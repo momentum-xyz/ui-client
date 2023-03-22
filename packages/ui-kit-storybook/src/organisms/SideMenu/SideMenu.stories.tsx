@@ -4,7 +4,7 @@ import {useState} from 'react';
 import SideMenu, {SideMenuPropsInterface} from './SideMenu';
 
 export default {
-  title: 'Molecules/SideMenu',
+  title: 'Organisms/SideMenu',
   component: SideMenu
 } as ComponentMeta<typeof SideMenu>;
 
