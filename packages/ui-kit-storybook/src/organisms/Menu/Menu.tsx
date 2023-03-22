@@ -45,13 +45,21 @@ const Menu: FC<MenuPropsInterface> = ({
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useResize(ref, () => setWindowWidth(window.innerWidth));
 
+  const calculateSubMenuLeftOffset = (): number => {
+    if (!subMenu?.length) {
+      return 0;
+    }
+    const offsetsToAdd = leftActions.length + leftBlankCount + activeCenterActionIdx;
+    const offsetsToSubtract = Math.floor(subMenu?.length / 2);
+    const offsetCnt = offsetsToAdd - offsetsToSubtract;
+    return offsetCnt * MENU_ITEM_WIDTH + sidePadding / 2 + MENU_ITEM_WIDTH / 2;
+  };
+
   const activeCenterActionIdx = centerActions.findIndex(({key}) => key === activeMenuItemKey);
   const subMenu: MenuItemInterface[] | undefined = activeCenterActionIdx
     ? centerActions[activeCenterActionIdx]?.subMenuItems
     : undefined;
-  const subMenuLeftOffset = subMenu?.length
-    ? (leftActions.length + leftBlankCount) * MENU_ITEM_WIDTH + sidePadding / 2
-    : 0;
+  const subMenuLeftOffset = calculateSubMenuLeftOffset();
 
   useEffect(() => {
     const totalPossibleHexagons = Math.floor(windowWidth / MENU_ITEM_WIDTH);
