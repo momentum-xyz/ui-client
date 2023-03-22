@@ -21,9 +21,9 @@ const AppLayers: FC<PropsInterface> = (props) => {
   const {unityStore} = useStore();
   const theme = useTheme();
 
-  if (renderUnity && !unityStore.isUnityAvailable) {
-    return <></>;
-  }
+  // if (renderUnity && !unityStore.isUnityAvailable) {
+  //   return <></>;
+  // }
 
   return (
     <div data-testid="AppLayers-test">

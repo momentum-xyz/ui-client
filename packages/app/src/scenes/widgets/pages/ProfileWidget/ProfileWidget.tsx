@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {Dialog, Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
@@ -16,7 +16,10 @@ const MENU_OFFSET_TOP = 20;
 
 const ProfileWidget: FC = () => {
   const {widgetsStore, sessionStore, agoraStore, unityStore} = useStore();
-  const {isUnityAvailable, unityInstanceStore} = unityStore;
+  const {
+    // isUnityAvailable,
+    unityInstanceStore
+  } = unityStore;
   const {profileStore} = widgetsStore;
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -31,11 +34,12 @@ const ProfileWidget: FC = () => {
     };
   }, [profileStore, sessionStore]);
 
-  const isTeleportAvailable = useMemo(() => {
-    return isUnityAvailable
-      ? !sessionStore.isGuest && unityStore.worldId !== sessionStore.userId
-      : !sessionStore.isGuest;
-  }, [isUnityAvailable, sessionStore.userId, sessionStore.isGuest, unityStore.worldId]);
+  const isTeleportAvailable = true;
+  // const isTeleportAvailable = useMemo(() => {
+  //   return isUnityAvailable
+  //     ? !sessionStore.isGuest && unityStore.worldId !== sessionStore.userId
+  //     : !sessionStore.isGuest;
+  // }, [isUnityAvailable, sessionStore.userId, sessionStore.isGuest, unityStore.worldId]);
 
   const handleTeleport = useCallback(() => {
     goToOdysseyHome(sessionStore.userId);
