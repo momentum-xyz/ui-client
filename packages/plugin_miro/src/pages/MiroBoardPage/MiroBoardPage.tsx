@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useStore} from 'shared/hooks/useStore';
 import {useObject} from '@momentum-xyz/sdk';
 import {SpacePage, ObjectTopBar} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {MiroActions, MiroBoard, MiroChoice} from './components';
 import * as styled from './MiroBoardPage.styled';
@@ -13,6 +14,8 @@ const MiroBoardPage: FC = () => {
   const {board, pickBoard, disableBoard} = miroBoardStore;
   const {isAdmin, objectId, pluginApi, isExpanded, onClose, onToggleExpand} = useObject();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
+
+  const {t} = useI18n();
 
   useEffect(() => {
     miroBoardStore.init(api);
@@ -30,7 +33,7 @@ const MiroBoardPage: FC = () => {
   return (
     <SpacePage>
       <ObjectTopBar
-        title="Miro"
+        title={t('plugin_miro.labels.miro')}
         subtitle={board?.name}
         onClose={() => onClose?.()}
         onToggleExpand={onToggleExpand}

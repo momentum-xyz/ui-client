@@ -1,6 +1,6 @@
 import React from 'react';
 import {observer} from 'mobx-react-lite';
-import {t} from 'i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {IconSvg} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
@@ -13,6 +13,8 @@ const Controls: React.FC = () => {
   const {
     widgetStore_OLD: {helpStore}
   } = useStore();
+
+  const {t} = useI18n();
 
   const handleExpand = () => {
     helpStore.toggleSection(HelpSectionEnum.Controls);

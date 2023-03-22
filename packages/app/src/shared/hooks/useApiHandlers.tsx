@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
 import {AxiosError} from 'axios';
 
@@ -13,7 +13,7 @@ export const useApiHandlers = () => {
   const {sessionStore} = useStore();
 
   const navigate = useNavigate();
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const onErrorHandler = useCallback(
     (error: AxiosError) => {

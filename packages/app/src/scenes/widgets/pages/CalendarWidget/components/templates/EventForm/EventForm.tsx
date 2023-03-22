@@ -5,9 +5,8 @@ import {SubmitHandler, Controller, useForm} from 'react-hook-form';
 import DatePickerOriginal, {ReactDatePickerProps} from 'react-datepicker';
 import cn from 'classnames';
 import {Input, Dialog, TextArea} from '@momentum-xyz/ui-kit';
-import {DATE_TIME_FORMAT, timeFromNow} from '@momentum-xyz/core';
+import {DATE_TIME_FORMAT, timeFromNow, useI18n} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
-import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'shared/hooks';
 import {NewsfeedTypeEnum} from 'core/enums';
@@ -19,7 +18,7 @@ import * as styled from './EventForm.styled';
 const DatePicker = DatePickerOriginal as unknown as FC<ReactDatePickerProps>;
 
 const EventForm: FC = () => {
-  const {t} = useTranslation();
+  const {t} = useI18n();
   const theme = useTheme();
   const {widgetsStore, unityStore, sessionStore, exploreStore, nftStore} = useStore();
   const {calendarStore} = widgetsStore;
@@ -131,7 +130,7 @@ const EventForm: FC = () => {
 
   useEffect(() => {
     if (startDate >= endDate) {
-      setError('end', {message: t('errors.endDateGraterThanStartDate')});
+      setError('end', {message: t('errors.endDateGraterThanStartDate') || ''});
       return;
     } else {
       clearErrors('end');
@@ -166,7 +165,7 @@ const EventForm: FC = () => {
                 onChange={onChange}
                 theme={theme}
                 label={t('eventForm.titleLabel')}
-                placeholder={t('eventForm.titlePlaceholder')}
+                placeholder={t('eventForm.titlePlaceholder') || ''}
                 errorMessage={t('eventForm.errorMessage')}
                 isError={!!errors.title}
               />
@@ -225,7 +224,7 @@ const EventForm: FC = () => {
                   onChange={onChange}
                   theme={theme}
                   label={t('eventForm.hostLabel')}
-                  placeholder={t('eventForm.hostPlaceholder')}
+                  placeholder={t('eventForm.hostPlaceholder') || ''}
                   isError={!!errors.hosted_by}
                   errorMessage={t('eventForm.errorMessage')}
                 />
@@ -244,7 +243,7 @@ const EventForm: FC = () => {
                   onChange={onChange}
                   theme={theme}
                   label={t('eventForm.linkLabel')}
-                  placeholder={t('eventForm.linkPlaceholder')}
+                  placeholder={t('eventForm.linkPlaceholder') || ''}
                 />
               )}
             />
@@ -260,10 +259,10 @@ const EventForm: FC = () => {
                 value={value}
                 onChange={onChange}
                 name={t('eventForm.descriptionLabel')}
-                placeholder={t('eventForm.descriptionPlaceholder')}
+                placeholder={t('eventForm.descriptionPlaceholder') || ''}
                 isResizable
                 isError={!!errors.description}
-                errorMessage={t('eventForm.errorMessage')}
+                errorMessage={t('eventForm.errorMessage') || ''}
               />
             )}
             rules={{required: true}}

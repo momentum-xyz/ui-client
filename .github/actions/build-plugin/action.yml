@@ -33,7 +33,7 @@ runs:
   steps:
     - id: build-plugin
       name: Build ${{ inputs.plugin-name }}
-      uses: momentum-xyz/docker-build-action@v6.3.2
+      uses: momentum-xyz/docker-build-action@de24be6bf0ba0bc9e928e6f738fc4611cf6dc847
       with:
         registry-server: ${{ inputs.registry-server }}
         registry-user: ${{ inputs.registry-user }}
@@ -42,6 +42,7 @@ runs:
         image-name: plugin-${{ inputs.plugin-name }}
         multistage-target: plugin-runtime
         extra-args: --build-arg PLUGIN=${{ inputs.plugin-dir || inputs.plugin-name }}
+        git-lfs: false
     - id: deploy-dev
       name: Deploy to development environment
       if: github.ref == 'refs/heads/develop'

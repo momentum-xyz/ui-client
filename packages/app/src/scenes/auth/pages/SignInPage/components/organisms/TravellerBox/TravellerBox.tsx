@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {Text} from '@momentum-xyz/ui-kit';
 
 import {Box} from 'ui-kit';
@@ -7,7 +7,7 @@ import {Box} from 'ui-kit';
 import * as styled from './TravellerBox.styled';
 
 const TravellerBox: FC = () => {
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   return (
     <Box>

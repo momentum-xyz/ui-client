@@ -2,7 +2,7 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {OptionInterface} from '@momentum-xyz/ui-kit';
 import {flow, types} from 'mobx-state-tree';
-import {t} from 'i18next';
+import {i18n} from '@momentum-xyz/core';
 
 import {api, GetSpaceInfoResponse} from 'api';
 import {PluginIdEnum} from 'api/enums';
@@ -89,7 +89,7 @@ const ObjectFunctionalityStore = types
         .filter(([, value]) => value !== BasicAsset2dIdEnum.DOCK)
         .map(([key, value]) => {
           return {
-            label: t(`enums.basicAsset2dId.${key}`),
+            label: i18n.t(`enums.basicAsset2dId.${key}`),
             value
           };
         });

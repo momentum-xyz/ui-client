@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {t} from 'i18next';
 import {PropsWithThemeInterface} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {EventItemInterface, UserModelInterface} from 'core/models';
 import {EventItem} from 'ui-kit';
@@ -23,6 +23,8 @@ const EventList: FC<PropsInterface> = ({
   onEventRemove,
   onWeblinkClick
 }) => {
+  const {t} = useI18n();
+
   if (events.length === 0) {
     return (
       <styled.Container className="empty noScrollIndicator">

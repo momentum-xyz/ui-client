@@ -1,8 +1,8 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
 import ReactHowlerOriginal, {PropTypes as ReactHowlerProps} from 'react-howler';
 import {ToolbarIcon, ToolbarIconInterface, ToolbarIconList} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {HelpWidget, MusicPlayerWidget, EmojiWidget} from 'scenes/widgets_OLD/pages';
@@ -17,7 +17,7 @@ const Widgets_OLD: FC = () => {
   const {user, userId} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   useEffect(() => {
     musicPlayerStore.init(unityStore.worldId);

@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import * as styled from './GoogleDocument.styled';
 
@@ -9,12 +9,12 @@ interface PropsInterface {
 }
 
 const GoogleDocument: FC<PropsInterface> = ({documentUrl}) => {
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   return (
     <styled.Wrapper data-testid="GoogleDocument-test">
       <iframe
-        title={t('labels.googleDrive')}
+        title={t('plugin_gd.labels.googleDrive')}
         width="800"
         height="500"
         src={documentUrl}

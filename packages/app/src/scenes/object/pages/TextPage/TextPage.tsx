@@ -3,7 +3,7 @@ import {Button, Heading, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate, useParams} from 'react-router-dom';
 import ReactLinkifyOriginal, {Props as ReactLinkifyProps} from 'react-linkify';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -23,7 +23,7 @@ const TextPage: FC = () => {
 
   const {worldId} = useParams<{worldId: string}>();
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   return (
     <styled.Modal data-testid="TextPage-test">

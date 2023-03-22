@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import cn from 'classnames';
-import {t} from 'i18next';
 import debounce from 'lodash/debounce';
+import {useI18n} from '@momentum-xyz/core';
 
 import {PropsWithThemeInterface} from '../../interfaces';
 import {TextSizeType, TextAlignType, TextTransformType, TextWeightType} from '../../types';
@@ -29,6 +29,8 @@ const ShowMoreText: FC<PropsInterface> = ({text, textProps, lines = 4}) => {
   const [showExpand, setShowExpand] = useState(true);
   const [collapsed, setCollapsed] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
+
+  const {t} = useI18n();
 
   const hasClamping = (el: HTMLDivElement) => {
     const {clientHeight, scrollHeight} = el;

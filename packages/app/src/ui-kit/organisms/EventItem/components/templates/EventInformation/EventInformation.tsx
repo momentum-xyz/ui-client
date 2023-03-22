@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {ShowMoreText, Text} from '@momentum-xyz/ui-kit';
-import {t} from 'i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {EventItemInterface} from 'core/models';
 
@@ -12,6 +12,8 @@ interface PropsInterface {
 }
 
 const EventInformation: FC<PropsInterface> = ({event}) => {
+  const {t} = useI18n();
+
   return (
     <styled.ContentRow>
       <styled.TextRow>

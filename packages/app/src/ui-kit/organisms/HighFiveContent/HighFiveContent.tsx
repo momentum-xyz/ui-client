@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {ToastContent} from 'ui-kit/molecules';
 
@@ -12,7 +12,7 @@ interface PropsInterface {
 const HighFiveContent: FC<PropsInterface> = ({message, sendBack, showCloseButton}) => {
   const [clicked, setClicked] = useState(false);
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const handleClick = () => {
     if (!clicked) {

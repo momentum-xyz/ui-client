@@ -23,6 +23,7 @@ jobs:
           registry-user: ${{ secrets.REGISTRY_USERNAME }}
           registry-pass: ${{ secrets.REGISTRY_PASSWORD }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          npm-token: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       version: ${{ steps.build.outputs.version }}
   dev2-deploy:

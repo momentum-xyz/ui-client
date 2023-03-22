@@ -1,8 +1,8 @@
 import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
 import {toast} from 'react-toastify';
 import {Dialog, Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {ProfileFormInterface} from 'core/interfaces';
@@ -22,7 +22,7 @@ const ProfileWidget: FC = () => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isDeviceSettings, setIsDeviceSettings] = useState<boolean>(false);
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
   const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {

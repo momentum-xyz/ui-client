@@ -8,22 +8,48 @@ export default {
 } as ComponentMeta<typeof ButtonEllipse>;
 
 const Template: Story<ButtonEllipsePropsInterface> = (args) => {
-  return <ButtonEllipse {...args} icon="close" label="Close" />;
+  return <ButtonEllipse {...args} />;
 };
 
 export const Primary = Template.bind({});
 Primary.args = {
-  variant: 'primary'
+  variant: 'primary',
+  icon: 'close_large',
+  label: 'Close'
 };
 
 export const IsActive = Template.bind({});
 IsActive.args = {
   variant: 'primary',
+  icon: 'close_large',
+  label: 'Close',
   isActive: true
+};
+
+export const IsLabel = Template.bind({});
+IsLabel.args = {
+  variant: 'primary',
+  icon: 'calendar',
+  label: 'Calendar',
+  isLabel: true
+};
+
+export const OnlyLabel = Template.bind({});
+OnlyLabel.args = {
+  variant: 'primary',
+  label: 'Close'
+};
+
+export const OnlyIcon = Template.bind({});
+OnlyIcon.args = {
+  variant: 'primary',
+  icon: 'favorite'
 };
 
 export const PrimaryDisabled = Template.bind({});
 PrimaryDisabled.args = {
   variant: 'primary',
+  icon: 'close_large',
+  label: 'Close',
   disabled: true
 };

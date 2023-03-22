@@ -11,7 +11,7 @@ import {
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import BN from 'bn.js';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
@@ -43,7 +43,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
     tokenSymbol
   } = nftStore;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const [wallet = addresses[0]?.address] = useState(authWallet);
   const initiatorAccount = accountOptions.find((account) => account.value === wallet);

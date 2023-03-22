@@ -11,16 +11,13 @@ on:
 
 permissions:
   contents: read
-  pages: write
   id-token: write
+  packages: read
+  pages: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
-
-defaults:
-  run:
-    working-directory: packages/ui-kit-storybook
 
 jobs:
   build:
@@ -37,12 +34,14 @@ jobs:
           node-version: '18'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@momentum-xyz'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - id: yarn-deps
         name: Install dependencies
         run: yarn install --frozen-lockfile
       - id: build
         name: Yarn build
-        run: yarn run build-storybook
+        run: yarn build:storybook
       - name: Upload artifact
         uses: actions/upload-pages-artifact@253fd476ed429e83b7aae64a92a75b4ceb1a17cf  # v1.0.7
         with:

@@ -21,7 +21,8 @@ COPY packages/plugin_google_drive/package.json ./packages/plugin_google_drive/
 COPY packages/plugin_video/package.json ./packages/plugin_video/
 COPY packages/app/package.json ./packages/app/
 
-RUN yarn install --immutable --immutable-cache --check-cache
+RUN --mount=type=secret,id=npm,target=/root/.npmrc,required=true \
+    yarn install --immutable --immutable-cache --check-cache
 
 
 # Monorepo shared deps
@@ -48,7 +49,7 @@ RUN yarn workspace plugin_${PLUGIN} build
 
 
 # Base runtime
-FROM nginx:1.22.0-alpine as base-runtime
+FROM nginx:1.23.3-alpine as base-runtime
 WORKDIR /opt/srv
 
 ADD ./docker_assets/nginx.conf /etc/nginx/nginx.conf

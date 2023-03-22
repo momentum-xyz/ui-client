@@ -6,9 +6,10 @@ import {PropsWithThemeInterface} from '../../interfaces';
 import * as styled from './InputDark.styled';
 
 interface PropsInterface extends PropsWithThemeInterface {
+  placeholder?: string | null;
   variant?: 'primary' | 'secondary';
   isError?: boolean;
-  errorMessage?: string;
+  errorMessage?: string | null;
   onChange?: (value: string) => void;
 }
 

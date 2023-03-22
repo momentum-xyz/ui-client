@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useMemo} from 'react';
 import {Dialog, Input, TextArea} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {useParams} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 
@@ -16,7 +16,7 @@ const ChangeTextDialog: FC = () => {
   const {assetStore} = objectStore;
   const {changeTileDialog} = assetStore;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   const {objectId} = useParams<{objectId: string}>();
 

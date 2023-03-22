@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {t} from 'i18next';
 import {SvgButton} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 
@@ -10,6 +10,8 @@ import * as styled from './UnityVolumeController.styled';
 const UnityVolumeController: FC = () => {
   const {unityStore} = useStore();
   const {unityInstanceStore} = unityStore;
+
+  const {t} = useI18n();
 
   return (
     <styled.Container data-testid="UnityVolumeController-test">

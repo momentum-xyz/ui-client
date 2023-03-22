@@ -21,3 +21,9 @@ PrimaryDisabled.args = {
   variant: 'primary',
   disabled: true
 };
+
+export const IsLabel = Template.bind({});
+IsLabel.args = {
+  variant: 'primary',
+  isLabel: true
+};

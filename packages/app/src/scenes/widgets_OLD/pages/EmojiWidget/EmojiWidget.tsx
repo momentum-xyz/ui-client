@@ -1,6 +1,6 @@
 import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTranslation} from 'react-i18next';
+import {useI18n} from '@momentum-xyz/core';
 import {PanelLayout, Emoji} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
@@ -17,7 +17,7 @@ const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
   const {emojiDetailsList, fetchAll} = widgetStore_OLD.emojiStore;
   const {user} = sessionStore;
 
-  const {t} = useTranslation();
+  const {t} = useI18n();
 
   useEffect(() => {
     fetchAll();

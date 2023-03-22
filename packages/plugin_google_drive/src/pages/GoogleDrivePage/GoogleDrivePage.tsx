@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useStore, useGooglePicker} from 'shared/hooks';
 import {useObject} from '@momentum-xyz/sdk';
 import {SpacePage, ObjectTopBar} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {GoogleDocument, GoogleChoice} from './components/templates';
 import * as styled from './GoogleDrivePage.styled';
@@ -12,6 +13,8 @@ const GoogleDrivePage: FC = () => {
   const store = useStore();
   const {api, googleDriveStore} = store;
   const {googleDocument} = googleDriveStore;
+
+  const {t} = useI18n();
 
   const {objectId, isAdmin, pluginApi, isExpanded, onClose, onToggleExpand} = useObject();
   const {useStateItemChange, useStateItemRemove} = pluginApi;
@@ -39,7 +42,7 @@ const GoogleDrivePage: FC = () => {
   return (
     <SpacePage>
       <ObjectTopBar
-        title="Google Drive"
+        title={t('plugin_gd.labels.googleDrive')}
         subtitle={googleDocument?.name}
         isExpanded={isExpanded}
         onClose={() => onClose?.()}
