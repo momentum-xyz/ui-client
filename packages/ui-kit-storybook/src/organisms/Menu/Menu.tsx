@@ -25,8 +25,8 @@ export interface MenuPropsInterface {
   centerActions: MenuItemWithSubMenuInterface[];
   rightActions: MenuItemInterface[];
 
-  activeMenuItemKey: string;
-  onMenuItemSelection: (key: string) => void;
+  activeMenuItemKey: string | null;
+  onMenuItemSelection: (key: string | null) => void;
 }
 
 const Menu: FC<MenuPropsInterface> = ({
@@ -96,6 +96,11 @@ const Menu: FC<MenuPropsInterface> = ({
     }
   }, [leftActions, centerActions, rightActions, windowWidth]);
 
+  const handleMenuItemSelection = (key: string): void => {
+    const isClosingMenu = subMenu?.length && centerActions[activeCenterActionIdx].key === key;
+    onMenuItemSelection(isClosingMenu ? null : key);
+  };
+
   const visualizeSection = (items: MenuItemInterface[]) => (
     <>
       {items.map((action) => (
@@ -105,7 +110,7 @@ const Menu: FC<MenuPropsInterface> = ({
           iconName={action.iconName}
           imageSrc={action.imageSrc}
           isActive={action.key === activeMenuItemKey}
-          onClick={() => onMenuItemSelection(action.key)}
+          onClick={() => handleMenuItemSelection(action.key)}
         />
       ))}
     </>

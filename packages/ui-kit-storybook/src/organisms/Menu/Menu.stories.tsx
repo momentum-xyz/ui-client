@@ -73,10 +73,10 @@ const RIGHT_ACTIONS: MenuItemInterface[] = [
 ];
 
 const Template: Story<MenuPropsInterface> = (args) => {
-  const [activeKey, setActiveKey] = useState(CENTRAL_ACTIONS[0].key);
+  const [activeKey, setActiveKey] = useState<string | null>(CENTRAL_ACTIONS[0].key);
 
-  const onMenuItemSelection = (key: string) => {
-    if (key.startsWith('sub_')) {
+  const onMenuItemSelection = (key: string | null) => {
+    if (key && key.startsWith('sub_')) {
       return;
     }
     setActiveKey(key);
