@@ -3,7 +3,7 @@ import {AttributeValueInterface} from '@momentum-xyz/sdk';
 import {AttributeInterface} from 'api/interfaces';
 
 export interface UserAttributesRequest {
-  worldId: string;
+  // worldId: string;
   userId: string;
 }
 
