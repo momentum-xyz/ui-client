@@ -288,18 +288,18 @@ const NftStore = types
       }
 
       const nftsItemsInfos = yield self.channel.query.uniques.asset.keys();
-      console.log('nftsItemsInfos', nftsItemsInfos);
+      // console.log('nftsItemsInfos', nftsItemsInfos);
       const collectionItemIds = nftsItemsInfos.map((nftItemInfo: any) => {
         const [collectionId, itemId] = nftItemInfo.args;
         return [collectionId.toNumber(), itemId.toNumber()];
       });
-      console.log('collectionItemIds', collectionItemIds);
+      // console.log('collectionItemIds', collectionItemIds);
       const [itemMetadatas, nftItemsDetailedInfos] = yield Promise.all([
         self.channel.query.uniques.instanceMetadataOf.multi(collectionItemIds),
         self.channel.query.uniques.asset.multi(collectionItemIds)
       ]);
 
-      console.log('metadatas', itemMetadatas, itemMetadatas?.toJSON?.());
+      // console.log('metadatas', itemMetadatas, itemMetadatas?.toJSON?.());
       const nftItems: NftItemModelInterface[] = yield Promise.all(
         itemMetadatas.map(
           async (itemMetadata: any, index: number): Promise<NftItemModelInterface | null> => {
@@ -371,8 +371,8 @@ const NftStore = types
           nftItems.filter((nftItem) => !!nftItem) as NftItemModelInterface[]
       );
 
-      console.log('NftItems');
-      console.table(nftItems);
+      console.log('Loaded NftItems', nftItems);
+      // console.table(nftItems);
 
       self.setNftItems(nftItems);
     }),
