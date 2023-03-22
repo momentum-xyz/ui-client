@@ -1,6 +1,6 @@
 import {FC, useCallback, useState} from 'react';
 import {generatePath, Navigate, Route, Routes, useNavigate} from 'react-router-dom';
-import * as uiKit from '@momentum-xyz/ui-kit';
+import {Toggle, Text, Button} from '@momentum-xyz/ui-kit';
 
 import {PluginInterface} from '../../../interfaces';
 import {ObjectViewEmulator} from '../ObjectViewEmulator';
@@ -11,7 +11,6 @@ import {ROUTES} from '../../constants';
 import * as styled from './WorldEmulator.styled';
 
 const DUMMY_SPACE_ID = '42424242-4242-4242-4242-424242424242';
-
 const LOCAL_STORAGE_KEY = 'sdk_emulator_is_admin';
 const initialIsAdmin = !(window.localStorage.getItem(LOCAL_STORAGE_KEY) === 'false');
 
@@ -21,6 +20,8 @@ interface PropsInterface {
 
 export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
   console.log('RENDER WorldEmulator', {plugin});
+
+  const [isAdmin, _setIsAdmin] = useState(initialIsAdmin);
 
   const navigate = useNavigate();
   const onClose = useCallback(() => navigate(ROUTES.base), [navigate]);
@@ -35,7 +36,6 @@ export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
     onClose();
   };
 
-  const [isAdmin, _setIsAdmin] = useState(initialIsAdmin);
   const setIsAdmin = () => {
     const newIsAdmin = !isAdmin;
     _setIsAdmin(newIsAdmin);
@@ -45,38 +45,44 @@ export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
   return (
     <styled.Container>
       <styled.ControlPanel>
-        <uiKit.Toggle size="normal" variant="normal" checked={isAdmin} onChange={setIsAdmin} />
-        <uiKit.Text text="Is User Admin" size="m" />
+        <Toggle size="normal" variant="normal" checked={isAdmin} onChange={setIsAdmin} />
+        <Text text="Is User Admin" size="m" />
       </styled.ControlPanel>
       <Routes>
-        <Route path="/">
-          <div>
-            <styled.Button
-              onClick={() => navigate(generatePath(ROUTES.plugin, {objectId: DUMMY_SPACE_ID}))}
-            >
-              Open Object
-            </styled.Button>
-            &nbsp;
-            {isAdmin && (
-              <styled.Button onClick={() => navigate(ROUTES.config)}>Open Config</styled.Button>
-            )}
-          </div>
-        </Route>
-        <Route path={ROUTES.plugin}>
-          <ObjectViewEmulator plugin={plugin} isAdmin={isAdmin} onClose={onClose} />
-        </Route>
-        <Route path={ROUTES.config}>
-          {isAdmin ? (
-            <ConfigEmulator
-              config={storedConfig}
-              plugin={plugin}
-              onSave={onSaveConfig}
-              onClose={onClose}
-            />
-          ) : (
-            <div>No permission for this page</div>
-          )}
-        </Route>
+        <Route
+          path={ROUTES.base}
+          element={
+            <div>
+              <Button
+                label="Open Object"
+                onClick={() => navigate(generatePath(ROUTES.plugin, {objectId: DUMMY_SPACE_ID}))}
+              />
+              &nbsp;
+              {isAdmin && <Button label="Open Config" onClick={() => navigate(ROUTES.config)} />}
+            </div>
+          }
+        />
+        <Route
+          path={ROUTES.plugin}
+          element={<ObjectViewEmulator plugin={plugin} isAdmin={isAdmin} onClose={onClose} />}
+        />
+        <Route
+          path={ROUTES.config}
+          element={
+            <>
+              {isAdmin ? (
+                <ConfigEmulator
+                  config={storedConfig}
+                  plugin={plugin}
+                  onSave={onSaveConfig}
+                  onClose={onClose}
+                />
+              ) : (
+                <div>No permission for this page</div>
+              )}
+            </>
+          }
+        />
         <Route path="*" element={<Navigate to={ROUTES.base} replace />} />
       </Routes>
     </styled.Container>

@@ -8,10 +8,6 @@ export const Container = styled.div`
   align-items: center;
 `;
 
-export const Button = styled.button`
-  border: 1px solid black;
-`;
-
 export const ControlPanel = styled.div`
   position: absolute;
   top: 0;

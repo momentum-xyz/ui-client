@@ -7,9 +7,9 @@ import {PluginInterface} from '../interfaces';
 import {GlobalStyles} from '../App.styled';
 import {UnityControlContextProvider} from '../contexts';
 
-import * as styled from './HostEmulator.styled';
 import {MomentumRequiredPage, WorldEmulator} from './components/';
 import {dummyUnityControl} from './dummyUnityControl';
+import * as styled from './HostEmulator.styled';
 
 const isDevEnv = process.env.NODE_ENV === 'development';
 
@@ -25,14 +25,10 @@ interface PropsInterface {
 ```tsx
 import plugin from './Plugin';
 
-const root = document.getElementById('root') as HTMLElement;
+const container = document.getElementById('root');
+const root = createRoot(container!);
 
-ReactDOM.render(
-  <React.StrictMode>
-    <HostEmulator plugin={plugin} />
-  </React.StrictMode>,
-  root
-);
+root.render(<HostEmulator plugin={plugin as PluginInterface} />);
 ```
  */
 export const HostEmulator: FC<PropsInterface> = ({plugin}) => {
