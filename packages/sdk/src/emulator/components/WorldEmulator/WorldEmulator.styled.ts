@@ -10,14 +10,20 @@ export const Container = styled.div`
 
 export const ControlPanel = styled.div`
   position: absolute;
-  top: 0;
-  left: 50%;
+  padding: 10px;
   transform: translateX(-50%);
   background-color: #888;
-  padding: 5px;
   border-radius: 0 0 5px 5px;
   display: flex;
   justify-content: center;
   align-items: center;
+  top: 0;
+  left: 50%;
   gap: 10px;
+`;
+
+export const Actions = styled.div`
+  padding: 10px;
+  border-radius: 4px;
+  background-color: #888;
 `;

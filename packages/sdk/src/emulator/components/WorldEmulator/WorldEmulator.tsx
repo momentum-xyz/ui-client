@@ -52,14 +52,14 @@ export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
         <Route
           path={ROUTES.base}
           element={
-            <div>
+            <styled.Actions>
               <Button
                 label="Open Object"
                 onClick={() => navigate(generatePath(ROUTES.plugin, {objectId: DUMMY_SPACE_ID}))}
               />
               &nbsp;
               {isAdmin && <Button label="Open Config" onClick={() => navigate(ROUTES.config)} />}
-            </div>
+            </styled.Actions>
           }
         />
         <Route
