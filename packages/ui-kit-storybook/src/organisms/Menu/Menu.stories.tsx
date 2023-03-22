@@ -5,73 +5,87 @@ import Menu, {MenuItemInterface, MenuPropsInterface} from './Menu';
 
 export default {
   title: 'Organisms/Menu',
-  component: Menu
+  component: Menu,
+  parameters: {
+    layout: 'fullscreen'
+  }
 } as ComponentMeta<typeof Menu>;
 
 const IMAGE_SRC = 'https://picsum.photos/300';
 
 const LEFT_ACTIONS: MenuItemInterface[] = [
   {
-    id: 1,
+    key: 'key_1',
     iconName: 'menu_info'
   },
   {
-    id: 2,
+    key: 'key_2',
     iconName: 'leave'
   },
   {
-    id: 3,
+    key: 'key_3',
     imageSrc: IMAGE_SRC
   },
   {
-    id: 4,
+    key: 'key_4',
     iconName: 'smiley-face'
   }
 ];
 const CENTRAL_ACTIONS: MenuItemInterface[] = [
   {
-    id: 5,
+    key: 'key_5',
     iconName: 'star_small'
   },
   {
-    id: 6,
+    key: 'key_6',
     iconName: 'edit'
   }
 ];
 const RIGHT_ACTIONS: MenuItemInterface[] = [
   {
-    id: 7,
+    key: 'key_7',
     iconName: 'voice_chat'
   },
   {
-    id: 8,
+    key: 'key_8',
     iconName: 'chat'
   },
   {
-    id: 9,
+    key: 'key_9',
     iconName: 'search'
   },
   {
-    id: 10,
+    key: 'key_10',
     iconName: 'meeting'
   },
   {
-    id: 11,
+    key: 'key_11',
     iconName: 'calendar'
   },
   {
-    id: 12,
+    key: 'key_12',
     iconName: 'clock'
   },
   {
-    id: 13,
+    key: 'key_13',
     imageSrc: IMAGE_SRC
   }
 ];
 
 const Template: Story<MenuPropsInterface> = (args) => {
-  const [activeId, setActiveId] = useState(1);
-  return <Menu {...args} activeMenuItemId={activeId} onMenuItemSelection={setActiveId} />;
+  const [activeKey, setActiveKey] = useState(CENTRAL_ACTIONS[0].key);
+  return (
+    <div
+      style={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column-reverse',
+        paddingBottom: '10px'
+      }}
+    >
+      <Menu {...args} activeMenuItemKey={activeKey} onMenuItemSelection={setActiveKey} />
+    </div>
+  );
 };
 
 export const General = Template.bind({});
@@ -85,5 +99,18 @@ export const SingleCentralAction = Template.bind({});
 SingleCentralAction.args = {
   leftActions: LEFT_ACTIONS,
   centerActions: [CENTRAL_ACTIONS[0]],
+  rightActions: RIGHT_ACTIONS
+};
+
+export const WithSubMenu = Template.bind({});
+WithSubMenu.args = {
+  leftActions: LEFT_ACTIONS,
+  centerActions: [
+    CENTRAL_ACTIONS[0],
+    {
+      ...CENTRAL_ACTIONS[1],
+      subMenuItems: LEFT_ACTIONS.map((a) => ({...a, key: `sub_${a.key}`}))
+    }
+  ],
   rightActions: RIGHT_ACTIONS
 };
