@@ -96,8 +96,8 @@ class PosBusService {
         const {id, entries} = data as any;
         if (entries?.texture?.name) {
           Event3dEmitter.emit('ObjectTextureChanged', {
-            id,
-            objectId: entries.texture.name
+            objectId: entries.texture.name,
+            hash: id
             // textureColor
           });
         }

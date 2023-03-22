@@ -105,17 +105,9 @@ export class ObjectHelper {
       this.assetRootUrl,
       assetUrl,
       scene,
-      (container) => {
-        console.log('Object Loaded ', object.name);
-        this.instantiate(container, object);
-      },
       (event) => {
         // On progress callback
         //console.log(`Loading progress ${event.loaded}/${event.total}`);
-      },
-      (scene, message) => {
-        // On error callback
-        console.log(object.name, 'failed loading!:', message);
       },
       '.glb'
     ).then((container) => {
