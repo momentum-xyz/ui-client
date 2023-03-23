@@ -3,9 +3,9 @@ import cn from 'classnames';
 
 import {IconButton} from '../../atoms';
 
-import * as styled from './Widget.styled';
+import * as styled from './Panel.styled';
 
-export interface WidgetPropsInterface extends PropsWithChildren {
+export interface PanelPropsInterface extends PropsWithChildren {
   variant: 'primary' | 'secondary';
   hexagon: ReactNode;
   title: string;
@@ -13,7 +13,7 @@ export interface WidgetPropsInterface extends PropsWithChildren {
   onClose?: () => void;
 }
 
-const Widget: FC<WidgetPropsInterface> = ({variant, hexagon, title, label, children, onClose}) => {
+const Panel: FC<PanelPropsInterface> = ({variant, hexagon, title, label, children, onClose}) => {
   return (
     <styled.Container data-testid="Widget-test" className={cn(variant)}>
       <styled.Header className={cn(variant)}>
@@ -32,4 +32,4 @@ const Widget: FC<WidgetPropsInterface> = ({variant, hexagon, title, label, child
   );
 };
 
-export default memo(Widget);
+export default memo(Panel);

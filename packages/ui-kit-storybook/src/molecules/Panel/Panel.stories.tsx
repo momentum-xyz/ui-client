@@ -5,13 +5,13 @@ import * as FrameTextStories from '../FrameText/FrameText.stories';
 import * as FrameTabsStories from '../FrameTabs/FrameTabs.stories';
 import * as FrameStepsStories from '../FrameSteps/FrameSteps.stories';
 
-import Widget, {WidgetPropsInterface} from './Widget';
+import Panel, {PanelPropsInterface} from './Panel';
 
 const IMAGE_SRC = 'https://picsum.photos/300';
 
 export default {
-  title: 'Molecules/Widget',
-  component: Widget,
+  title: 'Molecules/Panel',
+  component: Panel,
   argTypes: {
     hexagon: {
       table: {
@@ -26,10 +26,10 @@ export default {
       </div>
     )
   ]
-} as ComponentMeta<typeof Widget>;
+} as ComponentMeta<typeof Panel>;
 
-const Template: Story<WidgetPropsInterface> = (args) => {
-  return <Widget {...args} />;
+const Template: Story<PanelPropsInterface> = (args) => {
+  return <Panel {...args} />;
 };
 
 export const Primary = Template.bind({});

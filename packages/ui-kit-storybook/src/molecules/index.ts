@@ -1,4 +1,4 @@
-export * from './Widget';
+export * from './Panel';
 export * from './FrameSteps';
 export * from './FrameTabs';
 export * from './FrameText';
