@@ -1,31 +1,26 @@
 import {
   Scene,
   HemisphericLight,
-  Nullable,
   AbstractMesh,
-  StandardMaterial,
-  Color3,
   SceneLoader,
   Engine,
-  ISceneLoaderPlugin,
-  EventState,
-  ISceneLoaderPluginAsync,
   AssetContainer,
   Matrix,
   GizmoManager,
-  //Mesh,
-  ActionManager,
-  ExecuteCodeAction,
+  Mesh,
   InstantiatedEntries,
   Behavior,
-  TransformNode
-  //UniversalCamera
+  TransformNode,
+  Observable,
+  Texture,
+  PBRMaterial
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
-import {GLTFFileLoader} from '@babylonjs/loaders';
+//import {GLTFFileLoader} from '@babylonjs/loaders';
 
 import {CameraHelper} from './CameraHelper';
+import {SkyboxHelper} from './SkyboxHelper';
 
 interface BabylonObjectInterface {
   container: AssetContainer;
@@ -33,16 +28,29 @@ interface BabylonObjectInterface {
   objectInstance: InstantiatedEntries;
 }
 
+class CustomNode extends TransformNode {
+  public onSomeChange = new Observable();
+}
+
+export enum GizmoTypesEnum {
+  Position,
+  Rotation,
+  Scale,
+  BoundingBox
+}
+
 export class ObjectHelper {
   static light: HemisphericLight | null = null;
-  static assetRootUrl = 'https://odyssey.org/api/v3/render/asset/';
+  static assetRootUrl = 'https://dev2.odyssey.ninja/api/v3/render/asset/';
+  static textureRootUrl = 'https://dev2.odyssey.ninja/api/v3/render/texture/';
+  static textureDefaultSize = 's3/';
   static gizmoManager: GizmoManager;
-  static objects: BabylonObjectInterface[] = [];
+  static objectsMap = new Map<string, BabylonObjectInterface>();
   static followObjectBehaviour: Behavior<InstantiatedEntries>;
-  static _camRoot: TransformNode;
-  static _yTilt: TransformNode;
   static player: TransformNode;
-  static idToDelete: string;
+  static firstID: string;
+  static scene: Scene;
+  static mySphere: Mesh;
 
   static initialize(
     scene: Scene,
@@ -53,15 +61,14 @@ export class ObjectHelper {
     /*initialObjects.forEach((initialObject) => {
       this.spawnObject(scene, initialObject);
     });*/
-
-    this.idToDelete = '';
+    this.scene = scene;
+    this.firstID = '';
     // Mouse Click Listener
     scene.onPointerDown = function castRay() {
       const ray = scene.createPickingRay(
         scene.pointerX,
         scene.pointerY,
         Matrix.Identity(),
-        // Is this legal?
         CameraHelper.camera
       );
 
@@ -79,43 +86,12 @@ export class ObjectHelper {
       }
     };
 
-    // Keyboard Input Listener
-    scene.actionManager = new ActionManager(scene);
-    scene.actionManager.registerAction(
-      new ExecuteCodeAction(
-        {
-          trigger: ActionManager.OnKeyUpTrigger,
-          parameter: 'q'
-        },
-        () => {
-          this.disposeAllObjects();
-          console.log('q button was pressed. all objects disposed!');
-        }
-      )
-    );
-
-    // Gizmo
+    // Gizmo setup
     this.gizmoManager = new GizmoManager(scene);
     this.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
-    //this.gizmoManager.positionGizmoEnabled = true;
-    //this.gizmoManager.rotationGizmoEnabled = true;
-    //this.gizmoManager.scaleGizmoEnabled = true;
 
-    // Testing
-    document.onkeydown = (e) => {
-      if (e.key === 'e') {
-        this.gizmoManager.positionGizmoEnabled = !this.gizmoManager.positionGizmoEnabled;
-      }
-      if (e.key === 'r') {
-        this.gizmoManager.rotationGizmoEnabled = !this.gizmoManager.rotationGizmoEnabled;
-      }
-      if (e.key === 't') {
-        this.gizmoManager.scaleGizmoEnabled = !this.gizmoManager.scaleGizmoEnabled;
-      }
-      if (e.key === 'y') {
-        this.deleteObject(this.idToDelete);
-      }
-    };
+    // Enable position gizmo by default
+    this.setGizmoType(GizmoTypesEnum.Position);
   }
 
   static setWorld(assetID: string) {
@@ -123,35 +99,44 @@ export class ObjectHelper {
     console.log('assetID is: ' + assetUrl);
   }
 
-  static spawnObject(scene: Scene, object: Object3dInterface): void {
+  static async spawnObjectAsync(scene: Scene, object: Object3dInterface) {
     const assetUrl = this.getAssetFileName(object.asset_3d_id);
-    SceneLoader.LoadAssetContainer(
+
+    await SceneLoader.LoadAssetContainerAsync(
       this.assetRootUrl,
       assetUrl,
       scene,
-      (container) => {
-        console.log('Object Loaded ', object.name);
-        this.instantiate(container, object);
-      },
       (event) => {
         // On progress callback
         //console.log(`Loading progress ${event.loaded}/${event.total}`);
       },
-      (scene, message) => {
-        // On error callback
-        console.log(object.name, 'failed loading!:', message);
-      },
       '.glb'
-    );
+    ).then((container) => {
+      this.instantiate(container, object);
+    });
   }
 
   static setObjectTexture(scene: Scene, texture: Texture3dInterface): void {
-    const mesh: Nullable<AbstractMesh> = scene.getMeshById(texture.objectId);
-    if (mesh && texture.textureColor) {
-      const material = new StandardMaterial('color', scene);
-      material.alpha = 1;
-      material.diffuseColor = Color3.FromHexString(texture.textureColor).toLinearSpace();
-      mesh.material = material;
+    if (texture.label === 'skybox_custom') {
+      SkyboxHelper.set360Skybox(
+        scene,
+        this.textureRootUrl + SkyboxHelper.defaultSkyboxTextureSize + texture.hash
+      );
+      return;
+    }
+
+    const meshes = this.objectsMap.get(this.firstID)?.objectInstance.rootNodes[0].getChildMeshes();
+
+    if (meshes) {
+      for (const mesh of meshes) {
+        const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
+        const newTexture = new Texture(textureUrl, scene);
+        // TODO: check if material can be casted as PBRMaterial
+        const meshMater = mesh.material as PBRMaterial;
+        meshMater.albedoTexture = newTexture;
+      }
+    } else {
+      console.log("unable to set object texture, as the id didn't return a value from the map");
     }
   }
 
@@ -171,14 +156,20 @@ export class ObjectHelper {
       );
     }
 
-    const node = instance.rootNodes[0];
+    const node = instance.rootNodes[0] as CustomNode;
     node.name = object.name;
+
+    node.onSomeChange = new Observable();
+    node.onSomeChange.add((data) => {
+      console.log(`onSomeChange notified with data: ${data}`);
+    });
+
     node.position.x = object.transform.position.x;
     node.position.y = object.transform.position.y;
     node.position.z = object.transform.position.z;
     node.metadata = object.id;
-    if (this.idToDelete === '') {
-      this.idToDelete = object.id;
+    if (this.firstID === '') {
+      this.firstID = object.id;
     }
     /*const meshes = node.getChildMeshes();
     for (const mesh of meshes) {
@@ -190,38 +181,70 @@ export class ObjectHelper {
       objectDefinition: object,
       objectInstance: instance
     };
-    this.objects.push(babylonObject);
+    this.objectsMap.set(object.id, babylonObject);
 
-    //this.gizmoManager.attachToNode(node);
+    // Attach gizmo to object when clicked
     this.gizmoManager.attachableNodes?.push(node);
 
+    // Play animations
     for (const group of instance.animationGroups) {
       group.play(true);
     }
+
+    node.onSomeChange.notifyObservers('onSomeChange');
   }
 
   static disposeAllObjects() {
-    for (const obj of this.objects) {
-      obj.objectInstance.dispose();
-      obj.container.removeAllFromScene();
+    for (const mapObj of this.objectsMap) {
+      mapObj[1].objectInstance.dispose();
+      mapObj[1].container.removeFromScene();
     }
+    this.objectsMap.clear();
   }
 
   static deleteObject(id: string) {
-    for (const obj of this.objects) {
-      if (obj.objectDefinition.id === id) {
-        obj.objectInstance.dispose();
-        obj.container.removeAllFromScene();
-        const index = this.objects.indexOf(obj);
-        this.objects.splice(index, 1);
+    const objToDelete = this.objectsMap.get(id);
+    if (objToDelete) {
+      objToDelete.objectInstance.dispose();
+      objToDelete.container.removeAllFromScene();
+      this.objectsMap.delete(id);
+    } else {
+      console.log("unable to delete object, as the id doesn't exist in the map, " + id);
+    }
+  }
 
-        console.log('object with id: ' + id + ', deleted successfully');
-      }
+  static setGizmoType(type: GizmoTypesEnum) {
+    this.disableAllGizmos();
+    switch (type) {
+      case GizmoTypesEnum.Position:
+        this.gizmoManager.positionGizmoEnabled = true;
+        break;
+      case GizmoTypesEnum.Rotation:
+        this.gizmoManager.rotationGizmoEnabled = true;
+        break;
+      case GizmoTypesEnum.Scale:
+        this.gizmoManager.scaleGizmoEnabled = true;
+        break;
+      case GizmoTypesEnum.BoundingBox:
+        this.gizmoManager.boundingBoxGizmoEnabled = true;
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  static disableAllGizmos() {
+    if (this.gizmoManager) {
+      this.gizmoManager.positionGizmoEnabled = false;
+      this.gizmoManager.rotationGizmoEnabled = false;
+      this.gizmoManager.scaleGizmoEnabled = false;
+      this.gizmoManager.boundingBoxGizmoEnabled = false;
     }
   }
 
   static advancedLoading(): void {
-    SceneLoader.OnPluginActivatedObservable.addOnce(
+    /*SceneLoader.OnPluginActivatedObservable.addOnce(
       (loader: ISceneLoaderPlugin | ISceneLoaderPluginAsync, eventState: EventState) => {
         // This is just a precaution as this isn't strictly necessary since
         // the only loader in use is the glTF one.
@@ -250,7 +273,7 @@ export class ObjectHelper {
           console.log('asset loaded');
         });
       }
-    );
+    );*/
   }
 
   static getAssetFileName(id: string): string {

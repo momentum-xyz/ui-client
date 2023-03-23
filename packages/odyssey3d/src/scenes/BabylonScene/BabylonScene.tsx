@@ -15,7 +15,11 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
       CameraHelper.initialize(scene, view);
       LightHelper.initialize(scene);
       ObjectHelper.initialize(scene, engine, props.objects, view);
-      SkyboxHelper.setSkybox(scene);
+      //SkyboxHelper.setCubemapSkybox(scene);
+      SkyboxHelper.set360Skybox(
+        scene,
+        'https://dev2.odyssey.ninja/api/v3/render/texture/s8/26485e74acb29223ba7a9fa600d36c7f'
+      );
 
       if (window.sessionStorage.getItem('babylon_debug')) {
         Promise.all([
@@ -27,11 +31,13 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
       }
 
       Event3dEmitter.on('SetWorld', (assetID) => {
-        CameraHelper.spawnPlayer(scene, assetID);
+        // Commented out the actual line, as currently the assetID coming from BE is a Unity asset, so doesn't load
+        //CameraHelper.spawnPlayer(scene, assetID);
+        CameraHelper.spawnPlayer(scene, 'd906e070-3d2e-b1a5-3e3f-703423225945');
       });
 
-      Event3dEmitter.on('ObjectCreated', (object) => {
-        ObjectHelper.spawnObject(scene, object);
+      Event3dEmitter.on('ObjectCreated', async (object) => {
+        await ObjectHelper.spawnObjectAsync(scene, object);
       });
 
       Event3dEmitter.on('ObjectTextureChanged', (object) => {

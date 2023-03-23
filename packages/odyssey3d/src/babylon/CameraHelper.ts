@@ -1,30 +1,58 @@
 import {
   Scene,
-  //ArcRotateCamera,
-  //UniversalCamera,
-  FreeCamera,
+  UniversalCamera,
   Vector3,
   Quaternion,
   TransformNode,
   SceneLoader,
-  AssetContainer
+  AssetContainer,
+  ActionManager,
+  ExecuteCodeAction
 } from '@babylonjs/core';
 
 import {ObjectHelper} from './ObjectHelper';
-//import * as BABYLON from '@babylonjs/core';
+
+const NormalSpeed = 0.5;
+const FastSpeed = 1.5;
 
 export class CameraHelper {
-  //static camera: ArcRotateCamera | null = null;
-  static camera: FreeCamera | null = null;
+  static camera: UniversalCamera;
   static player: TransformNode;
 
   static initialize(scene: Scene, canvas: HTMLCanvasElement) {
-    // This creates and positions a free camera (non-mesh)
-    this.camera = new FreeCamera('camera1', new Vector3(-5, 5, -15), scene);
-    this.camera.rotationQuaternion = new Quaternion();
-    this.camera.speed = 0.5;
+    // This creates and positions a UniversalCamera camera (non-mesh)
+    const camera = new UniversalCamera('UniversalCamera', new Vector3(-5, 5, -15), scene);
+    camera.rotationQuaternion = new Quaternion();
+    camera.speed = NormalSpeed;
     // This attaches the camera to the canvas
-    this.camera.attachControl(canvas, true);
+    camera.attachControl(canvas, true);
+
+    // WASD controls
+    camera.keysUp = [87];
+    camera.keysLeft = [65];
+    camera.keysDown = [83];
+    camera.keysRight = [68];
+
+    this.camera = camera;
+
+    // Keyboard Input Listener
+    // TODO: Move Action Manager and Key Input to some central place to be used from different scripts
+    scene.actionManager = new ActionManager(scene);
+    scene.actionManager.registerAction(
+      new ExecuteCodeAction(ActionManager.OnKeyDownTrigger, function (evt) {
+        if (evt.sourceEvent.key === 'Shift') {
+          CameraHelper.camera.speed = FastSpeed;
+        }
+      })
+    );
+
+    scene.actionManager.registerAction(
+      new ExecuteCodeAction(ActionManager.OnKeyUpTrigger, function (evt) {
+        if (evt.sourceEvent.key === 'Shift') {
+          CameraHelper.camera.speed = NormalSpeed;
+        }
+      })
+    );
   }
 
   static spawnPlayer(scene: Scene, assetID: string) {
