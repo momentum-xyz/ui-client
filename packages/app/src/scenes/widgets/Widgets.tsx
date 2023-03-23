@@ -57,7 +57,7 @@ const Widgets: FC<PropsInterface> = (props) => {
 
   useEffect(() => {
     onlineUsersStore.init(unityStore.worldId, sessionStore.userId);
-    onlineUsersStore.fetchUser(unityStore.worldId);
+    onlineUsersStore.fetchUser(sessionStore.userId);
   }, [odysseyBioStore, onlineUsersStore, sessionStore.userId, unityStore.worldId]);
 
   useEffect(() => {
