@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import {FC} from 'react';
 import {Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 
@@ -18,16 +18,16 @@ const OnlineUsersWidget: FC<PropsInterface> = ({currentUser, worldId, onClick}) 
   const {widgetsStore} = useStore();
   const {onlineUsersStore} = widgetsStore;
 
-  useEffect(() => {
-    if (!currentUser) {
-      return;
-    }
-    const timeInterval = setInterval(() => {
-      onlineUsersStore.fetchOdysseyUsers(worldId, currentUser?.id);
-    }, 30000);
+  // useEffect(() => {
+  //   if (!currentUser) {
+  //     return;
+  //   }
+  //   const timeInterval = setInterval(() => {
+  //     onlineUsersStore.fetchOdysseyUsers(worldId, currentUser?.id);
+  //   }, 30000);
 
-    return () => clearInterval(timeInterval);
-  }, [onlineUsersStore, worldId]);
+  //   return () => clearInterval(timeInterval);
+  // }, [onlineUsersStore, worldId]);
 
   return (
     <styled.Container data-testid="OnlineUsersWidget-test" onClick={onClick}>

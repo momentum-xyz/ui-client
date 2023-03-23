@@ -35,7 +35,7 @@ const OnlineUsersStore = types
 
     return {
       init(worldId: string, userId: string): void {
-        this.fetchOdysseyUsers(worldId, userId);
+        // this.fetchOdysseyUsers(worldId, userId);
       },
       fetchOdysseyUsers: flow(function* (worldId: string, currentUserId: string) {
         const response: OdysseyOnlineUsersResponse = yield self.request.send(
