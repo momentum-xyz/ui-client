@@ -12,25 +12,28 @@ import {
 
 import {ObjectHelper} from './ObjectHelper';
 
+const NormalSpeed = 0.5;
+const FastSpeed = 1.5;
+
 export class CameraHelper {
   static camera: UniversalCamera;
   static player: TransformNode;
-  static normalSpeed = 0.5;
-  static fastSpeed = 1;
 
   static initialize(scene: Scene, canvas: HTMLCanvasElement) {
     // This creates and positions a UniversalCamera camera (non-mesh)
-    this.camera = new UniversalCamera('UniversalCamera', new Vector3(-5, 5, -15), scene);
-    this.camera.rotationQuaternion = new Quaternion();
-    this.camera.speed = this.normalSpeed;
+    const camera = new UniversalCamera('UniversalCamera', new Vector3(-5, 5, -15), scene);
+    camera.rotationQuaternion = new Quaternion();
+    camera.speed = NormalSpeed;
     // This attaches the camera to the canvas
-    this.camera.attachControl(canvas, true);
+    camera.attachControl(canvas, true);
 
     // WASD controls
-    this.camera.keysUp = [87];
-    this.camera.keysLeft = [65];
-    this.camera.keysDown = [83];
-    this.camera.keysRight = [68];
+    camera.keysUp = [87];
+    camera.keysLeft = [65];
+    camera.keysDown = [83];
+    camera.keysRight = [68];
+
+    this.camera = camera;
 
     // Keyboard Input Listener
     // TODO: Move Action Manager and Key Input to some central place to be used from different scripts
@@ -38,7 +41,7 @@ export class CameraHelper {
     scene.actionManager.registerAction(
       new ExecuteCodeAction(ActionManager.OnKeyDownTrigger, function (evt) {
         if (evt.sourceEvent.key === 'Shift') {
-          CameraHelper.camera.speed = CameraHelper.fastSpeed;
+          CameraHelper.camera.speed = FastSpeed;
         }
       })
     );
@@ -46,7 +49,7 @@ export class CameraHelper {
     scene.actionManager.registerAction(
       new ExecuteCodeAction(ActionManager.OnKeyUpTrigger, function (evt) {
         if (evt.sourceEvent.key === 'Shift') {
-          CameraHelper.camera.speed = CameraHelper.normalSpeed;
+          CameraHelper.camera.speed = NormalSpeed;
         }
       })
     );
