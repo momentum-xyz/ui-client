@@ -22,7 +22,7 @@ COPY packages/plugin_video/package.json ./packages/plugin_video/
 COPY packages/app/package.json ./packages/app/
 
 RUN --mount=type=secret,id=npm,target=/root/.npmrc,required=true \
-    yarn install --immutable --immutable-cache --check-cache
+    yarn install --frozen-lockfile
 
 
 # Monorepo shared deps
