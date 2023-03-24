@@ -5,6 +5,7 @@ import SceneComponent from 'babylonjs-hook';
 
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
 import {CameraHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babylon';
+import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
   /* Will run one time. */
@@ -15,6 +16,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
       CameraHelper.initialize(scene, view);
       LightHelper.initialize(scene);
       ObjectHelper.initialize(scene, engine, props.objects, view);
+      WorldCreatorHelper.initialize(scene);
       //SkyboxHelper.setCubemapSkybox(scene);
       SkyboxHelper.set360Skybox(
         scene,
