@@ -1,4 +1,4 @@
-import {GizmoManager, Scene} from '@babylonjs/core';
+import {GizmoManager, Scene, TransformNode} from '@babylonjs/core';
 
 import {ObjectHelper} from './ObjectHelper';
 
@@ -13,17 +13,29 @@ export class WorldCreatorHelper {
   static isCreatorMode = false;
   static lastLockedID = '';
   static gizmoManager: GizmoManager;
+  static transformSubscription: {unsubscribe: () => void} | undefined;
 
   static initialize(scene: Scene) {
     this.isCreatorMode = false;
     this.lastLockedID = '';
-
     // Gizmo setup
     this.gizmoManager = new GizmoManager(scene);
     this.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
-
-    // Enable position gizmo by default
     this.setGizmoType(GizmoTypesEnum.Position);
+  }
+
+  static subscribeForTransformUpdates(node: TransformNode) {
+    const updateTransformCallback = () => {
+      console.log('Updated Transform: ', node.position, node.rotationQuaternion, node.scaling);
+    };
+
+    node.onAfterWorldMatrixUpdateObservable.add(updateTransformCallback);
+
+    return {
+      unsubscribe: () => {
+        node.onAfterWorldMatrixUpdateObservable.removeCallback(updateTransformCallback);
+      }
+    };
   }
 
   static toggleCreatorMode() {
@@ -39,6 +51,14 @@ export class WorldCreatorHelper {
 
     if (ObjectHelper.objectsMap.has(id)) {
       console.log('clicked on an object, trying to lock');
+
+      // TODO: This has to be moved in the setLockedObject function, alongside enabling of gizmo
+      // Make sure this is called only once per object
+      const myNode = ObjectHelper.objectsMap.get(id)?.objectInstance.rootNodes[0];
+      if (myNode) {
+        this.transformSubscription = this.subscribeForTransformUpdates(myNode);
+      }
+
       //posbusclient.trylock(id);
     } else {
       this.unlockLastObject();
@@ -48,6 +68,7 @@ export class WorldCreatorHelper {
   // Called from posbusclient event
   static setLockedObject(id: string) {
     this.lastLockedID = id;
+
     // TODO: Figure out if this is needed here, maybe BE doesn't actually need it
     //posbusclient.unlock(this.lastSelectedID);
   }
@@ -57,6 +78,8 @@ export class WorldCreatorHelper {
       return;
     } else {
       //posbusclient.unlock(this.lastSelectedID);
+
+      this.transformSubscription?.unsubscribe();
       this.lastLockedID = '';
     }
   }

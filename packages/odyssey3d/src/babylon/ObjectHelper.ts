@@ -73,7 +73,8 @@ export class ObjectHelper {
           while (parent.parent) {
             parent = parent.parent as AbstractMesh;
           }
-          if (WorldCreatorHelper.isCreatorMode) {
+          // For testing, fix this later
+          if (!WorldCreatorHelper.isCreatorMode) {
             WorldCreatorHelper.tryLockObject(parent.metadata);
           }
           // feclient.sendclick(parent.metadata);
