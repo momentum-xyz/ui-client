@@ -4,7 +4,8 @@ export const authRepositoryEndpoints = () => {
   return {
     challenge: `${BASE_URL}/challenge`,
     token: `${BASE_URL}/token`,
-    attachAccount: `${BASE_URL}/attach-account`,
+    // TODO move to user repository if confirmed
+    attachAccount: `/users/me/attach-account`,
     guestToken: `${BASE_URL}/guest-token`
   };
 };

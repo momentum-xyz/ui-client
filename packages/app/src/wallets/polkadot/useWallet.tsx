@@ -1,9 +1,10 @@
 import {web3Enable, web3Accounts, web3FromSource} from '@polkadot/extension-dapp';
 import type {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {useEffect, useState} from 'react';
-import {UseWalletType} from 'wallets/wallets.types';
 import {decodeAddress} from '@polkadot/util-crypto';
 import {stringToHex, u8aToHex} from '@polkadot/util';
+
+import {UseWalletType} from 'wallets';
 
 export const useWallet: UseWalletType = ({appVariables}) => {
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);

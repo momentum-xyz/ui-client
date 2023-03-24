@@ -1,4 +1,4 @@
-import {WalletConfigInterface} from 'wallets/wallets.types';
+import {WalletConfigInterface} from 'wallets';
 
 import {useWallet} from './useWallet';
 
