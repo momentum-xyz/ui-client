@@ -1,0 +1,21 @@
+.storybook-grid {
+  display: flex;
+  gap: 15px;
+}
+
+.storybook-block {
+  max-width: 380px;
+}
+
+.storybook-grid-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.storybook-bottom {
+  padding-bottom: 10px;
+  display: flex;
+  height: 100vh;
+  flex-direction: column-reverse;
+}

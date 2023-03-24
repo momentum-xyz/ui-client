@@ -1,4 +1,4 @@
-import {FC, memo, useMemo, useRef, useState} from 'react';
+import {useMemo, useRef, useState} from 'react';
 
 import {IconNameType} from '../../types';
 import {Hexagon} from '../../atoms';
@@ -8,63 +8,58 @@ import * as styled from './Menu.styled';
 
 const MENU_ITEM_WIDTH = 60;
 
-const calculateSubMenuLeftOffset = (
-  subMenu: MenuItemInterface[] | undefined,
-  leftActions: MenuItemInterface[],
-  leftBlankCount: number,
-  activeCenterActionIdx: number,
-  sidePadding: number
-): number => {
-  if (!subMenu?.length) {
-    return 0;
-  }
-  const offsetsToAdd = leftActions.length + leftBlankCount + activeCenterActionIdx;
-  const offsetsToSubtract = Math.floor(subMenu?.length / 2);
-  const offsetCnt = offsetsToAdd - offsetsToSubtract;
-  return offsetCnt * MENU_ITEM_WIDTH + sidePadding / 2 + MENU_ITEM_WIDTH / 2;
-};
-
-export interface MenuItemInterface {
-  key: string;
-
+export interface MenuItemInterface<T> {
+  key: T;
   imageSrc?: string;
   iconName?: IconNameType;
   tooltip?: string;
+  subMenuItems?: MenuItemInterface<T>[];
 }
 
-export interface MenuItemWithSubMenuInterface extends MenuItemInterface {
-  subMenuItems?: MenuItemInterface[];
+export interface MenuPropsInterface<T> {
+  activeKey?: T;
+  leftItems?: MenuItemInterface<T>[];
+  centerItems?: MenuItemInterface<T>[];
+  rightItems?: MenuItemInterface<T>[];
+  onChangeActiveKey?: (key?: T) => void;
 }
 
-export interface MenuPropsInterface {
-  leftActions: MenuItemInterface[];
-  centerActions: MenuItemWithSubMenuInterface[];
-  rightActions: MenuItemInterface[];
-
-  activeMenuItemKey: string | null;
-  onMenuItemSelection: (key: string | null) => void;
-}
-
-const Menu: FC<MenuPropsInterface> = ({
-  leftActions,
-  centerActions,
-  rightActions,
-  activeMenuItemKey,
-  onMenuItemSelection
-}) => {
+const Menu = <T,>({
+  activeKey,
+  leftItems = [],
+  centerItems = [],
+  rightItems = [],
+  onChangeActiveKey
+}: MenuPropsInterface<T>) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useResize(ref, () => setWindowWidth(window.innerWidth));
 
+  const calculateSubMenuLeftOffset = (
+    subMenu: MenuItemInterface<T>[] | undefined,
+    leftActions: MenuItemInterface<T>[],
+    leftBlankCount: number,
+    activeCenterActionIdx: number,
+    sidePadding: number
+  ): number => {
+    if (!subMenu?.length) {
+      return 0;
+    }
+    const offsetsToAdd = leftActions.length + leftBlankCount + activeCenterActionIdx;
+    const offsetsToSubtract = Math.floor(subMenu?.length / 2);
+    const offsetCnt = offsetsToAdd - offsetsToSubtract;
+    return offsetCnt * MENU_ITEM_WIDTH + sidePadding / 2 + MENU_ITEM_WIDTH / 2;
+  };
+
   const [sidePadding, leftBlankCount, rightBlankCount] = useMemo(() => {
     const totalPossibleHexagons = Math.floor(windowWidth / MENU_ITEM_WIDTH);
     const tmp_sidePadding = windowWidth - totalPossibleHexagons * MENU_ITEM_WIDTH;
 
-    const nonCentralHexagons = totalPossibleHexagons - centerActions.length;
+    const nonCentralHexagons = totalPossibleHexagons - centerItems.length;
 
-    let tmp_leftBlankCount = nonCentralHexagons / 2 - leftActions.length;
-    let tmp_rightBlankCount = nonCentralHexagons / 2 - rightActions.length;
+    let tmp_leftBlankCount = nonCentralHexagons / 2 - leftItems.length;
+    let tmp_rightBlankCount = nonCentralHexagons / 2 - rightItems.length;
 
     if (tmp_leftBlankCount <= 0) {
       tmp_leftBlankCount = 1;
@@ -82,34 +77,34 @@ const Menu: FC<MenuPropsInterface> = ({
     }
 
     return [tmp_sidePadding, tmp_leftBlankCount, tmp_rightBlankCount];
-  }, [leftActions, centerActions, rightActions, windowWidth]);
+  }, [leftItems, centerItems, rightItems, windowWidth]);
 
-  const activeCenterActionIdx = centerActions.findIndex(({key}) => key === activeMenuItemKey);
-  const subMenu: MenuItemInterface[] | undefined = activeCenterActionIdx
-    ? centerActions[activeCenterActionIdx]?.subMenuItems
+  const activeCenterActionIdx = centerItems.findIndex(({key}) => key === activeKey);
+  const subMenu: MenuItemInterface<T>[] | undefined = activeCenterActionIdx
+    ? centerItems[activeCenterActionIdx]?.subMenuItems
     : undefined;
   const subMenuLeftOffset = calculateSubMenuLeftOffset(
     subMenu,
-    leftActions,
+    leftItems,
     leftBlankCount,
     activeCenterActionIdx,
     sidePadding
   );
 
-  const handleMenuItemSelection = (key: string): void => {
-    const isClosingMenu = subMenu?.length && centerActions[activeCenterActionIdx].key === key;
-    onMenuItemSelection(isClosingMenu ? null : key);
+  const handleMenuItemSelection = (key: T): void => {
+    const isClosingMenu = subMenu?.length && centerItems[activeCenterActionIdx].key === key;
+    onChangeActiveKey?.(isClosingMenu ? undefined : (key as unknown as T));
   };
 
-  const visualizeSection = (items: MenuItemInterface[]) => (
+  const visualizeSection = (items: MenuItemInterface<T>[]) => (
     <>
-      {items.map((action) => (
+      {items.map((action, index) => (
         <Hexagon
-          key={action.key}
+          key={index}
           type="primary"
           iconName={action.iconName}
           imageSrc={action.imageSrc}
-          isActive={action.key === activeMenuItemKey}
+          isActive={action.key === activeKey}
           onClick={() => handleMenuItemSelection(action.key)}
         />
       ))}
@@ -122,15 +117,19 @@ const Menu: FC<MenuPropsInterface> = ({
       data-testid="Menu-test"
       style={{padding: `0px ${sidePadding ? sidePadding / 2 : 0}px`}}
     >
-      {visualizeSection(leftActions)}
+      {visualizeSection(leftItems)}
+
       {new Array(leftBlankCount).fill(null).map((_, i) => (
         <Hexagon key={`blank_${i}`} type="blank" margin={12} />
       ))}
-      {visualizeSection(centerActions)}
+
+      {visualizeSection(centerItems)}
+
       {new Array(rightBlankCount).fill(null).map((_, i) => (
         <Hexagon key={`blank_${i + (leftBlankCount || 0)}`} type="blank" margin={12} />
       ))}
-      {visualizeSection(rightActions)}
+
+      {visualizeSection(rightItems)}
 
       {subMenu?.length && (
         <styled.SubMenuItemsContainer style={{left: `${subMenuLeftOffset}px`}}>
@@ -141,4 +140,4 @@ const Menu: FC<MenuPropsInterface> = ({
   );
 };
 
-export default memo(Menu);
+export default Menu;

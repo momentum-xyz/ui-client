@@ -36,11 +36,5 @@ export const ROUTES = {
   },
   magic: '/magic/:id',
   video: '/video/:spaceId',
-  help: '/help',
-  storyBook: {
-    base: '/storybook',
-    atoms: '/storybook/atoms',
-    molecules: '/storybook/molecules',
-    organisms: '/storybook/organisms'
-  }
+  help: '/help'
 };

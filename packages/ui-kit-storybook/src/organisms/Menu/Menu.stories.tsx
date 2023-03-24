@@ -8,12 +8,19 @@ export default {
   component: Menu,
   parameters: {
     layout: 'fullscreen'
-  }
+  },
+  decorators: [
+    (Story) => (
+      <div className="storybook-bottom">
+        <Story />
+      </div>
+    )
+  ]
 } as ComponentMeta<typeof Menu>;
 
 const IMAGE_SRC = 'https://picsum.photos/300';
 
-const LEFT_ACTIONS: MenuItemInterface[] = [
+const LEFT_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_1',
     iconName: 'menu_info'
@@ -31,7 +38,8 @@ const LEFT_ACTIONS: MenuItemInterface[] = [
     iconName: 'smiley-face'
   }
 ];
-const CENTRAL_ACTIONS: MenuItemInterface[] = [
+
+const CENTER_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_5',
     iconName: 'star_small'
@@ -41,7 +49,8 @@ const CENTRAL_ACTIONS: MenuItemInterface[] = [
     iconName: 'edit'
   }
 ];
-const RIGHT_ACTIONS: MenuItemInterface[] = [
+
+const RIGHT_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_7',
     iconName: 'voice_chat'
@@ -72,52 +81,42 @@ const RIGHT_ACTIONS: MenuItemInterface[] = [
   }
 ];
 
-const Template: Story<MenuPropsInterface> = (args) => {
-  const [activeKey, setActiveKey] = useState<string | null>(CENTRAL_ACTIONS[0].key);
+const Template: Story<MenuPropsInterface<string>> = (args) => {
+  const [activeKey, setActiveKey] = useState<string>();
 
-  const onMenuItemSelection = (key: string | null) => {
+  const onChangeActiveKey = (key?: string) => {
     if (key && key.startsWith('sub_')) {
       return;
     }
     setActiveKey(key);
   };
-  return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column-reverse',
-        paddingBottom: '10px'
-      }}
-    >
-      <Menu {...args} activeMenuItemKey={activeKey} onMenuItemSelection={onMenuItemSelection} />
-    </div>
-  );
+
+  return <Menu {...args} activeKey={activeKey} onChangeActiveKey={onChangeActiveKey} />;
 };
 
 export const General = Template.bind({});
 General.args = {
-  leftActions: LEFT_ACTIONS,
-  centerActions: CENTRAL_ACTIONS,
-  rightActions: RIGHT_ACTIONS
+  leftItems: LEFT_ITEMS,
+  centerItems: CENTER_ITEMS,
+  rightItems: RIGHT_ITEMS
 };
 
 export const SingleCentralAction = Template.bind({});
 SingleCentralAction.args = {
-  leftActions: LEFT_ACTIONS,
-  centerActions: [CENTRAL_ACTIONS[0]],
-  rightActions: RIGHT_ACTIONS
+  leftItems: LEFT_ITEMS,
+  centerItems: [CENTER_ITEMS[0]],
+  rightItems: RIGHT_ITEMS
 };
 
 export const WithSubMenu = Template.bind({});
 WithSubMenu.args = {
-  leftActions: LEFT_ACTIONS,
-  centerActions: [
-    CENTRAL_ACTIONS[0],
+  leftItems: LEFT_ITEMS,
+  rightItems: RIGHT_ITEMS,
+  centerItems: [
+    CENTER_ITEMS[0],
     {
-      ...CENTRAL_ACTIONS[1],
-      subMenuItems: LEFT_ACTIONS.map((a) => ({...a, key: `sub_${a.key}`}))
+      ...CENTER_ITEMS[1],
+      subMenuItems: LEFT_ITEMS.map((a) => ({...a, key: `sub_${a.key}`}))
     }
-  ],
-  rightActions: RIGHT_ACTIONS
+  ]
 };

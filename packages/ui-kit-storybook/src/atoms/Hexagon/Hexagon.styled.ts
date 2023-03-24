@@ -230,8 +230,9 @@ export const Hexagon = styled.div`
 
 export const Sparkle = styled.img`
   position: absolute;
-  z-index: 10;
   top: -16.5px;
   left: 1px;
   width: 32px;
+  pointer-events: none;
+  z-index: 10;
 `;

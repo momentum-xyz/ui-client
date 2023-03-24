@@ -4,6 +4,7 @@ import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
 const Widgets = lazy(() => import('./widgets/Widgets'));
+const UniverseMenuPage = lazy(() => import('./menu/pages/UniverseMenuPage/UniverseMenuPage'));
 const SignInPage = lazy(() => import('./auth/pages/SignInPage/SignInPage'));
 const SignInAccountPage = lazy(() => import('./auth/pages/SignInAccountPage/SignInAccountPage'));
 const BirthOfMePage = lazy(() => import('./auth/pages/BirthOfMePage/BirthOfMePage'));
@@ -16,7 +17,6 @@ const Object = lazy(() => import('./object/Object'));
 const DisconnectedPage = lazy(() => import('./system/pages/DisconnectedPage/DisconnectedPage'));
 const WrongBrowserPage = lazy(() => import('./system/pages/WrongBrowserPage/WrongBrowserPage'));
 const MaintenancePage = lazy(() => import('./system/pages/MaintenancePage/MaintenancePage'));
-const StoryBook = lazy(() => import('./storyBook/StoryBook'));
 const OdysseyCreator = lazy(() => import('./odysseyCreator/OdysseyCreator'));
 
 export const SYSTEM_ROUTES: RouteConfigInterface[] = [
@@ -46,10 +46,6 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
         <SignInPage />
       </>
     )
-  },
-  {
-    path: ROUTES.storyBook.base,
-    main: () => <StoryBook />
   },
   {
     path: ROUTES.signInAccount,
@@ -85,7 +81,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
       <>
         <Map3dPage isClickActive />
         <ExplorePage />
-        <Widgets isExplorePage />
+        <UniverseMenuPage />
       </>
     )
   },
