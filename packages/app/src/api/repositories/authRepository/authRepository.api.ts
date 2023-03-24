@@ -5,6 +5,8 @@ import {RequestInterface} from 'api/interfaces';
 
 import {authRepositoryEndpoints} from './authRepository.api.endpoints';
 import {
+  AttachAccountRequest,
+  AttachAccountResponse,
   AuthChallengeRequest,
   AuthChallengeResponse,
   AuthGuestTokenRequest,
@@ -23,6 +25,20 @@ export const getChallenge: RequestInterface<AuthChallengeRequest, AuthChallengeR
   };
   const URL: string = authRepositoryEndpoints().challenge;
   return request.get(URL, requestParams);
+};
+
+export const attachAccount: RequestInterface<AttachAccountRequest, AttachAccountResponse> = (
+  options
+) => {
+  const {signedChallenge, wallet, network, ...rest} = options;
+  const requestParams = {
+    method: 'post' as Method,
+    data: {signedChallenge, wallet, network},
+    ...rest
+  };
+
+  const URL: string = authRepositoryEndpoints().attachAccount;
+  return request(URL, requestParams);
 };
 
 export const getToken: RequestInterface<AuthTokenRequest, AuthTokenResponse> = (options) => {

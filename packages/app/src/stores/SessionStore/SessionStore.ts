@@ -8,6 +8,7 @@ import {PolkadotAddressInterface, User} from 'core/models';
 import {getAccessToken, refreshAxiosToken} from 'api/request';
 import {api, AuthChallengeRequest, CheckProfileUpdatingJobResponse, FetchMeResponse} from 'api';
 import PolkadotImplementation from 'shared/services/web3/polkadot.class';
+import {PluginIdEnum} from 'api/enums';
 
 const SessionStore = types
   .model('SessionStore', {
@@ -18,6 +19,7 @@ const SessionStore = types
     guestTokenRequest: types.optional(RequestModel, {}),
     challengeRequest: types.optional(RequestModel, {}),
     tokenRequest: types.optional(RequestModel, {}),
+    attachAccountRequest: types.optional(RequestModel, {}),
     profileRequest: types.optional(RequestModel, {}),
     profileJobRequest: types.optional(RequestModel, {})
   })
@@ -103,6 +105,35 @@ const SessionStore = types
       throw new Error('Error fetching token');
       // return false;
     }),
+    attachAnotherAccount: flow(function* (
+      account: string,
+      signChallenge: (challenge: string) => Promise<string>
+    ) {
+      const data: AuthChallengeRequest = {wallet: account};
+      const response = yield self.challengeRequest.send(api.authRepository.getChallenge, data);
+
+      if (response?.challenge) {
+        const signature = yield signChallenge(response.challenge);
+        if (signature) {
+          const data = {
+            wallet: account,
+            signedChallenge: signature,
+            network: account.length > 42 ? 'polkadot' : 'ethereum'
+          };
+          const response = yield self.attachAccountRequest.send(
+            api.authRepository.attachAccount,
+            data
+          );
+          console.log('attachAnotherWallet', response);
+          // TODO set user.wallets
+
+          if (response?.error) {
+            throw new Error(response.error?.message || 'Error attaching account');
+          }
+        }
+      }
+      throw new Error('Error fetching token');
+    }),
     fetchProfileJobStatus: flow(function* () {
       if (self.profileJobId) {
         const response: CheckProfileUpdatingJobResponse = yield self.profileJobRequest.send(
@@ -120,11 +151,29 @@ const SessionStore = types
         api.userRepository.fetchMe,
         {}
       );
-      if (response) {
-        self.user = cast(response);
+      if (!response?.id) {
+        return false;
       }
 
-      return !!response?.id;
+      self.user = cast(response);
+
+      if (!self.user?.isGuest) {
+        // TODO change fetchMe EP to return multiple wallets
+        const responseWallets = yield self.profileRequest.send(
+          api.userAttributeRepository.getPluginUserAttributeValue,
+          {
+            attributeName: 'wallet',
+            userId: response.id,
+            pluginId: PluginIdEnum.WALLETS
+          }
+        );
+        console.log('responseWallets', responseWallets);
+        if (responseWallets?.wallet && self.user) {
+          self.user.wallets = cast(responseWallets.wallet);
+        }
+      }
+
+      return true;
     }),
     signOutRedirect(): void {
       self.clearJobId();

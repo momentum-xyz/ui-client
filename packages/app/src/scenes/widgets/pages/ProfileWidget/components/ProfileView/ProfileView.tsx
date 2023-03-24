@@ -5,6 +5,8 @@ import {absoluteLink, registrationDateString, withoutProtocol, useI18n} from '@m
 
 import {UserModelInterface} from 'core/models';
 
+import {Accounts} from '../Accounts';
+
 import * as styled from './ProfileView.styled';
 
 interface PropsInterface {
@@ -44,6 +46,8 @@ const ProfileView: FC<PropsInterface> = (props) => {
       </styled.AvatarContainer>
 
       <styled.Info>
+        <Accounts user={user} />
+
         {user.profile?.bio && (
           <Text text={user.profile.bio} size="xxs" align="left" breakLongWord />
         )}
