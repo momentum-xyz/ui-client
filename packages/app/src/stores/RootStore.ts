@@ -15,6 +15,7 @@ import {ThemeStore} from './ThemeStore';
 import {SessionStore} from './SessionStore';
 import {AgoraStore} from './AgoraStore';
 import {SentryStore} from './SentryStore';
+import {WidgetManagerStore} from './WidgetManagerStore';
 
 const RootStore = types
   .model('RootStore', {
@@ -25,6 +26,7 @@ const RootStore = types
     sessionStore: types.optional(SessionStore, {}),
     agoraStore: types.optional(AgoraStore, {}),
     sentryStore: types.optional(SentryStore, {}),
+    widgetManagerStore: types.optional(WidgetManagerStore, {}),
 
     /* Connect independent stores */
     unityStore: types.optional(UnityStore, {}),

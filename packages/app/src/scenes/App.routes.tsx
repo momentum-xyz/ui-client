@@ -4,7 +4,7 @@ import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
 const Widgets = lazy(() => import('./widgets/Widgets'));
-const MainMenuPage = lazy(() => import('./menu/pages/MainMenuPage/MainMenuPage'));
+const WidgetManager = lazy(() => import('./widgetManager/WidgetManager'));
 const SignInPage = lazy(() => import('./auth/pages/SignInPage/SignInPage'));
 const SignInAccountPage = lazy(() => import('./auth/pages/SignInAccountPage/SignInAccountPage'));
 const BirthOfMePage = lazy(() => import('./auth/pages/BirthOfMePage/BirthOfMePage'));
@@ -81,7 +81,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
       <>
         <Map3dPage isClickActive />
         <ExplorePage />
-        <MainMenuPage />
+        <WidgetManager />
       </>
     )
   },
