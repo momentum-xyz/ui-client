@@ -1,3 +1,1 @@
-export * from './LoginMenuPage';
-export * from './OdysseyMenuPage';
-export * from './UniverseMenuPage';
+export * from './MainMenuPage';

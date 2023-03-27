@@ -3,19 +3,19 @@ import {observer} from 'mobx-react-lite';
 import {Menu, MenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
-import {MenuItemType} from 'core/types';
+import {WidgetType} from 'core/types';
 
-import * as styled from './UniverseMenuPage.styled';
+import * as styled from './MainMenuPage.styled';
 
-const UniverseMenuPage: FC = () => {
+const MainMenuPage: FC = () => {
   const {sessionStore} = useStore();
-  const {userImageUrl} = sessionStore;
+  const {userImageUrl, isGuest} = sessionStore;
 
-  const [activeKey, setActiveKey] = useState<MenuItemType>();
+  const [activeKey, setActiveKey] = useState<WidgetType>();
 
-  const CENTER_ITEMS: MenuItemInterface<MenuItemType>[] = [{key: 'UNIVERSE', iconName: 'info_2'}];
+  const CENTER_ITEMS: MenuItemInterface<WidgetType>[] = [{key: 'UNIVERSE', iconName: 'info_2'}];
 
-  const LEFT_ITEMS: MenuItemInterface<MenuItemType>[] = [
+  const LEFT_ITEMS: MenuItemInterface<WidgetType>[] = [
     {key: 'MAIN_MENU', iconName: 'menu_info'},
     {key: 'PROFILE', imageSrc: userImageUrl},
     {key: 'RABBIT', iconName: 'rabbit_fill'},
@@ -23,9 +23,9 @@ const UniverseMenuPage: FC = () => {
   ];
 
   return (
-    <styled.Container data-testid="UniverseMenuPage-test">
+    <styled.Container data-testid="MainMenuPage-test">
       <Menu
-        leftItems={LEFT_ITEMS}
+        leftItems={!isGuest ? LEFT_ITEMS : []}
         centerItems={CENTER_ITEMS}
         activeKey={activeKey}
         onChangeActiveKey={(key) => {
@@ -36,4 +36,4 @@ const UniverseMenuPage: FC = () => {
   );
 };
 
-export default observer(UniverseMenuPage);
+export default observer(MainMenuPage);

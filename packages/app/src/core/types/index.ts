@@ -1,4 +1,4 @@
-export * from './menu.type';
+export * from './widget.type';
 export * from './Unsubscribe.type';
 export * from './KeyringAddress.type';
 export * from './unityEvent.type';
