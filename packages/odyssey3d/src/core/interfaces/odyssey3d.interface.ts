@@ -1,11 +1,18 @@
-import {ObjectTransformInterface, PosbusEmitterType} from '@momentum-xyz/core';
+import {ObjectTransformInterface, Event3dEmitterType} from '@momentum-xyz/core';
 
 export interface Odyssey3dPropsInterface {
   // TODO add also reactive objects, users
 
-  events: PosbusEmitterType;
+  // Input events
+  events: Event3dEmitterType;
 
+  // Objects
   onObjectClick: (objectId: string) => void;
-  onMove: (transform: ObjectTransformInterface) => void;
+  onObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
+
+  // click on any user
   onUserClick: (userId: string) => void;
+
+  // Me moving
+  onMove: (transform: ObjectTransformInterface) => void;
 }

@@ -55,6 +55,10 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({
       events.on('ObjectTextureChanged', (object) => {
         ObjectHelper.setObjectTexture(scene, object);
       });
+
+      events.on('ObjectEditModeChanged', (objectId, isOn) => {
+        // TODO
+      });
     } else {
       console.error('There is no canvas for Babylon.');
     }

@@ -9,16 +9,18 @@ import {Object3dInterface, Texture3dInterface} from '../interfaces';
 // };
 
 // TODO: Define proper types
-export type PosbusType = {
+export type Event3dType = {
   ObjectCreated: (object: Object3dInterface) => void;
   ObjectChanged: (object: Object3dInterface) => void;
   SetWorld: (value: string) => void;
   ObjectTextureChanged: (texture: Texture3dInterface) => void;
   UserEntered: (value: string) => void;
   UserLeft: (value: string) => void;
+  ObjectEditModeChanged: (objectId: string, isEditOn: boolean) => void;
+  ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
 };
 
 // export const Event2dEmitter = new EventEmitter<Event2dType>();
-export const PosbusEmitter = new EventEmitter<PosbusType>();
+export const Event3dEmitter = new EventEmitter<Event3dType>();
 
-export type PosbusEmitterType = typeof PosbusEmitter;
+export type Event3dEmitterType = typeof Event3dEmitter;

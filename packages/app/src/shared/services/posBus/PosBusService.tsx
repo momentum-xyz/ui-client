@@ -1,6 +1,6 @@
 import {AttributeValueInterface} from '@momentum-xyz/sdk';
 import {Client, loadClientWorker, MsgType, PosbusEvent} from '@momentum-xyz/posbus-client';
-import {PosbusEmitter} from '@momentum-xyz/core';
+import {Event3dEmitter} from '@momentum-xyz/core';
 
 import {VoiceChatActionEnum} from 'api/enums';
 import {PosBusEventEmitter} from 'core/constants';
@@ -95,7 +95,7 @@ class PosBusService {
 
         const {id, entries} = data as any;
         if (entries?.texture?.name) {
-          PosbusEmitter.emit('ObjectTextureChanged', {
+          Event3dEmitter.emit('ObjectTextureChanged', {
             objectId: entries.texture.name,
             hash: id
             // textureColor
@@ -108,7 +108,7 @@ class PosBusService {
         console.log('Handle posbus set_world', data);
 
         const {id} = data;
-        PosbusEmitter.emit('SetWorld', id);
+        Event3dEmitter.emit('SetWorld', id);
         break;
       }
 
@@ -119,7 +119,7 @@ class PosBusService {
         for (const object of objects) {
           console.log('Add object', object);
           // TODO we should equalise these
-          PosbusEmitter.emit('ObjectCreated', {
+          Event3dEmitter.emit('ObjectCreated', {
             ...object,
             asset_3d_id: object.asset_type,
             transform: {
