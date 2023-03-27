@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {Menu, MenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
-import {WidgetEnum} from 'core/enums';
+import {WidgetTypeEnum} from 'core/enums';
 
 import * as styled from './WidgetMenuPage.styled';
 
@@ -11,17 +11,17 @@ const WidgetMenuPage: FC = () => {
   const {sessionStore} = useStore();
   const {userImageUrl, isGuest} = sessionStore;
 
-  const [activeKey, setActiveKey] = useState<WidgetEnum>();
+  const [activeKey, setActiveKey] = useState<WidgetTypeEnum>();
 
-  const CENTER_ITEMS: MenuItemInterface<WidgetEnum>[] = [
-    {key: WidgetEnum.UNIVERSE, iconName: 'info_2'}
+  const CENTER_ITEMS: MenuItemInterface<WidgetTypeEnum>[] = [
+    {key: WidgetTypeEnum.UNIVERSE, iconName: 'info_2'}
   ];
 
-  const LEFT_ITEMS: MenuItemInterface<WidgetEnum>[] = [
-    {key: WidgetEnum.MAIN_MENU, iconName: 'menu_info'},
-    {key: WidgetEnum.PROFILE, imageSrc: userImageUrl},
-    {key: WidgetEnum.RABBIT, iconName: 'rabbit_fill'},
-    {key: WidgetEnum.EMOJI, iconName: 'smiley-face'}
+  const LEFT_ITEMS: MenuItemInterface<WidgetTypeEnum>[] = [
+    {key: WidgetTypeEnum.MAIN_MENU, iconName: 'menu_info'},
+    {key: WidgetTypeEnum.PROFILE, imageSrc: userImageUrl},
+    {key: WidgetTypeEnum.RABBIT, iconName: 'rabbit_fill'},
+    {key: WidgetTypeEnum.EMOJI, iconName: 'smiley-face'}
   ];
 
   return (

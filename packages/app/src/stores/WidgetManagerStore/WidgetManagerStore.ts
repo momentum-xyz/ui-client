@@ -1,6 +1,6 @@
 import {types} from 'mobx-state-tree';
 
-import {WidgetEnum, WidgetPositionEnum} from 'core/enums';
+import {WidgetTypeEnum, WidgetPositionEnum} from 'core/enums';
 
 // TODO: TBD
 const WidgetManagerStore = types
@@ -10,8 +10,8 @@ const WidgetManagerStore = types
     rightActiveWidget: ''
   })
   .actions((self) => ({
-    open: (widget: WidgetEnum, position: WidgetPositionEnum) => {},
-    close: (widget: WidgetEnum) => {},
+    open: (widget: WidgetTypeEnum, position: WidgetPositionEnum) => {},
+    close: (widget: WidgetTypeEnum) => {},
     closeAll: () => {}
   }));
 
