@@ -3,10 +3,9 @@ import {observer} from 'mobx-react-lite';
 import {Menu, MenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
+import {MenuItemType} from 'core/types';
 
 import * as styled from './UniverseMenuPage.styled';
-
-type MenuItemType = 'MAIN_MENU' | 'PROFILE' | 'RABBIT' | 'EMOJI' | 'UNIVERSE';
 
 const UniverseMenuPage: FC = () => {
   const {sessionStore} = useStore();
