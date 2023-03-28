@@ -6,9 +6,9 @@ import {WidgetTypeEnum} from 'core/enums';
 import {ProfileWidget} from 'scenes/widgets/pages';
 import {ExplorePage} from 'scenes/explore/pages';
 
-import * as styled from './WidgetListPage.styled';
+import * as styled from './WidgetViewerPage.styled';
 
-const WidgetListPage: FC = () => {
+const WidgetViewerPage: FC = () => {
   const {widgetManagerStore} = useStore();
   const {leftActiveWidget, centerActiveWidget, rightActiveWidget} = widgetManagerStore;
 
@@ -40,4 +40,4 @@ const WidgetListPage: FC = () => {
   );
 };
 
-export default observer(WidgetListPage);
+export default observer(WidgetViewerPage);

@@ -5,6 +5,7 @@ import {WidgetTypeEnum} from 'core/enums';
 
 import {WidgetInfo} from './models';
 
+// TODO: Not final implementation. It depends on flow/design
 const WidgetManagerStore = types
   .model('WidgetManagerStore', {
     leftActiveWidget: types.maybeNull(WidgetInfo),

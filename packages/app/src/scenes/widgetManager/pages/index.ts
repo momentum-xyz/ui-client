@@ -1,2 +1,2 @@
 export * from './WidgetMenuPage';
-export * from './WidgetListPage';
+export * from './WidgetViewerPage';
