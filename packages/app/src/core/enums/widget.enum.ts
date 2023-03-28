@@ -5,9 +5,3 @@ export enum WidgetTypeEnum {
   RABBIT = 'RABBIT',
   EMOJI = 'EMOJI'
 }
-
-export enum WidgetPositionEnum {
-  LEFT = 'LEFT',
-  RIGHT = 'RIGHT',
-  CENTER = 'CENTER'
-}

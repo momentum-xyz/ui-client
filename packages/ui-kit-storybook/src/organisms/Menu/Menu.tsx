@@ -8,33 +8,44 @@ import * as styled from './Menu.styled';
 
 const MENU_ITEM_WIDTH = 60;
 
+export enum MenuItemPositionEnum {
+  LEFT = 'LEFT',
+  RIGHT = 'RIGHT',
+  CENTER = 'CENTER'
+}
+
 export interface MenuItemInterface<T> {
   key: T;
   imageSrc?: string;
   iconName?: IconNameType;
   tooltip?: string;
+  position: MenuItemPositionEnum;
   subMenuItems?: MenuItemInterface<T>[];
+  onClick?: (key: T) => void;
 }
 
 export interface MenuPropsInterface<T> {
   activeKey?: T;
-  leftItems?: MenuItemInterface<T>[];
-  centerItems?: MenuItemInterface<T>[];
-  rightItems?: MenuItemInterface<T>[];
-  onChangeActiveKey?: (key?: T) => void;
+  items?: MenuItemInterface<T>[];
 }
 
-const Menu = <T,>({
-  activeKey,
-  leftItems = [],
-  centerItems = [],
-  rightItems = [],
-  onChangeActiveKey
-}: MenuPropsInterface<T>) => {
+const Menu = <T,>({activeKey, items = []}: MenuPropsInterface<T>) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useResize(ref, () => setWindowWidth(window.innerWidth));
+
+  const leftItems: MenuItemInterface<T>[] = items.filter(
+    (i) => i.position === MenuItemPositionEnum.LEFT
+  );
+
+  const rightItems: MenuItemInterface<T>[] = items.filter(
+    (i) => i.position === MenuItemPositionEnum.RIGHT
+  );
+
+  const centerItems: MenuItemInterface<T>[] = items.filter(
+    (i) => i.position === MenuItemPositionEnum.CENTER
+  );
 
   const calculateSubMenuLeftOffset = (
     subMenu: MenuItemInterface<T>[] | undefined,
@@ -91,11 +102,6 @@ const Menu = <T,>({
     sidePadding
   );
 
-  const handleMenuItemSelection = (key: T): void => {
-    const isClosingMenu = subMenu?.length && centerItems[activeCenterActionIdx].key === key;
-    onChangeActiveKey?.(isClosingMenu ? undefined : (key as unknown as T));
-  };
-
   const visualizeSection = (items: MenuItemInterface<T>[]) => (
     <>
       {items.map((action, index) => (
@@ -105,7 +111,9 @@ const Menu = <T,>({
           iconName={action.iconName}
           imageSrc={action.imageSrc}
           isActive={action.key === activeKey}
-          onClick={() => handleMenuItemSelection(action.key)}
+          onClick={() => {
+            action.onClick?.(action.key);
+          }}
         />
       ))}
     </>

@@ -1,7 +1,7 @@
 import {ComponentMeta, Story} from '@storybook/react';
 import {useState} from 'react';
 
-import Menu, {MenuItemInterface, MenuPropsInterface} from './Menu';
+import Menu, {MenuItemInterface, MenuItemPositionEnum, MenuPropsInterface} from './Menu';
 
 export default {
   title: 'Organisms/Menu',
@@ -23,100 +23,111 @@ const IMAGE_SRC = 'https://picsum.photos/300';
 const LEFT_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_1',
-    iconName: 'menu_info'
+    iconName: 'menu_info',
+    position: MenuItemPositionEnum.LEFT
   },
   {
     key: 'key_2',
-    iconName: 'leave'
+    iconName: 'leave',
+    position: MenuItemPositionEnum.LEFT
   },
   {
     key: 'key_3',
-    imageSrc: IMAGE_SRC
+    imageSrc: IMAGE_SRC,
+    position: MenuItemPositionEnum.LEFT
   },
   {
     key: 'key_4',
-    iconName: 'smiley-face'
+    iconName: 'smiley-face',
+    position: MenuItemPositionEnum.LEFT
   }
 ];
 
 const CENTER_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_5',
-    iconName: 'star_small'
+    iconName: 'star_small',
+    position: MenuItemPositionEnum.CENTER
   },
   {
     key: 'key_6',
-    iconName: 'edit'
+    iconName: 'edit',
+    position: MenuItemPositionEnum.CENTER
   }
 ];
 
 const RIGHT_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_7',
-    iconName: 'voice_chat'
+    iconName: 'voice_chat',
+    position: MenuItemPositionEnum.RIGHT
   },
   {
     key: 'key_8',
-    iconName: 'chat'
+    iconName: 'chat',
+    position: MenuItemPositionEnum.RIGHT
   },
   {
     key: 'key_9',
-    iconName: 'search'
+    iconName: 'search',
+    position: MenuItemPositionEnum.RIGHT
   },
   {
     key: 'key_10',
-    iconName: 'meeting'
+    iconName: 'meeting',
+    position: MenuItemPositionEnum.RIGHT
   },
   {
     key: 'key_11',
-    iconName: 'calendar'
+    iconName: 'calendar',
+    position: MenuItemPositionEnum.RIGHT
   },
   {
     key: 'key_12',
-    iconName: 'clock'
+    iconName: 'clock',
+    position: MenuItemPositionEnum.RIGHT
   },
   {
     key: 'key_13',
-    imageSrc: IMAGE_SRC
+    imageSrc: IMAGE_SRC,
+    position: MenuItemPositionEnum.RIGHT
   }
 ];
 
 const Template: Story<MenuPropsInterface<string>> = (args) => {
-  const [activeKey, setActiveKey] = useState<string>();
+  const [activeKey /*, setActiveKey*/] = useState<string>(CENTER_ITEMS[0].key);
 
-  const onChangeActiveKey = (key?: string) => {
+  /*const onChangeActiveKey = (key?: string) => {
     if (key && key.startsWith('sub_')) {
       return;
     }
     setActiveKey(key);
-  };
+  };*/
 
-  return <Menu {...args} activeKey={activeKey} onChangeActiveKey={onChangeActiveKey} />;
+  return <Menu {...args} activeKey={activeKey} />;
 };
 
 export const General = Template.bind({});
 General.args = {
-  leftItems: LEFT_ITEMS,
-  centerItems: CENTER_ITEMS,
-  rightItems: RIGHT_ITEMS
+  items: [...LEFT_ITEMS, ...CENTER_ITEMS, ...RIGHT_ITEMS]
 };
 
 export const SingleCentralAction = Template.bind({});
 SingleCentralAction.args = {
-  leftItems: LEFT_ITEMS,
-  centerItems: [CENTER_ITEMS[0]],
-  rightItems: RIGHT_ITEMS
+  items: [...LEFT_ITEMS, CENTER_ITEMS[0], ...RIGHT_ITEMS]
 };
 
 export const WithSubMenu = Template.bind({});
 WithSubMenu.args = {
-  leftItems: LEFT_ITEMS,
-  rightItems: RIGHT_ITEMS,
-  centerItems: [
-    CENTER_ITEMS[0],
-    {
-      ...CENTER_ITEMS[1],
-      subMenuItems: LEFT_ITEMS.map((a) => ({...a, key: `sub_${a.key}`}))
-    }
+  items: [
+    ...LEFT_ITEMS,
+    ...[
+      CENTER_ITEMS[0],
+      {
+        ...CENTER_ITEMS[1],
+        subMenuItems: LEFT_ITEMS.map((a) => ({...a, key: `sub_${a.key}`}))
+      }
+    ],
+    ...RIGHT_ITEMS
   ]
 };
