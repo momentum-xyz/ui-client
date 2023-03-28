@@ -21,7 +21,7 @@ export interface MenuItemInterface<T> {
   tooltip?: string;
   position: MenuItemPositionEnum;
   subMenuItems?: MenuItemInterface<T>[];
-  onClick?: (key: T) => void;
+  onClick?: (key: T, position: MenuItemPositionEnum) => void;
 }
 
 export interface MenuPropsInterface<T> {
@@ -112,7 +112,7 @@ const Menu = <T,>({activeKey, items = []}: MenuPropsInterface<T>) => {
           imageSrc={action.imageSrc}
           isActive={action.key === activeKey}
           onClick={() => {
-            action.onClick?.(action.key);
+            action.onClick?.(action.key, action.position);
           }}
         />
       ))}

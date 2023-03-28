@@ -12,20 +12,33 @@ const WidgetManagerStore = types
     rightActiveWidget: types.maybeNull(WidgetInfo)
   })
   .actions((self) => ({
-    open: (type: WidgetTypeEnum, position: MenuItemPositionEnum) => {
+    toggle(type: WidgetTypeEnum, position: MenuItemPositionEnum) {
+      if (type && this.getActiveType() !== type) {
+        this.open(type, position);
+      } else {
+        this.close(type);
+      }
+    },
+    open(type: WidgetTypeEnum, position: MenuItemPositionEnum) {
       switch (position) {
         case MenuItemPositionEnum.LEFT:
           self.leftActiveWidget = cast({type});
+          self.rightActiveWidget = null;
+          self.centerActiveWidget = null;
           break;
         case MenuItemPositionEnum.CENTER:
           self.centerActiveWidget = cast({type});
+          self.rightActiveWidget = null;
+          self.leftActiveWidget = null;
           break;
         case MenuItemPositionEnum.RIGHT:
           self.rightActiveWidget = cast({type});
+          self.centerActiveWidget = null;
+          self.leftActiveWidget = null;
           break;
       }
     },
-    close: (type: WidgetTypeEnum) => {
+    close(type: WidgetTypeEnum) {
       if (self.leftActiveWidget?.type === type) {
         self.leftActiveWidget = null;
       } else if (self.rightActiveWidget?.type === type) {
@@ -38,6 +51,11 @@ const WidgetManagerStore = types
       self.leftActiveWidget = null;
       self.rightActiveWidget = null;
       self.centerActiveWidget = null;
+    },
+    getActiveType(): WidgetTypeEnum | undefined {
+      return (
+        self.leftActiveWidget?.type || self.centerActiveWidget?.type || self.rightActiveWidget?.type
+      );
     }
   }))
   .views((self) => ({

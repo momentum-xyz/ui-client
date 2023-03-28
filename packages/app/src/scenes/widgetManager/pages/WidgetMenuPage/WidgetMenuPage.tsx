@@ -1,4 +1,4 @@
-import {FC, useCallback} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Menu, MenuItemInterface, MenuItemPositionEnum} from '@momentum-xyz/ui-kit-storybook';
 
@@ -9,55 +9,45 @@ import * as styled from './WidgetMenuPage.styled';
 
 const WidgetMenuPage: FC = () => {
   const {sessionStore, widgetManagerStore} = useStore();
+  const {toggle, activeType} = widgetManagerStore;
   const {userImageUrl} = sessionStore;
-
-  const openOrClose = useCallback(
-    (type: WidgetTypeEnum, position: MenuItemPositionEnum) => {
-      if (type && widgetManagerStore.activeType !== type) {
-        widgetManagerStore.open(type, position);
-      } else {
-        widgetManagerStore.close(type);
-      }
-    },
-    [widgetManagerStore]
-  );
 
   const MENU_ITEMS: MenuItemInterface<WidgetTypeEnum>[] = [
     {
-      iconName: 'info_2',
       key: WidgetTypeEnum.UNIVERSE,
       position: MenuItemPositionEnum.CENTER,
-      onClick: (type) => openOrClose(type, MenuItemPositionEnum.CENTER)
+      iconName: 'info_2',
+      onClick: toggle
     },
     {
       key: WidgetTypeEnum.MAIN_MENU,
       position: MenuItemPositionEnum.LEFT,
       iconName: 'menu_info',
-      onClick: (type) => openOrClose(type, MenuItemPositionEnum.LEFT)
+      onClick: toggle
     },
     {
       key: WidgetTypeEnum.PROFILE,
       position: MenuItemPositionEnum.LEFT,
       imageSrc: userImageUrl,
-      onClick: (type) => openOrClose(type, MenuItemPositionEnum.LEFT)
+      onClick: toggle
     },
     {
       key: WidgetTypeEnum.RABBIT,
       position: MenuItemPositionEnum.LEFT,
       iconName: 'rabbit_fill',
-      onClick: (type) => openOrClose(type, MenuItemPositionEnum.LEFT)
+      onClick: toggle
     },
     {
       key: WidgetTypeEnum.EMOJI,
       position: MenuItemPositionEnum.LEFT,
       iconName: 'smiley-face',
-      onClick: (type) => openOrClose(type, MenuItemPositionEnum.LEFT)
+      onClick: toggle
     }
   ];
 
   return (
     <styled.Container data-testid="WidgetMenuPage-test">
-      <Menu items={MENU_ITEMS} activeKey={widgetManagerStore.activeType} />
+      <Menu items={MENU_ITEMS} activeKey={activeType} />
     </styled.Container>
   );
 };
