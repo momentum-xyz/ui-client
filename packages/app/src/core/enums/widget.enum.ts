@@ -3,5 +3,6 @@ export enum WidgetTypeEnum {
   UNIVERSE = 'UNIVERSE',
   PROFILE = 'PROFILE',
   RABBIT = 'RABBIT',
-  EMOJI = 'EMOJI'
+  EMOJI = 'EMOJI',
+  EXPLORE = 'EXPLORE'
 }

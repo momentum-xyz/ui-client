@@ -10,7 +10,7 @@ const SignInAccountPage = lazy(() => import('./auth/pages/SignInAccountPage/Sign
 const BirthOfMePage = lazy(() => import('./auth/pages/BirthOfMePage/BirthOfMePage'));
 const BirthAnimationPage = lazy(() => import('./auth/pages/BirthAnimationPage/BirthAnimationPage'));
 const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));
-const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
+//const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
 const Map3dPage = lazy(() => import('./map3d/pages/Map3dPage/Map3dPage'));
 const OdysseyHomePage = lazy(() => import('./odysseyHome/pages/OdysseyHomePage/OdysseyHomePage'));
 const Object = lazy(() => import('./object/Object'));
@@ -44,6 +44,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
       <>
         <Map3dPage isClickActive />
         <SignInPage />
+        <WidgetManager />
       </>
     )
   },
@@ -80,7 +81,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
     main: () => (
       <>
         <Map3dPage isClickActive />
-        <ExplorePage />
+        {/* <ExplorePage /> */}
         <WidgetManager />
       </>
     )

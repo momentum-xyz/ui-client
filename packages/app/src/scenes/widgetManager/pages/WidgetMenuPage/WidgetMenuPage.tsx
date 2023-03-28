@@ -10,7 +10,16 @@ import * as styled from './WidgetMenuPage.styled';
 const WidgetMenuPage: FC = () => {
   const {sessionStore, widgetManagerStore} = useStore();
   const {toggle, activeType} = widgetManagerStore;
-  const {userImageUrl} = sessionStore;
+  const {isGuest, userImageUrl} = sessionStore;
+
+  const MENU_ITEMS_GUEST: MenuItemInterface<WidgetTypeEnum>[] = [
+    {
+      key: WidgetTypeEnum.UNIVERSE,
+      position: MenuItemPositionEnum.CENTER,
+      iconName: 'info_2',
+      onClick: toggle
+    }
+  ];
 
   const MENU_ITEMS: MenuItemInterface<WidgetTypeEnum>[] = [
     {
@@ -42,12 +51,18 @@ const WidgetMenuPage: FC = () => {
       position: MenuItemPositionEnum.LEFT,
       iconName: 'smiley-face',
       onClick: toggle
+    },
+    {
+      key: WidgetTypeEnum.EXPLORE,
+      position: MenuItemPositionEnum.RIGHT,
+      iconName: 'planet',
+      onClick: toggle
     }
   ];
 
   return (
     <styled.Container data-testid="WidgetMenuPage-test">
-      <Menu items={MENU_ITEMS} activeKey={activeType} />
+      <Menu items={isGuest ? MENU_ITEMS_GUEST : MENU_ITEMS} activeKey={activeType} />
     </styled.Container>
   );
 };

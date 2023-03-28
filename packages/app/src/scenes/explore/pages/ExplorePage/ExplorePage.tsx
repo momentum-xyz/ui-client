@@ -6,8 +6,6 @@ import {useStore} from 'shared/hooks';
 import {ExplorePanel} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 
-import * as styled from './ExplorePage.styled';
-
 const ExplorePage: FC = () => {
   const {exploreStore, nftStore, widgetsStore, sessionStore} = useStore();
 
@@ -26,40 +24,30 @@ const ExplorePage: FC = () => {
   }, [exploreStore]);
 
   return (
-    <styled.Container>
-      <styled.Wrapper>
-        <styled.Boxes />
-
-        <styled.Boxes>
-          <ExplorePanel
-            newsfeed={exploreStore.newsfeed}
-            nftItems={nftStore.nftItems}
-            searchQuery={nftStore.searchQuery}
-            odysseyList={nftStore.searchedNftItems}
-            currentUser={sessionStore.user}
-            onSearch={nftStore.searchNft}
-            onSelect={(nft) => {
-              widgetsStore.odysseyInfoStore.open(nft);
-              widgetsStore.profileStore.dialog.close();
-            }}
-            onTeleport={(nft) => {
-              console.log(nft);
-              if (nft.uuid) {
-                navigate(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}), {replace: true});
-              }
-            }}
-            onAttend={(nft) => {
-              console.log(nft);
-            }}
-            // FIXME id type
-            onConnect={(id) => nftStore.setConnectToNftItemId(+id)}
-            onOpenOdyssey={(uuid) =>
-              widgetsStore.odysseyInfoStore.open(nftStore.getNftByUuid(uuid))
-            }
-          />
-        </styled.Boxes>
-      </styled.Wrapper>
-    </styled.Container>
+    <ExplorePanel
+      newsfeed={exploreStore.newsfeed}
+      nftItems={nftStore.nftItems}
+      searchQuery={nftStore.searchQuery}
+      odysseyList={nftStore.searchedNftItems}
+      currentUser={sessionStore.user}
+      onSearch={nftStore.searchNft}
+      onSelect={(nft) => {
+        widgetsStore.odysseyInfoStore.open(nft);
+        widgetsStore.profileStore.dialog.close();
+      }}
+      onTeleport={(nft) => {
+        console.log(nft);
+        if (nft.uuid) {
+          navigate(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}), {replace: true});
+        }
+      }}
+      onAttend={(nft) => {
+        console.log(nft);
+      }}
+      // FIXME id type
+      onConnect={(id) => nftStore.setConnectToNftItemId(+id)}
+      onOpenOdyssey={(uuid) => widgetsStore.odysseyInfoStore.open(nftStore.getNftByUuid(uuid))}
+    />
   );
 };
 
