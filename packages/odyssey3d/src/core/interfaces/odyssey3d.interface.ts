@@ -7,11 +7,11 @@ export interface Odyssey3dPropsInterface {
   events: Event3dEmitterType;
 
   // Objects
-  onObjectClick: (objectId: string) => void;
+  onObjectClick: (objectId: string, e?: React.MouseEvent) => void;
   onObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
 
   // click on any user
-  onUserClick: (userId: string) => void;
+  onUserClick: (userId: string, e?: React.MouseEvent) => void;
 
   // Me moving
   onMove: (transform: ObjectTransformInterface) => void;
