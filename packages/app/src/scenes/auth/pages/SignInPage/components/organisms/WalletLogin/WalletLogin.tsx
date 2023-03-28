@@ -1,11 +1,12 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, SvgButton, Text} from '@momentum-xyz/ui-kit';
+import {Button} from '@momentum-xyz/ui-kit-storybook';
 
 import {WalletConfigInterface} from 'wallets';
 import {useStore} from 'shared/hooks';
-import {Box} from 'ui-kit';
 import {appVariables} from 'api/constants';
+
+import * as styled from './WalletLogin.styled';
 
 interface PropsInterface {
   walletConf: WalletConfigInterface;
@@ -35,27 +36,20 @@ const WalletLogin: FC<PropsInterface> = ({
       {!!account && (
         <div
           style={{
-            margin: '1em'
+            margin: '10px'
           }}
         >
-          <Text text={account} size="m" />
+          <styled.TitleText>{account}</styled.TitleText>
         </div>
       )}
     </div>
   );
 
   return (
-    <Box>
-      <SvgButton iconName="close" size="normal" onClick={onCancel} />
-      <div
-        style={{
-          margin: '1em'
-        }}
-      >
-        <Text text={name} size="m" />
-      </div>
+    <styled.Container>
+      <styled.TitleText>Connect with {name}</styled.TitleText>
 
-      {innerView}
+      <styled.WalletInnerViewContainer>{innerView}</styled.WalletInnerViewContainer>
 
       <Button
         label="Connect"
@@ -78,7 +72,7 @@ const WalletLogin: FC<PropsInterface> = ({
             });
         }}
       />
-    </Box>
+    </styled.Container>
   );
 };
 

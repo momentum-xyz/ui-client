@@ -4,7 +4,7 @@ import {useWallet} from './useWallet';
 
 const config: WalletConfigInterface = {
   name: 'Talisman',
-  icon: 'TODO',
+  icon: 'https://avatars.githubusercontent.com/u/18060234?s=200&v=4', // 'TODO',
   useWallet
 };
 

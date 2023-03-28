@@ -3,6 +3,7 @@ import type {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {useEffect, useState} from 'react';
 import {decodeAddress} from '@polkadot/util-crypto';
 import {stringToHex, u8aToHex} from '@polkadot/util';
+import {Select} from '@momentum-xyz/ui-kit-storybook';
 
 import {UseWalletType} from 'wallets';
 
@@ -47,28 +48,28 @@ export const useWallet: UseWalletType = ({appVariables}) => {
     return signature;
   };
 
-  const handleAccountChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedAccount(event.target.value);
+  const handleAccountChange = (value: string | null) => {
+    if (!value) {
+      return;
+    }
+    setSelectedAccount(value);
   };
 
   const account = selectedAccount?.address;
   const accountHex = account ? u8aToHex(decodeAddress(account)) : null;
 
+  const options = accounts.map(({address, meta}) => ({
+    label: meta.name || address,
+    value: address
+  }));
   const content = (
-    <div style={{padding: '1em'}}>
+    <>
       {accounts ? (
-        <select value={selectedAccount?.address ?? ''} onChange={handleAccountChange}>
-          <option value="">Select account</option>
-          {accounts.map(({address, meta}) => (
-            <option key={address} value={address}>
-              {meta.name || address}
-            </option>
-          ))}
-        </select>
+        <Select options={options} value={null} onSingleChange={handleAccountChange}></Select>
       ) : (
         <span>Loading...</span>
       )}
-    </div>
+    </>
   );
 
   return {
