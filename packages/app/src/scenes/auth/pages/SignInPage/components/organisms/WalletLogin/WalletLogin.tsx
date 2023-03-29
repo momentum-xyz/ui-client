@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button, SvgButton, Text} from '@momentum-xyz/ui-kit';
-import {WalletConfigInterface} from 'wallets/wallets.types';
 
+import {WalletConfigInterface} from 'wallets';
 import {useStore} from 'shared/hooks';
 import {Box} from 'ui-kit';
 import {appVariables} from 'api/constants';
@@ -11,9 +11,17 @@ interface PropsInterface {
   walletConf: WalletConfigInterface;
   onCancel: () => void;
   onConnected: () => void;
+  onError?: (error: any) => void;
+  attachSecondaryAccount?: boolean;
 }
 
-const WalletLogin: FC<PropsInterface> = ({walletConf, onConnected, onCancel}) => {
+const WalletLogin: FC<PropsInterface> = ({
+  walletConf,
+  attachSecondaryAccount = false,
+  onConnected,
+  onError,
+  onCancel
+}) => {
   const {sessionStore} = useStore();
   const {name, useWallet} = walletConf;
 
@@ -58,11 +66,15 @@ const WalletLogin: FC<PropsInterface> = ({walletConf, onConnected, onCancel}) =>
             console.log('Account not selected');
             return;
           }
-          sessionStore
-            .fetchTokenByWallet2(accountHex, signChallenge)
+
+          (attachSecondaryAccount
+            ? sessionStore.attachAnotherAccount(accountHex, signChallenge)
+            : sessionStore.fetchTokenByWallet2(accountHex, signChallenge)
+          )
             .then(onConnected)
             .catch((err) => {
               console.log('Error connecting wallet', err);
+              onError?.(err);
             });
         }}
       />

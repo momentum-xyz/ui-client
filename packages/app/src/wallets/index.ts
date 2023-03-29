@@ -4,3 +4,5 @@ import talisman from './talisman';
 import polkadot from './polkadot';
 
 export const availableWallets = [metamask, coinbaseWallet, talisman, polkadot];
+
+export * from './wallets.types';

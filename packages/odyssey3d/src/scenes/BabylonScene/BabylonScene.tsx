@@ -1,12 +1,16 @@
 import {FC} from 'react';
 import {Scene} from '@babylonjs/core';
-import {Event3dEmitter} from '@momentum-xyz/core';
 import SceneComponent from 'babylonjs-hook';
 
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
 import {CameraHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babylon';
 
-const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
+const BabylonScene: FC<Odyssey3dPropsInterface> = ({
+  events,
+  onObjectClick,
+  onUserClick,
+  onMove
+}) => {
   /* Will run one time. */
   const onSceneReady = (scene: Scene) => {
     const view = scene.getEngine().getRenderingCanvas();
@@ -14,7 +18,15 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
     if (view?.id) {
       CameraHelper.initialize(scene, view);
       LightHelper.initialize(scene);
-      ObjectHelper.initialize(scene, engine, props.objects, view);
+      ObjectHelper.initialize(
+        scene,
+        engine,
+        //  props.objects,
+        view
+        // onObjectClick,
+        // onUserClick,
+        // onMove,
+      );
       //SkyboxHelper.setCubemapSkybox(scene);
       SkyboxHelper.set360Skybox(
         scene,
@@ -30,18 +42,22 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = (props) => {
         });
       }
 
-      Event3dEmitter.on('SetWorld', (assetID) => {
+      events.on('SetWorld', (assetID) => {
         // Commented out the actual line, as currently the assetID coming from BE is a Unity asset, so doesn't load
         //CameraHelper.spawnPlayer(scene, assetID);
         CameraHelper.spawnPlayer(scene, 'd906e070-3d2e-b1a5-3e3f-703423225945');
       });
 
-      Event3dEmitter.on('ObjectCreated', async (object) => {
+      events.on('ObjectCreated', async (object) => {
         await ObjectHelper.spawnObjectAsync(scene, object);
       });
 
-      Event3dEmitter.on('ObjectTextureChanged', (object) => {
+      events.on('ObjectTextureChanged', (object) => {
         ObjectHelper.setObjectTexture(scene, object);
+      });
+
+      events.on('ObjectEditModeChanged', (objectId, isOn) => {
+        // TODO
       });
     } else {
       console.error('There is no canvas for Babylon.');

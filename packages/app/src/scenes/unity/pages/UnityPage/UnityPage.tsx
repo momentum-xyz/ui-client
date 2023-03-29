@@ -6,7 +6,7 @@ import {toast} from 'react-toastify';
 // import Unity from 'react-unity-webgl';
 import {Portal} from '@momentum-xyz/ui-kit';
 import {BabylonScene} from '@momentum-xyz/odyssey3d';
-import {useI18n} from '@momentum-xyz/core';
+import {Event3dEmitter, useI18n} from '@momentum-xyz/core';
 
 import {PRIVATE_ROUTES_WITH_UNITY} from 'scenes/App.routes';
 import {appVariables} from 'api/constants';
@@ -228,7 +228,15 @@ const UnityPage: FC = () => {
           unityInstanceStore.setLastClickPosition(event.clientX, event.clientY);
         }}
       >
-        <BabylonScene objects={[]} />
+        <BabylonScene
+          events={Event3dEmitter}
+          onMove={(e) => console.log('onMove', e)}
+          onObjectClick={(e) => console.log('onObjectClick', e)}
+          onObjectTransform={(objectId, transform) =>
+            console.log('onObjectTransform', objectId, transform)
+          }
+          onUserClick={(e) => console.log('onUserClick', e)}
+        />
         {/* <Unity unityContext={unityInstanceStore.unityContext} style={UnityContextCSS} /> */}
       </styled.Inner>
 

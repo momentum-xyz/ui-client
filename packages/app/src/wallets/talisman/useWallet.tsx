@@ -1,11 +1,12 @@
 import {web3Enable, web3Accounts, web3FromSource} from '@polkadot/extension-dapp';
 import type {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {useEffect, useState} from 'react';
-import {UseWalletType} from 'wallets/wallets.types';
 import {decodeAddress} from '@polkadot/util-crypto';
 import {stringToHex, u8aToHex} from '@polkadot/util';
 import {hexlify} from '@ethersproject/bytes';
 import {toUtf8Bytes} from '@ethersproject/strings';
+
+import {UseWalletType} from 'wallets';
 
 const isPolkadotAccount = (account: InjectedAccountWithMeta) => {
   try {
