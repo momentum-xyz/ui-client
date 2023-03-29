@@ -21,7 +21,11 @@ const isPolkadotAccount = (account: InjectedAccountWithMeta) => {
   }
 };
 
-export const useWallet: UseWalletType = ({appVariables}) => {
+export const useWallet: UseWalletType = ({
+  appVariables,
+  existingNftAddresses = [],
+  walletsToDisplay = 'all'
+}) => {
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
   const [_selectedAccount, setSelectedAccount] = useState<string | null>(null);
   const selectedAccount = accounts.find((account) => account.address === _selectedAccount);
@@ -88,10 +92,18 @@ export const useWallet: UseWalletType = ({appVariables}) => {
       : account;
   console.log('useWallet talisman', {account, accountHex});
 
-  const options = accounts.map(({address, meta}) => ({
-    label: meta.name || address,
-    value: address
-  }));
+  const walletFilterFunctions: {[key: string]: (d: {value: string}) => boolean} = {
+    all: () => true,
+    withNfts: ({value}) => existingNftAddresses.includes(value),
+    withoutNfts: ({value}) => existingNftAddresses.includes(value) === false
+  };
+
+  const options = accounts
+    .map(({address, meta}) => ({
+      label: meta.name || address,
+      value: address
+    }))
+    .filter(walletFilterFunctions[walletsToDisplay]);
   const content = (
     <>
       {accounts ? (

@@ -23,11 +23,14 @@ const WalletLogin: FC<PropsInterface> = ({
   onError,
   onCancel
 }) => {
-  const {sessionStore} = useStore();
+  const {sessionStore, nftStore} = useStore();
   const {name, useWallet} = walletConf;
+  const {nftItems} = nftStore;
 
   const {signChallenge, content, account, accountHex} = useWallet({
-    appVariables: appVariables as any
+    appVariables: appVariables as any,
+    walletsToDisplay: 'withNfts',
+    existingNftAddresses: nftItems.map((d) => d.owner)
   });
   console.log('WalletLogin', {name, signChallenge, content, account, accountHex});
 
@@ -41,16 +44,21 @@ const WalletLogin: FC<PropsInterface> = ({
     </div>
   );
 
+  const accountCanLogin = accountHex && nftStore.nftItems.find((d) => d.owner === account);
+
   return (
     <styled.Container>
       <styled.TitleText>Connect with {name}</styled.TitleText>
-
       <styled.WalletInnerViewContainer>{innerView}</styled.WalletInnerViewContainer>
-
+      {accountHex && !accountCanLogin && (
+        <span>
+          a registration with this wallet does not exist, go to to the profile creation flow
+        </span>
+      )}
       <Button
         label="Connect your wallet"
         icon="wallet"
-        disabled={!accountHex}
+        disabled={!accountHex || !accountCanLogin}
         wide
         onClick={() => {
           if (!accountHex) {

@@ -12,7 +12,11 @@ import * as styled from './SignInPage.styled';
 const TEXT_LINE = 'Lorem ipsum dolor sit amet, consectetuer adipicing elit. Aenean commodo ligula.';
 
 const SignInPage: FC = () => {
-  const {sessionStore, widgetsStore} = useStore();
+  const {sessionStore, nftStore, widgetsStore} = useStore();
+
+  // eslint-disable-next-line no-debugger
+  debugger;
+  console.log(nftStore.nftItemsWithAccounts);
 
   const {previewOdysseyStore} = widgetsStore;
 
