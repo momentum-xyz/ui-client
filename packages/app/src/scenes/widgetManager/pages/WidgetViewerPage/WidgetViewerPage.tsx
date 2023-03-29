@@ -11,7 +11,7 @@ import * as styled from './WidgetViewerPage.styled';
 
 const WidgetViewerPage: FC = () => {
   const {widgetManagerStore} = useStore();
-  const {leftActiveWidget, centerActiveWidget, rightActiveWidget} = widgetManagerStore;
+  const {leftActiveWidget, rightActiveWidget} = widgetManagerStore;
 
   const visualizeSection = (widgetInfo: WidgetInfoModelType | null, msg: string) => {
     switch (widgetInfo?.type) {
@@ -31,10 +31,6 @@ const WidgetViewerPage: FC = () => {
       <styled.LeftSection>
         <styled.Widget>{visualizeSection(leftActiveWidget, 'LEFT')}</styled.Widget>
       </styled.LeftSection>
-
-      <styled.CenterSection>
-        <styled.Widget>{visualizeSection(centerActiveWidget, 'CENTER')}</styled.Widget>
-      </styled.CenterSection>
 
       <styled.RightSection>
         <styled.Widget>{visualizeSection(rightActiveWidget, 'RIGHT')}</styled.Widget>
