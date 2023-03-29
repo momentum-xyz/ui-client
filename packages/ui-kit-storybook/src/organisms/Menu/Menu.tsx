@@ -20,11 +20,11 @@ export interface MenuItemInterface<T> {
 }
 
 export interface MenuPropsInterface<T> {
-  activeKey?: T;
+  activeKeys?: T[];
   items?: MenuItemInterface<T>[];
 }
 
-const Menu = <T,>({activeKey, items = []}: MenuPropsInterface<T>) => {
+const Menu = <T,>({activeKeys = [], items = []}: MenuPropsInterface<T>) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -81,7 +81,7 @@ const Menu = <T,>({activeKey, items = []}: MenuPropsInterface<T>) => {
     return [tmp_sidePadding, tmp_leftBlankCount, tmp_rightBlankCount];
   }, [leftItems, centerItems, rightItems, windowWidth]);
 
-  const activeCenterActionIdx = centerItems.findIndex(({key}) => key === activeKey);
+  const activeCenterActionIdx = centerItems.findIndex(({key}) => activeKeys.includes(key));
   const subMenu: MenuItemInterface<T>[] | undefined = activeCenterActionIdx
     ? centerItems[activeCenterActionIdx]?.subMenuItems
     : undefined;
@@ -101,7 +101,7 @@ const Menu = <T,>({activeKey, items = []}: MenuPropsInterface<T>) => {
           type="primary"
           iconName={action.iconName}
           imageSrc={action.imageSrc}
-          isActive={action.key === activeKey}
+          isActive={activeKeys.includes(action.key)}
           onClick={() => {
             action.onClick?.(action.key, action.position);
           }}
