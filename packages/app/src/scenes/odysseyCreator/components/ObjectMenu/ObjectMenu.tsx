@@ -15,9 +15,9 @@ const OBJECT_MENU_OFFSET_X = 295;
 const OBJECT_MENU_OFFSET_Y = 100;
 
 const ObjectMenu: FC = () => {
-  const {odysseyCreatorStore, unityStore} = useStore();
+  const {odysseyCreatorStore, universeStore} = useStore();
   const {objectFunctionalityStore, objectColorStore} = odysseyCreatorStore;
-  const {worldId, unityInstanceStore} = unityStore;
+  const {worldId, instance3DStore} = universeStore;
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isObjectColor, setIsObjectColor] = useState(false);
@@ -25,9 +25,9 @@ const ObjectMenu: FC = () => {
   const navigate = useNavigate();
   const {t} = useI18n();
 
-  const topOffset = unityInstanceStore.objectMenuPosition.y - OBJECT_MENU_OFFSET_Y;
-  const leftOffset = unityInstanceStore.objectMenuPosition.x - OBJECT_MENU_OFFSET_X;
-  const objectId = unityInstanceStore.selectedObjectId ?? ' ';
+  const topOffset = instance3DStore.objectMenuPosition.y - OBJECT_MENU_OFFSET_Y;
+  const leftOffset = instance3DStore.objectMenuPosition.x - OBJECT_MENU_OFFSET_X;
+  const objectId = instance3DStore.selectedObjectId ?? ' ';
 
   useEffect(() => {
     objectFunctionalityStore.init(objectId);
@@ -65,35 +65,35 @@ const ObjectMenu: FC = () => {
           />
         </styled.TitleBar>
 
-        <styled.MenuItem onClick={() => unityInstanceStore.changeGizmoType(GizmoTypeEnum.POSITION)}>
+        <styled.MenuItem onClick={() => instance3DStore.changeGizmoType(GizmoTypeEnum.POSITION)}>
           <styled.MenuText
             text={t('actions.move')}
             size="m"
-            className={cn(unityInstanceStore.gizmoMode === GizmoTypeEnum.POSITION && 'selected')}
+            className={cn(instance3DStore.gizmoMode === GizmoTypeEnum.POSITION && 'selected')}
           />
         </styled.MenuItem>
 
-        <styled.MenuItem onClick={() => unityInstanceStore.changeGizmoType(GizmoTypeEnum.ROTATION)}>
+        <styled.MenuItem onClick={() => instance3DStore.changeGizmoType(GizmoTypeEnum.ROTATION)}>
           <styled.MenuText
             text={t('actions.rotate')}
             size="m"
-            className={cn(unityInstanceStore.gizmoMode === GizmoTypeEnum.ROTATION && 'selected')}
+            className={cn(instance3DStore.gizmoMode === GizmoTypeEnum.ROTATION && 'selected')}
           />
         </styled.MenuItem>
 
-        <styled.MenuItem onClick={() => unityInstanceStore.changeGizmoType(GizmoTypeEnum.SCALE)}>
+        <styled.MenuItem onClick={() => instance3DStore.changeGizmoType(GizmoTypeEnum.SCALE)}>
           <styled.MenuText
             text={t('actions.scale')}
             size="m"
-            className={cn(unityInstanceStore.gizmoMode === GizmoTypeEnum.SCALE && 'selected')}
+            className={cn(instance3DStore.gizmoMode === GizmoTypeEnum.SCALE && 'selected')}
           />
         </styled.MenuItem>
 
-        <styled.MenuItem onClick={unityInstanceStore.undo}>
+        <styled.MenuItem onClick={instance3DStore.undo}>
           <styled.MenuText text={t('actions.undo')} size="m" />
         </styled.MenuItem>
 
-        <styled.MenuItem onClick={unityInstanceStore.redo}>
+        <styled.MenuItem onClick={instance3DStore.redo}>
           <styled.MenuText text={t('actions.redo')} size="m" />
         </styled.MenuItem>
 
@@ -137,7 +137,7 @@ const ObjectMenu: FC = () => {
               title: t('actions.delete'),
               onClick: () => {
                 objectFunctionalityStore.deleteObject();
-                unityInstanceStore.objectMenu.close();
+                instance3DStore.objectMenu.close();
               },
               variant: 'danger'
             }}

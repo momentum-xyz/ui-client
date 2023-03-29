@@ -1,6 +1,6 @@
 import {Instance, types} from 'mobx-state-tree';
 
-const Space = types.model('Space', {
+const Object = types.model('Object', {
   id: types.string,
   name: types.string,
   description: types.maybeNull(types.string),
@@ -10,6 +10,6 @@ const Space = types.model('Space', {
   isPrivate: false
 });
 
-export type SpaceModelType = Instance<typeof Space>;
+export type ObjectModelType = Instance<typeof Object>;
 
-export {Space};
+export {Object};

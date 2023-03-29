@@ -12,8 +12,8 @@ import * as styled from './CalendarWidget.styled';
 import {EventForm, TabBarButtons} from './components';
 
 const CalendarWidget: FC = () => {
-  const {widgetsStore, unityStore, sessionStore} = useStore();
-  const {unityInstanceStore, unityWorldStore} = unityStore;
+  const {widgetsStore, universeStore, sessionStore} = useStore();
+  const {instance3DStore, activeWorldStore} = universeStore;
   const {calendarStore} = widgetsStore;
   const {eventList, deleteConfirmationDialog} = calendarStore;
 
@@ -21,22 +21,22 @@ const CalendarWidget: FC = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    eventList.fetchSpaceEvents(unityStore.worldId);
-    unityInstanceStore.changeKeyboardControl(false);
+    eventList.fetchSpaceEvents(universeStore.worldId);
+    instance3DStore.changeKeyboardControl(false);
 
     return () => {
-      unityInstanceStore.changeKeyboardControl(true);
+      instance3DStore.changeKeyboardControl(true);
       eventList.resetModel();
     };
-  }, [calendarStore, eventList, unityInstanceStore, unityStore.worldId]);
+  }, [calendarStore, eventList, instance3DStore, universeStore.worldId]);
 
   const handleWeblink = (weblink: string) => {
     window.open(absoluteLink(weblink), '_blank');
   };
 
   const handleEventDelete = async () => {
-    if (unityStore.worldId) {
-      if (await calendarStore.removeEvent(unityStore.worldId)) {
+    if (universeStore.worldId) {
+      if (await calendarStore.removeEvent(universeStore.worldId)) {
         toast.info(
           <ToastContent
             headerIconName="calendar"
@@ -65,7 +65,7 @@ const CalendarWidget: FC = () => {
         <PanelLayout
           componentSize={{width: '1063px'}}
           onClose={calendarStore.dialog.close}
-          title={unityWorldStore.world?.name}
+          title={activeWorldStore.info?.name}
           headerStyle="uppercase"
           headerType="h2"
           headerIconName="calendar"
@@ -76,7 +76,7 @@ const CalendarWidget: FC = () => {
         >
           <styled.InnerContainer>
             <styled.FormButton
-              disabled={!unityWorldStore.isMyWorld}
+              disabled={!activeWorldStore.isMyWorld}
               label={t('calendar.formButton')}
               variant="primary"
               height="medium-height"

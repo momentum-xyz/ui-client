@@ -1,6 +1,6 @@
 export * from './UserProfile';
 export * from './User';
-export * from './Space';
+export * from './Object';
 export * from './SpaceInfo';
 export * from './TrackModel';
 export * from './EventItem';

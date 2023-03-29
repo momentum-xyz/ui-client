@@ -12,8 +12,8 @@ import {UnityService} from 'shared/services';
 const DEFAULT_UNITY_VOLUME = 0.75;
 const UNITY_VOLUME_STEP = 0.1;
 
-const UnityInstanceStore = types
-  .model('UnityInstanceStore', {
+const Instance3DStore = types
+  .model('Instance3DStore', {
     isInitialized: false,
     isTeleportReady: false,
     muted: false,
@@ -246,4 +246,4 @@ const UnityInstanceStore = types
     }
   }));
 
-export {UnityInstanceStore};
+export {Instance3DStore};

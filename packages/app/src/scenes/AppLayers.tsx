@@ -18,17 +18,17 @@ interface PropsInterface {
 const AppLayers: FC<PropsInterface> = (props) => {
   const {children, renderUnity = false} = props;
 
-  const {unityStore} = useStore();
+  const {universeStore} = useStore();
   const theme = useTheme();
 
-  // if (renderUnity && !unityStore.isUnityAvailable) {
+  // if (renderUnity && !universeStore.isUnityAvailable) {
   //   return <></>;
   // }
 
   return (
     <div data-testid="AppLayers-test">
       <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} theme={theme} />
-      <UnityControlContextProvider value={unityStore.unityInstanceStore.unityControlInst}>
+      <UnityControlContextProvider value={universeStore.instance3DStore.unityControlInst}>
         <div id="sectioned-screen-container">
           <SectionedScreen />
         </div>

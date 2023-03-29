@@ -11,12 +11,12 @@ import {useStore} from 'shared/hooks';
 import * as styled from './DeleteSkyboxDialog.styled';
 
 const DeleteSkyboxDialog: FC = () => {
-  const {odysseyCreatorStore, unityStore, sessionStore} = useStore();
+  const {odysseyCreatorStore, universeStore, sessionStore} = useStore();
   const {skyboxSelectorStore} = odysseyCreatorStore;
   const {deleteDialog, closeSkyboxDeletion, removeUserSkybox, skyboxToDelete, currentItemId} =
     skyboxSelectorStore;
-  const {unityInstanceStore} = unityStore;
-  const worldId = unityStore.worldId;
+  const {instance3DStore} = universeStore;
+  const worldId = universeStore.worldId;
   const {user} = sessionStore;
 
   const deletingCurrentSkybox = skyboxToDelete?.id === currentItemId;
@@ -24,11 +24,11 @@ const DeleteSkyboxDialog: FC = () => {
   const {t} = useI18n();
 
   useEffect(() => {
-    unityInstanceStore.changeKeyboardControl(false);
+    instance3DStore.changeKeyboardControl(false);
     return () => {
-      unityInstanceStore.changeKeyboardControl(true);
+      instance3DStore.changeKeyboardControl(true);
     };
-  }, [unityInstanceStore]);
+  }, [instance3DStore]);
 
   if (!skyboxToDelete || !user) {
     closeSkyboxDeletion();

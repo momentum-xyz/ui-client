@@ -20,7 +20,7 @@ const DatePicker = DatePickerOriginal as unknown as FC<ReactDatePickerProps>;
 const EventForm: FC = () => {
   const {t} = useI18n();
   const theme = useTheme();
-  const {widgetsStore, unityStore, sessionStore, exploreStore, nftStore} = useStore();
+  const {widgetsStore, universeStore, sessionStore, exploreStore, nftStore} = useStore();
   const {calendarStore} = widgetsStore;
   const {eventForm, formDialog, eventList} = calendarStore;
   const {currentEvent} = eventForm;
@@ -58,13 +58,13 @@ const EventForm: FC = () => {
     const isNewEvent = !eventForm.currentEvent;
     const isSuccess = await eventForm.createOrUpdateEvent(
       data,
-      unityStore.worldId,
+      universeStore.worldId,
       sessionStore.userId,
       calendarStore.world?.name,
       image
     );
 
-    const nft = nftStore.getNftByUuid(unityStore.worldId);
+    const nft = nftStore.getNftByUuid(universeStore.worldId);
 
     if (isSuccess && isNewEvent && nft) {
       await exploreStore.createNewsfeedItem({
@@ -91,7 +91,7 @@ const EventForm: FC = () => {
           showCloseButton
         />
       );
-      await eventList.fetchSpaceEvents(unityStore.worldId);
+      await eventList.fetchSpaceEvents(universeStore.worldId);
     } else {
       toast.error(
         <ToastContent
