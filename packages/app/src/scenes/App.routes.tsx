@@ -11,7 +11,7 @@ const BirthOfMePage = lazy(() => import('./auth/pages/BirthOfMePage/BirthOfMePag
 const BirthAnimationPage = lazy(() => import('./auth/pages/BirthAnimationPage/BirthAnimationPage'));
 const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));
 //const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
-const Map3dPage = lazy(() => import('./map3d/pages/Map3dPage/Map3dPage'));
+//const Map3dPage = lazy(() => import('./map3d/pages/Map3dPage/Map3dPage'));
 const OdysseyHomePage = lazy(() => import('./odysseyHome/pages/OdysseyHomePage/OdysseyHomePage'));
 const Object = lazy(() => import('./object/Object'));
 const DisconnectedPage = lazy(() => import('./system/pages/DisconnectedPage/DisconnectedPage'));
@@ -42,7 +42,6 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.signIn,
     main: () => (
       <>
-        <Map3dPage isClickActive />
         <SignInPage />
         <WidgetManager />
       </>
@@ -50,22 +49,12 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   },
   {
     path: ROUTES.signInAccount,
-    main: () => (
-      <>
-        <Map3dPage />
-        <SignInAccountPage />
-      </>
-    )
+    main: () => <SignInAccountPage />
   },
   {
     path: ROUTES.birth,
     exact: true,
-    main: () => (
-      <>
-        <Map3dPage />
-        <BirthOfMePage />
-      </>
-    )
+    main: () => <BirthOfMePage />
   },
   {
     path: ROUTES.birthAnimation,
@@ -78,13 +67,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   },
   {
     path: ROUTES.explore,
-    main: () => (
-      <>
-        <Map3dPage isClickActive />
-        {/* <ExplorePage /> */}
-        <WidgetManager />
-      </>
-    )
+    main: () => <WidgetManager />
   },
   {
     path: ROUTES.magic,

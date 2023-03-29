@@ -1,4 +1,4 @@
-import React, {FC, Suspense, useEffect} from 'react';
+import {FC, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {ThemeProvider as ThemeProviderOriginal, ThemeProviderProps} from 'styled-components';
@@ -11,6 +11,7 @@ import {httpErrorCodes} from 'api/constants';
 import {SystemWideError} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
 import {UnityPage} from 'scenes/unity';
+import {Map3dPage} from 'scenes/map3d';
 
 import {PRIVATE_ROUTES, PRIVATE_ROUTES_WITH_UNITY, SYSTEM_ROUTES} from './App.routes';
 import AppAuth from './AppAuth';
@@ -29,6 +30,7 @@ const App: FC = () => {
   const {configStore, sessionStore, themeStore, sentryStore} = rootStore;
   const {configLoadingErrorCode} = configStore;
 
+  const isBrowserUnsupported = !isBrowserSupported();
   const {pathname} = useLocation();
   const navigate = useNavigate();
   const {t} = useI18n();
@@ -45,8 +47,6 @@ const App: FC = () => {
       sentryStore.init();
     }
   }, [sessionStore, configStore.isConfigReady, sentryStore]);
-
-  const isBrowserUnsupported = !isBrowserSupported();
 
   useEffect(() => {
     if (isBrowserUnsupported) {
@@ -111,32 +111,26 @@ const App: FC = () => {
     return <></>;
   }
 
-  // PRIVATE ROUTES WITH UNITY
-  if (isTargetRoute(pathname, PRIVATE_ROUTES_WITH_UNITY)) {
-    return (
-      <ThemeProvider theme={themeStore.theme}>
-        <AppAuth>
-          <GlobalStyles />
-          <UnityPage />
-          <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
-            <AppLayers renderUnity>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY)}</AppLayers>
-          </Suspense>
-          <TestnetMarkWidget withOffset />
-        </AppAuth>
-      </ThemeProvider>
-    );
-  }
-
-  // PRIVATE ROUTES
   return (
     <ThemeProvider theme={themeStore.theme}>
-      <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
-        <AppAuth>
-          <GlobalStyles />
-          <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES, ROUTES.explore)}</AppLayers>
-          {/*<TestnetMarkWidget /> */}
-        </AppAuth>
-      </Suspense>
+      <AppAuth>
+        <GlobalStyles />
+        {isTargetRoute(pathname, PRIVATE_ROUTES_WITH_UNITY) ? (
+          <>
+            <UnityPage />
+            <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
+              <AppLayers renderUnity>{createSwitchByConfig(PRIVATE_ROUTES_WITH_UNITY)}</AppLayers>
+            </Suspense>
+          </>
+        ) : (
+          <>
+            <Map3dPage />
+            <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
+              <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES, ROUTES.explore)}</AppLayers>
+            </Suspense>
+          </>
+        )}
+      </AppAuth>
     </ThemeProvider>
   );
 };
