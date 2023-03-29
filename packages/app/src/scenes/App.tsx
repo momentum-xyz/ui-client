@@ -134,7 +134,7 @@ const App: FC = () => {
         <AppAuth>
           <GlobalStyles />
           <AppLayers>{createSwitchByConfig(PRIVATE_ROUTES, ROUTES.explore)}</AppLayers>
-          <TestnetMarkWidget />
+          {/*<TestnetMarkWidget /> */}
         </AppAuth>
       </Suspense>
     </ThemeProvider>

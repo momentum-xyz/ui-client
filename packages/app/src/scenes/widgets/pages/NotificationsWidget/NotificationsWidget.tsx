@@ -65,7 +65,7 @@ const NotificationsWidget: FC = () => {
                 onConnect={() => {}}
                 onAttend={() => {}}
                 onOpenOdyssey={(uuid) => {
-                  widgetsStore.odysseyInfoStore.open(nftStore.getNftByUuid(uuid));
+                  widgetsStore.odysseyInfoStore.open(uuid);
                 }}
               />
             ))}

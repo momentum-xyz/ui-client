@@ -1,6 +1,8 @@
 import {ComponentMeta, Story} from '@storybook/react';
 import {useState} from 'react';
 
+import {PositionEnum} from '../../enums';
+
 import Menu, {MenuItemInterface, MenuPropsInterface} from './Menu';
 
 export default {
@@ -8,116 +10,126 @@ export default {
   component: Menu,
   parameters: {
     layout: 'fullscreen'
-  }
+  },
+  decorators: [
+    (Story) => (
+      <div className="storybook-bottom">
+        <Story />
+      </div>
+    )
+  ]
 } as ComponentMeta<typeof Menu>;
 
 const IMAGE_SRC = 'https://picsum.photos/300';
 
-const LEFT_ACTIONS: MenuItemInterface[] = [
+const LEFT_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_1',
-    iconName: 'menu_info'
+    iconName: 'menu_info',
+    position: PositionEnum.LEFT
   },
   {
     key: 'key_2',
-    iconName: 'leave'
+    iconName: 'leave',
+    position: PositionEnum.LEFT
   },
   {
     key: 'key_3',
-    imageSrc: IMAGE_SRC
+    imageSrc: IMAGE_SRC,
+    position: PositionEnum.LEFT
   },
   {
     key: 'key_4',
-    iconName: 'smiley-face'
+    iconName: 'smiley-face',
+    position: PositionEnum.LEFT
   }
 ];
-const CENTRAL_ACTIONS: MenuItemInterface[] = [
+
+const CENTER_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_5',
-    iconName: 'star_small'
+    iconName: 'star_small',
+    position: PositionEnum.CENTER
   },
   {
     key: 'key_6',
-    iconName: 'edit'
+    iconName: 'edit',
+    position: PositionEnum.CENTER
   }
 ];
-const RIGHT_ACTIONS: MenuItemInterface[] = [
+
+const RIGHT_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_7',
-    iconName: 'voice_chat'
+    iconName: 'voice_chat',
+    position: PositionEnum.RIGHT
   },
   {
     key: 'key_8',
-    iconName: 'chat'
+    iconName: 'chat',
+    position: PositionEnum.RIGHT
   },
   {
     key: 'key_9',
-    iconName: 'search'
+    iconName: 'search',
+    position: PositionEnum.RIGHT
   },
   {
     key: 'key_10',
-    iconName: 'meeting'
+    iconName: 'meeting',
+    position: PositionEnum.RIGHT
   },
   {
     key: 'key_11',
-    iconName: 'calendar'
+    iconName: 'calendar',
+    position: PositionEnum.RIGHT
   },
   {
     key: 'key_12',
-    iconName: 'clock'
+    iconName: 'clock',
+    position: PositionEnum.RIGHT
   },
   {
     key: 'key_13',
-    imageSrc: IMAGE_SRC
+    imageSrc: IMAGE_SRC,
+    position: PositionEnum.RIGHT
   }
 ];
 
-const Template: Story<MenuPropsInterface> = (args) => {
-  const [activeKey, setActiveKey] = useState<string | null>(CENTRAL_ACTIONS[0].key);
+const Template: Story<MenuPropsInterface<string>> = (args) => {
+  const [activeKey /*, setActiveKey*/] = useState<string>(CENTER_ITEMS[0].key);
 
-  const onMenuItemSelection = (key: string | null) => {
+  /*const onChangeActiveKey = (key?: string) => {
     if (key && key.startsWith('sub_')) {
       return;
     }
     setActiveKey(key);
-  };
-  return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column-reverse',
-        paddingBottom: '10px'
-      }}
-    >
-      <Menu {...args} activeMenuItemKey={activeKey} onMenuItemSelection={onMenuItemSelection} />
-    </div>
-  );
+  };*/
+
+  return <Menu {...args} activeKey={activeKey} />;
 };
 
 export const General = Template.bind({});
 General.args = {
-  leftActions: LEFT_ACTIONS,
-  centerActions: CENTRAL_ACTIONS,
-  rightActions: RIGHT_ACTIONS
+  items: [...LEFT_ITEMS, ...CENTER_ITEMS, ...RIGHT_ITEMS]
 };
 
 export const SingleCentralAction = Template.bind({});
 SingleCentralAction.args = {
-  leftActions: LEFT_ACTIONS,
-  centerActions: [CENTRAL_ACTIONS[0]],
-  rightActions: RIGHT_ACTIONS
+  items: [...LEFT_ITEMS, CENTER_ITEMS[0], ...RIGHT_ITEMS]
 };
 
 export const WithSubMenu = Template.bind({});
 WithSubMenu.args = {
-  leftActions: LEFT_ACTIONS,
-  centerActions: [
-    CENTRAL_ACTIONS[0],
-    {
-      ...CENTRAL_ACTIONS[1],
-      subMenuItems: LEFT_ACTIONS.map((a) => ({...a, key: `sub_${a.key}`}))
-    }
-  ],
-  rightActions: RIGHT_ACTIONS
+  items: [
+    ...LEFT_ITEMS,
+    ...[
+      CENTER_ITEMS[0],
+      {
+        ...CENTER_ITEMS[1],
+        subMenuItems: LEFT_ITEMS.map((a) => ({...a, key: `sub_${a.key}`}))
+      }
+    ],
+    ...RIGHT_ITEMS
+  ]
 };

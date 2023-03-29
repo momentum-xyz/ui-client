@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Dialog, Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
+import {Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
@@ -10,9 +10,6 @@ import {useNavigation, useStore} from 'shared/hooks';
 
 import {ProfileSettings, ProfileView, ProfileEditor} from './components';
 import * as styled from './ProfileWidget.styled';
-
-const MENU_OFFSET_LEFT = 10;
-const MENU_OFFSET_TOP = 20;
 
 const ProfileWidget: FC = () => {
   const {widgetsStore, sessionStore, agoraStore, universeStore} = useStore();
@@ -95,60 +92,52 @@ const ProfileWidget: FC = () => {
   );
 
   return (
-    <Dialog
-      title=""
-      position="leftTop"
-      offset={{left: MENU_OFFSET_LEFT, top: MENU_OFFSET_TOP}}
-      isBodyExtendingToEdges
-      showBackground={false}
-    >
-      <div data-testid="ProfileWidget-test">
-        <styled.Header>
-          <styled.Name>
-            <IconSvg name="people" size="medium" />
-            <Heading type="h2" label={t('titles.profile')} isTruncate />
-          </styled.Name>
-          <SvgButton iconName="close" size="normal" onClick={profileStore.resetModel} />
-        </styled.Header>
-        <styled.Body>
-          {!!sessionStore.user && (
-            <styled.Container>
-              {!isEditMode && (
-                <ProfileView
-                  isVisitAvailable={isTeleportAvailable}
-                  user={sessionStore.user}
-                  onTeleportToOdyssey={handleTeleport}
-                />
-              )}
-
-              {isEditMode && (
-                <ProfileEditor
-                  user={sessionStore.user}
-                  formErrors={profileStore.formErrors}
-                  isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
-                  onChangeKeyboardControl={instance3DStore.changeKeyboardControl}
-                  onUpdate={handleProfileUpdate}
-                  onCancel={() => setIsEditMode(!isEditMode)}
-                />
-              )}
-
-              <ProfileSettings
-                isGuest={sessionStore.isGuest}
-                isEditMode={isEditMode}
-                isDeviceSettings={isDeviceSettings}
-                audioDeviceId={agoraStore.userDevicesStore.currentAudioInput?.deviceId}
-                audioDeviceList={agoraStore.userDevicesStore.audioInputOptions}
-                onSelectAudioDevice={agoraStore.selectAudioInput}
-                onToggleDeviceSettings={() => setIsDeviceSettings(!isDeviceSettings)}
-                onToggleEditMode={() => setIsEditMode(!isEditMode)}
-                {...(!sessionStore.isGuest && {onSignOut: sessionStore.signOutRedirect})}
-                {...(sessionStore.isGuest && {onSignIn: sessionStore.signInRedirect})}
+    <styled.Container data-testid="ProfileWidget-test">
+      <styled.Header>
+        <styled.Name>
+          <IconSvg name="people" size="medium" />
+          <Heading type="h2" label={t('titles.profile')} isTruncate />
+        </styled.Name>
+        <SvgButton iconName="close" size="normal" onClick={profileStore.resetModel} />
+      </styled.Header>
+      <styled.Body>
+        {!!sessionStore.user && (
+          <styled.Wrapper>
+            {!isEditMode && (
+              <ProfileView
+                isVisitAvailable={isTeleportAvailable}
+                user={sessionStore.user}
+                onTeleportToOdyssey={handleTeleport}
               />
-            </styled.Container>
-          )}
-        </styled.Body>
-      </div>
-    </Dialog>
+            )}
+
+            {isEditMode && (
+              <ProfileEditor
+                user={sessionStore.user}
+                formErrors={profileStore.formErrors}
+                isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
+                onChangeKeyboardControl={instance3DStore.changeKeyboardControl}
+                onUpdate={handleProfileUpdate}
+                onCancel={() => setIsEditMode(!isEditMode)}
+              />
+            )}
+
+            <ProfileSettings
+              isGuest={sessionStore.isGuest}
+              isEditMode={isEditMode}
+              isDeviceSettings={isDeviceSettings}
+              audioDeviceId={agoraStore.userDevicesStore.currentAudioInput?.deviceId}
+              audioDeviceList={agoraStore.userDevicesStore.audioInputOptions}
+              onSelectAudioDevice={agoraStore.selectAudioInput}
+              onToggleDeviceSettings={() => setIsDeviceSettings(!isDeviceSettings)}
+              onToggleEditMode={() => setIsEditMode(!isEditMode)}
+              {...(!sessionStore.isGuest && {onSignOut: sessionStore.signOutRedirect})}
+              {...(sessionStore.isGuest && {onSignIn: sessionStore.signInRedirect})}
+            />
+          </styled.Wrapper>
+        )}
+      </styled.Body>
+    </styled.Container>
   );
 };
 

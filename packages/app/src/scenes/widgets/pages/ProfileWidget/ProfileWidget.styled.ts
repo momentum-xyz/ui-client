@@ -1,4 +1,10 @@
 import styled from 'styled-components';
+import {rgba} from 'polished';
+
+export const Container = styled.div`
+  background: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.95)};
+  border-radius: 8px;
+`;
 
 export const Header = styled.div`
   padding: 14px 12px 24px 12px;
@@ -22,7 +28,7 @@ export const Body = styled.div`
   width: 285px;
 `;
 
-export const Container = styled.div`
+export const Wrapper = styled.div`
   width: 100%;
 `;
 

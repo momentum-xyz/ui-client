@@ -4,6 +4,7 @@ import {LAST_AIRDROP_KEY, Map3dUserInterface, RequestModel} from '@momentum-xyz/
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
+import {getImageAbsoluteUrl} from 'core/utils';
 import {PolkadotAddressInterface, User} from 'core/models';
 import {getAccessToken, refreshAxiosToken} from 'api/request';
 import {api, AuthChallengeRequest, CheckProfileUpdatingJobResponse, FetchMeResponse} from 'api';
@@ -109,30 +110,40 @@ const SessionStore = types
       account: string,
       signChallenge: (challenge: string) => Promise<string>
     ) {
-      const data: AuthChallengeRequest = {wallet: account};
-      const response = yield self.challengeRequest.send(api.authRepository.getChallenge, data);
+      if (!self.user) {
+        return;
+      }
 
-      if (response?.challenge) {
-        const signature = yield signChallenge(response.challenge);
+      const data: AuthChallengeRequest = {wallet: account};
+      const challengeResponse = yield self.challengeRequest.send(
+        api.authRepository.getChallenge,
+        data
+      );
+
+      if (challengeResponse?.challenge) {
+        const signature = yield signChallenge(challengeResponse.challenge);
         if (signature) {
           const data = {
             wallet: account,
             signedChallenge: signature,
             network: account.length > 42 ? 'polkadot' : 'ethereum'
           };
-          const response = yield self.attachAccountRequest.send(
+          const attachResponse = yield self.attachAccountRequest.send(
             api.authRepository.attachAccount,
             data
           );
-          console.log('attachAnotherWallet', response);
-          // TODO set user.wallets
 
-          if (response?.error) {
-            throw new Error(response.error?.message || 'Error attaching account');
+          if (attachResponse?.error || !attachResponse?.wallet) {
+            console.log('Error attaching account, resp:', attachResponse);
+            throw new Error(attachResponse.error?.message || 'Error attaching account');
           }
+
+          self.user.wallets = cast(attachResponse.wallet);
+
+          return;
         }
       }
-      throw new Error('Error fetching token');
+      throw new Error('Error attaching account');
     }),
     fetchProfileJobStatus: flow(function* () {
       if (self.profileJobId) {
@@ -232,6 +243,9 @@ const SessionStore = types
     },
     get userId(): string {
       return self.user?.id || '';
+    },
+    get userImageUrl(): string {
+      return getImageAbsoluteUrl(self.user?.profile.avatarHash) || '';
     },
     get wallet(): string {
       return self.user?.wallet || '';

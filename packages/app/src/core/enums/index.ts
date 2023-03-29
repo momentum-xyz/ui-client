@@ -18,3 +18,4 @@ export * from './assetType.enum';
 export * from './basicAsset2dId.enum';
 export * from './newsfeed.enum';
 export * from './gizmoType.enum';
+export * from './widget.enum';

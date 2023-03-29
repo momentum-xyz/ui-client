@@ -31,8 +31,7 @@ const Object: FC = () => {
   useEffect(() => {
     if (assetType === AssetTypeEnum.DOCK) {
       if (assetStore.dockWorldId) {
-        const nft = nftStore.getNftByUuid(assetStore.dockWorldId);
-        odysseyInfoStore.open(nft);
+        odysseyInfoStore.open(assetStore.dockWorldId);
       }
     }
   }, [assetStore.dockWorldId, assetType, nftStore, odysseyInfoStore]);
