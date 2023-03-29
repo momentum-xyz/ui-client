@@ -96,8 +96,6 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
   const shouldHaveButton =
     type !== 'blank' && type !== 'blank-borderless' && !(type === 'primary' && skipOuterBorder);
 
-  const clickHandler = onClick || (() => {});
-
   const iconSize = hexagonSizeIconSizeMap[size];
   const element = imageSrc ? (
     <img src={imageSrc} alt="" style={{height: '100%'}} />
@@ -117,7 +115,9 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
         noHover && 'no-hover',
         isOuterBorder && 'outer-border'
       )}
-      onClick={clickHandler}
+      onClick={() => {
+        onClick?.();
+      }}
       style={margin ? {margin: `${margin}px`} : {}}
       {...rest}
     >

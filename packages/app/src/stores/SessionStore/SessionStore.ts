@@ -4,6 +4,7 @@ import {LAST_AIRDROP_KEY, Map3dUserInterface, RequestModel} from '@momentum-xyz/
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
+import {getImageAbsoluteUrl} from 'core/utils';
 import {PolkadotAddressInterface, User} from 'core/models';
 import {getAccessToken, refreshAxiosToken} from 'api/request';
 import {api, AuthChallengeRequest, CheckProfileUpdatingJobResponse, FetchMeResponse} from 'api';
@@ -242,6 +243,9 @@ const SessionStore = types
     },
     get userId(): string {
       return self.user?.id || '';
+    },
+    get userImageUrl(): string {
+      return getImageAbsoluteUrl(self.user?.profile.avatarHash) || '';
     },
     get wallet(): string {
       return self.user?.wallet || '';

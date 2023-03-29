@@ -1,6 +1,7 @@
 @import "variables.css";
 @import "reset.css";
 @import "fonts.css";
+@import "storybook.css";
 
 body {
   font-family: Poppins, sans-serif;
@@ -15,26 +16,4 @@ body {
 
 .noScrollIndicator::-webkit-scrollbar {
   display: none;
-}
-
-.text-truncate {
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.storybook-grid {
-  display: flex;
-  gap: 15px;
-}
-
-.storybook-block {
-  max-width: 380px;
-}
-
-.storybook-grid-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
 }
