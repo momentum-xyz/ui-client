@@ -14,6 +14,11 @@ export const TitleText = styled.div`
   letter-spacing: 0.2em;
   text-align: left;
   color: #ffffff;
+
+  &.wallet {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 `;
 
 export const WalletInnerViewContainer = styled.div`

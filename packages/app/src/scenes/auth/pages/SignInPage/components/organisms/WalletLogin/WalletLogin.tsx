@@ -34,12 +34,8 @@ const WalletLogin: FC<PropsInterface> = ({
   const innerView = content || (
     <div>
       {!!account && (
-        <div
-          style={{
-            margin: '10px'
-          }}
-        >
-          <styled.TitleText>{account}</styled.TitleText>
+        <div>
+          <styled.TitleText className="wallet">{account}</styled.TitleText>
         </div>
       )}
     </div>
@@ -52,7 +48,8 @@ const WalletLogin: FC<PropsInterface> = ({
       <styled.WalletInnerViewContainer>{innerView}</styled.WalletInnerViewContainer>
 
       <Button
-        label="Connect"
+        label="Connect your wallet"
+        icon="wallet"
         disabled={!accountHex}
         wide
         onClick={() => {

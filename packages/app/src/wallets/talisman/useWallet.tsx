@@ -95,7 +95,12 @@ export const useWallet: UseWalletType = ({appVariables}) => {
   const content = (
     <>
       {accounts ? (
-        <Select options={options} value={null} onSingleChange={handleAccountChange}></Select>
+        <Select
+          options={options}
+          value={null}
+          onSingleChange={handleAccountChange}
+          hideSelectedOptions={false}
+        ></Select>
       ) : (
         <span>Loading...</span>
       )}

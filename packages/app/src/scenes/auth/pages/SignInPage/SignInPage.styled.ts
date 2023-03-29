@@ -24,7 +24,7 @@ export const Boxes = styled.div`
   pointer-events: all;
 `;
 
-export const WidgetContainer = styled.div`
+export const PanelContainer = styled.div`
   width: 400px;
 `;
 
