@@ -97,7 +97,7 @@ const RIGHT_ITEMS: MenuItemInterface<string>[] = [
 ];
 
 const Template: Story<MenuPropsInterface<string>> = (args) => {
-  const [activeKey /*, setActiveKey*/] = useState<string>(CENTER_ITEMS[0].key);
+  const [activeKeys /*, setActiveKeys*/] = useState<string[]>([CENTER_ITEMS[0].key]);
 
   /*const onChangeActiveKey = (key?: string) => {
     if (key && key.startsWith('sub_')) {
@@ -106,7 +106,7 @@ const Template: Story<MenuPropsInterface<string>> = (args) => {
     setActiveKey(key);
   };*/
 
-  return <Menu {...args} activeKey={activeKey} />;
+  return <Menu {...args} activeKeys={activeKeys} />;
 };
 
 export const General = Template.bind({});

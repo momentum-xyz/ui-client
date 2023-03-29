@@ -4,7 +4,7 @@ import styled from 'styled-components';
 export const WrapperButton = styled.button``;
 
 export const Wrapper = styled.div`
-  --hexagon-border-color: ${(props) => props.theme.text};
+  --hexagon-border-color: ${(props) => props.theme.text && rgba(props.theme.text, 0.5)};
   --hexagon-accent-color: ${(props) => props.theme.accentBg};
 
   --hexagon-large-width: 48px;
@@ -83,6 +83,7 @@ export const Hexagon = styled.div`
   border-right: 1px solid var(--hexagon-border-color);
 
   background: ${(props) => props.theme.accentBg};
+
   &.transparent-background {
     background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
   }

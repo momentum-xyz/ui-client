@@ -9,7 +9,7 @@ import * as styled from './WidgetMenuPage.styled';
 
 const WidgetMenuPage: FC = () => {
   const {sessionStore, widgetManagerStore} = useStore();
-  const {toggle, activeType} = widgetManagerStore;
+  const {toggle, activeWidgetList} = widgetManagerStore;
   const {isGuest, userImageUrl} = sessionStore;
 
   const MENU_ITEMS_GUEST: MenuItemInterface<WidgetEnum>[] = [
@@ -62,7 +62,7 @@ const WidgetMenuPage: FC = () => {
 
   return (
     <styled.Container data-testid="WidgetMenuPage-test">
-      <Menu items={isGuest ? MENU_ITEMS_GUEST : MENU_ITEMS} activeKey={activeType} />
+      <Menu items={isGuest ? MENU_ITEMS_GUEST : MENU_ITEMS} activeKeys={activeWidgetList} />
     </styled.Container>
   );
 };
