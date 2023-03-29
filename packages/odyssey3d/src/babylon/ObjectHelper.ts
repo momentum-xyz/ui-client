@@ -55,7 +55,7 @@ export class ObjectHelper {
   static initialize(
     scene: Scene,
     engine: Engine,
-    initialObjects: Object3dInterface[],
+    // initialObjects: Object3dInterface[],
     view: HTMLCanvasElement
   ): void {
     /*initialObjects.forEach((initialObject) => {
