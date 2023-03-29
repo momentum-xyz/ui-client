@@ -7,6 +7,8 @@ import {PosBusService} from 'shared/services';
 import {GizmoTypeEnum, PosBusEventEnum} from 'core/enums';
 import {PosBusEmojiMessageType} from 'core/types';
 
+// TODO remove
+
 export class UnityService {
   unityApi?: UnityApiInterface;
   unityContext?: UnityContext;

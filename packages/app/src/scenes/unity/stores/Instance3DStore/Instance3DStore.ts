@@ -1,21 +1,24 @@
-import {cast, flow, types} from 'mobx-state-tree';
+import {
+  cast,
+  // flow,
+  types
+} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
 import {RequestModel, Dialog} from '@momentum-xyz/core';
 import {UnityControlInterface} from '@momentum-xyz/sdk';
 
-import {api, ResolveNodeResponse} from 'api';
-import {appVariables} from 'api/constants';
+// import {api, ResolveNodeResponse} from 'api';
+// import {appVariables} from 'api/constants';
 import {GizmoTypeEnum, PosBusEventEnum} from 'core/enums';
 import {UnityPositionInterface} from 'core/interfaces';
 import {UnityService} from 'shared/services';
 
 const DEFAULT_UNITY_VOLUME = 0.75;
-const UNITY_VOLUME_STEP = 0.1;
+// const UNITY_VOLUME_STEP = 0.1;
 
 const Instance3DStore = types
   .model('Instance3DStore', {
     isInitialized: false,
-    isTeleportReady: false,
     muted: false,
     volume: types.optional(types.number, DEFAULT_UNITY_VOLUME),
     nodeRequest: types.optional(RequestModel, {}),
@@ -33,64 +36,38 @@ const Instance3DStore = types
     unityContext: null
   }))
   .actions((self) => ({
-    init(): void {
-      self.unityContext = new UnityContext({
-        loaderUrl: appVariables.UNITY_CLIENT_LOADER_URL,
-        dataUrl: appVariables.UNITY_CLIENT_DATA_URL,
-        frameworkUrl: appVariables.UNITY_CLIENT_FRAMEWORK_URL,
-        codeUrl: appVariables.UNITY_CLIENT_CODE_URL,
-        streamingAssetsUrl: appVariables.UNITY_CLIENT_STREAMING_ASSETS_URL,
-        companyName: appVariables.UNITY_CLIENT_COMPANY_NAME,
-        productName: appVariables.UNITY_CLIENT_PRODUCT_NAME,
-        productVersion: appVariables.UNITY_CLIENT_PRODUCT_VERSION
-      });
-
-      UnityService.initialize(self.unityContext);
-      self.isInitialized = true;
-    },
-    teleportIsReady(): void {
-      self.isTeleportReady = true;
-    },
-    setAuthToken(token?: string): void {
-      UnityService.setAuthToken(token);
-    },
-    setAddressablesURL(url?: string): void {
-      UnityService.setAddressablesURL(url);
-    },
-    setTargetWorldId(id?: string): void {
-      UnityService.setTargetWorldId(id);
-    },
     triggerTeleport(url?: string, worldId?: string): void {
       UnityService.triggerTeleport(url, worldId);
     },
-    getCurrentWorld(): string | null {
-      return UnityService.getCurrentWorld?.() || null;
-    },
     getUserPosition(): UnityPositionInterface | null {
-      let position: UnityPositionInterface | null = null;
-      try {
-        const positionAsString = UnityService.getUserPosition?.() || null;
-        if (positionAsString) {
-          position = JSON.parse(positionAsString);
-        }
-      } catch (ex) {
-        console.error('getUserPosition', ex);
-      }
+      // TODO
+      return null;
+      // let position: UnityPositionInterface | null = null;
+      // try {
+      //   const positionAsString = UnityService.getUserPosition?.() || null;
+      //   if (positionAsString) {
+      //     position = JSON.parse(positionAsString);
+      //   }
+      // } catch (ex) {
+      //   console.error('getUserPosition', ex);
+      // }
 
-      return position;
+      // return position;
     },
     getUserRotation(): UnityPositionInterface | null {
-      let rotation: UnityPositionInterface | null = null;
-      try {
-        const rotationAsString = UnityService.getUserRotation?.() || null;
-        if (rotationAsString) {
-          rotation = JSON.parse(rotationAsString);
-        }
-      } catch (ex) {
-        console.error('getUserRotation', ex);
-      }
+      // TODO
+      return null;
+      // let rotation: UnityPositionInterface | null = null;
+      // try {
+      //   const rotationAsString = UnityService.getUserRotation?.() || null;
+      //   if (rotationAsString) {
+      //     rotation = JSON.parse(rotationAsString);
+      //   }
+      // } catch (ex) {
+      //   console.error('getUserRotation', ex);
+      // }
 
-      return rotation;
+      // return rotation;
     },
     teleportToUser(userId: string): void {
       UnityService.teleportToUser(userId);
@@ -108,54 +85,48 @@ const Instance3DStore = types
       UnityService.sendHighFive(receiverId);
     },
     sendHighFiveBack(receiverId: string): void {
-      UnityService.sendHighFive(receiverId);
-      UnityService.lookAtWisp(receiverId);
+      // UnityService.sendHighFive(receiverId);
+      // UnityService.lookAtWisp(receiverId);
     },
     pause(): void {
-      UnityService.pause();
+      // TODO
+      // UnityService.pause();
     },
     resume(): void {
-      UnityService.resume();
+      // TODO
+      // UnityService.resume();
     },
     isPaused(): boolean {
-      return UnityService.isPaused;
+      return false;
+      // return UnityService.isPaused;
     },
     setInitialVolume() {
-      UnityService.setSoundEffectVolume(self.volume.toString());
-    },
-    toggleMiniMap(): void {
-      UnityService.toggleMiniMap();
-    },
-    showMinimap(): void {
-      UnityService.showMinimap();
-    },
-    hideMinimap(): void {
-      UnityService.hideMinimap();
+      // TODO
+      // UnityService.setSoundEffectVolume(self.volume.toString());
     },
     mute() {
-      if (!self.muted) {
-        self.volume = 0;
-        self.muted = true;
-        UnityService.toggleAllSound(self.muted);
-        UnityService.setSoundEffectVolume(self.volume.toString());
-      }
+      // if (!self.muted) {
+      //   self.volume = 0;
+      //   self.muted = true;
+      //   UnityService.toggleAllSound(self.muted);
+      //   UnityService.setSoundEffectVolume(self.volume.toString());
+      // }
     },
     unmute() {
-      self.volume = self.volume <= 1 - UNITY_VOLUME_STEP ? self.volume + UNITY_VOLUME_STEP : 1;
-      self.muted = false;
-      UnityService.toggleAllSound(self.muted);
-      UnityService.setSoundEffectVolume(self.volume.toString());
+      // self.volume = self.volume <= 1 - UNITY_VOLUME_STEP ? self.volume + UNITY_VOLUME_STEP : 1;
+      // self.muted = false;
+      // UnityService.toggleAllSound(self.muted);
+      // UnityService.setSoundEffectVolume(self.volume.toString());
     },
     volumeChange(newVolume: number) {
-      if (newVolume === 0) {
-        this.mute();
-        return;
-      }
-
-      self.volume = newVolume;
-      self.muted = false;
-      UnityService.toggleAllSound(self.muted);
-      UnityService.setSoundEffectVolume(self.volume.toString());
+      // if (newVolume === 0) {
+      //   this.mute();
+      //   return;
+      // }
+      // self.volume = newVolume;
+      // self.muted = false;
+      // UnityService.toggleAllSound(self.muted);
+      // UnityService.setSoundEffectVolume(self.volume.toString());
     },
     triggerInteractionMessage(
       interaction: PosBusEventEnum,
@@ -163,53 +134,55 @@ const Instance3DStore = types
       flag: number,
       message: string
     ) {
-      UnityService.triggerInteractionMsg?.(interaction, targetId, flag, message);
+      // UnityService.triggerInteractionMsg?.(interaction, targetId, flag, message);
     },
-    startFlyWithMe(pilotId: string) {
-      UnityService.startFlyWithMe(pilotId);
-    },
-    disengageFlyWithMe() {
-      UnityService.disengageFlyWithMe();
-    },
+    // startFlyWithMe(pilotId: string) {
+    //   UnityService.startFlyWithMe(pilotId);
+    // },
+    // disengageFlyWithMe() {
+    //   UnityService.disengageFlyWithMe();
+    // },
     changeSkybox(skyboxId: string) {
-      UnityService.changeSkybox(skyboxId);
+      // TODO
+      // UnityService.changeSkybox(skyboxId);
     },
     toggleBuildMode() {
       UnityService.toggleBuildMode();
     },
     leaveSpace(spaceId: string) {
-      UnityService.leaveSpace(spaceId);
+      // need this?
+      // UnityService.leaveSpace(spaceId);
     },
-    resolveNode: flow(function* (object: string) {
-      return yield self.nodeRequest.send(api.web3Repository.resolveNode, {object});
-    }),
-    async loadWorldById(worldId: string, token: string) {
-      self.isTeleportReady = false;
+    // resolveNode: flow(function* (object: string) {
+    //   return yield self.nodeRequest.send(api.web3Repository.resolveNode, {object});
+    // }),
+    // async loadWorldById(worldId: string, token: string) {
+    //   self.isTeleportReady = false;
 
-      const response: ResolveNodeResponse = await this.resolveNode(worldId);
-      if (response) {
-        if (appVariables.UNITY_CLIENT_ADDRESSABLES_URL) {
-          this.setAddressablesURL(appVariables.UNITY_CLIENT_ADDRESSABLES_URL);
-        }
-        this.setAuthToken(token);
-        this.triggerTeleport(response.url, worldId);
-        this.setInitialVolume();
-      }
-    },
+    //   const response: ResolveNodeResponse = await this.resolveNode(worldId);
+    //   if (response) {
+    //     if (appVariables.UNITY_CLIENT_ADDRESSABLES_URL) {
+    //       this.setAddressablesURL(appVariables.UNITY_CLIENT_ADDRESSABLES_URL);
+    //     }
+    //     this.setAuthToken(token);
+    //     this.triggerTeleport(response.url, worldId);
+    //     this.setInitialVolume();
+    //   }
+    // },
     setLastClickPosition(x: number, y: number) {
       self.lastClickPosition = {x, y};
       this.closeAndResetObjectMenu();
     },
-    onUnityObjectClick(objectId: string) {
-      self.objectMenuPosition = self.lastClickPosition;
+    onObjectClick(objectId: string) {
+      // self.objectMenuPosition = self.lastClickPosition;
       self.objectMenu.open();
       self.selectedObjectId = objectId;
     },
     undo() {
-      UnityService.undo();
+      // UnityService.undo();
     },
     redo() {
-      UnityService.redo();
+      // UnityService.redo();
     },
     changeGizmoType(mode: GizmoTypeEnum) {
       self.gizmoMode = cast(mode);
