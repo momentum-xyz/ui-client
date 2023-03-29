@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Menu, MenuItemInterface, MenuItemPositionEnum} from '@momentum-xyz/ui-kit-storybook';
+import {Menu, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
-import {WidgetTypeEnum} from 'core/enums';
+import {WidgetEnum} from 'core/enums';
 
 import * as styled from './WidgetMenuPage.styled';
 
@@ -12,49 +12,49 @@ const WidgetMenuPage: FC = () => {
   const {toggle, activeType} = widgetManagerStore;
   const {isGuest, userImageUrl} = sessionStore;
 
-  const MENU_ITEMS_GUEST: MenuItemInterface<WidgetTypeEnum>[] = [
+  const MENU_ITEMS_GUEST: MenuItemInterface<WidgetEnum>[] = [
     {
-      key: WidgetTypeEnum.UNIVERSE,
-      position: MenuItemPositionEnum.CENTER,
+      key: WidgetEnum.UNIVERSE,
+      position: PositionEnum.CENTER,
       iconName: 'info_2',
       onClick: toggle
     }
   ];
 
-  const MENU_ITEMS: MenuItemInterface<WidgetTypeEnum>[] = [
+  const MENU_ITEMS: MenuItemInterface<WidgetEnum>[] = [
     {
-      key: WidgetTypeEnum.UNIVERSE,
-      position: MenuItemPositionEnum.CENTER,
+      key: WidgetEnum.UNIVERSE,
+      position: PositionEnum.CENTER,
       iconName: 'info_2',
       onClick: toggle
     },
     {
-      key: WidgetTypeEnum.MAIN_MENU,
-      position: MenuItemPositionEnum.LEFT,
+      key: WidgetEnum.MAIN_MENU,
+      position: PositionEnum.LEFT,
       iconName: 'menu_info',
       onClick: toggle
     },
     {
-      key: WidgetTypeEnum.PROFILE,
-      position: MenuItemPositionEnum.LEFT,
+      key: WidgetEnum.PROFILE,
+      position: PositionEnum.LEFT,
       imageSrc: userImageUrl,
       onClick: toggle
     },
     {
-      key: WidgetTypeEnum.RABBIT,
-      position: MenuItemPositionEnum.LEFT,
+      key: WidgetEnum.RABBIT,
+      position: PositionEnum.LEFT,
       iconName: 'rabbit_fill',
       onClick: toggle
     },
     {
-      key: WidgetTypeEnum.EMOJI,
-      position: MenuItemPositionEnum.LEFT,
+      key: WidgetEnum.EMOJI,
+      position: PositionEnum.LEFT,
       iconName: 'smiley-face',
       onClick: toggle
     },
     {
-      key: WidgetTypeEnum.EXPLORE,
-      position: MenuItemPositionEnum.RIGHT,
+      key: WidgetEnum.EXPLORE,
+      position: PositionEnum.RIGHT,
       iconName: 'planet',
       onClick: toggle
     }

@@ -1,8 +1,9 @@
-export enum WidgetTypeEnum {
+export enum WidgetEnum {
   MAIN_MENU = 'MAIN_MENU',
   UNIVERSE = 'UNIVERSE',
   PROFILE = 'PROFILE',
   RABBIT = 'RABBIT',
   EMOJI = 'EMOJI',
-  EXPLORE = 'EXPLORE'
+  EXPLORE = 'EXPLORE',
+  ODYSSEY_INFO = 'ODYSSEY_INFO'
 }

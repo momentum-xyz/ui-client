@@ -3,25 +3,20 @@ import {useMemo, useRef, useState} from 'react';
 import {IconNameType} from '../../types';
 import {Hexagon} from '../../atoms';
 import {useResize} from '../../hooks';
+import {PositionEnum} from '../../enums';
 
 import * as styled from './Menu.styled';
 
 const MENU_ITEM_WIDTH = 60;
-
-export enum MenuItemPositionEnum {
-  LEFT = 'LEFT',
-  RIGHT = 'RIGHT',
-  CENTER = 'CENTER'
-}
 
 export interface MenuItemInterface<T> {
   key: T;
   imageSrc?: string;
   iconName?: IconNameType;
   tooltip?: string;
-  position: MenuItemPositionEnum;
+  position: PositionEnum;
   subMenuItems?: MenuItemInterface<T>[];
-  onClick?: (key: T, position: MenuItemPositionEnum) => void;
+  onClick?: (key: T, position: PositionEnum) => void;
 }
 
 export interface MenuPropsInterface<T> {
@@ -35,16 +30,12 @@ const Menu = <T,>({activeKey, items = []}: MenuPropsInterface<T>) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useResize(ref, () => setWindowWidth(window.innerWidth));
 
-  const leftItems: MenuItemInterface<T>[] = items.filter(
-    (i) => i.position === MenuItemPositionEnum.LEFT
-  );
+  const leftItems: MenuItemInterface<T>[] = items.filter((i) => i.position === PositionEnum.LEFT);
 
-  const rightItems: MenuItemInterface<T>[] = items.filter(
-    (i) => i.position === MenuItemPositionEnum.RIGHT
-  );
+  const rightItems: MenuItemInterface<T>[] = items.filter((i) => i.position === PositionEnum.RIGHT);
 
   const centerItems: MenuItemInterface<T>[] = items.filter(
-    (i) => i.position === MenuItemPositionEnum.CENTER
+    (i) => i.position === PositionEnum.CENTER
   );
 
   const calculateSubMenuLeftOffset = (

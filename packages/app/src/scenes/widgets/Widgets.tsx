@@ -50,8 +50,6 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {agoraScreenShareStore} = agoraStore;
   const {user} = sessionStore;
 
-  const worldOwner = nftStore.getNftByUuid(unityStore.worldId);
-
   const {t} = useI18n();
   const {pathname} = useLocation();
 
@@ -148,7 +146,7 @@ const Widgets: FC<PropsInterface> = (props) => {
             </styled.OnlineUsers>
             <ToolbarIconList>
               <Tooltip label={t('labels.bio')} placement="top">
-                <styled.CurrentOdyssey onClick={() => odysseyBioStore.open(worldOwner)}>
+                <styled.CurrentOdyssey onClick={() => odysseyBioStore.open(unityStore.worldId)}>
                   <Text
                     className="odyssey-name"
                     size="m"

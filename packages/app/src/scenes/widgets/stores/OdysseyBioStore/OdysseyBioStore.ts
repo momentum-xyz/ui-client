@@ -23,11 +23,12 @@ const OdysseyBioStore = types.compose(
       docks: 0
     })
     .actions((self) => {
-      const {getStatisticsByWallet} = getRootStore(self).nftStore;
+      const {getStatisticsByWallet, getNftByUuid} = getRootStore(self).nftStore;
 
       return {
-        async open(item?: NftItemModelInterface) {
-          if (!item?.uuid) {
+        async open(uuid?: string) {
+          const item = getNftByUuid(uuid || '');
+          if (!item) {
             return;
           }
           const statistics = await getStatisticsByWallet(item.owner);

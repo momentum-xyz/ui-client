@@ -1,7 +1,9 @@
 import {ComponentMeta, Story} from '@storybook/react';
 import {useState} from 'react';
 
-import Menu, {MenuItemInterface, MenuItemPositionEnum, MenuPropsInterface} from './Menu';
+import {PositionEnum} from '../../enums';
+
+import Menu, {MenuItemInterface, MenuPropsInterface} from './Menu';
 
 export default {
   title: 'Organisms/Menu',
@@ -24,22 +26,22 @@ const LEFT_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_1',
     iconName: 'menu_info',
-    position: MenuItemPositionEnum.LEFT
+    position: PositionEnum.LEFT
   },
   {
     key: 'key_2',
     iconName: 'leave',
-    position: MenuItemPositionEnum.LEFT
+    position: PositionEnum.LEFT
   },
   {
     key: 'key_3',
     imageSrc: IMAGE_SRC,
-    position: MenuItemPositionEnum.LEFT
+    position: PositionEnum.LEFT
   },
   {
     key: 'key_4',
     iconName: 'smiley-face',
-    position: MenuItemPositionEnum.LEFT
+    position: PositionEnum.LEFT
   }
 ];
 
@@ -47,12 +49,12 @@ const CENTER_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_5',
     iconName: 'star_small',
-    position: MenuItemPositionEnum.CENTER
+    position: PositionEnum.CENTER
   },
   {
     key: 'key_6',
     iconName: 'edit',
-    position: MenuItemPositionEnum.CENTER
+    position: PositionEnum.CENTER
   }
 ];
 
@@ -60,37 +62,37 @@ const RIGHT_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_7',
     iconName: 'voice_chat',
-    position: MenuItemPositionEnum.RIGHT
+    position: PositionEnum.RIGHT
   },
   {
     key: 'key_8',
     iconName: 'chat',
-    position: MenuItemPositionEnum.RIGHT
+    position: PositionEnum.RIGHT
   },
   {
     key: 'key_9',
     iconName: 'search',
-    position: MenuItemPositionEnum.RIGHT
+    position: PositionEnum.RIGHT
   },
   {
     key: 'key_10',
     iconName: 'meeting',
-    position: MenuItemPositionEnum.RIGHT
+    position: PositionEnum.RIGHT
   },
   {
     key: 'key_11',
     iconName: 'calendar',
-    position: MenuItemPositionEnum.RIGHT
+    position: PositionEnum.RIGHT
   },
   {
     key: 'key_12',
     iconName: 'clock',
-    position: MenuItemPositionEnum.RIGHT
+    position: PositionEnum.RIGHT
   },
   {
     key: 'key_13',
     imageSrc: IMAGE_SRC,
-    position: MenuItemPositionEnum.RIGHT
+    position: PositionEnum.RIGHT
   }
 ];
 

@@ -30,7 +30,7 @@ import * as styled from './UnityPage.styled';
 // };
 
 const UnityPage: FC = () => {
-  const {unityStore, sessionStore, nftStore, widgetsStore} = useStore();
+  const {unityStore, sessionStore, widgetsStore} = useStore();
   const {unityInstanceStore} = unityStore;
 
   // const theme = useTheme();
@@ -102,11 +102,8 @@ const UnityPage: FC = () => {
 
   useUnityEvent('ClickObjectEvent', (spaceId: string, label: string) => {
     if (label === 'portal_odyssey') {
-      const nft = nftStore.getNftByUuid(appVariables.ODYSSEY_WORLD_ID);
-      if (nft) {
-        widgetsStore.odysseyInfoStore.open(nft);
-        return;
-      }
+      widgetsStore.odysseyInfoStore.open(appVariables.ODYSSEY_WORLD_ID);
+      return;
     }
     navigate({
       pathname: generatePath(ROUTES.odyssey.object.root, {
@@ -126,10 +123,7 @@ const UnityPage: FC = () => {
   });
 
   useUnityEvent('ProfileClickEvent', (id: string) => {
-    const nft = nftStore.getNftByUuid(id);
-    if (nft) {
-      widgetsStore.odysseyInfoStore.open(nft);
-    }
+    widgetsStore.odysseyInfoStore.open(id);
   });
 
   usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {

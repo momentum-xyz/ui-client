@@ -1,9 +1,9 @@
 import {cast, types} from 'mobx-state-tree';
-import {MenuItemPositionEnum} from '@momentum-xyz/ui-kit-storybook';
+import {PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 
-import {WidgetTypeEnum} from 'core/enums';
+import {WidgetEnum} from 'core/enums';
 
-import {WidgetInfo} from './models';
+import {WidgetInfo, WidgetInfoDataInterface} from './models';
 
 // TODO: Not final implementation. It depends on flow/design
 const WidgetManagerStore = types
@@ -13,33 +13,33 @@ const WidgetManagerStore = types
     rightActiveWidget: types.maybeNull(WidgetInfo)
   })
   .actions((self) => ({
-    toggle(type: WidgetTypeEnum, position: MenuItemPositionEnum) {
+    toggle(type: WidgetEnum, position: PositionEnum, data?: WidgetInfoDataInterface) {
       if (type && this.getActiveType() !== type) {
         this.open(type, position);
       } else {
         this.close(type);
       }
     },
-    open(type: WidgetTypeEnum, position: MenuItemPositionEnum) {
+    open(type: WidgetEnum, position: PositionEnum, data?: WidgetInfoDataInterface) {
       switch (position) {
-        case MenuItemPositionEnum.LEFT:
-          self.leftActiveWidget = cast({type});
+        case PositionEnum.LEFT:
+          self.leftActiveWidget = cast({type, data});
           self.rightActiveWidget = null;
           self.centerActiveWidget = null;
           break;
-        case MenuItemPositionEnum.CENTER:
-          self.centerActiveWidget = cast({type});
+        case PositionEnum.CENTER:
+          self.centerActiveWidget = cast({type, data});
           self.rightActiveWidget = null;
           self.leftActiveWidget = null;
           break;
-        case MenuItemPositionEnum.RIGHT:
-          self.rightActiveWidget = cast({type});
+        case PositionEnum.RIGHT:
+          self.rightActiveWidget = cast({type, data});
           self.centerActiveWidget = null;
           self.leftActiveWidget = null;
           break;
       }
     },
-    close(type: WidgetTypeEnum) {
+    close(type: WidgetEnum) {
       if (self.leftActiveWidget?.type === type) {
         self.leftActiveWidget = null;
       } else if (self.rightActiveWidget?.type === type) {
@@ -53,14 +53,14 @@ const WidgetManagerStore = types
       self.rightActiveWidget = null;
       self.centerActiveWidget = null;
     },
-    getActiveType(): WidgetTypeEnum | undefined {
+    getActiveType(): WidgetEnum | undefined {
       return (
         self.leftActiveWidget?.type || self.centerActiveWidget?.type || self.rightActiveWidget?.type
       );
     }
   }))
   .views((self) => ({
-    get activeType(): WidgetTypeEnum | undefined {
+    get activeType(): WidgetEnum | undefined {
       return (
         self.leftActiveWidget?.type || self.centerActiveWidget?.type || self.rightActiveWidget?.type
       );

@@ -32,7 +32,7 @@ const ExplorePage: FC = () => {
       currentUser={sessionStore.user}
       onSearch={nftStore.searchNft}
       onSelect={(nft) => {
-        widgetsStore.odysseyInfoStore.open(nft);
+        widgetsStore.odysseyInfoStore.open(nft.uuid);
         widgetsStore.profileStore.dialog.close();
       }}
       onTeleport={(nft) => {
@@ -46,7 +46,7 @@ const ExplorePage: FC = () => {
       }}
       // FIXME id type
       onConnect={(id) => nftStore.setConnectToNftItemId(+id)}
-      onOpenOdyssey={(uuid) => widgetsStore.odysseyInfoStore.open(nftStore.getNftByUuid(uuid))}
+      onOpenOdyssey={(uuid) => widgetsStore.odysseyInfoStore.open(uuid)}
     />
   );
 };
