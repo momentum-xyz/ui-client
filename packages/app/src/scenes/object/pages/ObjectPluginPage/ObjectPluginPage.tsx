@@ -33,7 +33,7 @@ interface PropsInterface {
 }
 
 const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) => {
-  const {unityStore} = useStore();
+  const {universeStore} = useStore();
   const {attributesManager} = pluginLoader;
 
   const theme = useTheme();
@@ -42,7 +42,7 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
 
   const {worldId} = useParams<{worldId: string}>();
 
-  const isAdmin = unityStore.isCurrentUserWorldAdmin;
+  const isAdmin = universeStore.isCurrentUserWorldAdmin;
 
   useEffect(() => {
     PosBusService.subscribe(pluginLoader.pluginId);

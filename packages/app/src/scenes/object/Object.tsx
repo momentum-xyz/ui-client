@@ -10,8 +10,8 @@ import {EmojiAnimationDock} from './components';
 import * as styled from './Object.styled';
 
 const Object: FC = () => {
-  const {objectStore, unityStore, nftStore, widgetsStore} = useStore();
-  const {unityInstanceStore} = unityStore;
+  const {objectStore, universeStore, nftStore, widgetsStore} = useStore();
+  const {instance3DStore} = universeStore;
   const {asset, assetStore} = objectStore;
   const {assetType} = assetStore;
   const {odysseyInfoStore} = widgetsStore;
@@ -20,13 +20,13 @@ const Object: FC = () => {
 
   useEffect(() => {
     objectStore.init(objectId!);
-    unityInstanceStore.triggerInteractionMessage(PosBusEventEnum.EnteredSpace, objectId!, 0, '');
+    instance3DStore.triggerInteractionMessage(PosBusEventEnum.EnteredSpace, objectId!, 0, '');
 
     return () => {
-      unityInstanceStore.triggerInteractionMessage(PosBusEventEnum.LeftSpace, objectId!, 0, '');
+      instance3DStore.triggerInteractionMessage(PosBusEventEnum.LeftSpace, objectId!, 0, '');
       objectStore.resetModel();
     };
-  }, [objectId, objectStore, unityInstanceStore]);
+  }, [objectId, objectStore, instance3DStore]);
 
   useEffect(() => {
     if (assetType === AssetTypeEnum.DOCK) {

@@ -11,11 +11,11 @@ import {ChangeImageDialog} from 'scenes/object/components';
 import * as styled from './ImagePage.styled';
 
 const ImagePage: FC = () => {
-  const {objectStore, unityStore} = useStore();
+  const {objectStore, universeStore} = useStore();
   const {assetStore} = objectStore;
   const {changeTileDialog, content, imageSrc} = assetStore;
 
-  const isAdmin = unityStore.isCurrentUserWorldAdmin;
+  const isAdmin = universeStore.isCurrentUserWorldAdmin;
 
   const navigate = useNavigate();
   const {t} = useI18n();

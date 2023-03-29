@@ -20,9 +20,9 @@ const OFFSET_LEFT = 10;
 const OFFSET_TOP = 20;
 
 const ObjectColorPage: FC = () => {
-  const {odysseyCreatorStore, unityStore} = useStore();
+  const {odysseyCreatorStore, universeStore} = useStore();
   const {objectColorStore} = odysseyCreatorStore;
-  const {unityInstanceStore} = unityStore;
+  const {instance3DStore} = universeStore;
 
   const ref = useRef<HTMLDivElement>(null);
   const [color, setColor] = useColor('hex', COLOR_PICKER_DEFAULT_COLOR);
@@ -32,11 +32,11 @@ const ObjectColorPage: FC = () => {
   const {t} = useI18n();
 
   useClickOutside(ref, () => {
-    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
+    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
   });
 
   const changeUnityObjectColor = useDebouncedCallback((colorHex: string) => {
-    unityInstanceStore.colorPickedPreview(objectId, colorHex);
+    instance3DStore.colorPickedPreview(objectId, colorHex);
   }, UNITY_DELAY_MS);
 
   useEffect(() => {
@@ -55,15 +55,15 @@ const ObjectColorPage: FC = () => {
 
   const onSaveHandler = useCallback(async () => {
     await objectColorStore.updateObjectColor(objectId, color.hex);
-    unityInstanceStore.colorPickedPreview(objectId, color.hex);
-    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
-  }, [color.hex, navigate, objectColorStore, objectId, unityStore, unityInstanceStore]);
+    instance3DStore.colorPickedPreview(objectId, color.hex);
+    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
+  }, [color.hex, navigate, objectColorStore, objectId, universeStore, instance3DStore]);
 
   const onCancelHandler = useCallback(() => {
     const initialColor = objectColorStore.objectColor || COLOR_PICKER_DEFAULT_COLOR;
-    unityInstanceStore.colorPickedPreview(objectId, initialColor);
-    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
-  }, [navigate, objectColorStore.objectColor, objectId, unityInstanceStore, unityStore.worldId]);
+    instance3DStore.colorPickedPreview(objectId, initialColor);
+    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
+  }, [navigate, objectColorStore.objectColor, objectId, instance3DStore, universeStore.worldId]);
 
   return (
     <styled.Wrapper>

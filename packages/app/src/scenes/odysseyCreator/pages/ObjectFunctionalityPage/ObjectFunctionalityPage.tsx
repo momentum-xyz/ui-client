@@ -11,7 +11,7 @@ import {useStore} from 'shared/hooks';
 import * as styled from './ObjectFunctionalityPage.styled';
 
 const ObjectFunctionalityPage: FC = () => {
-  const {odysseyCreatorStore, unityStore} = useStore();
+  const {odysseyCreatorStore, universeStore} = useStore();
   const {objectFunctionalityStore} = odysseyCreatorStore;
 
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const ObjectFunctionalityPage: FC = () => {
 
   useClickOutside(ref, () => {
     // navigate(-1);
-    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
+    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
   });
 
   useEffect(() => {

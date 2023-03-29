@@ -12,8 +12,8 @@ import {OnlineUser} from './components';
 const DIALOG_WIDTH_PX = 296;
 
 const SearchUsersWidget: FC = () => {
-  const {widgetsStore, nftStore, sessionStore, unityStore} = useStore();
-  const {unityInstanceStore} = unityStore;
+  const {widgetsStore, nftStore, sessionStore, universeStore} = useStore();
+  const {instance3DStore} = universeStore;
   const {onlineUsersStore} = widgetsStore;
 
   const isAlreadyConnected = nftStore.isAlreadyConnected(onlineUsersStore.odyssey?.owner || '');
@@ -22,12 +22,12 @@ const SearchUsersWidget: FC = () => {
   const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {
-    unityInstanceStore.changeKeyboardControl(false);
+    instance3DStore.changeKeyboardControl(false);
 
     return () => {
-      unityInstanceStore.changeKeyboardControl(true);
+      instance3DStore.changeKeyboardControl(true);
     };
-  }, [unityInstanceStore]);
+  }, [instance3DStore]);
 
   const handleClose = () => {
     onlineUsersStore.dialog.close();
@@ -41,7 +41,7 @@ const SearchUsersWidget: FC = () => {
   };
 
   const handleHighFive = (userId: string) => {
-    unityInstanceStore.sendHighFive(userId);
+    instance3DStore.sendHighFive(userId);
   };
 
   const handleOdysseyHighFive = () => {
@@ -83,7 +83,7 @@ const SearchUsersWidget: FC = () => {
               <SearchInput
                 placeholder={t('placeholders.searchForPeople') || ''}
                 onChange={(query: string) => onlineUsersStore.searchUsers(query)}
-                onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
+                onFocus={() => instance3DStore.changeKeyboardControl(false)}
               />
               <styled.List className="noScrollIndicator">
                 {onlineUsersStore.listedUsers.map((user) => (
@@ -94,7 +94,7 @@ const SearchUsersWidget: FC = () => {
                     onUserClick={handleUserClick}
                     onHighFiveUser={handleHighFive}
                     isCurrentUser={user.id === sessionStore.userId}
-                    isOwner={user?.id === unityStore.worldId}
+                    isOwner={user?.id === universeStore.worldId}
                   />
                 ))}
               </styled.List>
@@ -114,11 +114,11 @@ const SearchUsersWidget: FC = () => {
                   odyssey={onlineUsersStore.odyssey}
                   alreadyConnected={isAlreadyConnected}
                   onVisit={() => handleOdysseyTeleport()}
-                  visitDisabled={onlineUsersStore.odyssey?.uuid === unityStore.worldId}
+                  visitDisabled={onlineUsersStore.odyssey?.uuid === universeStore.worldId}
                   onHighFive={handleOdysseyHighFive}
                   onConnect={handleConnect}
                   connectDisabled={
-                    onlineUsersStore.odyssey?.uuid === unityStore.worldId || isAlreadyConnected
+                    onlineUsersStore.odyssey?.uuid === universeStore.worldId || isAlreadyConnected
                   }
                   onCoCreate={() => {}}
                   coCreateDisabled
