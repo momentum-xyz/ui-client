@@ -8,6 +8,16 @@ export interface AuthChallengeResponse {
   challenge: string;
 }
 
+/** ATTACH ACCOUNT REQUEST **/
+
+export interface AttachAccountRequest {
+  wallet: string;
+  signedChallenge: string;
+  network?: string;
+}
+
+export interface AttachAccountResponse {}
+
 /** TOKEN REQUEST **/
 
 export interface AuthTokenRequest {

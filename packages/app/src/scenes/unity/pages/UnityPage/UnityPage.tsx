@@ -6,7 +6,7 @@ import {toast} from 'react-toastify';
 // import Unity from 'react-unity-webgl';
 import {Portal} from '@momentum-xyz/ui-kit';
 import {BabylonScene} from '@momentum-xyz/odyssey3d';
-import {useI18n} from '@momentum-xyz/core';
+import {Event3dEmitter, useI18n} from '@momentum-xyz/core';
 
 import {PRIVATE_ROUTES_WITH_UNITY} from 'scenes/App.routes';
 import {appVariables} from 'api/constants';
@@ -30,7 +30,7 @@ import * as styled from './UnityPage.styled';
 // };
 
 const UnityPage: FC = () => {
-  const {unityStore, sessionStore, nftStore, widgetsStore} = useStore();
+  const {unityStore, sessionStore, widgetsStore} = useStore();
   const {unityInstanceStore} = unityStore;
 
   // const theme = useTheme();
@@ -102,11 +102,8 @@ const UnityPage: FC = () => {
 
   useUnityEvent('ClickObjectEvent', (spaceId: string, label: string) => {
     if (label === 'portal_odyssey') {
-      const nft = nftStore.getNftByUuid(appVariables.ODYSSEY_WORLD_ID);
-      if (nft) {
-        widgetsStore.odysseyInfoStore.open(nft);
-        return;
-      }
+      widgetsStore.odysseyInfoStore.open(appVariables.ODYSSEY_WORLD_ID);
+      return;
     }
     navigate({
       pathname: generatePath(ROUTES.odyssey.object.root, {
@@ -126,10 +123,7 @@ const UnityPage: FC = () => {
   });
 
   useUnityEvent('ProfileClickEvent', (id: string) => {
-    const nft = nftStore.getNftByUuid(id);
-    if (nft) {
-      widgetsStore.odysseyInfoStore.open(nft);
-    }
+    widgetsStore.odysseyInfoStore.open(id);
   });
 
   usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
@@ -234,7 +228,15 @@ const UnityPage: FC = () => {
           unityInstanceStore.setLastClickPosition(event.clientX, event.clientY);
         }}
       >
-        <BabylonScene objects={[]} />
+        <BabylonScene
+          events={Event3dEmitter}
+          onMove={(e) => console.log('onMove', e)}
+          onObjectClick={(e) => console.log('onObjectClick', e)}
+          onObjectTransform={(objectId, transform) =>
+            console.log('onObjectTransform', objectId, transform)
+          }
+          onUserClick={(e) => console.log('onUserClick', e)}
+        />
         {/* <Unity unityContext={unityInstanceStore.unityContext} style={UnityContextCSS} /> */}
       </styled.Inner>
 

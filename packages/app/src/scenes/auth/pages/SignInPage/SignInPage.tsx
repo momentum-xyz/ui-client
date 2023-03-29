@@ -2,13 +2,12 @@ import React, {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useNavigate} from 'react-router-dom';
 import {Button, Text} from '@momentum-xyz/ui-kit';
-import {WalletConfigInterface} from 'wallets/wallets.types';
 
 import {SinusBox, Box} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {PreviewOdysseyWidget} from 'scenes/widgets/pages';
-import {availableWallets} from 'wallets';
+import {availableWallets, WalletConfigInterface} from 'wallets';
 
 import {
   CreateOdyssey,

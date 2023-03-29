@@ -1,7 +1,8 @@
 import {useEffect, useCallback} from 'react';
 import {useWeb3React} from '@web3-react/core';
 import {InjectedConnector} from '@web3-react/injected-connector';
-import {UseWalletType} from 'wallets/wallets.types';
+
+import {UseWalletType} from 'wallets';
 
 const connector = new InjectedConnector({
   supportedChainIds: [1, 3, 4, 5, 42]

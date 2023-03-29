@@ -4,10 +4,12 @@ import {LAST_AIRDROP_KEY, Map3dUserInterface, RequestModel} from '@momentum-xyz/
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
+import {getImageAbsoluteUrl} from 'core/utils';
 import {PolkadotAddressInterface, User} from 'core/models';
 import {getAccessToken, refreshAxiosToken} from 'api/request';
 import {api, AuthChallengeRequest, CheckProfileUpdatingJobResponse, FetchMeResponse} from 'api';
 import PolkadotImplementation from 'shared/services/web3/polkadot.class';
+import {PluginIdEnum} from 'api/enums';
 
 const SessionStore = types
   .model('SessionStore', {
@@ -18,6 +20,7 @@ const SessionStore = types
     guestTokenRequest: types.optional(RequestModel, {}),
     challengeRequest: types.optional(RequestModel, {}),
     tokenRequest: types.optional(RequestModel, {}),
+    attachAccountRequest: types.optional(RequestModel, {}),
     profileRequest: types.optional(RequestModel, {}),
     profileJobRequest: types.optional(RequestModel, {})
   })
@@ -103,6 +106,45 @@ const SessionStore = types
       throw new Error('Error fetching token');
       // return false;
     }),
+    attachAnotherAccount: flow(function* (
+      account: string,
+      signChallenge: (challenge: string) => Promise<string>
+    ) {
+      if (!self.user) {
+        return;
+      }
+
+      const data: AuthChallengeRequest = {wallet: account};
+      const challengeResponse = yield self.challengeRequest.send(
+        api.authRepository.getChallenge,
+        data
+      );
+
+      if (challengeResponse?.challenge) {
+        const signature = yield signChallenge(challengeResponse.challenge);
+        if (signature) {
+          const data = {
+            wallet: account,
+            signedChallenge: signature,
+            network: account.length > 42 ? 'polkadot' : 'ethereum'
+          };
+          const attachResponse = yield self.attachAccountRequest.send(
+            api.authRepository.attachAccount,
+            data
+          );
+
+          if (attachResponse?.error || !attachResponse?.wallet) {
+            console.log('Error attaching account, resp:', attachResponse);
+            throw new Error(attachResponse.error?.message || 'Error attaching account');
+          }
+
+          self.user.wallets = cast(attachResponse.wallet);
+
+          return;
+        }
+      }
+      throw new Error('Error attaching account');
+    }),
     fetchProfileJobStatus: flow(function* () {
       if (self.profileJobId) {
         const response: CheckProfileUpdatingJobResponse = yield self.profileJobRequest.send(
@@ -120,11 +162,29 @@ const SessionStore = types
         api.userRepository.fetchMe,
         {}
       );
-      if (response) {
-        self.user = cast(response);
+      if (!response?.id) {
+        return false;
       }
 
-      return !!response?.id;
+      self.user = cast(response);
+
+      if (!self.user?.isGuest) {
+        // TODO change fetchMe EP to return multiple wallets
+        const responseWallets = yield self.profileRequest.send(
+          api.userAttributeRepository.getPluginUserAttributeValue,
+          {
+            attributeName: 'wallet',
+            userId: response.id,
+            pluginId: PluginIdEnum.WALLETS
+          }
+        );
+        console.log('responseWallets', responseWallets);
+        if (responseWallets?.wallet && self.user) {
+          self.user.wallets = cast(responseWallets.wallet);
+        }
+      }
+
+      return true;
     }),
     signOutRedirect(): void {
       self.clearJobId();
@@ -183,6 +243,9 @@ const SessionStore = types
     },
     get userId(): string {
       return self.user?.id || '';
+    },
+    get userImageUrl(): string {
+      return getImageAbsoluteUrl(self.user?.profile.avatarHash) || '';
     },
     get wallet(): string {
       return self.user?.wallet || '';

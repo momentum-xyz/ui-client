@@ -1,0 +1,9 @@
+export enum WidgetEnum {
+  MAIN_MENU = 'MAIN_MENU',
+  UNIVERSE = 'UNIVERSE',
+  PROFILE = 'PROFILE',
+  RABBIT = 'RABBIT',
+  EMOJI = 'EMOJI',
+  EXPLORE = 'EXPLORE',
+  ODYSSEY_INFO = 'ODYSSEY_INFO'
+}

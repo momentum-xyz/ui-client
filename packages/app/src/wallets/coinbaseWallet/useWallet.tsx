@@ -1,7 +1,8 @@
 import {useEffect, useCallback} from 'react';
 import {useWeb3React} from '@web3-react/core';
 import {WalletLinkConnector} from '@web3-react/walletlink-connector';
-import {UseWalletType} from 'wallets/wallets.types';
+
+import {UseWalletType} from 'wallets';
 
 export const useWallet: UseWalletType = ({appVariables}) => {
   const {library, account, activate, deactivate, active} = useWeb3React();

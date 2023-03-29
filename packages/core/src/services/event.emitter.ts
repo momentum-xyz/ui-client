@@ -3,10 +3,10 @@ import EventEmitter from 'eventemitter3';
 import {Object3dInterface, Texture3dInterface} from '../interfaces';
 
 // TODO: Define proper types
-export type Event2dType = {
-  WorldChanged: (value: string) => void;
-  UserChanged: (value: string) => void;
-};
+// export type Event2dType = {
+//   WorldChanged: (value: string) => void;
+//   UserChanged: (value: string) => void;
+// };
 
 // TODO: Define proper types
 export type Event3dType = {
@@ -16,7 +16,11 @@ export type Event3dType = {
   ObjectTextureChanged: (texture: Texture3dInterface) => void;
   UserEntered: (value: string) => void;
   UserLeft: (value: string) => void;
+  ObjectEditModeChanged: (objectId: string, isEditOn: boolean) => void;
+  ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
 };
 
-export const Event2dEmitter = new EventEmitter<Event2dType>();
+// export const Event2dEmitter = new EventEmitter<Event2dType>();
 export const Event3dEmitter = new EventEmitter<Event3dType>();
+
+export type Event3dEmitterType = typeof Event3dEmitter;

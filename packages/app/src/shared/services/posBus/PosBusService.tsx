@@ -1,5 +1,12 @@
 import {AttributeValueInterface} from '@momentum-xyz/sdk';
-import {Client, loadClientWorker, MsgType, PosbusEvent} from '@momentum-xyz/posbus-client';
+import {
+  Client,
+  loadClientWorker,
+  MsgType,
+  PosbusEvent,
+  PosbusPort
+  // posbus
+} from '@momentum-xyz/posbus-client';
 import {Event3dEmitter} from '@momentum-xyz/core';
 
 import {VoiceChatActionEnum} from 'api/enums';
@@ -30,7 +37,7 @@ class PosBusService {
   private _subscribedAttributeTypeTopics: Set<string>;
 
   private client: Client | null = null;
-  private port: MessagePort | null = null;
+  private port: PosbusPort | null = null;
 
   public static init(token: string, userId: string) {
     console.log('PosBusService init', token, userId);
@@ -132,9 +139,42 @@ class PosBusService {
         break;
       }
 
+      case MsgType.LOCK_OBJECT: {
+        console.log('Handle posbus message lock_object', message.data);
+
+        const {id, state} = data;
+        Event3dEmitter.emit('ObjectLockChanged', id, state === 1);
+        break;
+      }
+
+      case MsgType.LOCK_OBJECT_RESPONSE: {
+        console.log('Handle posbus message lock_object_response', message.data);
+
+        const {
+          id,
+          result
+          //  owner - todo check if we need this
+        } = data;
+        Event3dEmitter.emit('ObjectLockChanged', id, result === 1);
+        break;
+      }
+
       default:
         console.log('Handle posbus message', message.data);
     }
+  }
+
+  static requestObjectLock(objectId: string, lock: boolean) {
+    if (this.isConnected()) {
+      this.main.port?.postMessage([
+        MsgType.LOCK_OBJECT,
+        {
+          id: objectId,
+          state: 1
+        }
+      ]);
+    }
+    // else what? TODO
   }
 
   public get subscribedAttributeTypeTopics(): Set<string> {
