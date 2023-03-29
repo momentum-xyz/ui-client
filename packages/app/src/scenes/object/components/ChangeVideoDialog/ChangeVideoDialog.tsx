@@ -11,8 +11,8 @@ import {useStore} from 'shared/hooks';
 import * as styled from './ChangeVideoDialog.styled';
 
 const ChangeVideoDialog: FC = () => {
-  const {unityStore, objectStore} = useStore();
-  const {unityInstanceStore} = unityStore;
+  const {universeStore, objectStore} = useStore();
+  const {instance3DStore} = universeStore;
   const {assetStore} = objectStore;
   const {changeTileDialog} = assetStore;
 
@@ -39,12 +39,12 @@ const ChangeVideoDialog: FC = () => {
   };
 
   const handleFocus = useCallback(() => {
-    unityInstanceStore.changeKeyboardControl(false);
-  }, [unityInstanceStore]);
+    instance3DStore.changeKeyboardControl(false);
+  }, [instance3DStore]);
 
   const handleBlur = useCallback(() => {
-    unityInstanceStore.changeKeyboardControl(true);
-  }, [unityInstanceStore]);
+    instance3DStore.changeKeyboardControl(true);
+  }, [instance3DStore]);
 
   const errorMessage = useMemo(() => {
     switch (errors.youtube_url?.type) {

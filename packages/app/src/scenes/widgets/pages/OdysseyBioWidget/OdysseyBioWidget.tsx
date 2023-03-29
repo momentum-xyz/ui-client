@@ -11,8 +11,8 @@ const MENU_OFFSET_TOP = 20;
 interface PropsInterface {}
 
 const OdysseyBioWidget: FC<PropsInterface> = () => {
-  const {sessionStore, widgetsStore, nftStore, unityStore} = useStore();
-  const {unityInstanceStore} = unityStore;
+  const {sessionStore, widgetsStore, nftStore, universeStore} = useStore();
+  const {instance3DStore} = universeStore;
   const {odysseyBioStore} = widgetsStore;
 
   const {odyssey} = odysseyBioStore;
@@ -32,7 +32,7 @@ const OdysseyBioWidget: FC<PropsInterface> = () => {
       return;
     }
     console.log(`Calling sendHighFive to ${userId} ...`);
-    unityInstanceStore.sendHighFive(userId);
+    instance3DStore.sendHighFive(userId);
   };
 
   return (

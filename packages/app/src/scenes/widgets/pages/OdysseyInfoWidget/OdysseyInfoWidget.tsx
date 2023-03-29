@@ -11,7 +11,7 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
 const OdysseyInfoWidget: FC = () => {
-  const {sessionStore, nftStore, widgetsStore, objectStore, unityStore} = useStore();
+  const {sessionStore, nftStore, widgetsStore, objectStore, universeStore} = useStore();
   const {odysseyInfoStore} = widgetsStore;
   const {odyssey, isOnOdysseyWorld} = odysseyInfoStore;
   const {assetStore} = objectStore;
@@ -52,8 +52,8 @@ const OdysseyInfoWidget: FC = () => {
       onClose={() => {
         odysseyInfoStore.resetModel();
 
-        if (unityStore.worldId && matchPath(location.pathname, ROUTES.odyssey.object.root)) {
-          navigate(generatePath(ROUTES.odyssey.base, {worldId: unityStore.worldId}));
+        if (universeStore.worldId && matchPath(location.pathname, ROUTES.odyssey.object.root)) {
+          navigate(generatePath(ROUTES.odyssey.base, {worldId: universeStore.worldId}));
         }
       }}
       showCloseButton
@@ -64,7 +64,7 @@ const OdysseyInfoWidget: FC = () => {
             user={odysseyInfoStore.nftUser}
             odyssey={odysseyInfoStore.odyssey}
             onVisit={handleTeleport}
-            visitDisabled={unityStore.worldId === odyssey.uuid}
+            visitDisabled={universeStore.worldId === odyssey.uuid}
             onConnect={handleConnect}
             connectDisabled={userIsOdysseyOwner || alreadyConnected || sessionStore.isGuest}
             onDock={isOnOdysseyWorld ? undefined : () => {}}

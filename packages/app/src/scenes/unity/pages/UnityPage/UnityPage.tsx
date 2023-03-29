@@ -30,8 +30,8 @@ import * as styled from './UnityPage.styled';
 // };
 
 const UnityPage: FC = () => {
-  const {unityStore, sessionStore, nftStore, widgetsStore} = useStore();
-  const {unityInstanceStore} = unityStore;
+  const {universeStore, sessionStore, nftStore, widgetsStore} = useStore();
+  const {instance3DStore} = universeStore;
 
   // const theme = useTheme();
   const navigate = useNavigate();
@@ -39,8 +39,8 @@ const UnityPage: FC = () => {
   const location = useLocation();
 
   // useEffect(() => {
-  //   unityInstanceStore.init();
-  // }, [unityInstanceStore]);
+  //   instance3DStore.init();
+  // }, [instance3DStore]);
 
   // TODO: FIXME
   const worldId = useMemo(() => {
@@ -79,16 +79,16 @@ const UnityPage: FC = () => {
     console.log(`Unity worldId: ${worldId}`);
 
     if (worldId) {
-      await unityInstanceStore.loadWorldById(worldId, sessionStore.token);
+      await instance3DStore.loadWorldById(worldId, sessionStore.token);
     } else {
       console.error(`There is no worldId in route.`);
     }
   });
 
   useUnityEvent('TeleportReady', () => {
-    const worldId = unityInstanceStore.getCurrentWorld();
+    const worldId = instance3DStore.getCurrentWorld();
     if (worldId) {
-      unityStore.initTeleport(worldId);
+      universeStore.initTeleport(worldId);
     }
   });
 
@@ -110,7 +110,7 @@ const UnityPage: FC = () => {
     }
     navigate({
       pathname: generatePath(ROUTES.odyssey.object.root, {
-        worldId: unityStore.worldId,
+        worldId: universeStore.worldId,
         objectId: spaceId
       })
     });
@@ -118,10 +118,10 @@ const UnityPage: FC = () => {
 
   useUnityEvent('EditObjectEvent', (spaceId: string) => {
     console.log('EditObjectEvent', spaceId);
-    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId}));
+    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
     setTimeout(() => {
       // This even comes faster than actual click, so delay
-      unityInstanceStore.onUnityObjectClick(spaceId);
+      instance3DStore.onUnityObjectClick(spaceId);
     }, 500);
   });
 
@@ -152,7 +152,7 @@ const UnityPage: FC = () => {
           declineInfo={{title: t('actions.decline')}}
           approveInfo={{
             title: t('actions.join'),
-            onClick: () => unityInstanceStore.teleportToUser(userId)
+            onClick: () => instance3DStore.teleportToUser(userId)
           }}
         />,
         TOAST_NOT_AUTO_CLOSE_OPTIONS
@@ -171,7 +171,7 @@ const UnityPage: FC = () => {
       <HighFiveContent
         message={message}
         sendBack={() => {
-          unityInstanceStore.sendHighFiveBack(senderId);
+          instance3DStore.sendHighFiveBack(senderId);
         }}
         showCloseButton
       />,
@@ -220,7 +220,7 @@ const UnityPage: FC = () => {
     );
   });
 
-  // if (!unityInstanceStore.unityContext) {
+  // if (!instance3DStore.unityContext) {
   //   return <></>;
   // }
 
@@ -231,7 +231,7 @@ const UnityPage: FC = () => {
       <styled.Inner
         data-testid="UnityPage-test"
         onClick={(event) => {
-          unityInstanceStore.setLastClickPosition(event.clientX, event.clientY);
+          instance3DStore.setLastClickPosition(event.clientX, event.clientY);
         }}
       >
         <BabylonScene
@@ -243,10 +243,10 @@ const UnityPage: FC = () => {
           }
           onUserClick={(e) => console.log('onUserClick', e)}
         />
-        {/* <Unity unityContext={unityInstanceStore.unityContext} style={UnityContextCSS} /> */}
+        {/* <Unity unityContext={instance3DStore.unityContext} style={UnityContextCSS} /> */}
       </styled.Inner>
 
-      {/* {!unityStore.isUnityAvailable && <UnityLoader theme={theme} />} */}
+      {/* {!universeStore.isUnityAvailable && <UnityLoader theme={theme} />} */}
     </Portal>
   );
 };

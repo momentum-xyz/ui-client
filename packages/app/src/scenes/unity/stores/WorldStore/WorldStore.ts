@@ -3,16 +3,16 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api, SpaceAttributeItemResponse, SpaceInterface} from 'api';
 import {mapper} from 'api/mapper';
-import {NftItemModelInterface, Space} from 'core/models';
+import {NftItemModelInterface, Object} from 'core/models';
 import {getImageAbsoluteUrl, getRootStore} from 'core/utils';
 
 // TODO: Use this store a little bit more :)
-const UnityWorldStore = types.compose(
+const WorldStore = types.compose(
   ResetModel,
   types
-    .model('UnityWorldStore', {
+    .model('WorldStore', {
       worldId: types.optional(types.string, ''),
-      world: types.maybeNull(Space),
+      info: types.maybeNull(Object),
       request: types.optional(RequestModel, {})
     })
     .actions((self) => ({
@@ -27,7 +27,7 @@ const UnityWorldStore = types.compose(
         );
 
         if (response) {
-          self.world = cast({
+          self.info = cast({
             id: spaceId,
             ...mapper.mapSpaceSubAttributes<SpaceInterface>(response)
           });
@@ -59,4 +59,4 @@ const UnityWorldStore = types.compose(
     }))
 );
 
-export {UnityWorldStore};
+export {WorldStore as WorldStore};

@@ -11,9 +11,9 @@ import {ROUTES} from 'core/constants';
 import * as styled from './SelectedPage.styled';
 
 export const SelectedPage: FC = () => {
-  const {odysseyCreatorStore, unityStore} = useStore();
+  const {odysseyCreatorStore, universeStore} = useStore();
   const {spawnAssetStore} = odysseyCreatorStore;
-  const {unityInstanceStore} = unityStore;
+  const {instance3DStore} = universeStore;
 
   const {selectedAssset: asset} = spawnAssetStore;
 
@@ -99,8 +99,8 @@ export const SelectedPage: FC = () => {
       </styled.CheckBoxLabel>
       <styled.NameInput
         placeholder={t('placeholders.nameYourObjectNavigation') || ''}
-        onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
-        onBlur={() => unityInstanceStore.changeKeyboardControl(true)}
+        onFocus={() => instance3DStore.changeKeyboardControl(false)}
+        onBlur={() => instance3DStore.changeKeyboardControl(true)}
         onChange={spawnAssetStore.setNavigationObjectName}
       />
       <Button

@@ -15,20 +15,20 @@ import {TextChat} from './components';
 import * as styled from './TextChatWidget.styled';
 
 const TextChatWidget: FC = () => {
-  const {widgetsStore, sessionStore, unityStore} = useStore();
-  const {unityInstanceStore} = unityStore;
+  const {widgetsStore, sessionStore, universeStore} = useStore();
+  const {instance3DStore} = universeStore;
   const {textChatStore} = widgetsStore;
   const {streamChat} = textChatStore;
 
   const {t} = useI18n();
 
   useEffect(() => {
-    streamChat.init(sessionStore.userId, unityStore.worldId, sessionStore.user);
+    streamChat.init(sessionStore.userId, universeStore.worldId, sessionStore.user);
 
     return () => {
-      streamChat.deinit(unityStore.worldId);
+      streamChat.deinit(universeStore.worldId);
     };
-  }, [sessionStore.user, sessionStore.userId, streamChat, unityStore.worldId]);
+  }, [sessionStore.user, sessionStore.userId, streamChat, universeStore.worldId]);
 
   return (
     <SectionedScreenPortal section={ScreenSectionsEnum.TOP_RIGHT}>
@@ -48,8 +48,8 @@ const TextChatWidget: FC = () => {
             <TextChat
               client={streamChat.client}
               channel={streamChat.currentChannel}
-              onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
-              onBlur={() => unityInstanceStore.changeKeyboardControl(true)}
+              onFocus={() => instance3DStore.changeKeyboardControl(false)}
+              onBlur={() => instance3DStore.changeKeyboardControl(true)}
             />
           )}
         </styled.Body>

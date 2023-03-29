@@ -9,7 +9,7 @@ import {useStore} from 'shared/hooks';
 import * as styled from './CreatorMenu.styled';
 
 const CreatorMenu: FC = () => {
-  const {worldId} = useStore().unityStore;
+  const {worldId} = useStore().universeStore;
 
   const navigate = useNavigate();
   const {t} = useI18n();

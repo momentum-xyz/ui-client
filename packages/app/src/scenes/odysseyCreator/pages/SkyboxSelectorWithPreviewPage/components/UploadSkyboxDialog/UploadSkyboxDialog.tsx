@@ -21,22 +21,22 @@ const MAX_ASSET_SIZE_MB = 8;
 const MAX_ASSET_SIZE_B = MAX_ASSET_SIZE_MB * Math.pow(1024, 2);
 
 const UploadSkyboxDialog: FC = () => {
-  const {odysseyCreatorStore, unityStore, sessionStore} = useStore();
+  const {odysseyCreatorStore, universeStore, sessionStore} = useStore();
   const {skyboxSelectorStore} = odysseyCreatorStore;
   const {uploadDialog, uploadSkybox, isUploadPending} = skyboxSelectorStore;
-  const {unityInstanceStore} = unityStore;
+  const {instance3DStore} = universeStore;
   const {user} = sessionStore;
-  const worldId = unityStore.worldId;
+  const worldId = universeStore.worldId;
 
   const {t} = useI18n();
   const theme = useTheme();
 
   useEffect(() => {
-    unityInstanceStore.changeKeyboardControl(false);
+    instance3DStore.changeKeyboardControl(false);
     return () => {
-      unityInstanceStore.changeKeyboardControl(true);
+      instance3DStore.changeKeyboardControl(true);
     };
-  }, [unityInstanceStore]);
+  }, [instance3DStore]);
 
   const {
     control,

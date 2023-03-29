@@ -8,8 +8,8 @@ import {useStore} from 'shared/hooks';
 import * as styled from './UnityVolumeController.styled';
 
 const UnityVolumeController: FC = () => {
-  const {unityStore} = useStore();
-  const {unityInstanceStore} = unityStore;
+  const {universeStore} = useStore();
+  const {instance3DStore} = universeStore;
 
   const {t} = useI18n();
 
@@ -20,27 +20,27 @@ const UnityVolumeController: FC = () => {
         <SvgButton
           iconName="player-mute"
           size="medium"
-          onClick={unityInstanceStore.mute}
-          disabled={unityInstanceStore.volume === 0}
+          onClick={instance3DStore.mute}
+          disabled={instance3DStore.volume === 0}
         />
         <styled.VolumeBarContainer>
-          <styled.BarThumbPosition width={unityInstanceStore.volume * 100 + '%'} />
+          <styled.BarThumbPosition width={instance3DStore.volume * 100 + '%'} />
           <styled.VolumeBar
             type="range"
             min="0"
             max="1"
             step=".01"
-            value={unityInstanceStore.volume}
+            value={instance3DStore.volume}
             onChange={(e) => {
-              unityInstanceStore.volumeChange(parseFloat(e.target.value));
+              instance3DStore.volumeChange(parseFloat(e.target.value));
             }}
           />
         </styled.VolumeBarContainer>
         <SvgButton
           iconName="player-unmute"
           size="medium"
-          onClick={unityInstanceStore.unmute}
-          disabled={unityInstanceStore.volume === 1}
+          onClick={instance3DStore.unmute}
+          disabled={instance3DStore.volume === 1}
         />
       </styled.VolumeContainer>
     </styled.Container>

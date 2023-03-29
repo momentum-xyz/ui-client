@@ -11,9 +11,9 @@ import {ODYSSEY_CREATOR_ROUTES} from './OdysseyCreator.routes';
 import {CreatorMenu, ObjectMenu} from './components';
 
 const OdysseyCreator: FC = () => {
-  const {unityStore} = useStore();
-  const {unityInstanceStore} = unityStore;
-  const {worldId} = unityStore;
+  const {universeStore} = useStore();
+  const {instance3DStore} = universeStore;
+  const {worldId} = universeStore;
 
   useEffect(() => {
     UnityService.toggleBuildMode();
@@ -29,10 +29,10 @@ const OdysseyCreator: FC = () => {
         ODYSSEY_CREATOR_ROUTES,
         generatePath(ROUTES.odyssey.base, {worldId}),
         () => {
-          return unityStore.isCurrentUserWorldAdmin;
+          return universeStore.isCurrentUserWorldAdmin;
         }
       )}
-      {unityInstanceStore.objectMenu.isOpen && <ObjectMenu />}
+      {instance3DStore.objectMenu.isOpen && <ObjectMenu />}
     </>
   );
 };

@@ -8,7 +8,7 @@ import {useNavigation, useStore} from 'shared/hooks';
 import * as styled from './MutualConnectionsWidget.styled';
 
 const MutualConnectionsWidget: FC = () => {
-  const {nftStore, widgetsStore, unityStore} = useStore();
+  const {nftStore, widgetsStore, universeStore} = useStore();
   const {mutualConnectionsStore} = widgetsStore;
   const {mutualConnections} = nftStore;
 
@@ -73,7 +73,7 @@ const MutualConnectionsWidget: FC = () => {
                   iconName="fly-portal"
                   size="medium"
                   onClick={() => handleTeleportToOdyssey(connection.uuid)}
-                  disabled={unityStore.worldId === connection.uuid}
+                  disabled={universeStore.worldId === connection.uuid}
                 />
               </styled.Buttons>
             </styled.Connection>

@@ -27,8 +27,8 @@ const SessionStore = types
     updateAxiosAndUnityTokens(token: string): void {
       self.token = token;
       // TODO: Uncomment. Check Unity is ready.
-      // const {unityStore} = getRootStore(self).mainStore;
-      // unityStore.setAuthToken(self.token); // TODO: change key
+      // const {universeStore} = getRootStore(self).mainStore;
+      // universeStore.setAuthToken(self.token); // TODO: change key
       refreshAxiosToken(self.token);
     }
   }))

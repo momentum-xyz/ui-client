@@ -15,11 +15,11 @@ const ReactLinkify = ReactLinkifyOriginal as unknown as FC<ReactLinkifyProps>;
 
 const TextPage: FC = () => {
   const navigate = useNavigate();
-  const {objectStore, unityStore} = useStore();
+  const {objectStore, universeStore} = useStore();
   const {assetStore} = objectStore;
   const {changeTileDialog, content} = assetStore;
 
-  const isAdmin = unityStore.isCurrentUserWorldAdmin;
+  const isAdmin = universeStore.isCurrentUserWorldAdmin;
 
   const {worldId} = useParams<{worldId: string}>();
 

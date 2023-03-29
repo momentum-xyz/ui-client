@@ -15,11 +15,11 @@ const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
 const ProfileWidget: FC = () => {
-  const {widgetsStore, sessionStore, agoraStore, unityStore} = useStore();
+  const {widgetsStore, sessionStore, agoraStore, universeStore} = useStore();
   const {
     // isUnityAvailable,
-    unityInstanceStore
-  } = unityStore;
+    instance3DStore
+  } = universeStore;
   const {profileStore} = widgetsStore;
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
@@ -37,9 +37,9 @@ const ProfileWidget: FC = () => {
   const isTeleportAvailable = true;
   // const isTeleportAvailable = useMemo(() => {
   //   return isUnityAvailable
-  //     ? !sessionStore.isGuest && unityStore.worldId !== sessionStore.userId
+  //     ? !sessionStore.isGuest && universeStore.worldId !== sessionStore.userId
   //     : !sessionStore.isGuest;
-  // }, [isUnityAvailable, sessionStore.userId, sessionStore.isGuest, unityStore.worldId]);
+  // }, [isUnityAvailable, sessionStore.userId, sessionStore.isGuest, universeStore.worldId]);
 
   const handleTeleport = useCallback(() => {
     goToOdysseyHome(sessionStore.userId);
@@ -126,7 +126,7 @@ const ProfileWidget: FC = () => {
                   user={sessionStore.user}
                   formErrors={profileStore.formErrors}
                   isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
-                  onChangeKeyboardControl={unityInstanceStore.changeKeyboardControl}
+                  onChangeKeyboardControl={instance3DStore.changeKeyboardControl}
                   onUpdate={handleProfileUpdate}
                   onCancel={() => setIsEditMode(!isEditMode)}
                 />

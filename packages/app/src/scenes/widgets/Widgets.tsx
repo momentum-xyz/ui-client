@@ -44,29 +44,29 @@ interface PropsInterface {
 const Widgets: FC<PropsInterface> = (props) => {
   const {isExplorePage} = props;
 
-  const {sessionStore, widgetsStore, unityStore, agoraStore, nftStore} = useStore();
+  const {sessionStore, widgetsStore, universeStore, agoraStore, nftStore} = useStore();
   const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} = widgetsStore;
-  const {unityWorldStore, unityInstanceStore} = unityStore;
+  const {activeWorldStore, instance3DStore} = universeStore;
   const {agoraScreenShareStore} = agoraStore;
   const {user} = sessionStore;
 
-  const worldOwner = nftStore.getNftByUuid(unityStore.worldId);
+  const worldOwner = nftStore.getNftByUuid(universeStore.worldId);
 
   const {t} = useI18n();
   const {pathname} = useLocation();
 
   useEffect(() => {
-    onlineUsersStore.init(unityStore.worldId, sessionStore.userId);
+    onlineUsersStore.init(universeStore.worldId, sessionStore.userId);
     onlineUsersStore.fetchUser(sessionStore.userId);
-  }, [odysseyBioStore, onlineUsersStore, sessionStore.userId, unityStore.worldId]);
+  }, [odysseyBioStore, onlineUsersStore, sessionStore.userId, universeStore.worldId]);
 
   useEffect(() => {
     agoraScreenShareStore.init(
-      unityStore.worldId,
+      universeStore.worldId,
       sessionStore.userId,
       widgetsStore.screenShareStore.dialog.open
     );
-  }, [agoraScreenShareStore, widgetsStore, sessionStore.userId, unityStore.worldId]);
+  }, [agoraScreenShareStore, widgetsStore, sessionStore.userId, universeStore.worldId]);
 
   return (
     <>
@@ -142,7 +142,7 @@ const Widgets: FC<PropsInterface> = (props) => {
             <styled.OnlineUsers>
               <OnlineUsersWidget
                 currentUser={sessionStore.user}
-                worldId={unityStore.worldId}
+                worldId={universeStore.worldId}
                 onClick={onlineUsersStore.dialog.toggle}
               />
             </styled.OnlineUsers>
@@ -152,20 +152,20 @@ const Widgets: FC<PropsInterface> = (props) => {
                   <Text
                     className="odyssey-name"
                     size="m"
-                    text={unityWorldStore?.nftOfWorld?.name || null}
+                    text={activeWorldStore?.nftOfWorld?.name || null}
                     transform="uppercase"
                     weight="bold"
                   />
                   <ToolbarIcon
                     title=""
                     state={{canGoBack: true}}
-                    icon={unityWorldStore.worldImageSrc ? undefined : 'people'}
+                    icon={activeWorldStore.worldImageSrc ? undefined : 'people'}
                     size="medium"
                   >
-                    {unityWorldStore.worldImageSrc && (
+                    {activeWorldStore.worldImageSrc && (
                       <Avatar
                         size="extra-small"
-                        avatarSrc={unityWorldStore.worldImageSrc}
+                        avatarSrc={activeWorldStore.worldImageSrc}
                         showBorder
                         showHover
                       />
@@ -235,16 +235,16 @@ const Widgets: FC<PropsInterface> = (props) => {
                 icon="fly-to"
                 size="medium"
                 onClick={widgetsStore.flyToMeStore.dialog.open}
-                disabled={!unityWorldStore.isMyWorld}
+                disabled={!activeWorldStore.isMyWorld}
                 state={{canGoBack: true}}
               />
 
               <ToolbarCreatorIcon
-                worldId={unityStore.worldId}
-                isAdmin={unityStore.isCurrentUserWorldAdmin}
-                onCloseAndReset={unityInstanceStore.closeAndResetObjectMenu}
+                worldId={universeStore.worldId}
+                isAdmin={universeStore.isCurrentUserWorldAdmin}
+                onCloseAndReset={instance3DStore.closeAndResetObjectMenu}
                 isBuilderMode={pathname.includes(
-                  generatePath(ROUTES.odyssey.creator.base, {worldId: unityStore.worldId})
+                  generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId})
                 )}
               />
             </ToolbarIconList>

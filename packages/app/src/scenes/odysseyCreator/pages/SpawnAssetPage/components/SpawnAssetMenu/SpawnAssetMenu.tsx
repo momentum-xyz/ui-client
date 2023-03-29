@@ -15,8 +15,8 @@ interface PropsInterface {
 }
 
 const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
-  const {odysseyCreatorStore, unityStore} = useStore();
-  const {unityInstanceStore} = unityStore;
+  const {odysseyCreatorStore, universeStore} = useStore();
+  const {instance3DStore} = universeStore;
   const {spawnAssetStore} = odysseyCreatorStore;
   const {searchQuery} = spawnAssetStore;
 
@@ -29,8 +29,8 @@ const SpawnAssetMenu: FC<PropsInterface> = ({worldId}) => {
           variant="secondary"
           value={searchQuery.query}
           placeholder={t(`placeholders.searchForAssets`) || ''}
-          onFocus={() => unityInstanceStore.changeKeyboardControl(false)}
-          onBlur={() => unityInstanceStore.changeKeyboardControl(true)}
+          onFocus={() => instance3DStore.changeKeyboardControl(false)}
+          onBlur={() => instance3DStore.changeKeyboardControl(true)}
           onChange={searchQuery.setQuery}
         />
       </styled.Search>
