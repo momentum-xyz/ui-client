@@ -157,22 +157,22 @@ class PosBusService {
       }
 
       case MsgType.LOCK_OBJECT: {
-        console.log('Handle posbus message lock_object', message.data);
-
-        const {id, state} = data;
-        Event3dEmitter.emit('ObjectLockChanged', id, state === 1);
+        console.log('Temp ignore posbus message lock_object', message.data);
+        // console.log('Handle posbus message lock_object', message.data);
+        // const {id, state} = data;
+        // Event3dEmitter.emit('ObjectLockChanged', id, state === 1);
         break;
       }
 
       case MsgType.LOCK_OBJECT_RESPONSE: {
-        console.log('Handle posbus message lock_object_response', message.data);
-
-        const {
-          id,
-          result
-          //  owner - todo check if we need this
-        } = data;
-        Event3dEmitter.emit('ObjectLockChanged', id, result === 1);
+        console.log('Temp ignore posbus message lock_object_response', message.data);
+        // console.log('Handle posbus message lock_object_response', message.data);
+        // const {
+        //   id,
+        //   result
+        //   //  owner - todo check if we need this
+        // } = data;
+        // Event3dEmitter.emit('ObjectLockChanged', id, result === 1);
         break;
       }
 

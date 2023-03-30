@@ -17,8 +17,10 @@ export type Event3dType = {
 
   UserAdded: (user: Odyssey3dUserInterface) => void;
   UserRemoved: (userId: string) => void;
+
   ObjectEditModeChanged: (objectId: string, isEditOn: boolean) => void;
-  ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
+
+  // ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
 };
 
 // export const Event2dEmitter = new EventEmitter<Event2dType>();
