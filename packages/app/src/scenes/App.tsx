@@ -115,7 +115,7 @@ const App: FC = () => {
         {isTargetRoute(pathname, WORLD_ROUTES) ? (
           <>
             <UnityPage />
-            <Widgets />
+            <Widgets /> {/* FIXME: It will be replaced by WidgetManager */}
             <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
               <AppLayers>{createSwitchByConfig(WORLD_ROUTES)}</AppLayers>
             </Suspense>
@@ -123,7 +123,7 @@ const App: FC = () => {
         ) : (
           <>
             <Map3dPage />
-            <WidgetManager />
+            <WidgetManager /> {/* FIXME: It will be moved to AppLayers */}
             <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
               <AppLayers>{createSwitchByConfig(UNIVERSE_ROUTES)}</AppLayers>
             </Suspense>
