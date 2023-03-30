@@ -7,7 +7,7 @@ import {
   PosbusPort
   // posbus
 } from '@momentum-xyz/posbus-client';
-import {Event3dEmitter} from '@momentum-xyz/core';
+import {Event3dEmitter, ObjectTransformInterface} from '@momentum-xyz/core';
 
 import {VoiceChatActionEnum} from 'api/enums';
 import {PosBusEventEmitter} from 'core/constants';
@@ -162,6 +162,17 @@ class PosBusService {
       default:
         console.log('Handle posbus message', message.data);
     }
+  }
+
+  static sendMyTransform({position, rotation}: ObjectTransformInterface) {
+    this.main.port?.postMessage([
+      MsgType.MY_TRANSFORM,
+      {
+        location: position,
+        rotation
+      } as any
+      // TS error for the type, will fix later and remove any
+    ]);
   }
 
   static requestObjectLock(objectId: string, lock: boolean) {

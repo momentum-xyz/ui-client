@@ -70,14 +70,18 @@ const Instance3DStore = types
       // return rotation;
     },
     teleportToUser(userId: string): void {
-      UnityService.teleportToUser(userId);
+      // TODO Use Emitter3d
+      // UnityService.teleportToUser(userId);
     },
     teleportToSpace(spaceId: string): void {
-      UnityService.teleportToSpace(spaceId);
+      // TODO Use Emitter3d
+      // UnityService.teleportToSpace(spaceId);
     },
     teleportToVector3(vector: any): void {
-      UnityService.teleportToVector3(vector);
+      // TODO Use Emitter3d
+      // UnityService.teleportToVector3(vector);
     },
+
     changeKeyboardControl(isActive: boolean): void {
       UnityService.setKeyboardControl(isActive);
     },

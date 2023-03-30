@@ -1,11 +1,11 @@
 import {UnityContext} from 'react-unity-webgl';
 
-import {getUnityPosition} from 'core/utils';
-import {UnityEventEmitter, UnityTargetTypeEnum} from 'core/constants';
+// import {getUnityPosition} from 'core/utils';
+// import {UnityEventEmitter, UnityTargetTypeEnum} from 'core/constants';
 import {UnityApiInterface} from 'core/interfaces';
 import {PosBusService} from 'shared/services';
 import {GizmoTypeEnum, PosBusEventEnum} from 'core/enums';
-import {PosBusEmojiMessageType} from 'core/types';
+// import {PosBusEmojiMessageType} from 'core/types';
 
 // TODO remove
 
@@ -42,70 +42,70 @@ export class UnityService {
 
     /* Unity Events */
 
-    this.unityContext.on('MomentumLoaded', () => {
-      this.unityApi = this.unityContext?.unityInstance?.Module.UnityAPI;
+    // this.unityContext.on('MomentumLoaded', () => {
+    //   this.unityApi = this.unityContext?.unityInstance?.Module.UnityAPI;
 
-      this.getCurrentWorld = function () {
-        return this.unityApi?.getCurrentWorld();
-      };
+    //   this.getCurrentWorld = function () {
+    //     return this.unityApi?.getCurrentWorld();
+    //   };
 
-      this.getUserPosition = function () {
-        return this.unityApi?.getUserPosition();
-      };
+    //   this.getUserPosition = function () {
+    //     return this.unityApi?.getUserPosition();
+    //   };
 
-      this.getUserRotation = function () {
-        return this.unityApi?.getUserRotation();
-      };
+    //   this.getUserRotation = function () {
+    //     return this.unityApi?.getUserRotation();
+    //   };
 
-      this.triggerInteractionMsg = function (
-        kind: number,
-        guid: string,
-        flag: number,
-        message: string
-      ) {
-        this.unityApi?.triggerInteractionMsg(kind, guid, flag, message);
-      };
+    //   this.triggerInteractionMsg = function (
+    //     kind: number,
+    //     guid: string,
+    //     flag: number,
+    //     message: string
+    //   ) {
+    //     this.unityApi?.triggerInteractionMsg(kind, guid, flag, message);
+    //   };
 
-      UnityEventEmitter.emit('MomentumLoaded');
-    });
+    //   UnityEventEmitter.emit('MomentumLoaded');
+    // });
 
-    this.unityContext.on('TeleportReady', () => {
-      UnityEventEmitter.emit('TeleportReady');
-    });
+    // this.unityContext.on('TeleportReady', () => {
+    //   UnityEventEmitter.emit('TeleportReady');
+    // });
 
-    this.unityContext.on('HideMinimap', () => {
-      UnityEventEmitter.emit('HideMinimap');
-    });
+    // this.unityContext.on('HideMinimap', () => {
+    //   UnityEventEmitter.emit('HideMinimap');
+    // });
 
-    this.unityContext.on('ExterminateUnity', (topic: string) => {
-      UnityEventEmitter.emit('ExterminateUnity', topic);
-    });
+    // this.unityContext.on('ExterminateUnity', (topic: string) => {
+    //   UnityEventEmitter.emit('ExterminateUnity', topic);
+    // });
 
-    this.unityContext.on('ClickEvent', (identifier: string) => {
-      console.log('UnityService ClickEvent', identifier);
-      const [label, id] = identifier.split('|');
+    // this.unityContext.on('ClickEvent', (identifier: string) => {
+    //   console.log('UnityService ClickEvent', identifier);
+    //   const [label, id] = identifier.split('|');
 
-      if (this.isBuildMode) {
-        UnityEventEmitter.emit('EditObjectEvent', id);
-        return;
-      }
+    //   if (this.isBuildMode) {
+    //     UnityEventEmitter.emit('EditObjectEvent', id);
+    //     return;
+    //   }
 
-      UnityEventEmitter.emit('ClickObjectEvent', id, label);
-    });
+    //   UnityEventEmitter.emit('ClickObjectEvent', id, label);
+    // });
 
-    this.unityContext.on('ProfileHasBeenClicked', (identifier: string) => {
-      const [id, rawLocation] = identifier.split('|');
-      UnityEventEmitter.emit('ProfileClickEvent', id, getUnityPosition(rawLocation));
-    });
+    // this.unityContext.on('ProfileHasBeenClicked', (identifier: string) => {
+    //   const [id, rawLocation] = identifier.split('|');
+    //   UnityEventEmitter.emit('ProfileClickEvent', id, getUnityPosition(rawLocation));
+    // });
 
-    this.unityContext.on('InvalidToken', () => {
-      UnityEventEmitter.emit('InvalidToken');
-    });
+    // this.unityContext.on('InvalidToken', () => {
+    //   UnityEventEmitter.emit('InvalidToken');
+    // });
 
-    this.unityContext.on('Error', (message: string) => {
-      console.info('UnityContext error', message);
-      UnityEventEmitter.emit('Error', message);
-    });
+    // this.unityContext.on('Error', (message: string) => {
+    //   console.info('UnityContext error', message);
+    //   UnityEventEmitter.emit('Error', message);
+    // });
 
     /* PosBus Events */
 
@@ -177,37 +177,37 @@ export class UnityService {
     }
   }
 
-  sendEmoji({
-    emojiUrl,
-    emojiId,
-    userUUID,
-    userAvatarSrc,
-    userName,
-    targetType = UnityTargetTypeEnum.USER
-  }: {
-    emojiId: string;
-    emojiUrl: string;
-    userUUID: string;
-    userAvatarSrc: string;
-    userName: string;
-    targetType?: UnityTargetTypeEnum;
-  }) {
-    try {
-      const topic = 'emoji';
+  // sendEmoji({
+  //   emojiUrl,
+  //   emojiId,
+  //   userUUID,
+  //   userAvatarSrc,
+  //   userName,
+  //   targetType = UnityTargetTypeEnum.USER
+  // }: {
+  //   emojiId: string;
+  //   emojiUrl: string;
+  //   userUUID: string;
+  //   userAvatarSrc: string;
+  //   userName: string;
+  //   targetType?: UnityTargetTypeEnum;
+  // }) {
+  //   try {
+  //     const topic = 'emoji';
 
-      const data: PosBusEmojiMessageType = {
-        targetType,
-        targetID: userUUID,
-        urlAvatar: userAvatarSrc,
-        nickname: userName,
-        url: emojiUrl,
-        emojiID: emojiId
-      };
-      this.unityApi?.relayMessage(topic, JSON.stringify(data));
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  //     const data: PosBusEmojiMessageType = {
+  //       targetType,
+  //       targetID: userUUID,
+  //       urlAvatar: userAvatarSrc,
+  //       nickname: userName,
+  //       url: emojiUrl,
+  //       emojiID: emojiId
+  //     };
+  //     this.unityApi?.relayMessage(topic, JSON.stringify(data));
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   lookAtWisp(userId: string) {
     this.unityApi?.lookAtWisp(userId);

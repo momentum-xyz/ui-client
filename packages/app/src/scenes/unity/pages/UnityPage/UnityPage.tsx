@@ -6,12 +6,12 @@ import {toast} from 'react-toastify';
 // import Unity from 'react-unity-webgl';
 import {Portal} from '@momentum-xyz/ui-kit';
 import {BabylonScene} from '@momentum-xyz/odyssey3d';
-import {Event3dEmitter, useI18n} from '@momentum-xyz/core';
+import {Event3dEmitter, ObjectTransformInterface, useI18n} from '@momentum-xyz/core';
 
 import {PRIVATE_ROUTES_WITH_UNITY} from 'scenes/App.routes';
 // import {appVariables} from 'api/constants';
 import {ROUTES} from 'core/constants';
-import {useStore, usePosBusEvent, useUnityEvent} from 'shared/hooks';
+import {useStore, usePosBusEvent} from 'shared/hooks';
 import {
   // UnityLoader,
   ToastContent,
@@ -62,13 +62,13 @@ const UnityPage: FC = () => {
     if (worldId) {
       const setWorld = () => {
         if (!PosBusService.isConnected()) {
-          console.log(`PosBusService is not connected.`);
+          console.log(`BabylonPage: PosBusService is not connected.`);
           setTimeout(() => {
             setWorld();
           }, 1000);
           return;
         }
-        console.log(`Posbus - Set worldId: ${worldId}`);
+        console.log(`BabylonPage: Posbus - Set worldId: ${worldId}`);
         PosBusService.setWorld(worldId);
       };
       setWorld();
@@ -79,7 +79,7 @@ const UnityPage: FC = () => {
 
   const handleObjectClick = (objectId: string, e?: React.MouseEvent) => {
     if (universeStore.isCreatorMode) {
-      console.log('handle object click in creator mode', objectId);
+      console.log('BabylonPage: handle object click in creator mode', objectId);
 
       // TODO take coords from event
       // instance3DStore.setLastClickPosition
@@ -99,7 +99,7 @@ const UnityPage: FC = () => {
 
       instance3DStore.onObjectClick(objectId);
     } else {
-      console.log('handle object click, NOT creator mode', objectId);
+      console.log('BabylonPage: handle object click, NOT creator mode', objectId);
       // if (label === 'portal_odyssey') {
       //   widgetsStore.odysseyInfoStore.open(appVariables.ODYSSEY_WORLD_ID);
       //   return;
@@ -112,17 +112,16 @@ const UnityPage: FC = () => {
       });
     }
   };
-  // useUnityEvent('ClickObjectEvent', (spaceId: string, label: string) => {
 
-  // });
-
-  // useUnityEvent('EditObjectEvent', (spaceId: string) => {
-
-  // });
-
-  useUnityEvent('ProfileClickEvent', (id: string) => {
+  const handleUserClick = (id: string, e?: React.MouseEvent) => {
+    console.log('BabylonPage: onUserClick', id);
     widgetsStore.odysseyInfoStore.open(id);
-  });
+  };
+
+  const handleUserMove = (transform: ObjectTransformInterface) => {
+    console.log('BabylonPage: onMove', transform);
+    PosBusService.sendMyTransform(transform);
+  };
 
   // usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
   //   if (sessionStore.userId === userId) {
@@ -223,12 +222,12 @@ const UnityPage: FC = () => {
       >
         <BabylonScene
           events={Event3dEmitter}
-          onMove={(e) => console.log('onMove', e)}
+          onMove={handleUserMove}
           onObjectClick={handleObjectClick}
           onObjectTransform={(objectId, transform) =>
             console.log('onObjectTransform', objectId, transform)
           }
-          onUserClick={(e) => console.log('onUserClick', e)}
+          onUserClick={handleUserClick}
         />
         {/* <Unity unityContext={instance3DStore.unityContext} style={UnityContextCSS} /> */}
       </styled.Inner>
