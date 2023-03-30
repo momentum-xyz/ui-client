@@ -13,9 +13,11 @@ import {OnlineUsersStore} from './OnlineUsersStore';
 import {OdysseyBioStore} from './OdysseyBioStore';
 import {MutualConnectionsStore} from './MutualConnectionsStore';
 import {MagicLinkStore} from './MagicLinkStore';
+import {ExploreStore} from './ExploreStore';
 
 const RootWidgetsStore = types
   .model('RootWidgetsStore', {
+    exploreStore: types.optional(ExploreStore, {}),
     previewOdysseyStore: types.optional(PreviewOdysseyStore, {}),
     profileStore: types.optional(ProfileStore, {}),
     notificationsStore: types.optional(NotificationsStore, {}),

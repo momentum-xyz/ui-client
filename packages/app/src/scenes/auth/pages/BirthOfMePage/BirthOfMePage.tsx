@@ -11,7 +11,7 @@ import {BuildOdyssey} from './components';
 import * as styled from './BirthOfMePage.styled';
 
 const BirthOfMePage: FC = () => {
-  const {exploreStore, nftStore, signInStore, sessionStore} = useStore();
+  const {widgetsStore, nftStore, signInStore, sessionStore} = useStore();
 
   const navigate = useNavigate();
 
@@ -30,7 +30,7 @@ const BirthOfMePage: FC = () => {
     }
 
     if (nft) {
-      await exploreStore.createNewsfeedItem({
+      await widgetsStore.exploreStore.createNewsfeedItem({
         uuid: nft.uuid,
         type: NewsfeedTypeEnum.CREATED,
         date: new Date().toISOString()
@@ -38,7 +38,7 @@ const BirthOfMePage: FC = () => {
     }
 
     navigate(ROUTES.birthAnimation);
-  }, [exploreStore, navigate, nft, nftStore, sessionStore, signInStore]);
+  }, [widgetsStore, navigate, nft, nftStore, sessionStore, signInStore]);
 
   if (!nft) {
     return null;
