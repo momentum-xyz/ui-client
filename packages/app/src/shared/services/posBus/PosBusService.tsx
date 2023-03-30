@@ -92,6 +92,23 @@ class PosBusService {
         console.log('PosBus signal', data);
         break;
 
+      case MsgType.ADD_USERS: {
+        console.log('PosBus add_users', data);
+        const {users} = data;
+        for (const user of users) {
+          //temp
+          const data = {
+            ...user,
+            transform: {
+              ...user.transform,
+              position: user.transform.location
+            }
+          };
+          Event3dEmitter.emit('UserAdded', data);
+        }
+        break;
+      }
+
       case MsgType.USERS_TRANSFORM_LIST:
         // todo
         break;
