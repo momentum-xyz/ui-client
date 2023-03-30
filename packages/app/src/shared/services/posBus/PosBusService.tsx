@@ -132,7 +132,7 @@ class PosBusService {
             transform: {
               ...object.transform,
               position: object.transform.location,
-              scale: object.transform.scale.x // TODO check if this is correct
+              scale: object.transform.scale
             }
           });
         }

@@ -3,7 +3,7 @@ import {PositionInterface} from './position.interface';
 export interface ObjectTransformInterface {
   position: PositionInterface;
   rotation: PositionInterface;
-  scale: number;
+  scale: PositionInterface;
 }
 
 export interface Object3dInterface {
