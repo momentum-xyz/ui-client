@@ -170,8 +170,7 @@ class PosBusService {
       {
         location: position,
         rotation
-      } as any
-      // TS error for the type, will fix later and remove any
+      }
     ]);
   }
 
