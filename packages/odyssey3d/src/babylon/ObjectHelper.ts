@@ -20,7 +20,7 @@ import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
 
 import {CameraHelper} from './CameraHelper';
 import {SkyboxHelper} from './SkyboxHelper';
-import {UtilityHelper} from './UtilityHelper';
+import {getAssetFileName} from './UtilityHelper';
 
 interface BabylonObjectInterface {
   container: AssetContainer;
@@ -90,12 +90,12 @@ export class ObjectHelper {
 
   static setWorld(assetID: string) {
     // TODO: Add logic with this assetid
-    const assetUrl = UtilityHelper.getAssetFileName(assetID);
+    const assetUrl = getAssetFileName(assetID);
     console.log('assetID is: ' + assetUrl);
   }
 
   static async spawnObjectAsync(scene: Scene, object: Object3dInterface) {
-    const assetUrl = UtilityHelper.getAssetFileName(object.asset_3d_id);
+    const assetUrl = getAssetFileName(object.asset_3d_id);
 
     await SceneLoader.LoadAssetContainerAsync(
       this.assetRootUrl,

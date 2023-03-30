@@ -1,6 +1,6 @@
 import {GizmoManager, Scene, TransformNode} from '@babylonjs/core';
 
-import {UtilityHelper} from './UtilityHelper';
+import {getNodeFromId} from './UtilityHelper';
 
 export enum GizmoTypesEnum {
   Position,
@@ -50,7 +50,7 @@ export class WorldCreatorHelper {
   static toggleGizmo(objectId: string, on: boolean) {
     if (on) {
       this.setGizmoType(GizmoTypesEnum.Position);
-      const node = UtilityHelper.getNodeFromId(objectId);
+      const node = getNodeFromId(objectId);
 
       if (node) {
         this.gizmoManager.attachToNode(node);
