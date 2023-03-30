@@ -1,6 +1,11 @@
 import EventEmitter from 'eventemitter3';
 
-import {Object3dInterface, Odyssey3dUserInterface, Texture3dInterface} from '../interfaces';
+import {
+  Object3dInterface,
+  Odyssey3dUserInterface,
+  Odyssey3dUserTransformInterface,
+  Texture3dInterface
+} from '../interfaces';
 
 // TODO: Define proper types
 // export type Event2dType = {
@@ -17,6 +22,7 @@ export type Event3dType = {
 
   UserAdded: (user: Odyssey3dUserInterface) => void;
   UserRemoved: (userId: string) => void;
+  UsersTransformChanged: (users: Odyssey3dUserTransformInterface[]) => void;
 
   ObjectEditModeChanged: (objectId: string, isEditOn: boolean) => void;
 

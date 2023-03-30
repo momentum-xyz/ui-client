@@ -109,9 +109,31 @@ class PosBusService {
         break;
       }
 
-      case MsgType.USERS_TRANSFORM_LIST:
-        // todo
+      case MsgType.REMOVE_USERS: {
+        console.log('PosBus remove_users', data);
+        const {users} = data;
+        for (const user of users) {
+          Event3dEmitter.emit('UserRemoved', user);
+        }
         break;
+      }
+
+      case MsgType.USERS_TRANSFORM_LIST: {
+        console.log('PosBus users_transform_list', data);
+        const {value} = data;
+        // temp convert
+        const users = value.map((user) => {
+          return {
+            ...user,
+            transform: {
+              ...user.transform,
+              position: user.transform.location
+            }
+          };
+        });
+        Event3dEmitter.emit('UsersTransformChanged', users);
+        break;
+      }
 
       // TODO add to MsgType
       case 'set_object_data' as MsgType: {

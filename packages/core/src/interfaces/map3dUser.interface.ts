@@ -15,3 +15,8 @@ export interface Odyssey3dUserInterface {
   is_guest?: boolean;
   transform?: TransformNoScaleInterface;
 }
+
+export interface Odyssey3dUserTransformInterface {
+  id: string;
+  transform: TransformNoScaleInterface;
+}
