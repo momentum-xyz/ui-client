@@ -8,7 +8,7 @@ import {Portal} from '@momentum-xyz/ui-kit';
 import {BabylonScene} from '@momentum-xyz/odyssey3d';
 import {Event3dEmitter, useI18n} from '@momentum-xyz/core';
 
-import {PRIVATE_ROUTES_WITH_UNITY} from 'scenes/App.routes';
+import {WORLD_ROUTES} from 'scenes/App.routes';
 import {appVariables} from 'api/constants';
 import {ROUTES} from 'core/constants';
 import {useStore, usePosBusEvent, useUnityEvent} from 'shared/hooks';
@@ -44,7 +44,7 @@ const UnityPage: FC = () => {
 
   // TODO: FIXME
   const worldId = useMemo(() => {
-    const paths: string[] = PRIVATE_ROUTES_WITH_UNITY.map((route) => route.path);
+    const paths: string[] = WORLD_ROUTES.map((route) => route.path);
 
     let worldId = '';
     paths.forEach((path) => {

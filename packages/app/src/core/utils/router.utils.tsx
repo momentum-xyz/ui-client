@@ -3,6 +3,7 @@ import {matchPath, Navigate, Route, Routes, RoutesProps, useLocation} from 'reac
 
 import {createProtectedRouteElement} from 'ui-kit/utils/create-protected-route-element';
 import {ProtectedRouteListInterface, RouteConfigInterface} from 'core/interfaces';
+import {ROUTES} from 'core/constants';
 
 export const isTargetRoute = (currentPath: string, routes: RouteConfigInterface[]): boolean => {
   return routes.some((route) => {
@@ -27,7 +28,7 @@ export const createRoutesByConfig = (
         key={idx}
         path={`${route.path}${route.exact ? '' : '/*'}`}
         element={protectedRouteElement}
-      ></Route>
+      />
     );
   });
 };
@@ -48,7 +49,7 @@ const NavigateFallback: FC<{url: string; debugInfo: string}> = ({url, debugInfo}
 
 export const createSwitchByConfig = (
   routes: RouteConfigInterface[],
-  defaultRedirect?: string,
+  defaultRedirect = ROUTES.explore,
   hasRights?: () => boolean
 ): ReactElement<RoutesProps, any> => {
   return (

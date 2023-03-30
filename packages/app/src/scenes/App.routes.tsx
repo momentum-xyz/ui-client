@@ -37,7 +37,7 @@ export const SYSTEM_ROUTES: RouteConfigInterface[] = [
   }
 ];
 
-export const PRIVATE_ROUTES: RouteConfigInterface[] = [
+export const UNIVERSE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.signIn,
     main: () => (
@@ -67,7 +67,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
   },
   {
     path: ROUTES.explore,
-    main: () => <WidgetManager />
+    main: () => <></>
   },
   {
     path: ROUTES.magic,
@@ -76,7 +76,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
 ];
 
 /* !!! EACH ROUTE MUST HAVE WORLD ID IN ORDER TO LOAD UNITY !!! */
-export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
+export const WORLD_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.odyssey.base,
     main: () => <OdysseyHomePage />,
