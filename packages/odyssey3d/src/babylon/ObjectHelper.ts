@@ -20,7 +20,7 @@ import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
 
 import {CameraHelper} from './CameraHelper';
 import {SkyboxHelper} from './SkyboxHelper';
-import {WorldCreatorHelper} from './WorldCreatorHelper';
+import {UtilityHelper} from './UtilityHelper';
 
 interface BabylonObjectInterface {
   container: AssetContainer;
@@ -47,12 +47,9 @@ export class ObjectHelper {
   static initialize(
     scene: Scene,
     engine: Engine,
-    // initialObjects: Object3dInterface[],
-    view: HTMLCanvasElement
+    view: HTMLCanvasElement,
+    onObjectClick: (objectId: string, e?: React.MouseEvent) => void
   ): void {
-    /*initialObjects.forEach((initialObject) => {
-      this.spawnObject(scene, initialObject);
-    });*/
     this.scene = scene;
     this.firstID = '';
     // Mouse Click Listener
@@ -73,26 +70,32 @@ export class ObjectHelper {
           while (parent.parent) {
             parent = parent.parent as AbstractMesh;
           }
-          // For testing, fix this later
-          if (!WorldCreatorHelper.isCreatorMode) {
-            WorldCreatorHelper.tryLockObject(parent.metadata);
+          console.log('clicked on object with id: ' + parent.metadata);
+          if (ObjectHelper.objectsMap.has(parent.metadata)) {
+            onObjectClick(parent.metadata);
           }
-          // feclient.sendclick(parent.metadata);
-          console.log(parent.metadata);
-        } else {
-          WorldCreatorHelper.unlockLastObject();
+          // TODO: Check if object is in the user map
+
+          // For testing, fix this later
+          /*if (!WorldCreatorHelper.isCreatorMode) {
+            WorldCreatorHelper.tryLockObject(parent.metadata);
+          }*/
         }
+        /*else {
+          WorldCreatorHelper.unlockLastObject();
+        }*/
       }
     };
   }
 
   static setWorld(assetID: string) {
-    const assetUrl = this.getAssetFileName(assetID);
+    // TODO: Add logic with this assetid
+    const assetUrl = UtilityHelper.getAssetFileName(assetID);
     console.log('assetID is: ' + assetUrl);
   }
 
   static async spawnObjectAsync(scene: Scene, object: Object3dInterface) {
-    const assetUrl = this.getAssetFileName(object.asset_3d_id);
+    const assetUrl = UtilityHelper.getAssetFileName(object.asset_3d_id);
 
     await SceneLoader.LoadAssetContainerAsync(
       this.assetRootUrl,
@@ -175,9 +178,6 @@ export class ObjectHelper {
     };
     this.objectsMap.set(object.id, babylonObject);
 
-    // Attach gizmo to object when clicked
-    WorldCreatorHelper.gizmoManager.attachableNodes?.push(node);
-
     // Play animations
     for (const group of instance.animationGroups) {
       group.play(true);
@@ -236,9 +236,5 @@ export class ObjectHelper {
         });
       }
     );*/
-  }
-
-  static getAssetFileName(id: string): string {
-    return id.replace(/-/g, '');
   }
 }

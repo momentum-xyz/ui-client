@@ -1,6 +1,6 @@
 import {GizmoManager, Scene, TransformNode} from '@babylonjs/core';
 
-import {ObjectHelper} from './ObjectHelper';
+import {UtilityHelper} from './UtilityHelper';
 
 export enum GizmoTypesEnum {
   Position,
@@ -20,8 +20,11 @@ export class WorldCreatorHelper {
     this.lastLockedID = '';
     // Gizmo setup
     this.gizmoManager = new GizmoManager(scene);
-    this.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
-    this.setGizmoType(GizmoTypesEnum.Position);
+
+    // Custom gizmo stuff
+    /*const customMesh = MeshBuilder.CreateBox('sphere', undefined, this.gizmoManager.gizmos.rotationGizmo?.gizmoLayer.utilityLayerScene);
+    customMesh.scaling = new Vector3(0.01,0.02,0.01);
+    this.gizmoManager.gizmos.rotationGizmo?.xGizmo.setCustomMesh(customMesh);*/
   }
 
   static subscribeForTransformUpdates(node: TransformNode) {
@@ -44,17 +47,31 @@ export class WorldCreatorHelper {
     this.setGizmoType(GizmoTypesEnum.Position);
   }
 
+  static toggleGizmo(objectId: string, on: boolean) {
+    if (on) {
+      this.setGizmoType(GizmoTypesEnum.Position);
+      const node = UtilityHelper.getNodeFromId(objectId);
+
+      if (node) {
+        this.gizmoManager.attachToNode(node);
+      }
+    } else {
+      this.disableAllGizmos();
+    }
+  }
+
   static tryLockObject(id: string) {
-    if (this.lastLockedID === id) {
+    /*if (this.lastLockedID === id) {
       return;
     }
 
     if (ObjectHelper.objectsMap.has(id)) {
-      console.log('clicked on an object, trying to lock');
+      //console.log('clicked on an object, trying to lock');
 
       // TODO: This has to be moved in the setLockedObject function, alongside enabling of gizmo
       // Make sure this is called only once per object
-      const myNode = ObjectHelper.objectsMap.get(id)?.objectInstance.rootNodes[0];
+
+      const myNode = this.getNodeFromId(id);
       if (myNode) {
         this.transformSubscription = this.subscribeForTransformUpdates(myNode);
       }
@@ -62,7 +79,7 @@ export class WorldCreatorHelper {
       //posbusclient.trylock(id);
     } else {
       this.unlockLastObject();
-    }
+    }*/
   }
 
   // Called from posbusclient event

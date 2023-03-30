@@ -23,12 +23,12 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({
         scene,
         engine,
         //  props.objects,
-        view
-        // onObjectClick,
+        view,
+        onObjectClick
         // onUserClick,
         // onMove,
       );
-      
+
       WorldCreatorHelper.initialize(scene);
       //SkyboxHelper.setCubemapSkybox(scene);
       SkyboxHelper.set360Skybox(
@@ -60,7 +60,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({
       });
 
       events.on('ObjectEditModeChanged', (objectId, isOn) => {
-        // TODO
+        WorldCreatorHelper.toggleGizmo(objectId, isOn);
       });
     } else {
       console.error('There is no canvas for Babylon.');

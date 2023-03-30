@@ -11,9 +11,10 @@ import {
 } from '@babylonjs/core';
 
 import {ObjectHelper} from './ObjectHelper';
+import {UtilityHelper} from './UtilityHelper';
 
-const NormalSpeed = 0.5;
-const FastSpeed = 1.5;
+const NORMALSPEED = 0.5;
+const FASTSPEED = 1.5;
 
 export class CameraHelper {
   static camera: UniversalCamera;
@@ -23,7 +24,7 @@ export class CameraHelper {
     // This creates and positions a UniversalCamera camera (non-mesh)
     const camera = new UniversalCamera('UniversalCamera', new Vector3(-5, 5, -15), scene);
     camera.rotationQuaternion = new Quaternion();
-    camera.speed = NormalSpeed;
+    camera.speed = NORMALSPEED;
     // This attaches the camera to the canvas
     camera.attachControl(canvas, true);
 
@@ -41,7 +42,7 @@ export class CameraHelper {
     scene.actionManager.registerAction(
       new ExecuteCodeAction(ActionManager.OnKeyDownTrigger, function (evt) {
         if (evt.sourceEvent.key === 'Shift') {
-          CameraHelper.camera.speed = FastSpeed;
+          CameraHelper.camera.speed = FASTSPEED;
         }
       })
     );
@@ -49,14 +50,14 @@ export class CameraHelper {
     scene.actionManager.registerAction(
       new ExecuteCodeAction(ActionManager.OnKeyUpTrigger, function (evt) {
         if (evt.sourceEvent.key === 'Shift') {
-          CameraHelper.camera.speed = NormalSpeed;
+          CameraHelper.camera.speed = NORMALSPEED;
         }
       })
     );
   }
 
   static spawnPlayer(scene: Scene, assetID: string) {
-    const assetUrl = ObjectHelper.getAssetFileName(assetID);
+    const assetUrl = UtilityHelper.getAssetFileName(assetID);
     SceneLoader.LoadAssetContainer(
       ObjectHelper.assetRootUrl,
       assetUrl,
