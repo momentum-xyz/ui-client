@@ -6,7 +6,6 @@ import {
   Engine,
   AssetContainer,
   Matrix,
-  GizmoManager,
   Mesh,
   InstantiatedEntries,
   Behavior,
@@ -21,6 +20,7 @@ import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
 
 import {CameraHelper} from './CameraHelper';
 import {SkyboxHelper} from './SkyboxHelper';
+import {getAssetFileName} from './UtilityHelper';
 
 interface BabylonObjectInterface {
   container: AssetContainer;
@@ -32,19 +32,11 @@ class CustomNode extends TransformNode {
   public onSomeChange = new Observable();
 }
 
-export enum GizmoTypesEnum {
-  Position,
-  Rotation,
-  Scale,
-  BoundingBox
-}
-
 export class ObjectHelper {
   static light: HemisphericLight | null = null;
   static assetRootUrl = 'https://dev2.odyssey.ninja/api/v3/render/asset/';
   static textureRootUrl = 'https://dev2.odyssey.ninja/api/v3/render/texture/';
   static textureDefaultSize = 's3/';
-  static gizmoManager: GizmoManager;
   static objectsMap = new Map<string, BabylonObjectInterface>();
   static followObjectBehaviour: Behavior<InstantiatedEntries>;
   static player: TransformNode;
@@ -55,12 +47,9 @@ export class ObjectHelper {
   static initialize(
     scene: Scene,
     engine: Engine,
-    // initialObjects: Object3dInterface[],
-    view: HTMLCanvasElement
+    view: HTMLCanvasElement,
+    onObjectClick: (objectId: string, e?: React.MouseEvent) => void
   ): void {
-    /*initialObjects.forEach((initialObject) => {
-      this.spawnObject(scene, initialObject);
-    });*/
     this.scene = scene;
     this.firstID = '';
     // Mouse Click Listener
@@ -81,26 +70,32 @@ export class ObjectHelper {
           while (parent.parent) {
             parent = parent.parent as AbstractMesh;
           }
-          console.log(parent.metadata);
+          console.log('clicked on object with id: ' + parent.metadata);
+          if (ObjectHelper.objectsMap.has(parent.metadata)) {
+            onObjectClick(parent.metadata);
+          }
+          // TODO: Check if object is in the user map
+
+          // For testing, fix this later
+          /*if (!WorldCreatorHelper.isCreatorMode) {
+            WorldCreatorHelper.tryLockObject(parent.metadata);
+          }*/
         }
+        /*else {
+          WorldCreatorHelper.unlockLastObject();
+        }*/
       }
     };
-
-    // Gizmo setup
-    this.gizmoManager = new GizmoManager(scene);
-    this.gizmoManager.clearGizmoOnEmptyPointerEvent = true;
-
-    // Enable position gizmo by default
-    this.setGizmoType(GizmoTypesEnum.Position);
   }
 
   static setWorld(assetID: string) {
-    const assetUrl = this.getAssetFileName(assetID);
+    // TODO: Add logic with this assetid
+    const assetUrl = getAssetFileName(assetID);
     console.log('assetID is: ' + assetUrl);
   }
 
   static async spawnObjectAsync(scene: Scene, object: Object3dInterface) {
-    const assetUrl = this.getAssetFileName(object.asset_3d_id);
+    const assetUrl = getAssetFileName(object.asset_3d_id);
 
     await SceneLoader.LoadAssetContainerAsync(
       this.assetRootUrl,
@@ -183,9 +178,6 @@ export class ObjectHelper {
     };
     this.objectsMap.set(object.id, babylonObject);
 
-    // Attach gizmo to object when clicked
-    this.gizmoManager.attachableNodes?.push(node);
-
     // Play animations
     for (const group of instance.animationGroups) {
       group.play(true);
@@ -210,36 +202,6 @@ export class ObjectHelper {
       this.objectsMap.delete(id);
     } else {
       console.log("unable to delete object, as the id doesn't exist in the map, " + id);
-    }
-  }
-
-  static setGizmoType(type: GizmoTypesEnum) {
-    this.disableAllGizmos();
-    switch (type) {
-      case GizmoTypesEnum.Position:
-        this.gizmoManager.positionGizmoEnabled = true;
-        break;
-      case GizmoTypesEnum.Rotation:
-        this.gizmoManager.rotationGizmoEnabled = true;
-        break;
-      case GizmoTypesEnum.Scale:
-        this.gizmoManager.scaleGizmoEnabled = true;
-        break;
-      case GizmoTypesEnum.BoundingBox:
-        this.gizmoManager.boundingBoxGizmoEnabled = true;
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  static disableAllGizmos() {
-    if (this.gizmoManager) {
-      this.gizmoManager.positionGizmoEnabled = false;
-      this.gizmoManager.rotationGizmoEnabled = false;
-      this.gizmoManager.scaleGizmoEnabled = false;
-      this.gizmoManager.boundingBoxGizmoEnabled = false;
     }
   }
 
@@ -274,9 +236,5 @@ export class ObjectHelper {
         });
       }
     );*/
-  }
-
-  static getAssetFileName(id: string): string {
-    return id.replace(/-/g, '');
   }
 }

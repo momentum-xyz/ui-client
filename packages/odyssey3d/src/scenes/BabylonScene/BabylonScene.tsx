@@ -4,6 +4,7 @@ import SceneComponent from 'babylonjs-hook';
 
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
 import {CameraHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babylon';
+import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = ({
   events,
@@ -22,11 +23,13 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({
         scene,
         engine,
         //  props.objects,
-        view
-        // onObjectClick,
+        view,
+        onObjectClick
         // onUserClick,
         // onMove,
       );
+
+      WorldCreatorHelper.initialize(scene);
       //SkyboxHelper.setCubemapSkybox(scene);
       SkyboxHelper.set360Skybox(
         scene,
@@ -57,7 +60,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({
       });
 
       events.on('ObjectEditModeChanged', (objectId, isOn) => {
-        // TODO
+        WorldCreatorHelper.toggleGizmo(objectId, isOn);
       });
     } else {
       console.error('There is no canvas for Babylon.');
