@@ -61,6 +61,13 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
       onClick: toggle
     },
     {
+      key: WidgetEnum.STAKING,
+      position: PositionEnum.CENTER,
+      iconName: 'stake',
+      onClick: toggle,
+      isHidden: !isWorld || isGuest
+    },
+    {
       key: WidgetEnum.GO_TO,
       position: PositionEnum.CENTER,
       iconName: 'pencil',
@@ -73,6 +80,27 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
       iconName: 'alert',
       onClick: toggle,
       isHidden: isWorld
+    },
+    {
+      key: WidgetEnum.VOICE_CHAT,
+      position: PositionEnum.RIGHT,
+      iconName: 'group_chat',
+      onClick: toggle,
+      isHidden: !isWorld
+    },
+    {
+      key: WidgetEnum.WORLD_PEOPLE,
+      position: PositionEnum.RIGHT,
+      iconName: 'group',
+      onClick: toggle,
+      isHidden: !isWorld
+    },
+    {
+      key: WidgetEnum.WORLD_PROFILE,
+      position: PositionEnum.RIGHT,
+      iconName: 'planet', // FIXME: World image
+      onClick: toggle,
+      isHidden: !isWorld
     }
   ];
 
