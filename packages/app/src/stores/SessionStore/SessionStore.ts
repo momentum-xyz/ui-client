@@ -192,10 +192,11 @@ const SessionStore = types
 
       // FIXME: To use the storage instance and the StorageKeyEnum
       localStorage.removeItem(LAST_AIRDROP_KEY);
-      document.location = ROUTES.signIn;
+      document.location = ROUTES.explore;
     },
+    // TODO: Removal
     signInRedirect(isNewAccount?: boolean): void {
-      document.location = isNewAccount ? ROUTES.signInAccount : ROUTES.signIn;
+      document.location = isNewAccount ? ROUTES.signInAccount : ROUTES.signInAccount;
     }
   }))
   .actions((self) => ({

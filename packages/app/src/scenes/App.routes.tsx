@@ -3,7 +3,6 @@ import React, {lazy} from 'react';
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
-const SignInPage = lazy(() => import('./auth/pages/SignInPage/SignInPage'));
 const SignInAccountPage = lazy(() => import('./auth/pages/SignInAccountPage/SignInAccountPage'));
 const BirthOfMePage = lazy(() => import('./auth/pages/BirthOfMePage/BirthOfMePage'));
 const BirthAnimationPage = lazy(() => import('./auth/pages/BirthAnimationPage/BirthAnimationPage'));
@@ -35,10 +34,6 @@ export const SYSTEM_ROUTES: RouteConfigInterface[] = [
 ];
 
 export const UNIVERSE_ROUTES: RouteConfigInterface[] = [
-  {
-    path: ROUTES.signIn,
-    main: () => <SignInPage />
-  },
   {
     path: ROUTES.signInAccount,
     main: () => <SignInAccountPage />

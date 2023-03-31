@@ -16,7 +16,7 @@ import {convertToHex} from 'core/utils';
 import * as styled from './StakingDashboard.styled';
 
 const StakingDashboard: FC = () => {
-  const {sessionStore, nftStore, widgetsStore} = useStore();
+  const {sessionStore, nftStore} = useStore();
   const {wallet: authWallet} = sessionStore;
   const {addresses, accountOptions} = nftStore;
   const {
@@ -137,7 +137,7 @@ const StakingDashboard: FC = () => {
         console.log({walletAHex, walletBHex});
 
         // FIXME: Movement from the Explore store
-        return widgetsStore.exploreStore.destroyMutualDocks(walletAHex, walletBHex);
+        //return widgetsStore.exploreStore.destroyMutualDocks(walletAHex, walletBHex);
       })
       .then(() => {
         console.log('unstake success');

@@ -9,7 +9,7 @@ import {DATE_TIME_FORMAT, timeFromNow, useI18n} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
-import {NewsfeedTypeEnum} from 'core/enums';
+//import {NewsfeedTypeEnum} from 'core/enums';
 import {EventFormInterface} from 'core/interfaces';
 import {ToastContent} from 'ui-kit';
 
@@ -20,8 +20,8 @@ const DatePicker = DatePickerOriginal as unknown as FC<ReactDatePickerProps>;
 const EventForm: FC = () => {
   const {t} = useI18n();
   const theme = useTheme();
-  const {widgetsStore, universeStore, sessionStore, nftStore} = useStore();
-  const {calendarStore, exploreStore} = widgetsStore;
+  const {widgetsStore, universeStore, sessionStore} = useStore();
+  const {calendarStore} = widgetsStore;
   const {eventForm, formDialog, eventList} = calendarStore;
   const {currentEvent} = eventForm;
 
@@ -55,7 +55,7 @@ const EventForm: FC = () => {
       data.web_link = null;
     }
 
-    const isNewEvent = !eventForm.currentEvent;
+    //const isNewEvent = !eventForm.currentEvent;
     const isSuccess = await eventForm.createOrUpdateEvent(
       data,
       universeStore.worldId,
@@ -64,9 +64,10 @@ const EventForm: FC = () => {
       image
     );
 
-    const nft = nftStore.getNftByUuid(universeStore.worldId);
+    //const nft = nftStore.getNftByUuid(universeStore.worldId);
 
-    if (isSuccess && isNewEvent && nft) {
+    {
+      /*if (isSuccess && isNewEvent && nft) {
       await exploreStore.createNewsfeedItem({
         uuid: nft.uuid,
         type: NewsfeedTypeEnum.CALENDAR,
@@ -79,6 +80,7 @@ const EventForm: FC = () => {
           title: data.title
         }
       });
+    }*/
     }
 
     if (isSuccess) {

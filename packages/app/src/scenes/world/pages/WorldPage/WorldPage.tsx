@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite';
 import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-dom';
 import {toast} from 'react-toastify';
 // import Unity from 'react-unity-webgl';
-import {Portal} from '@momentum-xyz/ui-kit';
+//import {Portal} from '@momentum-xyz/ui-kit';
 import {BabylonScene} from '@momentum-xyz/odyssey3d';
 import {Event3dEmitter, TransformNoScaleInterface, useI18n} from '@momentum-xyz/core';
 
@@ -30,13 +30,19 @@ import * as styled from './WorldPage.styled';
 // };
 
 const WorldPage: FC = () => {
-  const {universeStore, widgetsStore} = useStore();
+  const {universeStore, widgetsStore, widgetManagerStore} = useStore();
   const {instance3DStore} = universeStore;
 
   // const theme = useTheme();
   const navigate = useNavigate();
   const {t} = useI18n();
   const location = useLocation();
+
+  useEffect(() => {
+    return () => {
+      widgetManagerStore.closeAll();
+    };
+  }, [widgetManagerStore]);
 
   // useEffect(() => {
   //   instance3DStore.init();
@@ -213,27 +219,23 @@ const WorldPage: FC = () => {
   console.log('WorldPage render');
 
   return (
-    <Portal>
-      <styled.Inner
-        data-testid="UnityPage-test"
-        onClick={(event) => {
-          instance3DStore.setLastClickPosition(event.clientX, event.clientY);
-        }}
-      >
-        <BabylonScene
-          events={Event3dEmitter}
-          onMove={handleUserMove}
-          onObjectClick={handleObjectClick}
-          onObjectTransform={(objectId, transform) =>
-            console.log('onObjectTransform', objectId, transform)
-          }
-          onUserClick={handleUserClick}
-        />
-        {/* <Unity unityContext={instance3DStore.unityContext} style={UnityContextCSS} /> */}
-      </styled.Inner>
-
-      {/* {!universeStore.isUnityAvailable && <UnityLoader theme={theme} />} */}
-    </Portal>
+    <styled.Inner
+      data-testid="UnityPage-test"
+      onClick={(event) => {
+        instance3DStore.setLastClickPosition(event.clientX, event.clientY);
+      }}
+    >
+      <BabylonScene
+        events={Event3dEmitter}
+        onMove={handleUserMove}
+        onObjectClick={handleObjectClick}
+        onObjectTransform={(objectId, transform) =>
+          console.log('onObjectTransform', objectId, transform)
+        }
+        onUserClick={handleUserClick}
+      />
+      {/* <Unity unityContext={instance3DStore.unityContext} style={UnityContextCSS} /> */}
+    </styled.Inner>
   );
 };
 

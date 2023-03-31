@@ -10,7 +10,7 @@ import {ROUTES} from 'core/constants';
 const MENU_OFFSET_LEFT = 10;
 const MENU_OFFSET_TOP = 20;
 
-const OdysseyInfoWidget: FC = () => {
+const WorldOverviewWidget: FC = () => {
   const {sessionStore, nftStore, widgetsStore, objectStore, universeStore} = useStore();
   const {odysseyInfoStore} = widgetsStore;
   const {odyssey, isOnOdysseyWorld} = odysseyInfoStore;
@@ -76,4 +76,4 @@ const OdysseyInfoWidget: FC = () => {
   );
 };
 
-export default observer(OdysseyInfoWidget);
+export default observer(WorldOverviewWidget);

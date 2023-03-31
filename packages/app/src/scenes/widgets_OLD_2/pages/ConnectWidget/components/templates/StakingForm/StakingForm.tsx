@@ -16,7 +16,7 @@ import {useI18n} from '@momentum-xyz/core';
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
 import {convertToHex} from 'core/utils';
-import {NewsfeedTypeEnum} from 'core/enums';
+//import {NewsfeedTypeEnum} from 'core/enums';
 
 import * as styled from './StakingForm.styled';
 
@@ -30,7 +30,7 @@ interface PropsInterface {
 }
 
 const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
-  const {sessionStore, nftStore, widgetsStore} = useStore();
+  const {sessionStore, nftStore} = useStore();
   const {wallet: authWallet} = sessionStore;
   const {
     balanceTotal,
@@ -97,7 +97,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
         console.log(isMutual ? 'MUTUAL STAKING' : 'No mutual staking');
 
         // FIXME: Movement from the Explore store
-        await widgetsStore.exploreStore.createNewsfeedItem({
+        /*await widgetsStore.exploreStore.createNewsfeedItem({
           uuid: myNft.uuid,
           type: NewsfeedTypeEnum.CONNECTED,
           date: new Date().toISOString(),
@@ -105,7 +105,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
             uuid: nft.uuid,
             isMutual
           }
-        });
+        });*/
 
         if (isMutual) {
           const walletAHex = convertToHex(wallet);
@@ -113,7 +113,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
           console.log({walletAHex, walletBHex});
 
           // FIXME: Movement from the Explore store
-          await widgetsStore.exploreStore.createMutualDocks(walletAHex, walletBHex);
+          //await widgetsStore.exploreStore.createMutualDocks(walletAHex, walletBHex);
         }
 
         console.log('stake success');
