@@ -12,7 +12,7 @@ const UniverseStore = types
   })
   .actions((self) => ({
     initTeleport(worldId: string): void {
-      self.instance3DStore.teleportIsReady();
+      // self.instance3DStore.teleportIsReady();
       self.activeWorldStore.init(worldId);
     }
   }))
@@ -20,12 +20,9 @@ const UniverseStore = types
     get worldId(): string {
       return self.activeWorldStore.worldId;
     },
-    get isUnityAvailable(): boolean {
-      return self.instance3DStore.isTeleportReady;
-    },
-    get isPaused(): boolean {
-      return UnityService.isPaused;
-    },
+    // get isUnityAvailable(): boolean {
+    //   return self.instance3DStore.isTeleportReady;
+    // },
     get isCreatorMode(): boolean {
       return UnityService.isBuildMode;
     },

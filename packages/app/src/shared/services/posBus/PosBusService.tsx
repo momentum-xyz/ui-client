@@ -7,7 +7,7 @@ import {
   PosbusPort
   // posbus
 } from '@momentum-xyz/posbus-client';
-import {Event3dEmitter} from '@momentum-xyz/core';
+import {Event3dEmitter, TransformNoScaleInterface} from '@momentum-xyz/core';
 
 import {VoiceChatActionEnum} from 'api/enums';
 import {PosBusEventEmitter} from 'core/constants';
@@ -92,9 +92,31 @@ class PosBusService {
         console.log('PosBus signal', data);
         break;
 
-      case MsgType.USERS_TRANSFORM_LIST:
-        // todo
+      case MsgType.ADD_USERS: {
+        console.log('PosBus add_users', data);
+        const {users} = data;
+        for (const user of users) {
+          Event3dEmitter.emit('UserAdded', user);
+        }
         break;
+      }
+
+      case MsgType.REMOVE_USERS: {
+        console.log('PosBus remove_users', data);
+        const {users} = data;
+        for (const user of users) {
+          Event3dEmitter.emit('UserRemoved', user);
+        }
+        break;
+      }
+
+      case MsgType.USERS_TRANSFORM_LIST: {
+        console.log('PosBus users_transform_list', data);
+        const {value: users} = data;
+
+        Event3dEmitter.emit('UsersTransformChanged', users);
+        break;
+      }
 
       // TODO add to MsgType
       case 'set_object_data' as MsgType: {
@@ -131,7 +153,6 @@ class PosBusService {
             asset_3d_id: object.asset_type,
             transform: {
               ...object.transform,
-              position: object.transform.location,
               scale: object.transform.scale.x // TODO check if this is correct
             }
           });
@@ -140,28 +161,32 @@ class PosBusService {
       }
 
       case MsgType.LOCK_OBJECT: {
-        console.log('Handle posbus message lock_object', message.data);
-
-        const {id, state} = data;
-        Event3dEmitter.emit('ObjectLockChanged', id, state === 1);
+        console.log('Temp ignore posbus message lock_object', message.data);
+        // console.log('Handle posbus message lock_object', message.data);
+        // const {id, state} = data;
+        // Event3dEmitter.emit('ObjectLockChanged', id, state === 1);
         break;
       }
 
       case MsgType.LOCK_OBJECT_RESPONSE: {
-        console.log('Handle posbus message lock_object_response', message.data);
-
-        const {
-          id,
-          result
-          //  owner - todo check if we need this
-        } = data;
-        Event3dEmitter.emit('ObjectLockChanged', id, result === 1);
+        console.log('Temp ignore posbus message lock_object_response', message.data);
+        // console.log('Handle posbus message lock_object_response', message.data);
+        // const {
+        //   id,
+        //   result
+        //   //  owner - todo check if we need this
+        // } = data;
+        // Event3dEmitter.emit('ObjectLockChanged', id, result === 1);
         break;
       }
 
       default:
         console.log('Handle posbus message', message.data);
     }
+  }
+
+  static sendMyTransform(transform: TransformNoScaleInterface) {
+    this.main.port?.postMessage([MsgType.MY_TRANSFORM, transform]);
   }
 
   static requestObjectLock(objectId: string, lock: boolean) {

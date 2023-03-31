@@ -1,15 +1,16 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 
-import {useStore, useUnityEvent} from 'shared/hooks';
+// import {useStore, useUnityEvent} from 'shared/hooks';
 
 const MinimapWidget: FC = () => {
-  const {widgetsStore} = useStore();
-  const {minimapStore} = widgetsStore;
+  // const {widgetsStore} = useStore();
+  // const {minimapStore} = widgetsStore;
 
-  useUnityEvent('HideMinimap', () => {
-    minimapStore.dialog.close();
-  });
+  // TODO
+  // useUnityEvent('HideMinimap', () => {
+  //   minimapStore.dialog.close();
+  // });
 
   return <></>;
 };
