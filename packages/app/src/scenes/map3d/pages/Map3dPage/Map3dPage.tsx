@@ -11,30 +11,23 @@ interface PropsInterface {
   isClickActive?: boolean;
 }
 
-const Map3dPage: FC<PropsInterface> = ({isClickActive}) => {
+const Map3dPage: FC<PropsInterface> = () => {
   const {nftStore, widgetsStore, sessionStore, widgetManagerStore} = useStore();
   const {previewOdysseyStore, odysseyInfoStore} = widgetsStore;
 
   const handleSelect = useCallback(
     (uuid: string) => {
-      if (isClickActive && sessionStore.isGuest) {
+      if (sessionStore.isGuest) {
         const nft = nftStore.getNftByUuid(uuid);
         previewOdysseyStore.open(nft!);
       }
 
-      if (isClickActive && !sessionStore.isGuest) {
+      if (!sessionStore.isGuest) {
         widgetManagerStore.open(WidgetEnum.ODYSSEY_INFO, PositionEnum.LEFT, {id: uuid});
         odysseyInfoStore.open(uuid);
       }
     },
-    [
-      isClickActive,
-      nftStore,
-      odysseyInfoStore,
-      previewOdysseyStore,
-      sessionStore.isGuest,
-      widgetManagerStore
-    ]
+    [nftStore, odysseyInfoStore, previewOdysseyStore, sessionStore.isGuest, widgetManagerStore]
   );
 
   if (nftStore.isLoading || !sessionStore.map3dUser) {

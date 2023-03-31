@@ -4,7 +4,7 @@ import {useI18n} from '@momentum-xyz/core';
 import {PanelLayout, Emoji} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {UnityService} from 'shared/services';
+// import {UnityService} from 'shared/services';
 
 import * as styled from './EmojiWidget.styled';
 
@@ -29,7 +29,8 @@ const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
   const handleEmojiClick = useCallback(
     (emojiId: string, emojiUrl: string) => {
       if (userUUID) {
-        UnityService.sendEmoji({emojiId, emojiUrl, userUUID, userAvatarSrc, userName});
+        // TODO
+        // UnityService.sendEmoji({emojiId, emojiUrl, userUUID, userAvatarSrc, userName});
       } else {
         console.error('Unable to get user uuid');
       }

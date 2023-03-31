@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useLocation} from 'react-router-dom';
+import {generatePath, useLocation, useNavigate} from 'react-router-dom';
 import {
   Avatar,
   Button,
@@ -51,6 +51,7 @@ const Widgets: FC<PropsInterface> = (props) => {
   const {user} = sessionStore;
 
   const {t} = useI18n();
+  const navigate = useNavigate();
   const {pathname} = useLocation();
 
   useEffect(() => {
@@ -77,10 +78,8 @@ const Widgets: FC<PropsInterface> = (props) => {
                 icon="leave-left"
                 size="medium"
                 onClick={() => {
-                  // FIXME: Hard redirect because of unity
-                  document.location = ROUTES.explore;
+                  navigate(ROUTES.explore, {replace: true});
                 }}
-                state={{canGoBack: true}}
               />
             )}
 

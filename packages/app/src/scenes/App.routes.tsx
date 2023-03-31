@@ -3,15 +3,12 @@ import React, {lazy} from 'react';
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
-const Widgets = lazy(() => import('./widgets/Widgets'));
-const WidgetManager = lazy(() => import('./widgetManager/WidgetManager'));
 const SignInPage = lazy(() => import('./auth/pages/SignInPage/SignInPage'));
 const SignInAccountPage = lazy(() => import('./auth/pages/SignInAccountPage/SignInAccountPage'));
 const BirthOfMePage = lazy(() => import('./auth/pages/BirthOfMePage/BirthOfMePage'));
 const BirthAnimationPage = lazy(() => import('./auth/pages/BirthAnimationPage/BirthAnimationPage'));
+const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
 const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));
-//const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
-const Map3dPage = lazy(() => import('./map3d/pages/Map3dPage/Map3dPage'));
 const OdysseyHomePage = lazy(() => import('./odysseyHome/pages/OdysseyHomePage/OdysseyHomePage'));
 const Object = lazy(() => import('./object/Object'));
 const DisconnectedPage = lazy(() => import('./system/pages/DisconnectedPage/DisconnectedPage'));
@@ -37,54 +34,27 @@ export const SYSTEM_ROUTES: RouteConfigInterface[] = [
   }
 ];
 
-export const PRIVATE_ROUTES: RouteConfigInterface[] = [
+export const UNIVERSE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.signIn,
-    main: () => (
-      <>
-        <Map3dPage isClickActive />
-        <SignInPage />
-        <WidgetManager />
-      </>
-    )
+    main: () => <SignInPage />
   },
   {
     path: ROUTES.signInAccount,
-    main: () => (
-      <>
-        <Map3dPage />
-        <SignInAccountPage />
-      </>
-    )
+    main: () => <SignInAccountPage />
   },
   {
     path: ROUTES.birth,
     exact: true,
-    main: () => (
-      <>
-        <Map3dPage />
-        <BirthOfMePage />
-      </>
-    )
+    main: () => <BirthOfMePage />
   },
   {
     path: ROUTES.birthAnimation,
-    main: () => (
-      <>
-        <BirthAnimationPage />
-        <Widgets isExplorePage />
-      </>
-    )
+    main: () => <BirthAnimationPage />
   },
   {
     path: ROUTES.explore,
-    main: () => (
-      <>
-        <Map3dPage isClickActive />
-        {/* <ExplorePage /> */}
-        <WidgetManager />
-      </>
-    )
+    main: () => <ExplorePage />
   },
   {
     path: ROUTES.magic,
@@ -93,7 +63,7 @@ export const PRIVATE_ROUTES: RouteConfigInterface[] = [
 ];
 
 /* !!! EACH ROUTE MUST HAVE WORLD ID IN ORDER TO LOAD UNITY !!! */
-export const PRIVATE_ROUTES_WITH_UNITY: RouteConfigInterface[] = [
+export const WORLD_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.odyssey.base,
     main: () => <OdysseyHomePage />,

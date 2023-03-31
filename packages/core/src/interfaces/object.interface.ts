@@ -6,6 +6,11 @@ export interface ObjectTransformInterface {
   scale: PositionInterface;
 }
 
+export interface TransformNoScaleInterface {
+  position: PositionInterface;
+  rotation: PositionInterface;
+}
+
 export interface Object3dInterface {
   id: string;
   name: string;

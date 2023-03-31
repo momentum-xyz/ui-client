@@ -30,7 +30,7 @@ interface PropsInterface {
 }
 
 const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
-  const {sessionStore, nftStore, exploreStore} = useStore();
+  const {sessionStore, nftStore, widgetsStore} = useStore();
   const {wallet: authWallet} = sessionStore;
   const {
     balanceTotal,
@@ -96,7 +96,8 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
         const isMutual = nftStore.stakingAtMe.has(nft.owner);
         console.log(isMutual ? 'MUTUAL STAKING' : 'No mutual staking');
 
-        await exploreStore.createNewsfeedItem({
+        // FIXME: Movement from the Explore store
+        await widgetsStore.exploreStore.createNewsfeedItem({
           uuid: myNft.uuid,
           type: NewsfeedTypeEnum.CONNECTED,
           date: new Date().toISOString(),
@@ -110,7 +111,9 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
           const walletAHex = convertToHex(wallet);
           const walletBHex = convertToHex(nft?.owner);
           console.log({walletAHex, walletBHex});
-          await exploreStore.createMutualDocks(walletAHex, walletBHex);
+
+          // FIXME: Movement from the Explore store
+          await widgetsStore.exploreStore.createMutualDocks(walletAHex, walletBHex);
         }
 
         console.log('stake success');

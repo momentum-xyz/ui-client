@@ -20,8 +20,8 @@ const DatePicker = DatePickerOriginal as unknown as FC<ReactDatePickerProps>;
 const EventForm: FC = () => {
   const {t} = useI18n();
   const theme = useTheme();
-  const {widgetsStore, universeStore, sessionStore, exploreStore, nftStore} = useStore();
-  const {calendarStore} = widgetsStore;
+  const {widgetsStore, universeStore, sessionStore, nftStore} = useStore();
+  const {calendarStore, exploreStore} = widgetsStore;
   const {eventForm, formDialog, eventList} = calendarStore;
   const {currentEvent} = eventForm;
 

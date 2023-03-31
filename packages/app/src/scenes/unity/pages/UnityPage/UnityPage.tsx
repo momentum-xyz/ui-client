@@ -6,19 +6,19 @@ import {toast} from 'react-toastify';
 // import Unity from 'react-unity-webgl';
 import {Portal} from '@momentum-xyz/ui-kit';
 import {BabylonScene} from '@momentum-xyz/odyssey3d';
-import {Event3dEmitter, useI18n} from '@momentum-xyz/core';
+import {Event3dEmitter, TransformNoScaleInterface, useI18n} from '@momentum-xyz/core';
 
-import {PRIVATE_ROUTES_WITH_UNITY} from 'scenes/App.routes';
-import {appVariables} from 'api/constants';
+import {WORLD_ROUTES} from 'scenes/App.routes';
+// import {appVariables} from 'api/constants';
 import {ROUTES} from 'core/constants';
-import {useStore, usePosBusEvent, useUnityEvent} from 'shared/hooks';
+import {useStore, usePosBusEvent} from 'shared/hooks';
 import {
   // UnityLoader,
   ToastContent,
   HighFiveContent,
-  TOAST_BASE_OPTIONS,
-  TOAST_COMMON_OPTIONS,
-  TOAST_NOT_AUTO_CLOSE_OPTIONS
+  TOAST_BASE_OPTIONS
+  // TOAST_COMMON_OPTIONS,
+  // TOAST_NOT_AUTO_CLOSE_OPTIONS
 } from 'ui-kit';
 import {PosBusService} from 'shared/services';
 
@@ -30,7 +30,7 @@ import * as styled from './UnityPage.styled';
 // };
 
 const UnityPage: FC = () => {
-  const {universeStore, sessionStore, widgetsStore} = useStore();
+  const {universeStore, widgetsStore} = useStore();
   const {instance3DStore} = universeStore;
 
   // const theme = useTheme();
@@ -44,7 +44,7 @@ const UnityPage: FC = () => {
 
   // TODO: FIXME
   const worldId = useMemo(() => {
-    const paths: string[] = PRIVATE_ROUTES_WITH_UNITY.map((route) => route.path);
+    const paths: string[] = WORLD_ROUTES.map((route) => route.path);
 
     let worldId = '';
     paths.forEach((path) => {
@@ -62,102 +62,94 @@ const UnityPage: FC = () => {
     if (worldId) {
       const setWorld = () => {
         if (!PosBusService.isConnected()) {
-          console.log(`PosBusService is not connected.`);
+          console.log(`BabylonPage: PosBusService is not connected.`);
           setTimeout(() => {
             setWorld();
           }, 1000);
           return;
         }
-        console.log(`Posbus - Set worldId: ${worldId}`);
+        console.log(`BabylonPage: Posbus - Set worldId: ${worldId}`);
         PosBusService.setWorld(worldId);
       };
       setWorld();
-    }
-  }, [worldId]);
 
-  useUnityEvent('MomentumLoaded', async () => {
-    console.log(`Unity worldId: ${worldId}`);
-
-    if (worldId) {
-      await instance3DStore.loadWorldById(worldId, sessionStore.token);
-    } else {
-      console.error(`There is no worldId in route.`);
-    }
-  });
-
-  useUnityEvent('TeleportReady', () => {
-    const worldId = instance3DStore.getCurrentWorld();
-    if (worldId) {
       universeStore.initTeleport(worldId);
     }
-  });
+  }, [worldId, universeStore]);
 
-  useUnityEvent('Error', (message: string) => {
-    console.info('Unity Error handling', message);
-  });
+  const handleObjectClick = (objectId: string, e?: React.MouseEvent) => {
+    if (universeStore.isCreatorMode) {
+      console.log('BabylonPage: handle object click in creator mode', objectId);
 
-  useUnityEvent('ExterminateUnity', () => {
-    document.location.href = ROUTES.system.disconnected;
-  });
+      // TODO take coords from event
+      // instance3DStore.setLastClickPosition
 
-  useUnityEvent('ClickObjectEvent', (spaceId: string, label: string) => {
-    if (label === 'portal_odyssey') {
-      widgetsStore.odysseyInfoStore.open(appVariables.ODYSSEY_WORLD_ID);
-      return;
-    }
-    navigate({
-      pathname: generatePath(ROUTES.odyssey.object.root, {
-        worldId: universeStore.worldId,
-        objectId: spaceId
-      })
-    });
-  });
+      if (instance3DStore.selectedObjectId) {
+        if (instance3DStore.selectedObjectId === objectId) {
+          return;
+        }
 
-  useUnityEvent('EditObjectEvent', (spaceId: string) => {
-    console.log('EditObjectEvent', spaceId);
-    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
-    setTimeout(() => {
-      // This even comes faster than actual click, so delay
-      instance3DStore.onUnityObjectClick(spaceId);
-    }, 500);
-  });
+        Event3dEmitter.emit('ObjectEditModeChanged', instance3DStore.selectedObjectId, false);
+      }
 
-  useUnityEvent('ProfileClickEvent', (id: string) => {
-    widgetsStore.odysseyInfoStore.open(id);
-  });
+      // TODO try to lock object and wait for lock to be acquired
+      Event3dEmitter.emit('ObjectEditModeChanged', objectId, true);
 
-  usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
-    if (sessionStore.userId === userId) {
-      toast.info(
-        <ToastContent
-          headerIconName="fly-with-me"
-          title="Fly to me Request"
-          text="Your request was sent!"
-          showCloseButton
-        />,
-        TOAST_COMMON_OPTIONS
-      );
+      navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
+
+      instance3DStore.onObjectClick(objectId);
     } else {
-      toast.info(
-        <ToastContent
-          headerIconName="fly-with-me"
-          title="Fly to me Request"
-          text={`${userName} has invited you to fly to them`}
-          declineInfo={{title: t('actions.decline')}}
-          approveInfo={{
-            title: t('actions.join'),
-            onClick: () => instance3DStore.teleportToUser(userId)
-          }}
-        />,
-        TOAST_NOT_AUTO_CLOSE_OPTIONS
-      );
+      console.log('BabylonPage: handle object click, NOT creator mode', objectId);
+      // if (label === 'portal_odyssey') {
+      //   widgetsStore.odysseyInfoStore.open(appVariables.ODYSSEY_WORLD_ID);
+      //   return;
+      // }
+      navigate({
+        pathname: generatePath(ROUTES.odyssey.object.root, {
+          worldId: universeStore.worldId,
+          objectId
+        })
+      });
     }
-  });
+  };
 
-  // FIXME: FYI: It is not used anymore
-  usePosBusEvent('space-invite', async (spaceId, invitorId, invitorName, uiTypeId) => {
-    console.info('[POSBUS EVENT] space-invite', spaceId, invitorId, invitorName, uiTypeId);
-  });
+  const handleUserClick = (id: string, e?: React.MouseEvent) => {
+    console.log('BabylonPage: onUserClick', id);
+    widgetsStore.odysseyInfoStore.open(id);
+  };
+
+  const handleUserMove = (transform: TransformNoScaleInterface) => {
+    console.log('BabylonPage: onMove', transform);
+    PosBusService.sendMyTransform(transform);
+  };
+
+  // usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
+  //   if (sessionStore.userId === userId) {
+  //     toast.info(
+  //       <ToastContent
+  //         headerIconName="fly-with-me"
+  //         title="Fly to me Request"
+  //         text="Your request was sent!"
+  //         showCloseButton
+  //       />,
+  //       TOAST_COMMON_OPTIONS
+  //     );
+  //   } else {
+  //     toast.info(
+  //       <ToastContent
+  //         headerIconName="fly-with-me"
+  //         title="Fly to me Request"
+  //         text={`${userName} has invited you to fly to them`}
+  //         declineInfo={{title: t('actions.decline')}}
+  //         approveInfo={{
+  //           title: t('actions.join'),
+  //           onClick: () => instance3DStore.teleportToUser(userId)
+  //         }}
+  //       />,
+  //       TOAST_NOT_AUTO_CLOSE_OPTIONS
+  //     );
+  //   }
+  // });
 
   usePosBusEvent('high-five', (senderId, message) => {
     console.info('[POSBUS EVENT] high-five', senderId, message);
@@ -185,34 +177,34 @@ const UnityPage: FC = () => {
     );
   });
 
-  usePosBusEvent('notify-gathering-start', (message) => {
-    console.info('[POSBUS EVENT] notify-gathering-start', message);
+  // usePosBusEvent('notify-gathering-start', (message) => {
+  //   console.info('[POSBUS EVENT] notify-gathering-start', message);
 
-    toast.info(
-      <ToastContent
-        headerIconName="calendar"
-        title={t('titles.joinGathering')}
-        text={t('messages.joinGathering', {title: message.title})}
-        approveInfo={{
-          title: t('actions.dismiss')
-        }}
-        showCloseButton
-      />,
-      TOAST_NOT_AUTO_CLOSE_OPTIONS
-    );
-  });
+  //   toast.info(
+  //     <ToastContent
+  //       headerIconName="calendar"
+  //       title={t('titles.joinGathering')}
+  //       text={t('messages.joinGathering', {title: message.title})}
+  //       approveInfo={{
+  //         title: t('actions.dismiss')
+  //       }}
+  //       showCloseButton
+  //     />,
+  //     TOAST_NOT_AUTO_CLOSE_OPTIONS
+  //   );
+  // });
 
-  usePosBusEvent('simple-notification', (message) => {
-    console.info('[POSBUS EVENT] simple-notification', message);
-    toast.info(
-      <ToastContent
-        headerIconName="check"
-        title={t('titles.alert')}
-        text={message}
-        showCloseButton
-      />
-    );
-  });
+  // usePosBusEvent('simple-notification', (message) => {
+  //   console.info('[POSBUS EVENT] simple-notification', message);
+  //   toast.info(
+  //     <ToastContent
+  //       headerIconName="check"
+  //       title={t('titles.alert')}
+  //       text={message}
+  //       showCloseButton
+  //     />
+  //   );
+  // });
 
   // if (!instance3DStore.unityContext) {
   //   return <></>;
@@ -230,12 +222,12 @@ const UnityPage: FC = () => {
       >
         <BabylonScene
           events={Event3dEmitter}
-          onMove={(e) => console.log('onMove', e)}
-          onObjectClick={(e) => console.log('onObjectClick', e)}
+          onMove={handleUserMove}
+          onObjectClick={handleObjectClick}
           onObjectTransform={(objectId, transform) =>
             console.log('onObjectTransform', objectId, transform)
           }
-          onUserClick={(e) => console.log('onUserClick', e)}
+          onUserClick={handleUserClick}
         />
         {/* <Unity unityContext={instance3DStore.unityContext} style={UnityContextCSS} /> */}
       </styled.Inner>

@@ -2,7 +2,6 @@ import {Instance, types} from 'mobx-state-tree';
 
 import {SignInStore} from 'scenes/auth/stores';
 import {UniverseStore} from 'scenes/unity/stores';
-import {ExploreStore} from 'scenes/explore/stores/ExploreStore';
 import {RootWidgetsStore} from 'scenes/widgets/stores/RootWidgetsStore';
 import {RootWidgetStore_OLD} from 'scenes/widgets_OLD/stores/RootWidgetStore_OLD';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
@@ -31,7 +30,6 @@ const RootStore = types
     /* Connect independent stores */
     universeStore: types.optional(UniverseStore, {}),
     signInStore: types.optional(SignInStore, {}),
-    exploreStore: types.optional(ExploreStore, {}),
     objectStore: types.optional(ObjectStore, {}),
     widgetsStore: types.optional(RootWidgetsStore, {}),
     odysseyCreatorStore: types.optional(RootOdysseyCreatorStore, {}),
