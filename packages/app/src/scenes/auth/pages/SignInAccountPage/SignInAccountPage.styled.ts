@@ -22,6 +22,7 @@ export const Boxes = styled.div`
   flex-direction: column;
   gap: 15px;
   pointer-events: all;
+  width: 420px;
 `;
 
 export const MintingMessageBox = styled.div`

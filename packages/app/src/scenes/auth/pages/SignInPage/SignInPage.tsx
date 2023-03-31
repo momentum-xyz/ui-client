@@ -9,14 +9,8 @@ import {availableWallets, WalletConfigInterface} from 'wallets';
 import {WalletLogin} from './components';
 import * as styled from './SignInPage.styled';
 
-const TEXT_LINE = 'Lorem ipsum dolor sit amet, consectetuer adipicing elit. Aenean commodo ligula.';
-
 const SignInPage: FC = () => {
-  const {sessionStore, nftStore, widgetsStore} = useStore();
-
-  // eslint-disable-next-line no-debugger
-  debugger;
-  console.log(nftStore.nftItemsWithAccounts);
+  const {sessionStore, widgetsStore} = useStore();
 
   const {previewOdysseyStore} = widgetsStore;
 
@@ -63,7 +57,10 @@ const SignInPage: FC = () => {
               variant="primary"
               hexagon={<Hexagon type="secondary-borderless" iconName="planet" />}
             >
-              <FrameText title="Sign in with your wallet" line1={TEXT_LINE} />
+              <FrameText
+                title="Sign in with your wallet"
+                line1="Lorem ipsum dolor sit amet, consectetuer adipicing elit. Aenean commodo ligula."
+              />
               <styled.SignInMethodsContainer>
                 <span className="title">Connect your wallet</span>
                 <div className="methods">

@@ -1,16 +1,9 @@
 import styled from 'styled-components';
 
-export const Div = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-`;
-
-export const Header = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
+export const Container = styled.div``;
+export const Separator = styled.div`
+  border-top: 2px solid #9eeeff;
+  margin: 10px 0;
 `;
 
 export const InputContainer = styled.div`
@@ -34,8 +27,17 @@ export const AvatarImageUpload = styled.div`
   width: 100px;
   height: 100px;
   border-radius: 100%;
-  background: var(--black-100);
+  background: rgba(0, 67, 115, 0.4);
+  border: 0.6px solid #9eeeff;
   position: relative;
+
+  & .image-upload-button {
+    background: transparent;
+    width: 100px;
+    height: 100px;
+    border: none;
+    border-radius: 100%;
+  }
 `;
 
 export const ImagePreview = styled.img`
@@ -50,10 +52,17 @@ export const AvatarImageInner = styled.div`
   position: absolute;
   left: -4px;
   right: -4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & > .icon-container {
+    position: absolute;
+  }
 `;
 
-export const Numbers = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+export const ReadyText = styled.div`
+  margin: 26px 0 16px;
+  color: white;
 `;
