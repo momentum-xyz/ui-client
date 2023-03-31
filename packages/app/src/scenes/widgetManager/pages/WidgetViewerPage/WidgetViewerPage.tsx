@@ -3,9 +3,8 @@ import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
-import {OdysseyInfoWidget, ProfileWidget} from 'scenes/widgets/pages';
-import {ExplorePage} from 'scenes/explore/pages';
 import {WidgetInfoModelType} from 'stores/WidgetManagerStore';
+import * as widgets from 'scenes/widgets/pages';
 
 import * as styled from './WidgetViewerPage.styled';
 
@@ -16,11 +15,11 @@ const WidgetViewerPage: FC = () => {
   const visualizeSection = (widgetInfo: WidgetInfoModelType | null, msg: string) => {
     switch (widgetInfo?.type) {
       case WidgetEnum.PROFILE:
-        return <ProfileWidget />;
+        return <widgets.ProfileWidget />;
       case WidgetEnum.EXPLORE:
-        return <ExplorePage />;
+        return <widgets.ExploreWidget />;
       case WidgetEnum.ODYSSEY_INFO:
-        return <OdysseyInfoWidget />;
+        return <widgets.OdysseyInfoWidget />;
       default:
         return <div>{msg}</div>;
     }
