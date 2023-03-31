@@ -1,6 +1,11 @@
 import EventEmitter from 'eventemitter3';
 
-import {Object3dInterface, Texture3dInterface} from '../interfaces';
+import {
+  Object3dInterface,
+  Odyssey3dUserInterface,
+  Odyssey3dUserTransformInterface,
+  Texture3dInterface
+} from '../interfaces';
 
 // TODO: Define proper types
 // export type Event2dType = {
@@ -14,10 +19,14 @@ export type Event3dType = {
   ObjectChanged: (object: Object3dInterface) => void;
   SetWorld: (value: string) => void;
   ObjectTextureChanged: (texture: Texture3dInterface) => void;
-  UserEntered: (value: string) => void;
-  UserLeft: (value: string) => void;
+
+  UserAdded: (user: Odyssey3dUserInterface) => void;
+  UserRemoved: (userId: string) => void;
+  UsersTransformChanged: (users: Odyssey3dUserTransformInterface[]) => void;
+
   ObjectEditModeChanged: (objectId: string, isEditOn: boolean) => void;
-  ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
+
+  // ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
 };
 
 // export const Event2dEmitter = new EventEmitter<Event2dType>();
