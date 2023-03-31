@@ -22,14 +22,14 @@ import {
 } from 'ui-kit';
 import {PosBusService} from 'shared/services';
 
-import * as styled from './UnityPage.styled';
+import * as styled from './WorldPage.styled';
 
 // const UnityContextCSS = {
 //   width: '100vw',
 //   height: '100vh'
 // };
 
-const UnityPage: FC = () => {
+const WorldPage: FC = () => {
   const {universeStore, widgetsStore} = useStore();
   const {instance3DStore} = universeStore;
 
@@ -210,7 +210,7 @@ const UnityPage: FC = () => {
   //   return <></>;
   // }
 
-  console.log('UnityPage render');
+  console.log('WorldPage render');
 
   return (
     <Portal>
@@ -237,4 +237,4 @@ const UnityPage: FC = () => {
   );
 };
 
-export default observer(UnityPage);
+export default observer(WorldPage);

@@ -10,7 +10,7 @@ import {useApiHandlers, useStore} from 'shared/hooks';
 import {httpErrorCodes} from 'api/constants';
 import {SystemWideError} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
-import {UnityPage} from 'scenes/unity';
+import {WorldPage} from 'scenes/world';
 import {Map3dPage} from 'scenes/map3d';
 
 import {UNIVERSE_ROUTES, WORLD_ROUTES, SYSTEM_ROUTES} from './App.routes';
@@ -114,7 +114,7 @@ const App: FC = () => {
         <GlobalStyles />
         {isTargetRoute(pathname, WORLD_ROUTES) ? (
           <>
-            <UnityPage />
+            <WorldPage />
             <Widgets /> {/* FIXME: It will be replaced by WidgetManager */}
             <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
               <AppLayers>{createSwitchByConfig(WORLD_ROUTES)}</AppLayers>

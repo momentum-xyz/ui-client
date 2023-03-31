@@ -1,7 +1,7 @@
 import {types} from 'mobx-state-tree';
 
-import {Instance3DStore} from './Instance3DStore';
-import {WorldStore} from './WorldStore';
+import {Instance3DStore} from '../Instance3DStore';
+import {WorldStore} from '../WorldStore';
 
 const UniverseStore = types
   .model('UniverseStore', {
