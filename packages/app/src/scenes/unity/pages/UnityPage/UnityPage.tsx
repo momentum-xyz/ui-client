@@ -6,7 +6,7 @@ import {toast} from 'react-toastify';
 // import Unity from 'react-unity-webgl';
 import {Portal} from '@momentum-xyz/ui-kit';
 import {BabylonScene} from '@momentum-xyz/odyssey3d';
-import {Event3dEmitter, ObjectTransformInterface, useI18n} from '@momentum-xyz/core';
+import {Event3dEmitter, TransformNoScaleInterface, useI18n} from '@momentum-xyz/core';
 
 import {PRIVATE_ROUTES_WITH_UNITY} from 'scenes/App.routes';
 // import {appVariables} from 'api/constants';
@@ -118,7 +118,7 @@ const UnityPage: FC = () => {
     widgetsStore.odysseyInfoStore.open(id);
   };
 
-  const handleUserMove = (transform: ObjectTransformInterface) => {
+  const handleUserMove = (transform: TransformNoScaleInterface) => {
     console.log('BabylonPage: onMove', transform);
     PosBusService.sendMyTransform(transform);
   };

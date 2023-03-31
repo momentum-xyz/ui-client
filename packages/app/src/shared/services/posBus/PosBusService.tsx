@@ -7,7 +7,7 @@ import {
   PosbusPort
   // posbus
 } from '@momentum-xyz/posbus-client';
-import {Event3dEmitter, ObjectTransformInterface} from '@momentum-xyz/core';
+import {Event3dEmitter, TransformNoScaleInterface} from '@momentum-xyz/core';
 
 import {VoiceChatActionEnum} from 'api/enums';
 import {PosBusEventEmitter} from 'core/constants';
@@ -96,15 +96,7 @@ class PosBusService {
         console.log('PosBus add_users', data);
         const {users} = data;
         for (const user of users) {
-          //temp
-          const data = {
-            ...user,
-            transform: {
-              ...user.transform,
-              position: user.transform.location
-            }
-          };
-          Event3dEmitter.emit('UserAdded', data);
+          Event3dEmitter.emit('UserAdded', user);
         }
         break;
       }
@@ -120,17 +112,8 @@ class PosBusService {
 
       case MsgType.USERS_TRANSFORM_LIST: {
         console.log('PosBus users_transform_list', data);
-        const {value} = data;
-        // temp convert
-        const users = value.map((user) => {
-          return {
-            ...user,
-            transform: {
-              ...user.transform,
-              position: user.transform.location
-            }
-          };
-        });
+        const {value: users} = data;
+
         Event3dEmitter.emit('UsersTransformChanged', users);
         break;
       }
@@ -170,7 +153,6 @@ class PosBusService {
             asset_3d_id: object.asset_type,
             transform: {
               ...object.transform,
-              position: object.transform.location,
               scale: object.transform.scale.x // TODO check if this is correct
             }
           });
@@ -203,14 +185,8 @@ class PosBusService {
     }
   }
 
-  static sendMyTransform({position, rotation}: ObjectTransformInterface) {
-    this.main.port?.postMessage([
-      MsgType.MY_TRANSFORM,
-      {
-        location: position,
-        rotation
-      }
-    ]);
+  static sendMyTransform(transform: TransformNoScaleInterface) {
+    this.main.port?.postMessage([MsgType.MY_TRANSFORM, transform]);
   }
 
   static requestObjectLock(objectId: string, lock: boolean) {
