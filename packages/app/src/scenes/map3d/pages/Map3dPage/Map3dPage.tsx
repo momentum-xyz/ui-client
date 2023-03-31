@@ -23,7 +23,7 @@ const Map3dPage: FC<PropsInterface> = () => {
       }
 
       if (!sessionStore.isGuest) {
-        widgetManagerStore.open(WidgetEnum.ODYSSEY_INFO, PositionEnum.LEFT, {id: uuid});
+        widgetManagerStore.open(WidgetEnum.WORLD_OVERVIEW, PositionEnum.LEFT, {id: uuid});
         odysseyInfoStore.open(uuid);
       }
     },

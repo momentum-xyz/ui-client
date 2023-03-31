@@ -1,9 +1,10 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
+import {ProfileStore} from 'scenes/widgets/stores';
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {ProfileFormInterface} from 'core/interfaces';
 import {useNavigation, useStore} from 'shared/hooks';
@@ -12,24 +13,15 @@ import {ProfileSettings, ProfileView, ProfileEditor} from './components';
 import * as styled from './ProfileWidget.styled';
 
 const ProfileWidget: FC = () => {
-  const {widgetsStore, sessionStore, agoraStore, universeStore} = useStore();
-  const {
-    // isUnityAvailable,
-    instance3DStore
-  } = universeStore;
-  const {profileStore} = widgetsStore;
+  const profileStore = ProfileStore.create();
+  const {sessionStore, agoraStore, universeStore} = useStore();
+  const {instance3DStore} = universeStore;
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isDeviceSettings, setIsDeviceSettings] = useState<boolean>(false);
 
   const {t} = useI18n();
   const {goToOdysseyHome} = useNavigation();
-
-  useEffect(() => {
-    return () => {
-      profileStore.resetModel();
-    };
-  }, [profileStore, sessionStore]);
 
   const isTeleportAvailable = true;
   // const isTeleportAvailable = useMemo(() => {

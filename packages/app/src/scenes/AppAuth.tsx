@@ -1,12 +1,10 @@
 import React, {FC, ReactNode, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useNavigate, useLocation} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {CheckJobStatusEnum, useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {PosBusService} from 'shared/services';
-import {ROUTES} from 'core/constants';
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 
 const PROFILE_JOB_CHECKER_MS = 3 * 1000;
@@ -14,17 +12,7 @@ const PROFILE_JOB_CHECKER_MS = 3 * 1000;
 const AppAuth: FC<{children: ReactNode}> = ({children}) => {
   const {sessionStore, nftStore} = useStore();
 
-  const navigate = useNavigate();
-  const {pathname} = useLocation();
   const {t} = useI18n();
-
-  if (pathname === ROUTES.signIn && !sessionStore.isGuest) {
-    navigate(ROUTES.explore);
-  }
-
-  if (pathname === ROUTES.explore && sessionStore.isGuest) {
-    navigate(ROUTES.signIn);
-  }
 
   // FIXME: It should be removed. Profile changes should come from a new PosBus
   useEffect(() => {

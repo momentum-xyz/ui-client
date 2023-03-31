@@ -7,62 +7,61 @@ import {WidgetEnum} from 'core/enums';
 
 import * as styled from './WidgetMenuPage.styled';
 
-const WidgetMenuPage: FC = () => {
+interface MenuItemExtendedInterface extends MenuItemInterface<WidgetEnum> {
+  isHidden?: boolean;
+}
+
+interface PropsInterface {
+  isWorld?: boolean;
+}
+
+const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
   const {sessionStore, widgetManagerStore} = useStore();
   const {toggle, activeWidgetList} = widgetManagerStore;
   const {isGuest, userImageUrl} = sessionStore;
 
-  const MENU_ITEMS_GUEST: MenuItemInterface<WidgetEnum>[] = [
+  const MENU_ITEMS: MenuItemExtendedInterface[] = [
     {
-      key: WidgetEnum.UNIVERSE,
-      position: PositionEnum.CENTER,
-      iconName: 'info_2',
-      onClick: toggle
-    }
-  ];
-
-  const MENU_ITEMS: MenuItemInterface<WidgetEnum>[] = [
-    {
-      key: WidgetEnum.UNIVERSE,
-      position: PositionEnum.CENTER,
-      iconName: 'info_2',
-      onClick: toggle
-    },
-    {
-      key: WidgetEnum.MAIN_MENU,
+      key: WidgetEnum.EXPLORE,
       position: PositionEnum.LEFT,
-      iconName: 'menu_info',
+      iconName: 'explore',
       onClick: toggle
     },
     {
       key: WidgetEnum.PROFILE,
       position: PositionEnum.LEFT,
       imageSrc: userImageUrl,
+      isHidden: isGuest,
       onClick: toggle
     },
     {
-      key: WidgetEnum.RABBIT,
+      key: WidgetEnum.LOGIN,
       position: PositionEnum.LEFT,
-      iconName: 'rabbit_fill',
+      iconName: 'astronaut',
+      isHidden: !isGuest,
       onClick: toggle
     },
     {
-      key: WidgetEnum.EMOJI,
+      key: WidgetEnum.STAKING_OVERVIEW,
       position: PositionEnum.LEFT,
-      iconName: 'smiley-face',
+      iconName: 'status-2',
+      isHidden: isGuest,
       onClick: toggle
     },
     {
-      key: WidgetEnum.EXPLORE,
+      key: WidgetEnum.UNIVERSE_INFO,
       position: PositionEnum.RIGHT,
-      iconName: 'planet',
+      iconName: 'alert',
       onClick: toggle
     }
   ];
 
   return (
     <styled.Container data-testid="WidgetMenuPage-test">
-      <Menu items={isGuest ? MENU_ITEMS_GUEST : MENU_ITEMS} activeKeys={activeWidgetList} />
+      <Menu
+        activeKeys={activeWidgetList}
+        items={MENU_ITEMS.filter((menuItem) => !menuItem.isHidden)}
+      />
     </styled.Container>
   );
 };
