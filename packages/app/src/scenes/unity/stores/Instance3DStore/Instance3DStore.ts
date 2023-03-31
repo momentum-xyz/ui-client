@@ -11,7 +11,6 @@ import {UnityControlInterface} from '@momentum-xyz/sdk';
 // import {appVariables} from 'api/constants';
 import {GizmoTypeEnum, PosBusEventEnum} from 'core/enums';
 import {UnityPositionInterface} from 'core/interfaces';
-import {UnityService} from 'shared/services';
 
 const DEFAULT_UNITY_VOLUME = 0.75;
 // const UNITY_VOLUME_STEP = 0.1;
@@ -25,6 +24,7 @@ const Instance3DStore = types
     lastClickPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
     objectMenuPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
     objectMenu: types.optional(Dialog, {}),
+    isCreatorMode: false,
     selectedObjectId: types.maybe(types.string),
 
     gizmoMode: types.optional(
@@ -36,9 +36,9 @@ const Instance3DStore = types
     unityContext: null
   }))
   .actions((self) => ({
-    triggerTeleport(url?: string, worldId?: string): void {
-      UnityService.triggerTeleport(url, worldId);
-    },
+    // triggerTeleport(url?: string, worldId?: string): void {
+    //   UnityService.triggerTeleport(url, worldId);
+    // },
     getUserPosition(): UnityPositionInterface | null {
       // TODO
       return null;
@@ -83,10 +83,12 @@ const Instance3DStore = types
     },
 
     changeKeyboardControl(isActive: boolean): void {
-      UnityService.setKeyboardControl(isActive);
+      // TODO
+      // UnityService.setKeyboardControl(isActive);
     },
     sendHighFive(receiverId: string): void {
-      UnityService.sendHighFive(receiverId);
+      // TODO use posbus
+      // UnityService.sendHighFive(receiverId);
     },
     sendHighFiveBack(receiverId: string): void {
       // UnityService.sendHighFive(receiverId);
@@ -150,8 +152,11 @@ const Instance3DStore = types
       // TODO
       // UnityService.changeSkybox(skyboxId);
     },
-    toggleBuildMode() {
-      UnityService.toggleBuildMode();
+    enableCreatorMode() {
+      self.isCreatorMode = true;
+    },
+    disableCreatorMode() {
+      self.isCreatorMode = false;
     },
     leaveSpace(spaceId: string) {
       // need this?
@@ -190,7 +195,8 @@ const Instance3DStore = types
     },
     changeGizmoType(mode: GizmoTypeEnum) {
       self.gizmoMode = cast(mode);
-      UnityService.changeGizmoType(mode);
+      // TODO notify babylon
+      // UnityService.changeGizmoType(mode);
     },
     closeAndResetObjectMenu() {
       self.objectMenu.close();
@@ -198,7 +204,8 @@ const Instance3DStore = types
       self.gizmoMode = GizmoTypeEnum.POSITION;
     },
     colorPickedPreview(objectId: string, colorHex: string) {
-      UnityService.colorPickedPreview(objectId, colorHex);
+      // TODO notify babylon
+      // UnityService.colorPickedPreview(objectId, colorHex);
     }
   }))
   .views((self) => ({

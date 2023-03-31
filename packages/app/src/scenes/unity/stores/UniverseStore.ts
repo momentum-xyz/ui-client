@@ -1,7 +1,5 @@
 import {types} from 'mobx-state-tree';
 
-import {UnityService} from 'shared/services';
-
 import {Instance3DStore} from './Instance3DStore';
 import {WorldStore} from './WorldStore';
 
@@ -24,7 +22,7 @@ const UniverseStore = types
     //   return self.instance3DStore.isTeleportReady;
     // },
     get isCreatorMode(): boolean {
-      return UnityService.isBuildMode;
+      return self.instance3DStore.isCreatorMode;
     },
     get isMyWorld(): boolean {
       return self.activeWorldStore.isMyWorld;
