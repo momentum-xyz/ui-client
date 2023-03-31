@@ -1,1 +1,1 @@
-export {default as Widgets} from './Widgets';
+export * from './pages';

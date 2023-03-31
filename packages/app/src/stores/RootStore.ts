@@ -2,7 +2,7 @@ import {Instance, types} from 'mobx-state-tree';
 
 import {SignInStore} from 'scenes/auth/stores';
 import {UniverseStore} from 'scenes/unity/stores';
-import {RootWidgetsStore} from 'scenes/widgets/stores/RootWidgetsStore';
+import {RootWidgetsStore} from 'scenes/widgets_OLD_2/stores/RootWidgetsStore';
 import {RootWidgetStore_OLD} from 'scenes/widgets_OLD/stores/RootWidgetStore_OLD';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {RootOdysseyCreatorStore} from 'scenes/odysseyCreator/stores';

@@ -12,27 +12,31 @@ const WidgetViewerPage: FC = () => {
   const {widgetManagerStore} = useStore();
   const {leftActiveWidget, rightActiveWidget} = widgetManagerStore;
 
-  const visualizeSection = (widgetInfo: WidgetInfoModelType | null, msg: string) => {
+  const visualizeSection = (widgetInfo: WidgetInfoModelType | null) => {
     switch (widgetInfo?.type) {
+      case WidgetEnum.LOGIN:
+        return <widgets.LoginWidget />;
       case WidgetEnum.PROFILE:
         return <widgets.ProfileWidget />;
       case WidgetEnum.EXPLORE:
         return <widgets.ExploreWidget />;
-      case WidgetEnum.ODYSSEY_INFO:
-        return <widgets.OdysseyInfoWidget />;
+      case WidgetEnum.WORLD_OVERVIEW:
+        return <widgets.WorldOverviewWidget />;
+      case WidgetEnum.STAKING_OVERVIEW:
+        return <widgets.StakingOverviewWidget />;
       default:
-        return <div>{msg}</div>;
+        return <></>;
     }
   };
 
   return (
     <styled.Container data-testid="WidgetListPage-test">
       <styled.LeftSection>
-        <styled.Widget>{visualizeSection(leftActiveWidget, 'LEFT')}</styled.Widget>
+        <styled.Widget>{visualizeSection(leftActiveWidget)}</styled.Widget>
       </styled.LeftSection>
 
       <styled.RightSection>
-        <styled.Widget>{visualizeSection(rightActiveWidget, 'RIGHT')}</styled.Widget>
+        <styled.Widget>{visualizeSection(rightActiveWidget)}</styled.Widget>
       </styled.RightSection>
     </styled.Container>
   );

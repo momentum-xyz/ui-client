@@ -1,68 +1,115 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {Menu, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
 import {WidgetEnum} from 'core/enums';
 
 import * as styled from './WidgetMenuPage.styled';
 
-const WidgetMenuPage: FC = () => {
-  const {sessionStore, widgetManagerStore} = useStore();
+interface MenuItemExtendedInterface extends MenuItemInterface<WidgetEnum> {
+  isHidden?: boolean;
+}
+
+interface PropsInterface {
+  isWorld?: boolean;
+}
+
+const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
+  const {sessionStore, widgetManagerStore, universeStore} = useStore();
   const {toggle, activeWidgetList} = widgetManagerStore;
   const {isGuest, userImageUrl} = sessionStore;
+  const {worldId, isMyWorld} = universeStore;
 
-  const MENU_ITEMS_GUEST: MenuItemInterface<WidgetEnum>[] = [
-    {
-      key: WidgetEnum.UNIVERSE,
-      position: PositionEnum.CENTER,
-      iconName: 'info_2',
-      onClick: toggle
-    }
-  ];
+  const navigate = useNavigate();
 
-  const MENU_ITEMS: MenuItemInterface<WidgetEnum>[] = [
+  const MENU_ITEMS: MenuItemExtendedInterface[] = [
     {
-      key: WidgetEnum.UNIVERSE,
-      position: PositionEnum.CENTER,
-      iconName: 'info_2',
-      onClick: toggle
+      key: WidgetEnum.GO_TO,
+      position: PositionEnum.LEFT,
+      iconName: 'go',
+      isHidden: !isWorld,
+      onClick: () => navigate(ROUTES.explore)
     },
     {
-      key: WidgetEnum.MAIN_MENU,
+      key: WidgetEnum.EXPLORE,
       position: PositionEnum.LEFT,
-      iconName: 'menu_info',
+      iconName: 'explore',
       onClick: toggle
     },
     {
       key: WidgetEnum.PROFILE,
       position: PositionEnum.LEFT,
       imageSrc: userImageUrl,
+      isHidden: isGuest,
       onClick: toggle
     },
     {
-      key: WidgetEnum.RABBIT,
+      key: WidgetEnum.LOGIN,
       position: PositionEnum.LEFT,
-      iconName: 'rabbit_fill',
+      iconName: 'astronaut',
+      isHidden: !isGuest,
       onClick: toggle
     },
     {
-      key: WidgetEnum.EMOJI,
+      key: WidgetEnum.STAKING_OVERVIEW,
       position: PositionEnum.LEFT,
-      iconName: 'smiley-face',
+      iconName: 'status-2',
+      isHidden: isGuest,
       onClick: toggle
     },
     {
-      key: WidgetEnum.EXPLORE,
+      key: WidgetEnum.STAKING,
+      position: PositionEnum.CENTER,
+      iconName: 'stake',
+      onClick: toggle,
+      isHidden: !isWorld || isGuest
+    },
+    {
+      key: WidgetEnum.GO_TO,
+      position: PositionEnum.CENTER,
+      iconName: 'pencil',
+      isHidden: !isWorld || !isMyWorld,
+      onClick: () => navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}))
+    },
+    {
+      key: WidgetEnum.UNIVERSE_INFO,
       position: PositionEnum.RIGHT,
-      iconName: 'planet',
-      onClick: toggle
+      iconName: 'alert',
+      onClick: toggle,
+      isHidden: isWorld
+    },
+    {
+      key: WidgetEnum.VOICE_CHAT,
+      position: PositionEnum.RIGHT,
+      iconName: 'group_chat',
+      onClick: toggle,
+      isHidden: !isWorld
+    },
+    {
+      key: WidgetEnum.WORLD_PEOPLE,
+      position: PositionEnum.RIGHT,
+      iconName: 'group',
+      onClick: toggle,
+      isHidden: !isWorld
+    },
+    {
+      key: WidgetEnum.WORLD_PROFILE,
+      position: PositionEnum.RIGHT,
+      iconName: 'planet', // FIXME: World image
+      onClick: toggle,
+      isHidden: !isWorld
     }
   ];
 
   return (
     <styled.Container data-testid="WidgetMenuPage-test">
-      <Menu items={isGuest ? MENU_ITEMS_GUEST : MENU_ITEMS} activeKeys={activeWidgetList} />
+      <Menu
+        activeKeys={activeWidgetList}
+        items={MENU_ITEMS.filter((menuItem) => !menuItem.isHidden)}
+      />
     </styled.Container>
   );
 };

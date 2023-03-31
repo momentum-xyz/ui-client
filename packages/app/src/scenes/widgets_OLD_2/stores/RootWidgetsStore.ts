@@ -1,6 +1,5 @@
 import {types} from 'mobx-state-tree';
 
-import {ProfileStore} from './ProfileStore';
 import {PreviewOdysseyStore} from './PreviewOdysseyStore';
 import {NotificationsStore} from './NotificationsStore';
 import {FlyToMeStore} from './FlyToMeStore';
@@ -13,13 +12,10 @@ import {OnlineUsersStore} from './OnlineUsersStore';
 import {OdysseyBioStore} from './OdysseyBioStore';
 import {MutualConnectionsStore} from './MutualConnectionsStore';
 import {MagicLinkStore} from './MagicLinkStore';
-import {ExploreStore} from './ExploreStore';
 
 const RootWidgetsStore = types
   .model('RootWidgetsStore', {
-    exploreStore: types.optional(ExploreStore, {}),
     previewOdysseyStore: types.optional(PreviewOdysseyStore, {}),
-    profileStore: types.optional(ProfileStore, {}),
     notificationsStore: types.optional(NotificationsStore, {}),
     minimapStore: types.optional(MinimapStore, {}),
     flyToMeStore: types.optional(FlyToMeStore, {}),
@@ -38,7 +34,6 @@ const RootWidgetsStore = types
       return (
         !self.odysseyInfoStore.dialog.isOpen &&
         !self.odysseyBioStore.dialog.isOpen &&
-        !self.profileStore.dialog.isOpen &&
         !self.calendarStore.dialog.isOpen &&
         !self.minimapStore.dialog.isOpen
       );

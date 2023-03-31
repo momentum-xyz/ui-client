@@ -6,7 +6,7 @@ import {Button, Text} from '@momentum-xyz/ui-kit';
 import {SinusBox, Box} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {PreviewOdysseyWidget} from 'scenes/widgets/pages';
+import {PreviewOdysseyWidget} from 'scenes/widgets_OLD_2/pages';
 import {availableWallets, WalletConfigInterface} from 'wallets';
 
 import {

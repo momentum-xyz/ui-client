@@ -18,7 +18,6 @@ import {ToolbarCreatorIcon} from 'ui-kit';
 
 import {
   SignInWidget,
-  ProfileWidget,
   FlyToMeWidget,
   MinimapWidget,
   ScreenShareWidget,
@@ -28,7 +27,6 @@ import {
   OnlineUsersWidget,
   NotificationsWidget,
   OdysseyBioWidget,
-  OdysseyInfoWidget,
   SearchUsersWidget,
   MutualConnectionsWidget,
   StakingWidget,
@@ -85,7 +83,7 @@ const Widgets: FC<PropsInterface> = (props) => {
 
             <ToolbarIcon
               title={t('titles.profile')}
-              onClick={widgetsStore.profileStore.dialog.toggle}
+              //onClick={widgetsStore.profileStore.dialog.toggle}
             >
               <Avatar size="extra-small" avatarSrc={user?.avatarSrc} showBorder showHover />
             </ToolbarIcon>
@@ -256,8 +254,6 @@ const Widgets: FC<PropsInterface> = (props) => {
       {mutualConnectionsStore.dialog.isOpen && <MutualConnectionsWidget />}
       {onlineUsersStore.dialog.isOpen && <SearchUsersWidget />}
       {widgetsStore.odysseyBioStore.dialog.isOpen && <OdysseyBioWidget />}
-      {widgetsStore.odysseyInfoStore.dialog.isOpen && <OdysseyInfoWidget />}
-      {widgetsStore.profileStore.dialog.isOpen && <ProfileWidget />}
       {widgetsStore.notificationsStore.dialog.isOpen && <NotificationsWidget />}
       {widgetsStore.minimapStore.dialog.isOpen && <MinimapWidget />}
       {widgetsStore.flyToMeStore.dialog.isOpen && <FlyToMeWidget />}
