@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Map3dCanvas} from '@momentum-xyz/map3d';
 import {PositionEnum} from '@momentum-xyz/ui-kit-storybook';
@@ -14,6 +14,12 @@ interface PropsInterface {
 const Map3dPage: FC<PropsInterface> = () => {
   const {nftStore, widgetsStore, sessionStore, widgetManagerStore} = useStore();
   const {previewOdysseyStore, odysseyInfoStore} = widgetsStore;
+
+  useEffect(() => {
+    return () => {
+      widgetManagerStore.closeAll();
+    };
+  }, [widgetManagerStore]);
 
   const handleSelect = useCallback(
     (uuid: string) => {

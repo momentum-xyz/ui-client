@@ -1,8 +1,10 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {Menu, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
+import {ROUTES} from 'core/constants';
 import {WidgetEnum} from 'core/enums';
 
 import * as styled from './WidgetMenuPage.styled';
@@ -16,11 +18,21 @@ interface PropsInterface {
 }
 
 const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
-  const {sessionStore, widgetManagerStore} = useStore();
+  const {sessionStore, widgetManagerStore, universeStore} = useStore();
   const {toggle, activeWidgetList} = widgetManagerStore;
   const {isGuest, userImageUrl} = sessionStore;
+  const {worldId, isMyWorld} = universeStore;
+
+  const navigate = useNavigate();
 
   const MENU_ITEMS: MenuItemExtendedInterface[] = [
+    {
+      key: WidgetEnum.GO_TO,
+      position: PositionEnum.LEFT,
+      iconName: 'go',
+      isHidden: !isWorld,
+      onClick: () => navigate(ROUTES.explore)
+    },
     {
       key: WidgetEnum.EXPLORE,
       position: PositionEnum.LEFT,
@@ -49,10 +61,18 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
       onClick: toggle
     },
     {
+      key: WidgetEnum.GO_TO,
+      position: PositionEnum.CENTER,
+      iconName: 'pencil',
+      isHidden: !isWorld || !isMyWorld,
+      onClick: () => navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}))
+    },
+    {
       key: WidgetEnum.UNIVERSE_INFO,
       position: PositionEnum.RIGHT,
       iconName: 'alert',
-      onClick: toggle
+      onClick: toggle,
+      isHidden: isWorld
     }
   ];
 
