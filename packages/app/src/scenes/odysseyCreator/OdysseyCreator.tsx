@@ -4,7 +4,6 @@ import {generatePath} from 'react-router-dom';
 
 import {createSwitchByConfig} from 'core/utils';
 import {ROUTES} from 'core/constants';
-import {UnityService} from 'shared/services';
 import {useStore} from 'shared/hooks';
 
 import {ODYSSEY_CREATOR_ROUTES} from './OdysseyCreator.routes';
@@ -16,9 +15,9 @@ const OdysseyCreator: FC = () => {
   const {worldId} = universeStore;
 
   useEffect(() => {
-    UnityService.toggleBuildMode();
+    instance3DStore.enableCreatorMode();
     return () => {
-      UnityService.toggleBuildMode();
+      instance3DStore.disableCreatorMode();
     };
   }, []);
 

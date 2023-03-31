@@ -1,7 +1,9 @@
 import {types} from 'mobx-state-tree';
 import {Dialog, ResetModel} from '@momentum-xyz/core';
 
-import {UnityService} from 'shared/services';
+// import {UnityService} from 'shared/services';
+
+// TODO delete this store and use Instance3DStore instead??
 
 const MinimapStore = types.compose(
   ResetModel,
@@ -11,7 +13,7 @@ const MinimapStore = types.compose(
     })
     .actions((self) => ({
       toggle() {
-        UnityService.toggleMiniMap();
+        // UnityService.toggleMiniMap();
         self.dialog.toggle();
       }
     }))
