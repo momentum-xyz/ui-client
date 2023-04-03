@@ -51,8 +51,8 @@ const WalletLogin: FC<PropsInterface> = ({
       <styled.TitleText>Connect with {name}</styled.TitleText>
       <styled.WalletInnerViewContainer>{innerView}</styled.WalletInnerViewContainer>
       {accountHex && !accountCanLogin && (
-        <span>
-          a registration with this wallet does not exist, go to to the profile creation flow
+        <span style={{color: 'white'}}>
+          A registration with this wallet does not exist, go to to the profile creation flow
         </span>
       )}
       <Button

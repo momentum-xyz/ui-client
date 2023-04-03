@@ -19,5 +19,6 @@ export type UseWalletType = (props: UseWalletPropsInterface) => UseWalletHookRet
 export interface WalletConfigInterface {
   name: string;
   icon: string;
+  browserExtensionUrl: string;
   useWallet: UseWalletType;
 }

@@ -1,4 +1,5 @@
-import React, {FC, useCallback, useState} from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {FC, useCallback, useState} from 'react';
 import {Button, Dropdown, Heading, IconSvg, OptionInterface, Text} from '@momentum-xyz/ui-kit';
 import {FrameText} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
@@ -16,7 +17,7 @@ interface PropsInterface {
   walletOptions: OptionInterface[];
   wallet: string | null;
   isConnectDisabled: boolean;
-  onSelectAddress: (address: string) => void;
+  onSelectAddress: (address: string) => Promise<any>;
   onConnect: () => void;
 }
 
@@ -29,21 +30,9 @@ const ChoiceYourWallet: FC<PropsInterface> = (props) => {
   const {t} = useI18n();
 
   const handleAccountConnected = useCallback(
-    (address: string) => {
-      onSelectAddress(address);
-      onConnect();
-    },
+    (address: string) => onSelectAddress(address).then(() => onConnect()),
     [onConnect, onSelectAddress]
   );
-
-  // const handleAccountConnected = useCallback(async () => {
-  //   console.log('handleAccountConnected');
-  //   // try {
-  //   //   await sessionStore.loadUserProfile();
-  //   // } catch (e) {
-  //   //   console.log('Error loading profile', e);
-  //   // }
-  // }, []);
 
   const frameTitle = hasError ? 'Oops' : 'Sign in with your wallet';
   const frameLine = hasError
@@ -71,12 +60,13 @@ const ChoiceYourWallet: FC<PropsInterface> = (props) => {
           <WalletSignUp
             key={selectedWallet.name}
             walletConf={selectedWallet}
+            isConnectDisabled={isConnectDisabled}
             onConnected={handleAccountConnected}
             onCancel={() => setSelectedWallet(null)}
           />
         )}
       </styled.Container>
-      <Box size="small">
+      {/* <Box size="small">
         <styled.Div>
           <styled.Header>
             <IconSvg name="add" size="normal" />
@@ -117,7 +107,7 @@ const ChoiceYourWallet: FC<PropsInterface> = (props) => {
             <CycleNumbered number={2} />
           </styled.Numbers>
         </styled.Div>
-      </Box>
+      </Box> */}
     </>
   );
 };

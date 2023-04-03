@@ -1,18 +1,21 @@
 import {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Panel, Hexagon, FrameText} from '@momentum-xyz/ui-kit-storybook';
+import {useNavigate} from 'react-router-dom';
 
 import {useStore} from 'shared/hooks';
 import {PreviewOdysseyWidget} from 'scenes/widgets_OLD_2/pages';
 import {availableWallets, WalletConfigInterface} from 'wallets';
+import {ROUTES} from 'core/constants';
 
-import {WalletLogin} from './components';
+import {CreateOdyssey, WalletLogin} from './components';
 import * as styled from './SignInPage.styled';
 
 const SignInPage: FC = () => {
   const {sessionStore, widgetsStore} = useStore();
-
   const {previewOdysseyStore} = widgetsStore;
+
+  const navigate = useNavigate();
 
   const [selectedWallet, setSelectedWallet] = useState<WalletConfigInterface | null>(null);
 
@@ -25,20 +28,13 @@ const SignInPage: FC = () => {
     }
   }, [sessionStore]);
 
-  // const handleSignUp = useCallback(() => {
-  //   navigate(ROUTES.signInAccount);
-  // }, [navigate]);
+  const handleSignUp = useCallback(() => {
+    navigate(ROUTES.signInAccount);
+  }, [navigate]);
 
   return (
     <styled.Container>
       <styled.Wrapper>
-        {/* <styled.Boxes>
-          <SinusBox />
-          <TravellerBox />
-          <SinusBox />
-          <CreateOdyssey onCreate={handleSignUp} />
-        </styled.Boxes> */}
-
         <styled.Boxes>
           {/* Login as a normal user */}
           {/* {!!nftStore.accountsWithNftsOptions.length && (
@@ -88,6 +84,13 @@ const SignInPage: FC = () => {
               )}
             </Panel>
           </styled.PanelContainer>
+        </styled.Boxes>
+
+        <styled.Boxes>
+          {/* <SinusBox />
+          <TravellerBox />
+          <SinusBox /> */}
+          <CreateOdyssey onCreate={handleSignUp} />
         </styled.Boxes>
       </styled.Wrapper>
 

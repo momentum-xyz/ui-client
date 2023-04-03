@@ -681,6 +681,7 @@ const NftStore = types
       }
 
       if (!checkIfCanRequestAirdrop(address)) {
+        self.setRequestFundsStatus('error');
         throw new Error('Wait at least 24 hours before requesting airdrop again');
       }
 

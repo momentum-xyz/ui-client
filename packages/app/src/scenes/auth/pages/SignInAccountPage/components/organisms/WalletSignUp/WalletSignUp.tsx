@@ -10,14 +10,21 @@ import * as styled from './WalletSignUp.styled';
 
 interface PropsInterface {
   walletConf: WalletConfigInterface;
+  isConnectDisabled: boolean;
   onCancel: () => void;
   onConnected: (address: string) => void;
   onError?: (error: any) => void;
 }
 
-const WalletSignUp: FC<PropsInterface> = ({walletConf, onConnected, onError, onCancel}) => {
+const WalletSignUp: FC<PropsInterface> = ({
+  walletConf,
+  isConnectDisabled,
+  onConnected,
+  onError,
+  onCancel
+}) => {
   const {nftStore} = useStore();
-  const {name, useWallet} = walletConf;
+  const {name, browserExtensionUrl, useWallet} = walletConf;
   const {nftItems} = nftStore;
 
   const {signChallenge, content, account, accountHex} = useWallet({
@@ -26,6 +33,13 @@ const WalletSignUp: FC<PropsInterface> = ({walletConf, onConnected, onError, onC
     existingNftAddresses: nftItems.map((d) => d.owner)
   });
   console.log('WalletSignUp', {name, signChallenge, content, account, accountHex});
+
+  const openLink = () => {
+    if (!browserExtensionUrl) {
+      return;
+    }
+    window.open(browserExtensionUrl, '_newtab');
+  };
 
   const innerView = content || (
     <div>
@@ -46,12 +60,14 @@ const WalletSignUp: FC<PropsInterface> = ({walletConf, onConnected, onError, onC
       {accountHex && accountCanLogin && (
         <span>a registration with this wallet exists, go to to the sign in flow</span>
       )}
-      <Button label="Install browser extension" icon="star" wide />
+      {browserExtensionUrl && (
+        <Button label="Install browser extension" icon="star" onClick={openLink} wide />
+      )}
       <div className="separator" style={{height: '16px'}}></div>
       <Button
         label="Connect your wallet"
         icon="wallet"
-        disabled={!accountHex || !!accountCanLogin}
+        disabled={isConnectDisabled || !accountHex || !!accountCanLogin}
         wide
         onClick={() => {
           if (!account) {

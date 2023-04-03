@@ -48,7 +48,7 @@ const SignInAccountPage: FC = () => {
   const onSelectWallet = useCallback(
     (wallet: string) => {
       signInStore.selectWallet(wallet);
-      nftStore.subscribeToBalanceChanges(wallet);
+      return nftStore.subscribeToBalanceChanges(wallet);
     },
     [nftStore, signInStore]
   );
@@ -108,16 +108,10 @@ const SignInAccountPage: FC = () => {
 
       {mintingNftStatus === 'pending' && (
         <Loader
-          title="Minting your Odyssey"
-          line="Please wait and don't refresh, this may take a while."
+          title={t('messages.mintingYourOdyssey')}
+          line={t('messages.mintingYourOdysseyWarning')}
         />
       )}
-      {/* {mintingNftStatus === 'pending' && (
-        <styled.MintingMessageBox>
-          <Text text={t('messages.mintingYourOdyssey')} size="m" align="left" />
-          <Text text={t('messages.mintingYourOdysseyWarning')} size="m" align="left" />
-        </styled.MintingMessageBox>
-      )} */}
 
       {mintingNftStatus === 'error' && (
         <styled.MintingMessageBox>

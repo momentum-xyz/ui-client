@@ -104,7 +104,6 @@ const SessionStore = types
         }
       }
       throw new Error('Error fetching token');
-      // return false;
     }),
     attachAnotherAccount: flow(function* (
       account: string,
