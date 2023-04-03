@@ -10,15 +10,14 @@ import {useApiHandlers, useStore} from 'shared/hooks';
 import {httpErrorCodes} from 'api/constants';
 import {SystemWideError} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
-import {UnityPage} from 'scenes/unity';
+import {WorldPage} from 'scenes/world';
 import {Map3dPage} from 'scenes/map3d';
 
-import {UNIVERSE_ROUTES, WORLD_ROUTES, SYSTEM_ROUTES} from './App.routes';
 import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
-import {GlobalStyles as GlobalStylesOriginal} from './App.styled';
 import {WidgetManager} from './widgetManager';
-import {Widgets} from './widgets';
+import {GlobalStyles as GlobalStylesOriginal} from './App.styled';
+import {UNIVERSE_ROUTES, WORLD_ROUTES, SYSTEM_ROUTES} from './App.routes';
 
 const ThemeProvider = ThemeProviderOriginal as unknown as FC<ThemeProviderProps<any, any>>;
 const GlobalStyles = GlobalStylesOriginal as unknown as FC;
@@ -114,8 +113,8 @@ const App: FC = () => {
         <GlobalStyles />
         {isTargetRoute(pathname, WORLD_ROUTES) ? (
           <>
-            <UnityPage />
-            <Widgets /> {/* FIXME: It will be replaced by WidgetManager */}
+            <WorldPage />
+            <WidgetManager isWorld />
             <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
               <AppLayers>{createSwitchByConfig(WORLD_ROUTES)}</AppLayers>
             </Suspense>
@@ -123,7 +122,7 @@ const App: FC = () => {
         ) : (
           <>
             <Map3dPage />
-            <WidgetManager /> {/* FIXME: It will be moved to AppLayers */}
+            <WidgetManager />
             <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
               <AppLayers>{createSwitchByConfig(UNIVERSE_ROUTES)}</AppLayers>
             </Suspense>

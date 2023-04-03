@@ -5,10 +5,11 @@ import {generatePath, useNavigate} from 'react-router-dom';
 import {useStore} from 'shared/hooks';
 import {ExplorePanel} from 'ui-kit';
 import {ROUTES} from 'core/constants';
+import {ExploreStore} from 'scenes/widgets/stores';
 
 const ExploreWidget: FC = () => {
   const {nftStore, widgetsStore, sessionStore} = useStore();
-  const {exploreStore} = widgetsStore;
+  const exploreStore = ExploreStore.create();
 
   const navigate = useNavigate();
 
@@ -34,7 +35,6 @@ const ExploreWidget: FC = () => {
       onSearch={nftStore.searchNft}
       onSelect={(nft) => {
         widgetsStore.odysseyInfoStore.open(nft.uuid);
-        widgetsStore.profileStore.dialog.close();
       }}
       onTeleport={(nft) => {
         console.log(nft);

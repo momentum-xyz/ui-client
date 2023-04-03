@@ -1,7 +1,7 @@
 import {FC, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 
-import {usePosBusEvent} from 'shared/hooks';
+// import {usePosBusEvent} from 'shared/hooks';
 import {PosBusEmojiMessageType} from 'core/types';
 
 import {EmojiWithAvatarAnimation, MegamojiAnimation} from './components';
@@ -21,6 +21,7 @@ const EmojiAnimationDock: FC = () => {
   const [items, setItems] = useState<EmojiItemInterfaceStoreType>(() => new Set());
   const refIndex = useRef(1);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const newEmojiHandler =
     (type: EmojiItemInterface['type']) => (emojiUrlOrMsg: string | PosBusEmojiMessageType) => {
       const item: EmojiItemInterface = {
@@ -43,8 +44,9 @@ const EmojiAnimationDock: FC = () => {
       }, ANIMATION_DURATION_SEC * 1000);
     };
 
-  usePosBusEvent('emoji', newEmojiHandler('emoji'));
-  usePosBusEvent('megamoji', newEmojiHandler('megamoji'));
+  // TODO
+  // usePosBusEvent('emoji', newEmojiHandler('emoji'));
+  // usePosBusEvent('megamoji', newEmojiHandler('megamoji'));
 
   return (
     <>
