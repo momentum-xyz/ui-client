@@ -1,4 +1,8 @@
-import {ObjectTransformInterface, Event3dEmitterType} from '@momentum-xyz/core';
+import {
+  ObjectTransformInterface,
+  Event3dEmitterType,
+  TransformNoScaleInterface
+} from '@momentum-xyz/core';
 
 export interface Odyssey3dPropsInterface {
   // TODO add also reactive objects, users
@@ -14,5 +18,5 @@ export interface Odyssey3dPropsInterface {
   onUserClick: (userId: string, e?: React.MouseEvent) => void;
 
   // Me moving
-  onMove: (transform: ObjectTransformInterface) => void;
+  onMove: (transform: TransformNoScaleInterface) => void;
 }

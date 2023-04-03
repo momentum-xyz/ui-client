@@ -18,7 +18,7 @@ import '@babylonjs/loaders/glTF';
 import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
 //import {GLTFFileLoader} from '@babylonjs/loaders';
 
-import {CameraHelper} from './CameraHelper';
+import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
 import {getAssetFileName} from './UtilityHelper';
 
@@ -58,7 +58,7 @@ export class ObjectHelper {
         scene.pointerX,
         scene.pointerY,
         Matrix.Identity(),
-        CameraHelper.camera
+        PlayerHelper.camera
       );
 
       const hit = scene.pickWithRay(ray);
