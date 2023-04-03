@@ -1,5 +1,8 @@
 import {types} from 'mobx-state-tree';
 
+import {getRootStore} from 'core/utils';
+import {NftItemModelInterface} from 'core/models';
+
 import {Instance3DStore, WorldStore} from './stores';
 
 const UniverseStore = types
@@ -28,6 +31,16 @@ const UniverseStore = types
     },
     get isCurrentUserWorldAdmin(): boolean {
       return self.activeWorldStore.isCurrentUserWorldAdmin;
+    }
+  }))
+  .views((self) => ({
+    get allWorlds(): NftItemModelInterface[] {
+      // FIXME source and type
+      return getRootStore(self).nftStore.nftItems;
+    },
+    get allUsers(): NftItemModelInterface[] {
+      // FIXME source and type
+      return getRootStore(self).nftStore.nftItems;
     }
   }));
 
