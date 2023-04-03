@@ -66,18 +66,18 @@ const WorldPage: FC = () => {
 
   useEffect(() => {
     if (worldId) {
-      const setWorld = () => {
+      const teleportToWorld = () => {
         if (!PosBusService.isConnected()) {
           console.log(`BabylonPage: PosBusService is not connected.`);
           setTimeout(() => {
-            setWorld();
+            teleportToWorld();
           }, 1000);
           return;
         }
         console.log(`BabylonPage: Posbus - Set worldId: ${worldId}`);
-        PosBusService.setWorld(worldId);
+        PosBusService.teleportToWorld(worldId);
       };
-      setWorld();
+      teleportToWorld();
 
       universeStore.initTeleport(worldId);
     }
