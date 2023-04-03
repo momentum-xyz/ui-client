@@ -1,46 +1,47 @@
 import {types} from 'mobx-state-tree';
 
-import {getRootStore} from 'core/utils';
 import {NftItemModelInterface} from 'core/models';
 
-import {Instance3DStore, WorldStore} from './stores';
+import {Universe2dStore, Universe3dStore, World2dStore, World3dStore} from './models';
 
 const UniverseStore = types
   .model('UniverseStore', {
-    instance3DStore: types.optional(Instance3DStore, {}),
-    activeWorldStore: types.optional(WorldStore, {})
+    universe2dStore: types.optional(Universe2dStore, {}),
+    universe3dStore: types.optional(Universe3dStore, {}),
+    world2dStore: types.maybeNull(World2dStore),
+    world3dStore: types.maybeNull(World3dStore)
   })
   .actions((self) => ({
-    initTeleport(worldId: string): void {
-      // self.instance3DStore.teleportIsReady();
-      self.activeWorldStore.init(worldId);
+    enterWorld(worldId: string): void {
+      self.world3dStore = World3dStore.create();
+      self.world2dStore = World2dStore.create();
+      self.world2dStore.init(worldId);
+    },
+    leaveWorld(): void {
+      self.world2dStore = null;
+      self.world3dStore = null;
     }
   }))
   .views((self) => ({
     get worldId(): string {
-      return self.activeWorldStore.worldId;
+      return self.world2dStore?.worldId || '';
     },
-    // get isUnityAvailable(): boolean {
-    //   return self.instance3DStore.isTeleportReady;
-    // },
     get isCreatorMode(): boolean {
-      return self.instance3DStore.isCreatorMode;
+      return self.world3dStore?.isCreatorMode || false;
     },
     get isMyWorld(): boolean {
-      return self.activeWorldStore.isMyWorld;
+      return self.world2dStore?.isMyWorld || false;
     },
     get isCurrentUserWorldAdmin(): boolean {
-      return self.activeWorldStore.isCurrentUserWorldAdmin;
+      return self.world2dStore?.isCurrentUserWorldAdmin || false;
     }
   }))
   .views((self) => ({
     get allWorlds(): NftItemModelInterface[] {
-      // FIXME source and type
-      return getRootStore(self).nftStore.nftItems;
+      return self.universe2dStore.allWorlds;
     },
     get allUsers(): NftItemModelInterface[] {
-      // FIXME source and type
-      return getRootStore(self).nftStore.nftItems;
+      return self.universe2dStore.allUsers;
     }
   }));
 

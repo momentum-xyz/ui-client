@@ -13,7 +13,7 @@ import {EventForm, TabBarButtons} from './components';
 
 const CalendarWidget: FC = () => {
   const {widgetsStore, universeStore, sessionStore} = useStore();
-  const {instance3DStore, activeWorldStore} = universeStore;
+  const {world3dStore, world2dStore} = universeStore;
   const {calendarStore} = widgetsStore;
   const {eventList, deleteConfirmationDialog} = calendarStore;
 
@@ -22,13 +22,13 @@ const CalendarWidget: FC = () => {
 
   useEffect(() => {
     eventList.fetchSpaceEvents(universeStore.worldId);
-    instance3DStore.changeKeyboardControl(false);
+    world3dStore?.changeKeyboardControl(false);
 
     return () => {
-      instance3DStore.changeKeyboardControl(true);
+      world3dStore?.changeKeyboardControl(true);
       eventList.resetModel();
     };
-  }, [calendarStore, eventList, instance3DStore, universeStore.worldId]);
+  }, [calendarStore, eventList, world3dStore, universeStore.worldId]);
 
   const handleWeblink = (weblink: string) => {
     window.open(absoluteLink(weblink), '_blank');
@@ -65,7 +65,7 @@ const CalendarWidget: FC = () => {
         <PanelLayout
           componentSize={{width: '1063px'}}
           onClose={calendarStore.dialog.close}
-          title={activeWorldStore.info?.name}
+          title={world2dStore?.info?.name}
           headerStyle="uppercase"
           headerType="h2"
           headerIconName="calendar"
@@ -76,7 +76,7 @@ const CalendarWidget: FC = () => {
         >
           <styled.InnerContainer>
             <styled.FormButton
-              disabled={!activeWorldStore.isMyWorld}
+              disabled={!world2dStore?.isMyWorld || false}
               label={t('calendar.formButton')}
               variant="primary"
               height="medium-height"

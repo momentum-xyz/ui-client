@@ -22,7 +22,7 @@ const OFFSET_TOP = 20;
 const ObjectColorPage: FC = () => {
   const {odysseyCreatorStore, universeStore} = useStore();
   const {objectColorStore} = odysseyCreatorStore;
-  const {instance3DStore} = universeStore;
+  const {world3dStore} = universeStore;
 
   const ref = useRef<HTMLDivElement>(null);
   const [color, setColor] = useColor('hex', COLOR_PICKER_DEFAULT_COLOR);
@@ -36,7 +36,7 @@ const ObjectColorPage: FC = () => {
   });
 
   const changeUnityObjectColor = useDebouncedCallback((colorHex: string) => {
-    instance3DStore.colorPickedPreview(objectId, colorHex);
+    world3dStore?.colorPickedPreview(objectId, colorHex);
   }, UNITY_DELAY_MS);
 
   useEffect(() => {
@@ -55,15 +55,15 @@ const ObjectColorPage: FC = () => {
 
   const onSaveHandler = useCallback(async () => {
     await objectColorStore.updateObjectColor(objectId, color.hex);
-    instance3DStore.colorPickedPreview(objectId, color.hex);
+    world3dStore?.colorPickedPreview(objectId, color.hex);
     navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
-  }, [color.hex, navigate, objectColorStore, objectId, universeStore, instance3DStore]);
+  }, [color.hex, navigate, objectColorStore, objectId, universeStore, world3dStore]);
 
   const onCancelHandler = useCallback(() => {
     const initialColor = objectColorStore.objectColor || COLOR_PICKER_DEFAULT_COLOR;
-    instance3DStore.colorPickedPreview(objectId, initialColor);
+    world3dStore?.colorPickedPreview(objectId, initialColor);
     navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
-  }, [navigate, objectColorStore.objectColor, objectId, instance3DStore, universeStore.worldId]);
+  }, [navigate, objectColorStore.objectColor, objectId, world3dStore, universeStore.worldId]);
 
   return (
     <styled.Wrapper>

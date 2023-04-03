@@ -16,7 +16,7 @@ const MAX_ASSET_SIZE_MB = `${(MAX_ASSET_SIZE / 1_000_000).toFixed(1)}`;
 const UploadCustomAssetPage: FC = () => {
   const {odysseyCreatorStore, universeStore} = useStore();
   const {spawnAssetStore} = odysseyCreatorStore;
-  const {instance3DStore} = universeStore;
+  const {world3dStore} = universeStore;
 
   const {t} = useI18n();
 
@@ -117,8 +117,8 @@ const UploadCustomAssetPage: FC = () => {
           </styled.PreviewContainer>
           <styled.NameInput
             placeholder={t('placeholders.nameYourAssetForYourLibrary') || ''}
-            onFocus={() => instance3DStore.changeKeyboardControl(false)}
-            onBlur={() => instance3DStore.changeKeyboardControl(true)}
+            onFocus={() => world3dStore?.changeKeyboardControl(false)}
+            onBlur={() => world3dStore?.changeKeyboardControl(true)}
             onChange={spawnAssetStore.setUploadedAssetName}
           />
           <Button

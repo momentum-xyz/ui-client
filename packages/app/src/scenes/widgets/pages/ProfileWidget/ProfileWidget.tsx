@@ -15,7 +15,7 @@ import * as styled from './ProfileWidget.styled';
 const ProfileWidget: FC = () => {
   const profileStore = ProfileStore.create();
   const {sessionStore, agoraStore, universeStore} = useStore();
-  const {instance3DStore} = universeStore;
+  const {world3dStore} = universeStore;
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isDeviceSettings, setIsDeviceSettings] = useState<boolean>(false);
@@ -108,7 +108,7 @@ const ProfileWidget: FC = () => {
                 user={sessionStore.user}
                 formErrors={profileStore.formErrors}
                 isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
-                onChangeKeyboardControl={instance3DStore.changeKeyboardControl}
+                onChangeKeyboardControl={world3dStore?.changeKeyboardControl}
                 onUpdate={handleProfileUpdate}
                 onCancel={() => setIsEditMode(!isEditMode)}
               />

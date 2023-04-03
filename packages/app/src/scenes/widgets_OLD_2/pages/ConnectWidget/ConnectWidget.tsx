@@ -10,17 +10,17 @@ import {StakingForm} from './components';
 
 const ConnectWidget: FC = () => {
   const {universeStore, nftStore, sessionStore} = useStore();
-  const {instance3DStore} = universeStore;
+  const {world3dStore} = universeStore;
 
   const {t} = useI18n();
 
   useEffect(() => {
-    instance3DStore.changeKeyboardControl(false);
+    world3dStore?.changeKeyboardControl(false);
 
     return () => {
-      instance3DStore.changeKeyboardControl(true);
+      world3dStore?.changeKeyboardControl(true);
     };
-  }, [instance3DStore]);
+  }, [world3dStore]);
 
   return (
     <Dialog
