@@ -15,7 +15,7 @@ const DeleteSkyboxDialog: FC = () => {
   const {skyboxSelectorStore} = odysseyCreatorStore;
   const {deleteDialog, closeSkyboxDeletion, removeUserSkybox, skyboxToDelete, currentItemId} =
     skyboxSelectorStore;
-  const {instance3DStore} = universeStore;
+  const {world3dStore} = universeStore;
   const worldId = universeStore.worldId;
   const {user} = sessionStore;
 
@@ -24,11 +24,11 @@ const DeleteSkyboxDialog: FC = () => {
   const {t} = useI18n();
 
   useEffect(() => {
-    instance3DStore.changeKeyboardControl(false);
+    world3dStore?.changeKeyboardControl(false);
     return () => {
-      instance3DStore.changeKeyboardControl(true);
+      world3dStore?.changeKeyboardControl(true);
     };
-  }, [instance3DStore]);
+  }, [world3dStore]);
 
   if (!skyboxToDelete || !user) {
     closeSkyboxDeletion();

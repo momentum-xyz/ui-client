@@ -9,7 +9,7 @@ import * as styled from './UnityVolumeController.styled';
 
 const UnityVolumeController: FC = () => {
   const {universeStore} = useStore();
-  const {instance3DStore} = universeStore;
+  const {world3dStore} = universeStore;
 
   const {t} = useI18n();
 
@@ -20,27 +20,27 @@ const UnityVolumeController: FC = () => {
         <SvgButton
           iconName="player-mute"
           size="medium"
-          onClick={instance3DStore.mute}
-          disabled={instance3DStore.volume === 0}
+          onClick={world3dStore?.mute}
+          disabled={world3dStore?.volume === 0}
         />
         <styled.VolumeBarContainer>
-          <styled.BarThumbPosition width={instance3DStore.volume * 100 + '%'} />
+          <styled.BarThumbPosition width={(world3dStore?.volume || 0) * 100 + '%'} />
           <styled.VolumeBar
             type="range"
             min="0"
             max="1"
             step=".01"
-            value={instance3DStore.volume}
+            value={world3dStore?.volume}
             onChange={(e) => {
-              instance3DStore.volumeChange(parseFloat(e.target.value));
+              world3dStore?.volumeChange(parseFloat(e.target.value));
             }}
           />
         </styled.VolumeBarContainer>
         <SvgButton
           iconName="player-unmute"
           size="medium"
-          onClick={instance3DStore.unmute}
-          disabled={instance3DStore.volume === 1}
+          onClick={world3dStore?.unmute}
+          disabled={world3dStore?.volume === 1}
         />
       </styled.VolumeContainer>
     </styled.Container>

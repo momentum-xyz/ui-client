@@ -1,8 +1,4 @@
-import {
-  cast,
-  // flow,
-  types
-} from 'mobx-state-tree';
+import {cast, types} from 'mobx-state-tree';
 import {UnityContext} from 'react-unity-webgl';
 import {RequestModel, Dialog} from '@momentum-xyz/core';
 import {UnityControlInterface} from '@momentum-xyz/sdk';
@@ -15,8 +11,9 @@ import {UnityPositionInterface} from 'core/interfaces';
 const DEFAULT_UNITY_VOLUME = 0.75;
 // const UNITY_VOLUME_STEP = 0.1;
 
-const Instance3DStore = types
-  .model('Instance3DStore', {
+const World3dStore = types
+  .model('World3dStore', {
+    // TODO: objectList: array
     isInitialized: false,
     muted: false,
     volume: types.optional(types.number, DEFAULT_UNITY_VOLUME),
@@ -230,4 +227,4 @@ const Instance3DStore = types
     }
   }));
 
-export {Instance3DStore};
+export {World3dStore};

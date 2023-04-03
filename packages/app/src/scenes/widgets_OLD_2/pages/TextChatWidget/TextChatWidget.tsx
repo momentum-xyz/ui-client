@@ -16,7 +16,7 @@ import * as styled from './TextChatWidget.styled';
 
 const TextChatWidget: FC = () => {
   const {widgetsStore, sessionStore, universeStore} = useStore();
-  const {instance3DStore} = universeStore;
+  const {world3dStore} = universeStore;
   const {textChatStore} = widgetsStore;
   const {streamChat} = textChatStore;
 
@@ -48,8 +48,8 @@ const TextChatWidget: FC = () => {
             <TextChat
               client={streamChat.client}
               channel={streamChat.currentChannel}
-              onFocus={() => instance3DStore.changeKeyboardControl(false)}
-              onBlur={() => instance3DStore.changeKeyboardControl(true)}
+              onFocus={() => world3dStore?.changeKeyboardControl(false)}
+              onBlur={() => world3dStore?.changeKeyboardControl(true)}
             />
           )}
         </styled.Body>

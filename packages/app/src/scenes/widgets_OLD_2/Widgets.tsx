@@ -44,7 +44,7 @@ const Widgets: FC<PropsInterface> = (props) => {
 
   const {sessionStore, widgetsStore, universeStore, agoraStore, nftStore} = useStore();
   const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} = widgetsStore;
-  const {activeWorldStore, instance3DStore} = universeStore;
+  const {world2dStore, world3dStore} = universeStore;
   const {agoraScreenShareStore} = agoraStore;
   const {user} = sessionStore;
 
@@ -147,20 +147,20 @@ const Widgets: FC<PropsInterface> = (props) => {
                   <Text
                     className="odyssey-name"
                     size="m"
-                    text={activeWorldStore?.nftOfWorld?.name || null}
+                    text={world2dStore?.nftOfWorld?.name || null}
                     transform="uppercase"
                     weight="bold"
                   />
                   <ToolbarIcon
                     title=""
                     state={{canGoBack: true}}
-                    icon={activeWorldStore.worldImageSrc ? undefined : 'people'}
+                    icon={world2dStore?.worldImageSrc ? undefined : 'people'}
                     size="medium"
                   >
-                    {activeWorldStore.worldImageSrc && (
+                    {world2dStore?.worldImageSrc && (
                       <Avatar
                         size="extra-small"
-                        avatarSrc={activeWorldStore.worldImageSrc}
+                        avatarSrc={world2dStore.worldImageSrc}
                         showBorder
                         showHover
                       />
@@ -230,14 +230,14 @@ const Widgets: FC<PropsInterface> = (props) => {
                 icon="fly-to"
                 size="medium"
                 onClick={widgetsStore.flyToMeStore.dialog.open}
-                disabled={!activeWorldStore.isMyWorld}
+                disabled={!world2dStore?.isMyWorld || false}
                 state={{canGoBack: true}}
               />
 
               <ToolbarCreatorIcon
                 worldId={universeStore.worldId}
                 isAdmin={universeStore.isCurrentUserWorldAdmin}
-                onCloseAndReset={instance3DStore.closeAndResetObjectMenu}
+                onCloseAndReset={world3dStore?.closeAndResetObjectMenu}
                 isBuilderMode={pathname.includes(
                   generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId})
                 )}

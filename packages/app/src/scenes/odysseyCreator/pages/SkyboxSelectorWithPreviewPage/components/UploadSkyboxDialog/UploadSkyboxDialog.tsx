@@ -24,7 +24,7 @@ const UploadSkyboxDialog: FC = () => {
   const {odysseyCreatorStore, universeStore, sessionStore} = useStore();
   const {skyboxSelectorStore} = odysseyCreatorStore;
   const {uploadDialog, uploadSkybox, isUploadPending} = skyboxSelectorStore;
-  const {instance3DStore} = universeStore;
+  const {world3dStore} = universeStore;
   const {user} = sessionStore;
   const worldId = universeStore.worldId;
 
@@ -32,11 +32,11 @@ const UploadSkyboxDialog: FC = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    instance3DStore.changeKeyboardControl(false);
+    world3dStore?.changeKeyboardControl(false);
     return () => {
-      instance3DStore.changeKeyboardControl(true);
+      world3dStore?.changeKeyboardControl(true);
     };
-  }, [instance3DStore]);
+  }, [world3dStore]);
 
   const {
     control,

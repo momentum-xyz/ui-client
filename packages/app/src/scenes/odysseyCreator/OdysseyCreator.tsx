@@ -11,13 +11,13 @@ import {CreatorMenu, ObjectMenu} from './components';
 
 const OdysseyCreator: FC = () => {
   const {universeStore} = useStore();
-  const {instance3DStore} = universeStore;
+  const {world3dStore} = universeStore;
   const {worldId} = universeStore;
 
   useEffect(() => {
-    instance3DStore.enableCreatorMode();
+    world3dStore?.enableCreatorMode();
     return () => {
-      instance3DStore.disableCreatorMode();
+      world3dStore?.disableCreatorMode();
     };
   }, []);
 
@@ -31,7 +31,7 @@ const OdysseyCreator: FC = () => {
           return universeStore.isCurrentUserWorldAdmin;
         }
       )}
-      {instance3DStore.objectMenu.isOpen && <ObjectMenu />}
+      {world3dStore?.objectMenu.isOpen && <ObjectMenu />}
     </>
   );
 };

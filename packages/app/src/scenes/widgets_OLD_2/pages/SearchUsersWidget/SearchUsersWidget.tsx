@@ -13,7 +13,7 @@ const DIALOG_WIDTH_PX = 296;
 
 const SearchUsersWidget: FC = () => {
   const {widgetsStore, nftStore, sessionStore, universeStore} = useStore();
-  const {instance3DStore} = universeStore;
+  const {world3dStore} = universeStore;
   const {onlineUsersStore} = widgetsStore;
 
   const isAlreadyConnected = nftStore.isAlreadyConnected(onlineUsersStore.odyssey?.owner || '');
@@ -22,12 +22,12 @@ const SearchUsersWidget: FC = () => {
   const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {
-    instance3DStore.changeKeyboardControl(false);
+    world3dStore?.changeKeyboardControl(false);
 
     return () => {
-      instance3DStore.changeKeyboardControl(true);
+      world3dStore?.changeKeyboardControl(true);
     };
-  }, [instance3DStore]);
+  }, [world3dStore]);
 
   const handleClose = () => {
     onlineUsersStore.dialog.close();
@@ -41,7 +41,7 @@ const SearchUsersWidget: FC = () => {
   };
 
   const handleHighFive = (userId: string) => {
-    instance3DStore.sendHighFive(userId);
+    world3dStore?.sendHighFive(userId);
   };
 
   const handleOdysseyHighFive = () => {
@@ -83,7 +83,7 @@ const SearchUsersWidget: FC = () => {
               <SearchInput
                 placeholder={t('placeholders.searchForPeople') || ''}
                 onChange={(query: string) => onlineUsersStore.searchUsers(query)}
-                onFocus={() => instance3DStore.changeKeyboardControl(false)}
+                onFocus={() => world3dStore?.changeKeyboardControl(false)}
               />
               <styled.List className="noScrollIndicator">
                 {onlineUsersStore.listedUsers.map((user) => (
