@@ -21,3 +21,8 @@ export interface Object3dInterface {
   showOnMiniMap?: boolean;
   isEditable?: boolean;
 }
+
+export interface ClickPositionInterface {
+  x: number;
+  y: number;
+}
