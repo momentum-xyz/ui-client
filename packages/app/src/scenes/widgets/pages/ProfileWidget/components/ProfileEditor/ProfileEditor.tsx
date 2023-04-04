@@ -14,7 +14,7 @@ interface PropsInterface {
   user: UserModelInterface;
   formErrors: FieldErrorInterface[];
   isUpdating: boolean;
-  onChangeKeyboardControl: (value: boolean) => void;
+  onChangeKeyboardControl?: (value: boolean) => void;
   onUpdate: (form: ProfileFormInterface, previousImageHash?: string) => void;
   onCancel: () => void;
 }
@@ -25,9 +25,9 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
   const {t} = useI18n();
 
   useEffect(() => {
-    onChangeKeyboardControl(false);
+    onChangeKeyboardControl?.(false);
     return () => {
-      onChangeKeyboardControl(true);
+      onChangeKeyboardControl?.(true);
     };
   }, [onChangeKeyboardControl]);
 

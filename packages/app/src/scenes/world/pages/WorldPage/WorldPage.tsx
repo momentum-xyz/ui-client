@@ -36,7 +36,7 @@ import * as styled from './WorldPage.styled';
 
 const WorldPage: FC = () => {
   const {universeStore, widgetsStore, widgetManagerStore} = useStore();
-  const {instance3DStore} = universeStore;
+  const {world3dStore} = universeStore;
 
   // const theme = useTheme();
   const navigate = useNavigate();
@@ -45,9 +45,10 @@ const WorldPage: FC = () => {
 
   useEffect(() => {
     return () => {
+      universeStore.leaveWorld();
       widgetManagerStore.closeAll();
     };
-  }, [widgetManagerStore]);
+  }, [universeStore, widgetManagerStore]);
 
   // useEffect(() => {
   //   instance3DStore.init();
@@ -71,20 +72,20 @@ const WorldPage: FC = () => {
 
   useEffect(() => {
     if (worldId) {
-      const setWorld = () => {
+      const teleportToWorld = () => {
         if (!PosBusService.isConnected()) {
           console.log(`BabylonPage: PosBusService is not connected.`);
           setTimeout(() => {
-            setWorld();
+            teleportToWorld();
           }, 1000);
           return;
         }
         console.log(`BabylonPage: Posbus - Set worldId: ${worldId}`);
-        PosBusService.setWorld(worldId);
+        PosBusService.teleportToWorld(worldId);
       };
-      setWorld();
+      teleportToWorld();
 
-      universeStore.initTeleport(worldId);
+      universeStore.enterWorld(worldId);
     }
   }, [worldId, universeStore]);
 
@@ -95,12 +96,12 @@ const WorldPage: FC = () => {
       // TODO take coords from event
       // instance3DStore.setLastClickPosition
 
-      if (instance3DStore.selectedObjectId) {
-        if (instance3DStore.selectedObjectId === objectId) {
+      if (world3dStore?.selectedObjectId) {
+        if (world3dStore?.selectedObjectId === objectId) {
           return;
         }
 
-        Event3dEmitter.emit('ObjectEditModeChanged', instance3DStore.selectedObjectId, false);
+        Event3dEmitter.emit('ObjectEditModeChanged', world3dStore.selectedObjectId, false);
       }
 
       // TODO try to lock object and wait for lock to be acquired
@@ -108,7 +109,7 @@ const WorldPage: FC = () => {
 
       navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
 
-      instance3DStore.onObjectClick(objectId);
+      world3dStore?.onObjectClick(objectId);
     } else {
       console.log('BabylonPage: handle object click, NOT creator mode', objectId);
       // if (label === 'portal_odyssey') {
@@ -168,7 +169,7 @@ const WorldPage: FC = () => {
       <HighFiveContent
         message={message}
         sendBack={() => {
-          instance3DStore.sendHighFiveBack(senderId);
+          world3dStore?.sendHighFiveBack(senderId);
         }}
         showCloseButton
       />,
@@ -227,7 +228,7 @@ const WorldPage: FC = () => {
     <styled.Inner
       data-testid="UnityPage-test"
       onClick={(event) => {
-        instance3DStore.setLastClickPosition(event.clientX, event.clientY);
+        world3dStore?.setLastClickPosition(event.clientX, event.clientY);
       }}
     >
       <BabylonScene

@@ -6,14 +6,14 @@ import {mapper} from 'api/mapper';
 import {NftItemModelInterface, Object} from 'core/models';
 import {getImageAbsoluteUrl, getRootStore} from 'core/utils';
 
-// TODO: Use this store a little bit more :)
-const WorldStore = types.compose(
+const World2dStore = types.compose(
   ResetModel,
   types
-    .model('WorldStore', {
+    .model('World2dStore', {
       worldId: types.optional(types.string, ''),
       info: types.maybeNull(Object),
       request: types.optional(RequestModel, {})
+      // TODO: onlineUsersList: array
     })
     .actions((self) => ({
       init(worldId: string) {
@@ -59,4 +59,4 @@ const WorldStore = types.compose(
     }))
 );
 
-export {WorldStore as WorldStore};
+export {World2dStore};

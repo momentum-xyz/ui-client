@@ -1,13 +1,15 @@
-import {FC, useEffect} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {
   Event3dEmitter
   // Object3dInterface
 } from '@momentum-xyz/core';
+import {Toggle, Text} from '@momentum-xyz/ui-kit';
 import {v4 as uuidv4} from 'uuid';
 import '@babylonjs/core/Debug/debugLayer';
 import '@babylonjs/inspector';
 
-import {BabylonScene} from './scenes';
+import {BabylonScene, UniverseScene} from './scenes';
+import * as styled from './Emulator.styled';
 
 window.sessionStorage.setItem('babylon_debug', 'true');
 
@@ -19,7 +21,7 @@ const assetIDs: string[] = [
 let i = 0;
 
 /** DEFINE MOCKS HERE **/
-const Emulator: FC = () => {
+const WorldEmulator: FC = () => {
   const randomNumber = () => {
     const min = -10;
     const max = 10;
@@ -75,6 +77,24 @@ const Emulator: FC = () => {
       }
       onUserClick={(e) => console.log('onUserClick', e)}
     />
+  );
+};
+
+const UniverseEmulator = () => {
+  return <UniverseScene />;
+};
+
+// TODO Split into several files
+const Emulator = () => {
+  const [isUniverse, setIsUniverse] = useState(false);
+  return (
+    <div>
+      <styled.ControlPanel>
+        <Toggle size="normal" variant="normal" checked={isUniverse} onChange={setIsUniverse} />
+        <Text text="Is Universe" size="m" />
+      </styled.ControlPanel>
+      {isUniverse ? <UniverseEmulator /> : <WorldEmulator />}
+    </div>
   );
 };
 

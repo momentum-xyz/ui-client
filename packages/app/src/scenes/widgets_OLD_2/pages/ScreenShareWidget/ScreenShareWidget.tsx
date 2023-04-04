@@ -9,7 +9,7 @@ import {ScreenChoice, ScreenVideo} from './components/templates';
 
 const ScreenShareWidget: FC = () => {
   const {widgetsStore, agoraStore, sessionStore, universeStore} = useStore();
-  const {activeWorldStore} = universeStore;
+  const {world2dStore} = universeStore;
   const {screenShareStore} = widgetsStore;
   const {agoraScreenShareStore} = agoraStore;
   const {remoteVideoTrack, localVideoTrack} = agoraScreenShareStore;
@@ -49,7 +49,7 @@ const ScreenShareWidget: FC = () => {
       maximized={screenShareStore.isExpanded}
     >
       <WindowPanel
-        title={activeWorldStore.info?.name || ''}
+        title={world2dStore?.info?.name || ''}
         subtitle={t('labels.screenShare') || ''}
         initialIsExpanded={screenShareStore.isExpanded}
         onToggleExpand={screenShareStore.togglePage}

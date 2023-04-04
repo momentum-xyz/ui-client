@@ -77,7 +77,7 @@ class PosBusService {
     return !!(this.main.client && this.main.port);
   }
 
-  static setWorld(worldId: string) {
+  static teleportToWorld(worldId: string) {
     if (this.main.client && this.main.port) {
       this.main.client.teleport(worldId);
     }

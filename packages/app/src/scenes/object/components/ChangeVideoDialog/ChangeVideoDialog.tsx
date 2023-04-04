@@ -12,7 +12,7 @@ import * as styled from './ChangeVideoDialog.styled';
 
 const ChangeVideoDialog: FC = () => {
   const {universeStore, objectStore} = useStore();
-  const {instance3DStore} = universeStore;
+  const {world3dStore} = universeStore;
   const {assetStore} = objectStore;
   const {changeTileDialog} = assetStore;
 
@@ -39,12 +39,12 @@ const ChangeVideoDialog: FC = () => {
   };
 
   const handleFocus = useCallback(() => {
-    instance3DStore.changeKeyboardControl(false);
-  }, [instance3DStore]);
+    world3dStore?.changeKeyboardControl(false);
+  }, [world3dStore]);
 
   const handleBlur = useCallback(() => {
-    instance3DStore.changeKeyboardControl(true);
-  }, [instance3DStore]);
+    world3dStore?.changeKeyboardControl(true);
+  }, [world3dStore]);
 
   const errorMessage = useMemo(() => {
     switch (errors.youtube_url?.type) {

@@ -17,7 +17,7 @@ const COLOR_PICKER_WIDTH_PX = 300;
 const SpawnPointPage: FC = () => {
   const {odysseyCreatorStore, universeStore} = useStore();
   const {spawnPointStore} = odysseyCreatorStore;
-  const {worldId, instance3DStore} = universeStore;
+  const {worldId, world3dStore} = universeStore;
   const {setSpawnPoint} = spawnPointStore;
 
   const ref = useRef<HTMLDivElement>(null);
@@ -30,8 +30,8 @@ const SpawnPointPage: FC = () => {
   });
 
   const onSetHandler = useCallback(async () => {
-    const position: UnityPositionInterface | null = instance3DStore.getUserPosition();
-    const rotation: UnityPositionInterface | null = instance3DStore.getUserRotation();
+    const position: UnityPositionInterface | null = world3dStore?.getUserPosition() || null;
+    const rotation: UnityPositionInterface | null = world3dStore?.getUserRotation() || null;
 
     if (position && rotation && (await setSpawnPoint(worldId, position, rotation))) {
       navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}));
@@ -55,7 +55,7 @@ const SpawnPointPage: FC = () => {
         TOAST_COMMON_OPTIONS
       );
     }
-  }, [instance3DStore, setSpawnPoint, worldId, navigate, t]);
+  }, [world3dStore, setSpawnPoint, worldId, navigate, t]);
 
   const onCancelHandler = useCallback(() => {
     navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}));

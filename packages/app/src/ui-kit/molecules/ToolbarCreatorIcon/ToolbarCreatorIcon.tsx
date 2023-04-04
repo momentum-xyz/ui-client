@@ -11,7 +11,7 @@ interface PropsInterface {
   worldId: string;
   isAdmin: boolean;
   isBuilderMode: boolean;
-  onCloseAndReset: () => void;
+  onCloseAndReset?: () => void;
 }
 
 const ToolbarCreatorIcon: FC<PropsInterface> = (props) => {
@@ -33,7 +33,7 @@ const ToolbarCreatorIcon: FC<PropsInterface> = (props) => {
       size: 'medium',
       title: t('actions.creatorClose'),
       onClick: () => {
-        onCloseAndReset();
+        onCloseAndReset?.();
         navigate(generatePath(ROUTES.odyssey.base, {worldId}));
       }
     }

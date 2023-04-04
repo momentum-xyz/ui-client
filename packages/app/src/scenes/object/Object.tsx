@@ -11,7 +11,7 @@ import * as styled from './Object.styled';
 
 const Object: FC = () => {
   const {objectStore, universeStore, nftStore, widgetsStore} = useStore();
-  const {instance3DStore} = universeStore;
+  const {world3dStore} = universeStore;
   const {asset, assetStore} = objectStore;
   const {assetType} = assetStore;
   const {odysseyInfoStore} = widgetsStore;
@@ -20,13 +20,13 @@ const Object: FC = () => {
 
   useEffect(() => {
     objectStore.init(objectId!);
-    instance3DStore.triggerInteractionMessage(PosBusEventEnum.EnteredSpace, objectId!, 0, '');
+    world3dStore?.triggerInteractionMessage(PosBusEventEnum.EnteredSpace, objectId!, 0, '');
 
     return () => {
-      instance3DStore.triggerInteractionMessage(PosBusEventEnum.LeftSpace, objectId!, 0, '');
+      world3dStore?.triggerInteractionMessage(PosBusEventEnum.LeftSpace, objectId!, 0, '');
       objectStore.resetModel();
     };
-  }, [objectId, objectStore, instance3DStore]);
+  }, [objectId, objectStore, world3dStore]);
 
   useEffect(() => {
     if (assetType === AssetTypeEnum.DOCK) {
