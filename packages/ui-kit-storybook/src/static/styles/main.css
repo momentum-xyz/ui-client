@@ -1,6 +1,7 @@
 @import "variables.css";
 @import "reset.css";
 @import "fonts.css";
+@import "carousel.css";
 @import "storybook.css";
 
 body {

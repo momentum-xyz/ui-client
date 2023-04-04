@@ -31,6 +31,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-imask": "^6.4.3",
+    "react-multi-carousel": "^2.8.3",
     "react-number-format": "^5.1.4",
     "react-router-dom": "^6.7.0",
     "react-select": "^5.7.0",

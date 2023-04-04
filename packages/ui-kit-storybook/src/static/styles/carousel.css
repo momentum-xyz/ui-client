@@ -1,0 +1,15 @@
+.react-multi-carousel-dot-list {
+  bottom: 8px;
+  gap: 6px;
+}
+
+.react-multi-carousel-dot button {
+  margin: 0;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--white);
+}
+
+.react-multi-carousel-dot--active button {
+  background: var(--white);
+}
