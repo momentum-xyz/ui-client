@@ -15,10 +15,10 @@ import {
   PBRMaterial
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
-import {Object3dInterface, Texture3dInterface} from '@momentum-xyz/core';
+import {Object3dInterface, Texture3dInterface, ClickPositionInterface} from '@momentum-xyz/core';
 //import {GLTFFileLoader} from '@babylonjs/loaders';
 
-import {CameraHelper} from './CameraHelper';
+import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
 import {getAssetFileName} from './UtilityHelper';
 
@@ -48,7 +48,7 @@ export class ObjectHelper {
     scene: Scene,
     engine: Engine,
     view: HTMLCanvasElement,
-    onObjectClick: (objectId: string, e?: React.MouseEvent) => void
+    onObjectClick: (objectId: string, clickPosition: ClickPositionInterface) => void
   ): void {
     this.scene = scene;
     this.firstID = '';
@@ -58,9 +58,13 @@ export class ObjectHelper {
         scene.pointerX,
         scene.pointerY,
         Matrix.Identity(),
-        CameraHelper.camera
+        PlayerHelper.camera
       );
 
+      const lastClick = {
+        x: scene.pointerX,
+        y: scene.pointerY
+      };
       const hit = scene.pickWithRay(ray);
 
       if (hit) {
@@ -72,7 +76,7 @@ export class ObjectHelper {
           }
           console.log('clicked on object with id: ' + parent.metadata);
           if (ObjectHelper.objectsMap.has(parent.metadata)) {
-            onObjectClick(parent.metadata);
+            onObjectClick(parent.metadata, lastClick);
           }
           // TODO: Check if object is in the user map
 

@@ -162,8 +162,7 @@ class PosBusService {
             ...object,
             asset_3d_id: object.asset_type,
             transform: {
-              ...object.transform,
-              scale: object.transform.scale.x // TODO check if this is correct
+              ...object.transform
             }
           });
         }

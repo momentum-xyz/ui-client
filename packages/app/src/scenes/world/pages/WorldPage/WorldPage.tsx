@@ -6,7 +6,12 @@ import {toast} from 'react-toastify';
 // import Unity from 'react-unity-webgl';
 //import {Portal} from '@momentum-xyz/ui-kit';
 import {BabylonScene} from '@momentum-xyz/odyssey3d';
-import {Event3dEmitter, TransformNoScaleInterface, useI18n} from '@momentum-xyz/core';
+import {
+  ClickPositionInterface,
+  Event3dEmitter,
+  TransformNoScaleInterface,
+  useI18n
+} from '@momentum-xyz/core';
 
 import {WORLD_ROUTES} from 'scenes/App.routes';
 // import {appVariables} from 'api/constants';
@@ -84,7 +89,7 @@ const WorldPage: FC = () => {
     }
   }, [worldId, universeStore]);
 
-  const handleObjectClick = (objectId: string, e?: React.MouseEvent) => {
+  const handleObjectClick = (objectId: string, clickPositin: ClickPositionInterface) => {
     if (universeStore.isCreatorMode) {
       console.log('BabylonPage: handle object click in creator mode', objectId);
 
@@ -120,7 +125,7 @@ const WorldPage: FC = () => {
     }
   };
 
-  const handleUserClick = (id: string, e?: React.MouseEvent) => {
+  const handleUserClick = (id: string, clickPosition: ClickPositionInterface) => {
     console.log('BabylonPage: onUserClick', id);
     widgetsStore.odysseyInfoStore.open(id);
   };

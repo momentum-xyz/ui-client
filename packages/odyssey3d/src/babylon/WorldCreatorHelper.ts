@@ -1,4 +1,5 @@
-import {GizmoManager, Scene, TransformNode} from '@babylonjs/core';
+import {GizmoManager, Scene, TransformNode, Vector3} from '@babylonjs/core';
+import {ObjectTransformInterface} from '@momentum-xyz/core';
 
 import {getNodeFromId} from './UtilityHelper';
 
@@ -14,8 +15,13 @@ export class WorldCreatorHelper {
   static lastLockedID = '';
   static gizmoManager: GizmoManager;
   static transformSubscription: {unsubscribe: () => void} | undefined;
+  static onObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
 
-  static initialize(scene: Scene) {
+  static initialize(
+    scene: Scene,
+    onObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void
+  ) {
+    this.onObjectTransform = onObjectTransform;
     this.isCreatorMode = false;
     this.lastLockedID = '';
     // Gizmo setup
@@ -27,9 +33,20 @@ export class WorldCreatorHelper {
     this.gizmoManager.gizmos.rotationGizmo?.xGizmo.setCustomMesh(customMesh);*/
   }
 
-  static subscribeForTransformUpdates(node: TransformNode) {
+  static subscribeForTransformUpdates(objectId: string, node: TransformNode) {
     const updateTransformCallback = () => {
-      console.log('Updated Transform: ', node.position, node.rotationQuaternion, node.scaling);
+      const myTransfrom: ObjectTransformInterface = {
+        position: Vector3.Zero(),
+        rotation: Vector3.Zero(),
+        scale: Vector3.Zero()
+      };
+
+      myTransfrom.position = node.position;
+      myTransfrom.rotation = node.rotation;
+      myTransfrom.scale = node.scaling;
+
+      // TODO: Check how often data should be sent to onObjectTransform
+      this.onObjectTransform(objectId, myTransfrom);
     };
 
     node.onAfterWorldMatrixUpdateObservable.add(updateTransformCallback);
@@ -54,9 +71,11 @@ export class WorldCreatorHelper {
 
       if (node) {
         this.gizmoManager.attachToNode(node);
+        this.transformSubscription = this.subscribeForTransformUpdates(objectId, node);
       }
     } else {
       this.disableAllGizmos();
+      this.transformSubscription?.unsubscribe();
     }
   }
 
@@ -69,12 +88,8 @@ export class WorldCreatorHelper {
       //console.log('clicked on an object, trying to lock');
 
       // TODO: This has to be moved in the setLockedObject function, alongside enabling of gizmo
-      // Make sure this is called only once per object
-
-      const myNode = this.getNodeFromId(id);
-      if (myNode) {
-        this.transformSubscription = this.subscribeForTransformUpdates(myNode);
-      }
+      console.log('trying to toggle gizmo');
+      this.toggleGizmo(id, true);
 
       //posbusclient.trylock(id);
     } else {

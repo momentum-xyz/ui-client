@@ -3,7 +3,7 @@ import {PositionInterface} from './position.interface';
 export interface ObjectTransformInterface {
   position: PositionInterface;
   rotation: PositionInterface;
-  scale: number;
+  scale: PositionInterface;
 }
 
 export interface TransformNoScaleInterface {
@@ -20,4 +20,9 @@ export interface Object3dInterface {
   asset_2d_id?: string;
   showOnMiniMap?: boolean;
   isEditable?: boolean;
+}
+
+export interface ClickPositionInterface {
+  x: number;
+  y: number;
 }
