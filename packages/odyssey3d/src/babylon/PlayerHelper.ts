@@ -27,7 +27,7 @@ export class PlayerHelper {
   static initialize(
     scene: Scene,
     canvas: HTMLCanvasElement,
-    onMove: (transform: TransformNoScaleInterface) => void
+    onMove?: (transform: TransformNoScaleInterface) => void
   ) {
     // This creates and positions a UniversalCamera camera (non-mesh)
     const camera = new UniversalCamera('UniversalCamera', new Vector3(-5, 5, -15), scene);
@@ -75,7 +75,9 @@ export class PlayerHelper {
       playerTransform.position = this.camera.position.subtract(PLAYER_OFFSET);
       playerTransform.rotation = this.camera.rotation;
 
-      onMove(playerTransform);
+      if (onMove) {
+        onMove(playerTransform);
+      }
     });
   }
 
