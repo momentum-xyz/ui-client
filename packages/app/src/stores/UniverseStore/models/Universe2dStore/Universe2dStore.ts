@@ -8,11 +8,25 @@ const Universe2dStore = types.compose(
   ResetModel,
   types
     .model('Universe2dStore', {
-      // allWorlds: types.optional(types.array, []);
-      // allUsers: types.optional(types.array, []);
+      // allUsers: types.optional(types.array(types.frozen<NftItemModelInterface>()), []),
+      // allWorlds: types.optional(types.array(types.frozen<NftItemModelInterface>()), [])
     })
     .actions((self) => ({
-      init(): void {}
+      init(): void {
+        // TODO: implementation
+      },
+      getMostFeaturedWorlds(): NftItemModelInterface[] {
+        return getRootStore(self).nftStore.nftItems.slice(0, 5);
+      },
+      getLastCreatedWorlds(): NftItemModelInterface[] {
+        return getRootStore(self).nftStore.nftItems.slice(5, 10);
+      },
+      getLastUpdatedWorlds(): NftItemModelInterface[] {
+        return getRootStore(self).nftStore.nftItems.slice(10, 15);
+      },
+      getMostStatedInWorlds(): NftItemModelInterface[] {
+        return getRootStore(self).nftStore.nftItems.slice(15, 20);
+      }
     }))
     .views((self) => ({
       get allWorlds(): NftItemModelInterface[] {

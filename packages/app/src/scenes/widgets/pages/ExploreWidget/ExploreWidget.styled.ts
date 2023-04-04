@@ -6,6 +6,10 @@ export const Container = styled.div`
   position: relative;
 `;
 
+export const Wrapper = styled.div`
+  position: relative;
+`;
+
 export const Tabs = styled.div`
   position: absolute;
   display: flex;

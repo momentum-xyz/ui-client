@@ -7,46 +7,54 @@ import {TabInterface, Tabs, Panel, Frame} from '@momentum-xyz/ui-kit-storybook';
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 
+import {WorldList, UserList} from './components';
 import * as styled from './ExploreWidget.styled';
 
-type ExploreTabType = 'odysseys' | 'accounts';
+type ExploreTabType = 'worlds' | 'users';
 
 const TABS_LIST: TabInterface<ExploreTabType>[] = [
-  {id: 'odysseys', icon: 'rabbit', label: i18n.t('labels.odysseys')},
-  {id: 'accounts', icon: 'astronaut', label: i18n.t('labels.accounts')}
+  {id: 'worlds', icon: 'rabbit', label: i18n.t('labels.odysseys')},
+  {id: 'users', icon: 'astronaut', label: i18n.t('labels.accounts')}
 ];
 
 const ExploreWidget: FC = () => {
-  const {widgetManagerStore} = useStore();
+  const {universeStore, widgetManagerStore} = useStore();
+  const {universe2dStore} = universeStore;
   const {close} = widgetManagerStore;
 
-  const [activeTab, setActiveTab] = useState<ExploreTabType>('odysseys');
-
-  //const exploreStore = ExploreStore.create();
-  //const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<ExploreTabType>('worlds');
 
   const {t} = useI18n();
 
   return (
-    <Panel
-      icon="search"
-      variant="primary"
-      title={t('labels.explore')}
-      onClose={() => close(WidgetEnum.EXPLORE)}
-    >
-      <styled.Container data-testid="ExploreWidget">
-        <styled.Tabs>
-          <Tabs tabList={TABS_LIST} activeId={activeTab} onSelect={setActiveTab} />
-        </styled.Tabs>
+    <styled.Container data-testid="ExploreWidget">
+      <Panel
+        icon="search"
+        variant="primary"
+        title={t('labels.explore')}
+        onClose={() => close(WidgetEnum.EXPLORE)}
+      >
+        <styled.Wrapper>
+          <styled.Tabs>
+            <Tabs tabList={TABS_LIST} activeId={activeTab} onSelect={setActiveTab} />
+          </styled.Tabs>
 
-        <styled.Content>
-          <Frame>
-            {activeTab === 'odysseys' && <div>odysseys</div>}
-            {activeTab === 'accounts' && <div>accounts</div>}
-          </Frame>
-        </styled.Content>
-      </styled.Container>
-    </Panel>
+          <styled.Content>
+            <Frame>
+              {activeTab === 'worlds' && (
+                <WorldList
+                  lastCreatedItems={universe2dStore.getLastCreatedWorlds()}
+                  lastUpdatedItems={universe2dStore.getLastUpdatedWorlds()}
+                  mostFeaturedItems={universe2dStore.getMostFeaturedWorlds()}
+                  mostStakedInItems={universe2dStore.getMostStatedInWorlds()}
+                />
+              )}
+              {activeTab === 'users' && <UserList />}
+            </Frame>
+          </styled.Content>
+        </styled.Wrapper>
+      </Panel>
+    </styled.Container>
   );
 };
 
