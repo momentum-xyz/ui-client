@@ -1,11 +1,11 @@
 import {useState} from 'react';
 import {ComponentMeta, Story} from '@storybook/react';
 
-import FrameTabs, {FrameTabsPropsInterface} from './FrameTabs';
+import Tabs, {TabsPropsInterface} from './Tabs';
 
 export default {
-  title: 'Molecules/FrameTabs',
-  component: FrameTabs,
+  title: 'Molecules/Tabs',
+  component: Tabs,
   decorators: [
     (Story) => (
       <div className="storybook-block">
@@ -13,15 +13,15 @@ export default {
       </div>
     )
   ]
-} as ComponentMeta<typeof FrameTabs>;
+} as ComponentMeta<typeof Tabs>;
 
-const Template: Story<FrameTabsPropsInterface> = (args) => {
+const Template: Story<TabsPropsInterface<string>> = (args) => {
   const [selectedId, setSelectedId] = useState<string>();
 
   return (
-    <FrameTabs {...args} selectedId={selectedId} onSelect={setSelectedId}>
+    <Tabs {...args} activeId={selectedId} onSelect={setSelectedId}>
       {selectedId && <>Tab id is {selectedId}</>}
-    </FrameTabs>
+    </Tabs>
   );
 };
 

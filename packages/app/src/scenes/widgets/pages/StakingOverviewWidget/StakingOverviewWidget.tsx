@@ -1,15 +1,11 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Hexagon, Panel} from '@momentum-xyz/ui-kit-storybook';
+import {Panel} from '@momentum-xyz/ui-kit-storybook';
 
 const StakingOverviewWidget: FC = () => {
   return (
     <div>
-      <Panel
-        variant="primary"
-        title="Staking Overview"
-        hexagon={<Hexagon type="secondary-borderless" iconName="planet" />}
-      >
+      <Panel variant="primary" title="Staking Overview" icon="stake">
         DATA
       </Panel>
     </div>

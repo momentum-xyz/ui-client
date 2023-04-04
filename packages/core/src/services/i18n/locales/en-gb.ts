@@ -249,6 +249,8 @@ export const enGb = {
       screenShare: 'Screenshare',
       stageMode: 'Stage Mode',
       calendar: 'World Calendar',
+      odysseys: 'Odysseys',
+      accounts: 'Accounts',
       emoji: 'EMOJI',
       skyboxName: 'Skybox Name',
       staking: 'Staking',

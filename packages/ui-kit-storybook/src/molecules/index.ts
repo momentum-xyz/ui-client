@@ -1,6 +1,6 @@
 export * from './Panel';
 export * from './FrameSteps';
-export * from './FrameTabs';
+export * from './Tabs';
 export * from './FrameText';
 export * from './TimelineCap';
 export * from './TimelineStars';
