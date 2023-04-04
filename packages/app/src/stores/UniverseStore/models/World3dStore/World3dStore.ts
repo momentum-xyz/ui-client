@@ -87,7 +87,9 @@ const World3dStore = types
       // return rotation;
     },
     handleUserMove(transform: TransformNoScaleInterface): void {
-      self.userCurrentTransform = transform;
+      // FIXME storing it here changes the structure and breaks stuff
+      // maybe deep-copy it or something?
+      // self.userCurrentTransform = cast(transform);
     },
     teleportToUser(userId: string): void {
       // TODO Use Emitter3d
