@@ -12,6 +12,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
   // const onUserClick = useMutableCallback(callbacks.onUserClick);
   const onMove = useMutableCallback(callbacks.onMove);
   const onObjectTransform = useMutableCallback(callbacks.onObjectTransform);
+  const onClickOutside = useMutableCallback(callbacks.onClickOutside);
+
   /* Will run one time. */
   const onSceneReady = (scene: Scene) => {
     const view = scene.getEngine().getRenderingCanvas();
@@ -24,7 +26,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         engine,
         //  props.objects,
         view,
-        onObjectClick
+        onObjectClick,
+        onClickOutside
         // onUserClick,
         // onMove,
       );

@@ -45,10 +45,9 @@ const WorldPage: FC = () => {
 
   useEffect(() => {
     return () => {
-      universeStore.leaveWorld();
       widgetManagerStore.closeAll();
     };
-  }, [universeStore, widgetManagerStore]);
+  }, [widgetManagerStore]);
 
   // useEffect(() => {
   //   instance3DStore.init();
@@ -87,6 +86,9 @@ const WorldPage: FC = () => {
 
       universeStore.enterWorld(worldId);
     }
+    return () => {
+      universeStore.leaveWorld();
+    };
   }, [worldId, universeStore]);
 
   const handleObjectClick = (objectId: string, clickPositin: ClickPositionInterface) => {
@@ -96,20 +98,9 @@ const WorldPage: FC = () => {
       // TODO take coords from event
       // instance3DStore.setLastClickPosition
 
-      if (world3dStore?.selectedObjectId) {
-        if (world3dStore?.selectedObjectId === objectId) {
-          return;
-        }
-
-        Event3dEmitter.emit('ObjectEditModeChanged', world3dStore.selectedObjectId, false);
-      }
-
-      // TODO try to lock object and wait for lock to be acquired
-      Event3dEmitter.emit('ObjectEditModeChanged', objectId, true);
-
       navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
 
-      world3dStore?.onObjectClick(objectId);
+      world3dStore?.handleClick(objectId);
     } else {
       console.log('BabylonPage: handle object click, NOT creator mode', objectId);
       // if (label === 'portal_odyssey') {
@@ -123,6 +114,11 @@ const WorldPage: FC = () => {
         })
       });
     }
+  };
+
+  const handleClickOutside = () => {
+    console.log('BabylonPage: handleClickOutside');
+    world3dStore?.closeAndResetObjectMenu();
   };
 
   const handleUserClick = (id: string, clickPosition: ClickPositionInterface) => {
@@ -222,7 +218,7 @@ const WorldPage: FC = () => {
   //   return <></>;
   // }
 
-  console.log('WorldPage render');
+  console.log('WorldPage render', {worldId, world3dStore});
 
   return (
     <styled.Inner
@@ -239,8 +235,8 @@ const WorldPage: FC = () => {
           console.log('onObjectTransform', objectId, transform)
         }
         onUserClick={handleUserClick}
+        onClickOutside={handleClickOutside}
       />
-      {/* <Unity unityContext={instance3DStore.unityContext} style={UnityContextCSS} /> */}
     </styled.Inner>
   );
 };

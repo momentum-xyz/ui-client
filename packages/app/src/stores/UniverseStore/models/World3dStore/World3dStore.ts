@@ -1,6 +1,5 @@
 import {cast, types} from 'mobx-state-tree';
-import {UnityContext} from 'react-unity-webgl';
-import {RequestModel, Dialog} from '@momentum-xyz/core';
+import {RequestModel, Dialog, Event3dEmitter} from '@momentum-xyz/core';
 import {UnityControlInterface} from '@momentum-xyz/sdk';
 
 // import {api, ResolveNodeResponse} from 'api';
@@ -22,15 +21,24 @@ const World3dStore = types
     objectMenuPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
     objectMenu: types.optional(Dialog, {}),
     isCreatorMode: false,
-    selectedObjectId: types.maybe(types.string),
+    selectedObjectId: types.maybeNull(types.string),
 
     gizmoMode: types.optional(
       types.enumeration(Object.values(GizmoTypeEnum)),
       GizmoTypeEnum.POSITION
     )
   })
-  .volatile<{unityContext: UnityContext | null}>(() => ({
-    unityContext: null
+  .actions((self) => ({
+    _selectObject(objectId: string): void {
+      self.selectedObjectId = objectId;
+      Event3dEmitter.emit('ObjectEditModeChanged', objectId, true);
+    },
+    _deselectObject(): void {
+      if (self.selectedObjectId) {
+        Event3dEmitter.emit('ObjectEditModeChanged', self.selectedObjectId, false);
+        self.selectedObjectId = null;
+      }
+    }
   }))
   .actions((self) => ({
     // triggerTeleport(url?: string, worldId?: string): void {
@@ -149,16 +157,6 @@ const World3dStore = types
       // TODO
       // UnityService.changeSkybox(skyboxId);
     },
-    enableCreatorMode() {
-      self.isCreatorMode = true;
-    },
-    disableCreatorMode() {
-      self.isCreatorMode = false;
-    },
-    leaveSpace(spaceId: string) {
-      // need this?
-      // UnityService.leaveSpace(spaceId);
-    },
     // resolveNode: flow(function* (object: string) {
     //   return yield self.nodeRequest.send(api.web3Repository.resolveNode, {object});
     // }),
@@ -176,13 +174,22 @@ const World3dStore = types
     //   }
     // },
     setLastClickPosition(x: number, y: number) {
+      console.log('setLastClickPosition', x, y);
       self.lastClickPosition = {x, y};
-      this.closeAndResetObjectMenu();
+      // this.closeAndResetObjectMenu();
     },
-    onObjectClick(objectId: string) {
+    handleClick(objectId: string) {
+      console.log('World3dStore : handleClick', objectId);
+      if (!self.isCreatorMode) {
+        return;
+      }
+
+      self._deselectObject();
+
       // self.objectMenuPosition = self.lastClickPosition;
+
+      self._selectObject(objectId);
       self.objectMenu.open();
-      self.selectedObjectId = objectId;
     },
     undo() {
       // UnityService.undo();
@@ -196,13 +203,24 @@ const World3dStore = types
       // UnityService.changeGizmoType(mode);
     },
     closeAndResetObjectMenu() {
+      console.log('closeAndResetObjectMenu', self.selectedObjectId);
       self.objectMenu.close();
-      self.selectedObjectId = '';
+      self._deselectObject();
       self.gizmoMode = GizmoTypeEnum.POSITION;
     },
     colorPickedPreview(objectId: string, colorHex: string) {
       // TODO notify babylon
       // UnityService.colorPickedPreview(objectId, colorHex);
+    }
+  }))
+  .actions((self) => ({
+    enableCreatorMode() {
+      self.isCreatorMode = true;
+    },
+    disableCreatorMode() {
+      self.isCreatorMode = false;
+
+      self.closeAndResetObjectMenu();
     }
   }))
   .views((self) => ({

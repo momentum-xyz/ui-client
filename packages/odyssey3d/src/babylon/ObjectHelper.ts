@@ -48,7 +48,8 @@ export class ObjectHelper {
     scene: Scene,
     engine: Engine,
     view: HTMLCanvasElement,
-    onObjectClick: (objectId: string, clickPosition: ClickPositionInterface) => void
+    onObjectClick: (objectId: string, clickPosition: ClickPositionInterface) => void,
+    onClickOutside: () => void
   ): void {
     this.scene = scene;
     this.firstID = '';
@@ -84,10 +85,10 @@ export class ObjectHelper {
           /*if (!WorldCreatorHelper.isCreatorMode) {
             WorldCreatorHelper.tryLockObject(parent.metadata);
           }*/
+        } else {
+          // WorldCreatorHelper.unlockLastObject();
+          onClickOutside();
         }
-        /*else {
-          WorldCreatorHelper.unlockLastObject();
-        }*/
       }
     };
   }
