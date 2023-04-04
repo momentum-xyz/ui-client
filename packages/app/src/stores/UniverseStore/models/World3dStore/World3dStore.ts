@@ -1,5 +1,11 @@
 import {cast, types} from 'mobx-state-tree';
-import {RequestModel, Dialog, Event3dEmitter, ClickPositionInterface} from '@momentum-xyz/core';
+import {
+  RequestModel,
+  Dialog,
+  Event3dEmitter,
+  ClickPositionInterface,
+  TransformNoScaleInterface
+} from '@momentum-xyz/core';
 import {UnityControlInterface} from '@momentum-xyz/sdk';
 
 // import {api, ResolveNodeResponse} from 'api';
@@ -16,6 +22,7 @@ const World3dStore = types
   .model('World3dStore', {
     // TODO: objectList: array
     isInitialized: false,
+    userCurrentTransform: types.maybeNull(types.frozen<TransformNoScaleInterface>()),
     muted: false,
     volume: types.optional(types.number, DEFAULT_UNITY_VOLUME),
     nodeRequest: types.optional(RequestModel, {}),
@@ -78,6 +85,9 @@ const World3dStore = types
       // }
 
       // return rotation;
+    },
+    handleUserMove(transform: TransformNoScaleInterface): void {
+      self.userCurrentTransform = transform;
     },
     teleportToUser(userId: string): void {
       // TODO Use Emitter3d

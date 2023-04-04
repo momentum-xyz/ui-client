@@ -3,8 +3,7 @@ import {observer} from 'mobx-react-lite';
 // import {useTheme} from 'styled-components';
 import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-dom';
 import {toast} from 'react-toastify';
-// import Unity from 'react-unity-webgl';
-//import {Portal} from '@momentum-xyz/ui-kit';
+import {useDebouncedCallback} from '@momentum-xyz/ui-kit-storybook';
 import {BabylonScene} from '@momentum-xyz/odyssey3d';
 import {
   ClickPositionInterface,
@@ -126,10 +125,16 @@ const WorldPage: FC = () => {
     widgetsStore.odysseyInfoStore.open(id);
   };
 
-  const handleUserMove = (transform: TransformNoScaleInterface) => {
-    console.log('BabylonPage: onMove', transform);
-    PosBusService.sendMyTransform(transform);
-  };
+  const handleUserMove = useDebouncedCallback(
+    (transform: TransformNoScaleInterface) => {
+      console.log('BabylonPage: onMove', transform);
+      world3dStore?.handleUserMove(transform);
+      PosBusService.sendMyTransform(transform); // move this to world3dStore??
+    },
+    250,
+    [],
+    {maxWait: 250}
+  );
 
   // usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
   //   if (sessionStore.userId === userId) {
