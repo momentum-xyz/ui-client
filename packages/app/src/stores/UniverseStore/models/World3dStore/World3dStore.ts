@@ -1,5 +1,5 @@
 import {cast, types} from 'mobx-state-tree';
-import {RequestModel, Dialog, Event3dEmitter} from '@momentum-xyz/core';
+import {RequestModel, Dialog, Event3dEmitter, ClickPositionInterface} from '@momentum-xyz/core';
 import {UnityControlInterface} from '@momentum-xyz/sdk';
 
 // import {api, ResolveNodeResponse} from 'api';
@@ -10,6 +10,8 @@ import {UnityPositionInterface} from 'core/interfaces';
 const DEFAULT_UNITY_VOLUME = 0.75;
 // const UNITY_VOLUME_STEP = 0.1;
 
+const defaultClickPosition = {x: 0, y: 0};
+
 const World3dStore = types
   .model('World3dStore', {
     // TODO: objectList: array
@@ -17,8 +19,11 @@ const World3dStore = types
     muted: false,
     volume: types.optional(types.number, DEFAULT_UNITY_VOLUME),
     nodeRequest: types.optional(RequestModel, {}),
-    lastClickPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
-    objectMenuPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
+    // lastClickPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
+    objectMenuPosition: types.optional(
+      types.frozen<ClickPositionInterface>(),
+      defaultClickPosition
+    ),
     objectMenu: types.optional(Dialog, {}),
     isCreatorMode: false,
     selectedObjectId: types.maybeNull(types.string),
@@ -173,12 +178,12 @@ const World3dStore = types
     //     this.setInitialVolume();
     //   }
     // },
-    setLastClickPosition(x: number, y: number) {
-      console.log('setLastClickPosition', x, y);
-      self.lastClickPosition = {x, y};
-      // this.closeAndResetObjectMenu();
-    },
-    handleClick(objectId: string) {
+    // setLastClickPosition(x: number, y: number) {
+    //   console.log('setLastClickPosition', x, y);
+    //   self.lastClickPosition = {x, y};
+    //   // this.closeAndResetObjectMenu();
+    // },
+    handleClick(objectId: string, clickPos?: ClickPositionInterface) {
       console.log('World3dStore : handleClick', objectId);
       if (!self.isCreatorMode) {
         return;
@@ -186,7 +191,7 @@ const World3dStore = types
 
       self._deselectObject();
 
-      // self.objectMenuPosition = self.lastClickPosition;
+      self.objectMenuPosition = clickPos || defaultClickPosition;
 
       self._selectObject(objectId);
       self.objectMenu.open();

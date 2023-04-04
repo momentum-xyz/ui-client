@@ -91,7 +91,7 @@ const WorldPage: FC = () => {
     };
   }, [worldId, universeStore]);
 
-  const handleObjectClick = (objectId: string, clickPositin: ClickPositionInterface) => {
+  const handleObjectClick = (objectId: string, clickPos: ClickPositionInterface) => {
     if (universeStore.isCreatorMode) {
       console.log('BabylonPage: handle object click in creator mode', objectId);
 
@@ -100,7 +100,7 @@ const WorldPage: FC = () => {
 
       navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
 
-      world3dStore?.handleClick(objectId);
+      world3dStore?.handleClick(objectId, clickPos);
     } else {
       console.log('BabylonPage: handle object click, NOT creator mode', objectId);
       // if (label === 'portal_odyssey') {
@@ -223,9 +223,11 @@ const WorldPage: FC = () => {
   return (
     <styled.Inner
       data-testid="UnityPage-test"
-      onClick={(event) => {
-        world3dStore?.setLastClickPosition(event.clientX, event.clientY);
-      }}
+      // it gets called after object click thus requiring to put some delays to its handler
+      // onObjectClick now provides this info, so commenting this out
+      // onClick={(event) => {
+      //   world3dStore?.setLastClickPosition(event.clientX, event.clientY);
+      // }}
     >
       <BabylonScene
         events={Event3dEmitter}
