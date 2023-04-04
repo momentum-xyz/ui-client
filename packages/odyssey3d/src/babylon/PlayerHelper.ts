@@ -21,7 +21,6 @@ const PLAYER_OFFSET = new Vector3(0, -0.5, 2);
 export class PlayerHelper {
   static camera: UniversalCamera;
   static player: TransformNode;
-  static playerAssetId: string;
   static playerMoveEvent: {unsubscribe: () => void} | undefined;
 
   static initialize(
@@ -82,7 +81,6 @@ export class PlayerHelper {
   }
 
   static spawnPlayer(scene: Scene, assetID: string) {
-    this.playerAssetId = assetID;
     const assetUrl = getAssetFileName(assetID);
     SceneLoader.LoadAssetContainer(
       ObjectHelper.assetRootUrl,

@@ -43,7 +43,6 @@ export class ObjectHelper {
   static firstID: string;
   static scene: Scene;
   static mySphere: Mesh;
-  static lastClick: ClickPositionInterface;
 
   static initialize(
     scene: Scene,
@@ -62,7 +61,7 @@ export class ObjectHelper {
         PlayerHelper.camera
       );
 
-      ObjectHelper.lastClick = {
+      const lastClick = {
         x: scene.pointerX,
         y: scene.pointerY
       };
@@ -77,7 +76,7 @@ export class ObjectHelper {
           }
           console.log('clicked on object with id: ' + parent.metadata);
           if (ObjectHelper.objectsMap.has(parent.metadata)) {
-            onObjectClick(parent.metadata, ObjectHelper.lastClick);
+            onObjectClick(parent.metadata, lastClick);
           }
           // TODO: Check if object is in the user map
 
