@@ -8,6 +8,7 @@ import {BabylonScene} from '@momentum-xyz/odyssey3d';
 import {
   ClickPositionInterface,
   Event3dEmitter,
+  ObjectTransformInterface,
   TransformNoScaleInterface,
   useI18n
 } from '@momentum-xyz/core';
@@ -136,6 +137,17 @@ const WorldPage: FC = () => {
     {maxWait: 250}
   );
 
+  const handleObjectTransform = useDebouncedCallback(
+    (objectId: string, transform: ObjectTransformInterface) => {
+      console.log('BabylonPage: onObjectTransform', objectId, transform);
+
+      PosBusService.sendObjectTransform(objectId, transform);
+    },
+    250,
+    [],
+    {maxWait: 250}
+  );
+
   // usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
   //   if (sessionStore.userId === userId) {
   //     toast.info(
@@ -238,9 +250,7 @@ const WorldPage: FC = () => {
         events={Event3dEmitter}
         onMove={handleUserMove}
         onObjectClick={handleObjectClick}
-        onObjectTransform={(objectId, transform) =>
-          console.log('onObjectTransform', objectId, transform)
-        }
+        onObjectTransform={handleObjectTransform}
         onUserClick={handleUserClick}
         onClickOutside={handleClickOutside}
       />

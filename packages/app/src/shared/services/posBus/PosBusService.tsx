@@ -7,7 +7,11 @@ import {
   PosbusPort
   // posbus
 } from '@momentum-xyz/posbus-client';
-import {Event3dEmitter, TransformNoScaleInterface} from '@momentum-xyz/core';
+import {
+  Event3dEmitter,
+  ObjectTransformInterface,
+  TransformNoScaleInterface
+} from '@momentum-xyz/core';
 
 // import {VoiceChatActionEnum} from 'api/enums';
 import {PosBusEventEmitter} from 'core/constants';
@@ -196,6 +200,13 @@ class PosBusService {
 
   static sendMyTransform(transform: TransformNoScaleInterface) {
     this.main.port?.postMessage([MsgType.MY_TRANSFORM, transform]);
+  }
+
+  static sendObjectTransform(objectId: string, transform: ObjectTransformInterface) {
+    this.main.port?.postMessage([
+      MsgType.OBJECT_TRANSFORM,
+      {id: objectId, object_transform: transform}
+    ]);
   }
 
   static requestObjectLock(objectId: string, lock: boolean) {
