@@ -45,16 +45,8 @@ class PosBusService {
   public static init(token: string, userId: string) {
     console.log('PosBusService init', token, userId);
 
-    console.log('import.meta.url', import.meta.url);
-    // TODO: nicer way to import these? some webpack and/or package.json export magic?
-    const workerUrl = new URL(
-      '../../../../../../node_modules/@momentum-xyz/posbus-client/dist/worker.mjs',
-      import.meta.url
-    );
-    const wasmUrl = new URL(
-      '../../../../../../node_modules/@momentum-xyz/posbus-client/dist/pbc.wasm',
-      import.meta.url
-    );
+    const workerUrl = new URL('@momentum-xyz/posbus-client/worker.mjs', import.meta.url);
+    const wasmUrl = new URL('@momentum-xyz/posbus-client/pbc.wasm', import.meta.url);
 
     loadClientWorker(workerUrl, wasmUrl)
       .then((client) => {
