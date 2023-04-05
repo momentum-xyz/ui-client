@@ -19,13 +19,19 @@ interface PropsInterface {
   searchResults: NftItemModelInterface[];
   lastCreatedItems: SliderItemInterface<string>[];
   mostStakedInItems: SliderItemInterface<string>[];
+  onShowDetails: (worldId: string) => void;
+  onVisit: (worldId: string) => void;
+  onStake: (worldId: string) => void;
 }
 
 const WorldList: FC<PropsInterface> = ({
   searchQuery,
   searchResults,
   lastCreatedItems,
-  mostStakedInItems
+  mostStakedInItems,
+  onShowDetails,
+  onVisit,
+  onStake
 }) => {
   return (
     <styled.Wrapper data-testid="WorldList-test">
@@ -54,9 +60,13 @@ const WorldList: FC<PropsInterface> = ({
                     Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                   </styled.ItemDesc>
                   <styled.Actions>
-                    <ButtonEllipse label="Info" icon="info_2" />
-                    <ButtonEllipse label="Visit" icon="fly-to" />
-                    <ButtonEllipse label="Stake" icon="stake" />
+                    <ButtonEllipse
+                      label="Info"
+                      icon="info_2"
+                      onClick={() => onShowDetails(item.uuid)}
+                    />
+                    <ButtonEllipse label="Visit" icon="fly-to" onClick={() => onVisit(item.uuid)} />
+                    <ButtonEllipse label="Stake" icon="stake" onClick={() => onStake(item.uuid)} />
                   </styled.Actions>
                 </styled.ItemContent>
               </styled.SearchResultItem>
@@ -66,11 +76,11 @@ const WorldList: FC<PropsInterface> = ({
           <styled.PopularContainer>
             <styled.BlockTitle>Most Staked In</styled.BlockTitle>
             <styled.Carousel>
-              <Slider items={mostStakedInItems} onClick={(i) => {}} />
+              <Slider items={mostStakedInItems} onClick={(uuid) => onShowDetails(uuid)} />
             </styled.Carousel>
             <styled.BlockTitle>New Odysseys</styled.BlockTitle>
             <styled.Carousel>
-              <Slider items={lastCreatedItems} onClick={() => {}} />
+              <Slider items={lastCreatedItems} onClick={(uuid) => onShowDetails(uuid)} />
             </styled.Carousel>
           </styled.PopularContainer>
         )}

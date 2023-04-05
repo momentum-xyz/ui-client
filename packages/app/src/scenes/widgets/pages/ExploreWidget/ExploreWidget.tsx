@@ -1,9 +1,11 @@
-import {FC, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n, i18n} from '@momentum-xyz/core';
 import {TabInterface, Tabs, Panel} from '@momentum-xyz/ui-kit-storybook';
 
 //import {ExplorePanel} from 'ui-kit';
+import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 
@@ -13,7 +15,7 @@ import * as styled from './ExploreWidget.styled';
 type ExploreTabType = 'worlds' | 'users';
 
 const TABS_LIST: TabInterface<ExploreTabType>[] = [
-  {id: 'worlds', icon: 'rabbit', label: i18n.t('labels.odysseys')},
+  {id: 'worlds', icon: 'rabbit_fill', label: i18n.t('labels.odysseys')},
   {id: 'users', icon: 'astronaut', label: i18n.t('labels.accounts')}
 ];
 
@@ -25,6 +27,11 @@ const ExploreWidget: FC = () => {
   const [activeTab, setActiveTab] = useState<ExploreTabType>('worlds');
 
   const {t} = useI18n();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    universe2dStore.searchQuery.resetModel();
+  }, [activeTab, universe2dStore]);
 
   return (
     <styled.Container data-testid="ExploreWidget">
@@ -46,6 +53,15 @@ const ExploreWidget: FC = () => {
                 searchResults={universe2dStore.filteredWorlds}
                 lastCreatedItems={universe2dStore.lastCreatedWorlds}
                 mostStakedInItems={universe2dStore.mostStatedInWorlds}
+                onShowDetails={(uuid) => {
+                  console.log(uuid);
+                }}
+                onVisit={(worldId) => {
+                  navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+                }}
+                onStake={(worldId) => {
+                  navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+                }}
               />
             )}
             {activeTab === 'users' && <UserList />}

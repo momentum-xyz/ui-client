@@ -29,14 +29,14 @@ const Universe2dStore = types.compose(
           : [];
       },
       get lastCreatedWorlds(): SliderItemInterface<string>[] {
-        return self.allWorlds.slice(0, 5).map((item) => ({
+        return self.allWorlds.slice(10, 15).map((item) => ({
           id: item.uuid,
           name: item.name,
           image: getImageAbsoluteUrl(item.image) || ''
         }));
       },
       get mostStatedInWorlds(): SliderItemInterface<string>[] {
-        return self.allWorlds.slice(5, 10).map((item) => ({
+        return self.allWorlds.slice(15, 20).map((item) => ({
           id: item.uuid,
           name: item.name,
           image: getImageAbsoluteUrl(item.image) || ''
