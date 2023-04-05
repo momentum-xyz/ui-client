@@ -22,8 +22,8 @@ export const Buttons = styled.div`
 export const NoWalletContainer = styled.div`
   display: flex;
   border-radius: 6px;
-  border: 1px solid ${(props) => props.theme.accent};
-  background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
+  border: 1px solid ${(props) => props.theme.accentText};
+  background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.2)};
   padding: 10px 10px;
   margin: 20px 0 0;
   gap: 8px;
@@ -37,7 +37,7 @@ export const AlertMessage = styled.div`
 
 export const BottomText = styled(Text)`
   text-decoration-line: underline;
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentText};
 `;
 
 export const Section = styled.div`
@@ -93,7 +93,7 @@ export const Separator = styled.hr`
   margin-top: -10px;
   margin-bottom: 20px;
   opacity: 20%;
-  border-color: ${(props) => props.theme.accent};
+  border-color: ${(props) => props.theme.accentText};
 `;
 
 export const ConsentContainer = styled.div`

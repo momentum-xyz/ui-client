@@ -47,7 +47,7 @@ export const CheckBox = styled.input`
   :checked::after {
     content: '';
     position: absolute;
-    background: ${(props) => props.theme.accent};
+    background: ${(props) => props.theme.accentText};
     width: calc(100% - 10px);
     height: calc(100% - 10px);
     top: 5px;

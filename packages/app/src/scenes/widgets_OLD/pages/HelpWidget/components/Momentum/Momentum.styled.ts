@@ -8,7 +8,7 @@ export const TextItem = styled.div`
 export const HighlightedSpan = styled.span`
   font-size: var(--font-size-m);
   font-weight: bold;
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentText};
   cursor: pointer;
 `;
 

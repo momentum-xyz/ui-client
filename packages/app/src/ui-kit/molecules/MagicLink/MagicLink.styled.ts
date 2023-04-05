@@ -13,7 +13,7 @@ export const Container = styled.div`
   grid-template-columns: 18px 1fr;
   align-items: center;
   border-radius: var(--radius);
-  background: ${(props) => props.theme.bg && rgba(props.theme.accent, 0.1)};
+  background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.1)};
   font-size: var(--font-size-xxs);
   text-transform: uppercase;
   color: ${(props) => props.theme.text};

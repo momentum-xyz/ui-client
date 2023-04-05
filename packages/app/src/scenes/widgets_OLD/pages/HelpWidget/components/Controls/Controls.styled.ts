@@ -21,5 +21,5 @@ export const ServerSpan = styled.span`
   font-size: var(--font-size-s);
   font-weight: bold;
   text-transform: uppercase;
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentText};
 `;

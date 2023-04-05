@@ -1,8 +1,7 @@
 import {ComponentMeta, Story} from '@storybook/react';
 
-import {Hexagon} from '../../atoms';
+import * as TabsStories from '../Tabs/Tabs.stories';
 import * as FrameTextStories from '../FrameText/FrameText.stories';
-import * as FrameTabsStories from '../FrameTabs/FrameTabs.stories';
 import * as FrameStepsStories from '../FrameSteps/FrameSteps.stories';
 
 import Panel, {PanelPropsInterface} from './Panel';
@@ -36,7 +35,7 @@ export const Primary = Template.bind({});
 Primary.args = {
   title: 'Long title of sidebar',
   variant: 'primary',
-  hexagon: <Hexagon type="secondary-borderless" iconName="planet" />
+  icon: 'planet'
 };
 
 export const PrimaryTextFrame = Template.bind({});
@@ -48,7 +47,7 @@ PrimaryTextFrame.args = {
 export const PrimaryTabsFrame = Template.bind({});
 PrimaryTabsFrame.args = {
   ...Primary.args,
-  children: <FrameTabsStories.General tabList={[]} {...FrameTabsStories.General.args} />
+  children: <TabsStories.General tabList={[]} {...TabsStories.General.args} />
 };
 
 export const PrimaryStepsFrame = Template.bind({});
@@ -62,5 +61,5 @@ Secondary.args = {
   title: 'Long odyssey name',
   label: 'Connected',
   variant: 'secondary',
-  hexagon: <Hexagon type="fourth-borderless" imageSrc={IMAGE_SRC} />
+  image: IMAGE_SRC
 };

@@ -13,7 +13,7 @@ export const Attendee = styled.div`
 `;
 
 export const AttendeeAvatar = styled(Avatar)`
-  border-color: ${(props) => props.theme.accent} !important;
+  border-color: ${(props) => props.theme.accentText} !important;
   border-width: 2px !important;
 `;
 

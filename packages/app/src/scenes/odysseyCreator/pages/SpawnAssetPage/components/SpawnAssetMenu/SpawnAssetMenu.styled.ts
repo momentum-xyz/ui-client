@@ -23,12 +23,12 @@ export const Tab = styled.button`
 
   &:not(&.selected):hover {
     ${TabText} {
-      color: ${(props) => props.theme.accent};
+      color: ${(props) => props.theme.accentText};
     }
   }
 
   &.selected {
-    background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};
+    background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.1)};
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
   }

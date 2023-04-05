@@ -41,6 +41,10 @@ export const Container = styled.div`
       background: ${(props) => props.theme.danger && rgba(props.theme.danger, 0.4)};
     }
 
+    &.search {
+      padding: 0 40px 0 20px;
+    }
+
     &:disabled {
       background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
       color: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
@@ -64,4 +68,13 @@ export const Container = styled.div`
   &.wide {
     width: 100%;
   }
+`;
+
+export const IconSearch = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  right: 10px;
+  bottom: 0;
+  top: 0;
 `;

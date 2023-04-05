@@ -220,8 +220,8 @@ export const Message = styled.div`
   height: var(--message-height);
   justify-content: center;
   align-items: center;
-  border: 2px solid ${(props) => props.theme.accent};
-  background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
+  border: 2px solid ${(props) => props.theme.accentText};
+  background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.2)};
   color: ${(props) => props.theme.text};
   font-size: var(--font-size-xs);
   border-radius: var(--message-radius);
@@ -229,6 +229,6 @@ export const Message = styled.div`
 
 export const Link = styled.a`
   padding: 0 0 0 5px;
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentText};
   font-size: var(--font-size-xs);
 `;

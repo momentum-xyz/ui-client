@@ -1,4 +1,8 @@
 :root {
+  /* MENU */
   --menu-height: 70px;
   --menu-padding: 10px;
+
+  /* MENU */
+  --widget-width-big: 570px;
 }

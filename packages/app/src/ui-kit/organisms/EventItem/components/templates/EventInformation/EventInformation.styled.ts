@@ -38,7 +38,7 @@ export const AttendeesContainer = styled.div`
 export const AttendeeAvatar = styled(Avatar)`
   width: 40px !important;
   height: 40px !important;
-  border: 2px solid ${(props) => props.theme.accent};
+  border: 2px solid ${(props) => props.theme.accentText};
 `;
 
 export const AttendeeNameText = styled(Text)`
@@ -62,7 +62,7 @@ export const MoreAttendees = styled.div`
   width: 40px !important;
   height: 40px !important;
   border-radius: 50%;
-  border: 2px solid ${(props) => props.theme.accent};
+  border: 2px solid ${(props) => props.theme.accentText};
 `;
 
 export const AttendeesCount = styled(Text)`
@@ -73,7 +73,7 @@ export const AttendeesCount = styled(Text)`
   height: 30px !important;
   border-radius: 50%;
   color: black;
-  background: ${(props) => props.theme.accent};
+  background: ${(props) => props.theme.accentText};
 `;
 
 export const EventTitle = styled(Text)`

@@ -15,7 +15,7 @@ export const SeekBar = styled.input`
   align-items: center;
   transition: width 1s;
   height: 2.39px;
-  background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.0)};
+  background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.0)};
   ::-webkit-slider-thumb {
     appearance: none;
     width: 8px;
@@ -29,7 +29,7 @@ export const SeekBar = styled.input`
 export const SeekBarContainer = styled.div`
   position: relative;
   align-items: center;
-  background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
+  background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.2)};
   border-radius: 10px;
   height: 2.39px;
   width: 100%;
@@ -37,7 +37,7 @@ export const SeekBarContainer = styled.div`
 
 export const BarThumbPosition = styled.div<{width: string}>`
   position: absolute;
-  background: ${(props) => props.theme.accent};
+  background: ${(props) => props.theme.accentText};
   border-radius: 10px;
   height: 2px;
   width: ${(props) => props.width};

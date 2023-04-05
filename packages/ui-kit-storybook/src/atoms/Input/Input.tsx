@@ -3,6 +3,8 @@ import {IMaskInput} from 'react-imask';
 import cn from 'classnames';
 import IMask from 'imask';
 
+import {IconSvg} from '../IconSvg';
+
 import {stringInputMask} from './Input.masks';
 import * as styled from './Input.styled';
 
@@ -12,6 +14,7 @@ export interface InputPropsInterface {
   placeholder?: string;
   size?: 'normal' | 'small';
   disabled?: boolean;
+  isSearch?: boolean;
   danger?: boolean;
   wide?: boolean;
   onChange: (value: string) => void;
@@ -19,13 +22,14 @@ export interface InputPropsInterface {
 }
 
 const Input: FC<InputPropsInterface> = ({
+  size = 'normal',
   opts = stringInputMask,
   value,
   placeholder,
   disabled,
   danger,
   wide,
-  size = 'normal',
+  isSearch,
   onChange,
   onEnter
 }) => {
@@ -47,13 +51,19 @@ const Input: FC<InputPropsInterface> = ({
         // @ts-ignore: Typescript issues in library
         placeholder={placeholder}
         disabled={disabled}
-        className={cn(size, danger && 'danger')}
+        className={cn(size, danger && 'danger', isSearch && 'search')}
         onKeyPress={(event: KeyboardEvent) => {
           if (event.key === 'Enter') {
             onEnter?.();
           }
         }}
       />
+
+      {isSearch && (
+        <styled.IconSearch>
+          <IconSvg name="search" size="m" isWhite />
+        </styled.IconSearch>
+      )}
     </styled.Container>
   );
 };

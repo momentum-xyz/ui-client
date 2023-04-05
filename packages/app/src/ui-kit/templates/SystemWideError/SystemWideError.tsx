@@ -9,10 +9,9 @@ import * as styled from './SystemWideError.styled';
 interface PropsInterface extends PropsWithThemeInterface {
   text: string | string[] | null;
   showRefreshButton?: boolean;
-  theme: any; // TODO Add proper
 }
 
-const SystemWideError: FC<PropsInterface> = ({theme, text, showRefreshButton}) => {
+const SystemWideError: FC<PropsInterface> = ({text, showRefreshButton}) => {
   const {t} = useI18n();
 
   const texts = useMemo(() => (Array.isArray(text) ? text : [text]), [text]);
@@ -23,14 +22,14 @@ const SystemWideError: FC<PropsInterface> = ({theme, text, showRefreshButton}) =
 
   return (
     <styled.Background background={background}>
-      <PanelLayout isBodyExtendingToEdges theme={theme}>
+      <PanelLayout isBodyExtendingToEdges>
         <styled.PanelContent>
           <styled.IconContainer>
-            <IconSvg name="alert" size="extra-large" theme={theme} isWhite />
+            <IconSvg name="alert" size="extra-large" isWhite />
           </styled.IconContainer>
           <styled.InnerContent>
             {texts.map((text) => (
-              <Text text={text} key={text} size="m" weight="light" theme={theme} />
+              <Text text={text} key={text} size="m" weight="light" />
             ))}
             {showRefreshButton && (
               <styled.ActionsContainer>

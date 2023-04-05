@@ -1,6 +1,5 @@
 import React, {FC, useEffect} from 'react';
 import {toast} from 'react-toastify';
-import {useTheme} from 'styled-components';
 import {PanelLayout} from '@momentum-xyz/ui-kit';
 import {absoluteLink, useI18n} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
@@ -18,7 +17,6 @@ const CalendarWidget: FC = () => {
   const {eventList, deleteConfirmationDialog} = calendarStore;
 
   const {t} = useI18n();
-  const theme = useTheme();
 
   useEffect(() => {
     eventList.fetchSpaceEvents(universeStore.worldId);
@@ -60,7 +58,7 @@ const CalendarWidget: FC = () => {
   };
 
   return (
-    <styled.Modal theme={theme} data-testid="CalendarWidget-test">
+    <styled.Modal data-testid="CalendarWidget-test">
       <styled.Container className="noScrollIndicator">
         <PanelLayout
           componentSize={{width: '1063px'}}

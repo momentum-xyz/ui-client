@@ -53,11 +53,11 @@ export const Container = styled.div`
 
   @keyframes cssAnimation {
     0% {
-      border: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
+      border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 1)};
     }
 
     100% {
-      border: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0)};
+      border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0)};
     }
   }
 
