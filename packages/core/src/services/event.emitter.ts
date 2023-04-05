@@ -4,7 +4,8 @@ import {
   Object3dInterface,
   Odyssey3dUserInterface,
   Odyssey3dUserTransformInterface,
-  Texture3dInterface
+  Texture3dInterface,
+  WorldInfoInterface
 } from '../interfaces';
 
 // TODO: Define proper types
@@ -33,3 +34,14 @@ export type Event3dType = {
 export const Event3dEmitter = new EventEmitter<Event3dType>();
 
 export type Event3dEmitterType = typeof Event3dEmitter;
+
+export type Universe3dType = {
+  WorldAdded: (world: WorldInfoInterface) => void;
+  // WorldChanged: (world: WorldInfoInterface) => void;
+  UserAdded: (user: Odyssey3dUserInterface) => void;
+  // UserChanged: (user: Odyssey3dUserInterface) => void;
+};
+
+export const Universe3dEmitter = new EventEmitter<Universe3dType>();
+
+export type Universe3dEmitterType = typeof Universe3dEmitter;

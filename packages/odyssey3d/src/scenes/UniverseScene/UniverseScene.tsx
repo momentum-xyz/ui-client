@@ -1,10 +1,23 @@
 import {FC} from 'react';
 import {Scene} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
+import {useMutableCallback} from '@momentum-xyz/ui-kit';
+import {Universe3dEmitterType} from '@momentum-xyz/core';
 
 import {PlayerHelper, LightHelper, SkyboxHelper} from '../../babylon';
 
-export const UniverseScene: FC = () => {
+export interface PropsInterface {
+  events: Universe3dEmitterType;
+  onWorldClick: (id: string) => void;
+  onUserClick: (id: string) => void;
+  onClickOutside: () => void;
+}
+
+export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
+  const onWorldClick = useMutableCallback(callbacks.onWorldClick);
+  const onUserClick = useMutableCallback(callbacks.onUserClick);
+  const onClickOutside = useMutableCallback(callbacks.onClickOutside);
+
   const onSceneReady = (scene: Scene) => {
     console.log('onSceneReady', scene);
     const view = scene.getEngine().getRenderingCanvas();
@@ -13,6 +26,18 @@ export const UniverseScene: FC = () => {
       PlayerHelper.initialize(scene, view);
       LightHelper.initialize(scene);
     }
+
+    console.log('TODO attach callbacks', {onWorldClick, onUserClick, onClickOutside});
+
+    events.on('WorldAdded', (world) => {
+      console.log('WorldAdded', world);
+      // TODO
+    });
+
+    events.on('UserAdded', (user) => {
+      console.log('UserAdded', user);
+      // TODO
+    });
 
     SkyboxHelper.set360Skybox(
       scene,
@@ -32,7 +57,7 @@ export const UniverseScene: FC = () => {
   };
 
   const onRender = (scene: Scene) => {
-    console.log('onRender', scene);
+    // console.log('onRender', scene);
   };
 
   return (

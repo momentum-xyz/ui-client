@@ -1,6 +1,7 @@
 import {FC, useEffect, useState} from 'react';
 import {
-  Event3dEmitter
+  Event3dEmitter,
+  Universe3dEmitter
   // Object3dInterface
 } from '@momentum-xyz/core';
 import {Toggle, Text} from '@momentum-xyz/ui-kit';
@@ -82,7 +83,35 @@ const WorldEmulator: FC = () => {
 };
 
 const UniverseEmulator = () => {
-  return <UniverseScene />;
+  useEffect(() => {
+    for (let i = 0; i < 10; i++) {
+      Universe3dEmitter.emit('WorldAdded', {
+        id: '0d5b35b9-33c0-d917-c095-7ba3670755da',
+        name: 'Cool world ' + i,
+        description: 'Cool description',
+        image: 'https://picsum.photos/100',
+        owner: '123' + i
+      });
+    }
+
+    for (let i = 0; i < 10; i++) {
+      Universe3dEmitter.emit('UserAdded', {
+        id: '123',
+        name: 'Cool user',
+        avatar: 'https://picsum.photos/100',
+        is_guest: false
+      });
+    }
+  }, []);
+
+  return (
+    <UniverseScene
+      events={Universe3dEmitter}
+      onWorldClick={(e) => console.log('onWorldClick', e)}
+      onUserClick={(e) => console.log('onUserClick', e)}
+      onClickOutside={() => console.log('onClickOutside')}
+    />
+  );
 };
 
 // TODO Split into several files
