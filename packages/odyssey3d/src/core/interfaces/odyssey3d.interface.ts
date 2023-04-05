@@ -15,6 +15,9 @@ export interface Odyssey3dPropsInterface {
   onObjectClick: (objectId: string, clickPosition: ClickPositionInterface) => void;
   onObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
 
+  // Can be used for clearing gizmo, etc
+  onClickOutside: () => void;
+
   // click on any user
   onUserClick: (userId: string, clickPosition: ClickPositionInterface) => void;
 

@@ -6,3 +6,4 @@ export * from './useSortableData';
 export * from './useResize';
 export * from './useScroll';
 export * from './useCoordinates';
+export * from './useMutableCallback';

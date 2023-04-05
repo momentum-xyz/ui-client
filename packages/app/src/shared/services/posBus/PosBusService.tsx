@@ -7,7 +7,11 @@ import {
   PosbusPort
   // posbus
 } from '@momentum-xyz/posbus-client';
-import {Event3dEmitter, TransformNoScaleInterface} from '@momentum-xyz/core';
+import {
+  Event3dEmitter,
+  ObjectTransformInterface,
+  TransformNoScaleInterface
+} from '@momentum-xyz/core';
 
 // import {VoiceChatActionEnum} from 'api/enums';
 import {PosBusEventEmitter} from 'core/constants';
@@ -45,16 +49,8 @@ class PosBusService {
   public static init(token: string, userId: string) {
     console.log('PosBusService init', token, userId);
 
-    console.log('import.meta.url', import.meta.url);
-    // TODO: nicer way to import these? some webpack and/or package.json export magic?
-    const workerUrl = new URL(
-      '../../../../../../node_modules/@momentum-xyz/posbus-client/dist/worker.mjs',
-      import.meta.url
-    );
-    const wasmUrl = new URL(
-      '../../../../../../node_modules/@momentum-xyz/posbus-client/dist/pbc.wasm',
-      import.meta.url
-    );
+    const workerUrl = new URL('@momentum-xyz/posbus-client/worker.mjs', import.meta.url);
+    const wasmUrl = new URL('@momentum-xyz/posbus-client/pbc.wasm', import.meta.url);
 
     loadClientWorker(workerUrl, wasmUrl)
       .then((client) => {
@@ -196,6 +192,13 @@ class PosBusService {
 
   static sendMyTransform(transform: TransformNoScaleInterface) {
     this.main.port?.postMessage([MsgType.MY_TRANSFORM, transform]);
+  }
+
+  static sendObjectTransform(objectId: string, transform: ObjectTransformInterface) {
+    this.main.port?.postMessage([
+      MsgType.OBJECT_TRANSFORM,
+      {id: objectId, object_transform: transform}
+    ]);
   }
 
   static requestObjectLock(objectId: string, lock: boolean) {

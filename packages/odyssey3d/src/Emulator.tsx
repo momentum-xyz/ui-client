@@ -76,6 +76,7 @@ const WorldEmulator: FC = () => {
         console.log('onObjectTransform', objectId, transform)
       }
       onUserClick={(e) => console.log('onUserClick', e)}
+      onClickOutside={() => console.log('onClickOutside')}
     />
   );
 };
