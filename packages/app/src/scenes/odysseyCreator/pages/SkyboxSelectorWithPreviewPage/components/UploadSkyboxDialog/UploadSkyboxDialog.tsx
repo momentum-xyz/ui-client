@@ -4,7 +4,6 @@ import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import cn from 'classnames';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import {useTheme} from 'styled-components';
 import {toast} from 'react-toastify';
 
 import {ToastContent} from 'ui-kit';
@@ -29,7 +28,6 @@ const UploadSkyboxDialog: FC = () => {
   const worldId = universeStore.worldId;
 
   const {t} = useI18n();
-  const theme = useTheme();
 
   useEffect(() => {
     world3dStore?.changeKeyboardControl(false);
@@ -157,7 +155,6 @@ const UploadSkyboxDialog: FC = () => {
                 />
               )}
               <FileUploader
-                theme={theme}
                 label={value ? t('actions.changeImage') : t('actions.selectImage')}
                 dragActiveLabel={t('fileUploader.dragActiveLabel')}
                 maxSize={MAX_ASSET_SIZE_B}

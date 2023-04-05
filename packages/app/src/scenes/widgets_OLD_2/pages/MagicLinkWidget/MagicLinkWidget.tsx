@@ -1,6 +1,5 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTheme} from 'styled-components';
 import {toast} from 'react-toastify';
 import {Button, Dialog, Text} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
@@ -19,7 +18,6 @@ const MagicLinkWidget: FC = () => {
   const {magicLinkStore} = widgetsStore;
   const {address, copyToClipBoard} = magicLinkStore;
 
-  const theme = useTheme();
   const {t} = useI18n();
 
   useEffect(() => {
@@ -50,7 +48,6 @@ const MagicLinkWidget: FC = () => {
 
   return (
     <Dialog
-      theme={theme}
       icon="link"
       iconSize="medium"
       position="rightBottom"
@@ -63,9 +60,9 @@ const MagicLinkWidget: FC = () => {
       showCloseButton
     >
       <styled.Container data-testid="MagicLinkWidget-test">
-        <Text theme={theme} text={t('messages.magicLink')} align="left" size="xxs" />
+        <Text text={t('messages.magicLink')} align="left" size="xxs" />
         <styled.Content>
-          <MagicLink icon="locate" theme={theme} value={address} />
+          <MagicLink icon="locate" value={address} />
         </styled.Content>
         <styled.Actions>
           <Button

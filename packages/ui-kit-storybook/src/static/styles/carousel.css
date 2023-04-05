@@ -1,0 +1,46 @@
+.react-multi-carousel-dot-list {
+  bottom: 8px;
+  gap: 6px;
+}
+
+.react-multi-carousel-dot button {
+  margin: 0;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--white);
+}
+
+.react-multi-carousel-dot--active button {
+  background: var(--white);
+}
+
+.react-multiple-carousel__arrow {
+  background: initial;
+  min-width: initial;
+  min-height: initial;
+}
+
+.react-multiple-carousel__arrow::before {
+  padding: 0 0 8px 0;
+  font-size: 22px;
+}
+
+.react-multiple-carousel__arrow--right {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding: 0 14px 0 6px;
+}
+
+.react-multiple-carousel__arrow--left {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0 6px 0 14px;
+}
+
+.react-multiple-carousel__arrow--left:hover,
+.react-multiple-carousel__arrow--right:hover {
+  background: initial;
+  opacity: .8;
+}

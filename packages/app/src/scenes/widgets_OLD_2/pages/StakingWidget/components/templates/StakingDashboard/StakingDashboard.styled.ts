@@ -62,7 +62,7 @@ export const Separator = styled.hr`
   margin-top: -10px;
   margin-bottom: 20px;
   opacity: 20%;
-  border-color: ${(props) => props.theme.accent};
+  border-color: ${(props) => props.theme.accentText};
 `;
 
 export const LabeledLineContainer = styled.div`

@@ -1,6 +1,5 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTheme} from 'styled-components';
 import {Dialog, Loader, Text} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
@@ -17,7 +16,6 @@ const NotificationsWidget: FC = () => {
   const {notificationsStore} = widgetsStore;
   const {dialog, notifications} = notificationsStore;
 
-  const theme = useTheme();
   const {t} = useI18n();
   const {goToOdysseyHome} = useNavigation();
 
@@ -35,7 +33,6 @@ const NotificationsWidget: FC = () => {
 
   return (
     <Dialog
-      theme={theme}
       icon="clock-two"
       iconSize="medium"
       position="rightBottom"

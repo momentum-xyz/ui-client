@@ -8,10 +8,10 @@ interface PropsInterface extends PropsWithThemeInterface {
   value?: string | null;
 }
 
-const MagicLink: FC<PropsInterface> = ({icon, value, theme}) => {
+const MagicLink: FC<PropsInterface> = ({icon, value}) => {
   return (
     <styled.Container data-testid="Location-test">
-      <IconSvg theme={theme} name={icon} />
+      <IconSvg name={icon} />
       <span>{value}</span>
     </styled.Container>
   );

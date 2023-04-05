@@ -1,3 +1,4 @@
+import 'react-multi-carousel/lib/styles.css';
 import './static/styles/main.css';
 
 export * from './atoms';

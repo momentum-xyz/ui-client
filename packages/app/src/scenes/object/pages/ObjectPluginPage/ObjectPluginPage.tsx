@@ -71,6 +71,7 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
   };
 
   const pluginProps: PluginPropsInterface = {
+    // @ts-ignore: FIXME
     theme,
     isAdmin,
     isExpanded: pluginLoader.isExpanded,

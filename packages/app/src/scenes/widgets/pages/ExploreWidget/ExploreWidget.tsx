@@ -1,54 +1,87 @@
-import React, {FC, useEffect} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
+import {useI18n, i18n} from '@momentum-xyz/core';
+import {TabInterface, Tabs, Panel} from '@momentum-xyz/ui-kit-storybook';
 
-import {useStore} from 'shared/hooks';
-import {ExplorePanel} from 'ui-kit';
+//import {ExplorePanel} from 'ui-kit';
 import {ROUTES} from 'core/constants';
-import {ExploreStore} from 'scenes/widgets/stores';
+import {useStore} from 'shared/hooks';
+import {WidgetEnum} from 'core/enums';
+
+import {WorldList, UserList} from './components';
+import * as styled from './ExploreWidget.styled';
+
+type ExploreTabType = 'worlds' | 'users';
+
+const TABS_LIST: TabInterface<ExploreTabType>[] = [
+  {id: 'worlds', icon: 'rabbit_fill', label: i18n.t('labels.odysseys')},
+  {id: 'users', icon: 'astronaut', label: i18n.t('labels.accounts')}
+];
 
 const ExploreWidget: FC = () => {
-  const {nftStore, widgetsStore, sessionStore} = useStore();
-  const exploreStore = ExploreStore.create();
+  const {universeStore, widgetManagerStore} = useStore();
+  const {universe2dStore} = universeStore;
+  const {close} = widgetManagerStore;
 
+  const [activeTab, setActiveTab] = useState<ExploreTabType>('worlds');
+
+  const {t} = useI18n();
   const navigate = useNavigate();
 
   useEffect(() => {
-    exploreStore.init();
-
-    const timeInterval = setInterval(() => {
-      exploreStore.fetchNewsfeed();
-    }, 15000);
-
-    return () => {
-      clearInterval(timeInterval);
-    };
-  }, [exploreStore]);
+    universe2dStore.searchQuery.resetModel();
+  }, [activeTab, universe2dStore]);
 
   return (
-    <ExplorePanel
-      newsfeed={exploreStore.newsfeed}
-      nftItems={nftStore.nftItems}
-      searchQuery={nftStore.searchQuery}
-      odysseyList={nftStore.searchedNftItems}
-      currentUser={sessionStore.user}
-      onSearch={nftStore.searchNft}
-      onSelect={(nft) => {
-        widgetsStore.odysseyInfoStore.open(nft.uuid);
-      }}
-      onTeleport={(nft) => {
-        console.log(nft);
-        if (nft.uuid) {
-          navigate(generatePath(ROUTES.odyssey.base, {worldId: nft.uuid}), {replace: true});
-        }
-      }}
-      onAttend={(nft) => {
-        console.log(nft);
-      }}
-      // FIXME id type
-      onConnect={(id) => nftStore.setConnectToNftItemId(+id)}
-      onOpenOdyssey={(uuid) => widgetsStore.odysseyInfoStore.open(uuid)}
-    />
+    <styled.Container data-testid="ExploreWidget">
+      <Panel
+        icon="search"
+        variant="primary"
+        title={t('labels.explore')}
+        onClose={() => close(WidgetEnum.EXPLORE)}
+      >
+        <styled.Wrapper>
+          <styled.Tabs>
+            <Tabs tabList={TABS_LIST} activeId={activeTab} onSelect={setActiveTab} />
+          </styled.Tabs>
+
+          <styled.Content>
+            {activeTab === 'worlds' && (
+              <WorldList
+                searchQuery={universe2dStore.searchQuery}
+                searchResults={universe2dStore.filteredWorlds}
+                lastCreatedItems={universe2dStore.lastCreatedWorlds}
+                mostStakedInItems={universe2dStore.mostStatedInWorlds}
+                onShowDetails={(worldId) => {
+                  console.log(worldId);
+                }}
+                onVisit={(worldId) => {
+                  navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+                }}
+                onStake={(worldId) => {
+                  navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+                }}
+              />
+            )}
+            {activeTab === 'users' && (
+              <UserList
+                searchQuery={universe2dStore.searchQuery}
+                searchResults={universe2dStore.filteredUsers}
+                lastCreatedItems={universe2dStore.lastCreatedUsers}
+                mostStakedItems={universe2dStore.mostStatedUsers}
+                onShowDetails={(userId) => {
+                  console.log(userId);
+                }}
+                onVisit={(userId) => {
+                  console.log(userId);
+                }}
+              />
+            )}
+          </styled.Content>
+        </styled.Wrapper>
+      </Panel>
+    </styled.Container>
   );
 };
 

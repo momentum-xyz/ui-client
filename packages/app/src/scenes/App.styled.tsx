@@ -9,7 +9,7 @@ export const GlobalStyles = createGlobalStyle`
 
   ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    border: 5px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.6)};
+    border: 5px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
     background-clip: content-box;
     max-height: 40px;
   }
@@ -30,7 +30,7 @@ export const GlobalStyles = createGlobalStyle`
     color: ${(props) => props.theme.text};
     
     &:hover {
-    color: ${(props) => props.theme.accent};
+    color: ${(props) => props.theme.accentText};
     }
   }
   
@@ -40,26 +40,26 @@ export const GlobalStyles = createGlobalStyle`
     background-color: ${(props) => props.theme.bg} !important;
     color: ${(props) => props.theme.text} !important;
     border: 1px solid;
-    border-color: ${(props) => props.theme.accent} !important;
+    border-color: ${(props) => props.theme.accentText} !important;
     border-radius: 6px;
     padding: 5px;
   }
   .react-datepicker__header {
     background-color: ${(props) => props.theme.bg} !important;
     border-bottom: 1px solid !important;
-    border-bottom-color: ${(props) => props.theme.accent} !important;
+    border-bottom-color: ${(props) => props.theme.accentText} !important;
     border-top-left-radius: 6px !important;
   }
   .react-datepicker__current-month,
   .react-datepicker-time__header,
   .react-datepicker-year-header {
     margin-top: 0;
-    color: ${(props) => props.theme.accent} !important;
+    color: ${(props) => props.theme.accentText} !important;
     font-weight: bold;
     font-size: 0.944rem;
   }
   .react-datepicker__day-name {
-    color: ${(props) => props.theme.accent} !important;
+    color: ${(props) => props.theme.accentText} !important;
   }
   .react-datepicker__day,
   .react-datepicker__time-name {
@@ -71,14 +71,14 @@ export const GlobalStyles = createGlobalStyle`
     margin: 0.166rem;
   }
   .react-datepicker__navigation-icon::before {
-    border-color: ${(props) => props.theme.accent} !important;
+    border-color: ${(props) => props.theme.accentText} !important;
   }
   .react-datepicker__day--today {
     font-weight: 800;
     color: var(--white) !important;
   }
   .react-datepicker__day:hover {
-    background-color: ${(props) => props.theme.accent} !important;
+    background-color: ${(props) => props.theme.accentText} !important;
   }
   .react-datepicker__input-time-container {
     display: flex;
@@ -89,7 +89,7 @@ export const GlobalStyles = createGlobalStyle`
     text-transform: uppercase;
     font-weight: 700;
     font-size: 11px;
-    color: ${(props) => props.theme.accent} !important;
+    color: ${(props) => props.theme.accentText} !important;
     margin: 0;
   }
   .react-datepicker-time__input-container .react-datepicker-time__input {
@@ -106,7 +106,7 @@ export const GlobalStyles = createGlobalStyle`
 
   .react-datepicker-popper[data-placement^='bottom'] .react-datepicker__triangle::before,
   .react-datepicker-popper[data-placement^='bottom'] .react-datepicker__triangle::after {
-    border-bottom-color: ${(props) => props.theme.accent} !important;
+    border-bottom-color: ${(props) => props.theme.accentText} !important;
   }
   .react-datepicker-time__input {
     color: var(--white) !important;
@@ -123,23 +123,23 @@ export const GlobalStyles = createGlobalStyle`
     ul.react-datepicker__time-list
     li.react-datepicker__time-list-item:hover {
     cursor: pointer;
-    background-color: ${(props) => props.theme.accent} !important;
+    background-color: ${(props) => props.theme.accentText} !important;
   }
   .react-datepicker__time-container {
-    border-left-color: ${(props) => props.theme.accent} !important;
+    border-left-color: ${(props) => props.theme.accentText} !important;
   }
   .react-datepicker__time-container .react-datepicker__time {
     background: ${(props) => props.theme.bg} !important;
   }
   
   a {
-  color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.8)};
+  color: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.8)};
   background-color: transparent;
   text-decoration: none;
   cursor: pointer;
   
     :hover {
-      color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
+      color: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 1)};
     }
   }
 

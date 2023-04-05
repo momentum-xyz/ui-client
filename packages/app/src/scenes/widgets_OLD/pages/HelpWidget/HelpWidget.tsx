@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTheme} from 'styled-components';
 import {Dialog, Text} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
@@ -17,8 +16,6 @@ const HelpWidget: React.FC = () => {
   const {widgetStore_OLD, universeStore} = useStore();
   const {helpStore} = widgetStore_OLD;
 
-  const theme = useTheme();
-
   useEffect(() => {
     helpStore.init(universeStore.worldId);
 
@@ -29,7 +26,6 @@ const HelpWidget: React.FC = () => {
 
   return (
     <Dialog
-      theme={theme}
       title={t('helpSection.title')}
       headerStyle="uppercase"
       icon="question"

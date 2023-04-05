@@ -21,7 +21,7 @@ export const Header = styled.div`
   align-items: center;
   padding: 10px 4px;
   margin: 0 10px;
-  border-bottom: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};
+  border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.1)};
 `;
 
 export const HeaderItemsGroup = styled.div`

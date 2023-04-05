@@ -5,6 +5,7 @@ export * from './Loader';
 export * from './Input';
 export * from './Select';
 export * from './Switch';
+export * from './Frame';
 export * from './Checkbox';
 export * from './Button';
 export * from './ButtonRound';

@@ -31,8 +31,8 @@ export const EnterLeaveButton = styled.button`
   justify-content: center;
   align-items: center;
 
-  background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};
-  border: 1px solid ${(props) => props.theme.accent};
+  background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.1)};
+  border: 1px solid ${(props) => props.theme.accentText};
 
   border-left: 0;
   border-right: 0;
@@ -62,5 +62,5 @@ export const VoiceAction = styled.button`
 `;
 
 export const EnterLeaveButtonLabel = styled(Text)`
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentText};
 `;

@@ -56,14 +56,14 @@ export const Link = styled.a`
 
 export const Statistics = styled.div`
   padding: 0 6px;
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentText};
   font-size: var(--font-size-xs);
   font-weight: 500;
 `;
 
 export const StatisticsData = styled.div`
   padding: 0 6px 20.5px 6px;
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentText};
   font-size: var(--font-size-xs);
   font-weight: 500;
 `;
