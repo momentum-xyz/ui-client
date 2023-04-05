@@ -33,7 +33,7 @@ export const ConnectedInfo = styled.div`
 `;
 
 export const Date = styled.div`
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentText};
   font-weight: 400;
   font-size: 8px;
 `;

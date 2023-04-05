@@ -19,5 +19,5 @@ export const UsersCount = styled(Text)`
   height: 23px !important;
   border-radius: 50%;
   color: black;
-  background: ${(props) => props.theme.accent};
+  background: ${(props) => props.theme.accentText};
 `;

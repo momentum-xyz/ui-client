@@ -96,11 +96,7 @@ const UnityLoader: React.FC<PropsWithThemeInterface> = ({theme}) => {
           />
         </styled.RabbitWrapper>
         <styled.Version>
-          <Text
-            size="s"
-            theme={theme}
-            text={t('messages.version', {version: appVariables.APP_VERSION})}
-          />
+          <Text size="s" text={t('messages.version', {version: appVariables.APP_VERSION})} />
         </styled.Version>
       </styled.Wrapper>
 

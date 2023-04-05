@@ -1,41 +1,46 @@
 import {types} from 'mobx-state-tree';
+import {cloneDeep} from 'lodash-es';
 import {ResetModel} from '@momentum-xyz/core';
+import {SliderItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
-import {NftItemModelInterface} from 'core/models';
-import {getRootStore} from 'core/utils';
+import {NftItemModelInterface, SearchQuery} from 'core/models';
+import {getImageAbsoluteUrl, getRootStore} from 'core/utils';
 
 const Universe2dStore = types.compose(
   ResetModel,
   types
     .model('Universe2dStore', {
-      // allUsers: types.optional(types.array(types.frozen<NftItemModelInterface>()), []),
-      // allWorlds: types.optional(types.array(types.frozen<NftItemModelInterface>()), [])
+      allUsers: types.optional(types.array(types.frozen<NftItemModelInterface>()), []),
+      allWorlds: types.optional(types.array(types.frozen<NftItemModelInterface>()), []),
+      searchQuery: types.optional(SearchQuery, {})
     })
     .actions((self) => ({
       init(): void {
         // TODO: implementation
-      },
-      getMostFeaturedWorlds(): NftItemModelInterface[] {
-        return getRootStore(self).nftStore.nftItems.slice(0, 5);
-      },
-      getLastCreatedWorlds(): NftItemModelInterface[] {
-        return getRootStore(self).nftStore.nftItems.slice(5, 10);
-      },
-      getLastUpdatedWorlds(): NftItemModelInterface[] {
-        return getRootStore(self).nftStore.nftItems.slice(10, 15);
-      },
-      getMostStatedInWorlds(): NftItemModelInterface[] {
-        return getRootStore(self).nftStore.nftItems.slice(15, 20);
+        const {nftItems} = getRootStore(self).nftStore;
+        self.allUsers = cloneDeep(nftItems);
+        self.allWorlds = cloneDeep(nftItems);
       }
     }))
     .views((self) => ({
-      get allWorlds(): NftItemModelInterface[] {
-        // FIXME source and type
-        return getRootStore(self).nftStore.nftItems;
+      get filteredWorlds(): NftItemModelInterface[] {
+        return self.searchQuery.isQueryValid
+          ? self.allWorlds.filter((world) => world.name.includes(self.searchQuery.queryLowerCased))
+          : [];
       },
-      get allUsers(): NftItemModelInterface[] {
-        // FIXME source and type
-        return getRootStore(self).nftStore.nftItems;
+      get lastCreatedWorlds(): SliderItemInterface<string>[] {
+        return self.allWorlds.slice(0, 5).map((item) => ({
+          id: item.uuid,
+          name: item.name,
+          image: getImageAbsoluteUrl(item.image) || ''
+        }));
+      },
+      get mostStatedInWorlds(): SliderItemInterface<string>[] {
+        return self.allWorlds.slice(5, 10).map((item) => ({
+          id: item.uuid,
+          name: item.name,
+          image: getImageAbsoluteUrl(item.image) || ''
+        }));
       }
     }))
 );

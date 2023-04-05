@@ -15,7 +15,7 @@ export const Container = styled.div`
   cursor: pointer;
   background: ${(props) => props.theme.bg};
   &.notFlyAround {
-    border: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.8)};
+    border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.8)};
   }
   z-index: 200;
   pointer-events: all;

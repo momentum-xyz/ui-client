@@ -14,7 +14,7 @@ export const Container = styled.div`
   align-items: center;
   width: 100%;
   justify-content: space-between;
-  border-bottom: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.1)};
+  border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.1)};
   padding: 6px 0;
 `;
 
@@ -27,7 +27,7 @@ export const InfoContainer = styled.div`
 
   :hover {
     ${StyledText} {
-      color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
+      color: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 1)};
     }
   }
 `;

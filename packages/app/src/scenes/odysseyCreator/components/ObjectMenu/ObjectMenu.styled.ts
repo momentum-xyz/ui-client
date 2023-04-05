@@ -41,7 +41,7 @@ export const MenuItem = styled.button`
   :nth-child(3),
   :nth-child(5),
   :nth-child(7) {
-    border-right: 1px solid ${(props) => props.theme.accent};
+    border-right: 1px solid ${(props) => props.theme.accentText};
   }
 
   :disabled {
@@ -52,6 +52,6 @@ export const MenuItem = styled.button`
 export const MenuText = styled(Text)`
   :hover,
   &.selected {
-    color: ${(props) => props.theme.accent} !important;
+    color: ${(props) => props.theme.accentText} !important;
   }
 `;

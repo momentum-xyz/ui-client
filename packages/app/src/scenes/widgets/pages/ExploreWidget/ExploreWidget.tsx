@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n, i18n} from '@momentum-xyz/core';
-import {TabInterface, Tabs, Panel, Frame} from '@momentum-xyz/ui-kit-storybook';
+import {TabInterface, Tabs, Panel} from '@momentum-xyz/ui-kit-storybook';
 
 //import {ExplorePanel} from 'ui-kit';
 import {useStore} from 'shared/hooks';
@@ -40,17 +40,15 @@ const ExploreWidget: FC = () => {
           </styled.Tabs>
 
           <styled.Content>
-            <Frame>
-              {activeTab === 'worlds' && (
-                <WorldList
-                  lastCreatedItems={universe2dStore.getLastCreatedWorlds()}
-                  lastUpdatedItems={universe2dStore.getLastUpdatedWorlds()}
-                  mostFeaturedItems={universe2dStore.getMostFeaturedWorlds()}
-                  mostStakedInItems={universe2dStore.getMostStatedInWorlds()}
-                />
-              )}
-              {activeTab === 'users' && <UserList />}
-            </Frame>
+            {activeTab === 'worlds' && (
+              <WorldList
+                searchQuery={universe2dStore.searchQuery}
+                searchResults={universe2dStore.filteredWorlds}
+                lastCreatedItems={universe2dStore.lastCreatedWorlds}
+                mostStakedInItems={universe2dStore.mostStatedInWorlds}
+              />
+            )}
+            {activeTab === 'users' && <UserList />}
           </styled.Content>
         </styled.Wrapper>
       </Panel>

@@ -18,7 +18,7 @@ export const ItemLink = styled.div`
 export const ItemName = styled.div`
   position: absolute;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   color: ${(props) => props.theme.text};
   font-size: var(--font-size-s);
   text-transform: uppercase;

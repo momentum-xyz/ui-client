@@ -29,7 +29,7 @@ export const Link = styled.a`
   color: ${(props) => props.theme.text};
 
   &:hover {
-    color: ${(props) => props.theme.accent};
+    color: ${(props) => props.theme.accentText};
   }
 `;
 

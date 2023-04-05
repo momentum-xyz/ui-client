@@ -26,6 +26,6 @@ export const MenuItem = styled.button`
 
 export const MenuText = styled(IconSvg)`
   :hover {
-    color: ${(props) => props.theme.accent} !important;
+    color: ${(props) => props.theme.accentText} !important;
   }
 `;

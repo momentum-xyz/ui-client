@@ -15,8 +15,9 @@ export const Tabs = styled.div`
   display: flex;
   justify-content: end;
   top: -12px;
-  right: 0;
+  right: 10px;
   left 0;
+  z-index: 1;
 `;
 
 export const Content = styled.div``;
