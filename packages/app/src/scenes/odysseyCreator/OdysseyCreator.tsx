@@ -19,7 +19,7 @@ const OdysseyCreator: FC = () => {
     return () => {
       world3dStore?.disableCreatorMode();
     };
-  }, []);
+  }, [world3dStore]);
 
   return (
     <>
