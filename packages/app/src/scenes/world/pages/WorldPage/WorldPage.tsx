@@ -3,10 +3,15 @@ import {observer} from 'mobx-react-lite';
 // import {useTheme} from 'styled-components';
 import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-dom';
 import {toast} from 'react-toastify';
-// import Unity from 'react-unity-webgl';
-//import {Portal} from '@momentum-xyz/ui-kit';
+import {useDebouncedCallback} from '@momentum-xyz/ui-kit-storybook';
 import {BabylonScene} from '@momentum-xyz/odyssey3d';
-import {Event3dEmitter, TransformNoScaleInterface, useI18n} from '@momentum-xyz/core';
+import {
+  ClickPositionInterface,
+  Event3dEmitter,
+  ObjectTransformInterface,
+  TransformNoScaleInterface,
+  useI18n
+} from '@momentum-xyz/core';
 
 import {WORLD_ROUTES} from 'scenes/App.routes';
 // import {appVariables} from 'api/constants';
@@ -40,10 +45,9 @@ const WorldPage: FC = () => {
 
   useEffect(() => {
     return () => {
-      universeStore.leaveWorld();
       widgetManagerStore.closeAll();
     };
-  }, [universeStore, widgetManagerStore]);
+  }, [widgetManagerStore]);
 
   // useEffect(() => {
   //   instance3DStore.init();
@@ -82,29 +86,21 @@ const WorldPage: FC = () => {
 
       universeStore.enterWorld(worldId);
     }
+    return () => {
+      universeStore.leaveWorld();
+    };
   }, [worldId, universeStore]);
 
-  const handleObjectClick = (objectId: string, e?: React.MouseEvent) => {
+  const handleObjectClick = (objectId: string, clickPos: ClickPositionInterface) => {
     if (universeStore.isCreatorMode) {
       console.log('BabylonPage: handle object click in creator mode', objectId);
 
       // TODO take coords from event
       // instance3DStore.setLastClickPosition
 
-      if (world3dStore?.selectedObjectId) {
-        if (world3dStore?.selectedObjectId === objectId) {
-          return;
-        }
-
-        Event3dEmitter.emit('ObjectEditModeChanged', world3dStore.selectedObjectId, false);
-      }
-
-      // TODO try to lock object and wait for lock to be acquired
-      Event3dEmitter.emit('ObjectEditModeChanged', objectId, true);
-
       navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
 
-      world3dStore?.onObjectClick(objectId);
+      world3dStore?.handleClick(objectId, clickPos);
     } else {
       console.log('BabylonPage: handle object click, NOT creator mode', objectId);
       // if (label === 'portal_odyssey') {
@@ -120,15 +116,37 @@ const WorldPage: FC = () => {
     }
   };
 
-  const handleUserClick = (id: string, e?: React.MouseEvent) => {
+  const handleClickOutside = () => {
+    console.log('BabylonPage: handleClickOutside');
+    world3dStore?.closeAndResetObjectMenu();
+  };
+
+  const handleUserClick = (id: string, clickPosition: ClickPositionInterface) => {
     console.log('BabylonPage: onUserClick', id);
     widgetsStore.odysseyInfoStore.open(id);
   };
 
-  const handleUserMove = (transform: TransformNoScaleInterface) => {
-    console.log('BabylonPage: onMove', transform);
-    PosBusService.sendMyTransform(transform);
-  };
+  const handleUserMove = useDebouncedCallback(
+    (transform: TransformNoScaleInterface) => {
+      console.log('BabylonPage: onMove', transform);
+      world3dStore?.handleUserMove(transform);
+      PosBusService.sendMyTransform(transform); // move this to world3dStore??
+    },
+    250,
+    [],
+    {maxWait: 250}
+  );
+
+  const handleObjectTransform = useDebouncedCallback(
+    (objectId: string, transform: ObjectTransformInterface) => {
+      console.log('BabylonPage: onObjectTransform', objectId, transform);
+
+      PosBusService.sendObjectTransform(objectId, transform);
+    },
+    250,
+    [],
+    {maxWait: 250}
+  );
 
   // usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
   //   if (sessionStore.userId === userId) {
@@ -217,25 +235,25 @@ const WorldPage: FC = () => {
   //   return <></>;
   // }
 
-  console.log('WorldPage render');
+  console.log('WorldPage render', {worldId, world3dStore});
 
   return (
     <styled.Inner
       data-testid="UnityPage-test"
-      onClick={(event) => {
-        world3dStore?.setLastClickPosition(event.clientX, event.clientY);
-      }}
+      // it gets called after object click thus requiring to put some delays to its handler
+      // onObjectClick now provides this info, so commenting this out
+      // onClick={(event) => {
+      //   world3dStore?.setLastClickPosition(event.clientX, event.clientY);
+      // }}
     >
       <BabylonScene
         events={Event3dEmitter}
         onMove={handleUserMove}
         onObjectClick={handleObjectClick}
-        onObjectTransform={(objectId, transform) =>
-          console.log('onObjectTransform', objectId, transform)
-        }
+        onObjectTransform={handleObjectTransform}
         onUserClick={handleUserClick}
+        onClickOutside={handleClickOutside}
       />
-      {/* <Unity unityContext={instance3DStore.unityContext} style={UnityContextCSS} /> */}
     </styled.Inner>
   );
 };

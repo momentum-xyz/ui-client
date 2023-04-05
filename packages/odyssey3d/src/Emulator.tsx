@@ -15,23 +15,9 @@ window.sessionStorage.setItem('babylon_debug', 'true');
 
 const assetIDs: string[] = [
   'de99ac0e-0ba0-6446-9263-46d3f6c854e5',
-  '8eb299aa-bed7-8de6-fbc2-54716723f2e0',
-  '0d5b35b9-33c0-d917-c095-7ba3670755da'
+  '8eb299aa-bed7-8de6-fbc2-54716723f2e0'
 ];
-// const object_3d_mocks: Object3dInterface[] = [
-//   {
-//     id: 'e227af0c-cb47-41d2-a93c-565000abad3e',
-//     name: 'Sphere 1',
-//     transform: {position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, scale: 2},
-//     asset_3d_id: '7e20a110-149b-4c6e-b1ab-a25cbdc066e6'
-//   },
-//   {
-//     id: 'e337af0c-cb47-41d2-a93c-565000abad3e',
-//     name: 'Sphere 2',
-//     transform: {position: {x: 0, y: 3, z: 0}, rotation: {x: 0, y: 0, z: 0}, scale: 0.5},
-//     asset_3d_id: '7e20a110-149b-4c6e-b1ab-a25cbdc066e6'
-//   }
-// ];
+
 let i = 0;
 
 /** DEFINE MOCKS HERE **/
@@ -56,7 +42,7 @@ const WorldEmulator: FC = () => {
           transform: {
             position: {x: randomNumber(), y: randomNumber(), z: randomNumber()},
             rotation: {x: 0, y: 0, z: 0},
-            scale: Math.random() * 2
+            scale: {x: 1, y: 1, z: 1}
           },
           //teapot: de99ac0e-0ba0-6446-9263-46d3f6c854e5
           //charizard: 8eb299aa-bed7-8de6-fbc2-54716723f2e0
@@ -90,6 +76,7 @@ const WorldEmulator: FC = () => {
         console.log('onObjectTransform', objectId, transform)
       }
       onUserClick={(e) => console.log('onUserClick', e)}
+      onClickOutside={() => console.log('onClickOutside')}
     />
   );
 };

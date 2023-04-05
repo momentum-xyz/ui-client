@@ -1,6 +1,11 @@
 import {cast, types} from 'mobx-state-tree';
-import {UnityContext} from 'react-unity-webgl';
-import {RequestModel, Dialog} from '@momentum-xyz/core';
+import {
+  RequestModel,
+  Dialog,
+  Event3dEmitter,
+  ClickPositionInterface,
+  TransformNoScaleInterface
+} from '@momentum-xyz/core';
 import {UnityControlInterface} from '@momentum-xyz/sdk';
 
 // import {api, ResolveNodeResponse} from 'api';
@@ -11,26 +16,41 @@ import {UnityPositionInterface} from 'core/interfaces';
 const DEFAULT_UNITY_VOLUME = 0.75;
 // const UNITY_VOLUME_STEP = 0.1;
 
+const defaultClickPosition = {x: 0, y: 0};
+
 const World3dStore = types
   .model('World3dStore', {
     // TODO: objectList: array
     isInitialized: false,
+    userCurrentTransform: types.maybeNull(types.frozen<TransformNoScaleInterface>()),
     muted: false,
     volume: types.optional(types.number, DEFAULT_UNITY_VOLUME),
     nodeRequest: types.optional(RequestModel, {}),
-    lastClickPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
-    objectMenuPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
+    // lastClickPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
+    objectMenuPosition: types.optional(
+      types.frozen<ClickPositionInterface>(),
+      defaultClickPosition
+    ),
     objectMenu: types.optional(Dialog, {}),
     isCreatorMode: false,
-    selectedObjectId: types.maybe(types.string),
+    selectedObjectId: types.maybeNull(types.string),
 
     gizmoMode: types.optional(
       types.enumeration(Object.values(GizmoTypeEnum)),
       GizmoTypeEnum.POSITION
     )
   })
-  .volatile<{unityContext: UnityContext | null}>(() => ({
-    unityContext: null
+  .actions((self) => ({
+    _selectObject(objectId: string): void {
+      self.selectedObjectId = objectId;
+      Event3dEmitter.emit('ObjectEditModeChanged', objectId, true);
+    },
+    _deselectObject(): void {
+      if (self.selectedObjectId) {
+        Event3dEmitter.emit('ObjectEditModeChanged', self.selectedObjectId, false);
+        self.selectedObjectId = null;
+      }
+    }
   }))
   .actions((self) => ({
     // triggerTeleport(url?: string, worldId?: string): void {
@@ -65,6 +85,11 @@ const World3dStore = types
       // }
 
       // return rotation;
+    },
+    handleUserMove(transform: TransformNoScaleInterface): void {
+      // FIXME storing it here changes the structure and breaks stuff
+      // maybe deep-copy it or something?
+      // self.userCurrentTransform = cast(transform);
     },
     teleportToUser(userId: string): void {
       // TODO Use Emitter3d
@@ -149,16 +174,6 @@ const World3dStore = types
       // TODO
       // UnityService.changeSkybox(skyboxId);
     },
-    enableCreatorMode() {
-      self.isCreatorMode = true;
-    },
-    disableCreatorMode() {
-      self.isCreatorMode = false;
-    },
-    leaveSpace(spaceId: string) {
-      // need this?
-      // UnityService.leaveSpace(spaceId);
-    },
     // resolveNode: flow(function* (object: string) {
     //   return yield self.nodeRequest.send(api.web3Repository.resolveNode, {object});
     // }),
@@ -175,14 +190,23 @@ const World3dStore = types
     //     this.setInitialVolume();
     //   }
     // },
-    setLastClickPosition(x: number, y: number) {
-      self.lastClickPosition = {x, y};
-      this.closeAndResetObjectMenu();
-    },
-    onObjectClick(objectId: string) {
-      // self.objectMenuPosition = self.lastClickPosition;
+    // setLastClickPosition(x: number, y: number) {
+    //   console.log('setLastClickPosition', x, y);
+    //   self.lastClickPosition = {x, y};
+    //   // this.closeAndResetObjectMenu();
+    // },
+    handleClick(objectId: string, clickPos?: ClickPositionInterface) {
+      console.log('World3dStore : handleClick', objectId);
+      if (!self.isCreatorMode) {
+        return;
+      }
+
+      self._deselectObject();
+
+      self.objectMenuPosition = clickPos || defaultClickPosition;
+
+      self._selectObject(objectId);
       self.objectMenu.open();
-      self.selectedObjectId = objectId;
     },
     undo() {
       // UnityService.undo();
@@ -196,13 +220,24 @@ const World3dStore = types
       // UnityService.changeGizmoType(mode);
     },
     closeAndResetObjectMenu() {
+      console.log('closeAndResetObjectMenu', self.selectedObjectId);
       self.objectMenu.close();
-      self.selectedObjectId = '';
+      self._deselectObject();
       self.gizmoMode = GizmoTypeEnum.POSITION;
     },
     colorPickedPreview(objectId: string, colorHex: string) {
       // TODO notify babylon
       // UnityService.colorPickedPreview(objectId, colorHex);
+    }
+  }))
+  .actions((self) => ({
+    enableCreatorMode() {
+      self.isCreatorMode = true;
+    },
+    disableCreatorMode() {
+      self.isCreatorMode = false;
+
+      self.closeAndResetObjectMenu();
     }
   }))
   .views((self) => ({

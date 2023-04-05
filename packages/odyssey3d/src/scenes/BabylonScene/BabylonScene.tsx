@@ -1,35 +1,38 @@
 import {FC} from 'react';
 import {Scene} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
+import {useMutableCallback} from '@momentum-xyz/ui-kit';
 
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
-import {CameraHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babylon';
+import {PlayerHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babylon';
 import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
 
-const BabylonScene: FC<Odyssey3dPropsInterface> = ({
-  events,
-  onObjectClick,
-  onUserClick,
-  onMove
-}) => {
+const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
+  const onObjectClick = useMutableCallback(callbacks.onObjectClick);
+  // const onUserClick = useMutableCallback(callbacks.onUserClick);
+  const onMove = useMutableCallback(callbacks.onMove);
+  const onObjectTransform = useMutableCallback(callbacks.onObjectTransform);
+  const onClickOutside = useMutableCallback(callbacks.onClickOutside);
+
   /* Will run one time. */
   const onSceneReady = (scene: Scene) => {
     const view = scene.getEngine().getRenderingCanvas();
     const engine = scene.getEngine();
     if (view?.id) {
-      CameraHelper.initialize(scene, view);
+      PlayerHelper.initialize(scene, view, onMove);
       LightHelper.initialize(scene);
       ObjectHelper.initialize(
         scene,
         engine,
         //  props.objects,
         view,
-        onObjectClick
+        onObjectClick,
+        onClickOutside
         // onUserClick,
         // onMove,
       );
 
-      WorldCreatorHelper.initialize(scene);
+      WorldCreatorHelper.initialize(scene, onObjectTransform);
       //SkyboxHelper.setCubemapSkybox(scene);
       SkyboxHelper.set360Skybox(
         scene,
@@ -48,7 +51,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({
       events.on('SetWorld', (assetID) => {
         // Commented out the actual line, as currently the assetID coming from BE is a Unity asset, so doesn't load
         //CameraHelper.spawnPlayer(scene, assetID);
-        CameraHelper.spawnPlayer(scene, 'd906e070-3d2e-b1a5-3e3f-703423225945');
+        PlayerHelper.spawnPlayer(scene, 'd906e070-3d2e-b1a5-3e3f-703423225945');
       });
 
       events.on('ObjectCreated', async (object) => {
@@ -58,6 +61,10 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({
       events.on('ObjectTextureChanged', (object) => {
         ObjectHelper.setObjectTexture(scene, object);
       });
+
+      /*events.on('UserEntered', (userId) => {
+        PlayerHelper.userEntered(userId);
+      });*/
 
       events.on('ObjectEditModeChanged', (objectId, isOn) => {
         WorldCreatorHelper.toggleGizmo(objectId, isOn);

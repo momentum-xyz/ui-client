@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Scene} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
 
-import {CameraHelper, LightHelper, SkyboxHelper} from '../../babylon';
+import {PlayerHelper, LightHelper, SkyboxHelper} from '../../babylon';
 
 export const UniverseScene: FC = () => {
   const onSceneReady = (scene: Scene) => {
@@ -10,7 +10,7 @@ export const UniverseScene: FC = () => {
     const view = scene.getEngine().getRenderingCanvas();
     // const engine = scene.getEngine();
     if (view?.id) {
-      CameraHelper.initialize(scene, view);
+      PlayerHelper.initialize(scene, view);
       LightHelper.initialize(scene);
     }
 
@@ -19,7 +19,7 @@ export const UniverseScene: FC = () => {
       'https://dev2.odyssey.ninja/api/v3/render/texture/s8/27a7d8904d525b5d163754624ae46bc8'
     );
 
-    CameraHelper.spawnPlayer(scene, 'd906e070-3d2e-b1a5-3e3f-703423225945');
+    PlayerHelper.spawnPlayer(scene, 'd906e070-3d2e-b1a5-3e3f-703423225945');
 
     if (window.sessionStorage.getItem('babylon_debug')) {
       Promise.all([

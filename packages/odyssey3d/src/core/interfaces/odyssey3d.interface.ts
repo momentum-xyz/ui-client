@@ -1,4 +1,9 @@
-import {ObjectTransformInterface, Event3dEmitterType} from '@momentum-xyz/core';
+import {
+  ObjectTransformInterface,
+  Event3dEmitterType,
+  TransformNoScaleInterface,
+  ClickPositionInterface
+} from '@momentum-xyz/core';
 
 export interface Odyssey3dPropsInterface {
   // TODO add also reactive objects, users
@@ -7,12 +12,15 @@ export interface Odyssey3dPropsInterface {
   events: Event3dEmitterType;
 
   // Objects
-  onObjectClick: (objectId: string, e?: React.MouseEvent) => void;
+  onObjectClick: (objectId: string, clickPosition: ClickPositionInterface) => void;
   onObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
 
+  // Can be used for clearing gizmo, etc
+  onClickOutside: () => void;
+
   // click on any user
-  onUserClick: (userId: string, e?: React.MouseEvent) => void;
+  onUserClick: (userId: string, clickPosition: ClickPositionInterface) => void;
 
   // Me moving
-  onMove: (transform: ObjectTransformInterface) => void;
+  onMove: (transform: TransformNoScaleInterface) => void;
 }
