@@ -10,7 +10,8 @@ const connector = new InjectedConnector({
 
 export const useWallet: UseWalletType = () => {
   // const {library, account, activate, deactivate, active} = useWeb3React();
-  const {library, account, activate, active} = useWeb3React();
+  const data = useWeb3React();
+  const {library, account, activate, active} = data;
   console.log('useWallet', {library, account, activate, active});
 
   const signChallenge = useCallback(
