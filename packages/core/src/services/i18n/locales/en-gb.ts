@@ -195,7 +195,12 @@ export const enGb = {
     },
     login: {
       welcome: 'Welcome to',
-      enableStaking: 'Login with a polkadot.js account to enable on chain activities'
+      enableStaking: 'Login with a polkadot.js account to enable on chain activities',
+      signInTitle: 'Sign In',
+      signInWithYourWalletTitle: 'Sign in with your wallet',
+      signInWithYourWalletDescription:
+        'Lorem ipsum dolor sit amet, consectetuer adipicing elit. Aenean commodo ligula.',
+      connectYourWallet: 'Connect your wallet'
     },
     errors: {
       oidcSession: 'Something wrong with session',

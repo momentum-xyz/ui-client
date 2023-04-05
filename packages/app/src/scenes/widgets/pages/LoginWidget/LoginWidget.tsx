@@ -1,6 +1,7 @@
 import {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Panel, Hexagon, FrameText} from '@momentum-xyz/ui-kit-storybook';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {availableWallets, WalletConfigInterface} from 'wallets';
@@ -10,6 +11,7 @@ import * as styled from './LoginWidget.styled';
 
 const LoginWidget: FC = () => {
   const {sessionStore, widgetManagerStore} = useStore();
+  const {t} = useI18n();
 
   const [selectedWallet, setSelectedWallet] = useState<WalletConfigInterface | null>(null);
 
@@ -26,16 +28,16 @@ const LoginWidget: FC = () => {
   return (
     <styled.Container>
       <Panel
-        title="Sign In"
+        title={t('login.signInTitle')}
         variant="primary"
-        hexagon={<Hexagon type="secondary-borderless" iconName="planet" />}
+        hexagon={<Hexagon type="secondary-borderless" iconName="enter" />}
       >
         <FrameText
-          title="Sign in with your wallet"
-          line1="Lorem ipsum dolor sit amet, consectetuer adipicing elit. Aenean commodo ligula."
+          title={t('login.signInWithYourWalletTitle')}
+          line1={t('login.signInWithYourWalletDescription')}
         />
         <styled.SignInMethodsContainer>
-          <span className="title">Connect your wallet</span>
+          <span className="title">{t('login.connectYourWallet')}</span>
           <div className="methods">
             {availableWallets.map((wallet) => {
               const {name, icon} = wallet;
@@ -53,36 +55,10 @@ const LoginWidget: FC = () => {
             key={selectedWallet.name}
             walletConf={selectedWallet}
             onConnected={handleAccountConnected}
-            // onCancel={() => setSelectedWallet(null)}
           />
         )}
       </Panel>
     </styled.Container>
-    // <styled.Container>
-    //   <CreateOdyssey onCreate={() => {}} />
-
-    //   {!selectedWallet && (
-    //     <Box>
-    //       <Text text="Connect your wallet" size="m" />
-    //       {availableWallets.map((wallet) => {
-    //         const {name} = wallet;
-    //         return (
-    //           <div style={{marginTop: '15px'}} key={name}>
-    //             <Button wide label={name} key={name} onClick={() => setSelectedWallet(wallet)} />
-    //           </div>
-    //         );
-    //       })}
-    //     </Box>
-    //   )}
-    //   {selectedWallet && (
-    //     <WalletLogin
-    //       key={selectedWallet.name}
-    //       walletConf={selectedWallet}
-    //       onConnected={handleAccountConnected}
-    //       onCancel={() => setSelectedWallet(null)}
-    //     />
-    //   )}
-    // </styled.Container>
   );
 };
 
