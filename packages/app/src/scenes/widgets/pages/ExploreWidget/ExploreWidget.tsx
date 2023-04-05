@@ -53,8 +53,8 @@ const ExploreWidget: FC = () => {
                 searchResults={universe2dStore.filteredWorlds}
                 lastCreatedItems={universe2dStore.lastCreatedWorlds}
                 mostStakedInItems={universe2dStore.mostStatedInWorlds}
-                onShowDetails={(uuid) => {
-                  console.log(uuid);
+                onShowDetails={(worldId) => {
+                  console.log(worldId);
                 }}
                 onVisit={(worldId) => {
                   navigate(generatePath(ROUTES.odyssey.base, {worldId}));
@@ -64,7 +64,20 @@ const ExploreWidget: FC = () => {
                 }}
               />
             )}
-            {activeTab === 'users' && <UserList />}
+            {activeTab === 'users' && (
+              <UserList
+                searchQuery={universe2dStore.searchQuery}
+                searchResults={universe2dStore.filteredUsers}
+                lastCreatedItems={universe2dStore.lastCreatedUsers}
+                mostStakedItems={universe2dStore.mostStatedUsers}
+                onShowDetails={(userId) => {
+                  console.log(userId);
+                }}
+                onVisit={(userId) => {
+                  console.log(userId);
+                }}
+              />
+            )}
           </styled.Content>
         </styled.Wrapper>
       </Panel>

@@ -23,20 +23,39 @@ const Universe2dStore = types.compose(
       }
     }))
     .views((self) => ({
+      get filteredUsers(): NftItemModelInterface[] {
+        return self.searchQuery.isQueryValid
+          ? self.allUsers.filter((user) => user.name.includes(self.searchQuery.queryLowerCased))
+          : [];
+      },
       get filteredWorlds(): NftItemModelInterface[] {
         return self.searchQuery.isQueryValid
           ? self.allWorlds.filter((world) => world.name.includes(self.searchQuery.queryLowerCased))
           : [];
       },
+      get lastCreatedUsers(): SliderItemInterface<string>[] {
+        return self.allWorlds.slice(0, 5).map((item) => ({
+          id: item.uuid,
+          name: item.name,
+          image: getImageAbsoluteUrl(item.image) || ''
+        }));
+      },
+      get mostStatedUsers(): SliderItemInterface<string>[] {
+        return self.allWorlds.slice(5, 10).map((item) => ({
+          id: item.uuid,
+          name: item.name,
+          image: getImageAbsoluteUrl(item.image) || ''
+        }));
+      },
       get lastCreatedWorlds(): SliderItemInterface<string>[] {
-        return self.allWorlds.slice(10, 15).map((item) => ({
+        return self.allWorlds.slice(20, 25).map((item) => ({
           id: item.uuid,
           name: item.name,
           image: getImageAbsoluteUrl(item.image) || ''
         }));
       },
       get mostStatedInWorlds(): SliderItemInterface<string>[] {
-        return self.allWorlds.slice(15, 20).map((item) => ({
+        return self.allWorlds.slice(25, 30).map((item) => ({
           id: item.uuid,
           name: item.name,
           image: getImageAbsoluteUrl(item.image) || ''
