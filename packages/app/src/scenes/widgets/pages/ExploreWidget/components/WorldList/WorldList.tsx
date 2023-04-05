@@ -38,8 +38,9 @@ const WorldList: FC<PropsInterface> = ({
       <Frame>
         <styled.Search>
           <Input
+            isSearch
             value={searchQuery.query}
-            placeholder="Search odysseys..."
+            placeholder="Search odysseys"
             opts={stringInputMask}
             onChange={searchQuery.setQuery}
             wide

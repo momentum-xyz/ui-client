@@ -36,8 +36,9 @@ const UserList: FC<PropsInterface> = ({
       <Frame>
         <styled.Search>
           <Input
+            isSearch
             value={searchQuery.query}
-            placeholder="Search accounts..."
+            placeholder="Search accounts"
             opts={stringInputMask}
             onChange={searchQuery.setQuery}
             wide
