@@ -1,5 +1,6 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import {Universe3dEmitter} from '@momentum-xyz/core';
 import {Map3dCanvas} from '@momentum-xyz/map3d';
 import {PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 import {UniverseScene} from '@momentum-xyz/odyssey3d';
@@ -40,12 +41,26 @@ const Map3dPage: FC<PropsInterface> = () => {
     [nftStore, odysseyInfoStore, previewOdysseyStore, sessionStore.isGuest, widgetManagerStore]
   );
 
+  const handleSelectUser = useCallback((uuid: string) => {
+    console.log('Map3dPage: handleSelectUser', uuid);
+    // widgetManagerStore.open(WidgetEnum.WORLD_OVERVIEW, PositionEnum.LEFT, {id: uuid});
+  }, []);
+
+  const handleClickOutside = useCallback(() => {
+    widgetManagerStore.closeAll();
+  }, [widgetManagerStore]);
+
   if (nftStore.isLoading || !sessionStore.map3dUser) {
     return <></>;
   }
 
   return isBabylonUniverse ? (
-    <UniverseScene />
+    <UniverseScene
+      events={Universe3dEmitter}
+      onWorldClick={handleSelect}
+      onUserClick={handleSelectUser}
+      onClickOutside={handleClickOutside}
+    />
   ) : (
     <Map3dCanvas
       currentUser={sessionStore.map3dUser}
