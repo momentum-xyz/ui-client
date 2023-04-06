@@ -1,7 +1,9 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import {useI18n} from '@momentum-xyz/core';
 import {
   Input,
+  Image,
   Frame,
   Slider,
   stringInputMask,
@@ -19,7 +21,8 @@ interface PropsInterface {
   searchResults: NftItemModelInterface[];
   lastCreatedItems: SliderItemInterface<string>[];
   mostStakedInItems: SliderItemInterface<string>[];
-  onShowDetails: (worldId: string) => void;
+  onWorldClick: (worldId: string) => void;
+  onUserClick: (users: string) => void;
   onVisit: (worldId: string) => void;
   onStake: (worldId: string) => void;
 }
@@ -29,10 +32,13 @@ const WorldList: FC<PropsInterface> = ({
   searchResults,
   lastCreatedItems,
   mostStakedInItems,
-  onShowDetails,
+  onWorldClick,
+  onUserClick,
   onVisit,
   onStake
 }) => {
+  const {t} = useI18n();
+
   return (
     <styled.Wrapper data-testid="WorldList-test">
       <Frame>
@@ -40,7 +46,7 @@ const WorldList: FC<PropsInterface> = ({
           <Input
             isSearch
             value={searchQuery.query}
-            placeholder="Search odysseys"
+            placeholder={t('actions.searchOdysseys')}
             opts={stringInputMask}
             onChange={searchQuery.setQuery}
             wide
@@ -50,24 +56,43 @@ const WorldList: FC<PropsInterface> = ({
       <styled.WorldsContainer>
         {searchQuery.isQueryValid ? (
           <styled.SearchContainer>
-            <styled.SearchResultTitle>Search results</styled.SearchResultTitle>
+            <styled.SearchResultTitle>{t('labels.searchResults')}</styled.SearchResultTitle>
 
             {searchResults.map((item) => (
               <styled.SearchResultItem key={item.id}>
-                <styled.Image src={getImageAbsoluteUrl(item.image) || ''} />
+                <Image
+                  src={getImageAbsoluteUrl(item.image)}
+                  onClick={() => onWorldClick(item.uuid)}
+                />
                 <styled.ItemContent>
-                  <styled.ItemName>{item.name}</styled.ItemName>
+                  <styled.ItemNameContainer>
+                    <styled.ItemName>{item.name}</styled.ItemName>
+                    <span>
+                      {`${t('labels.by')}: `}
+                      <styled.ItemLink onClick={() => onUserClick(item.uuid)}>
+                        {item.name}
+                      </styled.ItemLink>
+                    </span>
+                  </styled.ItemNameContainer>
                   <styled.ItemDesc>
                     Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                   </styled.ItemDesc>
                   <styled.Actions>
                     <ButtonEllipse
-                      label="Info"
+                      label={t('actions.info')}
                       icon="info_2"
-                      onClick={() => onShowDetails(item.uuid)}
+                      onClick={() => onWorldClick(item.uuid)}
                     />
-                    <ButtonEllipse label="Visit" icon="fly-to" onClick={() => onVisit(item.uuid)} />
-                    <ButtonEllipse label="Stake" icon="stake" onClick={() => onStake(item.uuid)} />
+                    <ButtonEllipse
+                      label={t('actions.visit')}
+                      icon="fly-to"
+                      onClick={() => onVisit(item.uuid)}
+                    />
+                    <ButtonEllipse
+                      label={t('actions.stake')}
+                      icon="stake"
+                      onClick={() => onStake(item.uuid)}
+                    />
                   </styled.Actions>
                 </styled.ItemContent>
               </styled.SearchResultItem>
@@ -75,13 +100,13 @@ const WorldList: FC<PropsInterface> = ({
           </styled.SearchContainer>
         ) : (
           <styled.PopularContainer>
-            <styled.BlockTitle>Most Staked In</styled.BlockTitle>
+            <styled.BlockTitle>{t('labels.mostStakedIn')}</styled.BlockTitle>
             <styled.Carousel>
-              <Slider items={mostStakedInItems} onClick={(uuid) => onShowDetails(uuid)} />
+              <Slider items={mostStakedInItems} onClick={(uuid) => onWorldClick(uuid)} />
             </styled.Carousel>
-            <styled.BlockTitle>New Odysseys</styled.BlockTitle>
+            <styled.BlockTitle>{t('labels.newOdysseys')}</styled.BlockTitle>
             <styled.Carousel>
-              <Slider items={lastCreatedItems} onClick={(uuid) => onShowDetails(uuid)} />
+              <Slider items={lastCreatedItems} onClick={(uuid) => onWorldClick(uuid)} />
             </styled.Carousel>
           </styled.PopularContainer>
         )}

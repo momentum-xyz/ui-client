@@ -50,17 +50,10 @@ export const SearchResultItem = styled.div`
   padding: 10px;
   display: grid;
   grid-template-columns: 170px 1fr;
-  background: ${(props) => props.theme.bg && rgba(props.theme.accentBg, 0.2)};
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
   box-shadow: -1px -1px 2px rgba(158, 238, 255, 0.1);
   border-radius: 4px;
   gap: 20px;
-`;
-
-export const Image = styled.img`
-  width: 170px;
-  height: 124px;
-  border-radius: 4px;
-  object-fit: cover;
 `;
 
 export const ItemContent = styled.div`

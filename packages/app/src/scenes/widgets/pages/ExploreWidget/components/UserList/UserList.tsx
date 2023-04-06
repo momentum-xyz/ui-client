@@ -1,7 +1,9 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import {useI18n} from '@momentum-xyz/core';
 import {
   Input,
+  Image,
   Frame,
   Slider,
   ButtonEllipse,
@@ -19,7 +21,7 @@ interface PropsInterface {
   searchResults: NftItemModelInterface[];
   lastCreatedItems: SliderItemInterface<string>[];
   mostStakedItems: SliderItemInterface<string>[];
-  onShowDetails: (userId: string) => void;
+  onUserClick: (userId: string) => void;
   onVisit: (userId: string) => void;
 }
 
@@ -28,9 +30,11 @@ const UserList: FC<PropsInterface> = ({
   searchResults,
   lastCreatedItems,
   mostStakedItems,
-  onShowDetails,
+  onUserClick,
   onVisit
 }) => {
+  const {t} = useI18n();
+
   return (
     <styled.Wrapper data-testid="UserList-test">
       <Frame>
@@ -38,7 +42,7 @@ const UserList: FC<PropsInterface> = ({
           <Input
             isSearch
             value={searchQuery.query}
-            placeholder="Search accounts"
+            placeholder={t('actions.searchMembers')}
             opts={stringInputMask}
             onChange={searchQuery.setQuery}
             wide
@@ -48,11 +52,15 @@ const UserList: FC<PropsInterface> = ({
       <styled.WorldsContainer>
         {searchQuery.isQueryValid ? (
           <styled.SearchContainer>
-            <styled.SearchResultTitle>Search results</styled.SearchResultTitle>
+            <styled.SearchResultTitle>{t('labels.searchResults')}</styled.SearchResultTitle>
 
             {searchResults.map((item) => (
               <styled.SearchResultItem key={item.id}>
-                <styled.Image src={getImageAbsoluteUrl(item.image) || ''} />
+                <Image
+                  src={getImageAbsoluteUrl(item.image)}
+                  errorIcon="astronaut"
+                  onClick={() => onUserClick(item.uuid)}
+                />
                 <styled.ItemContent>
                   <styled.ItemName>{item.name}</styled.ItemName>
                   <styled.ItemDesc>
@@ -60,11 +68,15 @@ const UserList: FC<PropsInterface> = ({
                   </styled.ItemDesc>
                   <styled.Actions>
                     <ButtonEllipse
-                      label="Info"
+                      label={t('actions.info')}
                       icon="info_2"
-                      onClick={() => onShowDetails(item.uuid)}
+                      onClick={() => onUserClick(item.uuid)}
                     />
-                    <ButtonEllipse label="Visit" icon="fly-to" onClick={() => onVisit(item.uuid)} />
+                    <ButtonEllipse
+                      label={t('actions.visit')}
+                      icon="fly-to"
+                      onClick={() => onVisit(item.uuid)}
+                    />
                   </styled.Actions>
                 </styled.ItemContent>
               </styled.SearchResultItem>
@@ -72,13 +84,21 @@ const UserList: FC<PropsInterface> = ({
           </styled.SearchContainer>
         ) : (
           <styled.PopularContainer>
-            <styled.BlockTitle>Most Staked Members</styled.BlockTitle>
+            <styled.BlockTitle>{t('labels.mostStakedMembers')}</styled.BlockTitle>
             <styled.Carousel>
-              <Slider items={mostStakedItems} onClick={(uuid) => onShowDetails(uuid)} />
+              <Slider
+                items={mostStakedItems}
+                errorIcon="astronaut"
+                onClick={(uuid) => onUserClick(uuid)}
+              />
             </styled.Carousel>
-            <styled.BlockTitle>New Members</styled.BlockTitle>
+            <styled.BlockTitle>{t('labels.newMembers')}</styled.BlockTitle>
             <styled.Carousel>
-              <Slider items={lastCreatedItems} onClick={(uuid) => onShowDetails(uuid)} />
+              <Slider
+                items={lastCreatedItems}
+                errorIcon="astronaut"
+                onClick={(uuid) => onUserClick(uuid)}
+              />
             </styled.Carousel>
           </styled.PopularContainer>
         )}

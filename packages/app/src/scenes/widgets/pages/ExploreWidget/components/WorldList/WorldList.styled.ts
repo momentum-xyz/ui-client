@@ -56,13 +56,6 @@ export const SearchResultItem = styled.div`
   gap: 20px;
 `;
 
-export const Image = styled.img`
-  width: 170px;
-  height: 124px;
-  border-radius: 4px;
-  object-fit: cover;
-`;
-
 export const ItemContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -70,12 +63,16 @@ export const ItemContent = styled.div`
   gap: 10px;
 `;
 
+export const ItemNameContainer = styled.div``;
+
 export const ItemName = styled.div`
   font-size: var(--font-size-xl);
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-weight: 700;
 `;
+
+export const ItemLink = styled.a``;
 
 export const ItemDesc = styled.div``;
 

@@ -576,7 +576,9 @@ export const use3dMap = (
    */
   const onMouseDown = useCallback(
     async (event: MouseEvent) => {
-      if (event.button !== 0) {
+      const htmlElement = event.srcElement as HTMLElement;
+      if (event.button !== 0 || htmlElement.tagName !== 'CANVAS') {
+        console.log('Click skipped by the map');
         return;
       }
 

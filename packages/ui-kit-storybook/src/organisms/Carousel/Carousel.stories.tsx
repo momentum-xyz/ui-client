@@ -15,7 +15,7 @@ export default {
 } as ComponentMeta<typeof Carousel>;
 
 const Template: Story<CarouselPropsInterface<string>> = (args) => {
-  return <Carousel {...args} />;
+  return <Carousel height={180} {...args} />;
 };
 
 export const General = Template.bind({});

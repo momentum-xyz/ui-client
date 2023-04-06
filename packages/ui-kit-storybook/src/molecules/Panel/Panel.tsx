@@ -12,6 +12,7 @@ export interface PanelPropsInterface extends PropsWithChildren {
   label?: string;
   image?: string;
   icon?: IconNameType;
+  closeIcon?: IconNameType;
   onClose?: () => void;
 }
 
@@ -21,6 +22,7 @@ const Panel: FC<PanelPropsInterface> = ({
   label,
   image,
   icon,
+  closeIcon = 'close_large',
   children,
   onClose
 }) => {
@@ -40,7 +42,7 @@ const Panel: FC<PanelPropsInterface> = ({
           <styled.Label>{label}</styled.Label>
         </styled.TitleContainer>
         <styled.Actions className={cn(variant)}>
-          <IconButton name="close_large" size="s" onClick={onClose} />
+          <IconButton name={closeIcon} size="s" onClick={onClose} />
         </styled.Actions>
       </styled.Header>
 

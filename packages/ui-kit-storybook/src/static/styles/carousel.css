@@ -15,32 +15,27 @@
 }
 
 .react-multiple-carousel__arrow {
-  background: initial;
-  min-width: initial;
-  min-height: initial;
+  min-width: 24px;
+  min-height: 24px;
 }
 
 .react-multiple-carousel__arrow::before {
-  padding: 0 0 8px 0;
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .react-multiple-carousel__arrow--right {
-  top: 0;
-  bottom: 0;
-  right: 0;
-  padding: 0 14px 0 6px;
+  border-radius: initial;
+  right: 5px;
+  top: calc(50% - 12px);
 }
 
 .react-multiple-carousel__arrow--left {
-  top: 0;
-  bottom: 0;
-  left: 0;
-  padding: 0 6px 0 14px;
+  border-radius: initial;
+  left: 5px;
+  top: calc(50% - 12px);
 }
 
 .react-multiple-carousel__arrow--left:hover,
 .react-multiple-carousel__arrow--right:hover {
   background: initial;
-  opacity: .8;
 }
