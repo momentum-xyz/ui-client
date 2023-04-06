@@ -4,7 +4,6 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 400px;
 `;
 
 export const SignInMethodsContainer = styled.div`

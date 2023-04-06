@@ -11,27 +11,16 @@ import * as styled from './WalletLogin.styled';
 
 interface PropsInterface {
   walletConf: WalletConfigInterface;
-  disabled?: boolean;
   onConnected: () => void;
   onError?: (error: any) => void;
-  attachSecondaryAccount?: boolean;
 }
 
-const WalletLogin: FC<PropsInterface> = ({
-  walletConf,
-  disabled,
-  attachSecondaryAccount = false,
-  onConnected,
-  onError
-}) => {
+const WalletLogin: FC<PropsInterface> = ({walletConf, onConnected, onError}) => {
   const {name, useWallet} = walletConf;
-  const {sessionStore, nftStore} = useStore();
-  const {nftItems} = nftStore;
+  const {sessionStore} = useStore();
 
   const {signChallenge, content, account, accountHex} = useWallet({
-    appVariables: appVariables as any,
-    walletsToDisplay: 'withNfts', // This filters the available wallets, use 'all' to show even the unregistered ones;
-    existingNftAddresses: nftItems.map((d) => d.owner)
+    appVariables: appVariables as any
   });
   console.log('WalletLogin', {name, signChallenge, content, account, accountHex});
 
@@ -40,10 +29,8 @@ const WalletLogin: FC<PropsInterface> = ({
       return void console.log('Account not selected');
     }
 
-    (attachSecondaryAccount
-      ? sessionStore.attachAnotherAccount(accountHex, signChallenge)
-      : sessionStore.fetchTokenByWallet2(accountHex, signChallenge)
-    )
+    sessionStore
+      .fetchTokenByWallet2(accountHex, signChallenge)
       .then(onConnected)
       .catch((err) => {
         console.log('Error connecting wallet', err);
@@ -68,7 +55,7 @@ const WalletLogin: FC<PropsInterface> = ({
       <Button
         label="Connect your wallet"
         icon="wallet"
-        disabled={disabled || !accountHex}
+        disabled={!accountHex}
         wide
         onClick={() => onConnectWallet()}
       />

@@ -200,7 +200,8 @@ export const enGb = {
       signInWithYourWalletTitle: 'Sign in with your wallet',
       signInWithYourWalletDescription:
         'Lorem ipsum dolor sit amet, consectetuer adipicing elit. Aenean commodo ligula.',
-      connectYourWallet: 'Connect your wallet'
+      connectYourWallet: 'Connect your wallet',
+      signUpTitle: 'Create account'
     },
     errors: {
       oidcSession: 'Something wrong with session',

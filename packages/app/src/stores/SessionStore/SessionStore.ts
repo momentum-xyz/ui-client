@@ -16,6 +16,7 @@ const SessionStore = types
     token: '',
     isAuthenticating: true,
     user: types.maybeNull(User),
+    signUpUser: types.maybeNull(User),
     profileJobId: types.maybeNull(types.string),
     guestTokenRequest: types.optional(RequestModel, {}),
     challengeRequest: types.optional(RequestModel, {}),
@@ -165,7 +166,13 @@ const SessionStore = types
         return false;
       }
 
-      self.user = cast(response);
+      if (!response.name) {
+        // handle tmp user creation
+        self.signUpUser = cast(response);
+      } else {
+        self.user = cast(response);
+        self.signUpUser = cast(null);
+      }
 
       if (!self.user?.isGuest) {
         // TODO change fetchMe EP to return multiple wallets
