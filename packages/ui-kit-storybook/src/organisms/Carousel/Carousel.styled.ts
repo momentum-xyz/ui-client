@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --image-height: 180px;
-
   position: relative;
 `;
 
@@ -24,11 +22,4 @@ export const ItemName = styled.div`
   bottom: 30px;
   right: 0;
   left: 0;
-`;
-
-export const ItemImage = styled.img`
-  width: 100%;
-  height: var(--image-height);
-  border-radius: 4px;
-  object-fit: cover;
 `;

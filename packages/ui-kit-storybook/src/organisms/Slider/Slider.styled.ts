@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --image-height: 124px;
-
   position: relative;
   margin: 0 -5px;
 `;
@@ -33,11 +31,4 @@ export const ItemName = styled.div`
     white-space: nowrap;
     overflow: hidden;
   }
-`;
-
-export const ItemImage = styled.img`
-  width: 100%;
-  height: var(--image-height);
-  border-radius: 4px;
-  object-fit: cover;
 `;
