@@ -44,6 +44,7 @@ const ExploreWidget: FC = () => {
           icon="search"
           variant="primary"
           title={t('labels.explore')}
+          closeIcon={activeItem ? 'arrow' : 'close_large'}
           onClose={() => {
             !activeItem ? close(WidgetEnum.EXPLORE) : setActiveItem(null);
           }}
