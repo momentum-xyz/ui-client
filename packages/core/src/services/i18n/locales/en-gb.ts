@@ -340,6 +340,8 @@ export const enGb = {
       mostStakedMembers: 'Most Staked Members',
       newMembers: 'New Members',
       createProfile: 'Create a profile',
+      memberProfile: 'Member profile',
+      odysseyOverview: 'Odyssey Overview',
       connectYourWallet: 'Connect your wallet'
     },
     messages: {

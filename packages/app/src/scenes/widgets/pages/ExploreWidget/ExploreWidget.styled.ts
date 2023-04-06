@@ -9,7 +9,9 @@ export const ExplorePanel = styled.div`
   width: var(--width);
 
   &.collapsed {
+    position: absolute;
     transform: translateX(calc((var(--widget-width-big) - 30px) * -1));
+    top: 10px;
   }
 `;
 
@@ -28,3 +30,7 @@ export const Tabs = styled.div`
 `;
 
 export const Content = styled.div``;
+
+export const Details = styled.div`
+  padding: 0 0 0 40px;
+`;
