@@ -11,11 +11,17 @@ import * as styled from './WalletLogin.styled';
 
 interface PropsInterface {
   walletConf: WalletConfigInterface;
+  attachSecondaryAccount?: boolean;
   onConnected: () => void;
   onError?: (error: any) => void;
 }
 
-const WalletLogin: FC<PropsInterface> = ({walletConf, onConnected, onError}) => {
+const WalletLogin: FC<PropsInterface> = ({
+  walletConf,
+  onConnected,
+  onError,
+  attachSecondaryAccount = false
+}) => {
   const {name, useWallet} = walletConf;
   const {sessionStore} = useStore();
 
@@ -29,8 +35,10 @@ const WalletLogin: FC<PropsInterface> = ({walletConf, onConnected, onError}) => 
       return void console.log('Account not selected');
     }
 
-    sessionStore
-      .fetchTokenByWallet2(accountHex, signChallenge)
+    (attachSecondaryAccount
+      ? sessionStore.attachAnotherAccount(accountHex, signChallenge)
+      : sessionStore.fetchTokenByWallet2(accountHex, signChallenge)
+    )
       .then(onConnected)
       .catch((err) => {
         console.log('Error connecting wallet', err);
