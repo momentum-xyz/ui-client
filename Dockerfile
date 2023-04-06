@@ -49,7 +49,7 @@ RUN yarn workspace plugin_${PLUGIN} build
 
 
 # Base runtime
-FROM nginx:1.23.3-alpine as base-runtime
+FROM nginx:1.23.4-alpine as base-runtime
 WORKDIR /opt/srv
 
 ADD ./docker_assets/nginx.conf /etc/nginx/nginx.conf
