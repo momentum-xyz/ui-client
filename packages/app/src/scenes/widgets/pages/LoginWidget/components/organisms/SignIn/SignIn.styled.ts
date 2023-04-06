@@ -55,6 +55,7 @@ export const SignInMethodContainer = styled.button`
 
   & > img {
     max-width: 64px;
+    height: 64px;
     margin-bottom: 4px;
   }
 `;

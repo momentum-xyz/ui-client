@@ -1,10 +1,11 @@
 import {WalletConfigInterface} from 'wallets';
+import icon from 'static/images/walletMetamask.svg';
 
 import {useWallet} from './useWallet';
 
 const config: WalletConfigInterface = {
   name: 'Metamask',
-  icon: 'https://avatars.githubusercontent.com/u/18060234?s=200&v=4', //'TODO',
+  icon,
   browserExtensionUrl: 'https://metamask.io/download/',
   useWallet
 };

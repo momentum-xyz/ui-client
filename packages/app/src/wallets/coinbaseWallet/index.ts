@@ -1,10 +1,11 @@
 import {WalletConfigInterface} from 'wallets';
+import icon from 'static/images/walletCoinbase.svg';
 
 import {useWallet} from './useWallet';
 
 const config: WalletConfigInterface = {
   name: 'Coinbase', // 'Coinbase Wallet',
-  icon: 'https://avatars.githubusercontent.com/u/18060234?s=200&v=4', //'TODO',
+  icon,
   browserExtensionUrl: 'https://www.coinbase.com/wallet/articles/getting-started-extension',
   useWallet
 };
