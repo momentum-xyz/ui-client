@@ -1,13 +1,17 @@
 import {FC, useState} from 'react';
 
+import {Hexagon} from '../Hexagon';
+import {IconNameType} from '../../types';
+
 import * as styled from './Image.styled';
 
 export interface ImagePropsInterface {
   src?: string | null;
   height?: number;
+  errorIcon?: IconNameType;
 }
 
-const Image: FC<ImagePropsInterface> = ({src, height = 124}) => {
+const Image: FC<ImagePropsInterface> = ({src, errorIcon = 'rabbit_fill', height = 124}) => {
   const [isError, setIsError] = useState<boolean>(false);
 
   return (
@@ -15,7 +19,9 @@ const Image: FC<ImagePropsInterface> = ({src, height = 124}) => {
       {src && !isError ? (
         <styled.Image src={src} onError={() => setIsError(true)} />
       ) : (
-        <styled.ErroredImage />
+        <styled.ErroredImage>
+          <Hexagon type="secondary" iconName={errorIcon} noHover skipOuterBorder />
+        </styled.ErroredImage>
       )}
     </styled.Container>
   );

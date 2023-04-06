@@ -1,6 +1,7 @@
 import CarouselComponent from 'react-multi-carousel';
 
 import {Image} from '../../atoms/Image';
+import {IconNameType} from '../../types';
 
 import * as styled from './Slider.styled';
 
@@ -13,10 +14,11 @@ export interface SliderItemInterface<T> {
 export interface SliderPropsInterface<T> {
   items: SliderItemInterface<T>[];
   height?: number;
+  errorIcon?: IconNameType;
   onClick: (id: T) => void;
 }
 
-const Slider = <T,>({items, height, onClick}: SliderPropsInterface<T>) => {
+const Slider = <T,>({items, height, errorIcon, onClick}: SliderPropsInterface<T>) => {
   return (
     <styled.Container data-testid="Slider-test">
       <CarouselComponent
@@ -35,7 +37,7 @@ const Slider = <T,>({items, height, onClick}: SliderPropsInterface<T>) => {
       >
         {items.map((item) => (
           <styled.ItemLink key={`${item.id}`} onClick={() => onClick(item.id)}>
-            <Image height={height} src={item.image} />
+            <Image height={height} src={item.image} errorIcon={errorIcon} />
             <styled.ItemName>
               <span>{item.name}</span>
             </styled.ItemName>

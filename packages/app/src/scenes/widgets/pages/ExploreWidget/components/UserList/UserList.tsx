@@ -53,7 +53,7 @@ const UserList: FC<PropsInterface> = ({
 
             {searchResults.map((item) => (
               <styled.SearchResultItem key={item.id}>
-                <Image src={getImageAbsoluteUrl(item.image)} />
+                <Image src={getImageAbsoluteUrl(item.image)} errorIcon="astronaut" />
                 <styled.ItemContent>
                   <styled.ItemName>{item.name}</styled.ItemName>
                   <styled.ItemDesc>
@@ -75,11 +75,19 @@ const UserList: FC<PropsInterface> = ({
           <styled.PopularContainer>
             <styled.BlockTitle>Most Staked Members</styled.BlockTitle>
             <styled.Carousel>
-              <Slider items={mostStakedItems} onClick={(uuid) => onUserClick(uuid)} />
+              <Slider
+                items={mostStakedItems}
+                errorIcon="astronaut"
+                onClick={(uuid) => onUserClick(uuid)}
+              />
             </styled.Carousel>
             <styled.BlockTitle>New Members</styled.BlockTitle>
             <styled.Carousel>
-              <Slider items={lastCreatedItems} onClick={(uuid) => onUserClick(uuid)} />
+              <Slider
+                items={lastCreatedItems}
+                errorIcon="astronaut"
+                onClick={(uuid) => onUserClick(uuid)}
+              />
             </styled.Carousel>
           </styled.PopularContainer>
         )}
