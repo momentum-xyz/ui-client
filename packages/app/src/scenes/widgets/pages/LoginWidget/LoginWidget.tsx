@@ -1,6 +1,6 @@
 import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Panel, Hexagon} from '@momentum-xyz/ui-kit-storybook';
+import {Panel} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
@@ -36,11 +36,7 @@ const LoginWidget: FC = () => {
 
   return (
     <styled.Container>
-      <Panel
-        title={panelTitle}
-        variant="primary"
-        hexagon={<Hexagon type="secondary-borderless" iconName={panelIconName} />}
-      >
+      <Panel title={panelTitle} variant="primary" icon={panelIconName}>
         {!isSignUp && <SignIn onConnected={handleAccountConnected} />}
         {isSignUp && <CreateOdysseyForm onCreated={handleAccountConnected} />}
       </Panel>

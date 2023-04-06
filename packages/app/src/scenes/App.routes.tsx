@@ -3,9 +3,6 @@ import React, {lazy} from 'react';
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
-const SignInAccountPage = lazy(() => import('./auth/pages/SignInAccountPage/SignInAccountPage'));
-const BirthOfMePage = lazy(() => import('./auth/pages/BirthOfMePage/BirthOfMePage'));
-const BirthAnimationPage = lazy(() => import('./auth/pages/BirthAnimationPage/BirthAnimationPage'));
 const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
 const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));
 const OdysseyHomePage = lazy(() => import('./odysseyHome/pages/OdysseyHomePage/OdysseyHomePage'));
@@ -34,19 +31,6 @@ export const SYSTEM_ROUTES: RouteConfigInterface[] = [
 ];
 
 export const UNIVERSE_ROUTES: RouteConfigInterface[] = [
-  {
-    path: ROUTES.signInAccount,
-    main: () => <SignInAccountPage />
-  },
-  {
-    path: ROUTES.birth,
-    exact: true,
-    main: () => <BirthOfMePage />
-  },
-  {
-    path: ROUTES.birthAnimation,
-    main: () => <BirthAnimationPage />
-  },
   {
     path: ROUTES.explore,
     main: () => <ExplorePage />
