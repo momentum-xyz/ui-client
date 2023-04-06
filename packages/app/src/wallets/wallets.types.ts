@@ -6,12 +6,8 @@ export interface UseWalletHookReturnInterface {
   content?: ReactNode;
   signChallenge: (challenge: string) => Promise<string>;
 }
-
-type WalletsToDisplayType = 'all' | 'withNfts' | 'withoutNfts';
 export interface UseWalletPropsInterface {
   appVariables: {[key: string]: string};
-  walletsToDisplay?: WalletsToDisplayType;
-  existingNftAddresses?: string[];
 }
 
 export type UseWalletType = (props: UseWalletPropsInterface) => UseWalletHookReturnInterface;

@@ -201,7 +201,15 @@ export const enGb = {
       signInWithYourWalletDescription:
         'Lorem ipsum dolor sit amet, consectetuer adipicing elit. Aenean commodo ligula.',
       connectYourWallet: 'Connect your wallet',
-      signUpTitle: 'Create account'
+      signUpTitle: 'Create account',
+      createYourProfileTitle: 'Create your profile',
+      createYourProfileDescription:
+        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor',
+      nameInputLabel: 'Enter a name*',
+      nameInputPlaceholder: 'Enter a name',
+      chooseAnImageLabel: 'Choose an Image',
+      areYouReadyText: 'Are you ready? Start counting. Go!',
+      startYourJourney: 'Start your journey'
     },
     errors: {
       oidcSession: 'Something wrong with session',

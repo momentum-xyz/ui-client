@@ -6,8 +6,7 @@ import {useI18n} from '@momentum-xyz/core';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './LoginWidget.styled';
-import {SignIn} from './components/organisms/SignIn';
-import {CreateOdysseyForm} from './components/organisms/CreateOdysseyForm';
+import {SignIn, SignUp} from './components';
 
 const LoginWidget: FC = () => {
   const {sessionStore, widgetManagerStore} = useStore();
@@ -38,7 +37,7 @@ const LoginWidget: FC = () => {
     <styled.Container>
       <Panel title={panelTitle} variant="primary" icon={panelIconName}>
         {!isSignUp && <SignIn onConnected={handleAccountConnected} />}
-        {isSignUp && <CreateOdysseyForm onCreated={handleAccountConnected} />}
+        {isSignUp && <SignUp onCreated={handleAccountConnected} />}
       </Panel>
     </styled.Container>
   );
