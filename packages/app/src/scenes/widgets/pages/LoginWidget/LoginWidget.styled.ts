@@ -4,5 +4,5 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 400px;
+  width: var(--widget-width);
 `;

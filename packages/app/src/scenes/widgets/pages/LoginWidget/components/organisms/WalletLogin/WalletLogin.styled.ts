@@ -6,14 +6,13 @@ export const Container = styled.div`
 
 export const TitleText = styled.div`
   margin-bottom: 22px;
-  font-family: Poppins;
   text-transform: uppercase;
   font-size: 15px;
   font-weight: 600;
   line-height: 22px;
   letter-spacing: 0.2em;
   text-align: left;
-  color: #ffffff;
+  color: ${(props) => props.theme.text};
 
   &.wallet {
     text-overflow: ellipsis;
