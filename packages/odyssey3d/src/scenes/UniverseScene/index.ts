@@ -1,1 +1,1 @@
-export * from './UniverseScene';
+export {default as UniverseScene} from './UniverseScene';

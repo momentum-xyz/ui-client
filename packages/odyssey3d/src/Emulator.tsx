@@ -82,16 +82,19 @@ const WorldEmulator: FC = () => {
   );
 };
 
+// generate 10 dummy worlds
+const dummyWorlds = Array.from({length: 10}, (_, i) => ({
+  id: '0d5b35b9-33c0-d917-c095-7ba3670755da',
+  name: 'Cool world ' + i,
+  description: 'Cool description',
+  image: 'https://picsum.photos/100',
+  owner: '123' + i
+}));
+
 const UniverseEmulator = () => {
   useEffect(() => {
-    for (let i = 0; i < 10; i++) {
-      Universe3dEmitter.emit('WorldAdded', {
-        id: '0d5b35b9-33c0-d917-c095-7ba3670755da',
-        name: 'Cool world ' + i,
-        description: 'Cool description',
-        image: 'https://picsum.photos/100',
-        owner: '123' + i
-      });
+    for (const w of dummyWorlds) {
+      Universe3dEmitter.emit('WorldAdded', w);
     }
 
     for (let i = 0; i < 10; i++) {
@@ -107,6 +110,7 @@ const UniverseEmulator = () => {
   return (
     <UniverseScene
       events={Universe3dEmitter}
+      worlds={dummyWorlds}
       onWorldClick={(e) => console.log('onWorldClick', e)}
       onUserClick={(e) => console.log('onUserClick', e)}
       onClickOutside={() => console.log('onClickOutside')}

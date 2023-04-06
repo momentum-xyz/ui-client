@@ -17,8 +17,9 @@ interface PropsInterface {
 const isBabylonUniverse = window.sessionStorage.getItem('babylon_universe');
 
 const Map3dPage: FC<PropsInterface> = () => {
-  const {nftStore, widgetsStore, sessionStore, widgetManagerStore} = useStore();
+  const {nftStore, widgetsStore, sessionStore, widgetManagerStore, universeStore} = useStore();
   const {previewOdysseyStore, odysseyInfoStore} = widgetsStore;
+  const {universe2dStore} = universeStore;
 
   useEffect(() => {
     return () => {
@@ -57,6 +58,7 @@ const Map3dPage: FC<PropsInterface> = () => {
   return isBabylonUniverse ? (
     <UniverseScene
       events={Universe3dEmitter}
+      worlds={universe2dStore.allWorlds}
       onWorldClick={handleSelect}
       onUserClick={handleSelectUser}
       onClickOutside={handleClickOutside}

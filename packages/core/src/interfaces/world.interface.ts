@@ -1,7 +1,7 @@
 export interface WorldInfoInterface {
-  id: string;
+  id: string | number; // temp
   name: string;
-  description: string;
+  description?: string;
   image: string;
   owner: string;
 }
