@@ -1,12 +1,20 @@
-import {FC, useMemo} from 'react';
+import {FC, useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Vector3, Scene, Color3, Mesh, MeshBuilder, PBRMaterial} from '@babylonjs/core';
+import {
+  Vector3,
+  Scene,
+  Color3,
+  Mesh,
+  MeshBuilder,
+  PBRMaterial,
+  ActionManager,
+  ExecuteCodeAction
+} from '@babylonjs/core';
 import {
   Scene as ReactScene,
   Engine,
   // useBeforeRender,
-  useScene,
-  useClick
+  useScene
 } from 'react-babylonjs';
 // import SceneComponent from 'babylonjs-hook';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
@@ -37,6 +45,7 @@ const WorldOrb: FC<{
   position?: Vector3;
   onClick?: () => void;
 }> = ({baseMesh, info, position = generateRandomVector3(), onClick}) => {
+  const scene = useScene();
   const {id, name} = info;
 
   const inst = useMemo(() => {
@@ -44,16 +53,17 @@ const WorldOrb: FC<{
   }, [baseMesh, id]);
   console.log('World', name, position, inst);
 
-  const [ref] = useClick((e) => {
-    console.log('WorldOrb: useClick', e);
-    // const color = getRandomColor()
-    // setColor(Color3.FromArray(color))
-    onClick?.();
-  });
+  useEffect(() => {
+    if (inst && onClick && !inst.actionManager) {
+      inst.actionManager = new ActionManager(scene);
+      inst.actionManager.registerAction(
+        new ExecuteCodeAction(ActionManager.OnPickTrigger, onClick)
+      );
+    }
+  }, [inst, scene, onClick]);
 
   return (
     <mesh
-      ref={ref}
       name={`World ${info.id}`}
       fromInstance={baseMesh}
       position={position}
