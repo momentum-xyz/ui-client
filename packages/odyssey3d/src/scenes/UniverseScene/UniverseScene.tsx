@@ -197,11 +197,9 @@ const UniverseScene: FC<PropsInterface> = ({worlds, events, ...callbacks}) => {
         renderOptions={{
           whenVisibleOnly: true
         }}
+        style={{width: '100vw', height: '100vh'}}
       >
-        <ReactScene
-          onSceneMount={onSceneReady}
-          //  style={{width: '100vw', height: '100vh'}}
-        >
+        <ReactScene onSceneMount={onSceneReady}>
           {/* <freeCamera
             name="camera1"
             position={new Vector3(0, 5, -10)}
