@@ -19,7 +19,8 @@ interface PropsInterface {
   searchResults: NftItemModelInterface[];
   lastCreatedItems: SliderItemInterface<string>[];
   mostStakedInItems: SliderItemInterface<string>[];
-  onShowDetails: (worldId: string) => void;
+  onWorldClick: (worldId: string) => void;
+  onUserClick: (users: string) => void;
   onVisit: (worldId: string) => void;
   onStake: (worldId: string) => void;
 }
@@ -29,7 +30,8 @@ const WorldList: FC<PropsInterface> = ({
   searchResults,
   lastCreatedItems,
   mostStakedInItems,
-  onShowDetails,
+  onWorldClick,
+  onUserClick,
   onVisit,
   onStake
 }) => {
@@ -56,7 +58,15 @@ const WorldList: FC<PropsInterface> = ({
               <styled.SearchResultItem key={item.id}>
                 <styled.Image src={getImageAbsoluteUrl(item.image) || ''} />
                 <styled.ItemContent>
-                  <styled.ItemName>{item.name}</styled.ItemName>
+                  <styled.ItemNameContainer>
+                    <styled.ItemName>{item.name}</styled.ItemName>
+                    <span>
+                      {'By: '}
+                      <styled.ItemLink onClick={() => onUserClick(item.uuid)}>
+                        {item.name}
+                      </styled.ItemLink>
+                    </span>
+                  </styled.ItemNameContainer>
                   <styled.ItemDesc>
                     Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                   </styled.ItemDesc>
@@ -64,7 +74,7 @@ const WorldList: FC<PropsInterface> = ({
                     <ButtonEllipse
                       label="Info"
                       icon="info_2"
-                      onClick={() => onShowDetails(item.uuid)}
+                      onClick={() => onWorldClick(item.uuid)}
                     />
                     <ButtonEllipse label="Visit" icon="fly-to" onClick={() => onVisit(item.uuid)} />
                     <ButtonEllipse label="Stake" icon="stake" onClick={() => onStake(item.uuid)} />
@@ -77,11 +87,11 @@ const WorldList: FC<PropsInterface> = ({
           <styled.PopularContainer>
             <styled.BlockTitle>Most Staked In</styled.BlockTitle>
             <styled.Carousel>
-              <Slider items={mostStakedInItems} onClick={(uuid) => onShowDetails(uuid)} />
+              <Slider items={mostStakedInItems} onClick={(uuid) => onWorldClick(uuid)} />
             </styled.Carousel>
             <styled.BlockTitle>New Odysseys</styled.BlockTitle>
             <styled.Carousel>
-              <Slider items={lastCreatedItems} onClick={(uuid) => onShowDetails(uuid)} />
+              <Slider items={lastCreatedItems} onClick={(uuid) => onWorldClick(uuid)} />
             </styled.Carousel>
           </styled.PopularContainer>
         )}

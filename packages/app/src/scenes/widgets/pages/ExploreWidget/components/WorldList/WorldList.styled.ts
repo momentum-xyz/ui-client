@@ -70,12 +70,16 @@ export const ItemContent = styled.div`
   gap: 10px;
 `;
 
+export const ItemNameContainer = styled.div``;
+
 export const ItemName = styled.div`
   font-size: var(--font-size-xl);
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-weight: 700;
 `;
+
+export const ItemLink = styled.a``;
 
 export const ItemDesc = styled.div``;
 

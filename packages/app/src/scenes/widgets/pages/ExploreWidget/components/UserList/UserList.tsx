@@ -19,7 +19,7 @@ interface PropsInterface {
   searchResults: NftItemModelInterface[];
   lastCreatedItems: SliderItemInterface<string>[];
   mostStakedItems: SliderItemInterface<string>[];
-  onShowDetails: (userId: string) => void;
+  onUserClick: (userId: string) => void;
   onVisit: (userId: string) => void;
 }
 
@@ -28,7 +28,7 @@ const UserList: FC<PropsInterface> = ({
   searchResults,
   lastCreatedItems,
   mostStakedItems,
-  onShowDetails,
+  onUserClick,
   onVisit
 }) => {
   return (
@@ -62,7 +62,7 @@ const UserList: FC<PropsInterface> = ({
                     <ButtonEllipse
                       label="Info"
                       icon="info_2"
-                      onClick={() => onShowDetails(item.uuid)}
+                      onClick={() => onUserClick(item.uuid)}
                     />
                     <ButtonEllipse label="Visit" icon="fly-to" onClick={() => onVisit(item.uuid)} />
                   </styled.Actions>
@@ -74,11 +74,11 @@ const UserList: FC<PropsInterface> = ({
           <styled.PopularContainer>
             <styled.BlockTitle>Most Staked Members</styled.BlockTitle>
             <styled.Carousel>
-              <Slider items={mostStakedItems} onClick={(uuid) => onShowDetails(uuid)} />
+              <Slider items={mostStakedItems} onClick={(uuid) => onUserClick(uuid)} />
             </styled.Carousel>
             <styled.BlockTitle>New Members</styled.BlockTitle>
             <styled.Carousel>
-              <Slider items={lastCreatedItems} onClick={(uuid) => onShowDetails(uuid)} />
+              <Slider items={lastCreatedItems} onClick={(uuid) => onUserClick(uuid)} />
             </styled.Carousel>
           </styled.PopularContainer>
         )}
