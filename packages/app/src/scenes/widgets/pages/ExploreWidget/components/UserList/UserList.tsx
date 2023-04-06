@@ -2,6 +2,7 @@ import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {
   Input,
+  Image,
   Frame,
   Slider,
   ButtonEllipse,
@@ -52,7 +53,7 @@ const UserList: FC<PropsInterface> = ({
 
             {searchResults.map((item) => (
               <styled.SearchResultItem key={item.id}>
-                <styled.Image src={getImageAbsoluteUrl(item.image) || ''} />
+                <Image src={getImageAbsoluteUrl(item.image)} />
                 <styled.ItemContent>
                   <styled.ItemName>{item.name}</styled.ItemName>
                   <styled.ItemDesc>

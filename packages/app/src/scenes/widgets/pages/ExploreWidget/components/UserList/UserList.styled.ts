@@ -56,13 +56,6 @@ export const SearchResultItem = styled.div`
   gap: 20px;
 `;
 
-export const Image = styled.img`
-  width: 170px;
-  height: 124px;
-  border-radius: 4px;
-  object-fit: cover;
-`;
-
 export const ItemContent = styled.div`
   display: flex;
   flex-direction: column;
