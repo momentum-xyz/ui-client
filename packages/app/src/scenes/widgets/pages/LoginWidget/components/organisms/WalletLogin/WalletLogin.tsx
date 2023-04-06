@@ -2,6 +2,7 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button} from '@momentum-xyz/ui-kit-storybook';
+import {useI18n} from '@momentum-xyz/core';
 
 import {WalletConfigInterface} from 'wallets';
 import {useStore} from 'shared/hooks';
@@ -74,6 +75,3 @@ const WalletLogin: FC<PropsInterface> = ({
 };
 
 export default observer(WalletLogin);
-function useI18n(): {t: any} {
-  throw new Error('Function not implemented.');
-}

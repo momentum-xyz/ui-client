@@ -202,7 +202,7 @@ const SessionStore = types
     },
     // TODO: Removal
     signInRedirect(isNewAccount?: boolean): void {
-      document.location = isNewAccount ? ROUTES.signInAccount : ROUTES.signInAccount;
+      // document.location = isNewAccount ? ROUTES.signInAccount : ROUTES.signInAccount;
     }
   }))
   .actions((self) => ({

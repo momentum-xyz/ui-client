@@ -1,3 +1,4 @@
+import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -8,7 +9,7 @@ export const Container = styled.div`
 
 export const SignInMethodsContainer = styled.div`
   padding-top: 22px;
-  border-top: 2px solid #9eeeff;
+  border-top: 2px solid ${(props) => props.theme.accentText};
   & > .title {
     display: block;
     margin: 0 10px 22px;
@@ -19,7 +20,7 @@ export const SignInMethodsContainer = styled.div`
     line-height: 22px;
     letter-spacing: 0.2em;
     text-align: left;
-    color: #ffffff;
+    color: ${(props) => props.theme.text};
   }
 
   & > .methods {
@@ -39,8 +40,8 @@ export const SignInMethodContainer = styled.button`
   padding: 10px, 6px, 10px, 6px;
   margin: 0 17px 20px;
 
-  background: rgba(0, 67, 115, 0.4);
-  border: 1px solid rgba(158, 238, 255, 0.6);
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
+  border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
 
   & > span {
     font-family: Poppins;
@@ -49,7 +50,7 @@ export const SignInMethodContainer = styled.button`
     line-height: 18px;
     letter-spacing: 0.08em;
     text-align: center;
-    color: #ffffff;
+    color: ${(props) => props.theme.text};
   }
 
   & > img {
