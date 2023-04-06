@@ -9,13 +9,19 @@ export interface ImagePropsInterface {
   src?: string | null;
   height?: number;
   errorIcon?: IconNameType;
+  onClick?: () => void;
 }
 
-const Image: FC<ImagePropsInterface> = ({src, errorIcon = 'rabbit_fill', height = 124}) => {
+const Image: FC<ImagePropsInterface> = ({
+  src,
+  errorIcon = 'rabbit_fill',
+  onClick,
+  height = 124
+}) => {
   const [isError, setIsError] = useState<boolean>(false);
 
   return (
-    <styled.Container height={height} data-testid="Image-test">
+    <styled.Container height={height} data-testid="Image-test" onClick={onClick}>
       {src && !isError ? (
         <styled.Image src={src} onError={() => setIsError(true)} />
       ) : (

@@ -11,6 +11,10 @@ export const Container = styled.div<{height: number}>`
   align-items: center;
   justify-content: center;
   border-radius: var(--border-radius);
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const Image = styled.img`
@@ -20,4 +24,6 @@ export const Image = styled.img`
   border-radius: var(--border-radius);
 `;
 
-export const ErroredImage = styled.div``;
+export const ErroredImage = styled.div`
+  pointer-events: none;
+`;

@@ -9,7 +9,7 @@ export const Container = styled.div`
     background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
 
     &:hover {
-      background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
+      background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
     }
   }
 `;

@@ -17,7 +17,7 @@ type ExploreTabType = 'worlds' | 'users';
 
 const TABS_LIST: TabInterface<ExploreTabType>[] = [
   {id: 'worlds', icon: 'rabbit_fill', label: i18n.t('labels.odysseys')},
-  {id: 'users', icon: 'astronaut', label: i18n.t('labels.accounts')}
+  {id: 'users', icon: 'astronaut', label: i18n.t('labels.members')}
 ];
 
 const ExploreWidget: FC = () => {
@@ -35,13 +35,11 @@ const ExploreWidget: FC = () => {
     universe2dStore.searchQuery.resetModel();
   }, [activeTab, universe2dStore]);
 
-  console.log(activeItem);
-
   return (
     <styled.Container data-testid="ExploreWidget">
       <styled.ExplorePanel className={cn(!!activeItem && 'collapsed')}>
         <Panel
-          icon="search"
+          icon="explore"
           variant="primary"
           title={t('labels.explore')}
           closeIcon={activeItem ? 'arrow' : 'close_large'}
