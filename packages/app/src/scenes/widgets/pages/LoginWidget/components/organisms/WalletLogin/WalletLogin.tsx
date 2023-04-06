@@ -25,6 +25,8 @@ const WalletLogin: FC<PropsInterface> = ({
   const {name, useWallet} = walletConf;
   const {sessionStore} = useStore();
 
+  const {t} = useI18n();
+
   const {signChallenge, content, account, accountHex} = useWallet({
     appVariables: appVariables as any
   });
@@ -58,10 +60,10 @@ const WalletLogin: FC<PropsInterface> = ({
 
   return (
     <styled.Container>
-      <styled.TitleText>Connect with {name}</styled.TitleText>
+      <styled.TitleText>{t('login.connectWith', {wallet: name})}</styled.TitleText>
       <styled.WalletInnerViewContainer>{innerView}</styled.WalletInnerViewContainer>
       <Button
-        label="Connect your wallet"
+        label={t('login.connectYourWallet')}
         icon="wallet"
         disabled={!accountHex}
         wide
@@ -72,3 +74,6 @@ const WalletLogin: FC<PropsInterface> = ({
 };
 
 export default observer(WalletLogin);
+function useI18n(): {t: any} {
+  throw new Error('Function not implemented.');
+}

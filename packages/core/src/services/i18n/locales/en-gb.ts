@@ -201,6 +201,7 @@ export const enGb = {
       signInWithYourWalletDescription:
         'Lorem ipsum dolor sit amet, consectetuer adipicing elit. Aenean commodo ligula.',
       connectYourWallet: 'Connect your wallet',
+      connectWith: 'Connect with {{wallet}}',
       signUpTitle: 'Create account',
       createYourProfileTitle: 'Create your profile',
       createYourProfileDescription:

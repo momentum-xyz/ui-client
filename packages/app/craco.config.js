@@ -67,11 +67,6 @@ module.exports = {
             eager: true,
             requiredVersion: "^0.1.3"
           },
-          "@momentum-xyz/ui-kit-storybook": {
-            singleton: true,
-            eager: true,
-            requiredVersion: "^0.1.0"
-          },
         }
       })
     ],
