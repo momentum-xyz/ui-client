@@ -73,7 +73,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
 
       events.on('UsersTransformChanged', (users) => {
         PlayerHelper.setUsersPosition(users);
-      })
+      });
 
       events.on('ObjectEditModeChanged', (objectId, isOn) => {
         WorldCreatorHelper.toggleGizmo(objectId, isOn);
