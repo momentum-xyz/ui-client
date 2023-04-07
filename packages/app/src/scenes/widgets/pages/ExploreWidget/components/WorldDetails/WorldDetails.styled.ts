@@ -6,5 +6,12 @@ export const Container = styled.div`
 `;
 
 export const Wrapper = styled.div`
-  height: 100%;
+  padding: 0;
+`;
+
+export const GeneralScrollable = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+  gap: 10px;
 `;

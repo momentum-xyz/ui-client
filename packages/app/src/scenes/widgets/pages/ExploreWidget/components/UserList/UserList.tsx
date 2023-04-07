@@ -3,15 +3,13 @@ import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {
   Input,
-  Image,
   Frame,
   Slider,
-  ButtonEllipse,
   stringInputMask,
   SliderItemInterface
 } from '@momentum-xyz/ui-kit-storybook';
 
-import {getImageAbsoluteUrl} from 'core/utils';
+import {ItemCard} from 'ui-kit';
 import {NftItemModelInterface, SearchQueryModelModelType} from 'core/models';
 
 import * as styled from './UserList.styled';
@@ -53,33 +51,16 @@ const UserList: FC<PropsInterface> = ({
         {searchQuery.isQueryValid ? (
           <styled.SearchContainer>
             <styled.SearchResultTitle>{t('labels.searchResults')}</styled.SearchResultTitle>
-
             {searchResults.map((item) => (
-              <styled.SearchResultItem key={item.id}>
-                <Image
-                  src={getImageAbsoluteUrl(item.image)}
-                  errorIcon="astronaut"
-                  onClick={() => onUserClick(item.uuid)}
-                />
-                <styled.ItemContent>
-                  <styled.ItemName>{item.name}</styled.ItemName>
-                  <styled.ItemDesc>
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                  </styled.ItemDesc>
-                  <styled.Actions>
-                    <ButtonEllipse
-                      label={t('actions.info')}
-                      icon="info_2"
-                      onClick={() => onUserClick(item.uuid)}
-                    />
-                    <ButtonEllipse
-                      label={t('actions.visit')}
-                      icon="fly-to"
-                      onClick={() => onVisit(item.uuid)}
-                    />
-                  </styled.Actions>
-                </styled.ItemContent>
-              </styled.SearchResultItem>
+              <ItemCard
+                key={item.id}
+                name={item.name}
+                image={item.image}
+                imageErrorIcon="astronaut"
+                description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+                onInfoClick={() => onUserClick(item.uuid)}
+                onVisitClick={() => onVisit(item.uuid)}
+              />
             ))}
           </styled.SearchContainer>
         ) : (

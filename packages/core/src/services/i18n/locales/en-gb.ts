@@ -632,6 +632,8 @@ export const enGb = {
       createOrSignIn: 'Create an account or sign in',
       searchOdysseys: 'Search odysseys',
       searchMembers: 'Search members',
+      visitOdyssey: 'Visit Odyssey',
+      stakeInOdyssey: 'Stake in Odyssey',
       approve: 'Approve',
       joinStage: 'Join Stage',
       decline: 'Decline',

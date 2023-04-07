@@ -102,7 +102,16 @@ const ExploreWidget: FC = () => {
       {universe2dStore.selectedWorld && (
         <styled.Details>
           <WorldDetails
-            worldId={universe2dStore.selectedWorld}
+            worldDetails={universe2dStore.selectedWorld}
+            onUserClick={(userId) => {
+              universe2dStore.selectUser(userId);
+            }}
+            onVisit={(worldId) => {
+              navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+            }}
+            onStake={(worldId) => {
+              navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+            }}
             onClose={universe2dStore.resetUnits}
           />
         </styled.Details>
@@ -111,7 +120,16 @@ const ExploreWidget: FC = () => {
       {/* SHOW USER OVERVIEW */}
       {universe2dStore.selectedUser && (
         <styled.Details>
-          <UserDetails userId={universe2dStore.selectedUser} onClose={universe2dStore.resetUnits} />
+          <UserDetails
+            userDetails={universe2dStore.selectedUser}
+            onVisit={(worldId) => {
+              navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+            }}
+            onStake={(worldId) => {
+              navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+            }}
+            onClose={universe2dStore.resetUnits}
+          />
         </styled.Details>
       )}
     </styled.Container>

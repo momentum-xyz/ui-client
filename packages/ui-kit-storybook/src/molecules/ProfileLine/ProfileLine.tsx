@@ -1,4 +1,4 @@
-import {FC, memo} from 'react';
+import {FC, memo, ReactNode} from 'react';
 
 import {IconNameType} from '../../types';
 import {ButtonRound} from '../../atoms';
@@ -7,7 +7,7 @@ import * as styled from './ProfileLine.styled';
 
 export interface ProfileLinePropsInterface {
   icon: IconNameType;
-  label: string;
+  label: string | ReactNode;
 }
 
 const ProfileLine: FC<ProfileLinePropsInterface> = ({icon, label}) => {

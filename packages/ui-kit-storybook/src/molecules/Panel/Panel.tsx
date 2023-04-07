@@ -10,7 +10,7 @@ export interface PanelPropsInterface extends PropsWithChildren {
   variant: 'primary' | 'secondary';
   title: string;
   label?: string;
-  image?: string;
+  image?: string | null;
   icon?: IconNameType;
   closeIcon?: IconNameType;
   onClose?: () => void;
