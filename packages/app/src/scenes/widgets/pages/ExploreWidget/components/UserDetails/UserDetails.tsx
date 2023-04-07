@@ -19,7 +19,7 @@ const UserDetails: FC<PropsInterface> = ({userId, onClose}) => {
     <styled.Container data-testid="UserDetails-test">
       <Panel icon="explore" variant="primary" title={t('labels.memberProfile')} onClose={onClose}>
         <styled.Wrapper>
-          <Image errorIcon="astronaut" />
+          <Image errorIcon="astronaut" height={200} />
         </styled.Wrapper>
       </Panel>
     </styled.Container>

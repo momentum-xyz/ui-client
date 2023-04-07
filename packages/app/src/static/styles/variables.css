@@ -3,10 +3,10 @@
   --menu-height: 70px;
   --menu-padding: 10px;
 
-  /* MENU */
+  /* WIDGET HEIGHT */
+  --widget-max-height: calc(100vh - var(--menu-height) - 5 * var(--menu-padding));
+
+  /* WIDGET WIDTH */
   --widget-width-big: 570px;
   --widget-width-normal: 400px;
-
-  /* SIGN IN */
-  --widget-width: 400px;
 }

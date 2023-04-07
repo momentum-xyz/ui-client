@@ -1,12 +1,11 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  --width: var(--widget-width-big);
-`;
+export const Container = styled.div``;
 
 export const ExplorePanel = styled.div`
   position: relative;
-  width: var(--width);
+  width: var(--widget-width-big);
+  height: var(--widget-max-height);
 
   &.collapsed {
     position: absolute;

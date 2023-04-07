@@ -19,7 +19,7 @@ const WorldDetails: FC<PropsInterface> = ({worldId, onClose}) => {
     <styled.Container data-testid="WorldDetails-test">
       <Panel icon="explore" variant="primary" title={t('labels.odysseyOverview')} onClose={onClose}>
         <styled.Wrapper>
-          <Image errorIcon="rabbit_fill" />
+          <Image errorIcon="rabbit_fill" height={200} />
         </styled.Wrapper>
       </Panel>
     </styled.Container>
