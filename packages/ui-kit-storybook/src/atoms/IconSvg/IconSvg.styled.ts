@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.span`
+  --icon-size-xxl: 40px;
   --icon-size-xl: 20px;
   --icon-size-l: 18px;
   --icon-size-m: 16px;
@@ -52,6 +53,11 @@ export const Wrapper = styled.span`
   &.xl {
     width: var(--icon-size-xl);
     height: var(--icon-size-xl);
+  }
+
+  &.xxl {
+    width: var(--icon-size-xxl);
+    height: var(--icon-size-xxl);
   }
 
   /* STATES */
