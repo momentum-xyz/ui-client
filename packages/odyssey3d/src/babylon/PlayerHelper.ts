@@ -210,17 +210,17 @@ export class PlayerHelper {
     }
   }
 
-  static setUsersPosition(users: Odyssey3dUserTransformInterface[]) {
+  static setUserTransforms(users: Odyssey3dUserTransformInterface[]) {
     for (const user of users) {
       if (user.id === this.playerId) {
-        return;
+        continue;
       }
       const userObj = this.userMap.get(user.id);
 
       if (userObj) {
         if (userObj.userInstance.rootNodes.length === 0) {
           console.log('Cant set position, because the instance of user has no rootnode.');
-          return;
+          continue;
         }
 
         const transformNode = userObj.userInstance.rootNodes[0];
