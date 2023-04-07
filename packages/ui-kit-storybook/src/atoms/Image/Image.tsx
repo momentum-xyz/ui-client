@@ -9,14 +9,16 @@ export interface ImagePropsInterface {
   src?: string | null;
   height?: number;
   errorIcon?: IconNameType;
+  errorIconOffset?: number;
   onClick?: () => void;
 }
 
 const Image: FC<ImagePropsInterface> = ({
   src,
+  height = 124,
   errorIcon = 'rabbit_fill',
-  onClick,
-  height = 124
+  errorIconOffset = 0,
+  onClick
 }) => {
   const [isError, setIsError] = useState<boolean>(false);
 
@@ -25,7 +27,7 @@ const Image: FC<ImagePropsInterface> = ({
       {src && !isError ? (
         <styled.Image src={src} onError={() => setIsError(true)} />
       ) : (
-        <styled.ErroredImage>
+        <styled.ErroredImage errorIconOffset={errorIconOffset}>
           <Hexagon type="secondary" iconName={errorIcon} noHover skipOuterBorder />
         </styled.ErroredImage>
       )}

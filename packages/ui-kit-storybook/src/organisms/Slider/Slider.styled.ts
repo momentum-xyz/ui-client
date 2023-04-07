@@ -27,7 +27,7 @@ export const ItemName = styled.div`
   display: flex;
   justify-content: flex-start;
   color: ${(props) => props.theme.text};
-  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
   font-size: var(--font-size-s);
   text-transform: uppercase;
   letter-spacing: 0.1em;

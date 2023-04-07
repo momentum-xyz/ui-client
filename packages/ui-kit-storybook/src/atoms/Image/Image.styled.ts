@@ -7,7 +7,7 @@ export const Container = styled.div<{height: number}>`
   display: flex;
   width: 100%;
   height: ${(props) => props.height}px;
-  background-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
+  background-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
   align-items: center;
   justify-content: center;
   border-radius: var(--border-radius);
@@ -24,6 +24,7 @@ export const Image = styled.img`
   border-radius: var(--border-radius);
 `;
 
-export const ErroredImage = styled.div`
+export const ErroredImage = styled.div<{errorIconOffset: number}>`
+  padding: 0 0 ${(props) => props.errorIconOffset}px 0;
   pointer-events: none;
 `;

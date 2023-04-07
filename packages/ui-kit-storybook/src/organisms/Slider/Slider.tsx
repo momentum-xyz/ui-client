@@ -15,10 +15,17 @@ export interface SliderPropsInterface<T> {
   items: SliderItemInterface<T>[];
   height?: number;
   errorIcon?: IconNameType;
+  errorIconOffset?: number;
   onClick: (id: T) => void;
 }
 
-const Slider = <T,>({items, height, errorIcon, onClick}: SliderPropsInterface<T>) => {
+const Slider = <T,>({
+  items,
+  height,
+  errorIcon,
+  errorIconOffset = 15,
+  onClick
+}: SliderPropsInterface<T>) => {
   return (
     <styled.Container data-testid="Slider-test">
       <CarouselComponent
@@ -37,7 +44,12 @@ const Slider = <T,>({items, height, errorIcon, onClick}: SliderPropsInterface<T>
       >
         {items.map((item) => (
           <styled.ItemLink key={`${item.id}`} onClick={() => onClick(item.id)}>
-            <Image height={height} src={item.image} errorIcon={errorIcon} />
+            <Image
+              height={height}
+              src={item.image}
+              errorIcon={errorIcon}
+              errorIconOffset={errorIconOffset}
+            />
             <styled.ItemName>
               <span>{item.name}</span>
             </styled.ItemName>

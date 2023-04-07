@@ -6,6 +6,7 @@ import * as styled from './ProfileInfo.styled';
 
 interface PropsInterface {
   address?: string;
+  hash?: string;
   description?: string;
   joinDate?: string;
   onVisit?: () => void;
@@ -13,12 +14,13 @@ interface PropsInterface {
 }
 
 const ProfileInfo: FC<PropsInterface> = (props) => {
-  const {description, address, joinDate, onVisit, onStake} = props;
+  const {hash, description, address, joinDate, onVisit, onStake} = props;
 
   const {t} = useI18n();
 
   return (
     <styled.Container data-testid="ProfileInfo-test">
+      {hash && <styled.Hash>{hash}</styled.Hash>}
       {description && <div>{description}</div>}
       {address && (
         <ProfileLine
@@ -33,14 +35,17 @@ const ProfileInfo: FC<PropsInterface> = (props) => {
       {joinDate && (
         <ProfileLine icon="astro" label={`${t('actions.joined')} ${signUpDateString(joinDate)}`} />
       )}
-      <styled.Actions>
-        {!!onVisit && (
-          <ButtonEllipse icon="fly-to" label={t('actions.visitOdyssey')} onClick={onVisit} />
-        )}
-        {!!onStake && (
-          <ButtonEllipse icon="stake" label={t('actions.stakeInOdyssey')} onClick={onStake} />
-        )}
-      </styled.Actions>
+
+      {(!!onVisit || !!onStake) && (
+        <styled.Actions>
+          {!!onVisit && (
+            <ButtonEllipse icon="fly-to" label={t('actions.visitOdyssey')} onClick={onVisit} />
+          )}
+          {!!onStake && (
+            <ButtonEllipse icon="stake" label={t('actions.stakeInOdyssey')} onClick={onStake} />
+          )}
+        </styled.Actions>
+      )}
     </styled.Container>
   );
 };
