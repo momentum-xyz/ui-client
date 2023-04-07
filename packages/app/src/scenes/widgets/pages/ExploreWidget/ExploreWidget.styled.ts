@@ -16,6 +16,10 @@ export const ExplorePanel = styled.div`
 
 export const Wrapper = styled.div`
   position: relative;
+
+  &.collapsed {
+    opacity: 0;
+  }
 `;
 
 export const Tabs = styled.div`

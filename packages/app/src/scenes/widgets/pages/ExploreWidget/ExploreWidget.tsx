@@ -53,7 +53,7 @@ const ExploreWidget: FC = () => {
             hasSelectedUnit ? universe2dStore.resetUnits() : close(WidgetEnum.EXPLORE);
           }}
         >
-          <styled.Wrapper>
+          <styled.Wrapper className={cn(hasSelectedUnit && 'collapsed')}>
             <styled.Tabs>
               <Tabs tabList={TABS_LIST} activeId={activeTab} onSelect={setActiveTab} />
             </styled.Tabs>
