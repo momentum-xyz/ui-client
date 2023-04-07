@@ -1,4 +1,4 @@
-import {FC, useEffect, useMemo, useRef} from 'react';
+import {FC, MutableRefObject, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {
   Vector3,
@@ -7,16 +7,10 @@ import {
   Mesh,
   MeshBuilder,
   PBRMaterial,
-  ActionManager,
-  ExecuteCodeAction,
-  InstancedMesh
+  InstancedMesh,
+  Nullable
 } from '@babylonjs/core';
-import {
-  Scene as ReactScene,
-  Engine,
-  // useBeforeRender,
-  useScene
-} from 'react-babylonjs';
+import {Scene as ReactScene, Engine, useClick, useScene} from 'react-babylonjs';
 // import SceneComponent from 'babylonjs-hook';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
 import {Universe3dEmitterType, WorldInfoInterface} from '@momentum-xyz/core';
@@ -46,26 +40,29 @@ const WorldOrb: FC<{
   position?: Vector3;
   onClick?: () => void;
 }> = ({baseMesh, info, position = generateRandomVector3(), onClick}) => {
-  const scene = useScene();
+  // const scene = useScene();
   const {id, name} = info;
   console.log('World', id, name, position);
 
-  const ref = useRef<InstancedMesh>(null);
+  // const ref = useRef<InstancedMesh>(null);
+  const [ref] = useClick((e) => {
+    console.log('WorldOrb: useClick', e);
+  });
 
-  useEffect(() => {
-    const inst = ref.current;
-    if (inst && onClick && !inst.actionManager) {
-      inst.actionManager = new ActionManager(scene);
-      inst.actionManager.registerAction(
-        new ExecuteCodeAction(ActionManager.OnPickTrigger, onClick)
-      );
-    }
-  }, [scene, onClick]);
+  // useEffect(() => {
+  //   const inst = ref.current;
+  //   if (inst && onClick && !inst.actionManager) {
+  //     inst.actionManager = new ActionManager(scene);
+  //     inst.actionManager.registerAction(
+  //       new ExecuteCodeAction(ActionManager.OnPickTrigger, onClick)
+  //     );
+  //   }
+  // }, [scene, onClick]);
 
   return (
     <instancedMesh
       name={`World ${info.id}`}
-      ref={ref}
+      ref={ref as MutableRefObject<Nullable<InstancedMesh>>}
       source={baseMesh}
       position={position}
       disposeInstanceOnUnmount
