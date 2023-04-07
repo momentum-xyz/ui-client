@@ -1,54 +1,44 @@
-import {FC, useCallback, useState} from 'react';
+import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Text} from '@momentum-xyz/ui-kit';
+import {Panel} from '@momentum-xyz/ui-kit-storybook';
+import {useI18n} from '@momentum-xyz/core';
 
-import {Box} from 'ui-kit';
 import {useStore} from 'shared/hooks';
-import {availableWallets, WalletConfigInterface} from 'wallets';
 
-import {CreateOdyssey, WalletLogin} from './components';
 import * as styled from './LoginWidget.styled';
+import {SignIn, SignUp} from './components';
 
 const LoginWidget: FC = () => {
   const {sessionStore, widgetManagerStore} = useStore();
-
-  const [selectedWallet, setSelectedWallet] = useState<WalletConfigInterface | null>(null);
+  const {t} = useI18n();
+  const {user, signUpUser, isGuest} = sessionStore;
+  const isSignUp = signUpUser !== null;
 
   const handleAccountConnected = useCallback(async () => {
     console.log('handleAccountConnected');
     try {
-      widgetManagerStore.closeAll();
       await sessionStore.loadUserProfile();
     } catch (e) {
       console.log('Error loading profile', e);
     }
-  }, [sessionStore, widgetManagerStore]);
+  }, [sessionStore]);
+
+  useEffect(() => {
+    if (isGuest || signUpUser || !user?.name) {
+      return;
+    }
+    widgetManagerStore.closeAll();
+  }, [isGuest, user, signUpUser, widgetManagerStore]);
+
+  const panelTitle = signUpUser ? t('login.signUpTitle') : t('login.signInTitle');
+  const panelIconName = signUpUser ? 'astronaut' : 'enter';
 
   return (
     <styled.Container>
-      <CreateOdyssey onCreate={() => {}} />
-
-      {!selectedWallet && (
-        <Box>
-          <Text text="Connect your wallet" size="m" />
-          {availableWallets.map((wallet) => {
-            const {name} = wallet;
-            return (
-              <div style={{marginTop: '15px'}} key={name}>
-                <Button wide label={name} key={name} onClick={() => setSelectedWallet(wallet)} />
-              </div>
-            );
-          })}
-        </Box>
-      )}
-      {selectedWallet && (
-        <WalletLogin
-          key={selectedWallet.name}
-          walletConf={selectedWallet}
-          onConnected={handleAccountConnected}
-          onCancel={() => setSelectedWallet(null)}
-        />
-      )}
+      <Panel title={panelTitle} variant="primary" icon={panelIconName}>
+        {!isSignUp && <SignIn onConnected={handleAccountConnected} />}
+        {isSignUp && <SignUp onCreated={handleAccountConnected} />}
+      </Panel>
     </styled.Container>
   );
 };

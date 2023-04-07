@@ -9,7 +9,9 @@ const connector = new InjectedConnector({
 });
 
 export const useWallet: UseWalletType = () => {
-  const {library, account, activate, deactivate, active} = useWeb3React();
+  // const {library, account, activate, deactivate, active} = useWeb3React();
+  const data = useWeb3React();
+  const {library, account, activate, active} = data;
   console.log('useWallet', {library, account, activate, active});
 
   const signChallenge = useCallback(
@@ -35,9 +37,10 @@ export const useWallet: UseWalletType = () => {
 
     return () => {
       console.log('MetaMask useWallet deactivate');
-      deactivate();
+      // deactivate();
     };
-  }, [activate, deactivate]);
+  }, [activate]);
+  // }, [activate, deactivate]);
 
   return {account, accountHex: account, signChallenge};
 };
