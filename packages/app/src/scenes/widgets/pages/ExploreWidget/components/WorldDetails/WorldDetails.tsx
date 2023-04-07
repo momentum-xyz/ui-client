@@ -1,25 +1,57 @@
-import {FC, useEffect} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Image, Panel} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
+
+import {getImageAbsoluteUrl} from 'core/utils';
+import {ProfileInfo, ProfileImage} from 'ui-kit';
+import {WorldDetailsType} from 'stores/UniverseStore/models';
 
 import * as styled from './WorldDetails.styled';
 
 interface PropsInterface {
-  worldId: string;
+  worldDetails: WorldDetailsType;
+  onUserClick: (userId: string) => void;
+  onVisit: (worldId: string) => void;
+  onStake: (worldId: string) => void;
   onClose: () => void;
 }
 
-const WorldDetails: FC<PropsInterface> = ({worldId, onClose}) => {
-  const {t} = useI18n();
+const WorldDetails: FC<PropsInterface> = (props) => {
+  const {worldDetails, onVisit, onStake, onUserClick, onClose} = props;
+  const {world} = worldDetails;
 
-  useEffect(() => {}, []);
+  const {t} = useI18n();
 
   return (
     <styled.Container data-testid="WorldDetails-test">
-      <Panel icon="explore" variant="primary" title={t('labels.odysseyOverview')} onClose={onClose}>
+      <Panel
+        icon="rabbit_fill"
+        variant="primary"
+        image={getImageAbsoluteUrl(world.image, ImageSizeEnum.S3)}
+        title={t('labels.odysseyOverview')}
+        onClose={onClose}
+      >
         <styled.Wrapper>
-          <Image errorIcon="rabbit_fill" height={200} />
+          {/* FIXME: REAL DATA */}
+          <ProfileImage
+            name={world.name}
+            image={world.image}
+            imageErrorIcon="rabbit_fill"
+            byName={world.name}
+            onByClick={() => onUserClick(world.uuid)}
+          />
+
+          <styled.GeneralScrollable>
+            {/* FIXME: REAL DATA */}
+            <ProfileInfo
+              description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean commodo ligula eget dolor..."
+              address="http://www.google.com"
+              joinDate={new Date().toISOString()}
+              onVisit={() => onVisit(world.uuid)}
+              onStake={() => onStake(world.uuid)}
+            />
+          </styled.GeneralScrollable>
         </styled.Wrapper>
       </Panel>
     </styled.Container>

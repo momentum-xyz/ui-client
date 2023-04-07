@@ -6,6 +6,8 @@ import {SliderItemInterface} from '@momentum-xyz/ui-kit-storybook';
 import {NftItem, NftItemModelInterface, SearchQuery} from 'core/models';
 import {getImageAbsoluteUrl, getRootStore} from 'core/utils';
 
+import {WorldDetails} from './models';
+
 const Universe2dStore = types.compose(
   ResetModel,
   types
@@ -13,7 +15,7 @@ const Universe2dStore = types.compose(
       allUsers: types.optional(types.array(NftItem), []),
       allWorlds: types.optional(types.array(NftItem), []),
       searchQuery: types.optional(SearchQuery, {}),
-      selectedWorld: types.maybeNull(types.string),
+      selectedWorld: types.maybeNull(WorldDetails),
       selectedUser: types.maybeNull(types.string)
     })
     .actions((self) => ({
@@ -23,11 +25,14 @@ const Universe2dStore = types.compose(
         self.allUsers = cloneDeep(nftItems);
         self.allWorlds = cloneDeep(nftItems);
       },
-      selectWorld(world: string): void {
-        self.selectedWorld = world;
+      selectWorld(worldId: string): void {
+        const world = self.allWorlds.find((world) => world.uuid === worldId);
+        self.selectedWorld = world ? WorldDetails.create({world: cloneDeep(world)}) : null;
+        self.selectedUser = null;
       },
       selectUser(userId: string): void {
         self.selectedUser = userId;
+        self.selectedWorld = null;
       },
       resetUnits(): void {
         self.selectedWorld = null;

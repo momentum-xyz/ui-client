@@ -198,7 +198,7 @@ export const dateToTime = (date: Date) => {
  * @returns {string} String containing month and the year in "MM YYYY" format
  */
 export const registrationDateString = (dateISO: string | undefined | null) => {
-  return dateISO ? monthAndYearString(new Date(dateISO)) : '';
+  return dateISO ? format(new Date(dateISO), 'MMMM yyyy') : '';
 };
 
 /**
@@ -222,6 +222,16 @@ export const newsfeedDateString = (dateISO: string | undefined | null, hasDash: 
 export const timelineDate = (dateISO: string | undefined | null) => {
   const targetFormat = 'yyyy - MM - dd / hh:mm aa';
   return dateISO ? format(new Date(dateISO), targetFormat) : '';
+};
+
+/**
+ * Constructs locale string containing only month and year
+ *
+ * @param {string} dateISO is ISO string or empty
+ * @returns {string} String containing month and the year in "MMMM YYYY" format
+ */
+export const signUpDateString = (dateISO: string | undefined | null) => {
+  return dateISO ? format(new Date(dateISO), 'MMMM yyyy') : '';
 };
 
 /**

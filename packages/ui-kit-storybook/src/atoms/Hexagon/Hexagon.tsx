@@ -60,7 +60,7 @@ export interface HexagonPropsInterface {
   skipOuterBorder?: boolean;
   transparentBackground?: boolean;
   margin?: number;
-  imageSrc?: string;
+  imageSrc?: string | null;
   iconName?: IconNameType;
   onClick?: () => void;
 }
