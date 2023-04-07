@@ -1,12 +1,12 @@
 import {FC, useEffect} from 'react';
-import {FrameText, Input, Button} from '@momentum-xyz/ui-kit-storybook';
+import {FrameText, Input, Button, AvatarUpload} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 import {Controller, useForm} from 'react-hook-form';
 
 import {SignUpFormInterface} from 'core/interfaces';
 import {SignInStore} from 'scenes/widgets/stores';
 
-import {FileUpload} from '../FileUpload';
+// import {AvatarUpload} from '../FileUpload';
 
 import * as styled from './SignUp.styled';
 
@@ -69,7 +69,7 @@ const SignUp: FC<PropsInterface> = (props) => {
       <Controller
         name="avatar"
         control={control}
-        render={({field: {value, onChange}}) => <FileUpload value={value} onChange={onChange} />}
+        render={({field: {value, onChange}}) => <AvatarUpload value={value} onChange={onChange} />}
       />
 
       <styled.ReadyText>{t('login.areYouReadyText')}</styled.ReadyText>

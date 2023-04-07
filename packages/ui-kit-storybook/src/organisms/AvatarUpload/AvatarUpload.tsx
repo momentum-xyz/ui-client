@@ -2,17 +2,18 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {FileUploader} from '@momentum-xyz/ui-kit';
-import {IconSvg} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 
-import * as styled from './FileUpload.styled';
+import {IconSvg} from '../../atoms';
 
-interface PropsInterface {
+import * as styled from './AvatarUpload.styled';
+
+export interface AvatarUploadPropsInterface {
   value: File | undefined;
   onChange: (...event: any[]) => void;
 }
 
-const FileUpload: FC<PropsInterface> = ({value, onChange}) => {
+const AvatarUpload: FC<AvatarUploadPropsInterface> = ({value, onChange}) => {
   const {t} = useI18n();
 
   return (
@@ -38,4 +39,4 @@ const FileUpload: FC<PropsInterface> = ({value, onChange}) => {
   );
 };
 
-export default observer(FileUpload);
+export default observer(AvatarUpload);
