@@ -10,7 +10,7 @@ import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 
-import {WorldList, UserList} from './components';
+import {WorldList, UserList, WorldDetails, UserDetails} from './components';
 import * as styled from './ExploreWidget.styled';
 
 type ExploreTabType = 'worlds' | 'users';
@@ -23,10 +23,10 @@ const TABS_LIST: TabInterface<ExploreTabType>[] = [
 const ExploreWidget: FC = () => {
   const {universeStore, widgetManagerStore} = useStore();
   const {universe2dStore} = universeStore;
+  const {hasSelectedUnit} = universe2dStore;
   const {close} = widgetManagerStore;
 
   const [activeTab, setActiveTab] = useState<ExploreTabType>('worlds');
-  const [activeItem, setActiveItem] = useState<{uuid: string; isWorld: boolean} | null>(null);
 
   const {t} = useI18n();
   const navigate = useNavigate();
@@ -35,19 +35,25 @@ const ExploreWidget: FC = () => {
     universe2dStore.searchQuery.resetModel();
   }, [activeTab, universe2dStore]);
 
+  useEffect(() => {
+    return () => {
+      universe2dStore.resetUnits();
+    };
+  }, [universe2dStore]);
+
   return (
     <styled.Container data-testid="ExploreWidget">
-      <styled.ExplorePanel className={cn(!!activeItem && 'collapsed')}>
+      <styled.ExplorePanel className={cn(hasSelectedUnit && 'collapsed')}>
         <Panel
           icon="explore"
           variant="primary"
           title={t('labels.explore')}
-          closeIcon={activeItem ? 'arrow' : 'close_large'}
+          closeIcon={hasSelectedUnit ? 'arrow' : 'close_large'}
           onClose={() => {
-            !activeItem ? close(WidgetEnum.EXPLORE) : setActiveItem(null);
+            hasSelectedUnit ? universe2dStore.resetUnits() : close(WidgetEnum.EXPLORE);
           }}
         >
-          <styled.Wrapper>
+          <styled.Wrapper className={cn(hasSelectedUnit && 'collapsed')}>
             <styled.Tabs>
               <Tabs tabList={TABS_LIST} activeId={activeTab} onSelect={setActiveTab} />
             </styled.Tabs>
@@ -60,10 +66,10 @@ const ExploreWidget: FC = () => {
                   lastCreatedItems={universe2dStore.lastCreatedWorlds}
                   mostStakedInItems={universe2dStore.mostStatedInWorlds}
                   onWorldClick={(worldId) => {
-                    setActiveItem({uuid: worldId, isWorld: true});
+                    universe2dStore.selectWorld(worldId);
                   }}
                   onUserClick={(userId) => {
-                    setActiveItem({uuid: userId, isWorld: false});
+                    universe2dStore.selectUser(userId);
                   }}
                   onVisit={(worldId) => {
                     navigate(generatePath(ROUTES.odyssey.base, {worldId}));
@@ -80,7 +86,7 @@ const ExploreWidget: FC = () => {
                   lastCreatedItems={universe2dStore.lastCreatedUsers}
                   mostStakedItems={universe2dStore.mostStatedUsers}
                   onUserClick={(userId) => {
-                    setActiveItem({uuid: userId, isWorld: false});
+                    universe2dStore.selectUser(userId);
                   }}
                   onVisit={(userId) => {
                     console.log(userId);
@@ -93,10 +99,21 @@ const ExploreWidget: FC = () => {
       </styled.ExplorePanel>
 
       {/* SHOW WORLD OVERVIEW */}
-      {activeItem && activeItem.isWorld && <div>{activeItem.uuid}</div>}
+      {universe2dStore.selectedWorld && (
+        <styled.Details>
+          <WorldDetails
+            worldId={universe2dStore.selectedWorld}
+            onClose={universe2dStore.resetUnits}
+          />
+        </styled.Details>
+      )}
 
       {/* SHOW USER OVERVIEW */}
-      {activeItem && !activeItem.isWorld && <div>{activeItem.uuid}</div>}
+      {universe2dStore.selectedUser && (
+        <styled.Details>
+          <UserDetails userId={universe2dStore.selectedUser} onClose={universe2dStore.resetUnits} />
+        </styled.Details>
+      )}
     </styled.Container>
   );
 };

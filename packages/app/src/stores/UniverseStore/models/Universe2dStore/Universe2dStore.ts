@@ -3,16 +3,18 @@ import {cloneDeep} from 'lodash-es';
 import {ResetModel} from '@momentum-xyz/core';
 import {SliderItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
-import {NftItemModelInterface, SearchQuery} from 'core/models';
+import {NftItem, NftItemModelInterface, SearchQuery} from 'core/models';
 import {getImageAbsoluteUrl, getRootStore} from 'core/utils';
 
 const Universe2dStore = types.compose(
   ResetModel,
   types
     .model('Universe2dStore', {
-      allUsers: types.optional(types.array(types.frozen<NftItemModelInterface>()), []),
-      allWorlds: types.optional(types.array(types.frozen<NftItemModelInterface>()), []),
-      searchQuery: types.optional(SearchQuery, {})
+      allUsers: types.optional(types.array(NftItem), []),
+      allWorlds: types.optional(types.array(NftItem), []),
+      searchQuery: types.optional(SearchQuery, {}),
+      selectedWorld: types.maybeNull(types.string),
+      selectedUser: types.maybeNull(types.string)
     })
     .actions((self) => ({
       init(): void {
@@ -20,6 +22,16 @@ const Universe2dStore = types.compose(
         const {nftItems} = getRootStore(self).nftStore;
         self.allUsers = cloneDeep(nftItems);
         self.allWorlds = cloneDeep(nftItems);
+      },
+      selectWorld(world: string): void {
+        self.selectedWorld = world;
+      },
+      selectUser(userId: string): void {
+        self.selectedUser = userId;
+      },
+      resetUnits(): void {
+        self.selectedWorld = null;
+        self.selectedUser = null;
       }
     }))
     .views((self) => ({
@@ -60,6 +72,9 @@ const Universe2dStore = types.compose(
           name: item.name,
           image: getImageAbsoluteUrl(item.image) || ''
         }));
+      },
+      get hasSelectedUnit(): boolean {
+        return !!self.selectedUser || !!self.selectedWorld;
       }
     }))
 );
