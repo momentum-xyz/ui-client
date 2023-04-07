@@ -9,7 +9,7 @@ import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
   const onObjectClick = useMutableCallback(callbacks.onObjectClick);
-  // const onUserClick = useMutableCallback(callbacks.onUserClick);
+  const onUserClick = useMutableCallback(callbacks.onUserClick);
   const onMove = useMutableCallback(callbacks.onMove);
   const onObjectTransform = useMutableCallback(callbacks.onObjectTransform);
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);
@@ -27,8 +27,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         //  props.objects,
         view,
         onObjectClick,
+        onUserClick,
         onClickOutside
-        // onUserClick,
         // onMove,
       );
 
