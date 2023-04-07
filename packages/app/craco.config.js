@@ -10,7 +10,7 @@ module.exports = {
   webpack: {
     plugins: [
       new CompressionPlugin({
-        test: /\.(js|css|svg)$/,
+        test: /\.(m?js|css|svg|wasm)$/,
         algorithm: 'gzip'
       }),
       new ModuleFederationPlugin({

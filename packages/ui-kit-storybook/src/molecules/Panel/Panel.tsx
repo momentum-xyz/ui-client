@@ -1,29 +1,48 @@
-import {FC, PropsWithChildren, memo, ReactNode} from 'react';
+import {FC, PropsWithChildren} from 'react';
 import cn from 'classnames';
 
-import {IconButton} from '../../atoms';
+import {IconNameType} from '../../types';
+import {Hexagon, IconButton} from '../../atoms';
 
 import * as styled from './Panel.styled';
 
 export interface PanelPropsInterface extends PropsWithChildren {
   variant: 'primary' | 'secondary';
-  hexagon: ReactNode;
   title: string;
   label?: string;
+  image?: string;
+  icon?: IconNameType;
+  closeIcon?: IconNameType;
   onClose?: () => void;
 }
 
-const Panel: FC<PanelPropsInterface> = ({variant, hexagon, title, label, children, onClose}) => {
+const Panel: FC<PanelPropsInterface> = ({
+  variant,
+  title,
+  label,
+  image,
+  icon,
+  closeIcon = 'close_large',
+  children,
+  onClose
+}) => {
   return (
     <styled.Container data-testid="Widget-test" className={cn(variant)}>
       <styled.Header className={cn(variant)}>
-        <styled.Hexagon>{hexagon}</styled.Hexagon>
+        <styled.Hexagon>
+          {variant === 'primary' && (
+            <Hexagon type="secondary-borderless" iconName={icon} imageSrc={image} />
+          )}
+          {variant === 'secondary' && (
+            <Hexagon type="fourth-borderless" iconName={icon} imageSrc={image} />
+          )}
+        </styled.Hexagon>
         <styled.TitleContainer>
           <styled.Title>{title}</styled.Title>
           <styled.Label>{label}</styled.Label>
         </styled.TitleContainer>
         <styled.Actions className={cn(variant)}>
-          <IconButton name="close_large" size="s" onClick={onClose} />
+          <IconButton name={closeIcon} size="s" onClick={onClose} />
         </styled.Actions>
       </styled.Header>
 
@@ -32,4 +51,4 @@ const Panel: FC<PanelPropsInterface> = ({variant, hexagon, title, label, childre
   );
 };
 
-export default memo(Panel);
+export default Panel;

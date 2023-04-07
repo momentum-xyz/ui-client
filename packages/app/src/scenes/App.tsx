@@ -70,7 +70,6 @@ const App: FC = () => {
               : t('errors.somethingWentWrongTryAgain')
           }
           showRefreshButton
-          theme={themeStore.theme}
         />
       </ThemeProvider>
     );
@@ -86,7 +85,6 @@ const App: FC = () => {
               : t('systemMessages.noBlockchainUrlAvailable')
           }
           showRefreshButton
-          theme={themeStore.theme}
         />
       </ThemeProvider>
     );

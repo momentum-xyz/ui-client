@@ -14,7 +14,7 @@ export const TextItemBottom = styled.div`
 export const ServerSpan = styled.span`
   font-size: var(--font-size-m);
   font-weight: bold;
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentText};
   cursor: pointer;
 `;
 

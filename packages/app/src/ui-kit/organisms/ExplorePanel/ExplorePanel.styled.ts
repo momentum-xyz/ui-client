@@ -15,7 +15,7 @@ export const Message = styled.div`
 export const Number = styled.div`
   font-size: 32px;
   font-weight: 300;
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentText};
 `;
 
 export const Explore = styled.div`
@@ -33,7 +33,7 @@ export const Loader = styled.div`
 
 export const Search = styled.div`
   padding: 0 0 8px 0;
-  border-bottom: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
+  border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.2)};
 
   &.isSearch {
     padding: 0;

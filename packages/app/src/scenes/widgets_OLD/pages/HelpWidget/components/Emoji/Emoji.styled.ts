@@ -20,7 +20,7 @@ export const TextItemLast = styled.div`
 export const HighlightedSpan = styled.span`
   font-size: var(--font-size-m);
   font-weight: bold;
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentText};
   cursor: pointer;
 `;
 
@@ -37,8 +37,8 @@ export const EmojiList = styled.div`
   flex-wrap: wrap;
   gap: 5px;
   border-radius: 10px;
-  border: 1px solid ${(props) => props.theme.accent};
-  background-color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
+  border: 1px solid ${(props) => props.theme.accentText};
+  background-color: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.2)};
 `;
 
 export const Emoji = styled.div`
@@ -60,8 +60,8 @@ export const EmojiButtonContainer = styled.div`
 export const SmileContainer = styled.div`
   padding: 4px 20px;
   border-radius: 10px;
-  border: 1px solid ${(props) => props.theme.accent};
-  background-color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
+  border: 1px solid ${(props) => props.theme.accentText};
+  background-color: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.2)};
 `;
 
 export const ArrowContainer = styled.div`

@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite';
 
 import {UserModelInterface} from 'core/models';
 import {availableWallets, WalletConfigInterface} from 'wallets';
-import {WalletLogin} from 'scenes/auth/pages/SignInPage/components';
+import {WalletLogin} from 'scenes/widgets/pages/LoginWidget/components';
 
 interface PropsInterface {
   user: UserModelInterface;
@@ -61,8 +61,9 @@ const Accounts: FC<PropsInterface> = ({user}) => {
               walletConf={selectedWallet}
               attachSecondaryAccount
               onConnected={handleAccountConnected}
-              onCancel={() => setSelectedWallet(null)}
-              onError={(err) => setError(err.toString())}
+              onError={(err) => {
+                setError(err.toString());
+              }}
             />
           )}
           {!!error && <Text text={error} size="s" align="left" />}

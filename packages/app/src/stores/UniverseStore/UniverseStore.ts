@@ -12,6 +12,9 @@ const UniverseStore = types
     world3dStore: types.maybeNull(World3dStore)
   })
   .actions((self) => ({
+    init(): void {
+      self.universe2dStore.init();
+    },
     enterWorld(worldId: string): void {
       self.world3dStore = World3dStore.create();
       self.world2dStore = World2dStore.create();

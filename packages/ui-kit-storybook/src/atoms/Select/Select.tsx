@@ -15,7 +15,7 @@ export interface SelectPropsInterface {
   value: string[] | string | null;
   options: SelectOptionInterface[];
   placeholder?: string;
-  hideSelectedOptions: boolean;
+  hideSelectedOptions?: boolean;
   closeMenuOnSelect?: boolean;
   isSearchable?: boolean;
   isMulti?: boolean;

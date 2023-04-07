@@ -32,7 +32,7 @@ export const ChatIconWrapper = styled.div`
 `;
 export const MessageCount = styled.span`
   position: absolute;
-  color: ${(props) => props.theme.accent};
+  color: ${(props) => props.theme.accentText};
   top: -5px;
   right: -7px;
 

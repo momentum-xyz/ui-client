@@ -6,7 +6,6 @@ export interface UseWalletHookReturnInterface {
   content?: ReactNode;
   signChallenge: (challenge: string) => Promise<string>;
 }
-
 export interface UseWalletPropsInterface {
   appVariables: {[key: string]: string};
 }
@@ -16,5 +15,6 @@ export type UseWalletType = (props: UseWalletPropsInterface) => UseWalletHookRet
 export interface WalletConfigInterface {
   name: string;
   icon: string;
+  browserExtensionUrl: string;
   useWallet: UseWalletType;
 }

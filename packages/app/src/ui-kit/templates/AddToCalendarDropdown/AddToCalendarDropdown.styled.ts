@@ -7,7 +7,7 @@ export const AddEventContainer = styled.div`
   flex-direction: column;
   position: absolute;
   overflow: visible;
-  border: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
+  border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 1)};
   border-radius: 7px;
   background: ${(props) => props.theme.bg && rgba(props.theme.bg, 1)};
   width: 100%;
@@ -19,11 +19,11 @@ export const AddEventContainer = styled.div`
     padding: 10px;
 
     &:hover {
-      color: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)};
+      color: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 1)};
     }
   }
 
   a ~ a {
-    border-top: 1px solid ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
+    border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.2)};
   }
 `;

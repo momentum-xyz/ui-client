@@ -1,6 +1,5 @@
 import {Instance, types} from 'mobx-state-tree';
 
-import {SignInStore} from 'scenes/auth/stores';
 import {UniverseStore} from 'stores/UniverseStore';
 import {RootWidgetsStore} from 'scenes/widgets_OLD_2/stores/RootWidgetsStore';
 import {RootWidgetStore_OLD} from 'scenes/widgets_OLD/stores/RootWidgetStore_OLD';
@@ -29,7 +28,6 @@ const RootStore = types
 
     /* Connect independent stores */
     universeStore: types.optional(UniverseStore, {}),
-    signInStore: types.optional(SignInStore, {}),
     objectStore: types.optional(ObjectStore, {}),
     widgetsStore: types.optional(RootWidgetsStore, {}),
     odysseyCreatorStore: types.optional(RootOdysseyCreatorStore, {}),
@@ -44,6 +42,7 @@ const RootStore = types
       await self.nftStore.init();
       await self.nftStore.initWeb3ExtensionIfNeeded();
 
+      self.universeStore.init();
       self.agoraStore.userDevicesStore.init();
       self.themeStore.init();
     }

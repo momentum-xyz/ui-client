@@ -1,6 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useTheme} from 'styled-components';
 import {SubmitHandler, Controller, useForm} from 'react-hook-form';
 import DatePickerOriginal, {ReactDatePickerProps} from 'react-datepicker';
 import cn from 'classnames';
@@ -19,7 +18,6 @@ const DatePicker = DatePickerOriginal as unknown as FC<ReactDatePickerProps>;
 
 const EventForm: FC = () => {
   const {t} = useI18n();
-  const theme = useTheme();
   const {widgetsStore, universeStore, sessionStore} = useStore();
   const {calendarStore} = widgetsStore;
   const {eventForm, formDialog, eventList} = calendarStore;
@@ -143,7 +141,6 @@ const EventForm: FC = () => {
 
   return (
     <Dialog
-      theme={theme}
       title={currentEvent?.eventId ? t('eventForm.editTitle') : t('eventForm.addTitle')}
       headerStyle="uppercase"
       showCloseButton
@@ -165,7 +162,6 @@ const EventForm: FC = () => {
               <Input
                 value={value}
                 onChange={onChange}
-                theme={theme}
                 label={t('eventForm.titleLabel')}
                 placeholder={t('eventForm.titlePlaceholder') || ''}
                 errorMessage={t('eventForm.errorMessage')}
@@ -176,7 +172,7 @@ const EventForm: FC = () => {
           />
         </styled.Item>
         <styled.Div>
-          <styled.DateInput theme={theme}>
+          <styled.DateInput>
             <styled.Item>
               <DatePicker
                 selected={startDate}
@@ -191,7 +187,7 @@ const EventForm: FC = () => {
               />
             </styled.Item>
           </styled.DateInput>
-          <styled.DateInput theme={theme} className={cn(errors.end && 'error')}>
+          <styled.DateInput className={cn(errors.end && 'error')}>
             <styled.Item>
               <DatePicker
                 selected={endDate}
@@ -224,7 +220,6 @@ const EventForm: FC = () => {
                 <Input
                   value={value}
                   onChange={onChange}
-                  theme={theme}
                   label={t('eventForm.hostLabel')}
                   placeholder={t('eventForm.hostPlaceholder') || ''}
                   isError={!!errors.hosted_by}
@@ -243,7 +238,6 @@ const EventForm: FC = () => {
                 <Input
                   value={value ?? undefined}
                   onChange={onChange}
-                  theme={theme}
                   label={t('eventForm.linkLabel')}
                   placeholder={t('eventForm.linkPlaceholder') || ''}
                 />
@@ -281,7 +275,6 @@ const EventForm: FC = () => {
               label={image ? t('fileUploader.changeLabel') : t('fileUploader.uploadLabel')}
               dragActiveLabel={t('fileUploader.dragActiveLabel')}
               fileType="image"
-              theme={theme}
               onFilesUpload={handleImage}
               buttonClassName="upload-button"
             />

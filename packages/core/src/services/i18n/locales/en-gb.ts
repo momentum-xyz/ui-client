@@ -195,7 +195,22 @@ export const enGb = {
     },
     login: {
       welcome: 'Welcome to',
-      enableStaking: 'Login with a polkadot.js account to enable on chain activities'
+      enableStaking: 'Login with a polkadot.js account to enable on chain activities',
+      signInTitle: 'Sign In',
+      signInWithYourWalletTitle: 'Sign in with your wallet',
+      signInWithYourWalletDescription:
+        'Lorem ipsum dolor sit amet, consectetuer adipicing elit. Aenean commodo ligula.',
+      connectYourWallet: 'Connect your wallet',
+      connectWith: 'Connect with {{wallet}}',
+      signUpTitle: 'Create account',
+      createYourProfileTitle: 'Create your profile',
+      createYourProfileDescription:
+        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor',
+      nameInputLabel: 'Enter a name*',
+      nameInputPlaceholder: 'Enter a name',
+      chooseAnImageLabel: 'Choose an Image',
+      areYouReadyText: 'Are you ready? Start counting. Go!',
+      startYourJourney: 'Start your journey'
     },
     errors: {
       oidcSession: 'Something wrong with session',
@@ -246,9 +261,13 @@ export const enGb = {
     },
     labels: {
       home: 'Home',
+      by: 'By',
       screenShare: 'Screenshare',
       stageMode: 'Stage Mode',
       calendar: 'World Calendar',
+      odysseys: 'Odysseys',
+      accounts: 'Accounts',
+      members: 'Members',
       emoji: 'EMOJI',
       skyboxName: 'Skybox Name',
       staking: 'Staking',
@@ -331,7 +350,13 @@ export const enGb = {
       addCustomSkybox: 'Add Custom Skybox',
       removeCustomSkybox: 'Remove Skybox',
       here: 'here',
+      mostStakedIn: 'Most Staked In',
+      newOdysseys: 'New Odysseys',
+      mostStakedMembers: 'Most Staked Members',
+      newMembers: 'New Members',
       createProfile: 'Create a profile',
+      memberProfile: 'Member profile',
+      odysseyOverview: 'Odyssey Overview',
       connectYourWallet: 'Connect your wallet'
     },
     messages: {
@@ -605,6 +630,8 @@ export const enGb = {
       startJourney: 'Start your journey',
       buildOdyssey: 'Build your Odyssey',
       createOrSignIn: 'Create an account or sign in',
+      searchOdysseys: 'Search odysseys',
+      searchMembers: 'Search members',
       approve: 'Approve',
       joinStage: 'Join Stage',
       decline: 'Decline',
@@ -648,6 +675,8 @@ export const enGb = {
       removeRule: 'remove rule',
       noCancel: 'no, cancel',
       save: 'save',
+      stake: 'Stake',
+      info: 'Info',
       launchInitiativeSuccess: 'Launched initiative succesfully, you will be now teleported.',
       lunchingInitiative: 'launching initiative',
       invite: 'Invite',

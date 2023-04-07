@@ -1,10 +1,12 @@
 import {WalletConfigInterface} from 'wallets';
+import icon from 'static/images/walletTalisman.svg';
 
 import {useWallet} from './useWallet';
 
 const config: WalletConfigInterface = {
   name: 'Talisman',
-  icon: 'TODO',
+  icon,
+  browserExtensionUrl: 'https://talismanwallet.com/',
   useWallet
 };
 

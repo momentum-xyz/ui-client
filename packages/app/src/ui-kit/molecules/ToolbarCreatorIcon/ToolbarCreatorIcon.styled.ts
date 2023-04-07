@@ -16,7 +16,7 @@ export const ActiveIcons = styled.div`
   padding: 11px 20px 11px 12px;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
-  background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.3)};
+  background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.3)};
   right: -16px;
 `;
 
@@ -29,5 +29,5 @@ export const StandoutBuilderModeContainer = styled.div`
   align-items: center;
   gap: 10px;
   border-radius: 10px;
-  background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.3)};
+  background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.3)};
 `;

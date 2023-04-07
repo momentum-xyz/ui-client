@@ -24,7 +24,7 @@ export const ImageUploadContainer = styled.div`
   }
 
   &.error {
-    border: 1px solid ${(props) => props.theme.accentDanger};
+    border: 1px solid ${(props) => props.theme.danger};
   }
 `;
 

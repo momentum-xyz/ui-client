@@ -39,5 +39,5 @@ export const TopContainer = styled.div`
 `;
 
 export const Border = styled.div`
-  border: 0.5px solid ${(props) => props.theme.accent};
+  border: 0.5px solid ${(props) => props.theme.accentText};
 `;

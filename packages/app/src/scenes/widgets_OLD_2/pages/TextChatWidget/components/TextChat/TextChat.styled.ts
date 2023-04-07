@@ -24,7 +24,7 @@ export const Container = styled.div`
     --str-chat__font-family: IBM Plex Sans, sans-serif;
     font-size: var(--font-size-s);
 
-    --str-chat__primary-color: ${(props) => props.theme.accent};
+    --str-chat__primary-color: ${(props) => props.theme.accentText};
     --str-chat__background-color: transparent;
     --str-chat__virtual-list-background-color: transparent;
     --str-chat__secondary-background-color: var(--str-chat__background-color);
@@ -79,7 +79,7 @@ export const Container = styled.div`
       border-inline: solid var(--str-chat__primary-color);
     }
     :not(&:hover) {
-      border-top: 1px solid ${(props) => props.theme.accent};
+      border-top: 1px solid ${(props) => props.theme.accentText};
     }
     .str-chat__send-button {
       height: calc(var(--str-chat__spacing-px) * 37);

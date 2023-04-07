@@ -43,7 +43,7 @@ export const ToastContainerStyled = styled(ToastContainer)`
   }
 
   .Toastify__progress-bar {
-    background: ${(props) => props.theme.accent && rgba(props.theme.accent, 1)} !important;
+    background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 1)} !important;
     height: 3px;
   }
 
@@ -52,7 +52,7 @@ export const ToastContainerStyled = styled(ToastContainer)`
     padding: 0;
     border: none;
     .Toastify__progress-bar {
-      background: ${(props) => props.theme.accent} !important;
+      background: ${(props) => props.theme.accentText} !important;
     }
     .Toastify__close-button {
       display: none;
@@ -64,7 +64,7 @@ export const ToastContainerStyled = styled(ToastContainer)`
     padding: 0;
     border: none;
     .Toastify__progress-bar {
-      background: ${(props) => props.theme.accentDanger} !important;
+      background: ${(props) => props.theme.danger} !important;
     }
     .Toastify__close-button {
       display: none;
@@ -72,20 +72,20 @@ export const ToastContainerStyled = styled(ToastContainer)`
   }
   .Toastify__toast--success {
     padding: 15px 20px;
-    background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.7)} !important;
+    background: ${(props) =>
+      props.theme.accentText && rgba(props.theme.accentText, 0.7)} !important;
     border: 1px solid;
-    border-color: ${(props) => props.theme.accent} !important;
+    border-color: ${(props) => props.theme.accentText} !important;
   }
 
   .Toastify__toast--warning {
     padding: 15px 20px;
-    background: ${(props) =>
-      props.theme.accentDanger && rgba(props.theme.accentDanger, 0.7)} !important;
+    background: ${(props) => props.theme.danger && rgba(props.theme.danger, 0.7)} !important;
     border: 1px solid;
-    border-color: ${(props) => props.theme.accentDanger} !important;
+    border-color: ${(props) => props.theme.danger} !important;
 
     .Toastify__progress-bar {
-      background: ${(props) => props.theme.accentDanger} !important;
+      background: ${(props) => props.theme.danger} !important;
     }
   }
 `;

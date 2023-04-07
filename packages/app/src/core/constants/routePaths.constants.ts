@@ -1,9 +1,5 @@
 export const ROUTES = {
   base: '/', // TODO: REMOVAL
-  signIn: '/signIn',
-  signInAccount: '/signInAccount',
-  birth: '/birth',
-  birthAnimation: '/birth/animation',
   explore: '/explore',
   odyssey: {
     base: '/odyssey/:worldId',

@@ -14,6 +14,6 @@ export const ButtonHolder = styled.div`
   border-radius: 10px;
   cursor: pointer;
   &:hover {
-    background-color: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
+    background-color: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.2)};
   }
 `;
