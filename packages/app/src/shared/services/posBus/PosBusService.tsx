@@ -45,13 +45,13 @@ class PosBusService {
 
   private client: Client | null = null;
   private port: PosbusPort | null = null;
+  private static user: string;
 
   public static init(token: string, userId: string) {
     console.log('PosBusService init', token, userId);
-
     const workerUrl = new URL('@momentum-xyz/posbus-client/worker.mjs', import.meta.url);
     const wasmUrl = new URL('@momentum-xyz/posbus-client/pbc.wasm', import.meta.url);
-
+    this.user = userId;
     loadClientWorker(workerUrl, wasmUrl)
       .then((client) => {
         console.log('PosBus client loaded', client);
@@ -141,9 +141,14 @@ class PosBusService {
 
       case MsgType.SET_WORLD: {
         console.log('Handle posbus set_world', data);
+        const {id, name, avatar, owner, avatar_3d_asset_id} = data;
+        console.log('emitting with id of: ' + PosBusService.user);
+        Event3dEmitter.emit(
+          'SetWorld',
+          {id, name, avatar, owner, avatar_3d_asset_id},
+          PosBusService.user
+        );
 
-        const {id} = data;
-        Event3dEmitter.emit('SetWorld', id);
         break;
       }
 

@@ -4,6 +4,7 @@ import {
   Object3dInterface,
   Odyssey3dUserInterface,
   Odyssey3dUserTransformInterface,
+  SetWorldInterface,
   Texture3dInterface
 } from '../interfaces';
 
@@ -17,7 +18,7 @@ import {
 export type Event3dType = {
   ObjectCreated: (object: Object3dInterface) => void;
   ObjectChanged: (object: Object3dInterface) => void;
-  SetWorld: (value: string) => void;
+  SetWorld: (world: SetWorldInterface, userId: string) => void;
   ObjectTextureChanged: (texture: Texture3dInterface) => void;
 
   UserAdded: (user: Odyssey3dUserInterface) => void;
