@@ -1,4 +1,4 @@
-import {FC, useEffect, useMemo} from 'react';
+import {FC, useEffect, useMemo, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {
   Vector3,
@@ -8,7 +8,8 @@ import {
   MeshBuilder,
   PBRMaterial,
   ActionManager,
-  ExecuteCodeAction
+  ExecuteCodeAction,
+  InstancedMesh
 } from '@babylonjs/core';
 import {
   Scene as ReactScene,
@@ -40,32 +41,32 @@ const generateRandomVector3 = (minRange = -50, maxRange = 50): Vector3 =>
   );
 
 const WorldOrb: FC<{
-  baseMesh: Mesh | null;
+  baseMesh: Mesh;
   info: WorldInfoInterface;
   position?: Vector3;
   onClick?: () => void;
 }> = ({baseMesh, info, position = generateRandomVector3(), onClick}) => {
   const scene = useScene();
   const {id, name} = info;
+  console.log('World', id, name, position);
 
-  const inst = useMemo(() => {
-    return baseMesh?.createInstance(`World ${id}`);
-  }, [baseMesh, id]);
-  console.log('World', name, position, inst);
+  const ref = useRef<InstancedMesh>(null);
 
   useEffect(() => {
+    const inst = ref.current;
     if (inst && onClick && !inst.actionManager) {
       inst.actionManager = new ActionManager(scene);
       inst.actionManager.registerAction(
         new ExecuteCodeAction(ActionManager.OnPickTrigger, onClick)
       );
     }
-  }, [inst, scene, onClick]);
+  }, [scene, onClick]);
 
   return (
-    <mesh
+    <instancedMesh
       name={`World ${info.id}`}
-      fromInstance={baseMesh}
+      ref={ref}
+      source={baseMesh}
       position={position}
       disposeInstanceOnUnmount
     >
@@ -74,7 +75,7 @@ const WorldOrb: FC<{
     diffuseColor={Color3.Yellow()}
     specularColor={Color3.Black()}
   /> */}
-    </mesh>
+    </instancedMesh>
   );
 };
 
@@ -112,6 +113,10 @@ const Worlds: FC<{position: Vector3; items: WorldInfoInterface[]}> = observer(
       baseSphere.material = glassMaterial;
       return baseSphere;
     }, [scene]);
+
+    if (!baseMesh) {
+      return null;
+    }
 
     return (
       <transformNode name="worlds" position={position}>
