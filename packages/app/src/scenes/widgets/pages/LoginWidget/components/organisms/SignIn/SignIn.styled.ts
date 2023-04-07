@@ -38,7 +38,7 @@ export const SignInMethodContainer = styled.button`
   align-items: center;
   justify-content: center;
   padding: 10px, 6px, 10px, 6px;
-  margin: 0 17px 20px;
+  margin: 0 14px 20px;
 
   background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
   border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
@@ -57,5 +57,49 @@ export const SignInMethodContainer = styled.button`
     max-width: 64px;
     height: 64px;
     margin-bottom: 4px;
+  }
+`;
+
+export const ExtraInfoPoints = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  & > .row {
+    display: flex;
+
+    & > button {
+      flex: 0 0 30px;
+    }
+    & > span {
+      color: ${(props) => props.theme.text};
+      margin-top: 5px;
+      margin-left: 10px;
+    }
+  }
+`;
+
+export const ConnectWithWalletRow = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+
+  & > img {
+    height: 22px;
+  }
+
+  & > span {
+    margin-left: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: ${(props) => props.theme.text};
+  }
+`;
+
+export const ConnectWithWallet = styled.div`
+  & > button {
+    margin-bottom: 16px;
   }
 `;

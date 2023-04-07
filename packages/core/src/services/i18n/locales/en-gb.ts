@@ -196,13 +196,15 @@ export const enGb = {
     login: {
       welcome: 'Welcome to',
       enableStaking: 'Login with a polkadot.js account to enable on chain activities',
-      signInTitle: 'Sign In',
-      signInWithYourWalletTitle: 'Sign in with your wallet',
-      signInWithYourWalletDescription:
+      connectAsMember: 'Connect as member',
+      howToConnectAsAMemberTitle: 'How to connect as a member',
+      howToConnectAsAMemberDescription:
         'Lorem ipsum dolor sit amet, consectetuer adipicing elit. Aenean commodo ligula.',
+      installWalletOrConnect: 'Install wallet or connect',
+      installBrowserExtension: 'Install browser extension',
+      connectWallet: 'Connect  wallet',
       connectYourWallet: 'Connect your wallet',
       connectWith: 'Connect with {{wallet}}',
-      signUpTitle: 'Create account',
       createYourProfileTitle: 'Create your profile',
       createYourProfileDescription:
         'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor',
@@ -210,7 +212,8 @@ export const enGb = {
       nameInputPlaceholder: 'Enter a name',
       chooseAnImageLabel: 'Choose an Image',
       areYouReadyText: 'Are you ready? Start counting. Go!',
-      startYourJourney: 'Start your journey'
+      startYourJourney: 'Start your journey',
+      welcomeUser: 'Welcome {{name}}'
     },
     errors: {
       oidcSession: 'Something wrong with session',

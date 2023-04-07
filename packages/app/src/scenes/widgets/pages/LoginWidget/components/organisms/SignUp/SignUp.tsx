@@ -5,8 +5,7 @@ import {Controller, useForm} from 'react-hook-form';
 
 import {SignUpFormInterface} from 'core/interfaces';
 import {SignInStore} from 'scenes/widgets/stores';
-
-// import {AvatarUpload} from '../FileUpload';
+// import {useStore} from 'shared/hooks';
 
 import * as styled from './SignUp.styled';
 
@@ -17,6 +16,8 @@ interface PropsInterface {
 const SignUp: FC<PropsInterface> = (props) => {
   const signInStore = SignInStore.create();
   const {fieldErrors, isUpdating, updateProfile} = signInStore;
+  // const {sessionStore} = useStore();
+  // const {user, isGuest} = sessionStore;
 
   const {onCreated} = props;
 
@@ -29,6 +30,10 @@ const SignUp: FC<PropsInterface> = (props) => {
   const disabled = isUpdating;
 
   const onUpdateProfile = handleSubmit(async (data: SignUpFormInterface) => {
+    // if (!isGuest) {
+    //   onCreated();
+    //   return;
+    // }
     const {name, avatar} = data;
     const isDone = await updateProfile({name, avatar});
     if (isDone) {
@@ -44,6 +49,8 @@ const SignUp: FC<PropsInterface> = (props) => {
 
   return (
     <styled.Container>
+      {/* {isGuest && (
+        <> */}
       <FrameText
         title={t('login.createYourProfileTitle')}
         line1={t('login.createYourProfileDescription')}
@@ -71,6 +78,15 @@ const SignUp: FC<PropsInterface> = (props) => {
         control={control}
         render={({field: {value, onChange}}) => <AvatarUpload value={value} onChange={onChange} />}
       />
+      {/* </>
+      )}
+      {!isGuest && user && (
+        <>
+          <FrameText
+            title={t('login.welcomeUser', {name: user.name})}
+          />
+        </>
+      )} */}
 
       <styled.ReadyText>{t('login.areYouReadyText')}</styled.ReadyText>
       <Button
