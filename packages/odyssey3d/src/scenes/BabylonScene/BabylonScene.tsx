@@ -48,10 +48,11 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         });
       }
 
-      events.on('SetWorld', (assetID) => {
+      events.on('SetWorld', (world, userId) => {
         // Commented out the actual line, as currently the assetID coming from BE is a Unity asset, so doesn't load
         //CameraHelper.spawnPlayer(scene, assetID);
-        PlayerHelper.spawnPlayer(scene, 'd906e070-3d2e-b1a5-3e3f-703423225945');
+        PlayerHelper.setWorld(world, userId);
+        //PlayerHelper.spawnPlayer(scene, 'd906e070-3d2e-b1a5-3e3f-703423225945');
       });
 
       events.on('ObjectCreated', async (object) => {
@@ -62,9 +63,17 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         ObjectHelper.setObjectTexture(scene, object);
       });
 
-      /*events.on('UserEntered', (userId) => {
-        PlayerHelper.userEntered(userId);
-      });*/
+      events.on('UserAdded', async (user) => {
+        await PlayerHelper.userEnteredAsync(user);
+      });
+
+      events.on('UserRemoved', (userId) => {
+        PlayerHelper.userRemove(userId);
+      });
+
+      events.on('UsersTransformChanged', (users) => {
+        PlayerHelper.setUserTransforms(users);
+      });
 
       events.on('ObjectEditModeChanged', (objectId, isOn) => {
         WorldCreatorHelper.toggleGizmo(objectId, isOn);

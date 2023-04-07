@@ -44,7 +44,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
       'https://dev2.odyssey.ninja/api/v3/render/texture/s8/27a7d8904d525b5d163754624ae46bc8'
     );
 
-    PlayerHelper.spawnPlayer(scene, 'd906e070-3d2e-b1a5-3e3f-703423225945');
+    PlayerHelper.spawnPlayer(scene);
 
     if (window.sessionStorage.getItem('babylon_debug')) {
       Promise.all([

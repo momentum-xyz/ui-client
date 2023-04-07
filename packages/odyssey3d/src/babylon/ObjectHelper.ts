@@ -112,7 +112,7 @@ export class ObjectHelper {
       },
       '.glb'
     ).then((container) => {
-      this.instantiate(container, object);
+      this.instantiateObject(container, object);
     });
   }
 
@@ -140,7 +140,7 @@ export class ObjectHelper {
     }
   }
 
-  static instantiate(container: AssetContainer, object: Object3dInterface) {
+  static instantiateObject(container: AssetContainer, object: Object3dInterface) {
     const instance = container.instantiateModelsToScene();
 
     if (instance.rootNodes.length === 0) {
@@ -191,23 +191,26 @@ export class ObjectHelper {
     node.onSomeChange.notifyObservers('onSomeChange');
   }
 
-  static disposeAllObjects() {
-    for (const mapObj of this.objectsMap) {
-      mapObj[1].objectInstance.dispose();
-      mapObj[1].container.removeFromScene();
-    }
-    this.objectsMap.clear();
-  }
+  static removeObject(id: string) {
+    const objToRemove = this.objectsMap.get(id);
+    if (objToRemove) {
+      objToRemove.objectInstance.dispose();
+      objToRemove.container.removeAllFromScene();
+      objToRemove.container.dispose();
 
-  static deleteObject(id: string) {
-    const objToDelete = this.objectsMap.get(id);
-    if (objToDelete) {
-      objToDelete.objectInstance.dispose();
-      objToDelete.container.removeAllFromScene();
       this.objectsMap.delete(id);
     } else {
       console.log("unable to delete object, as the id doesn't exist in the map, " + id);
     }
+  }
+
+  static disposeAllObjects() {
+    for (const mapObj of this.objectsMap) {
+      mapObj[1].objectInstance.dispose();
+      mapObj[1].container.removeFromScene();
+      mapObj[1].container.dispose();
+    }
+    this.objectsMap.clear();
   }
 
   static advancedLoading(): void {

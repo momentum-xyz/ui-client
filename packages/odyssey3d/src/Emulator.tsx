@@ -30,7 +30,12 @@ const WorldEmulator: FC = () => {
   };
 
   useEffect(() => {
-    Event3dEmitter.emit('SetWorld', '0d5b35b9-33c0-d917-c095-7ba3670755da');
+    Event3dEmitter.emit(
+      'SetWorld',
+      {id: uuidv4(), name: 'name', avatar: 'avatar', owner: 'owner', avatar_3d_asset_id: uuidv4()},
+      'id'
+    );
+    //'0d5b35b9-33c0-d917-c095-7ba3670755da');
     console.log(assetIDs.length);
     setInterval(() => {
       if (i < 10) {
