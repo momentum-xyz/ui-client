@@ -84,7 +84,6 @@ export class PlayerHelper {
 
     this.camera.onViewMatrixChangedObservable.add(() => {
       // TODO: Consider where to apply the offset between player and camera
-      // Check how often data should be sent to onMove
 
       const playerTransform: TransformNoScaleInterface = {
         position: Vector3.Zero(),
@@ -200,6 +199,8 @@ export class PlayerHelper {
         userNode.position.y = user.transform?.position.y;
         userNode.position.z = user.transform?.position.z;
       }
+
+      userNode.metadata = user.id;
 
       const babylonUser = {
         container: container,

@@ -6,11 +6,7 @@ import {
   Engine,
   AssetContainer,
   Matrix,
-  Mesh,
   InstantiatedEntries,
-  Behavior,
-  TransformNode,
-  Observable,
   Texture,
   PBRMaterial
 } from '@babylonjs/core';
@@ -28,27 +24,21 @@ interface BabylonObjectInterface {
   objectInstance: InstantiatedEntries;
 }
 
-class CustomNode extends TransformNode {
-  public onSomeChange = new Observable();
-}
-
 export class ObjectHelper {
   static light: HemisphericLight | null = null;
   static assetRootUrl = 'https://dev2.odyssey.ninja/api/v3/render/asset/';
   static textureRootUrl = 'https://dev2.odyssey.ninja/api/v3/render/texture/';
   static textureDefaultSize = 's3/';
   static objectsMap = new Map<string, BabylonObjectInterface>();
-  static followObjectBehaviour: Behavior<InstantiatedEntries>;
-  static player: TransformNode;
   static firstID: string;
   static scene: Scene;
-  static mySphere: Mesh;
 
   static initialize(
     scene: Scene,
     engine: Engine,
     view: HTMLCanvasElement,
     onObjectClick: (objectId: string, clickPosition: ClickPositionInterface) => void,
+    onUserClick: (userId: string, clickPosition: ClickPositionInterface) => void,
     onClickOutside: () => void
   ): void {
     this.scene = scene;
@@ -78,8 +68,12 @@ export class ObjectHelper {
           console.log('clicked on object with id: ' + parent.metadata);
           if (ObjectHelper.objectsMap.has(parent.metadata)) {
             onObjectClick(parent.metadata, lastClick);
+          } else if (
+            PlayerHelper.playerId === parent.metadata ||
+            PlayerHelper.userMap.has(parent.metadata)
+          ) {
+            onUserClick(parent.metadata, lastClick);
           }
-          // TODO: Check if object is in the user map
 
           // For testing, fix this later
           /*if (!WorldCreatorHelper.isCreatorMode) {
@@ -156,13 +150,8 @@ export class ObjectHelper {
       );
     }
 
-    const node = instance.rootNodes[0] as CustomNode;
+    const node = instance.rootNodes[0];
     node.name = object.name;
-
-    node.onSomeChange = new Observable();
-    node.onSomeChange.add((data) => {
-      console.log(`onSomeChange notified with data: ${data}`);
-    });
 
     node.position.x = object.transform.position.x;
     node.position.y = object.transform.position.y;
@@ -187,8 +176,6 @@ export class ObjectHelper {
     for (const group of instance.animationGroups) {
       group.play(true);
     }
-
-    node.onSomeChange.notifyObservers('onSomeChange');
   }
 
   static removeObject(id: string) {
@@ -211,38 +198,5 @@ export class ObjectHelper {
       mapObj[1].container.dispose();
     }
     this.objectsMap.clear();
-  }
-
-  static advancedLoading(): void {
-    /*SceneLoader.OnPluginActivatedObservable.addOnce(
-      (loader: ISceneLoaderPlugin | ISceneLoaderPluginAsync, eventState: EventState) => {
-        // This is just a precaution as this isn't strictly necessary since
-        // the only loader in use is the glTF one.
-        if (loader.name !== 'gltf') {
-          return;
-        }
-
-        const gltf = loader as GLTFFileLoader;
-
-        gltf.loggingEnabled = true;
-
-        // Use HTTP range requests to load the glTF binary (GLB) in parts.
-        gltf.useRangeRequests = true;
-
-        // Register for when extension are loaded.
-        gltf.onExtensionLoadedObservable.add(function (extension) {
-          // Ignore extensions except MSFT_lod.
-          if (extension.name !== 'MSFT_lod') {
-            return;
-          }
-        });
-
-        // Update the status text when loading is complete, i.e. when
-        // all the LODs are loaded.
-        gltf.onCompleteObservable.add(function () {
-          console.log('asset loaded');
-        });
-      }
-    );*/
   }
 }
