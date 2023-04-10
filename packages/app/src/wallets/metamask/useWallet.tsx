@@ -8,6 +8,10 @@ const connector = new InjectedConnector({
   supportedChainIds: [1, 3, 4, 5, 42]
 });
 
+const {ethereum} = window as any;
+// this structure exists when Coinbase Wallet is installed
+const metamaskProvider = ethereum?.providers?.find((p: any) => p.isMetaMask);
+
 export const useWallet: UseWalletType = () => {
   // const {library, account, activate, deactivate, active} = useWeb3React();
   const data = useWeb3React();
@@ -25,6 +29,16 @@ export const useWallet: UseWalletType = () => {
 
   useEffect(() => {
     console.log('MetaMask useWallet activate');
+    console.log('MetaMask useWallet metamaskProvider', metamaskProvider);
+
+    // It's a workaround to fix the issue with opening Coinbase Wallet when it's also installed
+    if (metamaskProvider && typeof ethereum.selectedProvider !== 'undefined') {
+      try {
+        ethereum.selectedProvider = metamaskProvider;
+      } catch (err) {
+        console.log('MetaMask useWallet selectedProvider err', err);
+      }
+    }
 
     // connector.activate()
     activate(connector)
