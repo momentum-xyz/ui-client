@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  padding: 10px;
-`;
+export const Container = styled.div``;
 
 export const TitleText = styled.div`
   margin-bottom: 22px;

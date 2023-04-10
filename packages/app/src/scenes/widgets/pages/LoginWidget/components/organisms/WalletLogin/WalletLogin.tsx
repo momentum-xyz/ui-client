@@ -61,7 +61,7 @@ const WalletLogin: FC<PropsInterface> = ({
 
   return (
     <styled.Container>
-      <styled.TitleText>{t('login.connectWith', {wallet: name})}</styled.TitleText>
+      {/* <styled.TitleText>{t('login.connectWith', {wallet: name})}</styled.TitleText> */}
       <styled.WalletInnerViewContainer>{innerView}</styled.WalletInnerViewContainer>
       <Button
         label={t('login.connectYourWallet')}
