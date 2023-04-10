@@ -7,7 +7,7 @@ const WorldDetails = types.compose(
   ResetModel,
   types
     .model('WorldDetails', {
-      world: NftItem // FIXME: world: types.reference
+      world: types.reference(NftItem)
     })
     .actions((self) => ({
       afterCreate(): void {}

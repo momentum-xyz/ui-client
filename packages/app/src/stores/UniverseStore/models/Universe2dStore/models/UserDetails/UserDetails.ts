@@ -7,7 +7,7 @@ const UserDetails = types.compose(
   ResetModel,
   types
     .model('UserDetails', {
-      user: NftItem // FIXME: user: types.reference
+      user: types.reference(NftItem)
     })
     .actions((self) => ({
       afterCreate(): void {}
