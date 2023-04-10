@@ -350,6 +350,8 @@ export const enGb = {
       addCustomSkybox: 'Add Custom Skybox',
       removeCustomSkybox: 'Remove Skybox',
       here: 'here',
+      odysseysOwned: 'Odyssey’s Owned',
+      odysseysStakedIn: 'Odyssey’s Staked In',
       mostStakedIn: 'Most Staked In',
       newOdysseys: 'New Odysseys',
       mostStakedMembers: 'Most Staked Members',

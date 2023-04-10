@@ -1,23 +1,26 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Panel, ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, ImageSizeEnum, IconSvg} from '@momentum-xyz/ui-kit-storybook';
 
 import {getImageAbsoluteUrl} from 'core/utils';
-import {ProfileInfo, ProfileImage} from 'ui-kit';
+import {ProfileInfo, ProfileImage, ItemCard} from 'ui-kit';
+import {NftItemModelInterface} from 'core/models';
 import {UserDetailsType} from 'stores/UniverseStore/models';
 
 import * as styled from './UserDetails.styled';
 
 interface PropsInterface {
   userDetails: UserDetailsType;
+  nftOwned: NftItemModelInterface[];
+  nftStakedIn: NftItemModelInterface[];
   onVisit: (worldId: string) => void;
-  onStake: (worldId: string) => void;
+  onInfo: (worldId: string) => void;
   onClose: () => void;
 }
 
 const UserDetails: FC<PropsInterface> = (props) => {
-  const {userDetails, onClose} = props;
+  const {userDetails, nftOwned, nftStakedIn, onVisit, onInfo, onClose} = props;
   const {user} = userDetails;
 
   const {t} = useI18n();
@@ -43,6 +46,52 @@ const UserDetails: FC<PropsInterface> = (props) => {
               address="http://www.google.com"
               joinDate={new Date().toISOString()}
             />
+
+            <styled.OdysseyList>
+              {nftOwned.length > 0 && (
+                <>
+                  <styled.Title>
+                    <IconSvg name="rabbit_fill" size="xs" isWhite />
+                    <span>{t('labels.odysseysOwned')}</span>
+                  </styled.Title>
+                  {nftOwned.map((nft) => (
+                    <ItemCard
+                      key={nft.uuid}
+                      variant="small"
+                      name={nft.name}
+                      image={nft.image}
+                      imageHeight={95}
+                      description="Lorem ipsum dolor sit amet, consectetuer."
+                      imageErrorIcon="rabbit_fill"
+                      onVisitClick={() => onVisit(nft.uuid)}
+                      onInfoClick={() => onInfo(nft.uuid)}
+                    />
+                  ))}
+                </>
+              )}
+
+              {nftStakedIn.length > 0 && (
+                <>
+                  <styled.Title>
+                    <IconSvg name="stake" size="xs" isWhite />
+                    <span>{t('labels.odysseysStakedIn')}</span>
+                  </styled.Title>
+                  {nftStakedIn.map((nft) => (
+                    <ItemCard
+                      key={nft.uuid}
+                      variant="small"
+                      name={nft.name}
+                      image={nft.image}
+                      imageHeight={95}
+                      description="Lorem ipsum dolor sit amet, consectetuer."
+                      imageErrorIcon="rabbit_fill"
+                      onVisitClick={() => onVisit(nft.uuid)}
+                      onInfoClick={() => onInfo(nft.uuid)}
+                    />
+                  ))}
+                </>
+              )}
+            </styled.OdysseyList>
           </styled.GeneralScrollable>
         </styled.Wrapper>
       </Panel>

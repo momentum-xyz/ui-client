@@ -21,7 +21,6 @@ const Universe2dStore = types.compose(
       init(): void {
         // TODO: implementation
         const {nftItems} = getRootStore(self).nftStore;
-        console.log(nftItems.length);
 
         self.allUsers = castToSnapshot(nftItems.filter((i) => !i.image?.includes('http')));
         self.allWorlds = castToSnapshot(nftItems.filter((i) => !i.image?.includes('http')));
@@ -30,11 +29,13 @@ const Universe2dStore = types.compose(
         const world = self.allWorlds.find((world) => world.uuid === worldId);
         self.selectedWorld = world ? WorldDetails.create({world: world.id}) : null;
         self.selectedUser = null;
+        self.selectedWorld?.init();
       },
       selectUser(userId: string): void {
         const user = self.allUsers.find((user) => user.uuid === userId);
         self.selectedUser = user ? UserDetails.create({user: user.id}) : null;
         self.selectedWorld = null;
+        self.selectedUser?.init();
       },
       resetUnits(): void {
         self.selectedWorld = null;

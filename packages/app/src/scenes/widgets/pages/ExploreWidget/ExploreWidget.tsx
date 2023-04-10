@@ -122,11 +122,13 @@ const ExploreWidget: FC = () => {
         <styled.Details>
           <UserDetails
             userDetails={universe2dStore.selectedUser}
+            nftOwned={universe2dStore.selectedUser.nftOwned}
+            nftStakedIn={universe2dStore.selectedUser.nftStakedIn}
             onVisit={(worldId) => {
               navigate(generatePath(ROUTES.odyssey.base, {worldId}));
             }}
-            onStake={(worldId) => {
-              navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+            onInfo={(worldId) => {
+              universe2dStore.selectWorld(worldId);
             }}
             onClose={universe2dStore.resetUnits}
           />
