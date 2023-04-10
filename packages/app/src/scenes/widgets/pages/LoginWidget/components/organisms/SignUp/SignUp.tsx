@@ -5,7 +5,7 @@ import {Controller, useForm} from 'react-hook-form';
 
 import {SignUpFormInterface} from 'core/interfaces';
 import {SignInStore} from 'scenes/widgets/stores';
-// import {useStore} from 'shared/hooks';
+import {useStore} from 'shared/hooks';
 
 import * as styled from './SignUp.styled';
 
@@ -16,25 +16,37 @@ interface PropsInterface {
 const SignUp: FC<PropsInterface> = (props) => {
   const signInStore = SignInStore.create();
   const {fieldErrors, isUpdating, updateProfile} = signInStore;
-  // const {sessionStore} = useStore();
-  // const {user, isGuest} = sessionStore;
-
-  const {onCreated} = props;
+  const {sessionStore} = useStore();
+  const {user, isGuest, userImageUrl} = sessionStore;
 
   const {t} = useI18n();
 
-  const {control, setError, handleSubmit} = useForm<SignUpFormInterface>({
+  const isProfileCreated = !isGuest && !!user && !!user.name;
+  const isProfileReady = isProfileCreated && !!user.profile.avatarHash;
+
+  const frameTextTitle = isProfileCreated
+    ? t('login.welcomeUser', {name: user.name})
+    : t('login.createYourProfileTitle');
+  const frameTextDescription = isProfileCreated
+    ? undefined
+    : t('login.createYourProfileDescription');
+
+  const {onCreated} = props;
+
+  const {
+    control,
+    setError,
+    handleSubmit,
+    formState: {errors}
+  } = useForm<SignUpFormInterface>({
     mode: 'all'
   });
 
   const disabled = isUpdating;
 
   const onUpdateProfile = handleSubmit(async (data: SignUpFormInterface) => {
-    // if (!isGuest) {
-    //   onCreated();
-    //   return;
-    // }
-    const {name, avatar} = data;
+    const {avatar} = data;
+    const name = isProfileCreated ? user.name : data.name;
     const isDone = await updateProfile({name, avatar});
     if (isDone) {
       onCreated();
@@ -49,44 +61,44 @@ const SignUp: FC<PropsInterface> = (props) => {
 
   return (
     <styled.Container>
-      {/* {isGuest && (
-        <> */}
-      <FrameText
-        title={t('login.createYourProfileTitle')}
-        line1={t('login.createYourProfileDescription')}
-      />
-      <styled.Separator />
-      <FrameText title={t('login.nameInputLabel')} />
-      <styled.InputContainer>
-        <Controller
-          name="name"
-          control={control}
-          rules={{required: true, maxLength: 32, minLength: 2}}
-          render={({field: {onChange, value}}) => (
-            <Input
-              placeholder={t('login.nameInputPlaceholder')}
-              value={value || ''}
-              disabled={disabled}
-              onChange={onChange}
-            />
-          )}
-        />
-      </styled.InputContainer>
-      <FrameText title={t('login.chooseAnImageLabel')} />
-      <Controller
-        name="avatar"
-        control={control}
-        render={({field: {value, onChange}}) => <AvatarUpload value={value} onChange={onChange} />}
-      />
-      {/* </>
-      )}
-      {!isGuest && user && (
+      <FrameText title={frameTextTitle} line1={frameTextDescription} />
+      {(!isProfileCreated || !isProfileReady) && (
         <>
-          <FrameText
-            title={t('login.welcomeUser', {name: user.name})}
+          <styled.Separator />
+          {!isProfileCreated && (
+            <>
+              <FrameText title={t('login.nameInputLabel')} />
+              <styled.InputContainer>
+                <Controller
+                  name="name"
+                  control={control}
+                  rules={{required: true, maxLength: 32, minLength: 2}}
+                  render={({field: {onChange, value}}) => (
+                    <Input
+                      placeholder={t('login.nameInputPlaceholder')}
+                      value={value || ''}
+                      disabled={disabled}
+                      onChange={onChange}
+                    />
+                  )}
+                />
+                {errors?.name && <span>{errors.name.message}</span>}
+              </styled.InputContainer>
+            </>
+          )}
+          <FrameText title={t('login.chooseAnImageLabel')} />
+          <Controller
+            name="avatar"
+            control={control}
+            render={({field: {value, onChange}}) => (
+              <AvatarUpload value={value} onChange={onChange} />
+            )}
           />
         </>
-      )} */}
+      )}
+      {isProfileReady && (
+        <styled.ProfileAvatarPreview style={{backgroundImage: `url(${userImageUrl})`}} />
+      )}
 
       <styled.ReadyText>{t('login.areYouReadyText')}</styled.ReadyText>
       <Button
@@ -95,7 +107,7 @@ const SignUp: FC<PropsInterface> = (props) => {
         variant="primary"
         label={t('login.startYourJourney')}
         disabled={disabled}
-        onClick={onUpdateProfile}
+        onClick={() => (isProfileReady ? onCreated() : onUpdateProfile())}
       ></Button>
     </styled.Container>
   );

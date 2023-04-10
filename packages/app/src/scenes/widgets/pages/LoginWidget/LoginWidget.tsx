@@ -1,4 +1,4 @@
-import {FC, useCallback, useEffect, useMemo} from 'react';
+import {FC, useCallback, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Panel, FrameSteps, StepInterface} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
@@ -13,27 +13,25 @@ const LoginWidget: FC = () => {
   const {t} = useI18n();
   const {user, signUpUser, isGuest} = sessionStore;
 
-  // const isSignIn = !signUpUser && isGuest;
-  // const isSignUp = signUpUser || !isGuest;
-  const isSignUp = !!signUpUser;
+  const isSignIn = !signUpUser && isGuest;
+  const isSignUp = signUpUser || !isGuest;
 
   console.log(signUpUser, user);
 
-  const handleAccountConnected = useCallback(async () => {
-    console.log('handleAccountConnected');
-    try {
-      await sessionStore.loadUserProfile();
-    } catch (e) {
-      console.log('Error loading profile', e);
-    }
-  }, [sessionStore]);
-
-  useEffect(() => {
-    if (isGuest || signUpUser || !user?.name) {
-      return;
-    }
-    widgetManagerStore.closeAll();
-  }, [isGuest, user, signUpUser, widgetManagerStore]);
+  const handleAccountConnected = useCallback(
+    async (close = false) => {
+      console.log('handleAccountConnected');
+      try {
+        await sessionStore.loadUserProfile();
+        if (close) {
+          widgetManagerStore.closeAll();
+        }
+      } catch (e) {
+        console.log('Error loading profile', e);
+      }
+    },
+    [sessionStore, widgetManagerStore]
+  );
 
   const stepList: StepInterface[] = useMemo(() => {
     const activeStep = isSignUp || user ? 1 : 0;
@@ -56,9 +54,8 @@ const LoginWidget: FC = () => {
         onClose={onClose}
       >
         <FrameSteps stepList={stepList}>
-          {/* {isSignIn && <SignIn onConnected={handleAccountConnected} />} */}
-          {!isSignUp && <SignIn onConnected={handleAccountConnected} />}
-          {isSignUp && <SignUp onCreated={handleAccountConnected} />}
+          {isSignIn && <SignIn onConnected={() => handleAccountConnected(false)} />}
+          {isSignUp && <SignUp onCreated={() => handleAccountConnected(true)} />}
         </FrameSteps>
       </Panel>
     </styled.Container>

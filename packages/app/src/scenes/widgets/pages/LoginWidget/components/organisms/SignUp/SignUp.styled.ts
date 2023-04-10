@@ -19,3 +19,11 @@ export const ReadyText = styled.div`
   margin: 26px 0 16px;
   color: white;
 `;
+
+export const ProfileAvatarPreview = styled.div`
+  width: 340px;
+  height: 200px;
+  background-size: cover;
+  background-position: center center;
+  border-radius: 4px;
+`;

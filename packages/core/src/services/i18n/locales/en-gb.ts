@@ -213,7 +213,10 @@ export const enGb = {
       chooseAnImageLabel: 'Choose an Image',
       areYouReadyText: 'Are you ready? Start counting. Go!',
       startYourJourney: 'Start your journey',
-      welcomeUser: 'Welcome {{name}}'
+      welcomeUser: 'Welcome {{name}}',
+      permissionInfo: 'View only permissions, we will never do anything without your approval',
+      auditInfo: 'Audited Smart contracts',
+      trustInfo: 'Trusted by {{count}} customers'
     },
     errors: {
       oidcSession: 'Something wrong with session',

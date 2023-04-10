@@ -30,6 +30,8 @@ const SignIn: FC<PropsInterface> = ({onConnected}) => {
     </styled.ConnectWithWalletRow>
   );
 
+  const count = 59589588;
+
   return (
     <styled.Container>
       <FrameText
@@ -60,15 +62,15 @@ const SignIn: FC<PropsInterface> = ({onConnected}) => {
         <styled.ExtraInfoPoints>
           <div className="row">
             <ButtonRound variant="primary" isLabel={true} icon="visible" />
-            <span>View only permissions, we will never do anything without your appoval</span>
+            <span>{t('login.permissionInfo')}</span>
           </div>
           <div className="row">
             <ButtonRound variant="primary" isLabel={true} icon="locked" />
-            <span>Audited Smart contracts</span>
+            <span>{t('login.auditInfo')}</span>
           </div>
           <div className="row">
             <ButtonRound variant="primary" isLabel={true} icon="star_favorite" />
-            <span>Trusted by 59589588 customers</span>
+            <span>{t('login.trustInfo', {count})}</span>
           </div>
         </styled.ExtraInfoPoints>
       )}
