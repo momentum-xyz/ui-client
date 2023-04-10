@@ -54,7 +54,10 @@ const WorldList: FC<PropsInterface> = ({
       <styled.ScrollableContainer>
         {searchQuery.isQueryValid ? (
           <styled.SearchContainer>
-            <styled.SearchResultTitle>{t('labels.searchResults')}</styled.SearchResultTitle>
+            <styled.SearchResultTitle>
+              {`${searchResults.length} ${t('labels.results')}`}
+            </styled.SearchResultTitle>
+
             {searchResults.map((item) => (
               <ItemCard
                 key={item.id}

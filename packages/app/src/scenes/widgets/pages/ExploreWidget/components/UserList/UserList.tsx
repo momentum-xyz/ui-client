@@ -50,7 +50,10 @@ const UserList: FC<PropsInterface> = ({
       <styled.ScrollableContainer>
         {searchQuery.isQueryValid ? (
           <styled.SearchContainer>
-            <styled.SearchResultTitle>{t('labels.searchResults')}</styled.SearchResultTitle>
+            <styled.SearchResultTitle>
+              {`${searchResults.length} ${t('labels.results')}`}
+            </styled.SearchResultTitle>
+
             {searchResults.map((item) => (
               <ItemCard
                 key={item.id}
@@ -59,13 +62,12 @@ const UserList: FC<PropsInterface> = ({
                 imageErrorIcon="astronaut"
                 description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
                 onInfoClick={() => onUserClick(item.uuid)}
-                onVisitClick={() => onVisit(item.uuid)}
               />
             ))}
           </styled.SearchContainer>
         ) : (
           <styled.PopularContainer>
-            <styled.BlockTitle>{t('labels.mostStakedMembers')}</styled.BlockTitle>
+            <styled.BlockTitle>{t('labels.bigStakers')}</styled.BlockTitle>
             <styled.Carousel>
               <Slider
                 items={mostStakedItems}

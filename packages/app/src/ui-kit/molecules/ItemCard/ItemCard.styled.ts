@@ -29,7 +29,7 @@ export const ItemContent = styled.div`
   }
 
   &.small {
-    gap: 10px;
+    gap: 8px;
   }
 `;
 
