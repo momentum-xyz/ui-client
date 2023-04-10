@@ -4,8 +4,25 @@ import {InjectedConnector} from '@web3-react/injected-connector';
 
 import {UseWalletType} from 'wallets';
 
+const ARBITRUM_ONE = 42161;
+const OPTIMISM = 10;
+const ARBITRUM_NITRO = 421611;
+const LOCAL_TESTNET = 1337;
+const LOCAL_TESTNET_ARBITRUM = 412346;
+
 const connector = new InjectedConnector({
-  supportedChainIds: [1, 3, 4, 5, 42]
+  supportedChainIds: [
+    1,
+    3,
+    4,
+    5,
+    42,
+    ARBITRUM_ONE,
+    ARBITRUM_NITRO,
+    OPTIMISM,
+    LOCAL_TESTNET,
+    LOCAL_TESTNET_ARBITRUM
+  ]
 });
 
 const {ethereum} = window as any;
