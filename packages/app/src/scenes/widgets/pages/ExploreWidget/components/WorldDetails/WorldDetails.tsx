@@ -1,7 +1,14 @@
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Panel, ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
+import {
+  Panel,
+  ImageSizeEnum,
+  IconSvg,
+  SymbolAmount,
+  Hexagon,
+  ButtonEllipse
+} from '@momentum-xyz/ui-kit-storybook';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ProfileInfo, ProfileImage} from 'ui-kit';
@@ -17,9 +24,18 @@ interface PropsInterface {
   onClose: () => void;
 }
 
-const WorldDetails: FC<PropsInterface> = (props) => {
-  const {worldDetails, onVisit, onStake, onUserClick, onClose} = props;
-  const {world} = worldDetails;
+const USERS_MAX = 2;
+
+const WorldDetails: FC<PropsInterface> = ({
+  worldDetails,
+  onVisit,
+  onStake,
+  onUserClick,
+  onClose
+}) => {
+  const {world, usersStakedIn, lastStakingComment, totalAmountStaked} = worldDetails;
+
+  const [isButtonShown, setIsButtonShown] = useState(usersStakedIn.length > USERS_MAX);
 
   const {t} = useI18n();
 
@@ -51,6 +67,56 @@ const WorldDetails: FC<PropsInterface> = (props) => {
               onVisit={() => onVisit(world.uuid)}
               onStake={() => onStake(world.uuid)}
             />
+
+            <styled.TitleContainer>
+              <styled.Title>
+                <IconSvg name="stake" size="xs" isWhite />
+                <span>{t('labels.staked')}</span>
+              </styled.Title>
+            </styled.TitleContainer>
+
+            <styled.TotalAmount>
+              <div>{t('labels.totalAmountStaked')}:</div>
+              <SymbolAmount value={totalAmountStaked} tokenSymbol="MOM" />
+            </styled.TotalAmount>
+
+            {!!lastStakingComment && (
+              <styled.StakingCommentContainer>
+                <div>{t('labels.lastStakingComment')}:</div>
+                <styled.StakingComment>{lastStakingComment}</styled.StakingComment>
+              </styled.StakingCommentContainer>
+            )}
+
+            {usersStakedIn.length > 0 && (
+              <styled.StakedInUsersContainer>
+                <styled.Title>
+                  <IconSvg name="connect" size="xs" isWhite />
+                  <span>{t('labels.connections')}</span>
+                </styled.Title>
+
+                {(isButtonShown ? usersStakedIn.slice(0, USERS_MAX) : usersStakedIn).map(
+                  (user, index) => (
+                    <styled.StakedInUser key={user.uuid} onClick={() => onUserClick(user.uuid)}>
+                      <Hexagon type="fourth-borderless" skipOuterBorder imageSrc={user.image} />
+                      <styled.Link>
+                        {index < USERS_MAX
+                          ? `${t('labels.topConnector')}: ${user.name}`
+                          : user.name}
+                      </styled.Link>
+                    </styled.StakedInUser>
+                  )
+                )}
+
+                {isButtonShown && (
+                  <styled.ShowAllButtonContainer>
+                    <ButtonEllipse
+                      label={t('actions.seeAll')}
+                      onClick={() => setIsButtonShown(false)}
+                    />
+                  </styled.ShowAllButtonContainer>
+                )}
+              </styled.StakedInUsersContainer>
+            )}
           </styled.GeneralScrollable>
         </styled.Wrapper>
       </Panel>

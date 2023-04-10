@@ -51,7 +51,7 @@ const WorldList: FC<PropsInterface> = ({
           />
         </styled.Search>
       </Frame>
-      <styled.WorldsContainer>
+      <styled.ScrollableContainer>
         {searchQuery.isQueryValid ? (
           <styled.SearchContainer>
             <styled.SearchResultTitle>{t('labels.searchResults')}</styled.SearchResultTitle>
@@ -82,7 +82,7 @@ const WorldList: FC<PropsInterface> = ({
             </styled.Carousel>
           </styled.PopularContainer>
         )}
-      </styled.WorldsContainer>
+      </styled.ScrollableContainer>
     </styled.Wrapper>
   );
 };

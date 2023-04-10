@@ -12,7 +12,7 @@ export const Wrapper = styled.div`
 `;
 
 export const GeneralScrollable = styled.div`
-  padding: 0 10px;
+  margin: 0 10px;
   display: flex;
   max-height: calc(100vh - var(--scroll-offset));
   flex-direction: column;
