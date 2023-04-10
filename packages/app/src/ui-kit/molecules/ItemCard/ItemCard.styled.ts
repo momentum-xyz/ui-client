@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
   padding: 10px;
   display: grid;
   background: ${(props) => props.theme.bg && rgba(props.theme.accentBg, 0.2)};
-  box-shadow: -1px -1px 2px rgba(158, 238, 255, 0.1);
+  box-shadow: -1px -1px 2px ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.1)};
   border-radius: 4px;
 
   &.normal {
