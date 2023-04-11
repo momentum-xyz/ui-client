@@ -1,5 +1,4 @@
-import {types} from 'mobx-state-tree';
-import {cloneDeep} from 'lodash-es';
+import {castToSnapshot, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 import {ImageSizeEnum, SliderItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
@@ -12,8 +11,8 @@ const Universe2dStore = types.compose(
   ResetModel,
   types
     .model('Universe2dStore', {
-      allUsers: types.optional(types.array(NftItem), []),
-      allWorlds: types.optional(types.array(NftItem), []),
+      allUsers: types.optional(types.array(types.reference(NftItem)), []),
+      allWorlds: types.optional(types.array(types.reference(NftItem)), []),
       searchQuery: types.optional(SearchQuery, {}),
       selectedWorld: types.maybeNull(WorldDetails),
       selectedUser: types.maybeNull(UserDetails)
@@ -22,18 +21,21 @@ const Universe2dStore = types.compose(
       init(): void {
         // TODO: implementation
         const {nftItems} = getRootStore(self).nftStore;
-        self.allUsers = cloneDeep(nftItems);
-        self.allWorlds = cloneDeep(nftItems);
+
+        self.allUsers = castToSnapshot(nftItems.filter((i) => !i.image?.includes('http')));
+        self.allWorlds = castToSnapshot(nftItems.filter((i) => !i.image?.includes('http')));
       },
       selectWorld(worldId: string): void {
         const world = self.allWorlds.find((world) => world.uuid === worldId);
-        self.selectedWorld = world ? WorldDetails.create({world: cloneDeep(world)}) : null;
+        self.selectedWorld = world ? WorldDetails.create({world: world.id}) : null;
         self.selectedUser = null;
+        self.selectedWorld?.init();
       },
       selectUser(userId: string): void {
         const user = self.allUsers.find((user) => user.uuid === userId);
-        self.selectedUser = user ? UserDetails.create({user: cloneDeep(user)}) : null;
+        self.selectedUser = user ? UserDetails.create({user: user.id}) : null;
         self.selectedWorld = null;
+        self.selectedUser?.init();
       },
       resetUnits(): void {
         self.selectedWorld = null;
@@ -52,28 +54,28 @@ const Universe2dStore = types.compose(
           : [];
       },
       get lastCreatedUsers(): SliderItemInterface<string>[] {
-        return self.allWorlds.slice(0, 5).map((item) => ({
+        return self.allWorlds.slice(0, 6).map((item) => ({
           id: item.uuid,
           name: item.name,
           image: getImageAbsoluteUrl(item.image, ImageSizeEnum.S5) || ''
         }));
       },
       get mostStatedUsers(): SliderItemInterface<string>[] {
-        return self.allWorlds.slice(5, 10).map((item) => ({
+        return self.allWorlds.slice(6, 12).map((item) => ({
           id: item.uuid,
           name: item.name,
           image: getImageAbsoluteUrl(item.image, ImageSizeEnum.S5) || ''
         }));
       },
       get lastCreatedWorlds(): SliderItemInterface<string>[] {
-        return self.allWorlds.slice(20, 25).map((item) => ({
+        return self.allWorlds.slice(12, 18).map((item) => ({
           id: item.uuid,
           name: item.name,
           image: getImageAbsoluteUrl(item.image, ImageSizeEnum.S5) || ''
         }));
       },
       get mostStatedInWorlds(): SliderItemInterface<string>[] {
-        return self.allWorlds.slice(25, 30).map((item) => ({
+        return self.allWorlds.slice(18, 24).map((item) => ({
           id: item.uuid,
           name: item.name,
           image: getImageAbsoluteUrl(item.image, ImageSizeEnum.S5) || ''

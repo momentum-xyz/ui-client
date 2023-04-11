@@ -49,16 +49,3 @@ export const ItemLabel = styled.div`
   font-size: var(--font-size-m);
   font-weight: 400;
 `;
-
-export const ItemValue = styled.div`
-  padding: 8px 10px;
-  display: flex;
-  border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
-  border-radius: 4px;
-  font-weight: 700;
-  gap: 5px;
-`;
-
-export const ItemSuffix = styled.div`
-  font-weight: 400;
-`;

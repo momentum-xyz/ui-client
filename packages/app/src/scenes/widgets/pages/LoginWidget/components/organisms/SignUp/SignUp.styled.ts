@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  height: calc(100vh - 220px);
   padding: 10px;
 `;
 export const Separator = styled.div`
@@ -19,4 +18,12 @@ export const InputContainer = styled.div`
 export const ReadyText = styled.div`
   margin: 26px 0 16px;
   color: white;
+`;
+
+export const ProfileAvatarPreview = styled.div`
+  width: 340px;
+  height: 200px;
+  background-size: cover;
+  background-position: center center;
+  border-radius: 4px;
 `;

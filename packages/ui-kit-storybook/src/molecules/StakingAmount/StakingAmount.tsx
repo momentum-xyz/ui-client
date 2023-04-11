@@ -1,8 +1,7 @@
 import {FC, memo} from 'react';
-import {NumericFormat, NumericFormatProps} from 'react-number-format';
 import {useI18n} from '@momentum-xyz/core';
 
-import {ButtonEllipse} from '../../atoms';
+import {ButtonEllipse, SymbolAmount} from '../../atoms';
 
 import * as styled from './StakingAmount.styled';
 
@@ -13,13 +12,6 @@ export interface StakingAmountPropsInterface {
   tokenSymbol: string;
   onUnstakeClick?: () => void;
 }
-
-const FORMATTING: NumericFormatProps = {
-  displayType: 'text',
-  decimalSeparator: '.',
-  thousandSeparator: ' ',
-  decimalScale: 3
-};
 
 const StakingAmount: FC<StakingAmountPropsInterface> = ({
   username,
@@ -42,17 +34,11 @@ const StakingAmount: FC<StakingAmountPropsInterface> = ({
       <styled.Content>
         <styled.Item>
           <styled.ItemLabel>{t('staking.balanceTypes.staked')}:</styled.ItemLabel>
-          <styled.ItemValue>
-            <NumericFormat {...FORMATTING} value={amount} />
-            <styled.ItemSuffix>{tokenSymbol}</styled.ItemSuffix>
-          </styled.ItemValue>
+          <SymbolAmount value={amount} tokenSymbol={tokenSymbol} />
         </styled.Item>
         <styled.Item>
           <styled.ItemLabel>{t('staking.rewards')}:</styled.ItemLabel>
-          <styled.ItemValue>
-            <NumericFormat {...FORMATTING} value={rewardsAmount} />
-            <styled.ItemSuffix>{tokenSymbol}</styled.ItemSuffix>
-          </styled.ItemValue>
+          <SymbolAmount value={rewardsAmount} tokenSymbol={tokenSymbol} />
         </styled.Item>
       </styled.Content>
     </styled.Container>

@@ -18,23 +18,21 @@ const AvatarUpload: FC<AvatarUploadPropsInterface> = ({value, onChange}) => {
 
   return (
     <styled.Container>
-      <styled.Circle>
-        {value && <styled.ImagePreview src={URL.createObjectURL(value)} />}
-        <styled.CircleInner>
-          <div className="icon-container">
-            <IconSvg isWhite name="photo_camera" size="xxl" />
-          </div>
-          <FileUploader
-            label=""
-            dragActiveLabel={t('fileUploader.dragActiveLabel')}
-            fileType="image"
-            onFilesUpload={onChange}
-            onError={(error: any) => console.error(error)}
-            enableDragAndDrop={false}
-            buttonClassName="image-upload-button"
-          />
-        </styled.CircleInner>
-      </styled.Circle>
+      {value && <styled.ImagePreview src={URL.createObjectURL(value)} />}
+      {!value && (
+        <div className="icon-container">
+          <IconSvg isWhite name="photo_camera" size="xxl" />
+        </div>
+      )}
+      <FileUploader
+        label=""
+        dragActiveLabel={t('fileUploader.dragActiveLabel')}
+        fileType="image"
+        onFilesUpload={onChange}
+        onError={(error: any) => console.error(error)}
+        enableDragAndDrop={false}
+        buttonClassName="image-upload-button"
+      />
     </styled.Container>
   );
 };
