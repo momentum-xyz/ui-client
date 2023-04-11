@@ -27,8 +27,13 @@ export const useWallet: UseWalletType = () => {
   );
 
   useEffect(() => {
-    console.log('MetaMask useWallet activate');
     console.log('MetaMask useWallet metamaskProvider', metamaskProvider);
+    if (!isInstalled) {
+      console.log('MetaMask useWallet not installed');
+      return;
+    }
+
+    console.log('MetaMask useWallet activate');
 
     // It's a workaround to fix the issue with opening Coinbase Wallet when it's also installed
     if (metamaskProvider && typeof ethereum.setSelectedProvider === 'function') {
@@ -57,7 +62,7 @@ export const useWallet: UseWalletType = () => {
       console.log('MetaMask useWallet deactivate');
       deactivate();
     };
-  }, [activate, deactivate]);
+  }, [activate, deactivate, ethereum, isInstalled, metamaskProvider]);
 
   return {account, accountHex: account, isInstalled, signChallenge};
 };

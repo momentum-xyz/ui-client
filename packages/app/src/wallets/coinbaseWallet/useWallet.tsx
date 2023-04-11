@@ -22,6 +22,11 @@ export const useWallet: UseWalletType = ({appVariables}) => {
   );
 
   useEffect(() => {
+    if (!isInstalled) {
+      console.log('CoinbaseWallet useWallet not installed');
+      return;
+    }
+
     console.log('CoinbaseWallet useWallet activate', appVariables.WEB3_PUBLIC_RPC_URL_MAINNET);
 
     const connector = new WalletLinkConnector({
@@ -43,7 +48,7 @@ export const useWallet: UseWalletType = ({appVariables}) => {
       console.log('CoinbaseWallet useWallet deactivate');
       deactivate();
     };
-  }, [activate, deactivate, appVariables]);
+  }, [activate, deactivate, appVariables, isInstalled]);
 
   return {account, accountHex: account, isInstalled, signChallenge};
 };
