@@ -5,7 +5,6 @@ import cn from 'classnames';
 import {useI18n, i18n} from '@momentum-xyz/core';
 import {TabInterface, Tabs, Panel} from '@momentum-xyz/ui-kit-storybook';
 
-//import {ExplorePanel} from 'ui-kit';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
@@ -41,8 +40,20 @@ const ExploreWidget: FC = () => {
     };
   }, [universe2dStore]);
 
+  const onSelectUser = (userId: string) => {
+    universe2dStore.selectUser(userId);
+  };
+
+  const onSelectWorld = (worldId: string) => {
+    universe2dStore.selectWorld(worldId);
+  };
+
+  const onVisitWorld = (worldId: string) => {
+    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+  };
+
   return (
-    <styled.Container data-testid="ExploreWidget">
+    <styled.Container data-testid="ExploreWidget-test">
       <styled.ExplorePanel className={cn(hasSelectedUnit && 'collapsed')}>
         <Panel
           icon="explore"
@@ -63,34 +74,22 @@ const ExploreWidget: FC = () => {
                 <WorldList
                   searchQuery={universe2dStore.searchQuery}
                   searchResults={universe2dStore.filteredWorlds}
-                  lastCreatedItems={universe2dStore.lastCreatedWorlds}
-                  mostStakedInItems={universe2dStore.mostStatedInWorlds}
-                  onWorldClick={(worldId) => {
-                    universe2dStore.selectWorld(worldId);
-                  }}
-                  onUserClick={(userId) => {
-                    universe2dStore.selectUser(userId);
-                  }}
-                  onVisit={(worldId) => {
-                    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
-                  }}
-                  onStake={(worldId) => {
-                    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
-                  }}
+                  lastCreatedWorlds={universe2dStore.lastCreatedWorlds}
+                  mostStakedWorlds={universe2dStore.mostStatedInWorlds}
+                  onSelectWorld={onSelectWorld}
+                  onSelectUser={onSelectUser}
+                  onVisitWorld={onVisitWorld}
+                  onStakeWorld={onVisitWorld}
                 />
               )}
+
               {activeTab === 'users' && (
                 <UserList
                   searchQuery={universe2dStore.searchQuery}
                   searchResults={universe2dStore.filteredUsers}
-                  lastCreatedItems={universe2dStore.lastCreatedUsers}
-                  mostStakedItems={universe2dStore.mostStatedUsers}
-                  onUserClick={(userId) => {
-                    universe2dStore.selectUser(userId);
-                  }}
-                  onVisit={(userId) => {
-                    console.log(userId);
-                  }}
+                  lastCreatedUsers={universe2dStore.lastCreatedUsers}
+                  mostStakedUsers={universe2dStore.mostStatedUsers}
+                  onSelectUser={onSelectUser}
                 />
               )}
             </styled.Content>
@@ -103,15 +102,9 @@ const ExploreWidget: FC = () => {
         <styled.Details>
           <WorldDetails
             worldDetails={universe2dStore.selectedWorld}
-            onUserClick={(userId) => {
-              universe2dStore.selectUser(userId);
-            }}
-            onVisit={(worldId) => {
-              navigate(generatePath(ROUTES.odyssey.base, {worldId}));
-            }}
-            onStake={(worldId) => {
-              navigate(generatePath(ROUTES.odyssey.base, {worldId}));
-            }}
+            onSelectUser={onSelectUser}
+            onVisitWorld={onVisitWorld}
+            onStakeWorld={onVisitWorld}
             onClose={universe2dStore.resetUnits}
           />
         </styled.Details>
@@ -124,12 +117,8 @@ const ExploreWidget: FC = () => {
             userDetails={universe2dStore.selectedUser}
             nftOwned={universe2dStore.selectedUser.nftOwned}
             nftStakedIn={universe2dStore.selectedUser.nftStakedIn}
-            onVisit={(worldId) => {
-              navigate(generatePath(ROUTES.odyssey.base, {worldId}));
-            }}
-            onInfo={(worldId) => {
-              universe2dStore.selectWorld(worldId);
-            }}
+            onVisitWorld={onVisitWorld}
+            onSelectWorld={onSelectWorld}
             onClose={universe2dStore.resetUnits}
           />
         </styled.Details>

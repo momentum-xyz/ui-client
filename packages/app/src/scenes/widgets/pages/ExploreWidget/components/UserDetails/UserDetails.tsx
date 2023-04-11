@@ -14,13 +14,13 @@ interface PropsInterface {
   userDetails: UserDetailsType;
   nftOwned: NftItemModelInterface[];
   nftStakedIn: NftItemModelInterface[];
-  onVisit: (worldId: string) => void;
-  onInfo: (worldId: string) => void;
+  onVisitWorld: (worldId: string) => void;
+  onSelectWorld: (worldId: string) => void;
   onClose: () => void;
 }
 
 const UserDetails: FC<PropsInterface> = (props) => {
-  const {userDetails, nftOwned, nftStakedIn, onVisit, onInfo, onClose} = props;
+  const {userDetails, nftOwned, nftStakedIn, onVisitWorld, onSelectWorld, onClose} = props;
   const {user} = userDetails;
 
   const {t} = useI18n();
@@ -63,8 +63,8 @@ const UserDetails: FC<PropsInterface> = (props) => {
                       imageHeight={95}
                       description="Lorem ipsum dolor sit amet, consectetuer."
                       imageErrorIcon="rabbit_fill"
-                      onVisitClick={() => onVisit(nft.uuid)}
-                      onInfoClick={() => onInfo(nft.uuid)}
+                      onVisitClick={() => onVisitWorld(nft.uuid)}
+                      onInfoClick={() => onSelectWorld(nft.uuid)}
                     />
                   ))}
                 </>
@@ -85,8 +85,8 @@ const UserDetails: FC<PropsInterface> = (props) => {
                       imageHeight={95}
                       description="Lorem ipsum dolor sit amet, consectetuer."
                       imageErrorIcon="rabbit_fill"
-                      onVisitClick={() => onVisit(nft.uuid)}
-                      onInfoClick={() => onInfo(nft.uuid)}
+                      onVisitClick={() => onVisitWorld(nft.uuid)}
+                      onInfoClick={() => onSelectWorld(nft.uuid)}
                     />
                   ))}
                 </>

@@ -18,9 +18,9 @@ import * as styled from './WorldDetails.styled';
 
 interface PropsInterface {
   worldDetails: WorldDetailsType;
-  onUserClick: (userId: string) => void;
-  onVisit: (worldId: string) => void;
-  onStake: (worldId: string) => void;
+  onSelectUser: (userId: string) => void;
+  onVisitWorld: (worldId: string) => void;
+  onStakeWorld: (worldId: string) => void;
   onClose: () => void;
 }
 
@@ -28,9 +28,9 @@ const USERS_MAX = 2;
 
 const WorldDetails: FC<PropsInterface> = ({
   worldDetails,
-  onVisit,
-  onStake,
-  onUserClick,
+  onVisitWorld,
+  onStakeWorld,
+  onSelectUser,
   onClose
 }) => {
   const {world, usersStakedIn, lastStakingComment, totalAmountStaked} = worldDetails;
@@ -55,7 +55,7 @@ const WorldDetails: FC<PropsInterface> = ({
             image={world.image}
             imageErrorIcon="rabbit_fill"
             byName={world.name}
-            onByClick={() => onUserClick(world.uuid)}
+            onByClick={() => onSelectUser(world.uuid)}
           />
 
           <styled.GeneralScrollable>
@@ -64,8 +64,8 @@ const WorldDetails: FC<PropsInterface> = ({
               description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean commodo ligula eget dolor..."
               address="http://www.google.com"
               joinDate={new Date().toISOString()}
-              onVisit={() => onVisit(world.uuid)}
-              onStake={() => onStake(world.uuid)}
+              onVisit={() => onVisitWorld(world.uuid)}
+              onStake={() => onStakeWorld(world.uuid)}
             />
 
             <styled.TitleContainer>
@@ -96,7 +96,7 @@ const WorldDetails: FC<PropsInterface> = ({
 
                 {(isButtonShown ? usersStakedIn.slice(0, USERS_MAX) : usersStakedIn).map(
                   (user, index) => (
-                    <styled.StakedInUser key={user.uuid} onClick={() => onUserClick(user.uuid)}>
+                    <styled.StakedInUser key={user.uuid} onClick={() => onSelectUser(user.uuid)}>
                       <Hexagon type="fourth-borderless" skipOuterBorder imageSrc={user.image} />
                       <styled.Link>
                         {index < USERS_MAX

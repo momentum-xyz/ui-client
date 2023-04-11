@@ -17,19 +17,17 @@ import * as styled from './UserList.styled';
 interface PropsInterface {
   searchQuery: SearchQueryModelModelType;
   searchResults: NftItemModelInterface[];
-  lastCreatedItems: SliderItemInterface<string>[];
-  mostStakedItems: SliderItemInterface<string>[];
-  onUserClick: (userId: string) => void;
-  onVisit: (userId: string) => void;
+  lastCreatedUsers: SliderItemInterface<string>[];
+  mostStakedUsers: SliderItemInterface<string>[];
+  onSelectUser: (userId: string) => void;
 }
 
 const UserList: FC<PropsInterface> = ({
   searchQuery,
   searchResults,
-  lastCreatedItems,
-  mostStakedItems,
-  onUserClick,
-  onVisit
+  lastCreatedUsers,
+  mostStakedUsers,
+  onSelectUser
 }) => {
   const {t} = useI18n();
 
@@ -61,7 +59,7 @@ const UserList: FC<PropsInterface> = ({
                 image={item.image}
                 imageErrorIcon="astronaut"
                 description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
-                onInfoClick={() => onUserClick(item.uuid)}
+                onInfoClick={() => onSelectUser(item.uuid)}
               />
             ))}
           </styled.SearchContainer>
@@ -70,17 +68,17 @@ const UserList: FC<PropsInterface> = ({
             <styled.BlockTitle>{t('labels.bigStakers')}</styled.BlockTitle>
             <styled.Carousel>
               <Slider
-                items={mostStakedItems}
+                items={mostStakedUsers}
                 errorIcon="astronaut"
-                onClick={(uuid) => onUserClick(uuid)}
+                onClick={(uuid) => onSelectUser(uuid)}
               />
             </styled.Carousel>
             <styled.BlockTitle>{t('labels.newMembers')}</styled.BlockTitle>
             <styled.Carousel>
               <Slider
-                items={lastCreatedItems}
+                items={lastCreatedUsers}
                 errorIcon="astronaut"
-                onClick={(uuid) => onUserClick(uuid)}
+                onClick={(uuid) => onSelectUser(uuid)}
               />
             </styled.Carousel>
           </styled.PopularContainer>
