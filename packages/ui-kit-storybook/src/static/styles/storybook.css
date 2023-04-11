@@ -7,6 +7,10 @@
   max-width: 380px;
 }
 
+.storybook-block-2 {
+  max-width: 530px;
+}
+
 .storybook-grid-rows {
   display: flex;
   flex-direction: column;

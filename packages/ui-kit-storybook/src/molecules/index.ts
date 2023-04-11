@@ -12,3 +12,4 @@ export * from './VoiceUserLine';
 export * from './ProfileInfo';
 export * from './ProfileLine';
 export * from './StakingAmount';
+export * from './StakeCard';
