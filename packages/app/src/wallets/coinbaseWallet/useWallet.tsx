@@ -8,6 +8,10 @@ export const useWallet: UseWalletType = ({appVariables}) => {
   const {library, account, activate, deactivate, active} = useWeb3React();
   console.log('CoinbaseWallet useWallet', {library, account, activate, active});
 
+  const {ethereum} = window as any;
+  const isInstalled =
+    ethereum?.isCoinbaseWallet || !!ethereum?.providers?.some((p: any) => p.isCoinbaseWallet);
+
   const signChallenge = useCallback(
     async (challenge: string) => {
       console.log('CoinbaseWallet useWallet connect', challenge);
@@ -41,5 +45,5 @@ export const useWallet: UseWalletType = ({appVariables}) => {
     };
   }, [activate, deactivate, appVariables]);
 
-  return {account, accountHex: account, signChallenge};
+  return {account, accountHex: account, isInstalled, signChallenge};
 };

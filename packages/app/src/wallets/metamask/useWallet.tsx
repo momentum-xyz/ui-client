@@ -8,13 +8,14 @@ const connector = new InjectedConnector({
   supportedChainIds: [1, 3, 4, 5, 42]
 });
 
-const {ethereum} = window as any;
-// this structure exists when Coinbase Wallet is installed
-const metamaskProvider = ethereum?.providers?.find((p: any) => p.isMetaMask);
-
 export const useWallet: UseWalletType = () => {
   const {library, account, activate, deactivate, active} = useWeb3React();
   console.log('MetaMask useWallet', {library, account, activate, active});
+
+  const {ethereum} = window as any;
+  // this structure exists when both Metamask and Coinbase Wallet are installed
+  const metamaskProvider = ethereum?.providers?.find((p: any) => p.isMetaMask);
+  const isInstalled = !!metamaskProvider || ethereum?.isMetaMask;
 
   const signChallenge = useCallback(
     async (challenge: string) => {
@@ -58,5 +59,5 @@ export const useWallet: UseWalletType = () => {
     };
   }, [activate, deactivate]);
 
-  return {account, accountHex: account, signChallenge};
+  return {account, accountHex: account, isInstalled, signChallenge};
 };
