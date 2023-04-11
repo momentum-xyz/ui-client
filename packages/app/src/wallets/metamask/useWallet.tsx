@@ -32,9 +32,9 @@ export const useWallet: UseWalletType = () => {
     console.log('MetaMask useWallet metamaskProvider', metamaskProvider);
 
     // It's a workaround to fix the issue with opening Coinbase Wallet when it's also installed
-    if (metamaskProvider && typeof ethereum.selectedProvider !== 'undefined') {
+    if (metamaskProvider && typeof ethereum.setSelectedProvider === 'function') {
       try {
-        ethereum.selectedProvider = metamaskProvider;
+        ethereum.setSelectedProvider?.(metamaskProvider);
       } catch (err) {
         console.log('MetaMask useWallet selectedProvider err', err);
       }
