@@ -5,6 +5,7 @@ import {useMutableCallback} from '@momentum-xyz/ui-kit';
 import {Universe3dEmitterType} from '@momentum-xyz/core';
 
 import {PlayerHelper, LightHelper, SkyboxHelper} from '../../babylon';
+import {UniverseBuilderHelper} from '../../babylon/UniverseBuilderHelper';
 
 export interface PropsInterface {
   events: Universe3dEmitterType;
@@ -18,13 +19,20 @@ export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
   const onUserClick = useMutableCallback(callbacks.onUserClick);
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);
 
-  const onSceneReady = (scene: Scene) => {
+  const onSceneReady = async (scene: Scene) => {
+    SkyboxHelper.set360Skybox(
+      scene,
+      'https://dev2.odyssey.ninja/api/v3/render/texture/s8/27a7d8904d525b5d163754624ae46bc8'
+    );
+
     console.log('onSceneReady', scene);
     const view = scene.getEngine().getRenderingCanvas();
     // const engine = scene.getEngine();
     if (view?.id) {
       PlayerHelper.initialize(scene, view);
       LightHelper.initialize(scene);
+      UniverseBuilderHelper.initialize(scene);
+      await UniverseBuilderHelper.buildEntireUniverse();
     }
 
     console.log('TODO attach callbacks', {onWorldClick, onUserClick, onClickOutside});
@@ -38,11 +46,6 @@ export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
       console.log('UserAdded', user);
       // TODO
     });
-
-    SkyboxHelper.set360Skybox(
-      scene,
-      'https://dev2.odyssey.ninja/api/v3/render/texture/s8/27a7d8904d525b5d163754624ae46bc8'
-    );
 
     PlayerHelper.spawnPlayer(scene);
 
