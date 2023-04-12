@@ -76,8 +76,9 @@ export const useWallet: UseWalletType = () => {
     }, 500);
 
     return () => {
-      console.log('MetaMask useWallet deactivate');
-      deactivate();
+      // temp disable
+      // console.log('MetaMask useWallet deactivate');
+      // deactivate();
     };
   }, [activate, deactivate, ethereum, isInstalled, metamaskProvider]);
 
