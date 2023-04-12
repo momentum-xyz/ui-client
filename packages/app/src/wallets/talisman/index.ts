@@ -6,7 +6,7 @@ import {useWallet} from './useWallet';
 const config: WalletConfigInterface = {
   name: 'Talisman',
   icon,
-  browserExtensionUrl: 'https://talismanwallet.com/',
+  browserExtensionUrl: 'https://www.talisman.xyz/',
   useWallet
 };
 

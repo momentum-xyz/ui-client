@@ -25,15 +25,14 @@ const connector = new InjectedConnector({
   ]
 });
 
-const {ethereum} = window as any;
-// this structure exists when Coinbase Wallet is installed
-const metamaskProvider = ethereum?.providers?.find((p: any) => p.isMetaMask);
-
 export const useWallet: UseWalletType = () => {
-  // const {library, account, activate, deactivate, active} = useWeb3React();
-  const data = useWeb3React();
-  const {library, account, activate, active} = data;
-  console.log('useWallet', {library, account, activate, active});
+  const {library, account, activate, deactivate, active} = useWeb3React();
+  console.log('MetaMask useWallet', {library, account, activate, active});
+
+  const {ethereum} = window as any;
+  // this structure exists when both Metamask and Coinbase Wallet are installed
+  const metamaskProvider = ethereum?.providers?.find((p: any) => p.isMetaMask);
+  const isInstalled = !!metamaskProvider || ethereum?.isMetaMask;
 
   const signChallenge = useCallback(
     async (challenge: string) => {
@@ -45,33 +44,42 @@ export const useWallet: UseWalletType = () => {
   );
 
   useEffect(() => {
-    console.log('MetaMask useWallet activate');
     console.log('MetaMask useWallet metamaskProvider', metamaskProvider);
+    if (!isInstalled) {
+      console.log('MetaMask useWallet not installed');
+      return;
+    }
+
+    console.log('MetaMask useWallet activate');
 
     // It's a workaround to fix the issue with opening Coinbase Wallet when it's also installed
-    if (metamaskProvider && typeof ethereum.selectedProvider !== 'undefined') {
+    if (metamaskProvider && typeof ethereum.setSelectedProvider === 'function') {
       try {
-        ethereum.selectedProvider = metamaskProvider;
+        ethereum.setSelectedProvider?.(metamaskProvider);
       } catch (err) {
         console.log('MetaMask useWallet selectedProvider err', err);
       }
     }
 
-    // connector.activate()
-    activate(connector)
-      .then((res) => {
-        console.log('MetaMask useWallet activated res', res);
-      })
-      .catch((err) => {
-        console.log('MetaMask useWallet activate err', err);
-      });
+    // another workaround for Coinbase Wallet
+    // when swtiching from Coinbase Wallet to MetaMask there's some internal race condition
+    // that leaves connector deactivated so timeout helps here
+    // https://github.com/Uniswap/web3-react/issues/78
+    setTimeout(() => {
+      activate(connector)
+        .then((res) => {
+          console.log('MetaMask useWallet activated res', res);
+        })
+        .catch((err) => {
+          console.log('MetaMask useWallet activate err', err);
+        });
+    }, 500);
 
     return () => {
       console.log('MetaMask useWallet deactivate');
-      // deactivate();
+      deactivate();
     };
-  }, [activate]);
-  // }, [activate, deactivate]);
+  }, [activate, deactivate, ethereum, isInstalled, metamaskProvider]);
 
-  return {account, accountHex: account, signChallenge};
+  return {account, accountHex: account, isInstalled, signChallenge};
 };

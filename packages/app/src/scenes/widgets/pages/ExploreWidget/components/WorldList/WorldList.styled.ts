@@ -8,8 +8,9 @@ export const Search = styled.div`
   padding: 24px 0 0 0;
 `;
 
-export const WorldsContainer = styled.div`
-  padding: 10px;
+export const ScrollableContainer = styled.div`
+  margin: 0 10px;
+  padding: 10px 0;
   height: calc(100vh - var(--scroll-offset));
   overflow: auto;
 `;

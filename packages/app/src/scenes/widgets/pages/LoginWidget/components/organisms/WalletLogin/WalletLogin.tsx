@@ -23,12 +23,12 @@ const WalletLogin: FC<PropsInterface> = ({
   onError,
   attachSecondaryAccount = false
 }) => {
-  const {name, useWallet} = walletConf;
+  const {name, useWallet, browserExtensionUrl} = walletConf;
   const {sessionStore} = useStore();
 
   const {t} = useI18n();
 
-  const {signChallenge, content, account, accountHex} = useWallet({
+  const {signChallenge, content, account, isInstalled, accountHex} = useWallet({
     appVariables: appVariables as any
   });
   console.log('WalletLogin', {name, signChallenge, content, account, accountHex});
@@ -61,15 +61,26 @@ const WalletLogin: FC<PropsInterface> = ({
 
   return (
     <styled.Container>
-      {/* <styled.TitleText>{t('login.connectWith', {wallet: name})}</styled.TitleText> */}
-      <styled.WalletInnerViewContainer>{innerView}</styled.WalletInnerViewContainer>
-      <Button
-        label={t('login.connectYourWallet')}
-        icon="wallet"
-        disabled={!accountHex}
-        wide
-        onClick={() => onConnectWallet()}
-      />
+      {isInstalled ? (
+        <>
+          {/* <styled.TitleText>{t('login.connectWith', {wallet: name})}</styled.TitleText> */}
+          <styled.WalletInnerViewContainer>{innerView}</styled.WalletInnerViewContainer>
+          <Button
+            label={t('login.connectYourWallet')}
+            icon="wallet"
+            disabled={!accountHex}
+            wide
+            onClick={() => onConnectWallet()}
+          />
+        </>
+      ) : (
+        <Button
+          label={t('login.installBrowserExtension')}
+          icon="logout" // TODO: Add missing 'install' icon to storybook and use it here
+          wide
+          onClick={() => window.open(browserExtensionUrl, '_blank')}
+        />
+      )}
     </styled.Container>
   );
 };

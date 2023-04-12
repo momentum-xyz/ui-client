@@ -17,6 +17,7 @@ const SignIn: FC<PropsInterface> = ({onConnected}) => {
   const {t} = useI18n();
 
   const [selectedWallet, setSelectedWallet] = useState<WalletConfigInterface | null>(null);
+  // TODO check if we need this separate state in future - we currently don't use it
   const [connectWithWallet, setConnectWithWallet] = useState<boolean>(false);
 
   const openWalletInstallationLink = (url: string): void => {
@@ -48,7 +49,7 @@ const SignIn: FC<PropsInterface> = ({onConnected}) => {
                 key={name}
                 onClick={() => {
                   setSelectedWallet(wallet);
-                  setConnectWithWallet(false);
+                  setConnectWithWallet(true);
                 }}
               >
                 <img src={icon} alt={`${name}-icon`} />
