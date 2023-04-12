@@ -13,7 +13,14 @@ export const useWallet: UseWalletType = ({appVariables}) => {
   const selectedAccount = accounts.find((account) => account.address === _selectedAccount);
   console.log('useWallet', {accounts, selectedAccount});
 
+  const isInstalled = !!(window as any)?.injectedWeb3?.['polkadot-js'];
+
   useEffect(() => {
+    if (!isInstalled) {
+      console.log('Polkadot.js Wallet is not installed');
+      return;
+    }
+
     const enable = async () => {
       console.log('web3Enable start');
       await web3Enable(appVariables.POLKADOT_CONNECTION_STRING);
@@ -24,7 +31,7 @@ export const useWallet: UseWalletType = ({appVariables}) => {
     };
 
     enable();
-  }, [appVariables]);
+  }, [appVariables, isInstalled]);
 
   const signChallenge = async (challenge: string): Promise<string> => {
     if (!selectedAccount) {
@@ -80,6 +87,7 @@ export const useWallet: UseWalletType = ({appVariables}) => {
   return {
     account,
     accountHex,
+    isInstalled,
     content,
     signChallenge
   };

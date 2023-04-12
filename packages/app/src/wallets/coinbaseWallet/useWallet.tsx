@@ -8,6 +8,10 @@ export const useWallet: UseWalletType = ({appVariables}) => {
   const {library, account, activate, deactivate, active} = useWeb3React();
   console.log('CoinbaseWallet useWallet', {library, account, activate, active});
 
+  const {ethereum} = window as any;
+  const isInstalled =
+    ethereum?.isCoinbaseWallet || !!ethereum?.providers?.some((p: any) => p.isCoinbaseWallet);
+
   const signChallenge = useCallback(
     async (challenge: string) => {
       console.log('CoinbaseWallet useWallet connect', challenge);
@@ -18,6 +22,11 @@ export const useWallet: UseWalletType = ({appVariables}) => {
   );
 
   useEffect(() => {
+    if (!isInstalled) {
+      console.log('CoinbaseWallet useWallet not installed');
+      return;
+    }
+
     console.log('CoinbaseWallet useWallet activate', appVariables.WEB3_PUBLIC_RPC_URL_MAINNET);
 
     const connector = new WalletLinkConnector({
@@ -39,7 +48,7 @@ export const useWallet: UseWalletType = ({appVariables}) => {
       console.log('CoinbaseWallet useWallet deactivate');
       deactivate();
     };
-  }, [activate, deactivate, appVariables]);
+  }, [activate, deactivate, appVariables, isInstalled]);
 
-  return {account, accountHex: account, signChallenge};
+  return {account, accountHex: account, isInstalled, signChallenge};
 };
