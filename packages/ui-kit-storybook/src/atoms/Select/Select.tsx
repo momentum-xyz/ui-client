@@ -1,4 +1,3 @@
-import {FC, memo} from 'react';
 import ReactSelect, {components} from 'react-select';
 import cn from 'classnames';
 
@@ -6,14 +5,14 @@ import {IconSvg} from '../IconSvg';
 
 import * as styled from './Select.styled';
 
-export interface SelectOptionInterface {
-  value: string;
+export interface SelectOptionInterface<T> {
+  value: T;
   label: string;
 }
 
-export interface SelectPropsInterface {
-  value: string[] | string | null;
-  options: SelectOptionInterface[];
+export interface SelectPropsInterface<T> {
+  value: T[] | T | null | undefined;
+  options: SelectOptionInterface<T>[];
   placeholder?: string;
   hideSelectedOptions?: boolean;
   closeMenuOnSelect?: boolean;
@@ -22,11 +21,11 @@ export interface SelectPropsInterface {
   isDisabled?: boolean;
   wide?: boolean;
   multiSuffix?: string;
-  onSingleChange?: (value: string | null) => void;
-  onMultiChange?: (value: string[]) => void;
+  onSingleChange?: (value: T | null) => void;
+  onMultiChange?: (value: T[]) => void;
 }
 
-const Select: FC<SelectPropsInterface> = ({
+const Select = <T,>({
   wide,
   value,
   options,
@@ -38,7 +37,7 @@ const Select: FC<SelectPropsInterface> = ({
   onSingleChange,
   onMultiChange,
   ...rest
-}) => {
+}: SelectPropsInterface<T>) => {
   return (
     <styled.Container data-testid="Select-test" className={cn(wide && 'wide')}>
       <ReactSelect
@@ -56,7 +55,7 @@ const Select: FC<SelectPropsInterface> = ({
           if (Array.isArray(opts)) {
             onMultiChange?.(opts?.map((opt) => opt.value) || []);
           } else {
-            onSingleChange?.(opts ? (opts as SelectOptionInterface).value : null);
+            onSingleChange?.(opts ? (opts as SelectOptionInterface<T>).value : null);
           }
         }}
         components={{
@@ -83,4 +82,4 @@ const Select: FC<SelectPropsInterface> = ({
   );
 };
 
-export default memo(Select);
+export default Select;

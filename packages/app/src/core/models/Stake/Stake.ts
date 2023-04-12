@@ -5,6 +5,7 @@ const Stake = types.model('Stake', {
   nftId: types.string,
   nftName: types.string,
   nftImage: types.maybeNull(types.string),
+  wallet: types.string,
   userId: types.string,
   userName: types.string,
   stakedAmount: 0,

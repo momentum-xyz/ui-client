@@ -2,12 +2,12 @@ import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n, i18n} from '@momentum-xyz/core';
-import {TabInterface, Tabs, Panel} from '@momentum-xyz/ui-kit-storybook';
+import {TabInterface, Tabs, Panel, SelectOptionInterface} from '@momentum-xyz/ui-kit-storybook';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
-import {StakingViewStore} from 'scenes/widgets/stores';
+import {StakeSortType} from 'core/types';
 
 import {StakeList, MyWallet} from './components';
 import * as styled from './StakingViewWidget.styled';
@@ -20,24 +20,37 @@ const TABS_LIST: TabInterface<StakingTabType>[] = [
 ];
 
 const StakingViewWidget: FC = () => {
-  const stakingViewStore = StakingViewStore.create();
-  const {widgetManagerStore} = useStore();
+  const {widgetManagerStore, widgetStore} = useStore();
+  const {stakingViewStore} = widgetStore;
   const {close} = widgetManagerStore;
 
   const [activeTab, setActiveTab] = useState<StakingTabType>('stakes');
-  const [activeStakeId, setActiveStakeId] = useState<string | null>(null);
-
-  console.log(activeStakeId);
 
   const {t} = useI18n();
   const navigate = useNavigate();
 
   useEffect(() => {
     stakingViewStore.init();
+
+    return () => {
+      stakingViewStore.resetModel();
+    };
   }, [stakingViewStore]);
 
+  const walletOptions: SelectOptionInterface<string>[] = stakingViewStore.wallets.map((wallet) => ({
+    value: wallet.hash,
+    label: wallet.hash
+  }));
+
+  const sortOptions: SelectOptionInterface<StakeSortType>[] = [
+    {
+      value: 'mostStaked',
+      label: t('labels.mostStaked')
+    }
+  ];
+
   const onSelectStake = (uuid: string) => {
-    setActiveStakeId(uuid);
+    console.log(uuid);
   };
 
   const onUnstake = (uuid: string) => {
@@ -65,14 +78,20 @@ const StakingViewWidget: FC = () => {
             {activeTab === 'stakes' && (
               <StakeList
                 searchQuery={stakingViewStore.searchQuery}
-                stakeList={stakingViewStore.stakeList}
+                stakeList={stakingViewStore.filteredAndSortedStakeList}
+                filterField={stakingViewStore.filterField}
+                filterOptions={walletOptions}
+                sortField={stakingViewStore.sortField}
+                sortOptions={sortOptions}
                 onSelectStake={onSelectStake}
                 onUnstake={onUnstake}
                 onStake={onStake}
               />
             )}
 
-            {activeTab === 'wallet' && <MyWallet />}
+            {activeTab === 'wallet' && (
+              <MyWallet wallets={stakingViewStore.wallets} walletOptions={walletOptions} />
+            )}
           </styled.Content>
         </styled.Wrapper>
       </Panel>
