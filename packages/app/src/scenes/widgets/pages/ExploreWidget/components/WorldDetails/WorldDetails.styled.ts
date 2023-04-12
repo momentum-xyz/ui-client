@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Container = styled.div`
-  --scroll-offset: 480px;
+  --scroll-offset: 490px;
 
   width: var(--widget-width-normal);
   height: var(--widget-max-height);

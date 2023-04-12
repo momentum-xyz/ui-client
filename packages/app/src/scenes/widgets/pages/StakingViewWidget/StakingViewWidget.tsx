@@ -9,14 +9,14 @@ import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {StakingViewStore} from 'scenes/widgets/stores';
 
-import {StakeList} from './components';
+import {StakeList, MyWallet} from './components';
 import * as styled from './StakingViewWidget.styled';
 
-type StakingTabType = 'stakes' | 'details';
+type StakingTabType = 'stakes' | 'wallet';
 
 const TABS_LIST: TabInterface<StakingTabType>[] = [
   {id: 'stakes', icon: 'stake', label: i18n.t('labels.activeStakes')},
-  {id: 'details', icon: 'status-2', label: i18n.t('labels.overview')}
+  {id: 'wallet', icon: 'status-2', label: i18n.t('labels.overview')}
 ];
 
 const StakingViewWidget: FC = () => {
@@ -26,6 +26,8 @@ const StakingViewWidget: FC = () => {
 
   const [activeTab, setActiveTab] = useState<StakingTabType>('stakes');
   const [activeStakeId, setActiveStakeId] = useState<string | null>(null);
+
+  console.log(activeStakeId);
 
   const {t} = useI18n();
   const navigate = useNavigate();
@@ -70,7 +72,7 @@ const StakingViewWidget: FC = () => {
               />
             )}
 
-            {activeTab === 'details' && <>{activeStakeId}</>}
+            {activeTab === 'wallet' && <MyWallet />}
           </styled.Content>
         </styled.Wrapper>
       </Panel>
