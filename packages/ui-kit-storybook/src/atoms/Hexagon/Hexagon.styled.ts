@@ -236,4 +236,7 @@ export const Sparkle = styled.img`
   width: 32px;
   pointer-events: none;
   z-index: 10;
+
+  width: 50px;
+  top: -9.5px;
 `;
