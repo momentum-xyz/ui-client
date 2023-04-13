@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Wrapper = styled.div`
+  margin: 0 1px;
   padding: 10px;
   display: grid;
   background: ${(props) => props.theme.bg && rgba(props.theme.accentBg, 0.2)};
