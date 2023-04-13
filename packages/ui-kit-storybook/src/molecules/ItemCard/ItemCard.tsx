@@ -7,7 +7,7 @@ import {ButtonEllipse, Image} from '../../atoms';
 
 import * as styled from './ItemCard.styled';
 
-interface PropsInterface {
+export interface ItemCardPropsInterface {
   variant?: 'small' | 'normal';
   name: string;
   description?: string | null;
@@ -21,7 +21,7 @@ interface PropsInterface {
   onStakeClick?: () => void;
 }
 
-const ItemCard: FC<PropsInterface> = ({
+const ItemCard: FC<ItemCardPropsInterface> = ({
   variant = 'normal',
   name,
   description,
