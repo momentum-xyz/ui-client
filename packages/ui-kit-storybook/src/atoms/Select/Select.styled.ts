@@ -45,9 +45,10 @@ export const Container = styled.div`
   }
 
   .Select__indicator {
-    padding: 0 16px;
+    padding: 0 15px;
   }
 
+  .Select__clear-indicator,
   .Select__dropdown-indicator {
     svg {
       transition: color var(--tr-150-ei), transform var(--tr-150-ei);
@@ -93,6 +94,10 @@ export const Container = styled.div`
     font-size: var(--font-size-m);
     font-weight: 400;
     letter-spacing: 0.5px;
+  }
+
+  .Select__value-container {
+    padding: 2px 8px 2px 8px;
   }
 
   .Select__single-value {

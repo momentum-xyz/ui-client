@@ -43,6 +43,7 @@ const WorldList: FC<PropsInterface> = ({
         <styled.Search>
           <Input
             isSearch
+            isClearable
             value={searchQuery.query}
             placeholder={t('actions.searchOdysseys')}
             opts={stringInputMask}

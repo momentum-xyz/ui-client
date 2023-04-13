@@ -37,6 +37,7 @@ const UserList: FC<PropsInterface> = ({
         <styled.Search>
           <Input
             isSearch
+            isClearable
             value={searchQuery.query}
             placeholder={t('actions.searchMembers')}
             opts={stringInputMask}

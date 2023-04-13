@@ -53,6 +53,7 @@ const StakeList: FC<PropsInterface> = ({
         <styled.Search>
           <Input
             isSearch
+            isClearable
             value={searchQuery.query}
             placeholder={t('actions.searchStakes')}
             opts={stringInputMask}
@@ -64,6 +65,7 @@ const StakeList: FC<PropsInterface> = ({
         <styled.Filters>
           <Select
             wide
+            isClearable
             options={sortOptions}
             value={sortField.fieldName}
             placeholder={t('actions.sort')}
@@ -71,6 +73,7 @@ const StakeList: FC<PropsInterface> = ({
           />
           <Select
             wide
+            isClearable
             options={filterOptions}
             value={filterField.fieldName}
             placeholder={t('actions.selectWallet')}

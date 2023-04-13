@@ -44,11 +44,26 @@ Single.args = {
   options: OPTIONS
 };
 
+export const SingleClearable = TemplateSingle.bind({});
+SingleClearable.args = {
+  placeholder: 'Choose wallet',
+  options: OPTIONS,
+  isClearable: true
+};
+
 export const Multi = TemplateMulti.bind({});
 Multi.args = {
   placeholder: 'Choose wallets',
   multiSuffix: 'selected',
   options: OPTIONS
+};
+
+export const MultiClearable = TemplateMulti.bind({});
+MultiClearable.args = {
+  placeholder: 'Choose wallets',
+  multiSuffix: 'selected',
+  options: OPTIONS,
+  isClearable: true
 };
 
 export const MultiOpened = TemplateMulti.bind({});

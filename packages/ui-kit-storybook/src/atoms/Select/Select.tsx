@@ -2,12 +2,14 @@ import ReactSelect, {components} from 'react-select';
 import cn from 'classnames';
 
 import {IconSvg} from '../IconSvg';
+import {IconNameType} from '../../types';
 
 import * as styled from './Select.styled';
 
 export interface SelectOptionInterface<T> {
   value: T;
   label: string;
+  icon?: IconNameType;
 }
 
 export interface SelectPropsInterface<T> {
@@ -21,6 +23,7 @@ export interface SelectPropsInterface<T> {
   isDisabled?: boolean;
   wide?: boolean;
   multiSuffix?: string;
+  isClearable?: boolean;
   onSingleChange?: (value: T | null) => void;
   onMultiChange?: (value: T[]) => void;
 }
@@ -33,6 +36,7 @@ const Select = <T,>({
   isSearchable = false,
   hideSelectedOptions = false,
   closeMenuOnSelect = true,
+  isClearable,
   multiSuffix,
   onSingleChange,
   onMultiChange,
@@ -46,6 +50,8 @@ const Select = <T,>({
         isSearchable={isSearchable}
         closeMenuOnSelect={closeMenuOnSelect}
         hideSelectedOptions={hideSelectedOptions}
+        isClearable={isClearable}
+        classNamePrefix="Select"
         value={
           value && Array.isArray(value)
             ? value.map((i) => options.find((opt) => opt.value === i))
@@ -72,10 +78,19 @@ const Select = <T,>({
               </components.MultiValueContainer>
             );
           },
-          IndicatorSeparator: () => null,
-          ClearIndicator: () => null
+          ClearIndicator: (props) => (
+            <components.ClearIndicator {...props}>
+              <IconSvg name="close_large" size="s" />
+            </components.ClearIndicator>
+          ),
+          IndicatorSeparator: () => null
         }}
-        classNamePrefix="Select"
+        styles={{
+          dropdownIndicator: (baseStyles, state) => ({
+            ...baseStyles,
+            display: isClearable && state.hasValue ? 'none' : baseStyles.display
+          })
+        }}
         {...rest}
       />
     </styled.Container>
