@@ -29,13 +29,13 @@ export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
 
     console.log('TODO attach callbacks', {onWorldClick, onUserClick, onClickOutside});
 
-    events.on('WorldAdded', (world) => {
-      console.log('WorldAdded', world);
+    events.on('WorldsAdded', (worlds) => {
+      console.log('WorldsAdded', worlds);
       // TODO
     });
 
-    events.on('UserAdded', (user) => {
-      console.log('UserAdded', user);
+    events.on('UsersAdded', (users) => {
+      console.log('UsersAdded', users);
       // TODO
     });
 
