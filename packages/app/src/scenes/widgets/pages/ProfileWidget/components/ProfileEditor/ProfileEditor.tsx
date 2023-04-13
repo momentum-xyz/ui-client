@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
 import {useForm, Controller} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
-import {Button, FileUploader, InputDark, Text, TextAreaDark} from '@momentum-xyz/ui-kit';
+import {Text} from '@momentum-xyz/ui-kit';
+import {Frame, AvatarUpload, Input, Button, ButtonRound} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 
 import {ProfileFormInterface} from 'core/interfaces';
@@ -35,8 +36,8 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
     control,
     setValue,
     handleSubmit,
-    setError,
-    formState: {errors}
+    setError
+    // formState: {errors} // TODO: error handling with new inputs?
   } = useForm<ProfileFormInterface>();
 
   useEffect(() => {
@@ -62,95 +63,89 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
 
   return (
     <styled.Container data-testid="ProfileEditor-test">
-      {/* AVATAR */}
-      <Controller
-        name="avatarFile"
-        control={control}
-        render={({field: {value, onChange}}) => (
-          <styled.Avatar>
-            <styled.AvatarImageUpload>
-              {value && <styled.AvatarImage src={URL.createObjectURL(value)} />}
-              {!value && !!user.avatarSrc && <styled.AvatarImage src={user.avatarSrc} />}
-              <styled.AvatarImageInner>
-                <FileUploader
-                  label={t('fileUploader.uploadLabel')}
-                  dragActiveLabel={t('fileUploader.dragActiveLabel')}
-                  fileType="image"
-                  buttonSize="small"
-                  onFilesUpload={onChange}
-                  onError={(error) => console.error(error)}
-                  enableDragAndDrop={false}
+      <Frame>
+        {/* AVATAR */}
+        <Controller
+          name="avatarFile"
+          control={control}
+          render={({field: {value, onChange}}) => (
+            <styled.AvatarContainer
+              style={!value && !!user.avatarSrc ? {backgroundImage: `url(${user.avatarSrc})`} : {}}
+            >
+              <AvatarUpload value={value} onChange={onChange} />
+            </styled.AvatarContainer>
+          )}
+        />
+
+        {/* NAME */}
+        <styled.InputsContainer>
+          <Controller
+            control={control}
+            name="name"
+            rules={{required: true, maxLength: 32, minLength: 2}}
+            render={({field: {value, onChange}}) => (
+              <Input
+                value={value}
+                onChange={onChange}
+                placeholder={t('fields.name') || ''}
+                // errorMessage={
+                //   errors?.name?.type !== 'duplicate'
+                //     ? t('errors.nameConstraints')
+                //     : errors.name.message
+                // }
+                // isError={!!errors.name}
+                disabled={isUpdating}
+                wide
+              />
+            )}
+          />
+
+          {/* BIO */}
+          <Controller
+            control={control}
+            name="bio"
+            render={({field: {value, onChange}}) => (
+              <Input // TODO: Add `TextArea` component to storybook and use it here
+                // rows={3}
+                placeholder={t('fields.bio') || ''}
+                value={value}
+                disabled={isUpdating}
+                onChange={onChange}
+                wide
+              />
+            )}
+          />
+
+          {/* LINK */}
+          <styled.InputIconRow>
+            <ButtonRound variant="primary" isLabel icon="link" />
+            <Controller
+              control={control}
+              name="profileLink"
+              render={({field: {value, onChange}}) => (
+                <Input
+                  placeholder={t('fields.link') || ''}
+                  value={value}
                   disabled={isUpdating}
+                  onChange={onChange}
+                  wide
                 />
-              </styled.AvatarImageInner>
-            </styled.AvatarImageUpload>
-          </styled.Avatar>
+              )}
+            />
+          </styled.InputIconRow>
+        </styled.InputsContainer>
+
+        <styled.Actions>
+          <Button variant="secondary" label={t('actions.cancel')} onClick={onCancel} />
+          <Button label={t('actions.save')} disabled={isUpdating} onClick={formSubmitHandler} />
+        </styled.Actions>
+
+        {isUpdating && (
+          <styled.IsUpdating>
+            <Text size="xs" text={t('editProfileWidget.isUpdating')} align="center" />
+          </styled.IsUpdating>
         )}
-      />
-
-      {/* NAME */}
-      <styled.InputsContainer>
-        <Controller
-          control={control}
-          name="name"
-          rules={{required: true, maxLength: 32, minLength: 2}}
-          render={({field: {value, onChange}}) => (
-            <InputDark
-              value={value}
-              onChange={onChange}
-              placeholder={t('fields.name') || ''}
-              errorMessage={
-                errors?.name?.type !== 'duplicate'
-                  ? t('errors.nameConstraints')
-                  : errors.name.message
-              }
-              isError={!!errors.name}
-              disabled={isUpdating}
-              required
-            />
-          )}
-        />
-
-        {/* BIO */}
-        <Controller
-          control={control}
-          name="bio"
-          render={({field: {value, onChange}}) => (
-            <TextAreaDark
-              rows={3}
-              placeholder={t('fields.bio') || ''}
-              value={value}
-              disabled={isUpdating}
-              onChange={onChange}
-            />
-          )}
-        />
-
-        {/* LINK */}
-        <Controller
-          control={control}
-          name="profileLink"
-          render={({field: {value, onChange}}) => (
-            <InputDark
-              placeholder={t('fields.link') || ''}
-              value={value}
-              disabled={isUpdating}
-              onChange={onChange}
-            />
-          )}
-        />
-      </styled.InputsContainer>
-
-      <styled.Actions>
-        <Button variant="danger" label={t('actions.cancel')} onClick={onCancel} />
-        <Button label={t('actions.save')} disabled={isUpdating} onClick={formSubmitHandler} />
-      </styled.Actions>
-
-      {isUpdating && (
-        <styled.IsUpdating>
-          <Text size="xs" text={t('editProfileWidget.isUpdating')} align="center" />
-        </styled.IsUpdating>
-      )}
+      </Frame>
     </styled.Container>
   );
 };

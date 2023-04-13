@@ -18,8 +18,13 @@ const ProfileWidget: FC = () => {
   const {sessionStore, agoraStore, universeStore} = useStore();
   const {world3dStore} = universeStore;
 
-  const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isDeviceSettings, setIsDeviceSettings] = useState<boolean>(false);
+
+  const [activeMenuIdx, setActiveMenuIdx] = useState<number>(-1);
+
+  const isProfileView = activeMenuIdx === -1;
+  const isEditMode = activeMenuIdx === 0;
+  const isSettingsView = activeMenuIdx === 1;
 
   const {t} = useI18n();
 
@@ -28,7 +33,7 @@ const ProfileWidget: FC = () => {
       const {jobId, isDone} = await profileStore.editProfile(form, previousHash);
       if (isDone && !jobId) {
         await sessionStore.loadUserProfile();
-        setIsEditMode(false);
+        setActiveMenuIdx(-1);
 
         toast.info(
           <ToastContent
@@ -43,7 +48,7 @@ const ProfileWidget: FC = () => {
 
       if (isDone && jobId) {
         sessionStore.setupJobId(jobId);
-        setIsEditMode(false);
+        setActiveMenuIdx(-1);
 
         toast.info(
           <ToastContent
@@ -85,58 +90,67 @@ const ProfileWidget: FC = () => {
       label: 'Settings'
     },
     {
-      iconName: 'buy', // TODO: Add proper icon
-      label: 'Buy odyssey'
+      iconName: 'wallet',
+      label: 'Manage wallet'
     },
-    {
-      iconName: 'leave-left',
-      label: 'Log out'
-    }
+    ...(!sessionStore.isGuest
+      ? [
+          {
+            iconName: 'leave-left',
+            label: 'Log out'
+          }
+        ]
+      : [])
   ];
-  const activeMenuIdx = isEditMode ? 1 : 0;
   const onMenuItemSelection = (menuItemIdx: number) => {
     console.log('onMenuItemSelection', menuItemIdx);
+    if (menuItemIdx === 3 && !sessionStore.isGuest) {
+      sessionStore.signOutRedirect();
+      return;
+    }
+    setActiveMenuIdx(activeMenuIdx === menuItemIdx ? -1 : menuItemIdx);
   };
 
   return (
     <styled.Container data-testid="ProfileWidget-test">
-      <Panel
-        title={t('titles.profile')}
-        variant="primary"
-        icon="astronaut"
-        onClose={profileStore.resetModel}
-      >
-        {!!sessionStore.user && (
-          <styled.Wrapper>
-            {!isEditMode && <ProfileView user={sessionStore.user} />}
+      <styled.PanelContainer>
+        <Panel
+          title={t('titles.profile')}
+          variant="primary"
+          icon="astronaut"
+          onClose={profileStore.resetModel}
+        >
+          {!!sessionStore.user && (
+            <styled.Wrapper>
+              {isProfileView && <ProfileView user={sessionStore.user} />}
 
-            {/* {isEditMode && (
-              <ProfileEditor
-                user={sessionStore.user}
-                formErrors={profileStore.formErrors}
-                isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
-                onChangeKeyboardControl={world3dStore?.changeKeyboardControl}
-                onUpdate={handleProfileUpdate}
-                onCancel={() => setIsEditMode(!isEditMode)}
-              />
-            )}
+              {isEditMode && (
+                <ProfileEditor
+                  user={sessionStore.user}
+                  formErrors={profileStore.formErrors}
+                  isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
+                  onChangeKeyboardControl={world3dStore?.changeKeyboardControl}
+                  onUpdate={handleProfileUpdate}
+                  onCancel={() => setActiveMenuIdx(-1)}
+                />
+              )}
 
-            <ProfileSettings
-              isGuest={sessionStore.isGuest}
-              isEditMode={isEditMode}
-              isDeviceSettings={isDeviceSettings}
-              audioDeviceId={agoraStore.userDevicesStore.currentAudioInput?.deviceId}
-              audioDeviceList={agoraStore.userDevicesStore.audioInputOptions}
-              onSelectAudioDevice={agoraStore.selectAudioInput}
-              onToggleDeviceSettings={() => setIsDeviceSettings(!isDeviceSettings)}
-              onToggleEditMode={() => setIsEditMode(!isEditMode)}
-              {...(!sessionStore.isGuest && {onSignOut: sessionStore.signOutRedirect})}
-              {...(sessionStore.isGuest && {onSignIn: sessionStore.signInRedirect})}
-            /> */}
-          </styled.Wrapper>
-        )}
-      </Panel>
-
+              {isSettingsView && (
+                <ProfileSettings
+                  inputAudioDeviceId={agoraStore.userDevicesStore.currentAudioInput?.deviceId}
+                  outputAudioDeviceId={agoraStore.userDevicesStore.currentAudioInput?.deviceId} // TODO: Connect;
+                  inputMuted={false} // TODO: Connect;
+                  outputMuted={false} // TODO: Connect;
+                  audioDeviceList={agoraStore.userDevicesStore.audioInputOptions}
+                  onSubmit={console.log} // TODO: Connect;
+                  onCancel={() => setActiveMenuIdx(-1)}
+                  isUpdating={false}
+                />
+              )}
+            </styled.Wrapper>
+          )}
+        </Panel>
+      </styled.PanelContainer>
       <styled.SideMenuContainer>
         <SideMenu
           sideMenuItems={sideMenuItems}

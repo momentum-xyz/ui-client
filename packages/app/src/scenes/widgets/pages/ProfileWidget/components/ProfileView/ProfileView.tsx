@@ -17,7 +17,7 @@ const ProfileView: FC<PropsInterface> = (props) => {
   const {t} = useI18n();
 
   return (
-    <>
+    <styled.Container>
       <Frame>
         <Image src={user.avatarSrc} height={200} />
         <styled.UserInfo>
@@ -50,7 +50,7 @@ const ProfileView: FC<PropsInterface> = (props) => {
           Odysseys Owned
         </styled.OwnedOdysseysTitle>
       </styled.OwnedOdysseys>
-    </>
+    </styled.Container>
   );
 };
 
