@@ -34,12 +34,12 @@ const LoginWidget: FC = () => {
   );
 
   const stepList: StepInterface[] = useMemo(() => {
-    const activeStep = isSignUp || user ? 1 : 0;
+    const activeStep = isSignUp ? 1 : 0;
     return [
       {label: '1', variant: activeStep === 0 ? 'active' : 'prev'},
       {label: '2', variant: activeStep === 1 ? 'active' : 'next'}
     ];
-  }, [isSignUp, user]);
+  }, [isSignUp]);
 
   const onClose = () => {
     widgetManagerStore.closeAll();
@@ -54,8 +54,10 @@ const LoginWidget: FC = () => {
         onClose={onClose}
       >
         <FrameSteps stepList={stepList}>
-          {isSignIn && <SignIn onConnected={() => handleAccountConnected(false)} />}
-          {isSignUp && <SignUp onCreated={() => handleAccountConnected(true)} />}
+          <styled.PanelContent>
+            {isSignIn && <SignIn onConnected={() => handleAccountConnected(false)} />}
+            {isSignUp && <SignUp onCreated={() => handleAccountConnected(true)} />}
+          </styled.PanelContent>
         </FrameSteps>
       </Panel>
     </styled.Container>

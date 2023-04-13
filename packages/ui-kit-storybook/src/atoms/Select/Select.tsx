@@ -44,6 +44,7 @@ const Select: FC<SelectPropsInterface> = ({
       <ReactSelect
         options={options}
         isMulti={isMulti}
+        menuPosition="fixed"
         isSearchable={isSearchable}
         closeMenuOnSelect={closeMenuOnSelect}
         hideSelectedOptions={hideSelectedOptions}

@@ -1,8 +1,13 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  display: flex;
   width: var(--widget-width-normal);
-  flex-direction: column;
-  gap: 10px;
+  height: var(--widget-max-height);
+  display: flex;
+`;
+
+export const PanelContent = styled.div`
+  height: calc(var(--widget-max-height) - 100px);
+  overflow: scroll;
+  padding-bottom: 10px;
 `;

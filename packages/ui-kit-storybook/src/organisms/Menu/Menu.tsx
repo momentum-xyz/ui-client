@@ -27,8 +27,8 @@ export interface MenuPropsInterface<T> {
 const Menu = <T,>({activeKeys = [], items = []}: MenuPropsInterface<T>) => {
   const ref = useRef<HTMLDivElement>(null);
 
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  useResize(ref, () => setWindowWidth(window.innerWidth));
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth - 20);
+  useResize(ref, () => setWindowWidth(window.innerWidth - 20));
 
   const leftItems: MenuItemInterface<T>[] = items.filter((i) => i.position === PositionEnum.LEFT);
 

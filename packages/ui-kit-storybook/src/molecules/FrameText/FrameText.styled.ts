@@ -23,7 +23,7 @@ export const Title = styled.div`
 
 export const Line = styled.div`
   font-size: var(--font-size-m);
-  letter-spacing: 0.2em;
+  letter-spacing: 0.02em;
   font-weight: 400;
 `;
 
