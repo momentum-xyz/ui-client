@@ -7,20 +7,20 @@ export const Wrapper = styled.div`
   --hexagon-border-color: ${(props) => props.theme.text && rgba(props.theme.text, 0.5)};
   --hexagon-accent-color: ${(props) => props.theme.accentBg};
 
-  --hexagon-large-width: 48px;
-  --hexagon-large-height: 56px;
+  --hexagon-large-width: 38.4px; // 48px;
+  --hexagon-large-height: 44.8px; // 56px;
 
   --hexagon-width: 42px;
   --hexagon-height: 49px;
 
-  --hexagon-medium-width: 36px;
-  --hexagon-medium-height: 42px;
+  --hexagon-medium-width: 28.8px; // 36px;
+  --hexagon-medium-height: 33.6px; // 42px;
 
   --hexagon-small-width: 30px;
   --hexagon-small-height: 35px;
 
-  --border-hexagon-large-width: 60px;
-  --border-hexagon-large-height: 70px;
+  --border-hexagon-large-width: 48px; // 60px;
+  --border-hexagon-large-height: 56px; // 70px;
 
   position: relative;
 
@@ -231,12 +231,10 @@ export const Hexagon = styled.div`
 
 export const Sparkle = styled.img`
   position: absolute;
-  top: -16.5px;
-  left: 1px;
+  top: -13.5px;
+  left: -1px;
   width: 32px;
+  height: 50px;
   pointer-events: none;
   z-index: 10;
-
-  width: 50px;
-  top: -9.5px;
 `;

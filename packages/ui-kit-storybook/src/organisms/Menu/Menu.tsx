@@ -7,7 +7,8 @@ import {PositionEnum} from '../../enums';
 
 import * as styled from './Menu.styled';
 
-const MENU_ITEM_WIDTH = 60;
+const MENU_ITEM_WIDTH = 48;
+const BLANK_MARGIN = 9.6;
 
 export interface MenuItemInterface<T> {
   key: T;
@@ -119,13 +120,13 @@ const Menu = <T,>({activeKeys = [], items = []}: MenuPropsInterface<T>) => {
       {visualizeSection(leftItems)}
 
       {new Array(leftBlankCount).fill(null).map((_, i) => (
-        <Hexagon key={`blank_${i}`} type="blank" margin={12} />
+        <Hexagon key={`blank_${i}`} type="blank" margin={BLANK_MARGIN} />
       ))}
 
       {visualizeSection(centerItems)}
 
       {new Array(rightBlankCount).fill(null).map((_, i) => (
-        <Hexagon key={`blank_${i + (leftBlankCount || 0)}`} type="blank" margin={12} />
+        <Hexagon key={`blank_${i + (leftBlankCount || 0)}`} type="blank" margin={BLANK_MARGIN} />
       ))}
 
       {visualizeSection(rightItems)}
