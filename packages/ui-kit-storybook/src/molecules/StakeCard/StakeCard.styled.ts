@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Wrapper = styled.div`
+  margin: 0 1px;
   padding: 10px;
   display: grid;
   grid-template-columns: 170px 1fr;
@@ -30,9 +31,9 @@ export const Name = styled.div`
 `;
 
 export const Actions = styled.div`
-  padding: 0 2px;
+  padding: 0 0 0 2px;
   display: flex;
-  gap: 10px;
+  gap: 8px;
 `;
 
 export const Totals = styled.div`

@@ -9,4 +9,12 @@
   /* WIDGET WIDTH */
   --widget-width-big: 570px;
   --widget-width-normal: 400px;
+
+  @media (max-width: 1440px) {
+
+    /* WIDGET WIDTH FOR LAPTOPS */
+    --widget-width-big: 520px;
+    --widget-width-normal: 400px;
+  }
 }
+
