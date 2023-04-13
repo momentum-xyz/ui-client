@@ -22,8 +22,8 @@ const WidgetViewerPage: FC = () => {
         return <widgets.ExploreWidget />;
       case WidgetEnum.WORLD_OVERVIEW:
         return <widgets.WorldOverviewWidget />;
-      case WidgetEnum.STAKING_OVERVIEW:
-        return <widgets.StakingOverviewWidget />;
+      case WidgetEnum.STAKING_VIEW:
+        return <widgets.StakingViewWidget />;
       default:
         return <></>;
     }

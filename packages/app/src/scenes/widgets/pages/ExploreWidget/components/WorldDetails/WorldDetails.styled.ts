@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Container = styled.div`
-  --scroll-offset: 480px;
+  --scroll-offset: 490px;
 
   width: var(--widget-width-normal);
   height: var(--widget-max-height);
@@ -15,7 +15,7 @@ export const Wrapper = styled.div`
 export const GeneralScrollable = styled.div`
   margin: 0 10px;
   display: flex;
-  max-height: calc(100vh - var(--scroll-offset));
+  height: calc(100vh - var(--scroll-offset));
   flex-direction: column;
   overflow: auto;
 `;

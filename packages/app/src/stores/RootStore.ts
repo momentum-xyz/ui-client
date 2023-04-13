@@ -1,6 +1,7 @@
 import {Instance, types} from 'mobx-state-tree';
 
 import {UniverseStore} from 'stores/UniverseStore';
+import {WidgetsStore} from 'scenes/widgets/stores/WidgetsStore';
 import {RootWidgetsStore} from 'scenes/widgets_OLD_2/stores/RootWidgetsStore';
 import {RootWidgetStore_OLD} from 'scenes/widgets_OLD/stores/RootWidgetStore_OLD';
 import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
@@ -24,12 +25,13 @@ const RootStore = types
     sessionStore: types.optional(SessionStore, {}),
     agoraStore: types.optional(AgoraStore, {}),
     sentryStore: types.optional(SentryStore, {}),
+    universeStore: types.optional(UniverseStore, {}),
     widgetManagerStore: types.optional(WidgetManagerStore, {}),
 
     /* Connect independent stores */
-    universeStore: types.optional(UniverseStore, {}),
+    widgetStore: types.optional(WidgetsStore, {}),
     objectStore: types.optional(ObjectStore, {}),
-    widgetsStore: types.optional(RootWidgetsStore, {}),
+    widgetsStore: types.optional(RootWidgetsStore, {}), // OLD
     odysseyCreatorStore: types.optional(RootOdysseyCreatorStore, {}),
     magicStore: types.optional(MagicStore, {}),
 

@@ -11,7 +11,7 @@ export const Button = styled.button`
   --primary-border-color-hover: transparent;
   --primary-border-color-active: ${(props) => props.theme.accentText};
   --primary-border-color-disabled: transparent;
-  --primary-bg-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
+  --primary-bg-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
   --primary-bg-color-hover: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
   --primary-bg-color-active: ${(props) => props.theme.accentBg};
   --primary-bg-color-disabled: ${(props) =>
@@ -21,7 +21,7 @@ export const Button = styled.button`
   --primary-color-active: ${(props) => props.theme.accentText};
   --primary-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
 
-  --normal-size: 30px;
+  --normal-size: 26px;
 
   display: flex;
   width: var(--size);

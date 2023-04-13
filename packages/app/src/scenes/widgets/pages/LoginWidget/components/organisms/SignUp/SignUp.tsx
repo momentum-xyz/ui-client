@@ -4,7 +4,6 @@ import {useI18n} from '@momentum-xyz/core';
 import {Controller, useForm} from 'react-hook-form';
 
 import {SignUpFormInterface} from 'core/interfaces';
-import {SignInStore} from 'scenes/widgets/stores';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './SignUp.styled';
@@ -14,10 +13,10 @@ interface PropsInterface {
 }
 
 const SignUp: FC<PropsInterface> = (props) => {
-  const signInStore = SignInStore.create();
-  const {fieldErrors, isUpdating, updateProfile} = signInStore;
-  const {sessionStore} = useStore();
+  const {sessionStore, widgetStore} = useStore();
   const {user, isGuest, userImageUrl} = sessionStore;
+  const {signInStore} = widgetStore;
+  const {fieldErrors, isUpdating, updateProfile} = signInStore;
 
   const {t} = useI18n();
 
