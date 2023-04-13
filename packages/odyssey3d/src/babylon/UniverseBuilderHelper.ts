@@ -1,16 +1,24 @@
-import {AssetContainer, Mesh, PBRMaterial, Scene, SceneLoader, Texture, TransformNode, Vector3} from '@babylonjs/core';
+import {
+  AbstractMesh,
+  Scene,
+  SceneLoader,
+  StandardMaterial,
+  Texture,
+  TransformNode,
+  Vector3
+} from '@babylonjs/core';
 
 //import cylinder from '../static/odyssey_base2.glb';
-import someTexture from '../static/logo1.png'
+import logo1 from '../static/logo1.png';
 
 import {ObjectHelper} from './ObjectHelper';
 import {getAssetFileName} from './UtilityHelper';
-import { PlayerHelper } from './PlayerHelper';
+import {PlayerHelper} from './PlayerHelper';
 
 // Accounts consts
 const ACC_PER_ROW = 20;
 const SPACE_BETWEEN_ACC = 10;
-const NUMBER_OF_ACC = 1000;
+const NUMBER_OF_ACC = 500;
 
 export class UniverseBuilderHelper {
   static scene: Scene;
@@ -28,68 +36,56 @@ export class UniverseBuilderHelper {
     // custom odyssey glb
     const assetUrl = getAssetFileName('d94ec058-c048-b4f6-e5fc-e154a7ef99c0');
 
-    await SceneLoader.LoadAssetContainerAsync(
+    await SceneLoader.ImportMeshAsync(
+      '',
       ObjectHelper.assetRootUrl,
       assetUrl,
       this.scene,
       (event) => {},
       '.glb'
-    ).then((container) => {
-      const instance = container.instantiateModelsToScene();
-      const odysseyMeshes = instance.rootNodes[0].getChildMeshes();
-
-      odysseyMeshes[0].setParent(null);
-      odysseyMeshes[0].isVisible = false;
-
-      odysseyMeshes[1].setParent(null);
-      odysseyMeshes[1].isVisible = false;
-
-      /*const meshThumb = odysseyMeshes[0] as Mesh;
-      const meshOrb = odysseyMeshes[1] as Mesh;*/
-
-      this.buildAccountLayer(container/*meshOrb, meshThumb*/);
-      //this.buildRingLayers(meshOrb, meshThumb);
+    ).then((result) => {
+      result.meshes[1].rotation = new Vector3(0, 60, 0);
+      this.buildAccountLayer(result.meshes[1], result.meshes[2]);
+      this.buildRingLayers(result.meshes[1], result.meshes[2]);
     });
   }
 
-  static buildAccountLayer(myContainer: AssetContainer) {
+  static buildAccountLayer(meshThumb: AbstractMesh, meshOrb: AbstractMesh) {
     let counter = 0;
     let row = 0;
     // Transform node for grouping all account objects.
     const accountLayer = new TransformNode('AccountLayer', this.scene);
+    const myTexture = new Texture(logo1);
+    const orbMat = new StandardMaterial('orbMat');
+    orbMat.alpha = 0.5;
+    meshOrb.material = orbMat;
 
-    for (let index = 0; index < NUMBER_OF_ACC; index++) {
-      const newInstance1 = myContainer.instantiateModelsToScene(undefined,true);
-
+    for (let i = 0; i < NUMBER_OF_ACC; i++) {
+      const newInstance1 = meshThumb.clone('acc thumb' + i, accountLayer);
+      const newInstance2 = meshOrb.clone('acc orb' + i, accountLayer);
+      const newMat = new StandardMaterial('mat' + i);
+      newMat.diffuseTexture = myTexture;
       // TODO: Metadata
       //newInstance.rootNodes[0].metadata = { type: "account"}
-      // Adapt numbers based on current instance.
       if (counter >= ACC_PER_ROW) {
         row++;
         counter = 0;
       }
 
-      // Set the position of the current instance.
-      const x = counter * SPACE_BETWEEN_ACC;
-      const z = row * SPACE_BETWEEN_ACC;
-      newInstance1.rootNodes[0].position = new Vector3(x, 0, z);
-      counter++;
+      if (newInstance1 && newInstance2) {
+        // Set the position of the current instance.
+        const x = counter * SPACE_BETWEEN_ACC;
+        const z = row * SPACE_BETWEEN_ACC;
+        newInstance1.position = new Vector3(x, 0, z);
+        newInstance2.position = new Vector3(x, 0, z);
+        counter++;
 
-      // Set the parent of the current instance to the transform node. ( account layer)
-      const meshes = newInstance1.rootNodes[0].getChildMeshes();
-
-      if (index === 1) {
-        const myMat = meshes[0].material as PBRMaterial;
-        const myTexture = new Texture(someTexture);
-        myMat.albedoTexture = myTexture;
+        if (i % 2 === 0) {
+          newInstance1.material = newMat;
+        }
+      } else {
+        console.log('Something went wrong with loading custom glb for Accounts and Odysseys');
       }
-
-      meshes.forEach(mesh => {
-        mesh.setParent(accountLayer);
-      });
-
-      // small optimization at the cost of scene organization
-      newInstance1.rootNodes[0].dispose();
     }
 
     // Center the accounterLayer in the Universe.
@@ -98,13 +94,17 @@ export class UniverseBuilderHelper {
     accountLayer.position.y = -100;
     accountLayer.position.z = 200;
 
-    PlayerHelper.camera.position = new Vector3(accountLayer.position.x, accountLayer.position.y, accountLayer.position.z);
+    PlayerHelper.camera.position = new Vector3(
+      accountLayer.position.x,
+      accountLayer.position.y,
+      accountLayer.position.z
+    );
   }
 
-  static buildRingLayers(meshOrb: Mesh, meshThumb: Mesh) {
+  static buildRingLayers(meshOrb: AbstractMesh, meshThumb: AbstractMesh) {
     // Base variables.
     const AllOdysseyRings = new Array<TransformNode>();
-    let totalOdysseys = 2000;
+    let totalOdysseys = 500;
     const halfAmountOfOdysseys = totalOdysseys / 2;
 
     // Calculate amount of Odyssey is next ring.
@@ -163,20 +163,20 @@ export class UniverseBuilderHelper {
     amount: number,
     ringRadius: number,
     ringNumber: number,
-    meshOrb: Mesh,
-    meshThumb: Mesh
+    meshOrb: AbstractMesh,
+    meshThumb: AbstractMesh
   ) {
-    const ring = new TransformNode('Ring' + ringNumber, this.scene);
+    const ringLayer = new TransformNode('Ring' + ringNumber, this.scene);
     const spaceBetweenOddyseys = 360 / amount;
     let offset = 0;
 
     // Create instance and location for every Odyssey. Based on amount given.
     for (let i = 0; i < amount; i++) {
-      const newInstance1 = meshOrb.createInstance('orb' + i);
-      const newInstance2 = meshThumb.createInstance('thumb' + i);
-
-      // Increase OdysseyCounter for naming purposes.
       this.odysseyCounter++;
+
+      const newInstance1 = meshThumb.clone('ring thumb' + this.odysseyCounter, ringLayer);
+      const newInstance2 = meshOrb.clone('ring orb' + this.odysseyCounter, ringLayer);
+      // Increase OdysseyCounter for naming purposes.
       // TODO: Metadata
       //odysseyNode.name = 'Odyssey' + this.odysseyCounter;
       //odysseyNode.metadata = {type: 'odyssey'};
@@ -188,14 +188,15 @@ export class UniverseBuilderHelper {
       const y = Math.sin(radian) * ringRadius;
       const z = Math.random() * 2 * ringNumber;
 
-      newInstance1.position = new Vector3(x, y, z);
-      newInstance2.position = new Vector3(x, y, z);
-      offset = offset + spaceBetweenOddyseys;
-
-      newInstance1.setParent(ring);
-      newInstance2.setParent(ring);
+      if (newInstance1 && newInstance2) {
+        newInstance1.position = new Vector3(x, y, z);
+        newInstance2.position = new Vector3(x, y, z);
+        offset = offset + spaceBetweenOddyseys;
+      } else {
+        console.log('Something went wrong with loading custom glb for Accounts and Odysseys');
+      }
     }
 
-    return ring;
+    return ringLayer;
   }
 }
