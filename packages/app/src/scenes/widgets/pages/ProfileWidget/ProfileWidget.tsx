@@ -4,7 +4,6 @@ import {toast} from 'react-toastify';
 import {Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
-import {ProfileStore} from 'scenes/widgets/stores';
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {ProfileFormInterface} from 'core/interfaces';
 import {useNavigation, useStore} from 'shared/hooks';
@@ -13,9 +12,9 @@ import {ProfileSettings, ProfileView, ProfileEditor} from './components';
 import * as styled from './ProfileWidget.styled';
 
 const ProfileWidget: FC = () => {
-  const profileStore = ProfileStore.create();
-  const {sessionStore, agoraStore, universeStore} = useStore();
+  const {sessionStore, agoraStore, universeStore, widgetStore} = useStore();
   const {world3dStore} = universeStore;
+  const {profileStore} = widgetStore;
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [isDeviceSettings, setIsDeviceSettings] = useState<boolean>(false);

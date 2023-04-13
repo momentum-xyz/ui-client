@@ -37,7 +37,7 @@ const ButtonEllipse = forwardRef<HTMLButtonElement, ButtonEllipsePropsInterface>
           isLabel && 'label'
         )}
       >
-        {icon && <IconSvg name={icon} size="xxs" />}
+        {icon && <IconSvg name={icon} size="xs" />}
         {label && <span>{label}</span>}
       </styled.Button>
     );

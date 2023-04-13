@@ -116,6 +116,6 @@ export const Actions = styled.div`
 `;
 
 export const Content = styled.div`
-  padding: 10px 10px 30px 10px;
+  padding: 20px 10px 30px 10px;
   color: ${(props) => props.theme.text};
 `;

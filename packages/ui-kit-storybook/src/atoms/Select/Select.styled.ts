@@ -81,6 +81,7 @@ export const Container = styled.div`
     font-size: var(--font-size-m);
     font-weight: 400;
     letter-spacing: 0.5px;
+    opacity: 0.8;
   }
 
   .Select__input-container {

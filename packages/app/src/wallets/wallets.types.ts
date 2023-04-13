@@ -3,6 +3,7 @@ import {ReactNode} from 'react';
 export interface UseWalletHookReturnInterface {
   account: string | null | undefined;
   accountHex: string | null | undefined;
+  isInstalled: boolean;
   content?: ReactNode;
   signChallenge: (challenge: string) => Promise<string>;
 }

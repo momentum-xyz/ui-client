@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  --scroll-offset: 290px;
+  --scroll-offset: 300px;
 `;
 
 export const Search = styled.div`

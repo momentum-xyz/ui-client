@@ -20,3 +20,7 @@ export * from './NftItemStats';
 export * from './PolkadotAddressMeta';
 export * from './PolkadotAddress';
 export * from './Asset3d';
+export * from './Stake';
+export * from './Wallet';
+export * from './FilterField';
+export * from './SortField';
