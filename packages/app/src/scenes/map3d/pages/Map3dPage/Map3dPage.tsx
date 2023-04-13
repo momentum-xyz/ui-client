@@ -50,11 +50,7 @@ const Map3dPage: FC<PropsInterface> = () => {
         }))
       );
     }
-  }, [allWorlds, allUsers]);
-
-  useEffect(() => {
-    console.log('Map3dPage: useEffect', nftStore.nftItems);
-  }, [nftStore.nftItems]);
+  }, [allWorlds, allUsers, allUsers.length, allWorlds.length]);
 
   const handleSelect = useCallback(
     (uuid: string) => {
