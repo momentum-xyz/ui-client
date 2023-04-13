@@ -38,7 +38,7 @@ export const SignInMethodContainer = styled.button`
   align-items: center;
   justify-content: center;
   padding: 10px, 6px, 10px, 6px;
-  margin: 0 14px 20px;
+  margin: 0 13px 20px;
 
   background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
   border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};

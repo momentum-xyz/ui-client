@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  padding: 10px;
-`;
+export const Container = styled.div``;
 export const Separator = styled.div`
   border-top: 2px solid ${(props) => props.theme.accentText};
   margin: 10px 0;
