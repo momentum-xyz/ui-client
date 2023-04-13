@@ -44,11 +44,39 @@ Single.args = {
   options: OPTIONS
 };
 
+export const SingleWithIcons = TemplateSingle.bind({});
+SingleWithIcons.args = {
+  placeholder: 'Choose wallet',
+  options: OPTIONS.map((option) => ({...option, icon: 'talisman'}))
+};
+
+export const SingleClearable = TemplateSingle.bind({});
+SingleClearable.args = {
+  placeholder: 'Choose wallet',
+  options: OPTIONS,
+  isClearable: true
+};
+
 export const Multi = TemplateMulti.bind({});
 Multi.args = {
   placeholder: 'Choose wallets',
   multiSuffix: 'selected',
   options: OPTIONS
+};
+
+export const MultiWithIcons = TemplateMulti.bind({});
+MultiWithIcons.args = {
+  placeholder: 'Choose wallets',
+  multiSuffix: 'selected',
+  options: OPTIONS.map((option) => ({...option, icon: 'talisman'}))
+};
+
+export const MultiClearable = TemplateMulti.bind({});
+MultiClearable.args = {
+  placeholder: 'Choose wallets',
+  multiSuffix: 'selected',
+  options: OPTIONS,
+  isClearable: true
 };
 
 export const MultiOpened = TemplateMulti.bind({});

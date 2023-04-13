@@ -1,18 +1,18 @@
 import {FC} from 'react';
 import cn from 'classnames';
 import {useI18n} from '@momentum-xyz/core';
-import {Image, ButtonEllipse, IconNameType, ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
 
-import {getImageAbsoluteUrl} from 'core/utils';
+import {IconNameType} from '../../types';
+import {ButtonEllipse, Image} from '../../atoms';
 
 import * as styled from './ItemCard.styled';
 
-interface PropsInterface {
+export interface ItemCardPropsInterface {
   variant?: 'small' | 'normal';
   name: string;
   description?: string | null;
   byName?: string;
-  image?: string | null;
+  imageUrl?: string | null;
   imageHeight?: number;
   imageErrorIcon: IconNameType;
   onByNameClick?: () => void;
@@ -21,12 +21,12 @@ interface PropsInterface {
   onStakeClick?: () => void;
 }
 
-const ItemCard: FC<PropsInterface> = ({
+const ItemCard: FC<ItemCardPropsInterface> = ({
   variant = 'normal',
   name,
   description,
   byName,
-  image,
+  imageUrl,
   imageHeight,
   imageErrorIcon,
   onByNameClick,
@@ -38,12 +38,7 @@ const ItemCard: FC<PropsInterface> = ({
 
   return (
     <styled.Wrapper data-testid="ItemCard-test" className={cn(variant)}>
-      <Image
-        src={getImageAbsoluteUrl(image, ImageSizeEnum.S5)}
-        errorIcon={imageErrorIcon}
-        height={imageHeight}
-        onClick={onInfoClick}
-      />
+      <Image src={imageUrl} errorIcon={imageErrorIcon} height={imageHeight} onClick={onInfoClick} />
       <styled.ItemContent className={cn(variant)}>
         <styled.ItemNameContainer>
           <styled.ItemName className={cn(variant)}>{name}</styled.ItemName>

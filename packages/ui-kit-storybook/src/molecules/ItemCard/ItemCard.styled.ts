@@ -2,8 +2,10 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Wrapper = styled.div`
+  margin: 0 1px;
   padding: 10px;
   display: grid;
+  font-size: var(--font-size-m);
   background: ${(props) => props.theme.bg && rgba(props.theme.accentBg, 0.2)};
   box-shadow: -1px -1px 2px ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.1)};
   border-radius: 4px;

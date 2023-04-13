@@ -5,11 +5,13 @@ import {
   Input,
   Frame,
   Slider,
+  ItemCard,
   stringInputMask,
-  SliderItemInterface
+  SliderItemInterface,
+  ImageSizeEnum
 } from '@momentum-xyz/ui-kit-storybook';
 
-import {ItemCard} from 'ui-kit';
+import {getImageAbsoluteUrl} from 'core/utils';
 import {NftItemModelInterface, SearchQueryModelModelType} from 'core/models';
 
 import * as styled from './WorldList.styled';
@@ -43,6 +45,7 @@ const WorldList: FC<PropsInterface> = ({
         <styled.Search>
           <Input
             isSearch
+            isClearable
             value={searchQuery.query}
             placeholder={t('actions.searchOdysseys')}
             opts={stringInputMask}
@@ -63,9 +66,9 @@ const WorldList: FC<PropsInterface> = ({
                 key={item.id}
                 name={item.name}
                 byName={item.name}
-                image={item.image}
                 imageErrorIcon="rabbit_fill"
                 description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+                imageUrl={getImageAbsoluteUrl(item.image, ImageSizeEnum.S5)}
                 onByNameClick={() => onSelectUser(item.uuid)}
                 onInfoClick={() => onSelectWorld(item.uuid)}
                 onVisitClick={() => onVisitWorld(item.uuid)}

@@ -5,11 +5,13 @@ import {
   Input,
   Frame,
   Slider,
+  ItemCard,
   stringInputMask,
-  SliderItemInterface
+  SliderItemInterface,
+  ImageSizeEnum
 } from '@momentum-xyz/ui-kit-storybook';
 
-import {ItemCard} from 'ui-kit';
+import {getImageAbsoluteUrl} from 'core/utils';
 import {NftItemModelInterface, SearchQueryModelModelType} from 'core/models';
 
 import * as styled from './UserList.styled';
@@ -37,6 +39,7 @@ const UserList: FC<PropsInterface> = ({
         <styled.Search>
           <Input
             isSearch
+            isClearable
             value={searchQuery.query}
             placeholder={t('actions.searchMembers')}
             opts={stringInputMask}
@@ -56,9 +59,9 @@ const UserList: FC<PropsInterface> = ({
               <ItemCard
                 key={item.id}
                 name={item.name}
-                image={item.image}
                 imageErrorIcon="astronaut"
                 description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
+                imageUrl={getImageAbsoluteUrl(item.image, ImageSizeEnum.S5)}
                 onInfoClick={() => onSelectUser(item.uuid)}
               />
             ))}

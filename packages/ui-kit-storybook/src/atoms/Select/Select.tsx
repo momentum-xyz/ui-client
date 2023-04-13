@@ -2,12 +2,14 @@ import ReactSelect, {components} from 'react-select';
 import cn from 'classnames';
 
 import {IconSvg} from '../IconSvg';
+import {IconNameType} from '../../types';
 
 import * as styled from './Select.styled';
 
 export interface SelectOptionInterface<T> {
   value: T;
   label: string;
+  icon?: IconNameType;
 }
 
 export interface SelectPropsInterface<T> {
@@ -21,6 +23,7 @@ export interface SelectPropsInterface<T> {
   isDisabled?: boolean;
   wide?: boolean;
   multiSuffix?: string;
+  isClearable?: boolean;
   onSingleChange?: (value: T | null) => void;
   onMultiChange?: (value: T[]) => void;
 }
@@ -33,6 +36,7 @@ const Select = <T,>({
   isSearchable = false,
   hideSelectedOptions = false,
   closeMenuOnSelect = true,
+  isClearable = false,
   multiSuffix,
   onSingleChange,
   onMultiChange,
@@ -46,6 +50,8 @@ const Select = <T,>({
         isSearchable={isSearchable}
         closeMenuOnSelect={closeMenuOnSelect}
         hideSelectedOptions={hideSelectedOptions}
+        isClearable={isClearable}
+        classNamePrefix="Select"
         value={
           value && Array.isArray(value)
             ? value.map((i) => options.find((opt) => opt.value === i))
@@ -59,11 +65,32 @@ const Select = <T,>({
           }
         }}
         components={{
+          IndicatorSeparator: () => null,
           DropdownIndicator: (props) => (
             <components.DropdownIndicator {...props}>
               <IconSvg name="chevron" size="m" />
             </components.DropdownIndicator>
           ),
+          ClearIndicator: (props) => (
+            <components.ClearIndicator {...props}>
+              <IconSvg name="close_large" size="s" />
+            </components.ClearIndicator>
+          ),
+          SingleValue: (props) => {
+            const option = props.selectProps.value as SelectOptionInterface<T>;
+            return (
+              <components.SingleValue {...props}>
+                {option.icon ? (
+                  <styled.LabelWithIcon>
+                    <IconSvg name={option.icon} size="l" />
+                    <styled.Label>{option.label}</styled.Label>
+                  </styled.LabelWithIcon>
+                ) : (
+                  <>{option.label}</>
+                )}
+              </components.SingleValue>
+            );
+          },
           MultiValueContainer: (props) => {
             const {value} = props.selectProps;
             return (
@@ -72,10 +99,25 @@ const Select = <T,>({
               </components.MultiValueContainer>
             );
           },
-          IndicatorSeparator: () => null,
-          ClearIndicator: () => null
+          Option: (props) => (
+            <components.Option {...props}>
+              {props.data?.icon ? (
+                <styled.LabelWithIcon>
+                  <IconSvg name={props.data.icon} size="l" />
+                  <styled.Label>{props?.data.label}</styled.Label>
+                </styled.LabelWithIcon>
+              ) : (
+                <>{props.data?.label}</>
+              )}
+            </components.Option>
+          )
         }}
-        classNamePrefix="Select"
+        styles={{
+          dropdownIndicator: (baseStyles, state) => ({
+            ...baseStyles,
+            display: isClearable && state.hasValue ? 'none' : baseStyles.display
+          })
+        }}
         {...rest}
       />
     </styled.Container>
