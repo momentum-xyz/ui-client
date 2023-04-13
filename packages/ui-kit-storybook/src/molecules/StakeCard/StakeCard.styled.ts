@@ -33,7 +33,11 @@ export const Name = styled.div`
 export const Actions = styled.div`
   padding: 0 0 0 2px;
   display: flex;
-  gap: 8px;
+  gap: 10px;
+
+  @media (max-width: 1440px) {
+    gap: 8px;
+  }
 `;
 
 export const Totals = styled.div`
