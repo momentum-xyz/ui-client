@@ -15,7 +15,7 @@ export const MenuItem = styled.button`
   padding-left: 17px;
   position: relative;
 
-  & > .hexagon-wrapper {
+  & > button {
     margin-right: 10px;
   }
 
@@ -23,7 +23,7 @@ export const MenuItem = styled.button`
     flex-direction: row-reverse;
     padding-left: 0px;
     padding-right: 17px;
-    & > .hexagon-wrapper {
+    & > button {
       margin-right: 0px;
       margin-left: 10px;
     }
