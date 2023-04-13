@@ -197,3 +197,14 @@ export const Container = styled.div`
     cursor: pointer;
   }
 `;
+
+export const LabelWithIcon = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+export const Label = styled.div`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`;

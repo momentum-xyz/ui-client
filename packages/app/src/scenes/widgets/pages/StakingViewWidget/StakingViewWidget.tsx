@@ -39,7 +39,8 @@ const StakingViewWidget: FC = () => {
 
   const walletOptions: SelectOptionInterface<string>[] = stakingViewStore.wallets.map((wallet) => ({
     value: wallet.hash,
-    label: wallet.hash
+    label: wallet.hash,
+    icon: 'talisman'
   }));
 
   const sortOptions: SelectOptionInterface<StakeSortType>[] = [

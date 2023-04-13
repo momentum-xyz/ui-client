@@ -36,7 +36,7 @@ const Select = <T,>({
   isSearchable = false,
   hideSelectedOptions = false,
   closeMenuOnSelect = true,
-  isClearable,
+  isClearable = false,
   multiSuffix,
   onSingleChange,
   onMultiChange,
@@ -65,11 +65,32 @@ const Select = <T,>({
           }
         }}
         components={{
+          IndicatorSeparator: () => null,
           DropdownIndicator: (props) => (
             <components.DropdownIndicator {...props}>
               <IconSvg name="chevron" size="m" />
             </components.DropdownIndicator>
           ),
+          ClearIndicator: (props) => (
+            <components.ClearIndicator {...props}>
+              <IconSvg name="close_large" size="s" />
+            </components.ClearIndicator>
+          ),
+          SingleValue: (props) => {
+            const option = props.selectProps.value as SelectOptionInterface<T>;
+            return (
+              <components.SingleValue {...props}>
+                {option.icon ? (
+                  <styled.LabelWithIcon>
+                    <IconSvg name={option.icon} size="l" />
+                    <styled.Label>{option.label}</styled.Label>
+                  </styled.LabelWithIcon>
+                ) : (
+                  <>{option.label}</>
+                )}
+              </components.SingleValue>
+            );
+          },
           MultiValueContainer: (props) => {
             const {value} = props.selectProps;
             return (
@@ -78,12 +99,18 @@ const Select = <T,>({
               </components.MultiValueContainer>
             );
           },
-          ClearIndicator: (props) => (
-            <components.ClearIndicator {...props}>
-              <IconSvg name="close_large" size="s" />
-            </components.ClearIndicator>
-          ),
-          IndicatorSeparator: () => null
+          Option: (props) => (
+            <components.Option {...props}>
+              {props.data?.icon ? (
+                <styled.LabelWithIcon>
+                  <IconSvg name={props.data.icon} size="l" />
+                  <styled.Label>{props?.data.label}</styled.Label>
+                </styled.LabelWithIcon>
+              ) : (
+                <>{props.data?.label}</>
+              )}
+            </components.Option>
+          )
         }}
         styles={{
           dropdownIndicator: (baseStyles, state) => ({
