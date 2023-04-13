@@ -1,9 +1,11 @@
-import {Mesh, Scene, SceneLoader, TransformNode, Vector3} from '@babylonjs/core';
+import {AssetContainer, Mesh, PBRMaterial, Scene, SceneLoader, Texture, TransformNode, Vector3} from '@babylonjs/core';
 
 //import cylinder from '../static/odyssey_base2.glb';
+import someTexture from '../static/logo1.png'
 
 import {ObjectHelper} from './ObjectHelper';
 import {getAssetFileName} from './UtilityHelper';
+import { PlayerHelper } from './PlayerHelper';
 
 // Accounts consts
 const ACC_PER_ROW = 20;
@@ -42,23 +44,23 @@ export class UniverseBuilderHelper {
       odysseyMeshes[1].setParent(null);
       odysseyMeshes[1].isVisible = false;
 
-      const meshThumb = odysseyMeshes[0] as Mesh;
-      const meshOrb = odysseyMeshes[1] as Mesh;
+      /*const meshThumb = odysseyMeshes[0] as Mesh;
+      const meshOrb = odysseyMeshes[1] as Mesh;*/
 
-      this.buildAccountLayer(meshOrb, meshThumb);
-      this.buildRingLayers(meshOrb, meshThumb);
+      this.buildAccountLayer(container/*meshOrb, meshThumb*/);
+      //this.buildRingLayers(meshOrb, meshThumb);
     });
   }
 
-  static buildAccountLayer(meshOrb: Mesh, meshThumb: Mesh) {
+  static buildAccountLayer(myContainer: AssetContainer) {
     let counter = 0;
     let row = 0;
     // Transform node for grouping all account objects.
     const accountLayer = new TransformNode('AccountLayer', this.scene);
 
     for (let index = 0; index < NUMBER_OF_ACC; index++) {
-      const newInstance1 = meshOrb.createInstance('orb' + index);
-      const newInstance2 = meshThumb.createInstance('thumb' + index);
+      const newInstance1 = myContainer.instantiateModelsToScene(undefined,true);
+
       // TODO: Metadata
       //newInstance.rootNodes[0].metadata = { type: "account"}
       // Adapt numbers based on current instance.
@@ -70,13 +72,24 @@ export class UniverseBuilderHelper {
       // Set the position of the current instance.
       const x = counter * SPACE_BETWEEN_ACC;
       const z = row * SPACE_BETWEEN_ACC;
-      newInstance1.position = new Vector3(x, 0, z);
-      newInstance2.position = new Vector3(x, 0, z);
+      newInstance1.rootNodes[0].position = new Vector3(x, 0, z);
       counter++;
 
       // Set the parent of the current instance to the transform node. ( account layer)
-      newInstance1.setParent(accountLayer);
-      newInstance2.setParent(accountLayer);
+      const meshes = newInstance1.rootNodes[0].getChildMeshes();
+
+      if (index === 1) {
+        const myMat = meshes[0].material as PBRMaterial;
+        const myTexture = new Texture(someTexture);
+        myMat.albedoTexture = myTexture;
+      }
+
+      meshes.forEach(mesh => {
+        mesh.setParent(accountLayer);
+      });
+
+      // small optimization at the cost of scene organization
+      newInstance1.rootNodes[0].dispose();
     }
 
     // Center the accounterLayer in the Universe.
@@ -84,6 +97,8 @@ export class UniverseBuilderHelper {
     accountLayer.position.x = accountLayer.position.x - offset; // Apply the offset to the container.
     accountLayer.position.y = -100;
     accountLayer.position.z = 200;
+
+    PlayerHelper.camera.position = new Vector3(accountLayer.position.x, accountLayer.position.y, accountLayer.position.z);
   }
 
   static buildRingLayers(meshOrb: Mesh, meshThumb: Mesh) {
