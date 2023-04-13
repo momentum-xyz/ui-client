@@ -54,7 +54,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
       onClick: toggle
     },
     {
-      key: WidgetEnum.STAKING_OVERVIEW,
+      key: WidgetEnum.STAKING_VIEW,
       position: PositionEnum.LEFT,
       iconName: 'status-2',
       isHidden: isGuest,

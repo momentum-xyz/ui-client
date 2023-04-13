@@ -2,4 +2,4 @@ export * from './LoginWidget';
 export * from './ExploreWidget';
 export * from './WorldOverviewWidget';
 export * from './ProfileWidget';
-export * from './StakingOverviewWidget';
+export * from './StakingViewWidget';

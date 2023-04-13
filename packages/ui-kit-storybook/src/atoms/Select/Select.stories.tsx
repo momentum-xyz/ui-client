@@ -20,7 +20,7 @@ export default {
   }
 } as ComponentMeta<typeof Select>;
 
-const OPTIONS: SelectOptionInterface[] = [
+const OPTIONS: SelectOptionInterface<string>[] = [
   {value: 'ocean', label: 'Ocean'},
   {value: 'blue', label: 'Blue'},
   {value: 'purple', label: 'Purple'},
@@ -28,12 +28,12 @@ const OPTIONS: SelectOptionInterface[] = [
   {value: 'orange', label: 'Orange'}
 ];
 
-const TemplateSingle: Story<SelectPropsInterface> = (args) => {
+const TemplateSingle: Story<SelectPropsInterface<string>> = (args) => {
   const [value, setValue] = useState<string | null>(null);
-  return <Select {...args} value={value} onSingleChange={setValue} />;
+  return <Select {...args} value={value} onSingleChange={(value) => setValue(value as string)} />;
 };
 
-const TemplateMulti: Story<SelectPropsInterface> = (args) => {
+const TemplateMulti: Story<SelectPropsInterface<string>> = (args) => {
   const [value, setValue] = useState<string[]>([]);
   return <Select {...args} isMulti value={value} onMultiChange={setValue} />;
 };
@@ -76,7 +76,7 @@ HideSelected.args = {
 export const NoOptions = TemplateSingle.bind({});
 NoOptions.args = {
   placeholder: 'Choose wallet',
-  options: []
+  options: OPTIONS
 };
 
 export const Disabled = TemplateSingle.bind({});

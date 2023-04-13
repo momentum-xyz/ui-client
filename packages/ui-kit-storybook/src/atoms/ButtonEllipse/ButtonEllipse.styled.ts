@@ -30,7 +30,7 @@ export const Button = styled.button`
   --normal-radius: 14px;
   --normal-padding: 0 10px;
   --normal-padding-only-icon: 0 7px;
-  --normal-gap: 10px;
+  --normal-gap: 8px;
 
   padding: var(--padding);
   display: flex;
