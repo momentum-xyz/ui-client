@@ -1,7 +1,7 @@
 import {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Panel, SideMenu} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, SideMenu, SideMenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
@@ -12,16 +12,14 @@ import {ProfileFormInterface} from 'core/interfaces';
 import {ProfileSettings, ProfileView, ProfileEditor} from './components';
 import * as styled from './ProfileWidget.styled';
 
+type MenuItemType = 'viewProfile' | 'editProfile' | 'settings' | 'wallet' | 'logout';
+
 const ProfileWidget: FC = () => {
   const {sessionStore, agoraStore, universeStore, widgetStore, widgetManagerStore} = useStore();
   const {world3dStore} = universeStore;
   const {profileStore} = widgetStore;
 
-  const [activeMenuIdx, setActiveMenuIdx] = useState<number>(-1);
-
-  const isProfileView = activeMenuIdx === -1;
-  const isEditMode = activeMenuIdx === 0;
-  const isSettingsView = activeMenuIdx === 1;
+  const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewProfile');
 
   const {t} = useI18n();
 
@@ -30,7 +28,7 @@ const ProfileWidget: FC = () => {
       const {jobId, isDone} = await profileStore.editProfile(form, previousHash);
       if (isDone && !jobId) {
         await sessionStore.loadUserProfile();
-        setActiveMenuIdx(-1);
+        setActiveMenuId('viewProfile');
 
         toast.info(
           <ToastContent
@@ -45,7 +43,7 @@ const ProfileWidget: FC = () => {
 
       if (isDone && jobId) {
         sessionStore.setupJobId(jobId);
-        setActiveMenuIdx(-1);
+        setActiveMenuId('viewProfile');
 
         toast.info(
           <ToastContent
@@ -73,38 +71,29 @@ const ProfileWidget: FC = () => {
     [profileStore, sessionStore, t]
   );
 
-  const sideMenuItems: any[] = [
-    // TODO: Add proper export of interface and remove `any[]`
+  const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     // TODO: Add translations
     {
+      id: 'editProfile',
       iconName: 'edit',
       label: 'Edit profile'
     },
     {
+      id: 'settings',
       iconName: 'settings',
       label: 'Settings'
     },
     {
+      id: 'wallet',
       iconName: 'wallet',
       label: 'Manage wallet'
     },
-    ...(!sessionStore.isGuest
-      ? [
-          {
-            iconName: 'leave-left',
-            label: 'Log out'
-          }
-        ]
-      : [])
-  ];
-  const onMenuItemSelection = (menuItemIdx: number) => {
-    console.log('onMenuItemSelection', menuItemIdx);
-    if (menuItemIdx === 3) {
-      sessionStore.signOutRedirect();
-      return;
+    {
+      id: 'logout',
+      iconName: 'leave-left',
+      label: 'Log out'
     }
-    setActiveMenuIdx(activeMenuIdx === menuItemIdx ? -1 : menuItemIdx);
-  };
+  ];
 
   return (
     <styled.Container data-testid="ProfileWidget-test">
@@ -122,20 +111,20 @@ const ProfileWidget: FC = () => {
         >
           {!!sessionStore.user && (
             <styled.Wrapper>
-              {isProfileView && <ProfileView user={sessionStore.user} />}
+              {activeMenuId === 'viewProfile' && <ProfileView user={sessionStore.user} />}
 
-              {isEditMode && (
+              {activeMenuId === 'editProfile' && (
                 <ProfileEditor
                   user={sessionStore.user}
                   formErrors={profileStore.formErrors}
                   isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
                   onChangeKeyboardControl={world3dStore?.changeKeyboardControl}
                   onUpdate={handleProfileUpdate}
-                  onCancel={() => setActiveMenuIdx(-1)}
+                  onCancel={() => setActiveMenuId('viewProfile')}
                 />
               )}
 
-              {isSettingsView && (
+              {activeMenuId === 'settings' && (
                 <ProfileSettings
                   inputAudioDeviceId={agoraStore.userDevicesStore.currentAudioInput?.deviceId}
                   outputAudioDeviceId={agoraStore.userDevicesStore.currentAudioInput?.deviceId} // TODO: Connect;
@@ -143,7 +132,7 @@ const ProfileWidget: FC = () => {
                   outputMuted={false} // TODO: Connect;
                   audioDeviceList={agoraStore.userDevicesStore.audioInputOptions}
                   onSubmit={console.log} // TODO: Connect;
-                  onCancel={() => setActiveMenuIdx(-1)}
+                  onCancel={() => setActiveMenuId('viewProfile')}
                   isUpdating={false}
                 />
               )}
@@ -154,9 +143,15 @@ const ProfileWidget: FC = () => {
 
       <styled.SideMenuContainer>
         <SideMenu
+          activeId={activeMenuId}
           sideMenuItems={sideMenuItems}
-          activeIdx={activeMenuIdx}
-          onMenuItemSelection={onMenuItemSelection}
+          onSelect={(menuId) => {
+            if (menuId === 'logout') {
+              sessionStore.signOutRedirect();
+            } else {
+              setActiveMenuId(activeMenuId === menuId ? 'viewProfile' : menuId);
+            }
+          }}
         />
       </styled.SideMenuContainer>
     </styled.Container>
