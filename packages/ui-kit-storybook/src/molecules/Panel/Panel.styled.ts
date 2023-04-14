@@ -7,6 +7,7 @@ export const Container = styled.div`
   --lg-header-from: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
   --lg-header-to: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.12)};
 
+  --height-offset: 165px;
   --radius: 4px;
 
   --color: initial;
@@ -28,6 +29,28 @@ export const Container = styled.div`
 
   &.secondary {
     --offset: var(--secondary-offset);
+  }
+
+  /* SIZES */
+
+  &.size-normal {
+    width: 400px;
+
+    @media (max-width: 1440px) {
+      width: 400px;
+    }
+  }
+
+  &.size-large {
+    width: 570px;
+
+    @media (max-width: 1440px) {
+      width: 520px;
+    }
+  }
+
+  &.size-wide {
+    width: 100%;
   }
 `;
 
@@ -116,6 +139,10 @@ export const Actions = styled.div`
 `;
 
 export const Content = styled.div`
-  padding: 10px 10px 30px 10px;
+  padding: 20px 10px 30px 10px;
   color: ${(props) => props.theme.text};
+
+  &.fullHeight {
+    height: calc(100vh - var(--height-offset));
+  }
 `;

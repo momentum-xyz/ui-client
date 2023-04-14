@@ -1,29 +1,29 @@
 import styled from 'styled-components';
+import {rgba} from 'polished';
 
 export const Container = styled.div`
-  padding: 10px;
-`;
-export const Separator = styled.div`
-  border-top: 2px solid ${(props) => props.theme.accentText};
-  margin: 10px 0;
+  --scroll-offset: 350px;
 `;
 
-export const InputContainer = styled.div`
-  display: grid;
-  grid-template-columns: 24px 1fr;
-  align-items: center;
-  gap: 12px;
+export const ScrollableContainer = styled.div`
+  margin: 0 10px;
+  padding: 10px 0 0 0;
+  border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
+  height: calc(100vh - var(--scroll-offset));
+  overflow: auto;
 `;
+
+export const Title = styled.div`
+  padding: 16px 0;
+  font-weight: 600;
+  font-size: var(--font-size-l);
+  line-height: 22px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+`;
+
+export const InputContainer = styled.div``;
 
 export const ReadyText = styled.div`
-  margin: 26px 0 16px;
-  color: white;
-`;
-
-export const ProfileAvatarPreview = styled.div`
-  width: 340px;
-  height: 200px;
-  background-size: cover;
-  background-position: center center;
-  border-radius: 4px;
+  padding: 12px 0;
 `;

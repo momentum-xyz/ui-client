@@ -3,9 +3,6 @@ import {rgba} from 'polished';
 
 export const Container = styled.div`
   --scroll-offset: 480px;
-
-  width: var(--widget-width-normal);
-  height: var(--widget-max-height);
 `;
 
 export const Wrapper = styled.div`
@@ -15,7 +12,7 @@ export const Wrapper = styled.div`
 export const GeneralScrollable = styled.div`
   margin: 0 10px;
   display: flex;
-  max-height: calc(100vh - var(--scroll-offset));
+  height: calc(100vh - var(--scroll-offset));
   flex-direction: column;
   overflow: auto;
 `;
@@ -75,5 +72,6 @@ export const Link = styled.a`
 `;
 
 export const ShowAllButtonContainer = styled.div`
+  margin: 0 1px;
   padding: 10px 0 0 0;
 `;

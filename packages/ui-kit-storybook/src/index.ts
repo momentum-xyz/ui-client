@@ -8,4 +8,5 @@ export * from './interfaces';
 export * from './molecules';
 export * from './organisms';
 export * from './types';
+export * from './utils';
 export * from './themes';

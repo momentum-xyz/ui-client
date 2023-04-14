@@ -49,22 +49,15 @@ const WalletLogin: FC<PropsInterface> = ({
       });
   };
 
-  const innerView = content || (
-    <div>
-      {!!account && (
-        <div>
-          <styled.TitleText className="wallet">{account}</styled.TitleText>
-        </div>
-      )}
-    </div>
-  );
-
   return (
-    <styled.Container>
+    <styled.Container data-testid="WalletLogin-test">
       {isInstalled ? (
         <>
-          {/* <styled.TitleText>{t('login.connectWith', {wallet: name})}</styled.TitleText> */}
-          <styled.WalletInnerViewContainer>{innerView}</styled.WalletInnerViewContainer>
+          <styled.WalletInnerViewContainer>
+            {!!content && <>{content}</>}
+            {!!account && !content && <styled.WalletHash>{account}</styled.WalletHash>}
+          </styled.WalletInnerViewContainer>
+
           <Button
             label={t('login.connectYourWallet')}
             icon="wallet"

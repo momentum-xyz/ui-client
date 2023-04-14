@@ -54,7 +54,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
       onClick: toggle
     },
     {
-      key: WidgetEnum.STAKING_OVERVIEW,
+      key: WidgetEnum.STAKING_VIEW,
       position: PositionEnum.LEFT,
       iconName: 'status-2',
       isHidden: isGuest,
@@ -73,13 +73,6 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
       iconName: 'pencil',
       isHidden: !isWorld || !isMyWorld,
       onClick: () => navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}))
-    },
-    {
-      key: WidgetEnum.UNIVERSE_INFO,
-      position: PositionEnum.RIGHT,
-      iconName: 'alert',
-      onClick: toggle,
-      isHidden: isWorld
     },
     {
       key: WidgetEnum.VOICE_CHAT,

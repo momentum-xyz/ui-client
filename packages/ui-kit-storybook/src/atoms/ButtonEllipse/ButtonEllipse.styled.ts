@@ -28,9 +28,9 @@ export const Button = styled.button`
 
   --normal-height: 26px;
   --normal-radius: 14px;
-  --normal-padding: 0 10px;
+  --normal-padding: 0 9px;
   --normal-padding-only-icon: 0 7px;
-  --normal-gap: 10px;
+  --normal-gap: 7px;
 
   padding: var(--padding);
   display: flex;
@@ -113,4 +113,10 @@ export const Button = styled.button`
       --padding: var(--normal-padding-only-icon);
     }
   }
+`;
+
+export const Label = styled.span`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `;

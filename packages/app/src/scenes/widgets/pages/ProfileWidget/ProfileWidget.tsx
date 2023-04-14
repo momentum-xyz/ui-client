@@ -5,7 +5,6 @@ import {toast} from 'react-toastify';
 import {Panel, SideMenu} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 
-import {ProfileStore} from 'scenes/widgets/stores';
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {ProfileFormInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
@@ -14,9 +13,9 @@ import {ProfileSettings, ProfileView, ProfileEditor} from './components';
 import * as styled from './ProfileWidget.styled';
 
 const ProfileWidget: FC = () => {
-  const profileStore = ProfileStore.create();
-  const {sessionStore, agoraStore, universeStore} = useStore();
+  const {sessionStore, agoraStore, universeStore, widgetStore} = useStore();
   const {world3dStore} = universeStore;
+  const {profileStore} = widgetStore;
 
   const [isDeviceSettings, setIsDeviceSettings] = useState<boolean>(false);
 

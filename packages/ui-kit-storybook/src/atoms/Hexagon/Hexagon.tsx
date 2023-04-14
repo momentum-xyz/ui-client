@@ -10,6 +10,7 @@ import * as styled from './Hexagon.styled';
 
 type HexagonSizeType = 'small' | 'normal' | 'medium' | 'large';
 type HexagonType =
+  | 'menu'
   | 'primary'
   | 'primary-borderless'
   | 'secondary'
@@ -21,7 +22,9 @@ type HexagonType =
   | 'fifth'
   | 'fifth-borderless'
   | 'blank-borderless'
-  | 'blank';
+  | 'blank'
+  | 'blank-small-borderless'
+  | 'blank-small';
 
 const largeSizeHexagonTypes: HexagonType[] = [
   'primary',
@@ -30,9 +33,21 @@ const largeSizeHexagonTypes: HexagonType[] = [
   'secondary-borderless'
 ];
 const mediumSizeHexagonTypes: HexagonType[] = ['fourth', 'fourth-borderless'];
-const smallSizeHexagonTypes: HexagonType[] = ['fifth', 'fifth-borderless'];
+const smallSizeHexagonTypes: HexagonType[] = [
+  'fifth',
+  'fifth-borderless',
+  'blank-small',
+  'blank-small-borderless'
+];
 
-const blankHexagonTypes: HexagonType[] = ['blank', 'blank-borderless'];
+const blankHexagonTypes: HexagonType[] = [
+  'blank',
+  'blank-borderless',
+  'blank-small',
+  'blank-small-borderless'
+];
+
+const outerBorderTypes: HexagonType[] = ['primary', 'menu'];
 
 const borderlessHexagonTypes: HexagonType[] = [
   'primary-borderless',
@@ -90,9 +105,10 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
     ? 'small'
     : 'normal';
 
-  const isOuterBorder = !skipOuterBorder && type === 'primary';
+  const isOuterBorder = !skipOuterBorder && outerBorderTypes.includes(type);
   const showSparkle = isOuterBorder && isActive;
   const isBlank = blankHexagonTypes.includes(type);
+  const isMenu = type === 'menu';
   const shouldHaveButton =
     type !== 'blank' && type !== 'blank-borderless' && !(type === 'primary' && skipOuterBorder);
 
@@ -111,6 +127,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
       className={cn(
         'hexagon-wrapper',
         size,
+        isMenu && 'menu',
         isBlank && 'blank',
         noHover && 'no-hover',
         isOuterBorder && 'outer-border'
@@ -121,7 +138,9 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
       style={margin ? {margin: `${margin}px`} : {}}
       {...rest}
     >
-      {showSparkle && <styled.Sparkle src={Sparkle} alt="sparkle" />}
+      {showSparkle && (
+        <styled.Sparkle src={Sparkle} alt="sparkle" className={cn(isMenu && 'menu')} />
+      )}
 
       <styled.Hexagon
         className={cn(
@@ -133,6 +152,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
           isBorderless && 'borderless',
           isOuterBorder && 'outer-border',
           isBlank && 'blank',
+          isMenu && 'menu',
           isActive && !isOuterBorder && 'active',
           iconName && 'icon-hexagon'
         )}

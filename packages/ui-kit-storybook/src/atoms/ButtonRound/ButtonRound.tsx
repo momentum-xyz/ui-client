@@ -26,7 +26,7 @@ const ButtonRound = forwardRef<HTMLButtonElement, ButtonRoundPropsInterface>(
         onClick={onClick}
         className={cn(variant, size, isLabel && 'label')}
       >
-        <IconSvg name={icon} size="s" />
+        <IconSvg name={icon} size="xs" />
       </styled.Button>
     );
   }

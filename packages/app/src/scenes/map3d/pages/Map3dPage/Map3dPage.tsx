@@ -17,14 +17,40 @@ interface PropsInterface {
 const isBabylonUniverse = window.sessionStorage.getItem('babylon_universe');
 
 const Map3dPage: FC<PropsInterface> = () => {
-  const {nftStore, widgetsStore, sessionStore, widgetManagerStore} = useStore();
+  const {nftStore, widgetsStore, sessionStore, widgetManagerStore, universeStore} = useStore();
   const {previewOdysseyStore, odysseyInfoStore} = widgetsStore;
+  const {allWorlds, allUsers} = universeStore.universe2dStore;
 
   useEffect(() => {
     return () => {
       widgetManagerStore.closeAll();
     };
   }, [widgetManagerStore]);
+
+  useEffect(() => {
+    console.log('Map3dPage: useEffect', allWorlds, allUsers);
+    if (allWorlds.length) {
+      Universe3dEmitter.emit(
+        'WorldsAdded',
+        allWorlds.map((world) => ({
+          ...world,
+          id: world.uuid,
+          description: world.description || ''
+        }))
+      );
+    }
+
+    if (allUsers.length) {
+      Universe3dEmitter.emit(
+        'UsersAdded',
+        allUsers.map((user) => ({
+          ...user,
+          id: user.uuid + '__temp123',
+          avatar: getImageAbsoluteUrl(user.image) || ''
+        }))
+      );
+    }
+  }, [allWorlds, allUsers, allUsers.length, allWorlds.length]);
 
   const handleSelect = useCallback(
     (uuid: string) => {

@@ -18,7 +18,7 @@ const NewsList: FC<NewsListPropsInterface> = ({title, items}) => {
 
   return (
     <styled.Container data-testid="NewsList-test">
-      <Panel title={title} variant="primary" icon="planet">
+      <Panel title={title} variant="primary" icon="planet" size="normal">
         <Tabs tabList={tabList} />
       </Panel>
     </styled.Container>
