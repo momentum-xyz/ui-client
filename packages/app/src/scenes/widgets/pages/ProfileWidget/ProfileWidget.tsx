@@ -1,23 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {FC, useCallback, useState} from 'react';
+import {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {Panel, SideMenu} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 
+import {useStore} from 'shared/hooks';
+import {WidgetEnum} from 'core/enums';
 import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {ProfileFormInterface} from 'core/interfaces';
-import {useStore} from 'shared/hooks';
 
 import {ProfileSettings, ProfileView, ProfileEditor} from './components';
 import * as styled from './ProfileWidget.styled';
 
 const ProfileWidget: FC = () => {
-  const {sessionStore, agoraStore, universeStore, widgetStore} = useStore();
+  const {sessionStore, agoraStore, universeStore, widgetStore, widgetManagerStore} = useStore();
   const {world3dStore} = universeStore;
   const {profileStore} = widgetStore;
-
-  const [isDeviceSettings, setIsDeviceSettings] = useState<boolean>(false);
 
   const [activeMenuIdx, setActiveMenuIdx] = useState<number>(-1);
 
@@ -75,8 +73,6 @@ const ProfileWidget: FC = () => {
     [profileStore, sessionStore, t]
   );
 
-  console.log(sessionStore.user);
-
   const sideMenuItems: any[] = [
     // TODO: Add proper export of interface and remove `any[]`
     // TODO: Add translations
@@ -103,7 +99,7 @@ const ProfileWidget: FC = () => {
   ];
   const onMenuItemSelection = (menuItemIdx: number) => {
     console.log('onMenuItemSelection', menuItemIdx);
-    if (menuItemIdx === 3 && !sessionStore.isGuest) {
+    if (menuItemIdx === 3) {
       sessionStore.signOutRedirect();
       return;
     }
@@ -114,10 +110,15 @@ const ProfileWidget: FC = () => {
     <styled.Container data-testid="ProfileWidget-test">
       <styled.PanelContainer>
         <Panel
+          isFullHeight
+          size="normal"
           title={t('titles.profile')}
           variant="primary"
           icon="astronaut"
-          onClose={profileStore.resetModel}
+          onClose={() => {
+            profileStore.resetModel();
+            widgetManagerStore.close(WidgetEnum.PROFILE);
+          }}
         >
           {!!sessionStore.user && (
             <styled.Wrapper>
@@ -150,6 +151,7 @@ const ProfileWidget: FC = () => {
           )}
         </Panel>
       </styled.PanelContainer>
+
       <styled.SideMenuContainer>
         <SideMenu
           sideMenuItems={sideMenuItems}

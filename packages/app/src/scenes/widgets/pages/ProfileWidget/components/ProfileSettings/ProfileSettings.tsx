@@ -55,6 +55,7 @@ const ProfileSettings: FC<PropsInterface> = ({
           <Select
             placeholder={`${t('devices.selectInputSource')}`}
             value={(inputAudioDeviceId || null) as any}
+            // @ts-ignore
             options={audioDeviceList}
             onSingleChange={(value) => {
               if (!value) {
@@ -69,6 +70,7 @@ const ProfileSettings: FC<PropsInterface> = ({
           <Select
             placeholder={`${t('devices.selectOutputSource')}`}
             value={(outputAudioDeviceId || null) as any}
+            // @ts-ignore
             options={audioDeviceList}
             onSingleChange={(value) => {
               if (!value) {

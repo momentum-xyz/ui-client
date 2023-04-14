@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 import {useForm, Controller} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {Text} from '@momentum-xyz/ui-kit';
@@ -70,7 +70,11 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
           control={control}
           render={({field: {value, onChange}}) => (
             <styled.AvatarContainer
-              style={!value && !!user.avatarSrc ? {backgroundImage: `url(${user.avatarSrc})`} : {}}
+              style={
+                !value && !!user.avatarLargeSrc
+                  ? {backgroundImage: `url(${user.avatarLargeSrc})`}
+                  : {}
+              }
             >
               <AvatarUpload value={value} onChange={onChange} />
             </styled.AvatarContainer>

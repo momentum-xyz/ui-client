@@ -5,6 +5,7 @@ export const Container = styled.div`
   --width: 360px;
   --height: 200px;
 
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;

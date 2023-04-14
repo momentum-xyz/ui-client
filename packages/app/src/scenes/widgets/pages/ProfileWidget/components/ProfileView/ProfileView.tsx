@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {ButtonRound, Image, Frame, IconSvg} from '@momentum-xyz/ui-kit-storybook';
 import {absoluteLink, registrationDateString, withoutProtocol, useI18n} from '@momentum-xyz/core';
@@ -19,7 +19,7 @@ const ProfileView: FC<PropsInterface> = (props) => {
   return (
     <styled.Container>
       <Frame>
-        <Image src={user.avatarSrc} height={200} />
+        <Image src={user.avatarLargeSrc} height={200} />
         <styled.UserInfo>
           <styled.NameContainer>{user.name}</styled.NameContainer>
           <styled.AddressContainer>{user.wallet}</styled.AddressContainer>
