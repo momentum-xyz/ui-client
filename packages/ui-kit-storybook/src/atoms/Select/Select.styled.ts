@@ -200,6 +200,7 @@ export const Container = styled.div`
 
 export const LabelWithIcon = styled.div`
   display: flex;
+  align-items: center;
   gap: 10px;
 `;
 

@@ -25,6 +25,7 @@ export interface SelectPropsInterface<T> {
   multiSuffix?: string;
   isClearable?: boolean;
   menuPlacement?: MenuPlacement;
+  maxMenuHeight?: number;
   onSingleChange?: (value: T | null) => void;
   onMultiChange?: (value: T[]) => void;
 }
@@ -40,6 +41,7 @@ const Select = <T,>({
   isClearable = false,
   multiSuffix,
   menuPlacement = 'auto',
+  maxMenuHeight,
   onSingleChange,
   onMultiChange,
   ...rest
@@ -55,6 +57,7 @@ const Select = <T,>({
         hideSelectedOptions={hideSelectedOptions}
         isClearable={isClearable}
         menuPlacement={menuPlacement}
+        maxMenuHeight={maxMenuHeight}
         classNamePrefix="Select"
         value={
           value && Array.isArray(value)
