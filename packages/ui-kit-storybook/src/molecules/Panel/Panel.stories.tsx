@@ -1,7 +1,6 @@
 import {ComponentMeta, Story} from '@storybook/react';
 
 import * as TabsStories from '../Tabs/Tabs.stories';
-import * as FrameTextStories from '../FrameText/FrameText.stories';
 import * as StepsStories from '../Steps/Steps.stories';
 
 import Panel, {PanelPropsInterface} from './Panel';
@@ -36,12 +35,6 @@ Primary.args = {
   title: 'Long title of sidebar',
   variant: 'primary',
   icon: 'planet'
-};
-
-export const PrimaryTextFrame = Template.bind({});
-PrimaryTextFrame.args = {
-  ...Primary.args,
-  children: <FrameTextStories.General {...FrameTextStories.General.args} />
 };
 
 export const PrimaryTabsFrame = Template.bind({});

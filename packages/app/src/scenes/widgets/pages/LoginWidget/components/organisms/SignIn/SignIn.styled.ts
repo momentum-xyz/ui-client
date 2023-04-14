@@ -10,7 +10,7 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.div`
-  padding: 20px 0 0 0;
+  padding: 10px 0 0 0;
   font-size: var(--font-size-l);
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -23,6 +23,7 @@ export const Desc = styled.div`
 `;
 
 export const ScrollableContainer = styled.div`
+  padding: 10px 0 0 0;
   border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
   height: calc(100vh - var(--scroll-offset));
   overflow: auto;

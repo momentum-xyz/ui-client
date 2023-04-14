@@ -5,10 +5,10 @@ export const Container = styled.div`
   --width: 355px;
   --height: 200px;
 
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 16px;
 
   & .image-upload-button {
     background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
