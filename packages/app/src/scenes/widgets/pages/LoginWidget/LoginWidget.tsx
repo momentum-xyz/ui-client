@@ -45,6 +45,8 @@ const LoginWidget: FC = () => {
   return (
     <styled.Container data-testid="LoginWidget-test">
       <Panel
+        isFullHeight
+        size="normal"
         icon="astronaut"
         variant="primary"
         title={t('login.connectAsMember')}

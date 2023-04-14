@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Wrapper = styled.div`
-  --scroll-offset: 448px;
+  --scroll-offset: 438px;
 `;
 
 export const Title = styled.div`

@@ -1,10 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --scroll-offset: 470px;
-
-  width: var(--widget-width-normal);
-  height: var(--widget-max-height);
+  --scroll-offset: 460px;
 `;
 
 export const Wrapper = styled.div`

@@ -2,10 +2,7 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Container = styled.div`
-  --scroll-offset: 490px;
-
-  width: var(--widget-width-normal);
-  height: var(--widget-max-height);
+  --scroll-offset: 480px;
 `;
 
 export const Wrapper = styled.div`
@@ -75,5 +72,6 @@ export const Link = styled.a`
 `;
 
 export const ShowAllButtonContainer = styled.div`
+  margin: 0 1px;
   padding: 10px 0 0 0;
 `;

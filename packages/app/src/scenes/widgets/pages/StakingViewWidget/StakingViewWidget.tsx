@@ -65,6 +65,8 @@ const StakingViewWidget: FC = () => {
   return (
     <styled.Container data-testid="StakingViewWidget-test">
       <Panel
+        isFullHeight
+        size="large"
         icon="status-2"
         variant="primary"
         title={t('labels.stakingOverview')}

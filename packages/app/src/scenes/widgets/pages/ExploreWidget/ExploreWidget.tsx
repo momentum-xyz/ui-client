@@ -56,6 +56,8 @@ const ExploreWidget: FC = () => {
     <styled.Container data-testid="ExploreWidget-test">
       <styled.ExplorePanel className={cn(hasSelectedUnit && 'collapsed')}>
         <Panel
+          isFullHeight
+          size="large"
           icon="explore"
           variant="primary"
           title={t('labels.explore')}

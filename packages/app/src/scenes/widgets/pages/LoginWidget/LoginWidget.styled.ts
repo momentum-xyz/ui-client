@@ -3,8 +3,6 @@ import styled from 'styled-components';
 export const Container = styled.div`
   position: relative;
   display: flex;
-  width: var(--widget-width-normal);
-  height: var(--widget-max-height);
 `;
 
 export const Content = styled.div`

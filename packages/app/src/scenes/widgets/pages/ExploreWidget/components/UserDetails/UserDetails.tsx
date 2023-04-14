@@ -28,6 +28,8 @@ const UserDetails: FC<PropsInterface> = (props) => {
   return (
     <styled.Container data-testid="UserDetails-test">
       <Panel
+        isFullHeight
+        size="normal"
         icon="astronaut"
         variant="primary"
         image={getImageAbsoluteUrl(user.image, ImageSizeEnum.S3)}

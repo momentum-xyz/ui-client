@@ -1,20 +1,6 @@
 :root {
   /* MENU */
-  --menu-height: 70px;
+  --menu-height: 50px;
   --menu-padding: 10px;
-
-  /* WIDGET HEIGHT */
-  --widget-max-height: calc(100vh - var(--menu-height) - 5 * var(--menu-padding));
-
-  /* WIDGET WIDTH */
-  --widget-width-big: 570px;
-  --widget-width-normal: 400px;
-
-  @media (max-width: 1440px) {
-
-    /* WIDGET WIDTH FOR LAPTOPS */
-    --widget-width-big: 520px;
-    --widget-width-normal: 400px;
-  }
 }
 

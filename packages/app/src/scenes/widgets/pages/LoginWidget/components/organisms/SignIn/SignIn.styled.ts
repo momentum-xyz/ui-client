@@ -2,7 +2,7 @@ import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --scroll-offset: 360px;
+  --scroll-offset: 340px;
 
   display: flex;
   flex-direction: column;
