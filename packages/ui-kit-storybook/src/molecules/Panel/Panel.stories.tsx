@@ -2,7 +2,7 @@ import {ComponentMeta, Story} from '@storybook/react';
 
 import * as TabsStories from '../Tabs/Tabs.stories';
 import * as FrameTextStories from '../FrameText/FrameText.stories';
-import * as FrameStepsStories from '../FrameSteps/FrameSteps.stories';
+import * as StepsStories from '../Steps/Steps.stories';
 
 import Panel, {PanelPropsInterface} from './Panel';
 
@@ -53,7 +53,7 @@ PrimaryTabsFrame.args = {
 export const PrimaryStepsFrame = Template.bind({});
 PrimaryStepsFrame.args = {
   ...Primary.args,
-  children: <FrameStepsStories.General stepList={[]} {...FrameStepsStories.General.args} />
+  children: <StepsStories.General stepList={[]} {...StepsStories.General.args} />
 };
 
 export const Secondary = Template.bind({});

@@ -1,4 +1,4 @@
-import ReactSelect, {components} from 'react-select';
+import ReactSelect, {components, MenuPlacement} from 'react-select';
 import cn from 'classnames';
 
 import {IconSvg} from '../IconSvg';
@@ -24,6 +24,7 @@ export interface SelectPropsInterface<T> {
   wide?: boolean;
   multiSuffix?: string;
   isClearable?: boolean;
+  menuPlacement?: MenuPlacement;
   onSingleChange?: (value: T | null) => void;
   onMultiChange?: (value: T[]) => void;
 }
@@ -38,6 +39,7 @@ const Select = <T,>({
   closeMenuOnSelect = true,
   isClearable = false,
   multiSuffix,
+  menuPlacement = 'auto',
   onSingleChange,
   onMultiChange,
   ...rest
@@ -52,6 +54,7 @@ const Select = <T,>({
         closeMenuOnSelect={closeMenuOnSelect}
         hideSelectedOptions={hideSelectedOptions}
         isClearable={isClearable}
+        menuPlacement={menuPlacement}
         classNamePrefix="Select"
         value={
           value && Array.isArray(value)

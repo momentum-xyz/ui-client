@@ -1,13 +1,18 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  position: relative;
+  display: flex;
   width: var(--widget-width-normal);
   height: var(--widget-max-height);
-  display: flex;
 `;
 
-export const PanelContent = styled.div`
-  height: calc(var(--widget-max-height) - 100px);
-  overflow: scroll;
-  padding-bottom: 10px;
+export const Content = styled.div`
+  padding: 10px 0;
+`;
+
+export const Steps = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 70px;
 `;
