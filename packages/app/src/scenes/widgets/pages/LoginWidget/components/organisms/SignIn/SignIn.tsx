@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
-import {Button, ButtonRound, Frame} from '@momentum-xyz/ui-kit-storybook';
+import {Button, Frame, ProfileLine} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 
 import {availableWallets, WalletConfigInterface} from 'wallets';
@@ -14,6 +14,8 @@ interface PropsInterface {
   onConnected: () => void;
 }
 
+const COUNT = 59589588;
+
 const SignIn: FC<PropsInterface> = ({onConnected}) => {
   const {t} = useI18n();
 
@@ -24,8 +26,6 @@ const SignIn: FC<PropsInterface> = ({onConnected}) => {
   const openWalletInstallationLink = (url: string): void => {
     window.open(url, '_blank');
   };
-
-  const count = 59589588;
 
   return (
     <styled.Container data-testid="SignIn-test">
@@ -55,18 +55,9 @@ const SignIn: FC<PropsInterface> = ({onConnected}) => {
 
           {!selectedWallet && !connectWithWallet && (
             <styled.ExtraInfoPoints>
-              <div className="row">
-                <ButtonRound variant="primary" isLabel={true} icon="visible" />
-                <span>{t('login.permissionInfo')}</span>
-              </div>
-              <div className="row">
-                <ButtonRound variant="primary" isLabel={true} icon="locked" />
-                <span>{t('login.auditInfo')}</span>
-              </div>
-              <div className="row">
-                <ButtonRound variant="primary" isLabel={true} icon="star_favorite" />
-                <span>{t('login.trustInfo', {count})}</span>
-              </div>
+              <ProfileLine icon="visible" label={t('login.permissionInfo')} />
+              <ProfileLine icon="locked" label={t('login.auditInfo')} />
+              <ProfileLine icon="star_favorite" label={t('login.trustInfo', {count: COUNT})} />
             </styled.ExtraInfoPoints>
           )}
 

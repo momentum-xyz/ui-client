@@ -76,19 +76,6 @@ export const ExtraInfoPoints = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-
-  & > .row {
-    display: flex;
-
-    & > button {
-      flex: 0 0 30px;
-    }
-    & > span {
-      color: ${(props) => props.theme.text};
-      margin-top: 5px;
-      margin-left: 10px;
-    }
-  }
 `;
 
 export const ConnectWithWalletRow = styled.div`
