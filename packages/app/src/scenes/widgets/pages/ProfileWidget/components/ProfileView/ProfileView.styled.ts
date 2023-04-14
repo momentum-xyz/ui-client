@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import {Text} from '@momentum-xyz/ui-kit';
 
-export const Container = styled.div`
-  width: 100%;
-`;
+export const Container = styled.div``;
+
+export const UserInfo = styled.div``;
 
 export const AvatarContainer = styled.div`
   padding: 0 12px;
@@ -12,39 +11,62 @@ export const AvatarContainer = styled.div`
   gap: 20px;
 `;
 
-export const NameContainer = styled.div`
-  max-width: 160px;
-  padding: 2px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+export const Separator = styled.div`
+  border-top: 1px solid ${(props) => props.theme.accentText};
+  margin: 10px;
 `;
 
-export const Info = styled.div`
-  padding: 12px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+export const NameContainer = styled.div`
+  margin: 10px 0;
+  font-weight: bold;
+  font-size: 16px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+`;
+
+export const AddressContainer = styled.div`
+  font-style: italic;
+  font-size: 13px;
+
+  letter-spacing: 0.02em;
+  text-decoration-line: underline;
+  margin-bottom: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+export const BioContainer = styled.div`
+  margin-bottom: 10px;
 `;
 
 export const InfoItem = styled.div`
   display: flex;
   align-items: center;
-  gap: 5px;
+  margin-bottom: 10px;
+  & > button {
+    margin-right: 10px;
+  }
 `;
 
 export const Link = styled.a`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 250px;
-  color: var(--white);
+  max-width: 320px;
+  color: ${(props) => props.theme.accentText};
 `;
 
-export const LocationText = styled(Text)`
-  max-width: 250px;
-`;
+export const OwnedOdysseys = styled.div``;
+export const OwnedOdysseysTitle = styled.div`
+  margin: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
 
-export const Settings = styled.div`
-  padding: 0 12px 12px 12px;
+  & > span {
+    margin-right: 10px;
+  }
 `;

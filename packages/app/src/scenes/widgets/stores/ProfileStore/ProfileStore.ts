@@ -1,5 +1,5 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
+import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api, UploadImageResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
@@ -9,7 +9,6 @@ const ProfileStore = types.compose(
   ResetModel,
   types
     .model('ProfileStore', {
-      dialog: types.optional(Dialog, {}),
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), []),
       editRequest: types.optional(RequestModel, {}),
       editAvatarRequest: types.optional(RequestModel, {})

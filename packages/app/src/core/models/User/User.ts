@@ -1,8 +1,9 @@
-import {types, Instance} from 'mobx-state-tree';
-import {ImageSizeEnum, UserStatusEnum} from '@momentum-xyz/ui-kit';
+import {Instance, types} from 'mobx-state-tree';
+import {UserStatusEnum} from '@momentum-xyz/ui-kit';
+import {ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {UserProfile} from 'core/models';
-import {appVariables} from 'api/constants';
+import {getImageAbsoluteUrl} from 'core/utils';
 
 const User = types
   .model('User', {
@@ -20,10 +21,10 @@ const User = types
   })
   .views((self) => ({
     get avatarSrc(): string | undefined {
-      return (
-        self.profile.avatarHash &&
-        `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${self.profile.avatarHash}`
-      );
+      return getImageAbsoluteUrl(self.profile.avatarHash) || undefined;
+    },
+    get avatarLargeSrc(): string | undefined {
+      return getImageAbsoluteUrl(self.profile.avatarHash, ImageSizeEnum.S5) || undefined;
     }
   }));
 

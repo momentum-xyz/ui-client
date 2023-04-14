@@ -1214,7 +1214,9 @@ export const enGb = {
       camera: 'camera',
       microphone: 'microphone',
       video: 'video',
-      audio: 'audio'
+      audio: 'audio',
+      selectInputSource: 'Select input source',
+      selectOutputSource: 'Select output source'
     },
     musicPlayer: {
       playerVolume: 'Music Volume',

@@ -1,76 +1,56 @@
-import React, {FC} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Avatar, Button, Heading, IconSvg, Text} from '@momentum-xyz/ui-kit';
+import {ButtonRound, Image, Frame, IconSvg} from '@momentum-xyz/ui-kit-storybook';
 import {absoluteLink, registrationDateString, withoutProtocol, useI18n} from '@momentum-xyz/core';
 
 import {UserModelInterface} from 'core/models';
-
-import {Accounts} from '../Accounts';
 
 import * as styled from './ProfileView.styled';
 
 interface PropsInterface {
   user: UserModelInterface;
-  isVisitAvailable: boolean;
-  onTeleportToOdyssey: () => void;
 }
 
 const ProfileView: FC<PropsInterface> = (props) => {
-  const {user, isVisitAvailable, onTeleportToOdyssey} = props;
+  const {user} = props;
 
   const {t} = useI18n();
 
   return (
-    <>
-      <styled.AvatarContainer>
-        <Avatar avatarSrc={user.avatarSrc} size="normal" status={user.status} />
-        <styled.NameContainer>
-          <Heading
-            type="h1"
-            label={user.name}
-            isTruncate
-            transform="uppercase"
-            align="left"
-            weight="bold"
-          />
-          <div>
-            <Button
-              icon="fly-portal"
-              size="medium"
-              label={t('labels.visit')}
-              disabled={!isVisitAvailable}
-              onClick={onTeleportToOdyssey}
-            />
-          </div>
-        </styled.NameContainer>
-      </styled.AvatarContainer>
+    <styled.Container>
+      <Frame>
+        <Image src={user.avatarLargeSrc} height={200} />
+        <styled.UserInfo>
+          <styled.NameContainer>{user.name}</styled.NameContainer>
+          <styled.AddressContainer>{user.wallet}</styled.AddressContainer>
+          {user.profile?.bio && <styled.BioContainer>{user.profile?.bio}</styled.BioContainer>}
 
-      <styled.Info>
-        <Accounts user={user} />
-
-        {user.profile?.bio && (
-          <Text text={user.profile.bio} size="xxs" align="left" breakLongWord />
-        )}
-
-        {user.profile?.profileLink && (
+          {user.profile.profileLink && (
+            <styled.InfoItem>
+              <ButtonRound variant="primary" isLabel icon="link" />
+              <styled.Link href={absoluteLink(user.profile.profileLink)} target="_blank">
+                {withoutProtocol(user.profile.profileLink)}
+              </styled.Link>
+            </styled.InfoItem>
+          )}
           <styled.InfoItem>
-            <IconSvg name="link" size="normal" />
-            <styled.Link href={absoluteLink(user.profile.profileLink)} target="_blank">
-              {withoutProtocol(user.profile.profileLink)}
-            </styled.Link>
+            <ButtonRound variant="primary" isLabel icon="astronaut" />
+            <span>
+              {t('actions.joined')} {registrationDateString(user.createdAt)}
+            </span>
           </styled.InfoItem>
-        )}
+        </styled.UserInfo>
+      </Frame>
 
-        <styled.InfoItem>
-          <IconSvg name="astro" size="normal" />
-          <Text
-            size="xxs"
-            text={`${t('actions.joined')} ${registrationDateString(user.createdAt)}`}
-            isMultiline={false}
-          />
-        </styled.InfoItem>
-      </styled.Info>
-    </>
+      <styled.Separator />
+
+      <styled.OwnedOdysseys>
+        <styled.OwnedOdysseysTitle>
+          <IconSvg name="rabbit_fill" isWhite />
+          Odysseys Owned
+        </styled.OwnedOdysseysTitle>
+      </styled.OwnedOdysseys>
+    </styled.Container>
   );
 };
 

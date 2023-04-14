@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button} from '@momentum-xyz/ui-kit-storybook';
