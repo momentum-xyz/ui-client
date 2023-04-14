@@ -1,4 +1,5 @@
 import {FC, useEffect} from 'react';
+import {Controller, useForm} from 'react-hook-form';
 import {
   Frame,
   Image,
@@ -8,7 +9,6 @@ import {
   ImageSizeEnum
 } from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
-import {Controller, useForm} from 'react-hook-form';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {SignUpFormInterface} from 'core/interfaces';
