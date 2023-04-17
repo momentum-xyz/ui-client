@@ -50,6 +50,7 @@ const ProfileSettings: FC<PropsInterface> = ({
   return (
     <styled.Container>
       <Frame>
+        <styled.Title>{t('labels.sound')}</styled.Title>
         <styled.DeviceItem>
           <ButtonRound variant="primary" isLabel icon="microphoneOn" />
           <Select

@@ -1,4 +1,4 @@
-import {FC, useCallback, useEffect, useState} from 'react';
+import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n} from '@momentum-xyz/core';
@@ -54,6 +54,17 @@ const ProfileWidget: FC = () => {
     }
   ];
 
+  const panelIcon = useMemo(() => {
+    if (activeMenuId !== 'viewProfile') {
+      return sideMenuItems.find((i) => i.id === activeMenuId)?.iconName;
+    }
+    return undefined;
+  }, [activeMenuId, sideMenuItems]);
+
+  const panelTitle = useMemo(() => {
+    return sideMenuItems.find((i) => i.id === activeMenuId)?.label || t('titles.myProfile');
+  }, [activeMenuId, sideMenuItems, t]);
+
   const handleProfileUpdate = useCallback(
     async (form: ProfileFormInterface, previousHash?: string) => {
       const {isDone} = await profileStore.editProfile(form, previousHash);
@@ -82,9 +93,10 @@ const ProfileWidget: FC = () => {
         <Panel
           isFullHeight
           size="normal"
-          title={t('titles.profile')}
           variant="primary"
-          icon="astronaut"
+          title={panelTitle}
+          icon={panelIcon}
+          image={!panelIcon ? sessionStore.userImageUrl : null}
           onClose={() => {
             profileStore.resetModel();
             widgetManagerStore.close(WidgetEnum.PROFILE);
