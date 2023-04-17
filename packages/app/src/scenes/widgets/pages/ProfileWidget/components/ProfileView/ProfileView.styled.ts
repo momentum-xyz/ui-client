@@ -1,9 +1,14 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  --scroll-offset: 435px;
+`;
 
-export const ScrollableContainer = styled.div``;
+export const ScrollableContainer = styled.div`
+  height: calc(100vh - var(--scroll-offset));
+  overflow: auto;
+`;
 
 export const GeneralInfo = styled.div`
   display: flex;
@@ -47,4 +52,10 @@ export const OwnedOdysseysTitle = styled.div`
   & > span {
     margin-right: 10px;
   }
+`;
+
+export const NftContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;

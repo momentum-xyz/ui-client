@@ -54,18 +54,25 @@ export const ItemName = styled.div`
     font-size: var(--font-size-s);
     font-weight: 600;
   }
+
+  > span {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 `;
 
 export const ItemLink = styled.a``;
 
 export const ItemDesc = styled.div`
-  line-height: 22px;
-
   &.normal {
+    font-size: var(--font-size-m);
+    line-height: 22px;
   }
 
   &.small {
     font-size: var(--font-size-s);
+    line-height: 18px;
   }
 `;
 

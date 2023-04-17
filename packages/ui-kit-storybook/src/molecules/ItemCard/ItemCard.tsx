@@ -41,7 +41,9 @@ const ItemCard: FC<ItemCardPropsInterface> = ({
       <Image src={imageUrl} errorIcon={imageErrorIcon} height={imageHeight} onClick={onInfoClick} />
       <styled.ItemContent className={cn(variant)}>
         <styled.ItemNameContainer>
-          <styled.ItemName className={cn(variant)}>{name}</styled.ItemName>
+          <styled.ItemName className={cn(variant)}>
+            <span>{name}</span>
+          </styled.ItemName>
           {byName && (
             <span>
               {`${t('labels.by')}: `}

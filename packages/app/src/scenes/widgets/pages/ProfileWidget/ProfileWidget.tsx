@@ -1,8 +1,10 @@
-import {FC, useCallback, useState} from 'react';
+import {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n} from '@momentum-xyz/core';
 import {Panel, SideMenu, SideMenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
+import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {ProfileFormInterface} from 'core/interfaces';
@@ -13,23 +15,21 @@ import * as styled from './ProfileWidget.styled';
 type MenuItemType = 'viewProfile' | 'editProfile' | 'settings' | 'wallet' | 'logout';
 
 const ProfileWidget: FC = () => {
-  const {sessionStore, agoraStore, widgetStore, widgetManagerStore} = useStore();
+  const {sessionStore, agoraStore, widgetStore, widgetManagerStore, nftStore} = useStore();
   const {profileStore} = widgetStore;
 
   const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewProfile');
 
+  const navigate = useNavigate();
   const {t} = useI18n();
 
-  const handleProfileUpdate = useCallback(
-    async (form: ProfileFormInterface, previousHash?: string) => {
-      const {isDone} = await profileStore.editProfile(form, previousHash);
-      if (isDone) {
-        await sessionStore.loadUserProfile();
-        setActiveMenuId('viewProfile');
-      }
-    },
-    [profileStore, sessionStore]
-  );
+  useEffect(() => {
+    // TODO: Load nft list
+    profileStore.init();
+    return () => {
+      profileStore.resetModel();
+    };
+  }, [profileStore]);
 
   const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     {
@@ -54,6 +54,28 @@ const ProfileWidget: FC = () => {
     }
   ];
 
+  const handleProfileUpdate = useCallback(
+    async (form: ProfileFormInterface, previousHash?: string) => {
+      const {isDone} = await profileStore.editProfile(form, previousHash);
+      if (isDone) {
+        await sessionStore.loadUserProfile();
+        setActiveMenuId('viewProfile');
+      }
+    },
+    [profileStore, sessionStore]
+  );
+
+  const onInfoWorld = useCallback((worldId: string) => {
+    console.log(worldId);
+  }, []);
+
+  const onVisitWorld = useCallback(
+    (worldId: string) => {
+      navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+    },
+    [navigate]
+  );
+
   return (
     <styled.Container data-testid="ProfileWidget-test">
       <styled.PanelContainer>
@@ -70,7 +92,15 @@ const ProfileWidget: FC = () => {
         >
           {!!sessionStore.user && (
             <styled.Wrapper>
-              {activeMenuId === 'viewProfile' && <ProfileView user={sessionStore.user} />}
+              {activeMenuId === 'viewProfile' && (
+                <ProfileView
+                  user={sessionStore.user}
+                  // FIXME: profileStore.nftList
+                  nftList={nftStore.nftItems.slice(0, 5)}
+                  onVisitNft={onVisitWorld}
+                  onInfoNft={onInfoWorld}
+                />
+              )}
 
               {activeMenuId === 'editProfile' && (
                 <ProfileEditor

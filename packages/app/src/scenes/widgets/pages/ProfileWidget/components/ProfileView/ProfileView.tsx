@@ -1,18 +1,29 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Image, Frame, IconSvg, ProfileLine, WalletHash} from '@momentum-xyz/ui-kit-storybook';
+import {
+  Image,
+  Frame,
+  IconSvg,
+  ProfileLine,
+  WalletHash,
+  ItemCard
+} from '@momentum-xyz/ui-kit-storybook';
 import {absoluteLink, withoutProtocol, useI18n, signUpDateString} from '@momentum-xyz/core';
 
-import {UserModelInterface} from 'core/models';
+import {getImageAbsoluteUrl} from 'core/utils';
+import {NftItemModelInterface, UserModelInterface} from 'core/models';
 
 import * as styled from './ProfileView.styled';
 
 interface PropsInterface {
   user: UserModelInterface;
+  nftList: NftItemModelInterface[];
+  onInfoNft: (uuid: string) => void;
+  onVisitNft: (uuid: string) => void;
 }
 
 const ProfileView: FC<PropsInterface> = (props) => {
-  const {user} = props;
+  const {user, nftList, onInfoNft, onVisitNft} = props;
 
   const {t} = useI18n();
 
@@ -42,12 +53,30 @@ const ProfileView: FC<PropsInterface> = (props) => {
             <WalletHash icon="talisman" hash={user.wallet || ''} />
           </styled.GeneralInfo>
 
-          <styled.OwnedOdysseys>
-            <styled.OwnedOdysseysTitle>
-              <IconSvg name="rabbit_fill" isWhite />
-              {t('labels.odysseysOwned')}
-            </styled.OwnedOdysseysTitle>
-          </styled.OwnedOdysseys>
+          {nftList.length > 0 && (
+            <styled.OwnedOdysseys>
+              <styled.OwnedOdysseysTitle>
+                <IconSvg name="rabbit_fill" isWhite />
+                {t('labels.odysseysOwned')}
+              </styled.OwnedOdysseysTitle>
+
+              <styled.NftContainer>
+                {nftList.map((nft) => (
+                  <ItemCard
+                    variant="small"
+                    key={nft.uuid}
+                    name={nft.name}
+                    imageHeight={95}
+                    imageUrl={getImageAbsoluteUrl(nft.image)}
+                    description="Lorem ipsum dolor sit amet, consectetuer"
+                    imageErrorIcon="rabbit_fill"
+                    onInfoClick={() => onInfoNft(nft.uuid)}
+                    onVisitClick={() => onVisitNft(nft.uuid)}
+                  />
+                ))}
+              </styled.NftContainer>
+            </styled.OwnedOdysseys>
+          )}
         </styled.ScrollableContainer>
       </Frame>
     </styled.Container>
