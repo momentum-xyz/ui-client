@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {ButtonRound, Image, Frame, IconSvg} from '@momentum-xyz/ui-kit-storybook';
-import {absoluteLink, registrationDateString, withoutProtocol, useI18n} from '@momentum-xyz/core';
+import {Image, Frame, IconSvg, ProfileLine, WalletHash} from '@momentum-xyz/ui-kit-storybook';
+import {absoluteLink, withoutProtocol, useI18n, signUpDateString} from '@momentum-xyz/core';
 
 import {UserModelInterface} from 'core/models';
 
@@ -20,36 +20,36 @@ const ProfileView: FC<PropsInterface> = (props) => {
     <styled.Container>
       <Frame>
         <Image src={user.avatarLargeSrc} height={200} />
-        <styled.UserInfo>
-          <styled.NameContainer>{user.name}</styled.NameContainer>
-          <styled.AddressContainer>{user.wallet}</styled.AddressContainer>
-          {user.profile?.bio && <styled.BioContainer>{user.profile?.bio}</styled.BioContainer>}
+        <styled.NameContainer>{user.name}</styled.NameContainer>
 
-          {user.profile.profileLink && (
-            <styled.InfoItem>
-              <ButtonRound variant="primary" isLabel icon="link" />
-              <styled.Link href={absoluteLink(user.profile.profileLink)} target="_blank">
-                {withoutProtocol(user.profile.profileLink)}
-              </styled.Link>
-            </styled.InfoItem>
-          )}
-          <styled.InfoItem>
-            <ButtonRound variant="primary" isLabel icon="astronaut" />
-            <span>
-              {t('actions.joined')} {registrationDateString(user.createdAt)}
-            </span>
-          </styled.InfoItem>
-        </styled.UserInfo>
+        <styled.ScrollableContainer>
+          <styled.GeneralInfo>
+            {user.profile?.bio && <div>{user.profile?.bio}</div>}
+            {user.profile.profileLink && (
+              <ProfileLine
+                icon="link"
+                label={
+                  <styled.LinkAccent target="_blank" href={absoluteLink(user.profile.profileLink)}>
+                    {withoutProtocol(user.profile.profileLink)}
+                  </styled.LinkAccent>
+                }
+              />
+            )}
+            <ProfileLine
+              icon="astro"
+              label={`${t('actions.joined')} ${signUpDateString(user.createdAt)}`}
+            />
+            <WalletHash icon="talisman" hash={user.wallet || ''} />
+          </styled.GeneralInfo>
+
+          <styled.OwnedOdysseys>
+            <styled.OwnedOdysseysTitle>
+              <IconSvg name="rabbit_fill" isWhite />
+              {t('labels.odysseysOwned')}
+            </styled.OwnedOdysseysTitle>
+          </styled.OwnedOdysseys>
+        </styled.ScrollableContainer>
       </Frame>
-
-      <styled.Separator />
-
-      <styled.OwnedOdysseys>
-        <styled.OwnedOdysseysTitle>
-          <IconSvg name="rabbit_fill" isWhite />
-          Odysseys Owned
-        </styled.OwnedOdysseysTitle>
-      </styled.OwnedOdysseys>
     </styled.Container>
   );
 };

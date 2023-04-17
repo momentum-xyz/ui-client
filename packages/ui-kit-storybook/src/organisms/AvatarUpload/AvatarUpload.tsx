@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {FileUploader} from '@momentum-xyz/ui-kit';
@@ -30,7 +29,7 @@ const AvatarUpload: FC<AvatarUploadPropsInterface> = ({value, onChange}) => {
           dragActiveLabel={t('fileUploader.dragActiveLabel')}
           fileType="image"
           onFilesUpload={onChange}
-          onError={(error: any) => console.error(error)}
+          onError={(error) => console.error(error)}
           enableDragAndDrop={false}
           buttonClassName="image-upload-button"
         />

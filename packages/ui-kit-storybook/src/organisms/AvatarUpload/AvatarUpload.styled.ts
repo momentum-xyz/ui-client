@@ -9,7 +9,6 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 16px;
   background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
   border: 0.6px solid ${(props) => props.theme.accentText};
   border-radius: 4px;

@@ -633,11 +633,14 @@ export const enGb = {
       nickname: 'Nickname',
       description: 'Description',
       name: 'Name',
+      profileName: 'Profile name',
       title: 'Title',
       social: 'Social',
       bio: 'Bio',
+      shortBio: 'Short bio',
       location: 'Location',
-      link: 'Link'
+      link: 'Link',
+      linkToWeb: 'Link to website'
     },
     networks: {
       polkadot: 'Polkadot.js',
@@ -651,6 +654,10 @@ export const enGb = {
       signIn: 'Sign In',
       signOut: 'Sign Out',
       sort: 'Sort',
+      logOut: 'Log out',
+      manageWallet: 'Manage wallet',
+      settings: 'Settings',
+      editProfile: 'Edit profile',
       claimRewards: 'Claim Rewards',
       selectWallet: 'Select wallet',
       createOdyssey: 'Create your Odyssey',

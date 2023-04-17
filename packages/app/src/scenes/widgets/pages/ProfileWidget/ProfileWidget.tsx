@@ -1,12 +1,10 @@
 import {FC, useCallback, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {toast} from 'react-toastify';
-import {Panel, SideMenu, SideMenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
+import {Panel, SideMenu, SideMenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
-import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 import {ProfileFormInterface} from 'core/interfaces';
 
 import {ProfileSettings, ProfileView, ProfileEditor} from './components';
@@ -15,8 +13,7 @@ import * as styled from './ProfileWidget.styled';
 type MenuItemType = 'viewProfile' | 'editProfile' | 'settings' | 'wallet' | 'logout';
 
 const ProfileWidget: FC = () => {
-  const {sessionStore, agoraStore, universeStore, widgetStore, widgetManagerStore} = useStore();
-  const {world3dStore} = universeStore;
+  const {sessionStore, agoraStore, widgetStore, widgetManagerStore} = useStore();
   const {profileStore} = widgetStore;
 
   const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewProfile');
@@ -25,73 +22,35 @@ const ProfileWidget: FC = () => {
 
   const handleProfileUpdate = useCallback(
     async (form: ProfileFormInterface, previousHash?: string) => {
-      const {jobId, isDone} = await profileStore.editProfile(form, previousHash);
-      if (isDone && !jobId) {
+      const {isDone} = await profileStore.editProfile(form, previousHash);
+      if (isDone) {
         await sessionStore.loadUserProfile();
         setActiveMenuId('viewProfile');
-
-        toast.info(
-          <ToastContent
-            headerIconName="people"
-            title={t('titles.alert')}
-            text={t('editProfileWidget.saveSuccess')}
-            showCloseButton
-          />,
-          TOAST_GROUND_OPTIONS
-        );
-      }
-
-      if (isDone && jobId) {
-        sessionStore.setupJobId(jobId);
-        setActiveMenuId('viewProfile');
-
-        toast.info(
-          <ToastContent
-            headerIconName="people"
-            title={t('titles.alert')}
-            text={t('editProfileWidget.saveInProgress')}
-            showCloseButton
-          />,
-          TOAST_GROUND_OPTIONS
-        );
-      }
-
-      if (!isDone) {
-        toast.error(
-          <ToastContent
-            isDanger
-            headerIconName="people"
-            title={t('titles.alert')}
-            text={t('editProfileWidget.saveFailure')}
-            showCloseButton
-          />
-        );
       }
     },
-    [profileStore, sessionStore, t]
+    [profileStore, sessionStore]
   );
 
   const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
-    // TODO: Add translations
     {
       id: 'editProfile',
       iconName: 'edit',
-      label: 'Edit profile'
+      label: t('actions.editProfile')
     },
     {
       id: 'settings',
       iconName: 'settings',
-      label: 'Settings'
+      label: t('actions.settings')
     },
     {
       id: 'wallet',
       iconName: 'wallet',
-      label: 'Manage wallet'
+      label: t('actions.manageWallet')
     },
     {
       id: 'logout',
       iconName: 'leave-left',
-      label: 'Log out'
+      label: t('actions.logOut')
     }
   ];
 
@@ -118,7 +77,6 @@ const ProfileWidget: FC = () => {
                   user={sessionStore.user}
                   formErrors={profileStore.formErrors}
                   isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
-                  onChangeKeyboardControl={world3dStore?.changeKeyboardControl}
                   onUpdate={handleProfileUpdate}
                   onCancel={() => setActiveMenuId('viewProfile')}
                 />
