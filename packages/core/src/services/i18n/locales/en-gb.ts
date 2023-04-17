@@ -548,6 +548,8 @@ export const enGb = {
     },
     titles: {
       alert: 'alert',
+      myWalletAccounts: 'My wallet accounts',
+      connectAnotherWallet: 'Connect another wallet',
       joinSpace: 'join the space',
       joinTable: 'join the table',
       returnHighFive: 'Return the favour',
@@ -659,6 +661,8 @@ export const enGb = {
       logOut: 'Log out',
       manageWallet: 'Manage wallet',
       settings: 'Settings',
+      default: 'Default',
+      setAsDefault: 'Set as default',
       editProfile: 'Edit profile',
       claimRewards: 'Claim Rewards',
       selectWallet: 'Select wallet',

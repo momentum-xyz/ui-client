@@ -9,7 +9,7 @@ import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {ProfileFormInterface} from 'core/interfaces';
 
-import {ProfileSettings, ProfileView, ProfileEditor} from './components';
+import {ProfileSettings, ProfileView, ProfileEditor, ManageWallet} from './components';
 import * as styled from './ProfileWidget.styled';
 
 type MenuItemType = 'viewProfile' | 'editProfile' | 'settings' | 'wallet' | 'logout';
@@ -136,6 +136,8 @@ const ProfileWidget: FC = () => {
                   isUpdating={false}
                 />
               )}
+
+              {activeMenuId === 'wallet' && <ManageWallet user={sessionStore.user} />}
             </styled.Wrapper>
           )}
         </Panel>

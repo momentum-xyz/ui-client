@@ -1,38 +1,44 @@
-import {rgba} from 'polished';
 import styled from 'styled-components';
+import {rgba} from 'polished';
 
 export const Container = styled.div`
-  --scroll-offset: 340px;
+  --scroll-offset: 230px;
+`;
 
-  display: flex;
+export const GeneralScrollable = styled.div`
+  height: calc(100vh - var(--scroll-offset));
   flex-direction: column;
+  overflow: auto;
+`;
+
+export const WalletContainer = styled.div`
+  padding: 0 0 10px 0;
+  border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
+`;
+
+export const Wallet = styled.div``;
+
+export const WalletActions = styled.div`
+  margin: 0 1px;
+  padding: 10px 0;
+  display: flex;
   gap: 10px;
 `;
 
 export const Title = styled.div`
-  padding: 10px 0 0 0;
-  font-size: var(--font-size-l);
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
+  padding: 0 0 10px 0;
   font-weight: 600;
+  font-size: var(--font-size-l);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 `;
 
-export const Desc = styled.div`
-  padding: 12px 0 22px 0;
-  line-height: 22px;
+export const ConnectContainer = styled.div`
+  padding: 20px 0 0 0;
 `;
-
-export const ScrollableContainer = styled.div`
-  padding: 10px 0 0 0;
-  border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
-  height: calc(100vh - var(--scroll-offset));
-  overflow: auto;
-`;
-
-export const SignInMethodsContainer = styled.div``;
 
 export const Methods = styled.div`
-  padding: 20px 1px 30px 1px;
+  padding: 0 0 20px 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px 40px;
@@ -89,11 +95,5 @@ export const ConnectWithWalletRow = styled.div`
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: ${(props) => props.theme.text};
-  }
-`;
-
-export const ConnectWithWallet = styled.div`
-  & > button {
-    margin-bottom: 16px;
   }
 `;
