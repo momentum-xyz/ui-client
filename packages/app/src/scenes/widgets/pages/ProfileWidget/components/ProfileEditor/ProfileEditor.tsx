@@ -1,13 +1,21 @@
-import {useEffect} from 'react';
+import {FC, useEffect} from 'react';
 import {useForm, Controller} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
-import {Text} from '@momentum-xyz/ui-kit';
-import {Frame, AvatarUpload, Input, Button, ButtonRound} from '@momentum-xyz/ui-kit-storybook';
-import {useI18n} from '@momentum-xyz/core';
+import {signUpDateString, useI18n} from '@momentum-xyz/core';
+import {
+  Frame,
+  AvatarUpload,
+  Input,
+  Button,
+  ButtonRound,
+  Textarea,
+  ProfileLine,
+  WalletHash
+} from '@momentum-xyz/ui-kit-storybook';
 
-import {ProfileFormInterface} from 'core/interfaces';
 import {UserModelInterface} from 'core/models';
 import {FieldErrorInterface} from 'api/interfaces';
+import {ProfileFormInterface} from 'core/interfaces';
 
 import * as styled from './ProfileEditor.styled';
 
@@ -15,29 +23,21 @@ interface PropsInterface {
   user: UserModelInterface;
   formErrors: FieldErrorInterface[];
   isUpdating: boolean;
-  onChangeKeyboardControl?: (value: boolean) => void;
   onUpdate: (form: ProfileFormInterface, previousImageHash?: string) => void;
   onCancel: () => void;
 }
 
-const ProfileEditor: React.FC<PropsInterface> = (props) => {
-  const {user, formErrors, isUpdating, onUpdate, onCancel, onChangeKeyboardControl} = props;
+const ProfileEditor: FC<PropsInterface> = (props) => {
+  const {user, formErrors, isUpdating, onUpdate, onCancel} = props;
 
   const {t} = useI18n();
-
-  useEffect(() => {
-    onChangeKeyboardControl?.(false);
-    return () => {
-      onChangeKeyboardControl?.(true);
-    };
-  }, [onChangeKeyboardControl]);
 
   const {
     control,
     setValue,
+    setError,
     handleSubmit,
-    setError
-    // formState: {errors} // TODO: error handling with new inputs?
+    formState: {errors}
   } = useForm<ProfileFormInterface>();
 
   useEffect(() => {
@@ -64,25 +64,25 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
   return (
     <styled.Container data-testid="ProfileEditor-test">
       <Frame>
-        {/* AVATAR */}
-        <Controller
-          name="avatarFile"
-          control={control}
-          render={({field: {value, onChange}}) => (
-            <styled.AvatarContainer
-              style={
-                !value && !!user.avatarLargeSrc
-                  ? {backgroundImage: `url(${user.avatarLargeSrc})`}
-                  : {}
-              }
-            >
-              <AvatarUpload value={value} onChange={onChange} />
-            </styled.AvatarContainer>
-          )}
-        />
-
-        {/* NAME */}
         <styled.InputsContainer>
+          {/* AVATAR */}
+          <Controller
+            name="avatarFile"
+            control={control}
+            render={({field: {value, onChange}}) => (
+              <styled.AvatarContainer
+                style={
+                  !value && !!user.avatarLargeSrc
+                    ? {backgroundImage: `url(${user.avatarLargeSrc})`}
+                    : {}
+                }
+              >
+                <AvatarUpload value={value} onChange={onChange} />
+              </styled.AvatarContainer>
+            )}
+          />
+
+          {/* NAME */}
           <Controller
             control={control}
             name="name"
@@ -91,13 +91,13 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
               <Input
                 value={value}
                 onChange={onChange}
-                placeholder={t('fields.name') || ''}
+                placeholder={t('fields.profileName')}
                 // errorMessage={
                 //   errors?.name?.type !== 'duplicate'
                 //     ? t('errors.nameConstraints')
                 //     : errors.name.message
                 // }
-                // isError={!!errors.name}
+                danger={!!errors.name}
                 disabled={isUpdating}
                 wide
               />
@@ -109,13 +109,11 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
             control={control}
             name="bio"
             render={({field: {value, onChange}}) => (
-              <Input // TODO: Add `TextArea` component to storybook and use it here
-                // rows={3}
-                placeholder={t('fields.bio') || ''}
+              <Textarea
+                placeholder={t('fields.shortBio')}
                 value={value}
                 disabled={isUpdating}
                 onChange={onChange}
-                wide
               />
             )}
           />
@@ -128,7 +126,7 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
               name="profileLink"
               render={({field: {value, onChange}}) => (
                 <Input
-                  placeholder={t('fields.link') || ''}
+                  placeholder={t('fields.linkToWeb') || ''}
                   value={value}
                   disabled={isUpdating}
                   onChange={onChange}
@@ -144,11 +142,14 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
           <Button label={t('actions.save')} disabled={isUpdating} onClick={formSubmitHandler} />
         </styled.Actions>
 
-        {isUpdating && (
-          <styled.IsUpdating>
-            <Text size="xs" text={t('editProfileWidget.isUpdating')} align="center" />
-          </styled.IsUpdating>
-        )}
+        <styled.Info>
+          <ProfileLine
+            icon="astro"
+            label={`${t('actions.joined')} ${signUpDateString(user.createdAt)}`}
+          />
+
+          <WalletHash icon="talisman" hash={user.wallet || ''} />
+        </styled.Info>
       </Frame>
     </styled.Container>
   );

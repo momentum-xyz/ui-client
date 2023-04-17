@@ -1,20 +1,17 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
-import {Button, Frame, ProfileLine} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
+import {Button, Frame} from '@momentum-xyz/ui-kit-storybook';
 
+import {TrustPoints, WalletLogin} from 'ui-kit';
 import {availableWallets, WalletConfigInterface} from 'wallets';
-
-import {WalletLogin} from '../WalletLogin';
 
 import * as styled from './SignIn.styled';
 
 interface PropsInterface {
   onConnected: () => void;
 }
-
-const COUNT = 59589588;
 
 const SignIn: FC<PropsInterface> = ({onConnected}) => {
   const {t} = useI18n();
@@ -53,13 +50,7 @@ const SignIn: FC<PropsInterface> = ({onConnected}) => {
             </styled.Methods>
           </styled.SignInMethodsContainer>
 
-          {!selectedWallet && !connectWithWallet && (
-            <styled.ExtraInfoPoints>
-              <ProfileLine icon="visible" label={t('login.permissionInfo')} />
-              <ProfileLine icon="locked" label={t('login.auditInfo')} />
-              <ProfileLine icon="star_favorite" label={t('login.trustInfo', {count: COUNT})} />
-            </styled.ExtraInfoPoints>
-          )}
+          {!selectedWallet && !connectWithWallet && <TrustPoints />}
 
           {selectedWallet && (
             <>

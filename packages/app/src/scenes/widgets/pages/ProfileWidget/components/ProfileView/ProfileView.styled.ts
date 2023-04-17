@@ -1,8 +1,20 @@
 import styled from 'styled-components';
+import {rgba} from 'polished';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  --scroll-offset: 435px;
+`;
 
-export const UserInfo = styled.div``;
+export const ScrollableContainer = styled.div`
+  height: calc(100vh - var(--scroll-offset));
+  overflow: auto;
+`;
+
+export const GeneralInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
 
 export const AvatarContainer = styled.div`
   padding: 0 12px;
@@ -11,56 +23,27 @@ export const AvatarContainer = styled.div`
   gap: 20px;
 `;
 
-export const Separator = styled.div`
-  border-top: 1px solid ${(props) => props.theme.accentText};
-  margin: 10px;
-`;
-
 export const NameContainer = styled.div`
-  margin: 10px 0;
+  padding: 10px 0 8px 0;
   font-weight: bold;
-  font-size: 16px;
+  font-size: var(--font-size-xl);
   letter-spacing: 0.2em;
   text-transform: uppercase;
 `;
 
-export const AddressContainer = styled.div`
-  font-style: italic;
-  font-size: 13px;
-
-  letter-spacing: 0.02em;
-  text-decoration-line: underline;
-  margin-bottom: 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-export const BioContainer = styled.div`
-  margin-bottom: 10px;
-`;
-
-export const InfoItem = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  & > button {
-    margin-right: 10px;
-  }
-`;
-
-export const Link = styled.a`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 320px;
+export const LinkAccent = styled.a`
   color: ${(props) => props.theme.accentText};
 `;
 
-export const OwnedOdysseys = styled.div``;
+export const OwnedOdysseys = styled.div`
+  margin: 20px 0 0 0;
+  border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
+`;
+
 export const OwnedOdysseysTitle = styled.div`
-  margin: 10px;
-  font-size: 15px;
-  font-weight: bold;
+  padding: 10px 0;
+  font-size: var(--font-size-l);
+  font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   display: flex;
@@ -69,4 +52,10 @@ export const OwnedOdysseysTitle = styled.div`
   & > span {
     margin-right: 10px;
   }
+`;
+
+export const NftContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
