@@ -4,22 +4,14 @@ import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
 
 import {
-  CheckUserRequest,
-  CheckUserResponse,
   FetchMeRequest,
   FetchMeResponse,
+  FetchUserListRequest,
+  FetchUserListResponse,
   FetchUserRequest,
-  FetchUserResponse,
-  MutualDocksRequest,
-  MutualDocksResponse
+  FetchUserResponse
 } from './userRepository.api.types';
 import {userRepositoryEndpoints} from './userRepository.api.endpoints';
-
-export const check: RequestInterface<CheckUserRequest, CheckUserResponse> = (options) => {
-  const {idToken, ...restOptions} = options;
-
-  return request.post(userRepositoryEndpoints().check, {idToken}, restOptions);
-};
 
 export const fetchMe: RequestInterface<FetchMeRequest, FetchMeResponse> = (options) => {
   return request.get(userRepositoryEndpoints().me, options);
@@ -27,26 +19,14 @@ export const fetchMe: RequestInterface<FetchMeRequest, FetchMeResponse> = (optio
 
 export const fetchUser: RequestInterface<FetchUserRequest, FetchUserResponse> = (options) => {
   const {userId, ...restOptions} = options;
-
   const url = generatePath(userRepositoryEndpoints().profile, {userId});
-
   return request.get(url, restOptions);
 };
 
-export const createMutualDocks: RequestInterface<MutualDocksRequest, MutualDocksResponse> = (
+export const fetchUserList: RequestInterface<FetchUserListRequest, FetchUserListResponse> = (
   options
 ) => {
-  const {walletA, walletB, ...restOptions} = options;
-
-  return request.post(userRepositoryEndpoints().mutualDocks, {walletA, walletB}, restOptions);
-};
-
-export const destroyMutualDocks: RequestInterface<MutualDocksRequest, MutualDocksResponse> = (
-  options
-) => {
-  const {walletA, walletB, ...restOptions} = options;
-
-  restOptions.data = {walletA, walletB};
-
-  return request.delete(userRepositoryEndpoints().mutualDocks, restOptions);
+  const {limit, sortDirection, ...restOptions} = options;
+  restOptions.params = {sort: sortDirection, limit};
+  return request.get(userRepositoryEndpoints().list, restOptions);
 };

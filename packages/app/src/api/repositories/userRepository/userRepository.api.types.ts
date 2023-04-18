@@ -18,13 +18,12 @@ export interface UserInterface {
   isGuest?: boolean;
 }
 
-/** CHECK USER **/
-
-export interface CheckUserRequest {
-  idToken?: string;
+export interface UserInfoInterface {
+  id: string;
+  name: string;
+  description?: string;
+  profile: UserProfileInterface;
 }
-
-export interface CheckUserResponse extends UserInterface {}
 
 /** FETCH ME **/
 
@@ -40,10 +39,11 @@ export interface FetchUserRequest {
 
 export interface FetchUserResponse extends UserInterface {}
 
-/** Mutual docs */
-export interface MutualDocksRequest {
-  walletA: string;
-  walletB: string;
+/** FETCH USER LIST **/
+
+export interface FetchUserListRequest {
+  sortDirection: 'DESC' | 'ASC';
+  limit: number;
 }
 
-export interface MutualDocksResponse {}
+export interface FetchUserListResponse extends Array<UserInfoInterface> {}
