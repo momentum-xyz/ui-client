@@ -17,7 +17,7 @@ import {
 } from '@momentum-xyz/core';
 
 import {ObjectHelper} from './ObjectHelper';
-import {getAssetFileName} from './UtilityHelper';
+import {getAssetFileName, posToVec3, vec3ToPos} from './UtilityHelper';
 
 const NORMAL_SPEED = 0.5;
 const FAST_SPEED = 1.5;
@@ -86,12 +86,9 @@ export class PlayerHelper {
       // TODO: Consider where to apply the offset between player and camera
 
       const playerTransform: TransformNoScaleInterface = {
-        position: Vector3.Zero(),
-        rotation: Vector3.Zero()
+        position: vec3ToPos(this.camera.position.subtract(PLAYER_OFFSET)),
+        rotation: vec3ToPos(this.camera.rotation)
       };
-
-      playerTransform.position = this.camera.position.subtract(PLAYER_OFFSET);
-      playerTransform.rotation = this.camera.rotation;
 
       if (onMove) {
         onMove(playerTransform);
@@ -194,10 +191,8 @@ export class PlayerHelper {
 
       const userNode = instance.rootNodes[0];
       userNode.name = user.name;
-      if (user.transform) {
-        userNode.position.x = user.transform?.position.x;
-        userNode.position.y = user.transform?.position.y;
-        userNode.position.z = user.transform?.position.z;
+      if (user.transform?.position) {
+        userNode.position = posToVec3(user.transform.position);
       }
 
       userNode.metadata = user.id;
@@ -226,13 +221,8 @@ export class PlayerHelper {
 
         const transformNode = userObj.userInstance.rootNodes[0];
 
-        transformNode.position.x = user.transform.position.x;
-        transformNode.position.y = user.transform.position.y;
-        transformNode.position.z = user.transform.position.z;
-
-        transformNode.rotation.x = user.transform.rotation.x;
-        transformNode.rotation.y = user.transform.rotation.y;
-        transformNode.rotation.z = user.transform.rotation.z;
+        transformNode.position = posToVec3(user.transform.position);
+        transformNode.rotation = posToVec3(user.transform.rotation);
       }
     }
   }

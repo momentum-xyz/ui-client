@@ -1,7 +1,7 @@
-import {GizmoManager, Scene, TransformNode, Vector3} from '@babylonjs/core';
+import {GizmoManager, Scene, TransformNode} from '@babylonjs/core';
 import {ObjectTransformInterface} from '@momentum-xyz/core';
 
-import {getNodeFromId} from './UtilityHelper';
+import {getNodeFromId, vec3ToPos} from './UtilityHelper';
 
 export enum GizmoTypesEnum {
   Position,
@@ -36,14 +36,10 @@ export class WorldCreatorHelper {
   static subscribeForTransformUpdates(objectId: string, node: TransformNode) {
     const updateTransformCallback = () => {
       const myTransfrom: ObjectTransformInterface = {
-        position: Vector3.Zero(),
-        rotation: Vector3.Zero(),
-        scale: Vector3.Zero()
+        position: vec3ToPos(node.position),
+        rotation: vec3ToPos(node.rotation),
+        scale: vec3ToPos(node.scaling)
       };
-
-      myTransfrom.position = node.position;
-      myTransfrom.rotation = node.rotation;
-      myTransfrom.scale = node.scaling;
 
       // TODO: Check how often data should be sent to onObjectTransform
       this.onObjectTransform(objectId, myTransfrom);
