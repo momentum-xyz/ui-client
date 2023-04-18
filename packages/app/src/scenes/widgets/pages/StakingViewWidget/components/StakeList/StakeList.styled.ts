@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  --scroll-offset: 350px;
+  --scroll-offset: 340px;
 `;
 
 export const Search = styled.div`
@@ -17,7 +17,7 @@ export const Filters = styled.div`
 
 export const ScrollableContainer = styled.div`
   margin: 0 10px;
-  padding: 10px 0;
+  padding: 10px 0 0 0;
   height: calc(100vh - var(--scroll-offset));
   overflow: auto;
 `;

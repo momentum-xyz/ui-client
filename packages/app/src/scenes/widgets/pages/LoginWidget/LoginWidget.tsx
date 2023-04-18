@@ -1,6 +1,6 @@
 import {FC, useCallback, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Panel, FrameSteps, StepInterface} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, Steps, StepInterface} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
@@ -8,15 +8,16 @@ import {useStore} from 'shared/hooks';
 import * as styled from './LoginWidget.styled';
 import {SignIn, SignUp} from './components';
 
+type StepsType = 'signIn' | 'signUp';
+
 const LoginWidget: FC = () => {
   const {sessionStore, widgetManagerStore} = useStore();
+  const {signUpUser, isGuest} = sessionStore;
+
   const {t} = useI18n();
-  const {user, signUpUser, isGuest} = sessionStore;
 
   const isSignIn = !signUpUser && isGuest;
   const isSignUp = signUpUser || !isGuest;
-
-  console.log(signUpUser, user);
 
   const handleAccountConnected = useCallback(
     async (close = false) => {
@@ -33,30 +34,32 @@ const LoginWidget: FC = () => {
     [sessionStore, widgetManagerStore]
   );
 
-  const stepList: StepInterface[] = useMemo(() => {
-    const activeStep = isSignUp || user ? 1 : 0;
+  const stepList: StepInterface<StepsType>[] = useMemo(() => {
+    const activeStep = isSignUp ? 1 : 0;
     return [
-      {label: '1', variant: activeStep === 0 ? 'active' : 'prev'},
-      {label: '2', variant: activeStep === 1 ? 'active' : 'next'}
+      {id: 'signIn', label: '1', variant: activeStep === 0 ? 'active' : 'prev'},
+      {id: 'signUp', label: '2', variant: activeStep === 1 ? 'active' : 'next'}
     ];
-  }, [isSignUp, user]);
-
-  const onClose = () => {
-    widgetManagerStore.closeAll();
-  };
+  }, [isSignUp]);
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="LoginWidget-test">
       <Panel
-        title={t('login.connectAsMember')}
-        variant="primary"
+        isFullHeight
+        size="normal"
         icon="astronaut"
-        onClose={onClose}
+        variant="primary"
+        title={t('login.connectAsMember')}
+        onClose={widgetManagerStore.closeAll}
       >
-        <FrameSteps stepList={stepList}>
+        <styled.Steps>
+          <Steps stepList={stepList} />
+        </styled.Steps>
+
+        <styled.Content>
           {isSignIn && <SignIn onConnected={() => handleAccountConnected(false)} />}
           {isSignUp && <SignUp onCreated={() => handleAccountConnected(true)} />}
-        </FrameSteps>
+        </styled.Content>
       </Panel>
     </styled.Container>
   );

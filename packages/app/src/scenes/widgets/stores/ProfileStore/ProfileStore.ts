@@ -1,6 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel, Dialog} from '@momentum-xyz/core';
+import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
+import {NftItem} from 'core/models';
 import {api, UploadImageResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
 import {ProfileFormInterface} from 'core/interfaces';
@@ -9,12 +10,15 @@ const ProfileStore = types.compose(
   ResetModel,
   types
     .model('ProfileStore', {
-      dialog: types.optional(Dialog, {}),
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), []),
       editRequest: types.optional(RequestModel, {}),
-      editAvatarRequest: types.optional(RequestModel, {})
+      editAvatarRequest: types.optional(RequestModel, {}),
+      nftList: types.optional(types.array(NftItem), [])
     })
     .actions((self) => ({
+      init(): void {
+        // TODO: Load odysseys
+      },
       editProfile: flow(function* (form: ProfileFormInterface, previousImageHash?: string) {
         self.fieldErrors = cast([]);
 

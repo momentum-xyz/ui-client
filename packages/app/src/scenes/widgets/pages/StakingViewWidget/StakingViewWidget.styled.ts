@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  width: var(--widget-width-big);
-  height: var(--widget-max-height);
-`;
+export const Container = styled.div``;
 
 export const Wrapper = styled.div`
   position: relative;

@@ -363,6 +363,7 @@ export const enGb = {
       visit: 'visit',
       flyToMe: 'Fly to me',
       bio: 'Bio',
+      sound: 'Sound',
       discoverMore: 'Discover more',
       connections: 'Connections',
       newsfeed: 'Newsfeed',
@@ -547,6 +548,8 @@ export const enGb = {
     },
     titles: {
       alert: 'alert',
+      myWalletAccounts: 'My wallet accounts',
+      connectAnotherWallet: 'Connect another wallet',
       joinSpace: 'join the space',
       joinTable: 'join the table',
       returnHighFive: 'Return the favour',
@@ -573,6 +576,7 @@ export const enGb = {
       prepareToGoOnStage: 'Prepare to go on stage',
       broadcastManage: 'Manage Broadcast',
       profile: 'Profile',
+      myProfile: 'My profile',
       broadcast: 'Broadcast',
       name: 'Name',
       template: 'Template',
@@ -633,11 +637,14 @@ export const enGb = {
       nickname: 'Nickname',
       description: 'Description',
       name: 'Name',
+      profileName: 'Profile name',
       title: 'Title',
       social: 'Social',
       bio: 'Bio',
+      shortBio: 'Short bio',
       location: 'Location',
-      link: 'Link'
+      link: 'Link',
+      linkToWeb: 'Link to website'
     },
     networks: {
       polkadot: 'Polkadot.js',
@@ -651,6 +658,12 @@ export const enGb = {
       signIn: 'Sign In',
       signOut: 'Sign Out',
       sort: 'Sort',
+      logOut: 'Log out',
+      manageWallet: 'Manage wallet',
+      settings: 'Settings',
+      default: 'Default',
+      setAsDefault: 'Set as default',
+      editProfile: 'Edit profile',
       claimRewards: 'Claim Rewards',
       selectWallet: 'Select wallet',
       createOdyssey: 'Create your Odyssey',
@@ -1214,7 +1227,9 @@ export const enGb = {
       camera: 'camera',
       microphone: 'microphone',
       video: 'video',
-      audio: 'audio'
+      audio: 'audio',
+      selectInputSource: 'Select input source',
+      selectOutputSource: 'Select output source'
     },
     musicPlayer: {
       playerVolume: 'Music Volume',

@@ -42,6 +42,8 @@ const WorldDetails: FC<PropsInterface> = ({
   return (
     <styled.Container data-testid="WorldDetails-test">
       <Panel
+        isFullHeight
+        size="normal"
         icon="rabbit_fill"
         variant="primary"
         image={getImageAbsoluteUrl(world.image, ImageSizeEnum.S3)}

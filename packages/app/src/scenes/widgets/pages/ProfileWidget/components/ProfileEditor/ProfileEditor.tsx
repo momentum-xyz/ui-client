@@ -1,12 +1,21 @@
-import React, {useEffect} from 'react';
+import {FC, useEffect} from 'react';
 import {useForm, Controller} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
-import {Button, FileUploader, InputDark, Text, TextAreaDark} from '@momentum-xyz/ui-kit';
-import {useI18n} from '@momentum-xyz/core';
+import {signUpDateString, useI18n} from '@momentum-xyz/core';
+import {
+  Frame,
+  AvatarUpload,
+  Input,
+  Button,
+  ButtonRound,
+  Textarea,
+  ProfileLine,
+  WalletHash
+} from '@momentum-xyz/ui-kit-storybook';
 
-import {ProfileFormInterface} from 'core/interfaces';
 import {UserModelInterface} from 'core/models';
 import {FieldErrorInterface} from 'api/interfaces';
+import {ProfileFormInterface} from 'core/interfaces';
 
 import * as styled from './ProfileEditor.styled';
 
@@ -14,28 +23,20 @@ interface PropsInterface {
   user: UserModelInterface;
   formErrors: FieldErrorInterface[];
   isUpdating: boolean;
-  onChangeKeyboardControl?: (value: boolean) => void;
   onUpdate: (form: ProfileFormInterface, previousImageHash?: string) => void;
   onCancel: () => void;
 }
 
-const ProfileEditor: React.FC<PropsInterface> = (props) => {
-  const {user, formErrors, isUpdating, onUpdate, onCancel, onChangeKeyboardControl} = props;
+const ProfileEditor: FC<PropsInterface> = (props) => {
+  const {user, formErrors, isUpdating, onUpdate, onCancel} = props;
 
   const {t} = useI18n();
-
-  useEffect(() => {
-    onChangeKeyboardControl?.(false);
-    return () => {
-      onChangeKeyboardControl?.(true);
-    };
-  }, [onChangeKeyboardControl]);
 
   const {
     control,
     setValue,
-    handleSubmit,
     setError,
+    handleSubmit,
     formState: {errors}
   } = useForm<ProfileFormInterface>();
 
@@ -62,95 +63,94 @@ const ProfileEditor: React.FC<PropsInterface> = (props) => {
 
   return (
     <styled.Container data-testid="ProfileEditor-test">
-      {/* AVATAR */}
-      <Controller
-        name="avatarFile"
-        control={control}
-        render={({field: {value, onChange}}) => (
-          <styled.Avatar>
-            <styled.AvatarImageUpload>
-              {value && <styled.AvatarImage src={URL.createObjectURL(value)} />}
-              {!value && !!user.avatarSrc && <styled.AvatarImage src={user.avatarSrc} />}
-              <styled.AvatarImageInner>
-                <FileUploader
-                  label={t('fileUploader.uploadLabel')}
-                  dragActiveLabel={t('fileUploader.dragActiveLabel')}
-                  fileType="image"
-                  buttonSize="small"
-                  onFilesUpload={onChange}
-                  onError={(error) => console.error(error)}
-                  enableDragAndDrop={false}
+      <Frame>
+        <styled.InputsContainer>
+          {/* AVATAR */}
+          <Controller
+            name="avatarFile"
+            control={control}
+            render={({field: {value, onChange}}) => (
+              <styled.AvatarContainer
+                style={
+                  !value && !!user.avatarLargeSrc
+                    ? {backgroundImage: `url(${user.avatarLargeSrc})`}
+                    : {}
+                }
+              >
+                <AvatarUpload value={value} onChange={onChange} />
+              </styled.AvatarContainer>
+            )}
+          />
+
+          {/* NAME */}
+          <Controller
+            control={control}
+            name="name"
+            rules={{required: true, maxLength: 32, minLength: 2}}
+            render={({field: {value, onChange}}) => (
+              <Input
+                value={value}
+                onChange={onChange}
+                placeholder={t('fields.profileName')}
+                // errorMessage={
+                //   errors?.name?.type !== 'duplicate'
+                //     ? t('errors.nameConstraints')
+                //     : errors.name.message
+                // }
+                danger={!!errors.name}
+                disabled={isUpdating}
+                wide
+              />
+            )}
+          />
+
+          {/* BIO */}
+          <Controller
+            control={control}
+            name="bio"
+            render={({field: {value, onChange}}) => (
+              <Textarea
+                placeholder={t('fields.shortBio')}
+                value={value}
+                disabled={isUpdating}
+                onChange={onChange}
+              />
+            )}
+          />
+
+          {/* LINK */}
+          <styled.InputIconRow>
+            <ButtonRound variant="primary" isLabel icon="link" />
+            <Controller
+              control={control}
+              name="profileLink"
+              render={({field: {value, onChange}}) => (
+                <Input
+                  placeholder={t('fields.linkToWeb') || ''}
+                  value={value}
                   disabled={isUpdating}
+                  onChange={onChange}
+                  wide
                 />
-              </styled.AvatarImageInner>
-            </styled.AvatarImageUpload>
-          </styled.Avatar>
-        )}
-      />
-
-      {/* NAME */}
-      <styled.InputsContainer>
-        <Controller
-          control={control}
-          name="name"
-          rules={{required: true, maxLength: 32, minLength: 2}}
-          render={({field: {value, onChange}}) => (
-            <InputDark
-              value={value}
-              onChange={onChange}
-              placeholder={t('fields.name') || ''}
-              errorMessage={
-                errors?.name?.type !== 'duplicate'
-                  ? t('errors.nameConstraints')
-                  : errors.name.message
-              }
-              isError={!!errors.name}
-              disabled={isUpdating}
-              required
+              )}
             />
-          )}
-        />
+          </styled.InputIconRow>
+        </styled.InputsContainer>
 
-        {/* BIO */}
-        <Controller
-          control={control}
-          name="bio"
-          render={({field: {value, onChange}}) => (
-            <TextAreaDark
-              rows={3}
-              placeholder={t('fields.bio') || ''}
-              value={value}
-              disabled={isUpdating}
-              onChange={onChange}
-            />
-          )}
-        />
+        <styled.Actions>
+          <Button variant="secondary" label={t('actions.cancel')} onClick={onCancel} />
+          <Button label={t('actions.save')} disabled={isUpdating} onClick={formSubmitHandler} />
+        </styled.Actions>
 
-        {/* LINK */}
-        <Controller
-          control={control}
-          name="profileLink"
-          render={({field: {value, onChange}}) => (
-            <InputDark
-              placeholder={t('fields.link') || ''}
-              value={value}
-              disabled={isUpdating}
-              onChange={onChange}
-            />
-          )}
-        />
-      </styled.InputsContainer>
+        <styled.Info>
+          <ProfileLine
+            icon="astro"
+            label={`${t('actions.joined')} ${signUpDateString(user.createdAt)}`}
+          />
 
-      <styled.Actions>
-        <Button variant="danger" label={t('actions.cancel')} onClick={onCancel} />
-        <Button label={t('actions.save')} disabled={isUpdating} onClick={formSubmitHandler} />
-      </styled.Actions>
-
-      {isUpdating && (
-        <styled.IsUpdating>
-          <Text size="xs" text={t('editProfileWidget.isUpdating')} align="center" />
-        </styled.IsUpdating>
-      )}
+          <WalletHash icon="talisman" hash={user.wallet || ''} />
+        </styled.Info>
+      </Frame>
     </styled.Container>
   );
 };

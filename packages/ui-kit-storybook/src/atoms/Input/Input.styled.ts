@@ -21,6 +21,7 @@ export const Container = styled.div`
     border-radius: 4px;
     letter-spacing: 0.5px;
     transition: background var(--tr-150-ei), color var(--tr-150-ei);
+    font-size: var(--font-size-m);
 
     &::placeholder {
       color: ${(props) => props.theme.text && rgba(props.theme.text, 0.8)};
@@ -74,7 +75,28 @@ export const IconSearch = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
-  right: 10px;
+  right: 15px;
   bottom: 0;
   top: 0;
+`;
+
+export const IconClear = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  right: 15px;
+  bottom: 0;
+  top: 0;
+
+  svg {
+    color: ${(props) => props.theme.text};
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    svg {
+      color: ${(props) => props.theme.accentText};
+    }
+  }
 `;

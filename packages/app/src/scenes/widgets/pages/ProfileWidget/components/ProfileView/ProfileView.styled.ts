@@ -1,8 +1,19 @@
 import styled from 'styled-components';
-import {Text} from '@momentum-xyz/ui-kit';
+import {rgba} from 'polished';
 
 export const Container = styled.div`
-  width: 100%;
+  --scroll-offset: 435px;
+`;
+
+export const ScrollableContainer = styled.div`
+  height: calc(100vh - var(--scroll-offset));
+  overflow: auto;
+`;
+
+export const GeneralInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;
 
 export const AvatarContainer = styled.div`
@@ -13,38 +24,38 @@ export const AvatarContainer = styled.div`
 `;
 
 export const NameContainer = styled.div`
-  max-width: 160px;
-  padding: 2px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  padding: 10px 0 8px 0;
+  font-weight: bold;
+  font-size: var(--font-size-xl);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 `;
 
-export const Info = styled.div`
-  padding: 12px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+export const LinkAccent = styled.a`
+  color: ${(props) => props.theme.accentText};
 `;
 
-export const InfoItem = styled.div`
+export const OwnedOdysseys = styled.div`
+  margin: 20px 0 0 0;
+  border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
+`;
+
+export const OwnedOdysseysTitle = styled.div`
+  padding: 10px 0;
+  font-size: var(--font-size-l);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   display: flex;
   align-items: center;
-  gap: 5px;
+
+  & > span {
+    margin-right: 10px;
+  }
 `;
 
-export const Link = styled.a`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 250px;
-  color: var(--white);
-`;
-
-export const LocationText = styled(Text)`
-  max-width: 250px;
-`;
-
-export const Settings = styled.div`
-  padding: 0 12px 12px 12px;
+export const NftContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
