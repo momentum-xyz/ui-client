@@ -1,5 +1,6 @@
 import {
   AbstractMesh,
+  Matrix,
   Nullable,
   Scene,
   SceneLoader,
@@ -21,15 +22,61 @@ import {PlayerHelper} from './PlayerHelper';
 const ACC_PER_ROW = 20;
 const SPACE_BETWEEN_ACC = 10;
 
+interface BabylonAccountInterface {
+  accountDefinition: Odyssey3dUserInterface;
+  thumbClone: AbstractMesh;
+  orbClone: AbstractMesh;
+}
+
+interface BabylonWorldInterface {
+  worldDefinition: WorldInfoInterface;
+  thumbClone: AbstractMesh;
+  orbClone: AbstractMesh;
+}
+
 export class UniverseBuilderHelper {
   static scene: Scene;
   static odysseyCounter = 0;
   static meshOrb: AbstractMesh;
   static meshThumb: AbstractMesh;
+  static accountsMap = new Map<string, BabylonAccountInterface>();
+  static worldsMap = new Map<string, BabylonWorldInterface>();
 
-  static async initialize(scene: Scene) {
+  static async initialize(
+    scene: Scene,
+    onWorldClick: (objectId: string) => void,
+    onUserClick: (userId: string) => void,
+    onClickOutside: () => void
+  ) {
     this.scene = scene;
     await this.loadModel();
+
+    scene.onPointerDown = function castRay() {
+      const ray = scene.createPickingRay(
+        scene.pointerX,
+        scene.pointerY,
+        Matrix.Identity(),
+        PlayerHelper.camera
+      );
+
+      const hit = scene.pickWithRay(ray);
+
+      if (hit) {
+        if (hit.pickedMesh) {
+          const pickedId = hit.pickedMesh.metadata;
+
+          if (UniverseBuilderHelper.accountsMap.has(pickedId)) {
+            onUserClick(pickedId);
+          } else if (UniverseBuilderHelper.worldsMap.has(pickedId)) {
+            onWorldClick(pickedId);
+          }
+          //console.log('clicked on mesh with name: ' + hit.pickedMesh.name);
+          //console.log('clicked on object with id: ' + hit.pickedMesh.metadata);
+        } else {
+          onClickOutside();
+        }
+      }
+    };
   }
 
   static async loadModel() {
@@ -62,7 +109,6 @@ export class UniverseBuilderHelper {
 
     // Spawn
     for (let i = 0; i < accounts.length; i++) {
-      console.log(accounts[i]);
       const newInstance1 = this.meshThumb.clone('acc_thumb' + i, accountLayer);
       const newInstance2 = this.meshOrb.clone('acc_orb' + i, accountLayer);
       const newMat = new StandardMaterial('acc_mat' + i);
@@ -72,8 +118,6 @@ export class UniverseBuilderHelper {
         newMat.diffuseTexture = downloadedTexture;
       }
 
-      // TODO: Metadata
-      //newInstance.rootNodes[0].metadata = { type: "account"}
       if (counter >= ACC_PER_ROW) {
         row++;
         counter = 0;
@@ -88,7 +132,17 @@ export class UniverseBuilderHelper {
         newInstance2.position = new Vector3(x, 0, z);
         counter++;
 
+        // TODO: Metadata
+        newInstance2.metadata = accounts[i].id;
         newInstance1.material = newMat;
+
+        const babylonAccount = {
+          accountDefinition: accounts[i],
+          thumbClone: newInstance1,
+          orbClone: newInstance2
+        };
+
+        this.accountsMap.set(accounts[i].id, babylonAccount);
       } else {
         console.log('Something went wrong with loading custom glb for Accounts and Odysseys');
       }
@@ -188,10 +242,7 @@ export class UniverseBuilderHelper {
         );
         newMat.diffuseTexture = downloadedTexture;
       }
-      // Increase OdysseyCounter for naming purposes.
-      // TODO: Metadata
       //odysseyNode.name = 'Odyssey' + this.odysseyCounter;
-      //odysseyNode.metadata = {type: 'odyssey'};
 
       // Calculate radian for circle placement.
       // Define how many radian per 1 degree. multiply by current offset (xdegrees)
@@ -205,7 +256,16 @@ export class UniverseBuilderHelper {
         newInstance2.position = new Vector3(x, y, z);
         offset = offset + spaceBetweenOddyseys;
 
+        newInstance2.metadata = worlds[this.odysseyCounter].id;
         newInstance1.material = newMat;
+
+        const babylonWorld = {
+          worldDefinition: worlds[this.odysseyCounter],
+          thumbClone: newInstance1,
+          orbClone: newInstance2
+        };
+
+        this.worldsMap.set(worlds[this.odysseyCounter].id, babylonWorld);
       } else {
         console.log('Something went wrong with loading custom glb for Accounts and Odysseys');
       }

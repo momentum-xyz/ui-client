@@ -27,24 +27,21 @@ export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
 
     console.log('onSceneReady', scene);
     const view = scene.getEngine().getRenderingCanvas();
-    // const engine = scene.getEngine();
     if (view?.id) {
       PlayerHelper.initialize(scene, view);
       LightHelper.initialize(scene);
-      await UniverseBuilderHelper.initialize(scene);
+      await UniverseBuilderHelper.initialize(scene, onWorldClick, onUserClick, onClickOutside);
     }
 
     console.log('TODO attach callbacks', {onWorldClick, onUserClick, onClickOutside});
 
     events.on('WorldsAdded', (worlds) => {
       console.log('WorldsAdded', worlds);
-      // TODO
       UniverseBuilderHelper.buildRingLayers(worlds);
     });
 
     events.on('UsersAdded', (users) => {
       console.log('UsersAdded', users);
-      // TODO
       UniverseBuilderHelper.buildAccountLayer(users);
     });
 
