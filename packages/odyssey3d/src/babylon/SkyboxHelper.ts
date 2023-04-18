@@ -31,11 +31,11 @@ export class SkyboxHelper {
   static set360Skybox(scene: Scene, url: string): void {
     const dome = new PhotoDome(
       'testdome',
-      //'https://cdn.eso.org/images/thumb300y/ESO_Paranal_360_Marcio_Cabral_Chile_07-CC.jpg',
       url,
+      //medusas,
       {
         resolution: 32,
-        size: 1000
+        size: 10000
       },
       scene
     );
