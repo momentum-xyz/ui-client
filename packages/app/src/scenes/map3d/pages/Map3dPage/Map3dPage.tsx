@@ -1,7 +1,6 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Universe3dEmitter} from '@momentum-xyz/core';
-import {Map3dCanvas} from '@momentum-xyz/map3d';
 import {PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 import {UniverseScene} from '@momentum-xyz/odyssey3d';
 
@@ -12,9 +11,6 @@ import {WidgetEnum} from 'core/enums';
 interface PropsInterface {
   isClickActive?: boolean;
 }
-
-// TEMP
-const isBabylonUniverse = window.sessionStorage.getItem('babylon_universe');
 
 const Map3dPage: FC<PropsInterface> = () => {
   const {nftStore, widgetsStore, sessionStore, widgetManagerStore, universeStore} = useStore();
@@ -54,7 +50,7 @@ const Map3dPage: FC<PropsInterface> = () => {
     }
   }, [allWorlds, allUsers, allUsers.length, allWorlds.length]);
 
-  const handleSelect = useCallback(
+  const handleSelectWorld = useCallback(
     (uuid: string) => {
       if (sessionStore.isGuest) {
         const nft = nftStore.getNftByUuid(uuid);
@@ -78,25 +74,12 @@ const Map3dPage: FC<PropsInterface> = () => {
     widgetManagerStore.closeAll();
   }, [widgetManagerStore]);
 
-  if (nftStore.isLoading || !sessionStore.map3dUser) {
-    return <></>;
-  }
-
-  return isBabylonUniverse ? (
+  return (
     <UniverseScene
       events={Universe3dEmitter}
-      onWorldClick={handleSelect}
+      onWorldClick={handleSelectWorld}
       onUserClick={handleSelectUser}
       onClickOutside={handleClickOutside}
-    />
-  ) : (
-    <Map3dCanvas
-      currentUser={sessionStore.map3dUser}
-      selectedUuid={odysseyInfoStore.nftId}
-      items={nftStore.nftItems}
-      getConnections={nftStore.getStakedAtOthersByWallet}
-      getImageUrl={getImageAbsoluteUrl}
-      onSelect={handleSelect}
     />
   );
 };
