@@ -31,8 +31,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
     if (view?.id) {
       PlayerHelper.initialize(scene, view);
       LightHelper.initialize(scene);
-      UniverseBuilderHelper.initialize(scene);
-      await UniverseBuilderHelper.buildEntireUniverse();
+      await UniverseBuilderHelper.initialize(scene);
     }
 
     console.log('TODO attach callbacks', {onWorldClick, onUserClick, onClickOutside});
@@ -40,11 +39,13 @@ export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
     events.on('WorldsAdded', (worlds) => {
       console.log('WorldsAdded', worlds);
       // TODO
+      UniverseBuilderHelper.buildRingLayers(worlds);
     });
 
     events.on('UsersAdded', (users) => {
       console.log('UsersAdded', users);
       // TODO
+      UniverseBuilderHelper.buildAccountLayer(users);
     });
 
     PlayerHelper.spawnPlayer(scene);

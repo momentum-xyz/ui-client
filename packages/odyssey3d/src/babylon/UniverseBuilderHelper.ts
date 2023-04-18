@@ -1,5 +1,6 @@
 import {
   AbstractMesh,
+  Nullable,
   Scene,
   SceneLoader,
   StandardMaterial,
@@ -7,9 +8,10 @@ import {
   TransformNode,
   Vector3
 } from '@babylonjs/core';
+import {Odyssey3dUserInterface, WorldInfoInterface} from '@momentum-xyz/core';
 
 //import cylinder from '../static/odyssey_base2.glb';
-import logo1 from '../static/logo1.png';
+//import logo1 from '../static/logo1.png';
 
 import {ObjectHelper} from './ObjectHelper';
 import {getAssetFileName} from './UtilityHelper';
@@ -18,17 +20,15 @@ import {PlayerHelper} from './PlayerHelper';
 // Accounts consts
 const ACC_PER_ROW = 20;
 const SPACE_BETWEEN_ACC = 10;
-const NUMBER_OF_ACC = 500;
 
 export class UniverseBuilderHelper {
   static scene: Scene;
   static odysseyCounter = 0;
+  static meshOrb: AbstractMesh;
+  static meshThumb: AbstractMesh;
 
-  static initialize(scene: Scene): void {
+  static async initialize(scene: Scene) {
     this.scene = scene;
-  }
-
-  static async buildEntireUniverse() {
     await this.loadModel();
   }
 
@@ -44,27 +44,34 @@ export class UniverseBuilderHelper {
       (event) => {},
       '.glb'
     ).then((result) => {
-      result.meshes[1].rotation = new Vector3(0, 60, 0);
-      this.buildAccountLayer(result.meshes[1], result.meshes[2]);
-      this.buildRingLayers(result.meshes[1], result.meshes[2]);
+      // TODO: Fix rotations
+      result.meshes[1].rotation = new Vector3(0, 60, 60);
+      this.meshThumb = result.meshes[1];
+      this.meshOrb = result.meshes[2];
     });
   }
 
-  static buildAccountLayer(meshThumb: AbstractMesh, meshOrb: AbstractMesh) {
+  static buildAccountLayer(accounts: Odyssey3dUserInterface[]) {
     let counter = 0;
     let row = 0;
     // Transform node for grouping all account objects.
     const accountLayer = new TransformNode('AccountLayer', this.scene);
-    const myTexture = new Texture(logo1);
     const orbMat = new StandardMaterial('orbMat');
     orbMat.alpha = 0.5;
-    meshOrb.material = orbMat;
+    this.meshOrb.material = orbMat;
 
-    for (let i = 0; i < NUMBER_OF_ACC; i++) {
-      const newInstance1 = meshThumb.clone('acc thumb' + i, accountLayer);
-      const newInstance2 = meshOrb.clone('acc orb' + i, accountLayer);
-      const newMat = new StandardMaterial('mat' + i);
-      newMat.diffuseTexture = myTexture;
+    // Spawn
+    for (let i = 0; i < accounts.length; i++) {
+      console.log(accounts[i]);
+      const newInstance1 = this.meshThumb.clone('acc_thumb' + i, accountLayer);
+      const newInstance2 = this.meshOrb.clone('acc_orb' + i, accountLayer);
+      const newMat = new StandardMaterial('acc_mat' + i);
+
+      if (accounts[i].avatar) {
+        const downloadedTexture = new Texture(accounts[i].avatar as Nullable<string>);
+        newMat.diffuseTexture = downloadedTexture;
+      }
+
       // TODO: Metadata
       //newInstance.rootNodes[0].metadata = { type: "account"}
       if (counter >= ACC_PER_ROW) {
@@ -72,6 +79,7 @@ export class UniverseBuilderHelper {
         counter = 0;
       }
 
+      // Assign position and material
       if (newInstance1 && newInstance2) {
         // Set the position of the current instance.
         const x = counter * SPACE_BETWEEN_ACC;
@@ -80,9 +88,7 @@ export class UniverseBuilderHelper {
         newInstance2.position = new Vector3(x, 0, z);
         counter++;
 
-        if (i % 2 === 0) {
-          newInstance1.material = newMat;
-        }
+        newInstance1.material = newMat;
       } else {
         console.log('Something went wrong with loading custom glb for Accounts and Odysseys');
       }
@@ -101,10 +107,10 @@ export class UniverseBuilderHelper {
     );
   }
 
-  static buildRingLayers(meshOrb: AbstractMesh, meshThumb: AbstractMesh) {
+  static buildRingLayers(worlds: WorldInfoInterface[]) {
     // Base variables.
     const AllOdysseyRings = new Array<TransformNode>();
-    let totalOdysseys = 500;
+    let totalOdysseys = worlds.length;
     const halfAmountOfOdysseys = totalOdysseys / 2;
 
     // Calculate amount of Odyssey is next ring.
@@ -124,8 +130,7 @@ export class UniverseBuilderHelper {
         odysseysInThisRing,
         ringRadius,
         AllOdysseyRings.length,
-        meshOrb,
-        meshThumb
+        worlds
       );
 
       // Set newRing depth
@@ -163,8 +168,7 @@ export class UniverseBuilderHelper {
     amount: number,
     ringRadius: number,
     ringNumber: number,
-    meshOrb: AbstractMesh,
-    meshThumb: AbstractMesh
+    worlds: WorldInfoInterface[]
   ) {
     const ringLayer = new TransformNode('Ring' + ringNumber, this.scene);
     const spaceBetweenOddyseys = 360 / amount;
@@ -172,10 +176,18 @@ export class UniverseBuilderHelper {
 
     // Create instance and location for every Odyssey. Based on amount given.
     for (let i = 0; i < amount; i++) {
-      this.odysseyCounter++;
+      const newInstance1 = this.meshThumb.clone('ring_thumb' + this.odysseyCounter, ringLayer);
+      const newInstance2 = this.meshOrb.clone('ring_orb' + this.odysseyCounter, ringLayer);
+      const newMat = new StandardMaterial('ring_mat' + this.odysseyCounter);
 
-      const newInstance1 = meshThumb.clone('ring thumb' + this.odysseyCounter, ringLayer);
-      const newInstance2 = meshOrb.clone('ring orb' + this.odysseyCounter, ringLayer);
+      if (worlds[this.odysseyCounter].image) {
+        const downloadedTexture = new Texture(
+          (ObjectHelper.textureRootUrl +
+            's3/' +
+            worlds[this.odysseyCounter].image) as Nullable<string>
+        );
+        newMat.diffuseTexture = downloadedTexture;
+      }
       // Increase OdysseyCounter for naming purposes.
       // TODO: Metadata
       //odysseyNode.name = 'Odyssey' + this.odysseyCounter;
@@ -192,9 +204,12 @@ export class UniverseBuilderHelper {
         newInstance1.position = new Vector3(x, y, z);
         newInstance2.position = new Vector3(x, y, z);
         offset = offset + spaceBetweenOddyseys;
+
+        newInstance1.material = newMat;
       } else {
         console.log('Something went wrong with loading custom glb for Accounts and Odysseys');
       }
+      this.odysseyCounter++;
     }
 
     return ringLayer;
