@@ -104,13 +104,13 @@ export class UniverseBuilderHelper {
 
     // Spawn
     for (let i = 0; i < accounts.length; i++) {
-      const newInstance1 = this.meshThumb.clone('acc_thumb' + i, accountLayer);
-      const newInstance2 = this.meshOrb.clone('acc_orb' + i, accountLayer);
-      const newMat = new StandardMaterial('acc_mat' + i);
+      const thumbClone = this.meshThumb.clone('acc_thumb' + i, accountLayer);
+      const orbClone = this.meshOrb.clone('acc_orb' + i, accountLayer);
+      const thumbMat = new StandardMaterial('acc_mat' + i);
 
       if (accounts[i].avatar) {
         const downloadedTexture = new Texture(accounts[i].avatar as Nullable<string>);
-        newMat.diffuseTexture = downloadedTexture;
+        thumbMat.diffuseTexture = downloadedTexture;
       }
 
       if (counter >= ACC_PER_ROW) {
@@ -119,22 +119,22 @@ export class UniverseBuilderHelper {
       }
 
       // Assign position and material
-      if (newInstance1 && newInstance2) {
+      if (thumbClone && orbClone) {
         // Set the position of the current instance.
         const x = counter * SPACE_BETWEEN_ACC;
         const z = row * SPACE_BETWEEN_ACC;
-        newInstance1.position = new Vector3(x, 0, z);
-        newInstance2.position = new Vector3(x, 0, z);
+        thumbClone.position = new Vector3(x, 0, z);
+        orbClone.position = new Vector3(x, 0, z);
         counter++;
 
         // TODO: Metadata
-        newInstance2.metadata = accounts[i].id;
-        newInstance1.material = newMat;
+        orbClone.metadata = accounts[i].id;
+        thumbClone.material = thumbMat;
 
         const babylonAccount = {
           accountDefinition: accounts[i],
-          thumbClone: newInstance1,
-          orbClone: newInstance2
+          thumbClone: thumbClone,
+          orbClone: orbClone
         };
 
         this.accountsMap.set(accounts[i].id, babylonAccount);
@@ -225,9 +225,9 @@ export class UniverseBuilderHelper {
 
     // Create instance and location for every Odyssey. Based on amount given.
     for (let i = 0; i < amount; i++) {
-      const newInstance1 = this.meshThumb.clone('ring_thumb' + this.odysseyCounter, ringLayer);
-      const newInstance2 = this.meshOrb.clone('ring_orb' + this.odysseyCounter, ringLayer);
-      const newMat = new StandardMaterial('ring_mat' + this.odysseyCounter);
+      const thumbClone = this.meshThumb.clone('ring_thumb' + this.odysseyCounter, ringLayer);
+      const orbClone = this.meshOrb.clone('ring_orb' + this.odysseyCounter, ringLayer);
+      const thumbMat = new StandardMaterial('ring_mat' + this.odysseyCounter);
 
       if (worlds[this.odysseyCounter].image) {
         const downloadedTexture = new Texture(
@@ -235,7 +235,7 @@ export class UniverseBuilderHelper {
             's3/' +
             worlds[this.odysseyCounter].image) as Nullable<string>
         );
-        newMat.diffuseTexture = downloadedTexture;
+        thumbMat.diffuseTexture = downloadedTexture;
       }
       //odysseyNode.name = 'Odyssey' + this.odysseyCounter;
 
@@ -246,18 +246,18 @@ export class UniverseBuilderHelper {
       const y = Math.sin(radian) * ringRadius;
       const z = Math.random() * 2 * ringNumber;
 
-      if (newInstance1 && newInstance2) {
-        newInstance1.position = new Vector3(x, y, z);
-        newInstance2.position = new Vector3(x, y, z);
+      if (thumbClone && orbClone) {
+        thumbClone.position = new Vector3(x, y, z);
+        orbClone.position = new Vector3(x, y, z);
         offset = offset + spaceBetweenOddyseys;
 
-        newInstance2.metadata = worlds[this.odysseyCounter].id;
-        newInstance1.material = newMat;
+        orbClone.metadata = worlds[this.odysseyCounter].id;
+        thumbClone.material = thumbMat;
 
         const babylonWorld = {
           worldDefinition: worlds[this.odysseyCounter],
-          thumbClone: newInstance1,
-          orbClone: newInstance2
+          thumbClone: thumbClone,
+          orbClone: orbClone
         };
 
         this.worldsMap.set(worlds[this.odysseyCounter].id, babylonWorld);
