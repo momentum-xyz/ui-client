@@ -1,20 +1,14 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Universe3dEmitter} from '@momentum-xyz/core';
-import {PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 import {UniverseScene} from '@momentum-xyz/odyssey3d';
 
 import {useStore} from 'shared/hooks';
 import {getImageAbsoluteUrl} from 'core/utils';
-import {WidgetEnum} from 'core/enums';
 
-interface PropsInterface {
-  isClickActive?: boolean;
-}
-
-const Map3dPage: FC<PropsInterface> = () => {
-  const {nftStore, widgetsStore, sessionStore, widgetManagerStore, universeStore} = useStore();
-  const {previewOdysseyStore, odysseyInfoStore} = widgetsStore;
+const Map3dPage: FC = () => {
+  const {widgetManagerStore, universeStore} = useStore();
+  // const {previewOdysseyStore, odysseyInfoStore} = widgetsStore;
   const {allWorlds, allUsers} = universeStore.universe2dStore;
 
   useEffect(() => {
@@ -50,20 +44,10 @@ const Map3dPage: FC<PropsInterface> = () => {
     }
   }, [allWorlds, allUsers, allUsers.length, allWorlds.length]);
 
-  const handleSelectWorld = useCallback(
-    (uuid: string) => {
-      if (sessionStore.isGuest) {
-        const nft = nftStore.getNftByUuid(uuid);
-        previewOdysseyStore.open(nft!);
-      }
-
-      if (!sessionStore.isGuest) {
-        widgetManagerStore.open(WidgetEnum.WORLD_OVERVIEW, PositionEnum.LEFT, {id: uuid});
-        odysseyInfoStore.open(uuid);
-      }
-    },
-    [nftStore, odysseyInfoStore, previewOdysseyStore, sessionStore.isGuest, widgetManagerStore]
-  );
+  const handleSelectWorld = useCallback((uuid: string) => {
+    console.log('Map3dPage: handleSelectWorld', uuid);
+    // widgetManagerStore.open(WidgetEnum.WORLD_OVERVIEW, PositionEnum.LEFT, {id: uuid});
+  }, []);
 
   const handleSelectUser = useCallback((uuid: string) => {
     console.log('Map3dPage: handleSelectUser', uuid);
