@@ -11,9 +11,6 @@ import {
 } from '@babylonjs/core';
 import {Odyssey3dUserInterface, WorldInfoInterface} from '@momentum-xyz/core';
 
-//import cylinder from '../static/odyssey_base2.glb';
-//import logo1 from '../static/logo1.png';
-
 import {ObjectHelper} from './ObjectHelper';
 import {getAssetFileName} from './UtilityHelper';
 import {PlayerHelper} from './PlayerHelper';
@@ -70,8 +67,6 @@ export class UniverseBuilderHelper {
           } else if (UniverseBuilderHelper.worldsMap.has(pickedId)) {
             onWorldClick(pickedId);
           }
-          //console.log('clicked on mesh with name: ' + hit.pickedMesh.name);
-          //console.log('clicked on object with id: ' + hit.pickedMesh.metadata);
         } else {
           onClickOutside();
         }

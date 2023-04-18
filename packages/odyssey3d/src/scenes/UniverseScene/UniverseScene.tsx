@@ -33,8 +33,6 @@ export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
       await UniverseBuilderHelper.initialize(scene, onWorldClick, onUserClick, onClickOutside);
     }
 
-    console.log('TODO attach callbacks', {onWorldClick, onUserClick, onClickOutside});
-
     events.on('WorldsAdded', (worlds) => {
       console.log('WorldsAdded', worlds);
       UniverseBuilderHelper.buildRingLayers(worlds);
