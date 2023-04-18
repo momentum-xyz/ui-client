@@ -5,41 +5,18 @@ import {request} from 'api/request';
 
 import {worldRepositoryEndpoints} from './worldRepository.api.endpoints';
 import {
+  FetchWorldListRequest,
+  FetchWorldListResponse,
   GetOnlineUsersRequest,
-  GetSpaceWithSubSpacesRequest,
-  GetSpaceWithSubSpacesResponse,
-  SearchSpacesRequest,
-  SearchSpacesResponse,
   OdysseyOnlineUsersResponse
 } from './worldRepository.api.types';
 
-export const fetchSpaceWithSubSpaces: RequestInterface<
-  GetSpaceWithSubSpacesRequest,
-  GetSpaceWithSubSpacesResponse
-> = (options) => {
-  const {worldId, spaceId, ...restOptions} = options;
-
-  restOptions.params = {
-    ...restOptions.params,
-    space_id: spaceId
-  };
-
-  const url = generatePath(worldRepositoryEndpoints().getSpaceWithSubspaces, {worldId});
-  return request.get(url, restOptions);
-};
-
-export const searchSpaces: RequestInterface<SearchSpacesRequest, SearchSpacesResponse> = (
+export const fetchWorldList: RequestInterface<FetchWorldListRequest, FetchWorldListResponse> = (
   options
 ) => {
-  const {worldId, query, ...restOptions} = options;
-
-  restOptions.params = {
-    ...restOptions.params,
-    query
-  };
-
-  const url = generatePath(worldRepositoryEndpoints().searchSpaces, {worldId});
-  return request.get(url, restOptions);
+  const {limit, sortDirection, ...restOptions} = options;
+  restOptions.params = {sort: sortDirection, limit};
+  return request.get(worldRepositoryEndpoints().list, restOptions);
 };
 
 export const fetchOnlineUsers: RequestInterface<

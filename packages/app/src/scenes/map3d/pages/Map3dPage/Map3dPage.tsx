@@ -33,9 +33,11 @@ const Map3dPage: FC<PropsInterface> = () => {
       Universe3dEmitter.emit(
         'WorldsAdded',
         allWorlds.map((world) => ({
-          ...world,
-          id: world.uuid,
-          description: world.description || ''
+          id: world.id,
+          name: world.name,
+          description: world.description || '',
+          image: getImageAbsoluteUrl(world.avatarHash) || '',
+          owner: ''
         }))
       );
     }
@@ -45,8 +47,8 @@ const Map3dPage: FC<PropsInterface> = () => {
         'UsersAdded',
         allUsers.map((user) => ({
           ...user,
-          id: user.uuid + '__temp123',
-          avatar: getImageAbsoluteUrl(user.image) || ''
+          id: user.id,
+          avatar: getImageAbsoluteUrl(user.profile.avatarHash) || ''
         }))
       );
     }
