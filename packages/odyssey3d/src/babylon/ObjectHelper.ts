@@ -16,7 +16,7 @@ import {Object3dInterface, Texture3dInterface, ClickPositionInterface} from '@mo
 
 import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
-import {getAssetFileName} from './UtilityHelper';
+import {getAssetFileName, posToVec3} from './UtilityHelper';
 
 interface BabylonObjectInterface {
   container: AssetContainer;
@@ -153,9 +153,7 @@ export class ObjectHelper {
     const node = instance.rootNodes[0];
     node.name = object.name;
 
-    node.position.x = object.transform.position.x;
-    node.position.y = object.transform.position.y;
-    node.position.z = object.transform.position.z;
+    node.position = posToVec3(object.transform.position);
     node.metadata = object.id;
     if (this.firstID === '') {
       this.firstID = object.id;
