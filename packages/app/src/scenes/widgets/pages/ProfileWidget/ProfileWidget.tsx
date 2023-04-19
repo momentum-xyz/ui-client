@@ -99,7 +99,7 @@ const ProfileWidget: FC = () => {
           image={!panelIcon ? sessionStore.userImageUrl : null}
           onClose={() => {
             profileStore.resetModel();
-            widgetManagerStore.close(WidgetEnum.PROFILE);
+            widgetManagerStore.close(WidgetEnum.MY_PROFILE);
           }}
         >
           {!!sessionStore.user && (

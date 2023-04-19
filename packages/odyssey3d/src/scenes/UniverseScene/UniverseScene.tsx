@@ -43,6 +43,14 @@ export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
       UniverseBuilderHelper.buildAccountLayer(users);
     });
 
+    events.on('UserSelected', (id) => {
+      console.log('Babylon: UserSelected ', id);
+    });
+
+    events.on('WorldSelected', (id) => {
+      console.log('Babylon: WorldSelected ', id);
+    });
+
     PlayerHelper.spawnPlayer(scene);
 
     if (window.sessionStorage.getItem('babylon_debug')) {
