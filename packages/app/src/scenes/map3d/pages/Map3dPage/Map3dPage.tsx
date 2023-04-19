@@ -56,11 +56,12 @@ const Map3dPage: FC = () => {
       events={Universe3dEmitter}
       onWorldClick={(id) => {
         console.log('Map3dPage: Select world: ', id);
-        widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id});
+        const real_id = id.split('_')[0];
+        widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id: real_id});
       }}
       onUserClick={(id) => {
         console.log('Map3dPage: Select user: ', id);
-        widgetManagerStore.open(WidgetEnum.USER_DETAILS, PositionEnum.LEFT, {id: id.split('_')[0]});
+        widgetManagerStore.open(WidgetEnum.USER_DETAILS, PositionEnum.LEFT, {id});
       }}
       onClickOutside={() => {
         widgetManagerStore.closeAll(); // ???
