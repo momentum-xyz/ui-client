@@ -3,26 +3,10 @@ import {useWeb3React} from '@web3-react/core';
 import {InjectedConnector} from '@web3-react/injected-connector';
 
 import {UseWalletType} from 'wallets';
-
-const ARBITRUM_ONE = 42161;
-const OPTIMISM = 10;
-const ARBITRUM_NITRO = 421611;
-const LOCAL_TESTNET = 1337;
-const LOCAL_TESTNET_ARBITRUM = 412346;
+import {SUPPORTED_CHAIN_IDS} from 'wallets/supportedChainIds';
 
 const connector = new InjectedConnector({
-  supportedChainIds: [
-    1,
-    3,
-    4,
-    5,
-    42,
-    ARBITRUM_ONE,
-    ARBITRUM_NITRO,
-    OPTIMISM,
-    LOCAL_TESTNET,
-    LOCAL_TESTNET_ARBITRUM
-  ]
+  supportedChainIds: SUPPORTED_CHAIN_IDS
 });
 
 export const useWallet: UseWalletType = () => {
