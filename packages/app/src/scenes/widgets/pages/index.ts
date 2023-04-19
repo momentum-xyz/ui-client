@@ -1,5 +1,6 @@
 export * from './LoginWidget';
 export * from './ExploreWidget';
-export * from './WorldOverviewWidget';
 export * from './ProfileWidget';
+export * from './WorldDetailsWidget';
+export * from './UserDetailsWidget';
 export * from './StakingViewWidget';

@@ -38,9 +38,11 @@ export type Event3dEmitterType = typeof Event3dEmitter;
 
 export type Universe3dType = {
   WorldsAdded: (worlds: WorldInfoInterface[]) => void;
-  // WorldChanged: (world: WorldInfoInterface) => void;
+  WorldSelected: (id: string) => void;
+  WorldChanged: (world: WorldInfoInterface) => void;
   UsersAdded: (users: Odyssey3dUserInterface[]) => void;
-  // UserChanged: (user: Odyssey3dUserInterface) => void;
+  UserSelected: (id: string) => void;
+  UserChanged: (user: Odyssey3dUserInterface) => void;
 };
 
 export const Universe3dEmitter = new EventEmitter<Universe3dType>();

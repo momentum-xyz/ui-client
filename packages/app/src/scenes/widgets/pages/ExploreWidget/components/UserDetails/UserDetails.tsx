@@ -1,6 +1,6 @@
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useI18n} from '@momentum-xyz/core';
+import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
 import {Panel, ImageSizeEnum, IconSvg, ItemCard} from '@momentum-xyz/ui-kit-storybook';
 
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -23,6 +23,10 @@ const UserDetails: FC<PropsInterface> = (props) => {
   const {user} = userDetails;
 
   const {t} = useI18n();
+
+  useEffect(() => {
+    Universe3dEmitter.emit('UserSelected', user.id);
+  }, [user.id]);
 
   return (
     <styled.Container data-testid="UserDetails-test">
