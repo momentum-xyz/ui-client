@@ -46,48 +46,53 @@ const StakingInner: FC<{web3: Web3; account: string}> = ({web3, account}) => {
       return;
     }
 
-    contract
-      .getPastEvents('Stake', {
-        // filter: {
-        //     value: ['1000', '1337']    //Only get events where transfer value was 1000 or 1337
-        // },
-        fromBlock: 0, //Number || "earliest" || "pending" || "latest"
-        toBlock: 'latest'
-      })
-      .then((results) => console.log('StakingOverviewWidget event', results))
-      .catch((err) => console.log(err));
+    // contract
+    //   .getPastEvents('Stake', {
+    //     // filter: {
+    //     //     value: ['1000', '1337']    //Only get events where transfer value was 1000 or 1337
+    //     // },
+    //     fromBlock: 0, //Number || "earliest" || "pending" || "latest"
+    //     toBlock: 'latest'
+    //   })
+    //   .then((results) => console.log('StakingOverviewWidget event', results))
+    //   .catch((err) => console.log(err));
 
-    contract.events
-      .Stake({
-        // fromBlock: 0,
-        // toBlock: 'latest'
-      })
-      .on('data', (event: any) => console.log('StakingOverviewWidget data', event))
-      .on('changed', (changed: any) => console.log('StakingOverviewWidget changed', changed))
-      .on('error', (err: any) => {
-        console.log('StakingOverviewWidget error', err);
-        throw err;
-      })
-      .on('connected', (nr: any) => console.log('StakingOverviewWidget connected', nr));
+    // contract.events
+    //   .Stake({
+    //     // fromBlock: 0,
+    //     // toBlock: 'latest'
+    //   })
+    //   .on('data', (event: any) => console.log('StakingOverviewWidget data', event))
+    //   .on('changed', (changed: any) => console.log('StakingOverviewWidget changed', changed))
+    //   .on('error', (err: any) => {
+    //     console.log('StakingOverviewWidget error', err);
+    //     throw err;
+    //   })
+    //   .on('connected', (nr: any) => console.log('StakingOverviewWidget connected', nr));
 
-    const options = {
-      fromBlock: 33,
-      address: [account, contractAddress, L2_MOM, L1_MOM, L2_DAD, L2_STAKING] //Only get events from specific addresses
-      // topics: [] //What topics to subscribe to
-    };
-    const subscription = web3.eth.subscribe('logs', options, (err, event) => {
-      if (!err) {
-        console.log(event);
-      }
-    });
+    // const options = {
+    //   fromBlock: 33,
+    //   address: [
+    //     account,
+    //     // contractAddress,
+    //     // L2_MOM, L1_MOM, L2_DAD,
+    //     L2_STAKING
+    //   ] //Only get events from specific addresses
+    //   // topics: [] //What topics to subscribe to
+    // };
+    // const subscription = web3.eth.subscribe('logs', options, (err, event) => {
+    //   if (!err) {
+    //     console.log(event);
+    //   }
+    // });
 
-    subscription.on('data', (event) => console.log('StakingOverviewWidget data', event));
-    subscription.on('changed', (changed) => console.log('StakingOverviewWidget changed', changed));
-    subscription.on('error', (err) => {
-      console.log('StakingOverviewWidget error', err);
-      throw err;
-    });
-    subscription.on('connected', (nr) => console.log('StakingOverviewWidget connected', nr));
+    // subscription.on('data', (event) => console.log('StakingOverviewWidget data', event));
+    // subscription.on('changed', (changed) => console.log('StakingOverviewWidget changed', changed));
+    // subscription.on('error', (err) => {
+    //   console.log('StakingOverviewWidget error', err);
+    //   throw err;
+    // });
+    // subscription.on('connected', (nr) => console.log('StakingOverviewWidget connected', nr));
 
     const getBalance = async () => {
       console.log('StakingOverviewWidget getBalance');
