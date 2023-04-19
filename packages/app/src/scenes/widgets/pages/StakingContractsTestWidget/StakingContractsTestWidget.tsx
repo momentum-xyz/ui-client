@@ -24,7 +24,7 @@ const StakingContractsTestWidget: FC = () => {
 
   return (
     <div>
-      <Panel variant="primary" title="Staking TEST" icon="stake">
+      <Panel variant="primary" size="normal" title="Staking TEST" icon="stake">
         {!library && (
           <SignIn
             onConnected={() => {
