@@ -2,7 +2,7 @@ import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n} from '@momentum-xyz/core';
-import {Panel, SideMenu, SideMenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, PositionEnum, SideMenu, SideMenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -76,9 +76,12 @@ const ProfileWidget: FC = () => {
     [profileStore, sessionStore]
   );
 
-  const onInfoWorld = useCallback((worldId: string) => {
-    console.log(worldId);
-  }, []);
+  const onInfoWorld = useCallback(
+    (id: string) => {
+      widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id});
+    },
+    [widgetManagerStore]
+  );
 
   const onVisitWorld = useCallback(
     (worldId: string) => {
