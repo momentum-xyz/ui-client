@@ -9,8 +9,8 @@ import {useStaking} from 'shared/hooks';
 import {SignIn} from '../LoginWidget/components';
 
 const StakingContractsTestWidget: FC = () => {
-  const {isWalletActive, account, balanse, stake} = useStaking();
-  console.log('StakingOverviewWidget', {isWalletActive, account, balanse, stake});
+  const {isWalletActive, account, stake} = useStaking();
+  console.log('StakingOverviewWidget', {isWalletActive, account, stake});
 
   return (
     <div>
