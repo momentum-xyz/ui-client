@@ -5,13 +5,12 @@ import {Panel, ImageSizeEnum, IconSvg, ItemCard} from '@momentum-xyz/ui-kit-stor
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ProfileInfo, ProfileImage} from 'ui-kit';
-import {NftItemModelInterface} from 'core/models';
-import {UserDetailsType} from 'stores/UniverseStore/models';
+import {NftItemModelInterface, UserDetailsModelType} from 'core/models';
 
 import * as styled from './UserDetails.styled';
 
 interface PropsInterface {
-  userDetails: UserDetailsType;
+  userDetails: UserDetailsModelType;
   nftOwned: NftItemModelInterface[];
   nftStakedIn: NftItemModelInterface[];
   onVisitWorld: (worldId: string) => void;
@@ -32,18 +31,22 @@ const UserDetails: FC<PropsInterface> = (props) => {
         size="normal"
         icon="astronaut"
         variant="primary"
-        image={getImageAbsoluteUrl(user.image, ImageSizeEnum.S3)}
+        image={getImageAbsoluteUrl(user.profile.avatarHash, ImageSizeEnum.S3)}
         title={t('labels.memberProfile')}
         onClose={onClose}
       >
         <styled.Wrapper>
           {/* FIXME: REAL DATA */}
-          <ProfileImage name={user.name} image={user.image} imageErrorIcon="astronaut" />
+          <ProfileImage
+            name={user.name}
+            image={user.profile.avatarHash}
+            imageErrorIcon="astronaut"
+          />
 
           <styled.GeneralScrollable>
             {/* FIXME: REAL DATA */}
             <ProfileInfo
-              hash={user.owner}
+              hash="some hash"
               description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean commodo ligula eget dolor..."
               address="http://www.google.com"
               joinDate={new Date().toISOString()}

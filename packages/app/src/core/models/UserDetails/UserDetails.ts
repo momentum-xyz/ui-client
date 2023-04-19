@@ -1,14 +1,14 @@
 import {castToSnapshot, Instance, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
-import {NftItem} from 'core/models';
+import {NftItem, UserInfo} from 'core/models';
 import {getRootStore} from 'core/utils';
 
 const UserDetails = types.compose(
   ResetModel,
   types
     .model('UserDetails', {
-      user: types.reference(NftItem),
+      user: types.reference(UserInfo),
       nftOwned: types.optional(types.array(types.reference(NftItem)), []),
       nftStakedIn: types.optional(types.array(types.reference(NftItem)), [])
     })
@@ -22,6 +22,6 @@ const UserDetails = types.compose(
     }))
 );
 
-export type UserDetailsType = Instance<typeof UserDetails>;
+export type UserDetailsModelType = Instance<typeof UserDetails>;
 
 export {UserDetails};

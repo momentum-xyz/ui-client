@@ -12,13 +12,13 @@ import {
 } from '@momentum-xyz/ui-kit-storybook';
 
 import {getImageAbsoluteUrl} from 'core/utils';
-import {NftItemModelInterface, SearchQueryModelModelType} from 'core/models';
+import {SearchQueryModelModelType, UserInfoModelInterface} from 'core/models';
 
 import * as styled from './UserList.styled';
 
 interface PropsInterface {
   searchQuery: SearchQueryModelModelType;
-  searchResults: NftItemModelInterface[];
+  searchResults: UserInfoModelInterface[];
   lastCreatedUsers: SliderItemInterface<string>[];
   mostStakedUsers: SliderItemInterface<string>[];
   onSelectUser: (userId: string) => void;
@@ -60,9 +60,9 @@ const UserList: FC<PropsInterface> = ({
                 key={item.id}
                 name={item.name}
                 imageErrorIcon="astronaut"
-                description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
-                imageUrl={getImageAbsoluteUrl(item.image, ImageSizeEnum.S5)}
-                onInfoClick={() => onSelectUser(item.uuid)}
+                description={item.description}
+                imageUrl={getImageAbsoluteUrl(item.profile.avatarHash, ImageSizeEnum.S5)}
+                onInfoClick={() => onSelectUser(item.id)}
               />
             ))}
           </styled.SearchContainer>
