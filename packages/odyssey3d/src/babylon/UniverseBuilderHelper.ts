@@ -229,16 +229,7 @@ export class UniverseBuilderHelper {
       const orbClone = this.meshOrb.clone('ring_orb' + this.odysseyCounter, ringLayer);
       const thumbMat = new StandardMaterial('ring_mat' + this.odysseyCounter);
 
-      if (worlds[this.odysseyCounter].image) {
-        const downloadedTexture = new Texture(
-          (ObjectHelper.textureRootUrl +
-            's3/' +
-            worlds[this.odysseyCounter].image) as Nullable<string>
-        );
-        thumbMat.diffuseTexture = downloadedTexture;
-      }
       //odysseyNode.name = 'Odyssey' + this.odysseyCounter;
-
       // Calculate radian for circle placement.
       // Define how many radian per 1 degree. multiply by current offset (xdegrees)
       const radian = offset * (Math.PI / 180);
@@ -246,10 +237,14 @@ export class UniverseBuilderHelper {
       const y = Math.sin(radian) * ringRadius;
       const z = Math.random() * 2 * ringNumber;
 
-      if (thumbClone && orbClone) {
+      // FIXME: Counter
+      if (thumbClone && orbClone && this.odysseyCounter < worlds.length) {
         thumbClone.position = new Vector3(x, y, z);
         orbClone.position = new Vector3(x, y, z);
         offset = offset + spaceBetweenOddyseys;
+
+        console.log(this.odysseyCounter);
+        console.log(worlds.length);
 
         orbClone.metadata = worlds[this.odysseyCounter].id;
         thumbClone.material = thumbMat;

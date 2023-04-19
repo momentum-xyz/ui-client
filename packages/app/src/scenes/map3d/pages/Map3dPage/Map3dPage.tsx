@@ -36,8 +36,8 @@ const Map3dPage: FC = () => {
       Universe3dEmitter.emit(
         'UsersAdded',
         allUsers.map((user) => ({
-          ...user,
           id: user.id,
+          name: user.name,
           avatar: getImageAbsoluteUrl(user.profile.avatarHash) || ''
         }))
       );
