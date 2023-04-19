@@ -108,11 +108,6 @@ export class UniverseBuilderHelper {
       const orbClone = this.meshOrb.clone('acc_orb' + i, accountLayer);
       const thumbMat = new StandardMaterial('acc_mat' + i);
 
-      if (accounts[i].avatar) {
-        const downloadedTexture = new Texture(accounts[i].avatar as Nullable<string>);
-        thumbMat.diffuseTexture = downloadedTexture;
-      }
-
       if (counter >= ACC_PER_ROW) {
         row++;
         counter = 0;
@@ -129,7 +124,13 @@ export class UniverseBuilderHelper {
 
         // TODO: Metadata
         orbClone.metadata = accounts[i].id;
-        thumbClone.material = thumbMat;
+
+        if (accounts[i].avatar !== '') {
+          const downloadedTexture = new Texture(accounts[i].avatar as Nullable<string>);
+          thumbMat.diffuseTexture = downloadedTexture;
+          thumbClone.material = thumbMat;
+        }
+        //thumbClone.billboardMode = Mesh.BILLBOARDMODE_ALL;
 
         const babylonAccount = {
           accountDefinition: accounts[i],
@@ -157,6 +158,7 @@ export class UniverseBuilderHelper {
   }
 
   static buildRingLayers(worlds: WorldInfoInterface[]) {
+    this.odysseyCounter = 0;
     // Base variables.
     const AllOdysseyRings = new Array<TransformNode>();
     let totalOdysseys = worlds.length;
@@ -237,8 +239,7 @@ export class UniverseBuilderHelper {
       const y = Math.sin(radian) * ringRadius;
       const z = Math.random() * 2 * ringNumber;
 
-      // FIXME: Counter
-      if (thumbClone && orbClone && this.odysseyCounter < worlds.length) {
+      if (thumbClone && orbClone) {
         thumbClone.position = new Vector3(x, y, z);
         orbClone.position = new Vector3(x, y, z);
         offset = offset + spaceBetweenOddyseys;
@@ -247,7 +248,17 @@ export class UniverseBuilderHelper {
         console.log(worlds.length);
 
         orbClone.metadata = worlds[this.odysseyCounter].id;
-        thumbClone.material = thumbMat;
+
+        if (worlds[this.odysseyCounter].image !== '') {
+          const downloadedTexture = new Texture(
+            (ObjectHelper.textureRootUrl +
+              's3/' +
+              worlds[this.odysseyCounter].image) as Nullable<string>
+          );
+          thumbMat.diffuseTexture = downloadedTexture;
+          thumbClone.material = thumbMat;
+        }
+        //thumbClone.billboardMode = Mesh.BILLBOARDMODE_X;
 
         const babylonWorld = {
           worldDefinition: worlds[this.odysseyCounter],
