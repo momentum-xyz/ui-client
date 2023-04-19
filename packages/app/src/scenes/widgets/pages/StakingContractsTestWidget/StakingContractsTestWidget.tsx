@@ -9,12 +9,12 @@ import abi from '../../../../staking_abi.json';
 import {SignIn} from '../LoginWidget/components';
 
 // const contractAddress = '0x02e81060B6a7F688b3d09d57f5748636b901ade9';
-const contractAddress = '0xB51b7639e37150C8924d1Ee35bd3f338C8C9F89c';
+// const contractAddress = '0xB51b7639e37150C8924d1Ee35bd3f338C8C9F89c';
 
-const L2_MOM = '0x37946707DB48F3812D465da4f3D8163B273981B5';
-const L1_MOM = '0xe1080224B632A93951A7CFA33EeEa9Fd81558b5e';
-const L2_DAD = '0x7F85fB7f42A0c0D40431cc0f7DFDf88be6495e67';
-const L2_STAKING = '0x7b650845242a96595f3a9766D4e8e5ab0887936A';
+// const L2_MOM = '0x37946707DB48F3812D465da4f3D8163B273981B5';
+// const L1_MOM = '0xe1080224B632A93951A7CFA33EeEa9Fd81558b5e';
+// const L2_DAD = '0x7F85fB7f42A0c0D40431cc0f7DFDf88be6495e67';
+const L2_STAKING = '0xC9D24EC9FFe8015430cb503a3aB8B4f24183c5aa';
 
 const StakingContractsTestWidget: FC = () => {
   const {library, account, activate, active} = useWeb3React();
@@ -39,7 +39,7 @@ const StakingContractsTestWidget: FC = () => {
 };
 
 const StakingInner: FC<{web3: Web3; account: string}> = ({web3, account}) => {
-  const contract = useMemo(() => new web3.eth.Contract(abi as any, contractAddress), [web3]);
+  const contract = useMemo(() => new web3.eth.Contract(abi as any, L2_STAKING), [web3]);
 
   useEffect(() => {
     if (!account) {
