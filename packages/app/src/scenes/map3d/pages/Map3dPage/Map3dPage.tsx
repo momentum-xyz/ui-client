@@ -1,24 +1,15 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Universe3dEmitter} from '@momentum-xyz/core';
-import {Map3dCanvas} from '@momentum-xyz/map3d';
-import {PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 import {UniverseScene} from '@momentum-xyz/odyssey3d';
 
 import {useStore} from 'shared/hooks';
 import {getImageAbsoluteUrl} from 'core/utils';
-import {WidgetEnum} from 'core/enums';
 
-interface PropsInterface {
-  isClickActive?: boolean;
-}
-
-// TEMP
-const isBabylonUniverse = window.sessionStorage.getItem('babylon_universe');
-
-const Map3dPage: FC<PropsInterface> = () => {
-  const {nftStore, widgetsStore, sessionStore, widgetManagerStore} = useStore();
-  const {previewOdysseyStore, odysseyInfoStore} = widgetsStore;
+const Map3dPage: FC = () => {
+  const {widgetManagerStore, universeStore} = useStore();
+  // const {previewOdysseyStore, odysseyInfoStore} = widgetsStore;
+  const {allWorlds, allUsers} = universeStore.universe2dStore;
 
   useEffect(() => {
     return () => {
@@ -26,20 +17,37 @@ const Map3dPage: FC<PropsInterface> = () => {
     };
   }, [widgetManagerStore]);
 
-  const handleSelect = useCallback(
-    (uuid: string) => {
-      if (sessionStore.isGuest) {
-        const nft = nftStore.getNftByUuid(uuid);
-        previewOdysseyStore.open(nft!);
-      }
+  useEffect(() => {
+    console.log('Map3dPage: useEffect', allWorlds, allUsers);
+    if (allWorlds.length) {
+      Universe3dEmitter.emit(
+        'WorldsAdded',
+        allWorlds.map((world) => ({
+          id: world.id,
+          name: world.name,
+          description: world.description || '',
+          image: getImageAbsoluteUrl(world.avatarHash) || '',
+          owner: ''
+        }))
+      );
+    }
 
-      if (!sessionStore.isGuest) {
-        widgetManagerStore.open(WidgetEnum.WORLD_OVERVIEW, PositionEnum.LEFT, {id: uuid});
-        odysseyInfoStore.open(uuid);
-      }
-    },
-    [nftStore, odysseyInfoStore, previewOdysseyStore, sessionStore.isGuest, widgetManagerStore]
-  );
+    if (allUsers.length) {
+      Universe3dEmitter.emit(
+        'UsersAdded',
+        allUsers.map((user) => ({
+          id: user.id,
+          name: user.name,
+          avatar: getImageAbsoluteUrl(user.profile.avatarHash) || ''
+        }))
+      );
+    }
+  }, [allWorlds, allUsers, allUsers.length, allWorlds.length]);
+
+  const handleSelectWorld = useCallback((uuid: string) => {
+    console.log('Map3dPage: handleSelectWorld', uuid);
+    // widgetManagerStore.open(WidgetEnum.WORLD_OVERVIEW, PositionEnum.LEFT, {id: uuid});
+  }, []);
 
   const handleSelectUser = useCallback((uuid: string) => {
     console.log('Map3dPage: handleSelectUser', uuid);
@@ -50,25 +58,12 @@ const Map3dPage: FC<PropsInterface> = () => {
     widgetManagerStore.closeAll();
   }, [widgetManagerStore]);
 
-  if (nftStore.isLoading || !sessionStore.map3dUser) {
-    return <></>;
-  }
-
-  return isBabylonUniverse ? (
+  return (
     <UniverseScene
       events={Universe3dEmitter}
-      onWorldClick={handleSelect}
+      onWorldClick={handleSelectWorld}
       onUserClick={handleSelectUser}
       onClickOutside={handleClickOutside}
-    />
-  ) : (
-    <Map3dCanvas
-      currentUser={sessionStore.map3dUser}
-      selectedUuid={odysseyInfoStore.nftId}
-      items={nftStore.nftItems}
-      getConnections={nftStore.getStakedAtOthersByWallet}
-      getImageUrl={getImageAbsoluteUrl}
-      onSelect={handleSelect}
     />
   );
 };

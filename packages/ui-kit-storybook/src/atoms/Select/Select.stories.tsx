@@ -44,11 +44,39 @@ Single.args = {
   options: OPTIONS
 };
 
+export const SingleWithIcons = TemplateSingle.bind({});
+SingleWithIcons.args = {
+  placeholder: 'Choose wallet',
+  options: OPTIONS.map((option) => ({...option, icon: 'talisman'}))
+};
+
+export const SingleClearable = TemplateSingle.bind({});
+SingleClearable.args = {
+  placeholder: 'Choose wallet',
+  options: OPTIONS,
+  isClearable: true
+};
+
 export const Multi = TemplateMulti.bind({});
 Multi.args = {
   placeholder: 'Choose wallets',
   multiSuffix: 'selected',
   options: OPTIONS
+};
+
+export const MultiWithIcons = TemplateMulti.bind({});
+MultiWithIcons.args = {
+  placeholder: 'Choose wallets',
+  multiSuffix: 'selected',
+  options: OPTIONS.map((option) => ({...option, icon: 'talisman'}))
+};
+
+export const MultiClearable = TemplateMulti.bind({});
+MultiClearable.args = {
+  placeholder: 'Choose wallets',
+  multiSuffix: 'selected',
+  options: OPTIONS,
+  isClearable: true
 };
 
 export const MultiOpened = TemplateMulti.bind({});
@@ -85,3 +113,26 @@ Disabled.args = {
   options: OPTIONS,
   isDisabled: true
 };
+
+export const NoSpaceOnBottom = TemplateSingle.bind({});
+NoSpaceOnBottom.args = {
+  placeholder: 'Choose wallet',
+  options: OPTIONS
+};
+NoSpaceOnBottom.decorators = [
+  () => {
+    const [value, setValue] = useState<string[]>([]);
+    return (
+      <div
+        style={{
+          height: 'calc(100vh + 400px)',
+          paddingBottom: '500px',
+          display: 'flex',
+          flexDirection: 'column-reverse'
+        }}
+      >
+        <Select {...(NoSpaceOnBottom.args as any)} isMulti value={value} onMultiChange={setValue} />
+      </div>
+    );
+  }
+];

@@ -1,7 +1,6 @@
 export * from './Panel';
-export * from './FrameSteps';
+export * from './Steps';
 export * from './Tabs';
-export * from './FrameText';
 export * from './TimelineCap';
 export * from './TimelineStars';
 export * from './TimelineReaction';
@@ -13,3 +12,4 @@ export * from './ProfileInfo';
 export * from './ProfileLine';
 export * from './StakingAmount';
 export * from './StakeCard';
+export * from './ItemCard';

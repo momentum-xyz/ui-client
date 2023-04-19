@@ -77,7 +77,8 @@ export const useWallet: UseWalletType = ({appVariables}) => {
           value={null}
           onSingleChange={handleAccountChange}
           hideSelectedOptions={false}
-        ></Select>
+          wide
+        />
       ) : (
         <span>Loading...</span>
       )}

@@ -75,13 +75,6 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
       onClick: () => navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}))
     },
     {
-      key: WidgetEnum.UNIVERSE_INFO,
-      position: PositionEnum.RIGHT,
-      iconName: 'alert',
-      onClick: toggle,
-      isHidden: isWorld
-    },
-    {
       key: WidgetEnum.VOICE_CHAT,
       position: PositionEnum.RIGHT,
       iconName: 'group_chat',

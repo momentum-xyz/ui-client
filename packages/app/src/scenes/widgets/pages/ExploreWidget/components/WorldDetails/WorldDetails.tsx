@@ -12,12 +12,12 @@ import {
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ProfileInfo, ProfileImage} from 'ui-kit';
-import {WorldDetailsType} from 'stores/UniverseStore/models';
+import {WorldDetailsModelType} from 'core/models';
 
 import * as styled from './WorldDetails.styled';
 
 interface PropsInterface {
-  worldDetails: WorldDetailsType;
+  worldDetails: WorldDetailsModelType;
   onSelectUser: (userId: string) => void;
   onVisitWorld: (worldId: string) => void;
   onStakeWorld: (worldId: string) => void;
@@ -42,20 +42,21 @@ const WorldDetails: FC<PropsInterface> = ({
   return (
     <styled.Container data-testid="WorldDetails-test">
       <Panel
+        isFullHeight
+        size="normal"
         icon="rabbit_fill"
         variant="primary"
-        image={getImageAbsoluteUrl(world.image, ImageSizeEnum.S3)}
+        image={getImageAbsoluteUrl(world.avatarHash, ImageSizeEnum.S3)}
         title={t('labels.odysseyOverview')}
         onClose={onClose}
       >
         <styled.Wrapper>
-          {/* FIXME: REAL DATA */}
           <ProfileImage
             name={world.name}
-            image={world.image}
+            image={world.avatarHash}
             imageErrorIcon="rabbit_fill"
             byName={world.name}
-            onByClick={() => onSelectUser(world.uuid)}
+            onByClick={() => onSelectUser(world.id)}
           />
 
           <styled.GeneralScrollable>
@@ -64,8 +65,8 @@ const WorldDetails: FC<PropsInterface> = ({
               description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean commodo ligula eget dolor..."
               address="http://www.google.com"
               joinDate={new Date().toISOString()}
-              onVisit={() => onVisitWorld(world.uuid)}
-              onStake={() => onStakeWorld(world.uuid)}
+              onVisit={() => onVisitWorld(world.id)}
+              onStake={() => onStakeWorld(world.id)}
             />
 
             <styled.TitleContainer>

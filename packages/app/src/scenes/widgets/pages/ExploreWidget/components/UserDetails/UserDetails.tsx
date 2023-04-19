@@ -1,17 +1,16 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Panel, ImageSizeEnum, IconSvg} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, ImageSizeEnum, IconSvg, ItemCard} from '@momentum-xyz/ui-kit-storybook';
 
 import {getImageAbsoluteUrl} from 'core/utils';
-import {ProfileInfo, ProfileImage, ItemCard} from 'ui-kit';
-import {NftItemModelInterface} from 'core/models';
-import {UserDetailsType} from 'stores/UniverseStore/models';
+import {ProfileInfo, ProfileImage} from 'ui-kit';
+import {NftItemModelInterface, UserDetailsModelType} from 'core/models';
 
 import * as styled from './UserDetails.styled';
 
 interface PropsInterface {
-  userDetails: UserDetailsType;
+  userDetails: UserDetailsModelType;
   nftOwned: NftItemModelInterface[];
   nftStakedIn: NftItemModelInterface[];
   onVisitWorld: (worldId: string) => void;
@@ -28,20 +27,26 @@ const UserDetails: FC<PropsInterface> = (props) => {
   return (
     <styled.Container data-testid="UserDetails-test">
       <Panel
+        isFullHeight
+        size="normal"
         icon="astronaut"
         variant="primary"
-        image={getImageAbsoluteUrl(user.image, ImageSizeEnum.S3)}
+        image={getImageAbsoluteUrl(user.profile.avatarHash, ImageSizeEnum.S3)}
         title={t('labels.memberProfile')}
         onClose={onClose}
       >
         <styled.Wrapper>
           {/* FIXME: REAL DATA */}
-          <ProfileImage name={user.name} image={user.image} imageErrorIcon="astronaut" />
+          <ProfileImage
+            name={user.name}
+            image={user.profile.avatarHash}
+            imageErrorIcon="astronaut"
+          />
 
           <styled.GeneralScrollable>
             {/* FIXME: REAL DATA */}
             <ProfileInfo
-              hash={user.owner}
+              hash="some hash"
               description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean commodo ligula eget dolor..."
               address="http://www.google.com"
               joinDate={new Date().toISOString()}
@@ -59,10 +64,10 @@ const UserDetails: FC<PropsInterface> = (props) => {
                       key={nft.uuid}
                       variant="small"
                       name={nft.name}
-                      image={nft.image}
                       imageHeight={95}
                       description="Lorem ipsum dolor sit amet, consectetuer."
                       imageErrorIcon="rabbit_fill"
+                      imageUrl={getImageAbsoluteUrl(nft.image, ImageSizeEnum.S5)}
                       onVisitClick={() => onVisitWorld(nft.uuid)}
                       onInfoClick={() => onSelectWorld(nft.uuid)}
                     />
@@ -81,10 +86,10 @@ const UserDetails: FC<PropsInterface> = (props) => {
                       key={nft.uuid}
                       variant="small"
                       name={nft.name}
-                      image={nft.image}
                       imageHeight={95}
                       description="Lorem ipsum dolor sit amet, consectetuer."
                       imageErrorIcon="rabbit_fill"
+                      imageUrl={getImageAbsoluteUrl(nft.image, ImageSizeEnum.S5)}
                       onVisitClick={() => onVisitWorld(nft.uuid)}
                       onInfoClick={() => onSelectWorld(nft.uuid)}
                     />

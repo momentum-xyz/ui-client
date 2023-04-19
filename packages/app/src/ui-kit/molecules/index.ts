@@ -6,4 +6,4 @@ export * from './NewsfeedItem';
 export * from './ToolbarCreatorIcon';
 export * from './ProfileInfo';
 export * from './ProfileImage';
-export * from './ItemCard';
+export * from './TrustPoints';

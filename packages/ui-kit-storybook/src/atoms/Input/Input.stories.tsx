@@ -77,11 +77,20 @@ WithSuffix.args = {
   opts: numberInputSuffixMask('MOM', 5)
 };
 
-export const SearchText = Template.bind({});
-SearchText.args = {
+export const Search = Template.bind({});
+Search.args = {
   size: 'normal',
   placeholder: 'Search items...',
   isSearch: true,
+  opts: stringInputMask
+};
+
+export const SearchClearable = Template.bind({});
+SearchClearable.args = {
+  size: 'normal',
+  placeholder: 'Search items...',
+  isSearch: true,
+  isClearable: true,
   opts: stringInputMask
 };
 

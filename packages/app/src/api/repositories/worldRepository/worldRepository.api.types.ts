@@ -1,37 +1,20 @@
 import {UserInterface} from 'api';
 
-export interface SpaceWithSubspacesInterface {
+export interface WorldInfoInterface {
   id: string;
   name: string;
-  description: string | null;
-  subSpaces?: Array<SubSpaceInterface>;
+  description?: string;
+  avatarHash: string | null;
 }
 
-export interface SubSpaceInterface {
-  id: string;
-  name: string;
-  subSpaces?: Array<SubSpaceInterface>;
+/** FETCH WORLD LIST **/
+
+export interface FetchWorldListRequest {
+  sortDirection: 'DESC' | 'ASC';
+  limit: number;
 }
 
-/** Get space with subspaces (1 level of subspaces) **/
-
-export interface GetSpaceWithSubSpacesRequest {
-  spaceId: string;
-  worldId: string;
-}
-
-export interface GetSpaceWithSubSpacesResponse extends SpaceWithSubspacesInterface {}
-
-/** Search spaces **/
-
-export interface SearchSpacesRequest {
-  worldId: string;
-  query: string;
-}
-
-export interface SearchSpacesResponse {
-  [categoryName: string]: SpaceWithSubspacesInterface[];
-}
+export interface FetchWorldListResponse extends Array<WorldInfoInterface> {}
 
 /** Online Users **/
 

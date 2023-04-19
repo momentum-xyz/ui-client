@@ -8,7 +8,8 @@ import {
   Select,
   StakeCard,
   ImageSizeEnum,
-  SelectOptionInterface
+  SelectOptionInterface,
+  doThreeDotsInside
 } from '@momentum-xyz/ui-kit-storybook';
 
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -53,6 +54,7 @@ const StakeList: FC<PropsInterface> = ({
         <styled.Search>
           <Input
             isSearch
+            isClearable
             value={searchQuery.query}
             placeholder={t('actions.searchStakes')}
             opts={stringInputMask}
@@ -64,6 +66,7 @@ const StakeList: FC<PropsInterface> = ({
         <styled.Filters>
           <Select
             wide
+            isClearable
             options={sortOptions}
             value={sortField.fieldName}
             placeholder={t('actions.sort')}
@@ -71,7 +74,11 @@ const StakeList: FC<PropsInterface> = ({
           />
           <Select
             wide
-            options={filterOptions}
+            isClearable
+            options={filterOptions.map((option) => ({
+              ...option,
+              label: doThreeDotsInside(option.label, 5, 5)
+            }))}
             value={filterField.fieldName}
             placeholder={t('actions.selectWallet')}
             onSingleChange={(value) => filterField.setField(value || '')}
