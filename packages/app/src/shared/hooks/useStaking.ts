@@ -3,10 +3,12 @@ import {useWeb3React} from '@web3-react/core';
 import Web3 from 'web3';
 import BN from 'bn.js';
 
-import abi from '../../staking_abi.json';
+import stackingABI from './contract_staking.ABI.json';
+import momABI from './contract_MOM.ABI.json';
 
-// const L2_STAKING = '0xC9D24EC9FFe8015430cb503a3aB8B4f24183c5aa';
-const L2_STAKING = '0xB51b7639e37150C8924d1Ee35bd3f338C8C9F89c';
+const MOM_CONTRACT = '0x310c2B16c304109f32BABB5f47cC562813765744';
+const L2_STAKING_CONTRACT = '0xC4497d6c0f94dc427cE0B8F825c91F25e2845B91';
+// const L2_STAKING = '0xB51b7639e37150C8924d1Ee35bd3f338C8C9F89c';
 
 enum TokenEnum {
   MOM_TOKEN = 0,
@@ -19,14 +21,15 @@ export const useStaking = () => {
 
   console.log('StakingOverviewWidget', {library, account, activate, active});
 
-  const [, contract] = useMemo(() => {
+  const [, stakingContract, momContract] = useMemo(() => {
     if (!library) {
-      return [null, null];
+      return [null];
     }
     const web3 = new Web3(library.provider);
-    const contract = new web3.eth.Contract(abi as any, L2_STAKING);
+    const stakingContract = new web3.eth.Contract(stackingABI as any, L2_STAKING_CONTRACT);
+    const momContract = new web3.eth.Contract(momABI as any, MOM_CONTRACT);
 
-    return [web3, contract];
+    return [web3, stakingContract, momContract];
   }, [library]);
 
   // useEffect(() => {
@@ -50,12 +53,17 @@ export const useStaking = () => {
   const stake = useCallback(
     async (worldId: string, amount: BN, tokenKind = TokenEnum.MOM_TOKEN) => {
       console.log('StakingOverviewWidget stake');
-      const result = await contract?.methods
+      const res = await momContract?.methods
+        .approve(L2_STAKING_CONTRACT, amount)
+        .send({from: account});
+      console.log('StakingOverviewWidget stake approve result', res);
+
+      const result = await stakingContract?.methods
         .stake(worldId, amount, tokenKind)
         .send({from: account});
       console.log('StakingOverviewWidget stake result', result);
     },
-    [contract, account]
+    [momContract?.methods, account, stakingContract?.methods]
   );
 
   const unstake = () => {
