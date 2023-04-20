@@ -1,15 +1,20 @@
 import {
   AbstractMesh,
+  Axis,
+  Color3,
   Matrix,
+  Mesh,
   Nullable,
+  PBRMaterial,
   Scene,
   SceneLoader,
-  StandardMaterial,
   Texture,
   TransformNode,
   Vector3
 } from '@babylonjs/core';
 import {Odyssey3dUserInterface, WorldInfoInterface} from '@momentum-xyz/core';
+
+import hdrTexture from '../static/test.hdr';
 
 import {ObjectHelper} from './ObjectHelper';
 import {getAssetFileName} from './UtilityHelper';
@@ -21,23 +26,25 @@ const SPACE_BETWEEN_ACC = 10;
 
 interface BabylonAccountInterface {
   accountDefinition: Odyssey3dUserInterface;
-  thumbClone: AbstractMesh;
-  orbClone: AbstractMesh;
+  rootClone: AbstractMesh;
 }
 
 interface BabylonWorldInterface {
   worldDefinition: WorldInfoInterface;
-  thumbClone: AbstractMesh;
-  orbClone: AbstractMesh;
+  rootClone: AbstractMesh;
 }
 
 export class UniverseBuilderHelper {
   static scene: Scene;
   static odysseyCounter = 0;
-  static meshOrb: AbstractMesh;
-  static meshThumb: AbstractMesh;
+
+  static rootMesh: AbstractMesh;
+  static thumbMat: PBRMaterial;
+  static orbMat: PBRMaterial;
+
   static accountsMap = new Map<string, BabylonAccountInterface>();
   static worldsMap = new Map<string, BabylonWorldInterface>();
+  static totalAmount = 0;
 
   static async initialize(
     scene: Scene,
@@ -64,8 +71,10 @@ export class UniverseBuilderHelper {
 
           if (UniverseBuilderHelper.accountsMap.has(pickedId)) {
             onUserClick(pickedId);
+            console.log('user');
           } else if (UniverseBuilderHelper.worldsMap.has(pickedId)) {
             onWorldClick(pickedId);
+            console.log('world');
           }
         } else {
           onClickOutside();
@@ -74,10 +83,27 @@ export class UniverseBuilderHelper {
     };
   }
 
+  static defineCustomMaterial() {
+    // TODO: Check with Frank how is this supposed to look
+    const customOrbGlassMat = new PBRMaterial('orbGlass', this.scene);
+
+    customOrbGlassMat.reflectionTexture = new Texture(hdrTexture);
+    customOrbGlassMat.indexOfRefraction = 0.52;
+    customOrbGlassMat.alpha = 0.5;
+    customOrbGlassMat.directIntensity = 0.0;
+    customOrbGlassMat.environmentIntensity = 0.7;
+    customOrbGlassMat.cameraExposure = 0.66;
+    customOrbGlassMat.cameraContrast = 1.66;
+    customOrbGlassMat.microSurface = 1;
+    customOrbGlassMat.reflectivityColor = new Color3(0.2, 0.2, 0.2);
+    customOrbGlassMat.albedoColor = new Color3(0.95, 0.95, 0.95);
+
+    this.orbMat = customOrbGlassMat;
+  }
+
   static async loadModel() {
     // custom odyssey glb
-    const assetUrl = getAssetFileName('d94ec058-c048-b4f6-e5fc-e154a7ef99c0');
-
+    const assetUrl = getAssetFileName('2dc7df8e-a34a-829c-e3ca-b73bfe99faf0');
     await SceneLoader.ImportMeshAsync(
       '',
       ObjectHelper.assetRootUrl,
@@ -86,10 +112,9 @@ export class UniverseBuilderHelper {
       (event) => {},
       '.glb'
     ).then((result) => {
-      // TODO: Fix rotations
-      result.meshes[1].rotation = new Vector3(0, 60, 60);
-      this.meshThumb = result.meshes[1];
-      this.meshOrb = result.meshes[2];
+      this.defineCustomMaterial();
+      this.rootMesh = result.meshes[0];
+      this.thumbMat = result.meshes[1].material as PBRMaterial;
     });
   }
 
@@ -98,15 +123,11 @@ export class UniverseBuilderHelper {
     let row = 0;
     // Transform node for grouping all account objects.
     const accountLayer = new TransformNode('AccountLayer', this.scene);
-    const orbMat = new StandardMaterial('orbMat');
-    orbMat.alpha = 0.5;
-    this.meshOrb.material = orbMat;
 
     // Spawn
     for (let i = 0; i < accounts.length; i++) {
-      const thumbClone = this.meshThumb.clone('acc_thumb' + i, accountLayer);
-      const orbClone = this.meshOrb.clone('acc_orb' + i, accountLayer);
-      const thumbMat = new StandardMaterial('acc_mat' + i);
+      const rootClone = this.rootMesh.clone('acc_root' + i, accountLayer) as Mesh;
+      const rootChildren = rootClone.getChildMeshes();
 
       if (counter >= ACC_PER_ROW) {
         row++;
@@ -114,28 +135,40 @@ export class UniverseBuilderHelper {
       }
 
       // Assign position and material
-      if (thumbClone && orbClone) {
+      if (rootClone && rootChildren.length > 1) {
         // Set the position of the current instance.
         const x = counter * SPACE_BETWEEN_ACC;
         const z = row * SPACE_BETWEEN_ACC;
-        thumbClone.position = new Vector3(x, 0, z);
-        orbClone.position = new Vector3(x, 0, z);
+        rootClone.position = new Vector3(x, 0, z);
+        rootClone.rotation = new Vector3(0, 0, 0);
         counter++;
 
-        // TODO: Metadata
-        orbClone.metadata = accounts[i].id;
+        // Metadata
+        rootChildren[1].metadata = accounts[i].id;
+        rootChildren[1].material = this.orbMat;
 
         if (accounts[i].avatar !== '') {
           const downloadedTexture = new Texture(accounts[i].avatar as Nullable<string>);
-          thumbMat.diffuseTexture = downloadedTexture;
-          thumbClone.material = thumbMat;
+          const thumbMatClone = this.thumbMat.clone('thumbMatCloneAcc' + i);
+
+          //TODO Move this to a function
+          // Override babylon's conversion of left-right hand
+          rootClone.scaling = new Vector3(1, 1, 1);
+          const alphaRot = -0.25 * 2 * Math.PI;
+          rootClone.rotate(Axis.X, alphaRot);
+          rootChildren[0].rotation = new Vector3(0, 0, 0);
+          const betaRot = 0.05 * 2 * Math.PI;
+          rootChildren[0].rotate(Axis.Y, betaRot);
+
+          thumbMatClone.albedoTexture = downloadedTexture;
+          rootChildren[0].material = thumbMatClone;
         }
-        //thumbClone.billboardMode = Mesh.BILLBOARDMODE_ALL;
+
+        rootClone.billboardMode = Mesh.BILLBOARDMODE_ALL;
 
         const babylonAccount = {
           accountDefinition: accounts[i],
-          thumbClone: thumbClone,
-          orbClone: orbClone
+          rootClone: rootClone
         };
 
         this.accountsMap.set(accounts[i].id, babylonAccount);
@@ -147,14 +180,10 @@ export class UniverseBuilderHelper {
     // Center the accounterLayer in the Universe.
     const offset = (ACC_PER_ROW * SPACE_BETWEEN_ACC) / 2; // Calculate total width. Divide by 2 for mid point.
     accountLayer.position.x = accountLayer.position.x - offset; // Apply the offset to the container.
-    accountLayer.position.y = -100;
+    accountLayer.position.y = -10;
     accountLayer.position.z = 200;
 
-    PlayerHelper.camera.position = new Vector3(
-      accountLayer.position.x,
-      accountLayer.position.y,
-      accountLayer.position.z
-    );
+    PlayerHelper.camera.setTarget(accountLayer.position);
   }
 
   static buildRingLayers(worlds: WorldInfoInterface[]) {
@@ -227,11 +256,9 @@ export class UniverseBuilderHelper {
 
     // Create instance and location for every Odyssey. Based on amount given.
     for (let i = 0; i < amount; i++) {
-      const thumbClone = this.meshThumb.clone('ring_thumb' + this.odysseyCounter, ringLayer);
-      const orbClone = this.meshOrb.clone('ring_orb' + this.odysseyCounter, ringLayer);
-      const thumbMat = new StandardMaterial('ring_mat' + this.odysseyCounter);
+      const rootClone = this.rootMesh.clone('ring_root' + i, ringLayer) as Mesh;
+      const rootChildren = rootClone.getChildMeshes();
 
-      //odysseyNode.name = 'Odyssey' + this.odysseyCounter;
       // Calculate radian for circle placement.
       // Define how many radian per 1 degree. multiply by current offset (xdegrees)
       const radian = offset * (Math.PI / 180);
@@ -239,15 +266,14 @@ export class UniverseBuilderHelper {
       const y = Math.sin(radian) * ringRadius;
       const z = Math.random() * 2 * ringNumber;
 
-      if (thumbClone && orbClone) {
-        thumbClone.position = new Vector3(x, y, z);
-        orbClone.position = new Vector3(x, y, z);
+      if (rootClone) {
+        rootClone.position = new Vector3(x, y, z);
+        rootClone.rotation = new Vector3(0, 0, 0);
         offset = offset + spaceBetweenOddyseys;
 
-        console.log(this.odysseyCounter);
-        console.log(worlds.length);
-
-        orbClone.metadata = worlds[this.odysseyCounter].id;
+        // Metadata
+        rootChildren[1].metadata = worlds[i].id;
+        rootChildren[1].material = this.orbMat;
 
         if (worlds[this.odysseyCounter].image !== '') {
           const downloadedTexture = new Texture(
@@ -255,21 +281,31 @@ export class UniverseBuilderHelper {
               's3/' +
               worlds[this.odysseyCounter].image) as Nullable<string>
           );
-          thumbMat.diffuseTexture = downloadedTexture;
-          thumbClone.material = thumbMat;
+
+          const thumbMatClone = this.thumbMat.clone('thumbMatCloneWorld' + i);
+          // Override babylon's conversion of left-right hand
+          rootClone.scaling = new Vector3(1, 1, 1);
+          const alphaRot = -0.25 * 2 * Math.PI;
+          rootClone.rotate(Axis.X, alphaRot);
+          rootChildren[0].rotation = new Vector3(0, 0, 0);
+          const betaRot = 0.05 * 2 * Math.PI;
+          rootChildren[0].rotate(Axis.Y, betaRot);
+
+          thumbMatClone.albedoTexture = downloadedTexture;
+          rootChildren[0].material = thumbMatClone;
         }
-        //thumbClone.billboardMode = Mesh.BILLBOARDMODE_X;
+        rootClone.billboardMode = Mesh.BILLBOARDMODE_ALL;
 
         const babylonWorld = {
           worldDefinition: worlds[this.odysseyCounter],
-          thumbClone: thumbClone,
-          orbClone: orbClone
+          rootClone: rootClone
         };
 
         this.worldsMap.set(worlds[this.odysseyCounter].id, babylonWorld);
       } else {
         console.log('Something went wrong with loading custom glb for Accounts and Odysseys');
       }
+
       this.odysseyCounter++;
     }
 
