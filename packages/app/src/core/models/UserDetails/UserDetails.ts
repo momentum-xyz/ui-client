@@ -1,24 +1,45 @@
-import {castToSnapshot, Instance, types} from 'mobx-state-tree';
-import {ResetModel} from '@momentum-xyz/core';
+import {cast, flow, Instance, types} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {NftItem, UserInfo} from 'core/models';
-import {getRootStore} from 'core/utils';
+import {api, UserWorldInfoInterface} from 'api';
+import {UserInfo} from 'core/models/UserInfo';
+import {WorldInfo} from 'core/models/WorldInfo';
 
 const UserDetails = types.compose(
   ResetModel,
   types
     .model('UserDetails', {
       user: types.reference(UserInfo),
-      nftOwned: types.optional(types.array(types.reference(NftItem)), []),
-      nftStakedIn: types.optional(types.array(types.reference(NftItem)), [])
+      worldsOwned: types.optional(types.array(types.reference(WorldInfo)), []),
+      worldsStakedIn: types.optional(types.array(types.reference(WorldInfo)), []),
+
+      worldsOwnedRequest: types.optional(RequestModel, {}),
+      worldsStakedInRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
       init(): void {
-        // TODO: implementation
-        const {nftItems} = getRootStore(self).nftStore;
-        self.nftOwned = castToSnapshot(nftItems.slice(20, 22));
-        self.nftStakedIn = castToSnapshot(nftItems.slice(22, 24));
-      }
+        this.loadOwnedWorlds();
+        //this.loadStakedInWorlds();
+      },
+      loadOwnedWorlds: flow(function* () {
+        const worlds: UserWorldInfoInterface[] = yield self.worldsOwnedRequest.send(
+          api.userRepository.fetchWorldList,
+          {userId: self.user.id}
+        );
+        if (worlds) {
+          self.worldsOwned = cast(worlds.map((world) => world.id));
+        }
+      }),
+      loadStakedInWorlds: flow(function* () {
+        const worlds: UserWorldInfoInterface[] = yield self.worldsOwnedRequest.send(
+          // FIXME: Just use correct EP which is not ready on BE side
+          api.userRepository.fetchWorldList,
+          {userId: self.user.id}
+        );
+        if (worlds) {
+          self.worldsStakedIn = cast(worlds.map((world) => world.id));
+        }
+      })
     }))
 );
 

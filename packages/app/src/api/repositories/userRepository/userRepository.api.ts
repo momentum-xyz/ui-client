@@ -9,7 +9,9 @@ import {
   FetchUserListRequest,
   FetchUserListResponse,
   FetchUserRequest,
-  FetchUserResponse
+  FetchUserResponse,
+  FetchUserWorldListRequest,
+  FetchUserWorldListResponse
 } from './userRepository.api.types';
 import {userRepositoryEndpoints} from './userRepository.api.endpoints';
 
@@ -29,4 +31,13 @@ export const fetchUserList: RequestInterface<FetchUserListRequest, FetchUserList
   const {limit, sortDirection, ...restOptions} = options;
   restOptions.params = {sort: sortDirection, limit};
   return request.get(userRepositoryEndpoints().list, restOptions);
+};
+
+export const fetchWorldList: RequestInterface<
+  FetchUserWorldListRequest,
+  FetchUserWorldListResponse
+> = (options) => {
+  const {userId, ...restOptions} = options;
+  const url = generatePath(userRepositoryEndpoints().worldList, {userId});
+  return request.get(url, restOptions);
 };

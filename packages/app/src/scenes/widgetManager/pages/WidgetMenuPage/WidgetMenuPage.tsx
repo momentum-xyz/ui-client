@@ -40,7 +40,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
       onClick: toggle
     },
     {
-      key: WidgetEnum.PROFILE,
+      key: WidgetEnum.MY_PROFILE,
       position: PositionEnum.LEFT,
       imageSrc: userImageUrl,
       isHidden: isGuest,

@@ -25,6 +25,12 @@ export interface UserInfoInterface {
   profile: UserProfileInterface;
 }
 
+export interface UserWorldInfoInterface {
+  id: string;
+  name: string;
+  owner_id: string;
+}
+
 /** FETCH ME **/
 
 export interface FetchMeRequest {}
@@ -47,3 +53,11 @@ export interface FetchUserListRequest {
 }
 
 export interface FetchUserListResponse extends Array<UserInfoInterface> {}
+
+/** FETCH WORLD LIST **/
+
+export interface FetchUserWorldListRequest {
+  userId: string;
+}
+
+export interface FetchUserWorldListResponse extends Array<UserWorldInfoInterface> {}

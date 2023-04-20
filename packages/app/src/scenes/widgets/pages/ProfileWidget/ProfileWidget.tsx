@@ -2,7 +2,7 @@ import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n} from '@momentum-xyz/core';
-import {Panel, SideMenu, SideMenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, PositionEnum, SideMenu, SideMenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -15,7 +15,7 @@ import * as styled from './ProfileWidget.styled';
 type MenuItemType = 'viewProfile' | 'editProfile' | 'settings' | 'wallet' | 'logout';
 
 const ProfileWidget: FC = () => {
-  const {sessionStore, agoraStore, widgetStore, widgetManagerStore, nftStore} = useStore();
+  const {sessionStore, agoraStore, widgetStore, widgetManagerStore} = useStore();
   const {profileStore} = widgetStore;
 
   const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewProfile');
@@ -24,12 +24,12 @@ const ProfileWidget: FC = () => {
   const {t} = useI18n();
 
   useEffect(() => {
-    // TODO: Load nft list
-    profileStore.init();
+    profileStore.init(sessionStore.userId);
+
     return () => {
       profileStore.resetModel();
     };
-  }, [profileStore]);
+  }, [profileStore, sessionStore.userId]);
 
   const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     {
@@ -76,9 +76,12 @@ const ProfileWidget: FC = () => {
     [profileStore, sessionStore]
   );
 
-  const onInfoWorld = useCallback((worldId: string) => {
-    console.log(worldId);
-  }, []);
+  const onInfoWorld = useCallback(
+    (id: string) => {
+      widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id});
+    },
+    [widgetManagerStore]
+  );
 
   const onVisitWorld = useCallback(
     (worldId: string) => {
@@ -99,7 +102,7 @@ const ProfileWidget: FC = () => {
           image={!panelIcon ? sessionStore.userImageUrl : null}
           onClose={() => {
             profileStore.resetModel();
-            widgetManagerStore.close(WidgetEnum.PROFILE);
+            widgetManagerStore.close(WidgetEnum.MY_PROFILE);
           }}
         >
           {!!sessionStore.user && (
@@ -107,10 +110,9 @@ const ProfileWidget: FC = () => {
               {activeMenuId === 'viewProfile' && (
                 <ProfileView
                   user={sessionStore.user}
-                  // FIXME: profileStore.nftList
-                  nftList={nftStore.nftItems.slice(0, 5)}
-                  onVisitNft={onVisitWorld}
-                  onInfoNft={onInfoWorld}
+                  worldList={profileStore.worldList}
+                  onVisitWorld={onVisitWorld}
+                  onInfoWorld={onInfoWorld}
                 />
               )}
 

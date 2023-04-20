@@ -11,19 +11,19 @@ import {
 import {absoluteLink, withoutProtocol, useI18n, signUpDateString} from '@momentum-xyz/core';
 
 import {getImageAbsoluteUrl} from 'core/utils';
-import {NftItemModelInterface, UserModelInterface} from 'core/models';
+import {UserModelInterface, WorldInfoModelInterface} from 'core/models';
 
 import * as styled from './ProfileView.styled';
 
 interface PropsInterface {
   user: UserModelInterface;
-  nftList: NftItemModelInterface[];
-  onInfoNft: (uuid: string) => void;
-  onVisitNft: (uuid: string) => void;
+  worldList: WorldInfoModelInterface[];
+  onInfoWorld: (uuid: string) => void;
+  onVisitWorld: (uuid: string) => void;
 }
 
 const ProfileView: FC<PropsInterface> = (props) => {
-  const {user, nftList, onInfoNft, onVisitNft} = props;
+  const {user, worldList, onInfoWorld, onVisitWorld} = props;
 
   const {t} = useI18n();
 
@@ -53,7 +53,7 @@ const ProfileView: FC<PropsInterface> = (props) => {
             <WalletHash icon="talisman" hash={user.wallet || ''} />
           </styled.GeneralInfo>
 
-          {nftList.length > 0 && (
+          {worldList.length > 0 && (
             <styled.OwnedOdysseys>
               <styled.OwnedOdysseysTitle>
                 <IconSvg name="rabbit_fill" isWhite />
@@ -61,17 +61,17 @@ const ProfileView: FC<PropsInterface> = (props) => {
               </styled.OwnedOdysseysTitle>
 
               <styled.NftContainer>
-                {nftList.map((nft) => (
+                {worldList.map((world) => (
                   <ItemCard
                     variant="small"
-                    key={nft.uuid}
-                    name={nft.name}
+                    key={world.id}
+                    name={world.name}
+                    description={world.description}
                     imageHeight={95}
-                    imageUrl={getImageAbsoluteUrl(nft.image)}
-                    description="Lorem ipsum dolor sit amet, consectetuer"
                     imageErrorIcon="rabbit_fill"
-                    onInfoClick={() => onInfoNft(nft.uuid)}
-                    onVisitClick={() => onVisitNft(nft.uuid)}
+                    imageUrl={getImageAbsoluteUrl(world.avatarHash)}
+                    onInfoClick={() => onInfoWorld(world.id)}
+                    onVisitClick={() => onVisitWorld(world.id)}
                   />
                 ))}
               </styled.NftContainer>

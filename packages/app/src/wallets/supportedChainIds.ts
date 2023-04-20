@@ -1,0 +1,18 @@
+export const ARBITRUM_ONE = 42161;
+export const OPTIMISM = 10;
+export const ARBITRUM_NITRO = 421611;
+export const LOCAL_TESTNET = 1337;
+export const LOCAL_TESTNET_ARBITRUM = 412346;
+
+export const SUPPORTED_CHAIN_IDS = [
+  1,
+  3,
+  4,
+  5,
+  42,
+  ARBITRUM_ONE,
+  ARBITRUM_NITRO,
+  OPTIMISM,
+  LOCAL_TESTNET,
+  LOCAL_TESTNET_ARBITRUM
+];

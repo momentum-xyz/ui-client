@@ -1,6 +1,6 @@
-import {FC, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useI18n} from '@momentum-xyz/core';
+import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
 import {
   Panel,
   ImageSizeEnum,
@@ -36,8 +36,11 @@ const WorldDetails: FC<PropsInterface> = ({
   const {world, usersStakedIn, lastStakingComment, totalAmountStaked} = worldDetails;
 
   const [isButtonShown, setIsButtonShown] = useState(usersStakedIn.length > USERS_MAX);
-
   const {t} = useI18n();
+
+  useEffect(() => {
+    Universe3dEmitter.emit('WorldSelected', world.id);
+  }, [world.id]);
 
   return (
     <styled.Container data-testid="WorldDetails-test">

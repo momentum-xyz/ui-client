@@ -1,8 +1,8 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {NftItem} from 'core/models';
-import {api, UploadImageResponse} from 'api';
+import {WorldInfo} from 'core/models';
+import {api, UploadImageResponse, UserWorldInfoInterface} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
 import {ProfileFormInterface} from 'core/interfaces';
 
@@ -10,15 +10,27 @@ const ProfileStore = types.compose(
   ResetModel,
   types
     .model('ProfileStore', {
+      worldList: types.optional(types.array(types.reference(WorldInfo)), []),
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), []),
+
+      worldsRequest: types.optional(RequestModel, {}),
       editRequest: types.optional(RequestModel, {}),
-      editAvatarRequest: types.optional(RequestModel, {}),
-      nftList: types.optional(types.array(NftItem), [])
+      editAvatarRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
-      init(): void {
-        // TODO: Load odysseys
+      init(userId: string): void {
+        this.loadWorlds(userId);
       },
+      loadWorlds: flow(function* (userId: string) {
+        const userWorlds: UserWorldInfoInterface[] = yield self.worldsRequest.send(
+          api.userRepository.fetchWorldList,
+          {userId}
+        );
+
+        if (userWorlds) {
+          self.worldList = cast(userWorlds.map((world) => world.id));
+        }
+      }),
       editProfile: flow(function* (form: ProfileFormInterface, previousImageHash?: string) {
         self.fieldErrors = cast([]);
 

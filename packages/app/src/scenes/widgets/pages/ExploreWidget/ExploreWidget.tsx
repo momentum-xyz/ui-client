@@ -117,8 +117,8 @@ const ExploreWidget: FC = () => {
         <styled.Details>
           <UserDetails
             userDetails={universe2dStore.selectedUser}
-            nftOwned={universe2dStore.selectedUser.nftOwned}
-            nftStakedIn={universe2dStore.selectedUser.nftStakedIn}
+            worldsOwned={universe2dStore.selectedUser.worldsOwned}
+            worldsStakedIn={universe2dStore.selectedUser.worldsStakedIn}
             onVisitWorld={onVisitWorld}
             onSelectWorld={onSelectWorld}
             onClose={universe2dStore.resetUnits}
