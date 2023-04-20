@@ -15,7 +15,7 @@ import * as styled from './ProfileWidget.styled';
 type MenuItemType = 'viewProfile' | 'editProfile' | 'settings' | 'wallet' | 'logout';
 
 const ProfileWidget: FC = () => {
-  const {sessionStore, agoraStore, widgetStore, widgetManagerStore, nftStore} = useStore();
+  const {sessionStore, agoraStore, widgetStore, widgetManagerStore} = useStore();
   const {profileStore} = widgetStore;
 
   const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewProfile');
@@ -24,12 +24,12 @@ const ProfileWidget: FC = () => {
   const {t} = useI18n();
 
   useEffect(() => {
-    // TODO: Load nft list
-    profileStore.init();
+    profileStore.init(sessionStore.userId);
+
     return () => {
       profileStore.resetModel();
     };
-  }, [profileStore]);
+  }, [profileStore, sessionStore.userId]);
 
   const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     {
@@ -110,10 +110,9 @@ const ProfileWidget: FC = () => {
               {activeMenuId === 'viewProfile' && (
                 <ProfileView
                   user={sessionStore.user}
-                  // FIXME: profileStore.nftList
-                  nftList={nftStore.nftItems.slice(0, 5)}
-                  onVisitNft={onVisitWorld}
-                  onInfoNft={onInfoWorld}
+                  worldList={profileStore.worldList}
+                  onVisitWorld={onVisitWorld}
+                  onInfoWorld={onInfoWorld}
                 />
               )}
 

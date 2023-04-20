@@ -4,6 +4,7 @@ export const userRepositoryEndpoints = () => {
   return {
     list: `${BASE_URL}`,
     me: `${BASE_URL}/me`,
-    profile: `${BASE_URL}/:userId`
+    profile: `${BASE_URL}/:userId`,
+    worldList: `${BASE_URL}/:userId/worlds`
   };
 };
