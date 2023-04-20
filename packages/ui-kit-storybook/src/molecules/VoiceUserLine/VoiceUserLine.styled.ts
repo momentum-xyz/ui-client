@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Container = styled.div`
+  margin: 1px;
   padding: 0 10px;
   display: grid;
   height: 65px;
@@ -10,9 +11,10 @@ export const Container = styled.div`
   color: ${(props) => props.theme.text};
   grid-template-columns: 42px 1fr 30px;
   font-size: var(--font-size-l);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.2em;
-  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
+  box-shadow: -1px -1px 2px rgba(158, 238, 255, 0.1);
   gap: 10px;
 `;
 

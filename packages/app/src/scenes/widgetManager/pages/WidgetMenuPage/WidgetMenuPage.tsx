@@ -77,7 +77,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
     {
       key: WidgetEnum.VOICE_CHAT,
       position: PositionEnum.RIGHT,
-      iconName: 'group_chat',
+      iconName: 'voice_chat',
       onClick: toggle,
       isHidden: !isWorld
     },
