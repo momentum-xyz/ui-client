@@ -69,6 +69,7 @@ export class UniverseBuilderHelper {
         if (hit.pickedMesh) {
           const pickedId = hit.pickedMesh.metadata;
 
+          // Currently worldIds === userIds, so every click on mesh will be userClick.
           if (UniverseBuilderHelper.accountsMap.has(pickedId)) {
             onUserClick(pickedId);
             console.log('user');
@@ -81,24 +82,6 @@ export class UniverseBuilderHelper {
         }
       }
     };
-  }
-
-  static defineCustomMaterial() {
-    // TODO: Check with Frank how is this supposed to look
-    const customOrbGlassMat = new PBRMaterial('orbGlass', this.scene);
-
-    customOrbGlassMat.reflectionTexture = new Texture(hdrTexture);
-    customOrbGlassMat.indexOfRefraction = 0.52;
-    customOrbGlassMat.alpha = 0.5;
-    customOrbGlassMat.directIntensity = 0.0;
-    customOrbGlassMat.environmentIntensity = 0.7;
-    customOrbGlassMat.cameraExposure = 0.66;
-    customOrbGlassMat.cameraContrast = 1.66;
-    customOrbGlassMat.microSurface = 1;
-    customOrbGlassMat.reflectivityColor = new Color3(0.2, 0.2, 0.2);
-    customOrbGlassMat.albedoColor = new Color3(0.95, 0.95, 0.95);
-
-    this.orbMat = customOrbGlassMat;
   }
 
   static async loadModel() {
@@ -148,18 +131,10 @@ export class UniverseBuilderHelper {
         rootChildren[1].material = this.orbMat;
 
         if (accounts[i].avatar !== '') {
+          this.setOrbRotation(rootClone, rootChildren[0]);
+
           const downloadedTexture = new Texture(accounts[i].avatar as Nullable<string>);
           const thumbMatClone = this.thumbMat.clone('thumbMatCloneAcc' + i);
-
-          //TODO Move this to a function
-          // Override babylon's conversion of left-right hand
-          rootClone.scaling = new Vector3(1, 1, 1);
-          const alphaRot = -0.25 * 2 * Math.PI;
-          rootClone.rotate(Axis.X, alphaRot);
-          rootChildren[0].rotation = new Vector3(0, 0, 0);
-          const betaRot = 0.05 * 2 * Math.PI;
-          rootChildren[0].rotate(Axis.Y, betaRot);
-
           thumbMatClone.albedoTexture = downloadedTexture;
           rootChildren[0].material = thumbMatClone;
         }
@@ -276,21 +251,14 @@ export class UniverseBuilderHelper {
         rootChildren[1].material = this.orbMat;
 
         if (worlds[this.odysseyCounter].image !== '') {
+          this.setOrbRotation(rootClone, rootChildren[0]);
+
           const downloadedTexture = new Texture(
             (ObjectHelper.textureRootUrl +
               's3/' +
               worlds[this.odysseyCounter].image) as Nullable<string>
           );
-
           const thumbMatClone = this.thumbMat.clone('thumbMatCloneWorld' + i);
-          // Override babylon's conversion of left-right hand
-          rootClone.scaling = new Vector3(1, 1, 1);
-          const alphaRot = -0.25 * 2 * Math.PI;
-          rootClone.rotate(Axis.X, alphaRot);
-          rootChildren[0].rotation = new Vector3(0, 0, 0);
-          const betaRot = 0.05 * 2 * Math.PI;
-          rootChildren[0].rotate(Axis.Y, betaRot);
-
           thumbMatClone.albedoTexture = downloadedTexture;
           rootChildren[0].material = thumbMatClone;
         }
@@ -310,5 +278,33 @@ export class UniverseBuilderHelper {
     }
 
     return ringLayer;
+  }
+
+  static defineCustomMaterial() {
+    // TODO: Check with Frank how is this supposed to look
+    const customOrbGlassMat = new PBRMaterial('orbGlass', this.scene);
+
+    customOrbGlassMat.reflectionTexture = new Texture(hdrTexture);
+    customOrbGlassMat.indexOfRefraction = 0.52;
+    customOrbGlassMat.alpha = 0.5;
+    customOrbGlassMat.directIntensity = 0.0;
+    customOrbGlassMat.environmentIntensity = 0.7;
+    customOrbGlassMat.cameraExposure = 0.66;
+    customOrbGlassMat.cameraContrast = 1.66;
+    customOrbGlassMat.microSurface = 1;
+    customOrbGlassMat.reflectivityColor = new Color3(0.2, 0.2, 0.2);
+    customOrbGlassMat.albedoColor = new Color3(0.95, 0.95, 0.95);
+
+    this.orbMat = customOrbGlassMat;
+  }
+
+  static setOrbRotation(root: AbstractMesh, thumb: AbstractMesh) {
+    // Override babylon's conversion of left-right hand
+    root.scaling = new Vector3(1, 1, 1);
+    const alphaRot = -0.25 * 2 * Math.PI;
+    root.rotate(Axis.X, alphaRot);
+    thumb.rotation = new Vector3(0, 0, 0);
+    const betaRot = 0.05 * 2 * Math.PI;
+    thumb.rotate(Axis.Y, betaRot);
   }
 }
