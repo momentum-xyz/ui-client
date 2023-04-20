@@ -5,21 +5,21 @@ import {Panel, ImageSizeEnum, IconSvg, ItemCard} from '@momentum-xyz/ui-kit-stor
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ProfileInfo, ProfileImage} from 'ui-kit';
-import {NftItemModelInterface, UserDetailsModelType} from 'core/models';
+import {UserDetailsModelType, WorldInfoModelInterface} from 'core/models';
 
 import * as styled from './UserDetails.styled';
 
 interface PropsInterface {
   userDetails: UserDetailsModelType;
-  nftOwned: NftItemModelInterface[];
-  nftStakedIn: NftItemModelInterface[];
+  worldsOwned: WorldInfoModelInterface[];
+  worldsStakedIn: WorldInfoModelInterface[];
   onVisitWorld: (worldId: string) => void;
   onSelectWorld: (worldId: string) => void;
   onClose: () => void;
 }
 
 const UserDetails: FC<PropsInterface> = (props) => {
-  const {userDetails, nftOwned, nftStakedIn, onVisitWorld, onSelectWorld, onClose} = props;
+  const {userDetails, worldsOwned, worldsStakedIn, onVisitWorld, onSelectWorld, onClose} = props;
   const {user} = userDetails;
 
   const {t} = useI18n();
@@ -40,7 +40,6 @@ const UserDetails: FC<PropsInterface> = (props) => {
         onClose={onClose}
       >
         <styled.Wrapper>
-          {/* FIXME: REAL DATA */}
           <ProfileImage
             name={user.name}
             image={user.profile.avatarHash}
@@ -48,54 +47,53 @@ const UserDetails: FC<PropsInterface> = (props) => {
           />
 
           <styled.GeneralScrollable>
-            {/* FIXME: REAL DATA */}
             <ProfileInfo
-              hash="some hash"
-              description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean commodo ligula eget dolor..."
-              address="http://www.google.com"
+              hash="some hash" // FIXME: REAL DATA
+              description={user.description}
+              address={user.profile.profileLink}
               joinDate={new Date().toISOString()}
             />
 
             <styled.OdysseyList>
-              {nftOwned.length > 0 && (
+              {worldsOwned.length > 0 && (
                 <>
                   <styled.Title>
                     <IconSvg name="rabbit_fill" size="xs" isWhite />
                     <span>{t('labels.odysseysOwned')}</span>
                   </styled.Title>
-                  {nftOwned.map((nft) => (
+                  {worldsOwned.map((world) => (
                     <ItemCard
-                      key={nft.uuid}
+                      key={world.id}
                       variant="small"
-                      name={nft.name}
+                      name={world.name}
                       imageHeight={95}
-                      description="Lorem ipsum dolor sit amet, consectetuer."
+                      description={world.description}
                       imageErrorIcon="rabbit_fill"
-                      imageUrl={getImageAbsoluteUrl(nft.image, ImageSizeEnum.S5)}
-                      onVisitClick={() => onVisitWorld(nft.uuid)}
-                      onInfoClick={() => onSelectWorld(nft.uuid)}
+                      imageUrl={getImageAbsoluteUrl(world.avatarHash, ImageSizeEnum.S5)}
+                      onVisitClick={() => onVisitWorld(world.id)}
+                      onInfoClick={() => onSelectWorld(world.id)}
                     />
                   ))}
                 </>
               )}
 
-              {nftStakedIn.length > 0 && (
+              {worldsStakedIn.length > 0 && (
                 <>
                   <styled.Title>
                     <IconSvg name="stake" size="xs" isWhite />
                     <span>{t('labels.odysseysStakedIn')}</span>
                   </styled.Title>
-                  {nftStakedIn.map((nft) => (
+                  {worldsStakedIn.map((world) => (
                     <ItemCard
-                      key={nft.uuid}
+                      key={world.id}
                       variant="small"
-                      name={nft.name}
+                      name={world.name}
                       imageHeight={95}
-                      description="Lorem ipsum dolor sit amet, consectetuer."
+                      description={world.description}
                       imageErrorIcon="rabbit_fill"
-                      imageUrl={getImageAbsoluteUrl(nft.image, ImageSizeEnum.S5)}
-                      onVisitClick={() => onVisitWorld(nft.uuid)}
-                      onInfoClick={() => onSelectWorld(nft.uuid)}
+                      imageUrl={getImageAbsoluteUrl(world.avatarHash, ImageSizeEnum.S5)}
+                      onVisitClick={() => onVisitWorld(world.id)}
+                      onInfoClick={() => onSelectWorld(world.id)}
                     />
                   ))}
                 </>
