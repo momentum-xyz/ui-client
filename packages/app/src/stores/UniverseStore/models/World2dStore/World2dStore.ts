@@ -1,9 +1,9 @@
 import {flow, types, cast} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {Event3dEmitter, Odyssey3dUserInterface, RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api, SpaceAttributeItemResponse, SpaceInterface} from 'api';
 import {mapper} from 'api/mapper';
-import {NftItemModelInterface, Object} from 'core/models';
+import {NftItemModelInterface, Object, UserInfo, WorldInfo} from 'core/models';
 import {getImageAbsoluteUrl, getRootStore} from 'core/utils';
 
 const World2dStore = types.compose(
@@ -11,15 +11,42 @@ const World2dStore = types.compose(
   types
     .model('World2dStore', {
       worldId: types.optional(types.string, ''),
-      info: types.maybeNull(Object),
-      request: types.optional(RequestModel, {})
-      // TODO: onlineUsersList: array
+      worldInfo: types.maybeNull(WorldInfo),
+      onlineUsersList: types.optional(types.array(UserInfo), []),
+
+      // TODO: Removal
+      request: types.optional(RequestModel, {}),
+      info: types.maybeNull(Object)
     })
     .actions((self) => ({
       init(worldId: string) {
         self.worldId = worldId;
-        this.fetchWorldInformation(worldId);
+        this.loadWorld();
+        this.subscribeToUsers();
       },
+      loadWorld(): void {
+        // TODO: Implementation
+        // self.worldInfo = ...
+      },
+      subscribeToUsers(): void {
+        Event3dEmitter.on('UserAdded', (onlineUser) => {
+          this.addOnlineUser(onlineUser);
+        });
+      },
+      addOnlineUser(user: Odyssey3dUserInterface) {
+        self.onlineUsersList = cast([
+          ...self.onlineUsersList,
+          {
+            id: user.id,
+            name: user.name,
+            description: '',
+            profile: {
+              avatarHash: user.avatar
+            }
+          }
+        ]);
+      },
+      // TODO: Removal
       fetchWorldInformation: flow(function* (spaceId: string) {
         const response: SpaceAttributeItemResponse = yield self.request.send(
           api.spaceRepository.fetchSpace,

@@ -19,7 +19,7 @@ const UserDetails = types.compose(
     .actions((self) => ({
       init(): void {
         this.loadOwnedWorlds();
-        this.loadStakedInWorlds();
+        //this.loadStakedInWorlds();
       },
       loadOwnedWorlds: flow(function* () {
         const worlds: UserWorldInfoInterface[] = yield self.worldsOwnedRequest.send(
