@@ -18,6 +18,9 @@ export interface AppConfigInterface {
   STREAMCHAT_KEY: string;
   NFT_ADMIN_ADDRESS: string;
   NFT_COLLECTION_ODYSSEY_ID: string;
+  CONTRACT_STAKING_ADDRESS: string;
+  CONTRACT_MOM_ADDRESS: string;
+  CONTRACT_DAD_ADDRESS: string;
   NODE_ID: string;
 }
 
