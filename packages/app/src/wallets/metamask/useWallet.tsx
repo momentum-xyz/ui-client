@@ -3,9 +3,10 @@ import {useWeb3React} from '@web3-react/core';
 import {InjectedConnector} from '@web3-react/injected-connector';
 
 import {UseWalletType} from 'wallets';
+import {SUPPORTED_CHAIN_IDS} from 'wallets/supportedChainIds';
 
 const connector = new InjectedConnector({
-  supportedChainIds: [1, 3, 4, 5, 42]
+  supportedChainIds: SUPPORTED_CHAIN_IDS
 });
 
 export const useWallet: UseWalletType = () => {
@@ -59,8 +60,9 @@ export const useWallet: UseWalletType = () => {
     }, 500);
 
     return () => {
-      console.log('MetaMask useWallet deactivate');
-      deactivate();
+      // temp disable
+      // console.log('MetaMask useWallet deactivate');
+      // deactivate();
     };
   }, [activate, deactivate, ethereum, isInstalled, metamaskProvider]);
 

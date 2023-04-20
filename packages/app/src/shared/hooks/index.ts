@@ -4,3 +4,4 @@ export * from './useDeviceChange';
 export * from './useSupernova';
 export * from './useApiHandlers';
 export * from './useNavigation';
+export * from './useStaking';

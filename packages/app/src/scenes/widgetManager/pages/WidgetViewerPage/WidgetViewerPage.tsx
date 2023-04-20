@@ -37,6 +37,11 @@ const WidgetViewerPage: FC = () => {
         <styled.Widget>{leftActiveWidget && visualizeSection(leftActiveWidget)}</styled.Widget>
       </styled.LeftSection>
 
+      {/* TEST */}
+      {/* <styled.Widget>
+        <widgets.StakingContractsTestWidget />
+      </styled.Widget> */}
+
       <styled.RightSection>
         <styled.Widget>{rightActiveWidget && visualizeSection(rightActiveWidget)}</styled.Widget>
       </styled.RightSection>
