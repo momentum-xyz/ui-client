@@ -84,7 +84,7 @@ export const Button = styled.button`
 
   &.label {
     pointer-events: none;
-    box-shadow: none;
+    box-shadow: -1px -1px 2px rgba(158, 238, 255, 0.1);
   }
 
   /* SIZES */

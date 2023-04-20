@@ -22,7 +22,6 @@ import {
   MinimapWidget,
   ScreenShareWidget,
   TextChatWidget,
-  VoiceChatWidget,
   CalendarWidget,
   OnlineUsersWidget,
   NotificationsWidget,
@@ -188,15 +187,6 @@ const Widgets: FC<PropsInterface> = (props) => {
               />
 
               <ToolbarIcon
-                title={t('labels.voiceChat')}
-                icon="microphoneOn"
-                size="medium"
-                onClick={widgetsStore.voiceChatStore.dialog.toggle}
-                isSelected={widgetsStore.voiceChatStore.dialog.isOpen}
-                state={{canGoBack: true}}
-              />
-
-              <ToolbarIcon
                 title={t('labels.chat')}
                 icon="groupChat"
                 size="medium"
@@ -261,7 +251,6 @@ const Widgets: FC<PropsInterface> = (props) => {
       {widgetsStore.screenShareStore.dialog.isOpen && <ScreenShareWidget />}
       {widgetsStore.calendarStore.dialog.isOpen && <CalendarWidget />}
       {widgetsStore.textChatStore.dialog.isOpen && <TextChatWidget />}
-      {widgetsStore.voiceChatStore.dialog.isOpen && <VoiceChatWidget />}
       {nftStore.stakingDashorboardDialog.isOpen && <StakingWidget />}
       {!!nftStore.connectToNftItemId && <ConnectWidget />}
     </>

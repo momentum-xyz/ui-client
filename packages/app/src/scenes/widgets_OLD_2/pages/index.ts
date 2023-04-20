@@ -4,7 +4,6 @@ export * from './MinimapWidget';
 export * from './FlyToMeWidget';
 export * from './ScreenShareWidget';
 export * from './TextChatWidget';
-export * from './VoiceChatWidget';
 export * from './NotificationsWidget';
 export * from './CalendarWidget';
 export * from './OdysseyBioWidget';
