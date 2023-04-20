@@ -6,24 +6,7 @@ export interface AppConfigInterface {
   BACKEND_ENDPOINT_URL: string;
   // TEMPORARY: remove it when all other BE EP will be migrated to V4 and we fully switch to V4
   BACKEND_V4_ENDPOINT_URL: string;
-  UNITY_CLIENT_URL: string;
-  UNITY_CLIENT_LOADER_URL: string;
-  UNITY_CLIENT_DATA_URL: string;
-  UNITY_CLIENT_FRAMEWORK_URL: string;
-  UNITY_CLIENT_CODE_URL: string;
-  UNITY_CLIENT_STREAMING_ASSETS_URL: string;
-  UNITY_CLIENT_COMPANY_NAME: string;
-  UNITY_CLIENT_PRODUCT_NAME: string;
-  UNITY_CLIENT_PRODUCT_VERSION: string;
-  UNITY_CLIENT_ADDRESSABLES_URL: string;
   RENDER_SERVICE_URL: string;
-  KEYCLOAK_OPENID_CONNECT_URL: string;
-  KEYCLOAK_OPENID_CLIENT_ID: string;
-  KEYCLOAK_OPENID_SCOPE: string;
-  HYDRA_OPENID_CONNECT_URL: string;
-  HYDRA_OPENID_CLIENT_ID: string;
-  HYDRA_OPENID_GUEST_CLIENT_ID: string;
-  HYDRA_OPENID_SCOPE: string;
   WEB3_IDENTITY_PROVIDER_URL: string;
   GUEST_IDENTITY_PROVIDER_URL: string;
   SENTRY_DSN: string;
@@ -35,6 +18,9 @@ export interface AppConfigInterface {
   STREAMCHAT_KEY: string;
   NFT_ADMIN_ADDRESS: string;
   NFT_COLLECTION_ODYSSEY_ID: string;
+  CONTRACT_STAKING_ADDRESS: string;
+  CONTRACT_MOM_ADDRESS: string;
+  CONTRACT_DAD_ADDRESS: string;
   NODE_ID: string;
 }
 
