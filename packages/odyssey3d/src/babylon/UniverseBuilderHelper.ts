@@ -14,7 +14,7 @@ import {
 } from '@babylonjs/core';
 import {Odyssey3dUserInterface, WorldInfoInterface} from '@momentum-xyz/core';
 
-import hdrTexture from '../static/test.hdr';
+//import hdrTexture from '../static/test.hdr';
 
 import {ObjectHelper} from './ObjectHelper';
 import {getAssetFileName} from './UtilityHelper';
@@ -284,7 +284,7 @@ export class UniverseBuilderHelper {
     // TODO: Check with Frank how is this supposed to look
     const customOrbGlassMat = new PBRMaterial('orbGlass', this.scene);
 
-    customOrbGlassMat.reflectionTexture = new Texture(hdrTexture);
+    //customOrbGlassMat.reflectionTexture = new Texture(hdrTexture);
     customOrbGlassMat.indexOfRefraction = 0.52;
     customOrbGlassMat.alpha = 0.5;
     customOrbGlassMat.directIntensity = 0.0;
