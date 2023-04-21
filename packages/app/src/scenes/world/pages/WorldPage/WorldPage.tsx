@@ -35,7 +35,7 @@ import * as styled from './WorldPage.styled';
 // };
 
 const WorldPage: FC = () => {
-  const {universeStore, widgetsStore, widgetManagerStore} = useStore();
+  const {agoraStore, universeStore, widgetsStore, widgetManagerStore} = useStore();
   const {world3dStore} = universeStore;
 
   // const theme = useTheme();
@@ -46,8 +46,11 @@ const WorldPage: FC = () => {
   useEffect(() => {
     return () => {
       widgetManagerStore.closeAll();
+      if (agoraStore.hasJoined) {
+        agoraStore.leaveVoiceChat();
+      }
     };
-  }, [widgetManagerStore]);
+  }, [agoraStore, widgetManagerStore]);
 
   // useEffect(() => {
   //   instance3DStore.init();

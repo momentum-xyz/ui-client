@@ -7,15 +7,19 @@ import {OnlineUsersList, CurrentWorld} from './components';
 import * as styled from './WorldBasePage.styled';
 
 const WorldBasePage: FC = () => {
-  const {universeStore, widgetManagerStore} = useStore();
+  const {universeStore, widgetManagerStore, agoraStore} = useStore();
   const {isLeftWidgetShown, isRightWidgetShown} = widgetManagerStore;
+  const {agoraVoiceChatStore} = agoraStore;
   const {world2dStore} = universeStore;
 
   return (
     <styled.Container data-testid="WorldBasePage-test">
       <styled.OnlineUsers>
         {!isLeftWidgetShown && (
-          <OnlineUsersList onlineUsers={world2dStore?.onlineUsersList || []} />
+          <OnlineUsersList
+            onlineUsers={world2dStore?.onlineUsersList || []}
+            voiceChatUsers={agoraVoiceChatStore.allAgoraUsers}
+          />
         )}
       </styled.OnlineUsers>
 

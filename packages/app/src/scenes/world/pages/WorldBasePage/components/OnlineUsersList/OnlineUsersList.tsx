@@ -11,9 +11,10 @@ import * as styled from './OnlineUsersList.styled';
 
 interface PropsInterface {
   onlineUsers: UserModelInterface[];
+  voiceChatUsers: string[];
 }
 
-const OnlineUsersList: FC<PropsInterface> = ({onlineUsers}) => {
+const OnlineUsersList: FC<PropsInterface> = ({onlineUsers, voiceChatUsers}) => {
   const [activeUser, setActiveUser] = useState<UserModelInterface | null>(null);
 
   const {t} = useI18n();
@@ -25,6 +26,7 @@ const OnlineUsersList: FC<PropsInterface> = ({onlineUsers}) => {
           key={user.id}
           type="menu"
           isActive={user.id === activeUser?.id}
+          indicator={voiceChatUsers.includes(user.id) ? 'voice' : undefined}
           imageSrc={getImageAbsoluteUrl(user.profile.avatarHash)}
           onClick={() => setActiveUser(user.id !== activeUser?.id ? user : null)}
         />

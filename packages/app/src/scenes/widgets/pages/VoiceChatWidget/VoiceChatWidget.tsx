@@ -17,8 +17,12 @@ const VoiceChatWidget: FC = () => {
   const {t} = useI18n();
 
   useEffect(() => {
-    agoraStore.init(universeStore.worldId, sessionStore.userId);
+    if (!agoraStore.hasJoined) {
+      agoraStore.init(universeStore.worldId, sessionStore.userId);
+    }
   }, [agoraStore, universeStore.worldId, sessionStore]);
+
+  console.log('VoiceChat: all agora users: ', agoraVoiceChatStore.allAgoraUsers);
 
   usePosBusEvent('voice-chat-mute-user', agoraStore.handleUserMuted);
   usePosBusEvent('voice-chat-mute-all', agoraStore.handleAllMuted);
@@ -34,13 +38,9 @@ const VoiceChatWidget: FC = () => {
     }
   }, [agoraVoiceChatStore, agoraStore]);
 
-  const handleClose = useCallback(async () => {
-    if (agoraVoiceChatStore.hasJoined) {
-      await agoraStore.leaveVoiceChat();
-    }
-
+  const handleClose = useCallback(() => {
     widgetManagerStore.close(WidgetEnum.VOICE_CHAT);
-  }, [agoraStore, agoraVoiceChatStore.hasJoined, widgetManagerStore]);
+  }, [widgetManagerStore]);
 
   return (
     <styled.Container data-testid="VoiceChatWidget-test">

@@ -18,7 +18,7 @@ interface PropsInterface {
 }
 
 const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
-  const {sessionStore, widgetManagerStore, universeStore} = useStore();
+  const {sessionStore, widgetManagerStore, universeStore, agoraStore} = useStore();
   const {toggle, activeWidgetList} = widgetManagerStore;
   const {isGuest, userImageUrl} = sessionStore;
   const {worldId, isMyWorld} = universeStore;
@@ -27,22 +27,24 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
 
   const MENU_ITEMS: MenuItemExtendedInterface[] = [
     {
-      key: WidgetEnum.GO_TO,
-      position: PositionEnum.LEFT,
-      iconName: 'go',
-      isHidden: !isWorld,
-      onClick: () => navigate(ROUTES.explore)
-    },
-    {
       key: WidgetEnum.EXPLORE,
       position: PositionEnum.LEFT,
       iconName: 'explore',
+      isHidden: isWorld,
       onClick: toggle
+    },
+    {
+      key: WidgetEnum.GO_TO,
+      position: PositionEnum.LEFT,
+      iconName: 'explore',
+      isHidden: !isWorld,
+      onClick: () => navigate(ROUTES.explore)
     },
     {
       key: WidgetEnum.MY_PROFILE,
       position: PositionEnum.LEFT,
       imageSrc: userImageUrl,
+      iconIndicator: agoraStore.hasJoined ? 'voice' : undefined,
       isHidden: isGuest,
       onClick: toggle
     },
@@ -78,6 +80,10 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
       key: WidgetEnum.VOICE_CHAT,
       position: PositionEnum.RIGHT,
       iconName: 'voice_chat',
+      iconIndicator:
+        agoraStore.hasJoined && !activeWidgetList.includes(WidgetEnum.VOICE_CHAT)
+          ? 'voice'
+          : undefined,
       onClick: toggle,
       isHidden: !isWorld
     },
@@ -91,7 +97,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
     {
       key: WidgetEnum.WORLD_PROFILE,
       position: PositionEnum.RIGHT,
-      iconName: 'planet', // FIXME: World image
+      iconName: 'rabbit_fill', // FIXME: World image
       onClick: toggle,
       isHidden: !isWorld
     }
