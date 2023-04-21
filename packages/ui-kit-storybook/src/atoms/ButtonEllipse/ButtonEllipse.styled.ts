@@ -93,6 +93,12 @@ export const Button = styled.button`
     box-shadow: none;
   }
 
+  &.wide {
+    padding: 0 10px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
   &.label {
     pointer-events: none;
     box-shadow: none;

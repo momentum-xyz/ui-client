@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import cn from 'classnames';
 import {signUpDateString, useI18n} from '@momentum-xyz/core';
 import {ProfileLine, ButtonEllipse} from '@momentum-xyz/ui-kit-storybook';
 
@@ -6,20 +7,21 @@ import * as styled from './ProfileInfo.styled';
 
 interface PropsInterface {
   address?: string;
-  hash?: string;
+  hash?: string | null;
   description?: string;
   joinDate?: string;
+  hideBorder?: boolean;
   onVisit?: () => void;
   onStake?: () => void;
 }
 
 const ProfileInfo: FC<PropsInterface> = (props) => {
-  const {hash, description, address, joinDate, onVisit, onStake} = props;
+  const {hash, description, address, joinDate, hideBorder, onVisit, onStake} = props;
 
   const {t} = useI18n();
 
   return (
-    <styled.Container data-testid="ProfileInfo-test">
+    <styled.Container data-testid="ProfileInfo-test" className={cn(hideBorder && 'hideBorder')}>
       {hash && <styled.Hash>{hash}</styled.Hash>}
       {description && <div>{description}</div>}
       {address && (
