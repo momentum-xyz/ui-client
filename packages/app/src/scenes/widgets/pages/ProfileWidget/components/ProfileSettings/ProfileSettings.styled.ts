@@ -18,14 +18,6 @@ export const DeviceItem = styled.div`
   margin-bottom: 10px;
 `;
 
-export const Controls = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  margin: 17px 0;
-`;
-
 export const Actions = styled.div`
   padding: 10px 0;
   display: grid;

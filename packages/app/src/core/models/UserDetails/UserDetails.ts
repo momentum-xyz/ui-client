@@ -1,43 +1,56 @@
 import {cast, flow, Instance, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, UserWorldInfoInterface} from 'api';
-import {UserInfo} from 'core/models/UserInfo';
+import {api, UserInterface, UserWorldInfoInterface} from 'api';
+import {User} from 'core/models/User';
 import {WorldInfo} from 'core/models/WorldInfo';
 
 const UserDetails = types.compose(
   ResetModel,
   types
     .model('UserDetails', {
-      user: types.reference(UserInfo),
-      worldsOwned: types.optional(types.array(types.reference(WorldInfo)), []),
-      worldsStakedIn: types.optional(types.array(types.reference(WorldInfo)), []),
-
+      userId: types.string,
+      user: types.maybeNull(User),
+      worldsOwned: types.optional(types.array(WorldInfo), []),
+      worldsStakedIn: types.optional(types.array(WorldInfo), []),
+      userRequest: types.optional(RequestModel, {}),
       worldsOwnedRequest: types.optional(RequestModel, {}),
       worldsStakedInRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
       init(): void {
+        this.loadUser();
         this.loadOwnedWorlds();
+      },
+      initStakeData(): void {
         //this.loadStakedInWorlds();
       },
+      loadUser: flow(function* () {
+        const response: UserInterface = yield self.userRequest.send(api.userRepository.fetchUser, {
+          userId: self.userId
+        });
+
+        if (response) {
+          self.user = cast(response);
+        }
+      }),
       loadOwnedWorlds: flow(function* () {
         const worlds: UserWorldInfoInterface[] = yield self.worldsOwnedRequest.send(
           api.userRepository.fetchWorldList,
-          {userId: self.user.id}
+          {userId: self.userId}
         );
         if (worlds) {
-          self.worldsOwned = cast(worlds.map((world) => world.id));
+          self.worldsOwned = cast(worlds);
         }
       }),
       loadStakedInWorlds: flow(function* () {
         const worlds: UserWorldInfoInterface[] = yield self.worldsOwnedRequest.send(
           // FIXME: Just use correct EP which is not ready on BE side
           api.userRepository.fetchWorldList,
-          {userId: self.user.id}
+          {userId: self.userId}
         );
         if (worlds) {
-          self.worldsStakedIn = cast(worlds.map((world) => world.id));
+          self.worldsStakedIn = cast(worlds);
         }
       })
     }))

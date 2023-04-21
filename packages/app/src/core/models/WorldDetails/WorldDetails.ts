@@ -4,6 +4,8 @@ import {ResetModel} from '@momentum-xyz/core';
 import {NftItem, WorldInfo} from 'core/models';
 import {getRootStore} from 'core/utils';
 
+// FIXME: It should be the same like UserDetails.
+// FIXME: Remove `types.reference` to avoid missing data.
 const WorldDetails = types.compose(
   ResetModel,
   types
