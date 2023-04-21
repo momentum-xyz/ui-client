@@ -1,13 +1,7 @@
-import {FC, useRef, useState} from 'react';
+import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {
-  ButtonEllipse,
-  Hexagon,
-  ImageSizeEnum,
-  Panel,
-  useClickOutside
-} from '@momentum-xyz/ui-kit-storybook';
+import {ButtonEllipse, Hexagon, ImageSizeEnum, Panel} from '@momentum-xyz/ui-kit-storybook';
 
 import {UserModelInterface} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -21,11 +15,8 @@ interface PropsInterface {
 
 const OnlineUsersList: FC<PropsInterface> = ({onlineUsers}) => {
   const [activeUser, setActiveUser] = useState<UserModelInterface | null>(null);
-  const activeUserRef = useRef<HTMLDivElement>(null);
 
   const {t} = useI18n();
-
-  useClickOutside(activeUserRef, () => setActiveUser(null));
 
   return (
     <styled.Container data-testid="OnlineUsersList-test">
@@ -49,7 +40,7 @@ const OnlineUsersList: FC<PropsInterface> = ({onlineUsers}) => {
             title={t('titles.profile')}
             onClose={() => setActiveUser(null)}
           >
-            <styled.Wrapper ref={activeUserRef}>
+            <styled.Wrapper>
               <ProfileImage
                 name={activeUser.name}
                 imageHeight={140}
