@@ -3,32 +3,34 @@ import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {ButtonEllipse, Hexagon, ImageSizeEnum, Panel} from '@momentum-xyz/ui-kit-storybook';
 
-import {UserModelInterface} from 'core/models';
+import {UserDetailsModelType} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ProfileImage, ProfileInfo} from 'ui-kit';
 
 import * as styled from './OnlineUsersList.styled';
 
 interface PropsInterface {
-  onlineUsers: UserModelInterface[];
+  onlineUsers: UserDetailsModelType[];
   voiceChatUsers: string[];
 }
 
 const OnlineUsersList: FC<PropsInterface> = ({onlineUsers, voiceChatUsers}) => {
-  const [activeUser, setActiveUser] = useState<UserModelInterface | null>(null);
+  const [activeUser, setActiveUser] = useState<UserDetailsModelType | null>(null);
 
   const {t} = useI18n();
 
   return (
     <styled.Container data-testid="OnlineUsersList-test">
-      {onlineUsers.map((user) => (
+      {onlineUsers.map((userDetails) => (
         <Hexagon
-          key={user.id}
+          key={userDetails.userId}
           type="menu"
-          isActive={user.id === activeUser?.id}
-          indicator={voiceChatUsers.includes(user.id) ? 'voice' : undefined}
-          imageSrc={getImageAbsoluteUrl(user.profile.avatarHash)}
-          onClick={() => setActiveUser(user.id !== activeUser?.id ? user : null)}
+          isActive={userDetails.userId === activeUser?.userId}
+          indicator={voiceChatUsers.includes(userDetails.userId) ? 'voice' : undefined}
+          imageSrc={getImageAbsoluteUrl(userDetails.user?.profile.avatarHash)}
+          onClick={() =>
+            setActiveUser(userDetails.userId !== activeUser?.userId ? userDetails : null)
+          }
         />
       ))}
 
@@ -38,23 +40,23 @@ const OnlineUsersList: FC<PropsInterface> = ({onlineUsers, voiceChatUsers}) => {
             size="small"
             icon="astronaut"
             variant="primary"
-            image={getImageAbsoluteUrl(activeUser.profile.avatarHash, ImageSizeEnum.S3)}
+            image={getImageAbsoluteUrl(activeUser.user?.profile.avatarHash, ImageSizeEnum.S3)}
             title={t('titles.profile')}
             onClose={() => setActiveUser(null)}
           >
             <styled.Wrapper>
               <ProfileImage
-                name={activeUser.name}
+                name={activeUser.user?.name || ''}
                 imageHeight={140}
-                image={activeUser.profile.avatarHash}
+                image={activeUser.user?.profile.avatarHash}
                 imageErrorIcon="astronaut"
               />
 
               <styled.Info>
                 <ProfileInfo
-                  description={activeUser.profile.bio}
-                  address={activeUser.profile.profileLink}
-                  joinDate={activeUser.createdAt}
+                  description={activeUser.user?.profile.bio}
+                  address={activeUser.user?.profile.profileLink}
+                  joinDate={activeUser.user?.createdAt}
                   hideBorder
                 />
               </styled.Info>

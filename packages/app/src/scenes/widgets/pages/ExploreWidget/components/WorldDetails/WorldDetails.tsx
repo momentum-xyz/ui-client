@@ -39,8 +39,8 @@ const WorldDetails: FC<PropsInterface> = ({
   const {t} = useI18n();
 
   useEffect(() => {
-    Universe3dEmitter.emit('WorldSelected', world.id);
-  }, [world.id]);
+    Universe3dEmitter.emit('WorldSelected', worldDetails.worldId);
+  }, [worldDetails.worldId]);
 
   return (
     <styled.Container data-testid="WorldDetails-test">
@@ -49,17 +49,17 @@ const WorldDetails: FC<PropsInterface> = ({
         size="normal"
         icon="rabbit_fill"
         variant="primary"
-        image={getImageAbsoluteUrl(world.avatarHash, ImageSizeEnum.S3)}
+        image={getImageAbsoluteUrl(world?.avatarHash, ImageSizeEnum.S3)}
         title={t('labels.odysseyOverview')}
         onClose={onClose}
       >
         <styled.Wrapper>
           <ProfileImage
-            name={world.name}
-            image={world.avatarHash}
+            name={world?.name || ''}
+            image={world?.avatarHash}
             imageErrorIcon="rabbit_fill"
-            byName={world.name}
-            onByClick={() => onSelectUser(world.id)}
+            byName={world?.name || ''}
+            onByClick={() => onSelectUser(world?.id || '')}
           />
 
           <styled.GeneralScrollable>
@@ -68,8 +68,8 @@ const WorldDetails: FC<PropsInterface> = ({
               description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean commodo ligula eget dolor..."
               address="http://www.google.com"
               joinDate={new Date().toISOString()}
-              onVisit={() => onVisitWorld(world.id)}
-              onStake={() => onStakeWorld(world.id)}
+              onVisit={() => onVisitWorld(world?.id || '')}
+              onStake={() => onStakeWorld(world?.id || '')}
             />
 
             <styled.TitleContainer>

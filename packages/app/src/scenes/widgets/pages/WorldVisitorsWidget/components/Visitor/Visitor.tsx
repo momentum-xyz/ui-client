@@ -2,21 +2,32 @@ import {FC, memo, useState} from 'react';
 import {signUpDateString, useI18n} from '@momentum-xyz/core';
 import {ButtonEllipse, ButtonRound, Hexagon, ProfileLine} from '@momentum-xyz/ui-kit-storybook';
 
-import {UserModelInterface} from 'core/models';
+import {UserDetailsModelType} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';
 
 import * as styled from './Visitor.styled';
 
 interface PropsInterface {
-  user: UserModelInterface;
+  userDetails: UserDetailsModelType;
+  onVisitWorld: (worldId: string) => void;
   onSendHighFive: (userId: string) => void;
   onInviteToVoiceChat: (userId: string) => void;
 }
 
-const Visitor: FC<PropsInterface> = ({user, onSendHighFive, onInviteToVoiceChat}) => {
+const Visitor: FC<PropsInterface> = ({
+  userDetails,
+  onVisitWorld,
+  onSendHighFive,
+  onInviteToVoiceChat
+}) => {
   const [isDetailsShown, setIsDetailsShown] = useState<boolean>(false);
+  const {user} = userDetails;
 
   const {t} = useI18n();
+
+  if (!user) {
+    return <></>;
+  }
 
   return (
     <styled.Container data-testid="Visitor-test">
@@ -39,12 +50,12 @@ const Visitor: FC<PropsInterface> = ({user, onSendHighFive, onInviteToVoiceChat}
               <ButtonRound
                 icon="voice_chat"
                 variant="primary"
-                onClick={() => onInviteToVoiceChat(user.id)}
+                onClick={() => onInviteToVoiceChat(userDetails.userId)}
               />
               <ButtonRound
                 icon="high-five"
                 variant="primary"
-                onClick={() => onSendHighFive(user.id)}
+                onClick={() => onSendHighFive(userDetails.userId)}
               />
             </>
           )}
@@ -60,6 +71,15 @@ const Visitor: FC<PropsInterface> = ({user, onSendHighFive, onInviteToVoiceChat}
       {isDetailsShown && (
         <styled.Details>
           {user.profile.bio && <styled.Bio>{user.profile.bio}</styled.Bio>}
+
+          {userDetails.worldsOwned.map(({id, name}) => (
+            <styled.Line key={id}>
+              <ProfileLine
+                icon="rabbit_fill"
+                label={<styled.Link onClick={() => onVisitWorld(id)}>{name}</styled.Link>}
+              />
+            </styled.Line>
+          ))}
 
           <styled.Line>
             <ProfileLine

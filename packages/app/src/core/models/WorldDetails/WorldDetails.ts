@@ -1,7 +1,8 @@
 import {castToSnapshot, Instance, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
-import {NftItem, WorldInfo} from 'core/models';
+import {NftItem} from 'core/models';
+import {World} from 'core/models/World';
 import {getRootStore} from 'core/utils';
 
 // FIXME: It should be the same like UserDetails.
@@ -10,7 +11,8 @@ const WorldDetails = types.compose(
   ResetModel,
   types
     .model('WorldDetails', {
-      world: types.reference(WorldInfo),
+      worldId: types.string,
+      world: types.maybeNull(World),
       usersStakedIn: types.optional(types.array(types.reference(NftItem)), []),
       lastStakingComment: '',
       totalAmountStaked: 0

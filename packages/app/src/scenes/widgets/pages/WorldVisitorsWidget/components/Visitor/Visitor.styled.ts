@@ -65,6 +65,10 @@ export const Bio = styled.div`
   line-height: 22px;
 `;
 
+export const Link = styled.a`
+  padding: 0;
+`;
+
 export const SubActions = styled.div`
   padding: 0 0 10px 0;
   display: flex;
