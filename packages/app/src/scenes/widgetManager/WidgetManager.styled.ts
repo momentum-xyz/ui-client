@@ -9,4 +9,5 @@ export const Container = styled.div`
   gap: 10px;
   bottom: 0;
   top: 0;
+  z-index: 2;
 `;

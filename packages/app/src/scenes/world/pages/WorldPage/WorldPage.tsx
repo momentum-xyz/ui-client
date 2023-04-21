@@ -239,7 +239,7 @@ const WorldPage: FC = () => {
 
   return (
     <styled.Inner
-      data-testid="UnityPage-test"
+      data-testid="WorldPage-test"
       // it gets called after object click thus requiring to put some delays to its handler
       // onObjectClick now provides this info, so commenting this out
       // onClick={(event) => {

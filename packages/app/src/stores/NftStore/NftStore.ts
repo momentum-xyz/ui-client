@@ -791,8 +791,8 @@ const NftStore = types
     }),
     activateWallet(wallet: string): void {
       console.log(`Activate wallet ${wallet}`);
-      self.subscribeToBalanceChanges(wallet);
-      self.subscribeToStakingInfo(wallet);
+      // self.subscribeToBalanceChanges(wallet);
+      // self.subscribeToStakingInfo(wallet);
     }
   }))
   .actions((self) => ({
