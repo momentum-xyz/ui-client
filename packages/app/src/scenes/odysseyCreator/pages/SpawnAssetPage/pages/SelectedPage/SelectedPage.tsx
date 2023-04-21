@@ -15,7 +15,7 @@ export const SelectedPage: FC = () => {
   const {spawnAssetStore} = odysseyCreatorStore;
   const {world3dStore} = universeStore;
 
-  const {selectedAssset: asset} = spawnAssetStore;
+  const {selectedAsset: asset} = spawnAssetStore;
 
   const navigate = useNavigate();
 

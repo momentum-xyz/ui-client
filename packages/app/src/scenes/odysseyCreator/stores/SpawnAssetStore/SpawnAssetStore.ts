@@ -13,7 +13,7 @@ const SpawnAssetStore = types
     types.model('SpawnAssetStore', {
       worldId: types.optional(types.string, ''),
       uploadProgress: types.maybeNull(types.number),
-      selectedAssset: types.maybe(Asset3d),
+      selectedAsset: types.maybe(Asset3d),
       navigationObjectName: '',
       isVisibleInNavigation: false,
       uploadedAssetName: '',
@@ -140,7 +140,7 @@ const SpawnAssetStore = types
       self.searchQuery.resetModel();
     },
     selectAsset(asset: Asset3dInterface) {
-      self.selectedAssset = Asset3d.create({...asset});
+      self.selectedAsset = Asset3d.create({...asset});
     },
     spawnObject: flow(function* (worldId: string) {
       const response: PostSpaceResponse | undefined = yield self.spawnObjectRequest.send(
@@ -150,7 +150,7 @@ const SpawnAssetStore = types
           object_name: self.navigationObjectName,
           // TODO: What is it for? Discussion !!!
           object_type_id: '4ed3a5bb-53f8-4511-941b-07902982c31c',
-          asset_3d_id: self.selectedAssset?.id,
+          asset_3d_id: self.selectedAsset?.id,
           minimap: self.isVisibleInNavigation
         }
       );
