@@ -28,10 +28,6 @@ const UserDetails: FC<PropsInterface> = (props) => {
     Universe3dEmitter.emit('UserSelected', userId);
   }, [userId]);
 
-  if (!user) {
-    return <></>;
-  }
-
   return (
     <styled.Container data-testid="UserDetails-test">
       <Panel
@@ -39,23 +35,23 @@ const UserDetails: FC<PropsInterface> = (props) => {
         size="normal"
         icon="astronaut"
         variant="primary"
-        image={getImageAbsoluteUrl(user.profile.avatarHash, ImageSizeEnum.S3)}
+        image={getImageAbsoluteUrl(user?.profile.avatarHash, ImageSizeEnum.S3)}
         title={t('labels.memberProfile')}
         onClose={onClose}
       >
         <styled.Wrapper>
           <ProfileImage
-            name={user.name}
-            image={user.profile.avatarHash}
+            name={user?.name || ''}
+            image={user?.profile.avatarHash}
             imageErrorIcon="astronaut"
           />
 
           <styled.GeneralScrollable>
             <ProfileInfo
-              hash={user.wallet}
-              description={user.profile.bio}
-              address={user.profile.profileLink}
-              joinDate={user.createdAt}
+              hash={user?.wallet}
+              description={user?.profile.bio}
+              address={user?.profile.profileLink}
+              joinDate={user?.createdAt}
             />
 
             <styled.OdysseyList>

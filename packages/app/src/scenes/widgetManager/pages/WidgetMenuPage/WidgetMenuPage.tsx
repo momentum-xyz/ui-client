@@ -88,7 +88,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
       isHidden: !isWorld
     },
     {
-      key: WidgetEnum.WORLD_PEOPLE,
+      key: WidgetEnum.WORLD_VISITORS,
       position: PositionEnum.RIGHT,
       iconName: 'group',
       onClick: toggle,
