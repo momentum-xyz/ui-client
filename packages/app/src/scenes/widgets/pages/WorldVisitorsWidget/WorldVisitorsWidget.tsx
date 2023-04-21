@@ -43,54 +43,6 @@ const WorldVisitorsWidget: FC = () => {
                 onInviteToVoiceChat={onInviteToVoiceChat}
               />
             ))}
-            {world2dStore?.onlineUsersList.map((user) => (
-              <Visitor
-                key={user.id}
-                user={user}
-                onSendHighFive={onSendHighFive}
-                onInviteToVoiceChat={onInviteToVoiceChat}
-              />
-            ))}
-            {world2dStore?.onlineUsersList.map((user) => (
-              <Visitor
-                key={user.id}
-                user={user}
-                onSendHighFive={onSendHighFive}
-                onInviteToVoiceChat={onInviteToVoiceChat}
-              />
-            ))}
-            {world2dStore?.onlineUsersList.map((user) => (
-              <Visitor
-                key={user.id}
-                user={user}
-                onSendHighFive={onSendHighFive}
-                onInviteToVoiceChat={onInviteToVoiceChat}
-              />
-            ))}
-            {world2dStore?.onlineUsersList.map((user) => (
-              <Visitor
-                key={user.id}
-                user={user}
-                onSendHighFive={onSendHighFive}
-                onInviteToVoiceChat={onInviteToVoiceChat}
-              />
-            ))}
-            {world2dStore?.onlineUsersList.map((user) => (
-              <Visitor
-                key={user.id}
-                user={user}
-                onSendHighFive={onSendHighFive}
-                onInviteToVoiceChat={onInviteToVoiceChat}
-              />
-            ))}
-            {world2dStore?.onlineUsersList.map((user) => (
-              <Visitor
-                key={user.id}
-                user={user}
-                onSendHighFive={onSendHighFive}
-                onInviteToVoiceChat={onInviteToVoiceChat}
-              />
-            ))}
           </styled.ScrollableContainer>
         </styled.Content>
       </Panel>
