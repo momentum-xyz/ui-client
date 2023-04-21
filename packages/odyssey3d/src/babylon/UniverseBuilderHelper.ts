@@ -162,6 +162,8 @@ export class UniverseBuilderHelper {
     accountLayer.position.y = -10;
     accountLayer.position.z = 200;
 
+    // After all of the orbs are done cloning, disable the initial one
+    this.rootMesh.setEnabled(false);
     PlayerHelper.camera.setTarget(accountLayer.position);
   }
 
