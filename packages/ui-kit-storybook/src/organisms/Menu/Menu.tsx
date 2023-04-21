@@ -1,7 +1,7 @@
 import {useMemo, useRef, useState} from 'react';
 
 import {IconNameType} from '../../types';
-import {Hexagon} from '../../atoms';
+import {Hexagon, HexagonIndicatorType} from '../../atoms';
 import {useResize} from '../../hooks';
 import {PositionEnum} from '../../enums';
 
@@ -14,6 +14,7 @@ export interface MenuItemInterface<T> {
   key: T;
   imageSrc?: string;
   iconName?: IconNameType;
+  iconIndicator?: HexagonIndicatorType;
   tooltip?: string;
   position: PositionEnum;
   subMenuItems?: MenuItemInterface<T>[];
@@ -102,6 +103,7 @@ const Menu = <T,>({activeKeys = [], items = []}: MenuPropsInterface<T>) => {
           type="menu"
           iconName={action.iconName}
           imageSrc={action.imageSrc}
+          indicator={action.iconIndicator}
           isActive={activeKeys.includes(action.key)}
           onClick={() => {
             action.onClick?.(action.key, action.position);

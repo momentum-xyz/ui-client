@@ -308,3 +308,17 @@ export const Sparkle = styled.img`
     left: -1px;
   }
 `;
+
+export const IndicatorVoice = styled.div`
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: var(--green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  right: 4px;
+  z-index: 10;
+`;

@@ -48,6 +48,14 @@ const AgoraVoiceChatStore = types
     },
     set agoraRemoteUsers(users: AgoraRemoteUserInterface[]) {
       self._agoraRemoteUsers = cast(users);
+    },
+    get allAgoraUsers(): string[] {
+      const allUsers = this.agoraRemoteUsers.map((user) => user.uid.toString());
+      if (self.hasJoined && self.userId) {
+        allUsers.push(self.userId);
+      }
+
+      return allUsers;
     }
   }))
   // Listeners handlers
@@ -379,11 +387,6 @@ const AgoraVoiceChatStore = types
         });
       }
     })
-  }))
-  .views((self) => ({
-    get maxVideoStreamsReached(): boolean {
-      return self.agoraRemoteUsers.length + 1 > appVariables.PARTICIPANTS_VIDEO_LIMIT;
-    }
   }));
 
 export {AgoraVoiceChatStore};

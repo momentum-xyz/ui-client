@@ -79,6 +79,9 @@ const AgoraStore = types
     },
     get canToggleMicrophone(): boolean {
       return !self.userDevicesStore.isTogglingMicrophone && !!self.agoraVoiceChatStore.hasJoined;
+    },
+    get hasJoined(): boolean {
+      return self.agoraVoiceChatStore.hasJoined;
     }
   }));
 

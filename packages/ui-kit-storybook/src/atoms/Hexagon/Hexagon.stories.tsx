@@ -18,9 +18,25 @@ const Template: Story<HexagonPropsInterface> = (args) => {
 };
 
 export const Menu = Template.bind({});
-Menu.args = {type: 'menu', iconName: 'fly-portal'};
+Menu.args = {
+  type: 'menu',
+  iconName: 'fly-portal'
+};
+
 export const MenuActive = Template.bind({});
-MenuActive.args = {type: 'menu', iconName: 'fly-portal', isActive: true};
+MenuActive.args = {
+  type: 'menu',
+  iconName: 'fly-portal',
+  isActive: true
+};
+
+export const MenuIndicator = Template.bind({});
+MenuIndicator.args = {
+  type: 'menu',
+  imageSrc: 'https://picsum.photos/300',
+  indicator: 'voice'
+};
+
 export const MenuBlank = Template.bind({});
 MenuBlank.args = {type: 'blank-small'};
 
