@@ -339,6 +339,7 @@ export const enGb = {
       flyWithMe: 'Fly with me',
       search: 'Search',
       voiceChat: 'Voice chat',
+      visitors: 'Visitors',
       chat: 'Chat',
       voice: 'Voice',
       notifications: 'Notifications',
