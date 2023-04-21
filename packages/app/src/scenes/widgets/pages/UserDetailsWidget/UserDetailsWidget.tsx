@@ -25,7 +25,7 @@ const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
     };
   }, [userDetailsStore, data?.id]);
 
-  if (!userDetails) {
+  if (!userDetails?.user) {
     return <></>;
   }
 

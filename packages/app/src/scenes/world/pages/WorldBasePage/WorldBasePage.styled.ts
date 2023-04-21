@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding: 20px 10px;
+  padding: 20px;
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -9,9 +9,9 @@ export const Container = styled.div`
 `;
 
 export const OnlineUsers = styled.div`
-  text-align: left;
+  pointer-events: all;
 `;
 
 export const World = styled.div`
-  text-align: right;
+  pointer-events: all;
 `;

@@ -20,13 +20,17 @@ interface PropsInterface {
 
 const UserDetails: FC<PropsInterface> = (props) => {
   const {userDetails, worldsOwned, worldsStakedIn, onVisitWorld, onSelectWorld, onClose} = props;
-  const {user} = userDetails;
+  const {user, userId} = userDetails;
 
   const {t} = useI18n();
 
   useEffect(() => {
-    Universe3dEmitter.emit('UserSelected', user.id);
-  }, [user.id]);
+    Universe3dEmitter.emit('UserSelected', userId);
+  }, [userId]);
+
+  if (!user) {
+    return <></>;
+  }
 
   return (
     <styled.Container data-testid="UserDetails-test">
@@ -48,10 +52,10 @@ const UserDetails: FC<PropsInterface> = (props) => {
 
           <styled.GeneralScrollable>
             <ProfileInfo
-              hash="some hash" // FIXME: REAL DATA
-              description={user.description}
+              hash={user.wallet}
+              description={user.profile.bio}
               address={user.profile.profileLink}
-              joinDate={new Date().toISOString()}
+              joinDate={user.createdAt}
             />
 
             <styled.OdysseyList>

@@ -33,6 +33,10 @@ export const Container = styled.div`
 
   /* SIZES */
 
+  &.size-small {
+    width: 280px;
+  }
+
   &.size-normal {
     width: 400px;
 

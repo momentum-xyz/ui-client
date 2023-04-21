@@ -1,26 +1,26 @@
-import React, {FC} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 
+import {OnlineUsersList, CurrentWorld} from './components';
 import * as styled from './WorldBasePage.styled';
 
 const WorldBasePage: FC = () => {
-  const {universeStore} = useStore();
+  const {universeStore, widgetManagerStore} = useStore();
+  const {isLeftWidgetShown, isRightWidgetShown} = widgetManagerStore;
   const {world2dStore} = universeStore;
 
   return (
     <styled.Container data-testid="WorldBasePage-test">
       <styled.OnlineUsers>
-        <div>Users:</div>
-        {world2dStore?.onlineUsersList.map((user) => (
-          <div key={user.id}>{user.name}</div>
-        ))}
+        {!isLeftWidgetShown && (
+          <OnlineUsersList onlineUsers={world2dStore?.onlineUsersList || []} />
+        )}
       </styled.OnlineUsers>
 
       <styled.World>
-        <div>World:</div>
-        <div>{world2dStore?.worldId}</div>
+        {!isRightWidgetShown && <CurrentWorld worldId={world2dStore?.worldId || ''} />}
       </styled.World>
     </styled.Container>
   );

@@ -7,6 +7,11 @@ export const Container = styled.div`
   flex-direction: column;
   border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
   gap: 10px;
+
+  &.hideBorder {
+    padding: 0;
+    border-bottom: none;
+  }
 `;
 
 export const Hash = styled.div`
