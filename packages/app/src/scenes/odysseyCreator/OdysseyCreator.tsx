@@ -1,7 +1,7 @@
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useMemo} from 'react';
 import {Panel, IconNameType, SideMenuItemInterface, SideMenu} from '@momentum-xyz/ui-kit-storybook';
-import {useI18n} from '@momentum-xyz/core';
+import {i18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 
@@ -19,8 +19,28 @@ export enum TabsEnum {
   objectColor = 'objectColor'
 }
 
-// keys of TabsEnum
 type MenuItemType = keyof typeof TabsEnum;
+
+const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
+  {
+    id: 'addObject',
+    iconName: 'add',
+    label: i18n.t('labels.addObject')
+  },
+  {
+    id: 'skybox',
+    iconName: 'skybox',
+    label: i18n.t('labels.skyboxes')
+  }
+];
+const allPanels = [
+  ...sideMenuItems,
+  {
+    id: 'inspector',
+    iconName: 'inspector',
+    label: i18n.t('labels.inspector')
+  }
+];
 
 const OdysseyCreator: FC = () => {
   const {universeStore} = useStore();
@@ -34,32 +54,6 @@ const OdysseyCreator: FC = () => {
       world3dStore.disableCreatorMode();
     };
   }, [world3dStore]);
-
-  const {t} = useI18n();
-
-  const [sideMenuItems, allPanels] = useMemo(() => {
-    const menuItems: SideMenuItemInterface<MenuItemType>[] = [
-      {
-        id: 'addObject',
-        iconName: 'add',
-        label: t('labels.addObject')
-      },
-      {
-        id: 'skybox',
-        iconName: 'skybox',
-        label: t('labels.skyboxes')
-      }
-    ];
-    const allPanels = [
-      ...menuItems,
-      {
-        id: 'inspector',
-        iconName: 'inspector',
-        label: t('labels.inspector')
-      }
-    ];
-    return [menuItems, allPanels];
-  }, [t]);
 
   const content =
     useMemo(() => {
