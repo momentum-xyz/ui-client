@@ -7,19 +7,17 @@ import {
   AssetContainer,
   ActionManager,
   ExecuteCodeAction,
-  InstantiatedEntries,
-  TransformNode
+  InstantiatedEntries
 } from '@babylonjs/core';
 import {
   Odyssey3dUserInterface,
   Odyssey3dUserTransformInterface,
-  PositionInterface,
   SetWorldInterface,
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
 
 import {ObjectHelper} from './ObjectHelper';
-import {getAssetFileName, posToVec3, vec3ToPos} from './UtilityHelper';
+import {getAssetFileName, posToVec3, vec3ToPos, moveNode} from './UtilityHelper';
 
 const NORMAL_SPEED = 0.5;
 const FAST_SPEED = 1.5;
@@ -227,25 +225,9 @@ export class PlayerHelper {
           continue;
         }
         const transformNode = userObj.userInstance.rootNodes[0];
-        this.movePlayer(transformNode, user.transform.position);
+        moveNode(transformNode, user.transform.position, this.scene);
       }
     }
-  }
-
-  static movePlayer(userNode: TransformNode, targetPos: PositionInterface) {
-    const slerpPos = Vector3.Zero();
-
-    let elapsedTime = 0;
-    const totalTime = 1000;
-
-    this.scene.onBeforeRenderObservable.add(() => {
-      // TODO: Add a check to not do this every frame if there are no position changes.
-      elapsedTime += this.scene.getEngine().getDeltaTime();
-
-      const startingPos = userNode.position;
-      Vector3.SmoothToRef(startingPos, posToVec3(targetPos), elapsedTime, totalTime, slerpPos);
-      userNode.position = slerpPos;
-    });
   }
 
   static userRemove(id: string) {

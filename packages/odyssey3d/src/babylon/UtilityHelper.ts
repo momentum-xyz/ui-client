@@ -1,4 +1,5 @@
-import {TransformNode, Vector3} from '@babylonjs/core';
+import {Scene, TransformNode, Vector3} from '@babylonjs/core';
+import {PositionInterface} from '@momentum-xyz/core';
 
 import {ObjectHelper} from './ObjectHelper';
 
@@ -13,6 +14,22 @@ export function getNodeFromId(id: string): TransformNode | undefined {
   } else {
     return undefined;
   }
+}
+
+export function moveNode(userNode: TransformNode, targetPos: PositionInterface, scene: Scene) {
+  const slerpPos = Vector3.Zero();
+
+  let elapsedTime = 0;
+  const totalTime = 1000;
+
+  scene.onBeforeRenderObservable.add(() => {
+    // TODO: Add a check to not do this every frame if there are no position changes.
+    elapsedTime += scene.getEngine().getDeltaTime();
+
+    const startingPos = userNode.position;
+    Vector3.SmoothToRef(startingPos, posToVec3(targetPos), elapsedTime, totalTime, slerpPos);
+    userNode.position = slerpPos;
+  });
 }
 
 export function vec3ToPos(vec: Vector3) {

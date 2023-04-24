@@ -64,6 +64,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
       });
 
       events.on('ObjectTransform', (id, object) => {
+        WorldCreatorHelper.setObjectTransform(id, object);
         console.log('TODO handle ObjectTransform', id, object);
       });
 

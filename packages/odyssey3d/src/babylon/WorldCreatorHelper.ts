@@ -1,7 +1,8 @@
 import {GizmoManager, Scene, TransformNode} from '@babylonjs/core';
 import {ObjectTransformInterface} from '@momentum-xyz/core';
 
-import {getNodeFromId, vec3ToPos} from './UtilityHelper';
+import {getNodeFromId, vec3ToPos, moveNode} from './UtilityHelper';
+import {ObjectHelper} from './ObjectHelper';
 
 export enum GizmoTypesEnum {
   Position,
@@ -16,6 +17,8 @@ export class WorldCreatorHelper {
   static gizmoManager: GizmoManager;
   static transformSubscription: {unsubscribe: () => void} | undefined;
   static onObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
+  static selectedObject = '';
+  static scene: Scene;
 
   static initialize(
     scene: Scene,
@@ -24,8 +27,10 @@ export class WorldCreatorHelper {
     this.onObjectTransform = onObjectTransform;
     this.isCreatorMode = false;
     this.lastLockedID = '';
+    this.selectedObject = '';
     // Gizmo setup
     this.gizmoManager = new GizmoManager(scene);
+    this.scene = scene;
 
     // Custom gizmo stuff
     /*const customMesh = MeshBuilder.CreateBox('sphere', undefined, this.gizmoManager.gizmos.rotationGizmo?.gizmoLayer.utilityLayerScene);
@@ -52,6 +57,19 @@ export class WorldCreatorHelper {
         node.onAfterWorldMatrixUpdateObservable.removeCallback(updateTransformCallback);
       }
     };
+  }
+
+  static setObjectTransform(id: string, transform: ObjectTransformInterface) {
+    if (id === this.selectedObject) {
+      return;
+    }
+
+    const objToMove = ObjectHelper.objectsMap.get(id);
+    if (objToMove) {
+      const transformNode = objToMove.objectInstance.rootNodes[0];
+
+      moveNode(transformNode, transform.position, this.scene);
+    }
   }
 
   static toggleCreatorMode() {
