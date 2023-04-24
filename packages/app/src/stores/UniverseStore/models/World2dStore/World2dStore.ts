@@ -1,9 +1,9 @@
 import {flow, types, cast} from 'mobx-state-tree';
 import {Event3dEmitter, RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, SpaceAttributeItemResponse, SpaceInterface, UserInterface} from 'api';
+import {api, SpaceAttributeItemResponse, SpaceInterface} from 'api';
 import {mapper} from 'api/mapper';
-import {NftItemModelInterface, Object, User, WorldInfo} from 'core/models';
+import {NftItemModelInterface, Object, UserDetails, WorldInfo} from 'core/models';
 import {getImageAbsoluteUrl, getRootStore} from 'core/utils';
 
 const World2dStore = types.compose(
@@ -12,8 +12,7 @@ const World2dStore = types.compose(
     .model('World2dStore', {
       worldId: types.optional(types.string, ''),
       worldInfo: types.maybeNull(WorldInfo),
-      onlineUsersList: types.optional(types.array(User), []),
-      userRequest: types.optional(RequestModel, {}),
+      onlineUsersList: types.optional(types.array(UserDetails), []),
 
       // TODO: Removal
       request: types.optional(RequestModel, {}),
@@ -37,16 +36,16 @@ const World2dStore = types.compose(
           this.removeOnlineUser(userId);
         });
       },
-      addOnlineUser: flow(function* (userId: string) {
-        const response: UserInterface = yield self.userRequest.send(api.userRepository.fetchUser, {
-          userId
-        });
-        if (response) {
-          self.onlineUsersList = cast([...self.onlineUsersList, response]);
-        }
-      }),
+      addOnlineUser(userId: string) {
+        const userDetails = UserDetails.create({userId});
+        userDetails.init();
+
+        self.onlineUsersList = cast([...self.onlineUsersList, userDetails]);
+      },
       removeOnlineUser(userId: string) {
-        self.onlineUsersList = cast([...self.onlineUsersList.filter((user) => user.id !== userId)]);
+        self.onlineUsersList = cast([
+          ...self.onlineUsersList.filter((user) => user.userId !== userId)
+        ]);
       },
       // TODO: Removal
       fetchWorldInformation: flow(function* (spaceId: string) {

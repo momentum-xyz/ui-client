@@ -1,29 +1,21 @@
 import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useEffect} from 'react';
-import {generatePath, useNavigate, useParams} from 'react-router-dom';
 import {Button, FileUploader, Text} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 import {Model3dPreview} from '@momentum-xyz/map3d';
 
 import {useStore} from 'shared/hooks';
-import {ROUTES} from 'core/constants';
 
 import * as styled from './SelectedPage.styled';
 
 export const SelectedPage: FC = () => {
   const {odysseyCreatorStore, universeStore} = useStore();
   const {spawnAssetStore} = odysseyCreatorStore;
-  const {world3dStore} = universeStore;
+  const {world3dStore, worldId} = universeStore;
 
-  const {selectedAssset: asset} = spawnAssetStore;
-
-  const navigate = useNavigate();
+  const {selectedAsset: asset, selectAsset} = spawnAssetStore;
 
   const {t} = useI18n();
-
-  const {worldId} = useParams<{
-    worldId: string;
-  }>();
 
   useEffect(() => {
     return () => {
@@ -32,16 +24,10 @@ export const SelectedPage: FC = () => {
   }, [spawnAssetStore]);
 
   const handleSpawn = useCallback(() => {
-    spawnAssetStore.spawnObject(worldId!).then((objectId) => {
-      if (objectId) {
-        if (window.history.state?.state?.setFunctionalityAfterCreation) {
-          navigate(generatePath(ROUTES.odyssey.creator.functionality, {worldId, objectId}));
-        } else {
-          navigate(generatePath(ROUTES.odyssey.base, {worldId}));
-        }
-      }
+    spawnAssetStore.spawnObject(worldId).then((objectId) => {
+      console.log('Spawned object', objectId);
     });
-  }, [navigate, spawnAssetStore, worldId]);
+  }, [spawnAssetStore, worldId]);
 
   const handleSnapshot = async (dataURL: string, initialSnapshot: boolean) => {
     if (!asset || !!asset.preview_hash || !initialSnapshot) {
@@ -73,6 +59,10 @@ export const SelectedPage: FC = () => {
           alert(err);
         });
     }
+  };
+
+  const handleGoBack = () => {
+    selectAsset(null);
   };
 
   if (!asset) {
@@ -108,12 +98,7 @@ export const SelectedPage: FC = () => {
         disabled={!spawnAssetStore.navigationObjectName}
         onClick={handleSpawn}
       />
-      <Button
-        label={t('actions.goBack')}
-        onClick={() => {
-          navigate(-1);
-        }}
-      />
+      <Button label={t('actions.goBack')} onClick={handleGoBack} />
       {process.env.NODE_ENV === 'development' && (
         <FileUploader
           label="DEV - Upload PREVIEW Image"

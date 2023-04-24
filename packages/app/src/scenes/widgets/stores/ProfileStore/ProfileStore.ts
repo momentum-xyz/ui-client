@@ -10,7 +10,7 @@ const ProfileStore = types.compose(
   ResetModel,
   types
     .model('ProfileStore', {
-      worldList: types.optional(types.array(types.reference(WorldInfo)), []),
+      worldList: types.optional(types.array(WorldInfo), []),
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), []),
 
       worldsRequest: types.optional(RequestModel, {}),
@@ -28,7 +28,7 @@ const ProfileStore = types.compose(
         );
 
         if (userWorlds) {
-          self.worldList = cast(userWorlds.map((world) => world.id));
+          self.worldList = cast(userWorlds);
         }
       }),
       editProfile: flow(function* (form: ProfileFormInterface, previousImageHash?: string) {

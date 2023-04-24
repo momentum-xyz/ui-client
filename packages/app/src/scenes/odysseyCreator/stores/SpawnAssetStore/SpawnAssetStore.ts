@@ -12,8 +12,9 @@ const SpawnAssetStore = types
     ResetModel,
     types.model('SpawnAssetStore', {
       worldId: types.optional(types.string, ''),
+      activeTab: 'community',
       uploadProgress: types.maybeNull(types.number),
-      selectedAssset: types.maybe(Asset3d),
+      selectedAsset: types.maybe(Asset3d),
       navigationObjectName: '',
       isVisibleInNavigation: false,
       uploadedAssetName: '',
@@ -52,6 +53,9 @@ const SpawnAssetStore = types
     }
   }))
   .actions((self) => ({
+    setActiveTab(activeTab: string) {
+      self.activeTab = activeTab;
+    },
     uploadAsset: flow(function* (asset: File, preview_hash: string | undefined) {
       if (!self.uploadedAssetName) {
         return;
@@ -139,18 +143,19 @@ const SpawnAssetStore = types
       self.assets3d = cast([]);
       self.searchQuery.resetModel();
     },
-    selectAsset(asset: Asset3dInterface) {
-      self.selectedAssset = Asset3d.create({...asset});
+    selectAsset(asset: Asset3dInterface | null) {
+      self.selectedAsset = asset ? Asset3d.create({...asset}) : undefined;
     },
     spawnObject: flow(function* (worldId: string) {
       const response: PostSpaceResponse | undefined = yield self.spawnObjectRequest.send(
+        // TODO rename SPACE to OBJECT
         api.spaceRepository.postSpace,
         {
           parent_id: worldId,
           object_name: self.navigationObjectName,
           // TODO: What is it for? Discussion !!!
           object_type_id: '4ed3a5bb-53f8-4511-941b-07902982c31c',
-          asset_3d_id: self.selectedAssset?.id,
+          asset_3d_id: self.selectedAsset?.id,
           minimap: self.isVisibleInNavigation
         }
       );
