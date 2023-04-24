@@ -32,7 +32,9 @@ const World3dStore = types
       defaultClickPosition
     ),
     objectMenu: types.optional(Dialog, {}),
+
     isCreatorMode: false,
+    selectedCreatorTab: types.maybeNull(types.enumeration(['addObject', 'skybox'])),
     selectedObjectId: types.maybeNull(types.string),
 
     gizmoMode: types.optional(
@@ -238,6 +240,9 @@ const World3dStore = types
       self.isCreatorMode = false;
 
       self.closeAndResetObjectMenu();
+    },
+    setSelectedCreatorTab(tab: string | null) {
+      self.selectedCreatorTab = tab;
     }
   }))
   .views((self) => ({

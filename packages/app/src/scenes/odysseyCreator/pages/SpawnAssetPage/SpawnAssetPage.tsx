@@ -1,52 +1,70 @@
-import {FC, useEffect} from 'react';
-import {generatePath, useNavigate, useParams} from 'react-router-dom';
-import {Heading, SvgButton} from '@momentum-xyz/ui-kit';
+import {FC, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useI18n} from '@momentum-xyz/core';
+import {useI18n, i18n} from '@momentum-xyz/core';
+import {Button, Input, TabInterface, Tabs} from '@momentum-xyz/ui-kit-storybook';
 
-import {ROUTES} from 'core/constants';
-import {createSwitchByConfig} from 'core/utils';
 import {useStore} from 'shared/hooks';
+import {Asset3dCategoryEnum} from 'api/enums';
 
-import {SpawnAssetMenu} from './components';
-import {SPAWN_ASSET_ROUTES} from './SpawnAssetPage.routes';
 import * as styled from './SpawnAssetPage.styled';
+import {UploadCustomAssetPage, AssetsPage, SelectedPage} from './pages';
+
+type TabType = 'community' | 'private' | 'upload' | 'selected';
+
+const TABS_LIST: TabInterface<TabType>[] = [
+  {id: 'community', icon: 'rabbit_fill', label: i18n.t('labels.communityObjectLibrary')},
+  {id: 'private', icon: 'astronaut', label: i18n.t('labels.privateObjectLibrary')}
+];
 
 const SpawnAssetPage: FC = () => {
-  const {odysseyCreatorStore} = useStore();
+  const {odysseyCreatorStore, universeStore} = useStore();
   const {spawnAssetStore} = odysseyCreatorStore;
-
-  const {worldId} = useParams<{worldId: string}>();
-  const navigate = useNavigate();
+  const {setActiveTab, activeTab, selectedAsset} = spawnAssetStore;
+  const worldId = universeStore.worldId;
 
   const {t} = useI18n();
 
-  useEffect(() => {
-    spawnAssetStore.init(worldId!);
+  //needs to be called before the first render
+  useMemo(() => {
+    spawnAssetStore.init(worldId);
   }, [spawnAssetStore, worldId]);
 
   return (
-    <styled.Wrapper>
-      <styled.Container>
-        <styled.Header>
-          <Heading label={t('titles.spawnAsset')} transform="uppercase" type="h1" />
-          <SvgButton
-            iconName="close"
-            size="medium-large"
-            onClick={() => navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}))}
-          />
-        </styled.Header>
-        <styled.Body>
-          <SpawnAssetMenu worldId={worldId!} />
-          <styled.PageContainer>
-            {createSwitchByConfig(
-              SPAWN_ASSET_ROUTES,
-              generatePath(ROUTES.odyssey.creator.spawnAsset.basicAssets, {worldId})
+    <styled.Container>
+      <styled.Header>
+        <Tabs tabList={TABS_LIST} activeId={activeTab} onSelect={setActiveTab} />
+        <Input
+          placeholder={t('labels.search')}
+          isSearch
+          isClearable
+          wide
+          onChange={spawnAssetStore.searchQuery.setQuery}
+          value={spawnAssetStore.searchQuery.query}
+        />
+        <Button
+          label={t('labels.uploadCustomObject')}
+          wide
+          icon="astro"
+          onClick={() => setActiveTab('upload')}
+        />
+      </styled.Header>
+      <styled.Separator />
+      <styled.Body>
+        {selectedAsset ? (
+          <SelectedPage />
+        ) : (
+          <>
+            {activeTab === 'community' && (
+              <AssetsPage assetCategory={Asset3dCategoryEnum.CUSTOM} showPreview />
             )}
-          </styled.PageContainer>
-        </styled.Body>
-      </styled.Container>
-    </styled.Wrapper>
+            {activeTab === 'private' && (
+              <AssetsPage assetCategory={Asset3dCategoryEnum.STANDARD} showPreview />
+            )}
+            {activeTab === 'upload' && <UploadCustomAssetPage />}
+          </>
+        )}
+      </styled.Body>
+    </styled.Container>
   );
 };
 
