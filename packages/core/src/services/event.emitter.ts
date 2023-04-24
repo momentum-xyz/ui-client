@@ -2,6 +2,7 @@ import EventEmitter from 'eventemitter3';
 
 import {
   Object3dInterface,
+  ObjectTransformInterface,
   Odyssey3dUserInterface,
   Odyssey3dUserTransformInterface,
   SetWorldInterface,
@@ -19,6 +20,7 @@ import {
 export type Event3dType = {
   ObjectCreated: (object: Object3dInterface) => void;
   ObjectChanged: (object: Object3dInterface) => void;
+  ObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
   SetWorld: (world: SetWorldInterface, userId: string) => void;
   ObjectTextureChanged: (texture: Texture3dInterface) => void;
 
