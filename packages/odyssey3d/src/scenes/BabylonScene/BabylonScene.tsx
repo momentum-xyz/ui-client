@@ -63,6 +63,10 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         ObjectHelper.setObjectTexture(scene, object);
       });
 
+      events.on('ObjectTransform', (id, object) => {
+        console.log('TODO handle ObjectTransform', id, object);
+      });
+
       events.on('UserAdded', async (user) => {
         await PlayerHelper.userEnteredAsync(user);
       });
