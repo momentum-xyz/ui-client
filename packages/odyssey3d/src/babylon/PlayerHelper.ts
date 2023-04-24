@@ -7,11 +7,13 @@ import {
   AssetContainer,
   ActionManager,
   ExecuteCodeAction,
-  InstantiatedEntries
+  InstantiatedEntries,
+  TransformNode
 } from '@babylonjs/core';
 import {
   Odyssey3dUserInterface,
   Odyssey3dUserTransformInterface,
+  PositionInterface,
   SetWorldInterface,
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
@@ -86,7 +88,7 @@ export class PlayerHelper {
       // TODO: Consider where to apply the offset between player and camera
 
       const playerTransform: TransformNoScaleInterface = {
-        position: vec3ToPos(this.camera.position.subtract(PLAYER_OFFSET)),
+        position: vec3ToPos(this.camera.position.add(PLAYER_OFFSET)),
         rotation: vec3ToPos(this.camera.rotation)
       };
 
@@ -218,13 +220,30 @@ export class PlayerHelper {
           console.log('Cant set position, because the instance of user has no rootnode.');
           continue;
         }
-
         const transformNode = userObj.userInstance.rootNodes[0];
-
-        transformNode.position = posToVec3(user.transform.position);
-        transformNode.rotation = posToVec3(user.transform.rotation);
+        this.movePlayer(transformNode, user.transform.position);
       }
     }
+  }
+
+  static movePlayer(userNode: TransformNode, targetPos: PositionInterface) {
+    const slerpPos = Vector3.Zero();
+
+    let elapsedTime = 0;
+    const totalTime = 1000;
+
+    this.scene.onBeforeRenderObservable.add(() => {
+      elapsedTime += this.scene.getEngine().getDeltaTime();
+      /*const distance = Vector3.Distance(userNode.position, posToVec3(targetPos));
+      const t = distance / NORMAL_SPEED + 0.5;*/
+
+      const startingPos = userNode.position;
+      //userNode.position = posToVec3(targetPos);
+
+      Vector3.SmoothToRef(startingPos, posToVec3(targetPos), elapsedTime, totalTime, slerpPos);
+
+      userNode.position = slerpPos;
+    });
   }
 
   static userRemove(id: string) {
