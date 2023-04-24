@@ -1,6 +1,6 @@
 import {useDebouncedCallback} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {FC, useEffect, useRef} from 'react';
+import {FC, useEffect} from 'react';
 import {ColorPicker, useColor, toColor} from 'react-color-palette';
 
 import {useStore} from 'shared/hooks';
@@ -10,8 +10,8 @@ import * as styled from './ObjectColorPicker.styled';
 import 'react-color-palette/lib/css/styles.css';
 
 const COLOR_PICKER_DEFAULT_COLOR = '#FFFFFF';
-const COLOR_PICKER_HEIGHT_PX = 150;
-const COLOR_PICKER_WIDTH_PX = 300;
+const COLOR_PICKER_HEIGHT_PX = 250;
+const COLOR_PICKER_WIDTH_PX = 300; // override with css
 const DEBOUNCE_DELAY_MS = 300;
 
 const ObjectColorPage: FC = () => {
@@ -19,11 +19,11 @@ const ObjectColorPage: FC = () => {
   const {objectColorStore} = odysseyCreatorStore;
   const {world3dStore} = universeStore;
 
-  const objectId = world3dStore?.selectedObjectId ?? '';
+  const objectId = odysseyCreatorStore.selectedObjectId || '';
 
-  const ref = useRef<HTMLDivElement>(null);
   const [color, setColor] = useColor('hex', COLOR_PICKER_DEFAULT_COLOR);
 
+  // TODO move these to parent
   const changeUnityObjectColor = useDebouncedCallback((colorHex: string) => {
     world3dStore?.colorPickedPreview(objectId, colorHex);
     objectColorStore.updateObjectColor(objectId, color.hex);
@@ -54,7 +54,7 @@ const ObjectColorPage: FC = () => {
   // }, [ objectColorStore.objectColor, objectId, world3dStore, universeStore.worldId]);
 
   return (
-    <styled.Container ref={ref} data-testid="ObjectColorPage-test">
+    <styled.Container data-testid="ObjectColorPage-test">
       <ColorPicker
         width={COLOR_PICKER_WIDTH_PX}
         height={COLOR_PICKER_HEIGHT_PX}

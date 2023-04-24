@@ -7,12 +7,13 @@ export const Wrapper = styled.div`
 `;
 
 export const WrapperInner = styled.div`
-  width: 300px;
+  width: 100%;
   pointer-events: all;
   margin: 35px 10px;
 `;
 
 export const Container = styled.div`
+  width: 100%;
   padding: 10px 0 0 0;
 
   .rcp {
@@ -21,6 +22,7 @@ export const Container = styled.div`
 
     &.rcp-light {
       background-color: transparent;
+      width: 100% !important;
     }
   }
 

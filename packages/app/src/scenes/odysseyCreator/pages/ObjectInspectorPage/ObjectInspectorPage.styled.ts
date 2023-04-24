@@ -9,9 +9,9 @@ export const Container = styled.div`
   pointer-events: all;
 `;
 
-export const Header = styled.div`
+export const Section = styled.div`
   display: flex;
-  align-items: center;
+  // align-items: center;
   flex-direction: column;
   gap: 10px;
 `;
