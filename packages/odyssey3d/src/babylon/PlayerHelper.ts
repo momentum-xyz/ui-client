@@ -17,7 +17,8 @@ import {
 } from '@momentum-xyz/core';
 
 import {ObjectHelper} from './ObjectHelper';
-import {getAssetFileName, posToVec3, vec3ToPos, moveNode} from './UtilityHelper';
+import {getAssetFileName} from './UtilityHelper';
+import {posToVec3, vec3ToPos, setNodeTransform, TransformTypesEnum} from './TransformHelper';
 
 const NORMAL_SPEED = 0.5;
 const FAST_SPEED = 1.5;
@@ -225,7 +226,13 @@ export class PlayerHelper {
           continue;
         }
         const transformNode = userObj.userInstance.rootNodes[0];
-        moveNode(transformNode, user.transform.position, this.scene);
+        setNodeTransform(
+          transformNode,
+          transformNode.position,
+          user.transform.position,
+          TransformTypesEnum.Position,
+          this.scene
+        );
       }
     }
   }

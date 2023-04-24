@@ -1,7 +1,13 @@
 import {GizmoManager, Scene, TransformNode} from '@babylonjs/core';
 import {ObjectTransformInterface} from '@momentum-xyz/core';
 
-import {getNodeFromId, vec3ToPos, moveNode} from './UtilityHelper';
+import {getNodeFromId} from './UtilityHelper';
+import {
+  vec3ToPos,
+  setNodeTransform,
+  TransformTypesEnum,
+  vec3Equals
+} from './TransformHelper';
 import {ObjectHelper} from './ObjectHelper';
 
 export enum GizmoTypesEnum {
@@ -47,6 +53,7 @@ export class WorldCreatorHelper {
       };
 
       // TODO: Check how often data should be sent to onObjectTransform
+      console.log('qq: ' + node.rotation.x);
       this.onObjectTransform(objectId, myTransfrom);
     };
 
@@ -68,7 +75,60 @@ export class WorldCreatorHelper {
     if (objToMove) {
       const transformNode = objToMove.objectInstance.rootNodes[0];
 
-      moveNode(transformNode, transform.position, this.scene);
+      if (!vec3Equals(objToMove.objectDefinition.transform.position, transform.position)) {
+        console.log(
+          'objToMove.objectDefinition.transform.position x: ' +
+            objToMove.objectDefinition.transform.position.x
+        );
+        console.log('transform.position.x: ' + transform.position.x);
+
+        console.log(
+          'objToMove.objectDefinition.transform.position y: ' +
+            objToMove.objectDefinition.transform.position.y
+        );
+        console.log('transform.position.y: ' + transform.position.y);
+
+        console.log(
+          'objToMove.objectDefinition.transform.position z: ' +
+            objToMove.objectDefinition.transform.position.z
+        );
+        console.log('transform.position.z: ' + transform.position.z);
+
+        console.log('pos changed');
+      } else if (!vec3Equals(objToMove.objectDefinition.transform.rotation, transform.rotation)) {
+        console.log(
+          'objToMove.objectDefinition.transform.rotation x: ' +
+            objToMove.objectDefinition.transform.rotation.x
+        );
+        console.log('transform.rotation.x: ' + transform.rotation.x);
+
+        console.log(
+          'objToMove.objectDefinition.transform.rotation y: ' +
+            objToMove.objectDefinition.transform.rotation.y
+        );
+        console.log('transform.rotation.y: ' + transform.rotation.y);
+
+        console.log(
+          'objToMove.objectDefinition.transform.rotation z: ' +
+            objToMove.objectDefinition.transform.rotation.z
+        );
+        console.log('transform.rotation.z: ' + transform.rotation.z);
+
+        console.log('rot changed');
+      } else if (!vec3Equals(objToMove.objectDefinition.transform.scale, transform.scale)) {
+        console.log('scale changed');
+      }
+      else {
+        console.log('nothing changed');
+      }
+
+      setNodeTransform(
+        transformNode,
+        transformNode.position,
+        transform.position,
+        TransformTypesEnum.Position,
+        this.scene
+      );
     }
   }
 
@@ -80,7 +140,7 @@ export class WorldCreatorHelper {
 
   static toggleGizmo(objectId: string, on: boolean) {
     if (on) {
-      this.setGizmoType(GizmoTypesEnum.Position);
+      this.setGizmoType(GizmoTypesEnum.Rotation);
       const node = getNodeFromId(objectId);
 
       if (node) {

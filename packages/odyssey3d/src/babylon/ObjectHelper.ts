@@ -16,7 +16,8 @@ import {Object3dInterface, Texture3dInterface, ClickPositionInterface} from '@mo
 
 import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
-import {getAssetFileName, posToVec3} from './UtilityHelper';
+import {getAssetFileName} from './UtilityHelper';
+import {posToVec3} from './TransformHelper';
 import {WorldCreatorHelper} from './WorldCreatorHelper';
 
 interface BabylonObjectInterface {

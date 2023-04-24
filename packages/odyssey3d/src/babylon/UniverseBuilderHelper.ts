@@ -496,7 +496,6 @@ export class UniverseBuilderHelper {
   }
 
   static defineCustomMaterial() {
-    // TODO: Check with Frank how is this supposed to look
     const customOrbGlassMat = new PBRMaterial('orbGlass', this.scene);
 
     customOrbGlassMat.reflectionTexture = new Texture(hdrTexture);
