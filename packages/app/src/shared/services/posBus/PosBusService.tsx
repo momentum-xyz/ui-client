@@ -205,8 +205,7 @@ class PosBusService {
       this.main.port?.postMessage([
         MsgType.LOCK_OBJECT,
         {
-          id: objectId,
-          state: 1
+          id: objectId
         }
       ]);
     }
