@@ -53,16 +53,19 @@ const OdysseyCreator: FC = () => {
   const {universeStore, odysseyCreatorStore} = useStore();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const world3dStore = universeStore.world3dStore!;
+  const worldId = universeStore.worldId;
 
-  const {selectedTab, setSelectedTab} = odysseyCreatorStore;
+  const {selectedTab, setSelectedTab, spawnAssetStore} = odysseyCreatorStore;
 
   useEffect(() => {
     world3dStore.enableCreatorMode();
+    spawnAssetStore.init(worldId); // TEMP
+    spawnAssetStore.fetchAllAssets3d(); // TEMP
     return () => {
       world3dStore.disableCreatorMode();
       odysseyCreatorStore.reset();
     };
-  }, [odysseyCreatorStore, world3dStore]);
+  }, [odysseyCreatorStore, world3dStore, spawnAssetStore, worldId]);
 
   const content =
     useMemo(() => {

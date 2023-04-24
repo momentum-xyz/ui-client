@@ -2,6 +2,7 @@ import {FC, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n, i18n} from '@momentum-xyz/core';
 import {Button, Input, TabInterface, Tabs} from '@momentum-xyz/ui-kit-storybook';
+import {Text} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {Asset3dCategoryEnum} from 'api/enums';
@@ -55,11 +56,14 @@ const SpawnAssetPage: FC = () => {
         ) : (
           <>
             {activeTab === 'community' && (
-              <AssetsPage assetCategory={Asset3dCategoryEnum.CUSTOM} showPreview />
+              <styled.AssetsGroupList>
+                <Text text={t('labels.wrappableAssetPack')} size="l" transform="uppercase" />
+                <AssetsPage assetCategory={Asset3dCategoryEnum.BASIC} showPreview />
+                <Text text={t('labels.communityAssetPack')} size="l" transform="uppercase" />
+                <AssetsPage assetCategory={Asset3dCategoryEnum.CUSTOM} showPreview />
+              </styled.AssetsGroupList>
             )}
-            {activeTab === 'private' && (
-              <AssetsPage assetCategory={Asset3dCategoryEnum.STANDARD} showPreview />
-            )}
+            {activeTab === 'private' && <Text text="Coming soon!" size="l" />}
             {activeTab === 'upload' && <UploadCustomAssetPage />}
           </>
         )}

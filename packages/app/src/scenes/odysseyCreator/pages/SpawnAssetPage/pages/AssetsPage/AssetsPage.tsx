@@ -33,7 +33,7 @@ const AssetsPage: FC<PropsInterface> = ({
   return (
     <styled.Contaier>
       <AssetsGrid
-        assets={spawnAssetStore.filteredAsset3dList}
+        assets={spawnAssetStore.filteredAsset3dList(assetCategory)}
         showPreview={showPreview}
         onSelected={spawnAssetStore.selectAsset}
       />

@@ -22,6 +22,11 @@ export const Body = styled.div`
   overflow: hidden;
 `;
 
+export const AssetsGroupList = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 export const Separator = styled.div`
   height: 1px;
   width: 100%;
