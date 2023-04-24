@@ -88,7 +88,7 @@ export class PlayerHelper {
       // TODO: Consider where to apply the offset between player and camera
 
       const playerTransform: TransformNoScaleInterface = {
-        position: vec3ToPos(this.camera.position.add(PLAYER_OFFSET)),
+        position: vec3ToPos(this.camera.position /*.add(PLAYER_OFFSET)*/),
         rotation: vec3ToPos(this.camera.rotation)
       };
 
@@ -192,6 +192,12 @@ export class PlayerHelper {
       }
 
       const userNode = instance.rootNodes[0];
+      userNode.scaling = new Vector3(1, 1, 1);
+      const childNodes = userNode.getChildTransformNodes();
+      if (childNodes.length > 0) {
+        childNodes[0].position = PLAYER_OFFSET;
+      }
+
       userNode.name = user.name;
       if (user.transform?.position) {
         userNode.position = posToVec3(user.transform.position);
@@ -233,15 +239,11 @@ export class PlayerHelper {
     const totalTime = 1000;
 
     this.scene.onBeforeRenderObservable.add(() => {
+      // TODO: Add a check to not do this every frame if there are no position changes.
       elapsedTime += this.scene.getEngine().getDeltaTime();
-      /*const distance = Vector3.Distance(userNode.position, posToVec3(targetPos));
-      const t = distance / NORMAL_SPEED + 0.5;*/
 
       const startingPos = userNode.position;
-      //userNode.position = posToVec3(targetPos);
-
       Vector3.SmoothToRef(startingPos, posToVec3(targetPos), elapsedTime, totalTime, slerpPos);
-
       userNode.position = slerpPos;
     });
   }
