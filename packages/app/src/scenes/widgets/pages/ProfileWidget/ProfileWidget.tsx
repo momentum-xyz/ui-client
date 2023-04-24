@@ -16,6 +16,7 @@ type MenuItemType = 'viewProfile' | 'editProfile' | 'settings' | 'wallet' | 'log
 
 const ProfileWidget: FC = () => {
   const {sessionStore, agoraStore, widgetStore, widgetManagerStore} = useStore();
+  const {userDevicesStore} = agoraStore;
   const {profileStore} = widgetStore;
 
   const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewProfile');
@@ -128,12 +129,14 @@ const ProfileWidget: FC = () => {
 
               {activeMenuId === 'settings' && (
                 <ProfileSettings
-                  inputAudioDeviceId={agoraStore.userDevicesStore.currentAudioInput?.deviceId}
-                  outputAudioDeviceId={agoraStore.userDevicesStore.currentAudioInput?.deviceId} // TODO: Connect;
-                  inputMuted={false} // TODO: Connect;
-                  outputMuted={false} // TODO: Connect;
-                  audioDeviceList={agoraStore.userDevicesStore.audioInputOptions}
-                  onSubmit={console.log} // TODO: Connect;
+                  inputAudioDeviceId={userDevicesStore.currentAudioInput?.deviceId}
+                  outputAudioDeviceId={userDevicesStore.currentAudioInput?.deviceId} // TODO: Connect;
+                  inputAudioDeviceList={userDevicesStore.audioInputOptions}
+                  outputAudioDeviceList={userDevicesStore.audioOutputOptions}
+                  onChangeAudioDevices={(inputId, outputId) => {
+                    userDevicesStore.selectAudioInput(inputId || '');
+                    // userDevicesStore.selectAudioInput(inputId || ''); // TODO: Connect;
+                  }}
                   onCancel={() => setActiveMenuId('viewProfile')}
                   isUpdating={false}
                 />

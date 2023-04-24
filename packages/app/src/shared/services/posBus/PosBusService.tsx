@@ -1,11 +1,10 @@
-import {AttributeValueInterface} from '@momentum-xyz/sdk';
+import {AttributeNameEnum, AttributeValueInterface} from '@momentum-xyz/sdk';
 import {
   Client,
   loadClientWorker,
   MsgType,
   PosbusEvent,
   PosbusPort
-  // posbus
 } from '@momentum-xyz/posbus-client';
 import {
   Event3dEmitter,
@@ -15,27 +14,8 @@ import {
 
 // import {VoiceChatActionEnum} from 'api/enums';
 import {PosBusEventEmitter} from 'core/constants';
-import {
-  PosBusMessageTypeEnum
-  // PosBusNotificationEnum
-} from 'core/enums';
-import {
-  // PosBusVibeMessageType,
-  // PosBusHigh5MessageType,
-  // PosBusMessageStatusType,
-  // PosBusInviteMessageType,
-  // PosBusBroadcastMessageType,
-  // PosBusGatheringMessageType,
-  // PosBusCommunicationMessageType,
-  // PosBusEmojiMessageType,
-  // PosBusMegamojiMessageType,
-  // PosBusFlyWithMeType,
-  // PosBusScreenShareMessageType,
-  PosBusMiroStateMessageType as PosBusAttributeMessageType
-  // PosBusFlyToMeType,
-  // PosBusVoiceChatActionMessageType,
-  // PosBusVoiceChatUserMessageType
-} from 'core/types';
+import {PosBusMessageTypeEnum} from 'core/enums';
+import {PosBusMiroStateMessageType as PosBusAttributeMessageType} from 'core/types';
 import {appVariables} from 'api/constants';
 
 class PosBusService {
@@ -181,6 +161,24 @@ class PosBusService {
         //   //  owner - todo check if we need this
         // } = data;
         // Event3dEmitter.emit('ObjectLockChanged', id, result === 1);
+        break;
+      }
+
+      case MsgType.ATTRIBUTE_VALUE_CHANGED: {
+        console.log('[PosBus Msg] ATTRIBUTE_VALUE_CHANGED: ', data);
+        switch (data.topic) {
+          case 'voice-chat-user': {
+            const {attribute_name, value} = data.data;
+            if (attribute_name === AttributeNameEnum.VOICE_CHAT_USER) {
+              if (value && value.joined) {
+                Event3dEmitter.emit('UserJoinedVoiceChat', value.userId);
+              } else if (value) {
+                Event3dEmitter.emit('UserLeftVoiceChat', value.userId);
+              }
+            }
+            break;
+          }
+        }
         break;
       }
 

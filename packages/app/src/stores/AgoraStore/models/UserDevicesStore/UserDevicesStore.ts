@@ -1,7 +1,7 @@
-import {flow, Instance, types} from 'mobx-state-tree';
+import {flow, types} from 'mobx-state-tree';
 import AgoraRTC, {IMicrophoneAudioTrack} from 'agora-rtc-sdk-ng';
 import {ResetModel, Dialog} from '@momentum-xyz/core';
-import {OptionInterface} from '@momentum-xyz/ui-kit';
+import {SelectOptionInterface} from '@momentum-xyz/ui-kit-storybook';
 
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
@@ -18,16 +18,24 @@ const UserDevicesStore = types
         isTogglingMicrophone: false
       })
       .volatile<{
-        audioInputs: MediaDeviceInfo[];
+        audioInputs: InputDeviceInfo[];
+        audioOutputs: MediaDeviceInfo[];
         _currentAudioInput?: MediaDeviceInfo;
         _localAudioTrack?: IMicrophoneAudioTrack;
       }>(() => ({
-        audioInputs: []
+        audioInputs: [],
+        audioOutputs: []
       }))
   )
   .views((self) => ({
-    get audioInputOptions(): OptionInterface[] {
+    get audioInputOptions(): SelectOptionInterface<string>[] {
       return self.audioInputs.map((input) => ({
+        value: input.deviceId,
+        label: input.label
+      }));
+    },
+    get audioOutputOptions(): SelectOptionInterface<string>[] {
+      return self.audioOutputs.map((input) => ({
         value: input.deviceId,
         label: input.label
       }));
@@ -64,9 +72,6 @@ const UserDevicesStore = types
 
       return true;
     }),
-    doNotShowCameraRequirementDialogAgain() {
-      storage.set(StorageKeyEnum.NoCameraInfo, 1);
-    },
     mute: flow(function* () {
       self.isTogglingMicrophone = true;
 
@@ -110,10 +115,8 @@ const UserDevicesStore = types
 
       if (self.microphoneConsent) {
         const devices = yield navigator.mediaDevices.enumerateDevices();
-
-        self.audioInputs = devices.filter(
-          (device: MediaDeviceInfo) => device.kind === 'audioinput'
-        );
+        self.audioInputs = devices.filter((i: InputDeviceInfo) => i.kind === 'audioinput');
+        self.audioOutputs = devices.filter((i: MediaDeviceInfo) => i.kind === 'audiooutput');
 
         try {
           self.currentAudioInput =
@@ -141,9 +144,7 @@ const UserDevicesStore = types
     }),
     cleanupLocalTracks() {
       self.localAudioTrack?.stop();
-
       self.localAudioTrack?.close();
-
       self.localAudioTrack = undefined;
     },
     toggleMicrophone(mute?: boolean) {
@@ -159,7 +160,5 @@ const UserDevicesStore = types
       }
     }
   }));
-
-export type UserDevicesStoreType = Instance<typeof UserDevicesStore>;
 
 export {UserDevicesStore};

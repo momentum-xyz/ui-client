@@ -1,8 +1,7 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {OptionInterface} from '@momentum-xyz/ui-kit';
-import {Select, Button, ButtonRound} from '@momentum-xyz/ui-kit-storybook';
+import {Select, Button, ButtonRound, SelectOptionInterface} from '@momentum-xyz/ui-kit-storybook';
 import {Frame} from '@momentum-xyz/ui-kit-storybook';
 
 import * as styled from './ProfileSettings.styled';
@@ -10,33 +9,26 @@ import * as styled from './ProfileSettings.styled';
 interface PropsInterface {
   inputAudioDeviceId?: string;
   outputAudioDeviceId?: string;
-  inputMuted?: boolean;
-  outputMuted?: boolean;
-  audioDeviceList: OptionInterface[];
+  inputAudioDeviceList: SelectOptionInterface<string>[];
+  outputAudioDeviceList: SelectOptionInterface<string>[];
   isUpdating: boolean;
+  onChangeAudioDevices: (inputId: string | undefined, outputId: string | undefined) => void;
   onCancel: () => void;
-  onSubmit: (data: {
-    inputAudioDeviceId: string | undefined;
-    outputAudioDeviceId: string | undefined;
-  }) => void;
 }
 
 const ProfileSettings: FC<PropsInterface> = ({
-  audioDeviceList,
+  inputAudioDeviceId,
+  outputAudioDeviceId,
+  inputAudioDeviceList,
+  outputAudioDeviceList,
   isUpdating,
-  onSubmit,
-  onCancel,
-  ...rest
+  onChangeAudioDevices,
+  onCancel
 }) => {
+  const [selectedInputAudioDeviceId, setInputAudioDeviceId] = useState(inputAudioDeviceId);
+  const [selectedOutputAudioDeviceId, setOutputAudioDeviceId] = useState(outputAudioDeviceId);
+
   const {t} = useI18n();
-
-  const [inputAudioDeviceId, setInputAudioDeviceId] = useState(rest.inputAudioDeviceId);
-  const [outputAudioDeviceId, setOutputAudioDeviceId] = useState(rest.outputAudioDeviceId);
-
-  const handleSubmit = () => {
-    const data = {inputAudioDeviceId, outputAudioDeviceId};
-    onSubmit(data);
-  };
 
   return (
     <styled.Container>
@@ -46,9 +38,8 @@ const ProfileSettings: FC<PropsInterface> = ({
           <ButtonRound variant="primary" isLabel icon="microphoneOn" />
           <Select
             placeholder={`${t('devices.selectInputSource')}`}
-            value={(inputAudioDeviceId || null) as any}
-            // @ts-ignore
-            options={audioDeviceList}
+            value={selectedInputAudioDeviceId}
+            options={inputAudioDeviceList}
             onSingleChange={(value) => {
               if (!value) {
                 return;
@@ -61,9 +52,8 @@ const ProfileSettings: FC<PropsInterface> = ({
           <ButtonRound variant="primary" isLabel icon="sound_louder" />
           <Select
             placeholder={`${t('devices.selectOutputSource')}`}
-            value={(outputAudioDeviceId || null) as any}
-            // @ts-ignore
-            options={audioDeviceList}
+            value={selectedOutputAudioDeviceId}
+            options={outputAudioDeviceList}
             onSingleChange={(value) => {
               if (!value) {
                 return;
@@ -75,7 +65,13 @@ const ProfileSettings: FC<PropsInterface> = ({
 
         <styled.Actions>
           <Button variant="secondary" label={t('actions.cancel')} onClick={onCancel} />
-          <Button label={t('actions.save')} disabled={isUpdating} onClick={handleSubmit} />
+          <Button
+            label={t('actions.save')}
+            disabled={isUpdating}
+            onClick={() => {
+              onChangeAudioDevices(selectedInputAudioDeviceId, selectedOutputAudioDeviceId);
+            }}
+          />
         </styled.Actions>
       </Frame>
     </styled.Container>
