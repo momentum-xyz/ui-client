@@ -91,9 +91,9 @@ const AgoraVoiceChatStore = types
       }
 
       const updatedUser = self.agoraRemoteUsers.find((remoteUser) => remoteUser.uid === user.uid);
-
       if (updatedUser) {
-        updatedUser.participantInfo = user;
+        updatedUser.agoraRTCUser = user;
+
         if (mediaType === 'audio') {
           updatedUser.isMuted = !user.hasAudio;
           updatedUser.audioTrack = user.audioTrack;
@@ -103,7 +103,7 @@ const AgoraVoiceChatStore = types
     handleUserUnpublished(user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
       const foundUser = self.agoraRemoteUsers.find((remoteUser) => remoteUser.uid === user.uid);
 
-      if (foundUser?.participantInfo) {
+      if (foundUser?.agoraRTCUser) {
         if (mediaType === 'audio' && foundUser.audioTrack?.isPlaying) {
           foundUser.audioTrack?.stop();
         }
@@ -119,16 +119,13 @@ const AgoraVoiceChatStore = types
         return;
       }
 
-      const foundUser = self.agoraRemoteUsers.find((remoteUser) => remoteUser.uid === user.uid);
+      if (!self.agoraRemoteUsers.find((remoteUser) => remoteUser.uid === user.uid)) {
+        const newUser: AgoraRemoteUserInterface = cast({
+          uid: user.uid,
+          agoraRTCUser: user,
+          isMuted: true
+        });
 
-      const newUser: AgoraRemoteUserInterface = cast({
-        uid: user.uid,
-        participantInfo: user,
-        isMuted: true,
-        cameraOff: true
-      });
-
-      if (!foundUser) {
         self.agoraRemoteUsers = cast([...self.agoraRemoteUsers, newUser]);
       }
     },

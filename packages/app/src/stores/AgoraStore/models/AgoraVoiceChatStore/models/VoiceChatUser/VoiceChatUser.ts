@@ -1,5 +1,5 @@
 import {RequestModel} from '@momentum-xyz/core';
-import {flow, types} from 'mobx-state-tree';
+import {flow, Instance, types} from 'mobx-state-tree';
 
 import {api, FetchUserResponse} from 'api';
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -29,5 +29,7 @@ const VoiceChatUser = types
       return getImageAbsoluteUrl(self.avatarHash);
     }
   }));
+
+export interface VoiceChatUserModelInterface extends Instance<typeof VoiceChatUser> {}
 
 export {VoiceChatUser};
