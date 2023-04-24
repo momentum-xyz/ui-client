@@ -12,10 +12,15 @@ import {ObjectColorPicker} from './components';
 
 const ObjectInspector: FC = () => {
   const {odysseyCreatorStore} = useStore();
-  const {selectedObjectId, objectName, objectInfo} = odysseyCreatorStore;
+  const {selectedObjectId, objectName, objectInfo, spawnAssetStore} = odysseyCreatorStore;
+  const {assets3dBasic, assets3dCustom} = spawnAssetStore;
 
   console.log('ObjectInspector.tsx: selected asset: ', {selectedObjectId, objectName, objectInfo});
+  console.log('ObjectInspector.tsx: assets3dBasic: ', assets3dBasic);
+  console.log('ObjectInspector.tsx: assets3dCustom: ', assets3dCustom);
   // const {t} = useI18n();
+
+  const canChangeColor = assets3dBasic.some((asset) => asset.id === objectInfo?.asset_3d_id);
 
   return (
     <styled.Container>
@@ -35,9 +40,11 @@ const ObjectInspector: FC = () => {
           value={spawnAssetStore.searchQuery.query}
         /> */}
       </styled.Section>
-      <styled.Section>
-        <ObjectColorPicker />
-      </styled.Section>
+      {canChangeColor && (
+        <styled.Section>
+          <ObjectColorPicker />
+        </styled.Section>
+      )}
     </styled.Container>
   );
 };
