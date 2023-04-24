@@ -20,7 +20,7 @@ const TABS_LIST: TabInterface<TabType>[] = [
 const SpawnAssetPage: FC = () => {
   const {odysseyCreatorStore, universeStore} = useStore();
   const {spawnAssetStore} = odysseyCreatorStore;
-  const {setActiveTab, activeTab, selectedAsset} = spawnAssetStore;
+  const {setActiveTab, activeTab, selectedAsset, selectAsset} = spawnAssetStore;
   const worldId = universeStore.worldId;
 
   const {t} = useI18n();
@@ -30,10 +30,15 @@ const SpawnAssetPage: FC = () => {
     spawnAssetStore.init(worldId);
   }, [spawnAssetStore, worldId]);
 
+  const handleTabSelect = (tabId: TabType) => {
+    setActiveTab(tabId);
+    selectAsset(null);
+  };
+
   return (
     <styled.Container>
       <styled.Header>
-        <Tabs tabList={TABS_LIST} activeId={activeTab} onSelect={setActiveTab} />
+        <Tabs tabList={TABS_LIST} activeId={activeTab as TabType} onSelect={handleTabSelect} />
         <Input
           placeholder={t('labels.search')}
           isSearch
