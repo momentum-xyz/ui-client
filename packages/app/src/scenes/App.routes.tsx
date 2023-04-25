@@ -10,7 +10,7 @@ const Object = lazy(() => import('./object/Object'));
 const DisconnectedPage = lazy(() => import('./system/pages/DisconnectedPage/DisconnectedPage'));
 const WrongBrowserPage = lazy(() => import('./system/pages/WrongBrowserPage/WrongBrowserPage'));
 const MaintenancePage = lazy(() => import('./system/pages/MaintenancePage/MaintenancePage'));
-const OdysseyCreator = lazy(() => import('./odysseyCreator/OdysseyCreator'));
+const OdysseyCreator = lazy(() => import('./widgets/pages/CreatorWidget/OdysseyCreator'));
 
 export const SYSTEM_ROUTES: RouteConfigInterface[] = [
   {
