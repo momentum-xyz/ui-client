@@ -1,9 +1,9 @@
 import {cast, flow, Instance, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, UserInterface, UserWorldInfoInterface} from 'api';
 import {User} from 'core/models/User';
 import {WorldInfo} from 'core/models/WorldInfo';
+import {api, UserInterface, WorldInfoInterface} from 'api';
 
 const UserDetails = types.compose(
   ResetModel,
@@ -18,13 +18,6 @@ const UserDetails = types.compose(
       worldsStakedInRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
-      init(): void {
-        this.loadUser();
-        this.loadOwnedWorlds();
-      },
-      initStakeData(): void {
-        //this.loadStakedInWorlds();
-      },
       loadUser: flow(function* () {
         const response: UserInterface = yield self.userRequest.send(api.userRepository.fetchUser, {
           userId: self.userId
@@ -35,8 +28,8 @@ const UserDetails = types.compose(
         }
       }),
       loadOwnedWorlds: flow(function* () {
-        const worlds: UserWorldInfoInterface[] = yield self.worldsOwnedRequest.send(
-          api.userRepository.fetchWorldList,
+        const worlds: WorldInfoInterface[] = yield self.worldsOwnedRequest.send(
+          api.userRepository.fetchOwnedWorldList,
           {userId: self.userId}
         );
         if (worlds) {
@@ -44,15 +37,21 @@ const UserDetails = types.compose(
         }
       }),
       loadStakedInWorlds: flow(function* () {
-        const worlds: UserWorldInfoInterface[] = yield self.worldsOwnedRequest.send(
-          // FIXME: Just use correct EP which is not ready on BE side
-          api.userRepository.fetchWorldList,
+        const worlds: WorldInfoInterface[] = yield self.worldsOwnedRequest.send(
+          api.userRepository.fetchStakedWorldList,
           {userId: self.userId}
         );
         if (worlds) {
           self.worldsStakedIn = cast(worlds);
         }
       })
+    }))
+    .actions((self) => ({
+      async afterCreate() {
+        await self.loadUser();
+        await self.loadOwnedWorlds();
+        await self.loadStakedInWorlds();
+      }
     }))
 );
 

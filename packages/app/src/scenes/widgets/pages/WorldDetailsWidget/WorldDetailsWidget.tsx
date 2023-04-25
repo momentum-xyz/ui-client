@@ -41,7 +41,7 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         onClose={widgetManagerStore.closeAll}
       >
         <styled.Content>
-          <div>{worldDetails.worldId}</div>
+          <div>{worldDetails.id}</div>
 
           {/* All required data are already available inside worldDetails model. */}
           {/* It doesn't need to make additional requests to BE. Just use. */}

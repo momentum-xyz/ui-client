@@ -1,6 +1,6 @@
 import {UserStatusEnum} from '@momentum-xyz/ui-kit';
 
-import {UserProfileInterface} from 'api';
+import {UserProfileInterface, WorldInfoInterface} from 'api';
 
 /** COMMON **/
 
@@ -23,12 +23,6 @@ export interface UserInfoInterface {
   name: string;
   description?: string;
   profile: UserProfileInterface;
-}
-
-export interface UserWorldInfoInterface {
-  id: string;
-  name: string;
-  owner_id: string;
 }
 
 /** FETCH ME **/
@@ -54,10 +48,18 @@ export interface FetchUserListRequest {
 
 export interface FetchUserListResponse extends Array<UserInfoInterface> {}
 
-/** FETCH WORLD LIST **/
+/** FETCH OWNED WORLD LIST **/
 
 export interface FetchUserWorldListRequest {
   userId: string;
 }
 
-export interface FetchUserWorldListResponse extends Array<UserWorldInfoInterface> {}
+export interface FetchUserWorldListResponse extends Array<WorldInfoInterface> {}
+
+/** FETCH STAKED WORLD LIST **/
+
+export interface FetchUserStakedWorldListRequest {
+  userId: string;
+}
+
+export interface FetchUserStakedWorldListResponse extends Array<WorldInfoInterface> {}

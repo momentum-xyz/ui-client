@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {WorldInfo} from 'core/models';
-import {api, UploadImageResponse, UserWorldInfoInterface} from 'api';
+import {api, UploadImageResponse, WorldInfoInterface} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
 import {ProfileFormInterface} from 'core/interfaces';
 
@@ -22,8 +22,8 @@ const ProfileStore = types.compose(
         this.loadWorlds(userId);
       },
       loadWorlds: flow(function* (userId: string) {
-        const userWorlds: UserWorldInfoInterface[] = yield self.worldsRequest.send(
-          api.userRepository.fetchWorldList,
+        const userWorlds: WorldInfoInterface[] = yield self.worldsRequest.send(
+          api.userRepository.fetchOwnedWorldList,
           {userId}
         );
 
