@@ -12,7 +12,7 @@ import * as styled from './Widgets_OLD.styled';
 const ReactHowler = ReactHowlerOriginal as unknown as FC<ReactHowlerProps>;
 
 const Widgets_OLD: FC = () => {
-  const {sessionStore, widgetStore_OLD, odysseyCreatorStore, universeStore} = useStore();
+  const {sessionStore, widgetStore_OLD, creatorStore, universeStore} = useStore();
   const {helpStore, musicPlayerStore, emojiStore} = widgetStore_OLD;
   const {user, userId} = sessionStore;
   const {musicPlayerWidget, playlist, musicPlayer} = musicPlayerStore;
@@ -22,8 +22,8 @@ const Widgets_OLD: FC = () => {
   useEffect(() => {
     musicPlayerStore.init(universeStore.worldId);
     emojiStore.init(universeStore.worldId);
-    odysseyCreatorStore.fetchPermissions();
-  }, [userId, user, universeStore.worldId, musicPlayerStore, emojiStore, odysseyCreatorStore]);
+    creatorStore.fetchPermissions();
+  }, [userId, user, universeStore.worldId, musicPlayerStore, emojiStore, creatorStore]);
 
   const mainToolbarIcons: ToolbarIconInterface[] = [
     {

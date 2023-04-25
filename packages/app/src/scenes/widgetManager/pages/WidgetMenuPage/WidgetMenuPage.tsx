@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {Menu, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
@@ -21,7 +21,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
   const {sessionStore, widgetManagerStore, universeStore, agoraStore} = useStore();
   const {toggle, activeWidgetList} = widgetManagerStore;
   const {isGuest, userImageUrl} = sessionStore;
-  const {worldId, isMyWorld} = universeStore;
+  const {isMyWorld} = universeStore;
 
   const navigate = useNavigate();
 
@@ -70,11 +70,12 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
       isHidden: !isWorld || isGuest
     },
     {
-      key: WidgetEnum.GO_TO,
-      position: PositionEnum.CENTER,
+      key: WidgetEnum.CREATOR,
+      // position: PositionEnum.CENTER,
+      position: PositionEnum.RIGHT, // TEMP, TODO fix widget manager
       iconName: 'pencil',
       isHidden: !isWorld || !isMyWorld,
-      onClick: () => navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}))
+      onClick: toggle
     },
     {
       key: WidgetEnum.VOICE_CHAT,

@@ -79,7 +79,7 @@ const WorldPage: FC = () => {
       // TODO take coords from event
       // instance3DStore.setLastClickPosition
 
-      navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
+      // navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
 
       world3dStore?.handleClick(objectId, clickPos);
     } else {
