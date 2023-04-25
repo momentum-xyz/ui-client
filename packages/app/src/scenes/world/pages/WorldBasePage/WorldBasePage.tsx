@@ -12,13 +12,16 @@ const WorldBasePage: FC = () => {
   const {agoraVoiceChatStore} = agoraStore;
   const {world2dStore} = universeStore;
 
+  console.log('[WORLD] Users are in VC: ', agoraVoiceChatStore.users.length);
+  console.log('[WORLD] Remove users are in VC: ', agoraVoiceChatStore.agoraRemoteUsers.length);
+
   return (
     <styled.Container data-testid="WorldBasePage-test">
       <styled.OnlineUsers>
         {!isLeftWidgetShown && (
           <OnlineUsersList
             onlineUsers={world2dStore?.onlineUsersList || []}
-            voiceChatUsers={agoraVoiceChatStore.allAgoraUsers}
+            voiceChatUsers={agoraVoiceChatStore.users.map((u) => u.id)}
           />
         )}
       </styled.OnlineUsers>

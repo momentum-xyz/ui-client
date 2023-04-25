@@ -13,51 +13,36 @@ const AgoraStore = types
       userDevicesStore: types.optional(UserDevicesStore, {})
     })
   )
-  // Initializer
   .actions((self) => ({
-    init(worldId: string, userId: string) {
+    initAgora(worldId: string, userId: string) {
       AgoraRTC.setLogLevel(4);
-
       self.userDevicesStore.init();
-      self.agoraVoiceChatStore.init(worldId, userId);
+      self.agoraVoiceChatStore.initAgora(worldId, userId);
+    },
+    initUsers(worldId: string) {
+      self.agoraVoiceChatStore.initUsers(worldId);
     }
   }))
-  // Agora calls setups and chat toggle
-  .actions((self) => ({
-    // --- COMMON ---
-    setupAgoraListeners() {
-      self.agoraVoiceChatStore.setupAgoraListeners(self.agoraScreenShareStore);
-    },
-    cleanupAgoraListeners() {
-      self.agoraVoiceChatStore.cleanupListeners();
-    },
-    handleUserMuted(userId: string) {
-      self.agoraVoiceChatStore.handleUserMuted(userId, self.userDevicesStore.mute);
-    },
-    handleAllMuted(initiatorId: string) {
-      self.agoraVoiceChatStore.handleAllMuted(initiatorId, self.userDevicesStore.mute);
-    }
-  }))
-  // Meeting space managment
   .actions((self) => ({
     joinVoiceChat: flow(function* () {
-      self.setupAgoraListeners();
+      self.agoraVoiceChatStore.setupAgoraListeners();
+      const joined = yield self.agoraVoiceChatStore.join();
+      if (!joined) {
+        return;
+      }
 
-      yield self.agoraVoiceChatStore.join(self.userDevicesStore.createLocalTracks);
-
+      self.userDevicesStore.createLocalTracks(self.agoraVoiceChatStore.createAudioTrackAndPublish);
       self.userDevicesStore.mute();
     }),
     leaveVoiceChat: flow(function* () {
-      self.userDevicesStore.cleanupLocalTracks();
-      self.cleanupAgoraListeners();
-
-      yield self.agoraVoiceChatStore.leave();
-    })
-  }))
-  .actions((self) => ({
+      if (self.agoraVoiceChatStore.hasJoined) {
+        yield self.userDevicesStore.cleanupLocalTracks();
+        self.agoraVoiceChatStore.cleanupListeners();
+        yield self.agoraVoiceChatStore.leave();
+      }
+    }),
     selectAudioInput(deviceId: string) {
       self.userDevicesStore.selectAudioInput(deviceId);
-
       self.userDevicesStore.localAudioTrack?.stop();
       self.userDevicesStore.localAudioTrack?.close();
 
@@ -68,9 +53,6 @@ const AgoraStore = types
       self.userDevicesStore.createLocalAudioTrack(
         self.agoraVoiceChatStore.createAudioTrackAndPublish
       );
-    },
-    selectVideoInput(deviceId: string) {
-      self.userDevicesStore.selectVideoInput(deviceId);
     }
   }))
   .views((self) => ({

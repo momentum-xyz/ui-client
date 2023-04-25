@@ -1,36 +1,35 @@
 import {RequestModel} from '@momentum-xyz/core';
-import {flow, types} from 'mobx-state-tree';
-import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
+import {flow, Instance, types} from 'mobx-state-tree';
 
 import {api, FetchUserResponse} from 'api';
-import {appVariables} from 'api/constants';
+import {getImageAbsoluteUrl} from 'core/utils';
 
 const VoiceChatUser = types
   .model('VoiceChatUser', {
     id: types.string,
     name: types.maybe(types.string),
     avatarHash: types.maybe(types.string),
-
-    fetchUserRequest: types.optional(RequestModel, {})
+    request: types.optional(RequestModel, {})
   })
   .actions((self) => ({
+    afterCreate() {
+      this.fetchUser();
+    },
     fetchUser: flow(function* () {
-      const user: FetchUserResponse = yield self.fetchUserRequest.send(
-        api.userRepository.fetchUser,
-        {userId: self.id}
-      );
+      const user: FetchUserResponse = yield self.request.send(api.userRepository.fetchUser, {
+        userId: self.id
+      });
 
       self.name = user.name;
       self.avatarHash = user.profile.avatarHash;
     })
   }))
   .views((self) => ({
-    get avatarSrc(): string | undefined {
-      return (
-        self.avatarHash &&
-        `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${self.avatarHash}`
-      );
+    get avatarSrc(): string | null {
+      return getImageAbsoluteUrl(self.avatarHash);
     }
   }));
+
+export interface VoiceChatUserModelInterface extends Instance<typeof VoiceChatUser> {}
 
 export {VoiceChatUser};
