@@ -48,10 +48,18 @@ export interface FetchUserListRequest {
 
 export interface FetchUserListResponse extends Array<UserInfoInterface> {}
 
-/** FETCH WORLD LIST **/
+/** FETCH OWNED WORLD LIST **/
 
 export interface FetchUserWorldListRequest {
   userId: string;
 }
 
 export interface FetchUserWorldListResponse extends Array<WorldInfoInterface> {}
+
+/** FETCH STAKED WORLD LIST **/
+
+export interface FetchUserStakedWorldListRequest {
+  userId: string;
+}
+
+export interface FetchUserStakedWorldListResponse extends Array<WorldInfoInterface> {}

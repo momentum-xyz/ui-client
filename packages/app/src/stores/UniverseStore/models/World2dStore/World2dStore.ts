@@ -38,8 +38,6 @@ const World2dStore = types.compose(
       },
       addOnlineUser(userId: string) {
         const userDetails = UserDetails.create({userId});
-        userDetails.init();
-
         self.onlineUsersList = cast([...self.onlineUsersList, userDetails]);
       },
       removeOnlineUser(userId: string) {

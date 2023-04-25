@@ -23,7 +23,7 @@ const ProfileStore = types.compose(
       },
       loadWorlds: flow(function* (userId: string) {
         const userWorlds: WorldInfoInterface[] = yield self.worldsRequest.send(
-          api.userRepository.fetchWorldList,
+          api.userRepository.fetchOwnedWorldList,
           {userId}
         );
 

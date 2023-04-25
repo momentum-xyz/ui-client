@@ -12,7 +12,6 @@ const UserDetailsStore = types.compose(
     .actions((self) => ({
       init(userId: string): void {
         self.userDetails = UserDetails.create({userId});
-        self.userDetails.init();
       }
     }))
 );

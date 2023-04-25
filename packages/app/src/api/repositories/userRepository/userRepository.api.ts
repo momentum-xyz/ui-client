@@ -10,6 +10,8 @@ import {
   FetchUserListResponse,
   FetchUserRequest,
   FetchUserResponse,
+  FetchUserStakedWorldListRequest,
+  FetchUserStakedWorldListResponse,
   FetchUserWorldListRequest,
   FetchUserWorldListResponse
 } from './userRepository.api.types';
@@ -33,11 +35,20 @@ export const fetchUserList: RequestInterface<FetchUserListRequest, FetchUserList
   return request.get(userRepositoryEndpoints().list, restOptions);
 };
 
-export const fetchWorldList: RequestInterface<
+export const fetchOwnedWorldList: RequestInterface<
   FetchUserWorldListRequest,
   FetchUserWorldListResponse
 > = (options) => {
   const {userId, ...restOptions} = options;
-  const url = generatePath(userRepositoryEndpoints().worldList, {userId});
+  const url = generatePath(userRepositoryEndpoints().ownedWorldList, {userId});
+  return request.get(url, restOptions);
+};
+
+export const fetchStakedWorldList: RequestInterface<
+  FetchUserStakedWorldListRequest,
+  FetchUserStakedWorldListResponse
+> = (options) => {
+  const {userId, ...restOptions} = options;
+  const url = generatePath(userRepositoryEndpoints().stakedWorldList, {userId});
   return request.get(url, restOptions);
 };

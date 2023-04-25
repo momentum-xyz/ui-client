@@ -10,6 +10,25 @@ export interface WorldInfoInterface {
   stake_total?: number;
 }
 
+export interface WorldInterface {
+  id: string;
+  name: string;
+  description?: string;
+  avatarHash: string | null;
+  last_staking_comment: string | null;
+  owner_id: string;
+  owner_name?: string | null;
+  stake_total?: number | null;
+  stakers: WorldStakerInterface[] | null;
+}
+
+export interface WorldStakerInterface {
+  user_id: string;
+  name: string;
+  stake?: number | null;
+  avatarHash?: string | null;
+}
+
 /** FETCH WORLD LIST **/
 
 export interface FetchWorldListRequest {
@@ -18,6 +37,14 @@ export interface FetchWorldListRequest {
 }
 
 export interface FetchWorldListResponse extends Array<WorldInfoInterface> {}
+
+/** FETCH WORLD **/
+
+export interface FetchWorldRequest {
+  worldId: string;
+}
+
+export interface FetchWorldResponse extends WorldInterface {}
 
 /** Online Users **/
 

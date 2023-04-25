@@ -12,12 +12,12 @@ import {
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ProfileInfo, ProfileImage} from 'ui-kit';
-import {WorldDetailsModelType} from 'core/models';
+import {WorldModelInterface} from 'core/models';
 
 import * as styled from './WorldDetails.styled';
 
 interface PropsInterface {
-  worldDetails: WorldDetailsModelType;
+  world: WorldModelInterface;
   onSelectUser: (userId: string) => void;
   onVisitWorld: (worldId: string) => void;
   onStakeWorld: (worldId: string) => void;
@@ -27,20 +27,20 @@ interface PropsInterface {
 const USERS_MAX = 2;
 
 const WorldDetails: FC<PropsInterface> = ({
-  worldDetails,
+  world,
   onVisitWorld,
   onStakeWorld,
   onSelectUser,
   onClose
 }) => {
-  const {world, usersStakedIn, lastStakingComment, totalAmountStaked} = worldDetails;
+  const {id, stakers} = world;
 
-  const [isButtonShown, setIsButtonShown] = useState(usersStakedIn.length > USERS_MAX);
+  const [isButtonShown, setIsButtonShown] = useState((stakers?.length || 0) > USERS_MAX);
   const {t} = useI18n();
 
   useEffect(() => {
-    Universe3dEmitter.emit('WorldSelected', worldDetails.worldId);
-  }, [worldDetails.worldId]);
+    Universe3dEmitter.emit('WorldSelected', id);
+  }, [id]);
 
   return (
     <styled.Container data-testid="WorldDetails-test">
@@ -55,21 +55,19 @@ const WorldDetails: FC<PropsInterface> = ({
       >
         <styled.Wrapper>
           <ProfileImage
-            name={world?.name || ''}
-            image={world?.avatarHash}
+            name={world.name}
+            image={world.avatarHash}
             imageErrorIcon="rabbit_fill"
-            byName={world?.name || ''}
-            onByClick={() => onSelectUser(world?.id || '')}
+            byName={world.owner_name || ''}
+            onByClick={() => onSelectUser(world.owner_id)}
           />
 
           <styled.GeneralScrollable>
-            {/* FIXME: REAL DATA */}
             <ProfileInfo
-              description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean commodo ligula eget dolor..."
-              address="http://www.google.com"
-              joinDate={new Date().toISOString()}
-              onVisit={() => onVisitWorld(world?.id || '')}
-              onStake={() => onStakeWorld(world?.id || '')}
+              description={world.description}
+              // joinDate={new Date().toISOString()}
+              onVisit={() => onVisitWorld(world.id)}
+              onStake={() => onStakeWorld(world.id)}
             />
 
             <styled.TitleContainer>
@@ -81,35 +79,34 @@ const WorldDetails: FC<PropsInterface> = ({
 
             <styled.TotalAmount>
               <div>{t('labels.totalAmountStaked')}:</div>
-              <SymbolAmount value={totalAmountStaked} tokenSymbol="MOM" />
+              <SymbolAmount value={world.stake_total || 0} tokenSymbol="MOM" />
             </styled.TotalAmount>
 
-            {!!lastStakingComment && (
+            {!!world.last_staking_comment && (
               <styled.StakingCommentContainer>
                 <div>{t('labels.lastStakingComment')}:</div>
-                <styled.StakingComment>{lastStakingComment}</styled.StakingComment>
+                <styled.StakingComment>{world.last_staking_comment}</styled.StakingComment>
               </styled.StakingCommentContainer>
             )}
 
-            {usersStakedIn.length > 0 && (
+            {stakers && (stakers?.length || 0) > 0 && (
               <styled.StakedInUsersContainer>
                 <styled.Title>
                   <IconSvg name="connect" size="xs" isWhite />
                   <span>{t('labels.connections')}</span>
                 </styled.Title>
 
-                {(isButtonShown ? usersStakedIn.slice(0, USERS_MAX) : usersStakedIn).map(
-                  (user, index) => (
-                    <styled.StakedInUser key={user.uuid} onClick={() => onSelectUser(user.uuid)}>
-                      <Hexagon type="fourth-borderless" skipOuterBorder imageSrc={user.image} />
-                      <styled.Link>
-                        {index < USERS_MAX
-                          ? `${t('labels.topConnector')}: ${user.name}`
-                          : user.name}
-                      </styled.Link>
-                    </styled.StakedInUser>
-                  )
-                )}
+                {(isButtonShown ? stakers.slice(0, USERS_MAX) : stakers).map((user, index) => (
+                  <styled.StakedInUser
+                    key={user.user_id}
+                    onClick={() => onSelectUser(user.user_id)}
+                  >
+                    <Hexagon type="fourth-borderless" skipOuterBorder imageSrc={user.avatarHash} />
+                    <styled.Link>
+                      {index < USERS_MAX ? `${t('labels.topConnector')}: ${user.name}` : user.name}
+                    </styled.Link>
+                  </styled.StakedInUser>
+                ))}
 
                 {isButtonShown && (
                   <styled.ShowAllButtonContainer>

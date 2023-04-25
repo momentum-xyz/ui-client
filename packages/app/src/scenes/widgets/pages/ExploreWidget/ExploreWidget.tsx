@@ -100,10 +100,10 @@ const ExploreWidget: FC = () => {
       </styled.ExplorePanel>
 
       {/* SHOW WORLD OVERVIEW */}
-      {universe2dStore.selectedWorld && (
+      {universe2dStore.selectedWorld?.world && (
         <styled.Details>
           <WorldDetails
-            worldDetails={universe2dStore.selectedWorld}
+            world={universe2dStore.selectedWorld.world}
             onSelectUser={onSelectUser}
             onVisitWorld={onVisitWorld}
             onStakeWorld={onVisitWorld}
