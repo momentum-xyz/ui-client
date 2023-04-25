@@ -1,16 +1,15 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-`;
-
 export const Container = styled.div`
-  width: 300px;
+  width: 100%;
   pointer-events: all;
 
-  margin: 35px 10px;
+  padding: 35px 10px;
+`;
+
+export const HeadingWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
 `;
 
 export const PanelBody = styled.div`
@@ -20,8 +19,9 @@ export const PanelBody = styled.div`
   padding-top: 20px;
 `;
 
-export const HeadingWrapper = styled.div`
+export const ActionBar = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 3px;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 20px;
 `;
