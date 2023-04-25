@@ -5,6 +5,9 @@ export interface WorldInfoInterface {
   name: string;
   description?: string;
   avatarHash: string | null;
+  owner_id: string;
+  owner_name?: string | null;
+  stake_total?: number;
 }
 
 /** FETCH WORLD LIST **/

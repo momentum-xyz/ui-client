@@ -1,7 +1,7 @@
 import {cast, flow, Instance, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, UserInterface, UserWorldInfoInterface} from 'api';
+import {api, UserInterface, WorldInfoInterface} from 'api';
 import {User} from 'core/models/User';
 import {WorldInfo} from 'core/models/WorldInfo';
 
@@ -35,7 +35,7 @@ const UserDetails = types.compose(
         }
       }),
       loadOwnedWorlds: flow(function* () {
-        const worlds: UserWorldInfoInterface[] = yield self.worldsOwnedRequest.send(
+        const worlds: WorldInfoInterface[] = yield self.worldsOwnedRequest.send(
           api.userRepository.fetchWorldList,
           {userId: self.userId}
         );
@@ -44,7 +44,7 @@ const UserDetails = types.compose(
         }
       }),
       loadStakedInWorlds: flow(function* () {
-        const worlds: UserWorldInfoInterface[] = yield self.worldsOwnedRequest.send(
+        const worlds: WorldInfoInterface[] = yield self.worldsOwnedRequest.send(
           // FIXME: Just use correct EP which is not ready on BE side
           api.userRepository.fetchWorldList,
           {userId: self.userId}

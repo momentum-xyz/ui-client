@@ -83,8 +83,11 @@ const Universe2dStore = types.compose(
           image: getImageAbsoluteUrl(item.avatarHash, ImageSizeEnum.S5) || ''
         }));
       },
-      get mostStatedInWorlds(): SliderItemInterface<string>[] {
-        return self.allWorlds.slice(0, 6).map((item) => ({
+      get mostStakedWorlds(): SliderItemInterface<string>[] {
+        const sortedWorlds = [...self.allWorlds].sort(
+          (a, b) => (b.stake_total || 0) - (a.stake_total || 0)
+        );
+        return sortedWorlds.slice(0, 6).map((item) => ({
           id: item.id,
           name: item.name,
           image: getImageAbsoluteUrl(item.avatarHash, ImageSizeEnum.S5) || ''
@@ -104,7 +107,7 @@ const Universe2dStore = types.compose(
           image: getImageAbsoluteUrl(item.profile.avatarHash, ImageSizeEnum.S5) || ''
         }));
       },
-      get mostStatedUsers(): SliderItemInterface<string>[] {
+      get mostStakedUsers(): SliderItemInterface<string>[] {
         return self.allUsers.slice(0, 6).map((item) => ({
           id: item.id,
           name: item.name,
