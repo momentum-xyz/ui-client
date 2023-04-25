@@ -4,22 +4,18 @@ import {Panel, IconNameType, SideMenuItemInterface, SideMenu} from '@momentum-xy
 import {i18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
+import {CreatorTabsEnum} from 'core/enums';
 
-import {ObjectMenu} from './components';
 import * as styled from './OdysseyCreator.styled';
-import {SpawnAssetPage} from './pages/SpawnAssetPage';
-import {SkyboxSelectorWithPreviewPage} from './pages/SkyboxSelectorWithPreviewPage';
+import {
+  SpawnAssetPage,
+  SkyboxSelectorWithPreviewPage,
+  ObjectInspectorPage,
+  AssetCustomisingPage,
+  ObjectFunctionalityPage
+} from './pages';
 
-export enum TabsEnum {
-  addObject = 'addObject',
-  skybox = 'skybox',
-  spawnPoint = 'spawnPoint',
-  spawnAsset = 'spawnAsset',
-  functionality = 'functionality',
-  objectColor = 'objectColor'
-}
-
-type MenuItemType = keyof typeof TabsEnum;
+type MenuItemType = keyof typeof CreatorTabsEnum;
 
 const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
   {
@@ -31,57 +27,80 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     id: 'skybox',
     iconName: 'skybox',
     label: i18n.t('labels.skyboxes')
+  },
+  // TODO move to all panels
+  {
+    id: 'functionality',
+    iconName: 'cubicles',
+    label: i18n.t('labels.selectFunction')
+  },
+  {
+    id: 'customise',
+    iconName: 'group',
+    label: i18n.t('labels.assetCustomising')
   }
 ];
-const allPanels = [
+const allPanels: SideMenuItemInterface<MenuItemType>[] = [
   ...sideMenuItems,
   {
     id: 'inspector',
-    iconName: 'inspector',
+    iconName: 'info',
     label: i18n.t('labels.inspector')
   }
 ];
 
 const OdysseyCreator: FC = () => {
-  const {universeStore} = useStore();
+  const {universeStore, odysseyCreatorStore} = useStore();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const world3dStore = universeStore.world3dStore!;
-  const {selectedCreatorTab, setSelectedCreatorTab} = world3dStore;
+  const worldId = universeStore.worldId;
+
+  const {selectedTab, setSelectedTab, spawnAssetStore} = odysseyCreatorStore;
 
   useEffect(() => {
     world3dStore.enableCreatorMode();
+    spawnAssetStore.init(worldId); // TEMP
+    spawnAssetStore.fetchAllAssets3d(); // TEMP
     return () => {
       world3dStore.disableCreatorMode();
+      odysseyCreatorStore.reset();
     };
-  }, [world3dStore]);
+  }, [odysseyCreatorStore, world3dStore, spawnAssetStore, worldId]);
 
   const content =
     useMemo(() => {
-      switch (selectedCreatorTab) {
+      switch (selectedTab) {
         case 'addObject':
           return <SpawnAssetPage />;
         case 'skybox':
           return <SkyboxSelectorWithPreviewPage />;
         case 'inspector':
-          return <ObjectMenu />;
+          return <ObjectInspectorPage />;
+        case 'functionality':
+          return <ObjectFunctionalityPage />;
+        case 'customise':
+          return <AssetCustomisingPage />;
+        // case 'spawnPoint':
+        //   return <SpawnPointPage />;
         default:
       }
       return null;
-    }, [selectedCreatorTab]) || [];
+    }, [selectedTab]) || [];
 
-  const panel = allPanels.find((panel) => panel.id === selectedCreatorTab);
-  const menuItem = sideMenuItems.find((item) => item.id === selectedCreatorTab);
+  const panel = allPanels.find((panel) => panel.id === selectedTab);
+  const menuItem = sideMenuItems.find((item) => item.id === selectedTab);
 
   return (
     <styled.Container>
       <SideMenu
         activeId={menuItem?.id}
         orientation="left"
-        sideMenuItems={sideMenuItems}
-        onSelect={world3dStore.setSelectedCreatorTab}
+        // sideMenuItems={sideMenuItems}
+        sideMenuItems={allPanels} // TEMP
+        onSelect={setSelectedTab}
       />
 
-      {!!selectedCreatorTab && (
+      {!!selectedTab && (
         <Panel
           isFullHeight
           size="large"
@@ -89,13 +108,12 @@ const OdysseyCreator: FC = () => {
           title={panel?.label || ''}
           icon={panel?.iconName as IconNameType}
           onClose={() => {
-            setSelectedCreatorTab(null);
+            setSelectedTab(null);
           }}
         >
           {content}
         </Panel>
       )}
-      {world3dStore.objectMenu.isOpen && <ObjectMenu />}
     </styled.Container>
   );
 };

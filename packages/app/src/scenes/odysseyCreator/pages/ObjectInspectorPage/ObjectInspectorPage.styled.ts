@@ -9,9 +9,9 @@ export const Container = styled.div`
   pointer-events: all;
 `;
 
-export const Header = styled.div`
+export const Section = styled.div`
   display: flex;
-  align-items: center;
+  // align-items: center;
   flex-direction: column;
   gap: 10px;
 `;
@@ -20,11 +20,6 @@ export const Body = styled.div`
   display: flex;
   flex-grow: 1;
   overflow: hidden;
-`;
-
-export const AssetsGroupList = styled.div`
-  display: flex;
-  flex-direction: column;
 `;
 
 export const Separator = styled.div`

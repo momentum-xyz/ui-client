@@ -32,28 +32,31 @@ const ProfileWidget: FC = () => {
     };
   }, [profileStore, sessionStore.userId]);
 
-  const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
-    {
-      id: 'editProfile',
-      iconName: 'edit',
-      label: t('actions.editProfile')
-    },
-    {
-      id: 'settings',
-      iconName: 'settings',
-      label: t('actions.settings')
-    },
-    {
-      id: 'wallet',
-      iconName: 'wallet',
-      label: t('actions.manageWallet')
-    },
-    {
-      id: 'logout',
-      iconName: 'leave-left',
-      label: t('actions.logOut')
-    }
-  ];
+  const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = useMemo(
+    () => [
+      {
+        id: 'editProfile',
+        iconName: 'edit',
+        label: t('actions.editProfile')
+      },
+      {
+        id: 'settings',
+        iconName: 'settings',
+        label: t('actions.settings')
+      },
+      {
+        id: 'wallet',
+        iconName: 'wallet',
+        label: t('actions.manageWallet')
+      },
+      {
+        id: 'logout',
+        iconName: 'leave-left',
+        label: t('actions.logOut')
+      }
+    ],
+    [t]
+  );
 
   const panelIcon = useMemo(() => {
     if (activeMenuId !== 'viewProfile') {

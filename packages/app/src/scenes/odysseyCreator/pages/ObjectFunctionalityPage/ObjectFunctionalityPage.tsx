@@ -1,39 +1,30 @@
-import {useClickOutside} from '@momentum-xyz/ui-kit';
 import {Dropdown, Heading, PanelLayout, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useRef} from 'react';
 import {useI18n} from '@momentum-xyz/core';
-import {generatePath, useNavigate, useParams} from 'react-router-dom';
 
-import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './ObjectFunctionalityPage.styled';
 
 const ObjectFunctionalityPage: FC = () => {
-  const {odysseyCreatorStore, universeStore} = useStore();
-  const {objectFunctionalityStore} = odysseyCreatorStore;
-
-  const navigate = useNavigate();
+  const {odysseyCreatorStore} = useStore();
+  const {objectFunctionalityStore, selectedObjectId} = odysseyCreatorStore;
 
   const ref = useRef<HTMLDivElement>(null);
 
   const {t} = useI18n();
 
-  const {objectId} = useParams<{objectId: string}>();
-
-  useClickOutside(ref, () => {
-    // navigate(-1);
-    navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
-  });
-
+  // TODO remove this and simplify the store
   useEffect(() => {
-    objectFunctionalityStore.init(objectId);
+    if (selectedObjectId) {
+      objectFunctionalityStore.init(selectedObjectId);
+    }
 
     return () => {
       objectFunctionalityStore.resetModel();
     };
-  }, [objectId, objectFunctionalityStore]);
+  }, [selectedObjectId, objectFunctionalityStore]);
 
   return (
     <styled.Wrapper>

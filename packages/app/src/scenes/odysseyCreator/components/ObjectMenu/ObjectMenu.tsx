@@ -11,8 +11,8 @@ import {useStore} from 'shared/hooks';
 
 import * as styled from './ObjectMenu.styled';
 
-const OBJECT_MENU_OFFSET_X = 295;
-const OBJECT_MENU_OFFSET_Y = 100;
+// const OBJECT_MENU_OFFSET_X = 295;
+// const OBJECT_MENU_OFFSET_Y = 100;
 
 const ObjectMenu: FC = () => {
   const {odysseyCreatorStore, universeStore} = useStore();
@@ -25,8 +25,8 @@ const ObjectMenu: FC = () => {
   const navigate = useNavigate();
   const {t} = useI18n();
 
-  const topOffset = world3dStore?.objectMenuPosition.y || 0 - OBJECT_MENU_OFFSET_Y;
-  const leftOffset = world3dStore?.objectMenuPosition.x || 0 - OBJECT_MENU_OFFSET_X;
+  const topOffset = 0; // world3dStore?.objectMenuPosition.y || 0 - OBJECT_MENU_OFFSET_Y;
+  const leftOffset = 0; //world3dStore?.objectMenuPosition.x || 0 - OBJECT_MENU_OFFSET_X;
   const objectId = world3dStore?.selectedObjectId ?? ' ';
 
   useEffect(() => {
@@ -137,7 +137,7 @@ const ObjectMenu: FC = () => {
               title: t('actions.delete'),
               onClick: () => {
                 objectFunctionalityStore.deleteObject();
-                world3dStore?.objectMenu.close();
+                // world3dStore?.objectMenu.close();
               },
               variant: 'danger'
             }}

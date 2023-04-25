@@ -25,7 +25,9 @@ const SpawnAssetStore = types
       spawnObjectRequest: types.optional(RequestModel, {}),
       setIsVisibleRequest: types.optional(RequestModel, {}),
 
-      assets3d: types.array(Asset3d)
+      assets3d: types.array(Asset3d),
+      assets3dBasic: types.array(Asset3d),
+      assets3dCustom: types.array(Asset3d)
     })
   )
   .actions((self) => ({
@@ -137,7 +139,16 @@ const SpawnAssetStore = types
             .sort((a, b) => a.name.localeCompare(b.name)) || [];
 
         self.assets3d = cast(assets);
+        if (category === Asset3dCategoryEnum.BASIC) {
+          self.assets3dBasic = cast(assets);
+        } else if (category === Asset3dCategoryEnum.CUSTOM) {
+          self.assets3dCustom = cast(assets);
+        }
       }
+    }),
+    fetchAllAssets3d: flow(function* () {
+      yield self.fetchAssets3d(Asset3dCategoryEnum.BASIC);
+      yield self.fetchAssets3d(Asset3dCategoryEnum.CUSTOM);
     }),
     clearAssets() {
       self.assets3d = cast([]);
@@ -167,12 +178,14 @@ const SpawnAssetStore = types
     get isUploadPending(): boolean {
       return self.uploadAssetRequest.isPending;
     },
-    get filteredAsset3dList(): Asset3dInterface[] {
+    filteredAsset3dList(category: string): Asset3dInterface[] {
+      const assets3dList =
+        category === Asset3dCategoryEnum.BASIC ? self.assets3dBasic : self.assets3dCustom;
       return self.searchQuery.isQueryValid
-        ? self.assets3d.filter((asset) =>
+        ? assets3dList.filter((asset) =>
             asset.name.toLocaleLowerCase().includes(self.searchQuery.queryLowerCased)
           )
-        : self.assets3d;
+        : assets3dList;
     }
   }));
 
