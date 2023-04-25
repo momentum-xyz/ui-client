@@ -1,4 +1,4 @@
-import {FC, useEffect, useRef} from 'react';
+import {FC, useEffect} from 'react';
 import {Scene} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
@@ -8,8 +8,6 @@ import {PlayerHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babyl
 import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
-  const sceneRef = useRef<Scene>();
-
   const onObjectClick = useMutableCallback(callbacks.onObjectClick);
   const onUserClick = useMutableCallback(callbacks.onUserClick);
   const onMove = useMutableCallback(callbacks.onMove);
@@ -27,14 +25,11 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
       events.off('UserRemoved');
       events.off('UsersTransformChanged');
       events.off('ObjectEditModeChanged');
-      sceneRef.current?.dispose();
     };
   }, [events]);
 
   /* Will run one time. */
   const onSceneReady = (scene: Scene) => {
-    sceneRef.current = scene;
-
     const view = scene.getEngine().getRenderingCanvas();
     const engine = scene.getEngine();
     if (view?.id) {
