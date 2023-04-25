@@ -3,17 +3,15 @@ import {observer} from 'mobx-react-lite';
 import {Button, Text, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
-import {useParams, useNavigate, generatePath} from 'react-router-dom';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
-import {ROUTES} from 'core/constants';
 
 import {UploadSkyboxDialog, DeleteSkyboxDialog} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
-  const {odysseyCreatorStore, sessionStore} = useStore();
+  const {odysseyCreatorStore, sessionStore, universeStore} = useStore();
   const {skyboxSelectorStore} = odysseyCreatorStore;
   const {
     currentItem,
@@ -29,10 +27,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
     currentItemId
   } = skyboxSelectorStore;
   const {user} = sessionStore;
-
-  const {worldId} = useParams<{worldId: string}>();
-
-  const navigate = useNavigate();
+  const {worldId} = universeStore;
 
   const {t} = useI18n();
 
@@ -135,10 +130,10 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
         </styled.ItemsGallery>
         <styled.ButtonsHolder>
           <Button label="Add Skybox" onClick={skyboxSelectorStore.uploadDialog.toggle} />
-          <Button
+          {/* <Button
             label={t('actions.closePanel')}
             onClick={() => navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}))}
-          />
+          /> */}
         </styled.ButtonsHolder>
       </styled.Container>
       {skyboxSelectorStore.uploadDialog.isOpen && <UploadSkyboxDialog />}
