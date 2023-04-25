@@ -1,11 +1,12 @@
+// TODO remove this file
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useNavigate} from 'react-router-dom';
+// import {generatePath, useNavigate} from 'react-router-dom';
 import {Dialog, Portal, Tooltip} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 import cn from 'classnames';
 
-import {ROUTES} from 'core/constants';
+// import {ROUTES} from 'core/constants';
 import {GizmoTypeEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
 
@@ -22,7 +23,7 @@ const ObjectMenu: FC = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isObjectColor, setIsObjectColor] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const {t} = useI18n();
 
   const topOffset = 0; // world3dStore?.objectMenuPosition.y || 0 - OBJECT_MENU_OFFSET_Y;
@@ -37,22 +38,22 @@ const ObjectMenu: FC = () => {
   }, [objectId, objectFunctionalityStore, objectColorStore, worldId]);
 
   const handleOnFunctionalityClick = useCallback(() => {
-    navigate({
-      pathname: generatePath(ROUTES.odyssey.creator.functionality, {
-        worldId,
-        objectId
-      })
-    });
-  }, [navigate, objectId, worldId]);
+    // navigate({
+    //   pathname: generatePath(ROUTES.odyssey.creator.functionality, {
+    //     worldId,
+    //     objectId
+    //   })
+    // });
+  }, []);
 
   const handleOnColorClick = useCallback(() => {
-    navigate({
-      pathname: generatePath(ROUTES.odyssey.creator.objectColor, {
-        worldId,
-        objectId
-      })
-    });
-  }, [navigate, objectId, worldId]);
+    // navigate({
+    //   pathname: generatePath(ROUTES.odyssey.creator.objectColor, {
+    //     worldId,
+    //     objectId
+    //   })
+    // });
+  }, []);
 
   return (
     <Portal>

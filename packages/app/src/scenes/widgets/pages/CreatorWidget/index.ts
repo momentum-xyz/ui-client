@@ -1,1 +1,1 @@
-export {default as OdysseyCreator} from './OdysseyCreator';
+export {default as CreatorWidget} from './CreatorWidget';

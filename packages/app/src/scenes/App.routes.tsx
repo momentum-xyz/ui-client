@@ -10,7 +10,7 @@ const Object = lazy(() => import('./object/Object'));
 const DisconnectedPage = lazy(() => import('./system/pages/DisconnectedPage/DisconnectedPage'));
 const WrongBrowserPage = lazy(() => import('./system/pages/WrongBrowserPage/WrongBrowserPage'));
 const MaintenancePage = lazy(() => import('./system/pages/MaintenancePage/MaintenancePage'));
-const OdysseyCreator = lazy(() => import('./widgets/pages/CreatorWidget/OdysseyCreator'));
+// const OdysseyCreator = lazy(() => import('./widgets/pages/CreatorWidget/OdysseyCreator'));
 
 export const SYSTEM_ROUTES: RouteConfigInterface[] = [
   {
@@ -48,10 +48,10 @@ export const WORLD_ROUTES: RouteConfigInterface[] = [
     main: () => <WorldBasePage />,
     exact: true
   },
-  {
-    path: ROUTES.odyssey.creator.base,
-    main: () => <OdysseyCreator />
-  },
+  // {
+  //   path: ROUTES.odyssey.creator.base,
+  //   main: () => <OdysseyCreator />
+  // },
   {
     path: ROUTES.odyssey.object.root,
     main: () => <Object />

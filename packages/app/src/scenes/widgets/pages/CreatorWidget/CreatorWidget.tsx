@@ -6,7 +6,7 @@ import {i18n} from '@momentum-xyz/core';
 import {useStore} from 'shared/hooks';
 import {CreatorTabsEnum} from 'core/enums';
 
-import * as styled from './OdysseyCreator.styled';
+import * as styled from './CreatorWidget.styled';
 import {
   SpawnAssetPage,
   SkyboxSelectorWithPreviewPage,
@@ -49,7 +49,7 @@ const allPanels: SideMenuItemInterface<MenuItemType>[] = [
   }
 ];
 
-const OdysseyCreator: FC = () => {
+const CreatorWidget: FC = () => {
   const {universeStore, creatorStore} = useStore();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const world3dStore = universeStore.world3dStore!;
@@ -57,13 +57,15 @@ const OdysseyCreator: FC = () => {
 
   const {selectedTab, setSelectedTab, spawnAssetStore} = creatorStore;
 
+  console.log('CreatorWidget render', {selectedTab});
+
   useEffect(() => {
     world3dStore.enableCreatorMode();
     spawnAssetStore.init(worldId); // TEMP
     spawnAssetStore.fetchAllAssets3d(); // TEMP
     return () => {
       world3dStore.disableCreatorMode();
-      creatorStore.reset();
+      creatorStore.resetModel();
     };
   }, [creatorStore, world3dStore, spawnAssetStore, worldId]);
 
@@ -118,4 +120,4 @@ const OdysseyCreator: FC = () => {
   );
 };
 
-export default observer(OdysseyCreator);
+export default observer(CreatorWidget);

@@ -53,15 +53,14 @@ const World3dStore = types
       }
     }
   }))
-
   .actions((self) => ({
     enableCreatorMode() {
       self.isCreatorMode = true;
     },
     disableCreatorMode() {
       self.isCreatorMode = false;
-      const {creatorStore} = getRootStore(self);
-      creatorStore.reset();
+      // const {creatorStore} = getRootStore(self);
+      // creatorStore.resetModel();
       // self.closeAndResetObjectMenu();
     }
   }))
