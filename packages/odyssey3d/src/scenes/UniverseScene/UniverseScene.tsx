@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useEffect, useRef} from 'react';
 import {Scene} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
@@ -15,11 +15,26 @@ export interface PropsInterface {
 }
 
 export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
+  const sceneRef = useRef<Scene>();
+
   const onWorldClick = useMutableCallback(callbacks.onWorldClick);
   const onUserClick = useMutableCallback(callbacks.onUserClick);
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);
 
+  useEffect(() => {
+    return () => {
+      // Cleaning everything
+      events.off('WorldsAdded');
+      events.off('UsersAdded');
+      events.off('UserSelected');
+      events.off('WorldSelected');
+      sceneRef.current?.dispose();
+    };
+  }, [events]);
+
   const onSceneReady = async (scene: Scene) => {
+    sceneRef.current = scene;
+
     SkyboxHelper.set360Skybox(
       scene,
       'https://dev2.odyssey.ninja/api/v3/render/texture/s8/27a7d8904d525b5d163754624ae46bc8'
