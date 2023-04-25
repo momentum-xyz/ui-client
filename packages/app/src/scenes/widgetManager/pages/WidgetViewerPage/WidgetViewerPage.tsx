@@ -18,6 +18,8 @@ const WidgetViewerPage: FC = () => {
         return <widgets.LoginWidget />;
       case WidgetEnum.MY_PROFILE:
         return <widgets.ProfileWidget />;
+      case WidgetEnum.CREATOR:
+        return <widgets.CreatorWidget />;
       case WidgetEnum.EXPLORE:
         return <widgets.ExploreWidget />;
       case WidgetEnum.USER_DETAILS:

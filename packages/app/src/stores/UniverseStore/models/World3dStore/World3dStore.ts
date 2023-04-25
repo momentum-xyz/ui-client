@@ -53,15 +53,14 @@ const World3dStore = types
       }
     }
   }))
-
   .actions((self) => ({
     enableCreatorMode() {
       self.isCreatorMode = true;
     },
     disableCreatorMode() {
       self.isCreatorMode = false;
-      const {odysseyCreatorStore} = getRootStore(self);
-      odysseyCreatorStore.reset();
+      // const {creatorStore} = getRootStore(self);
+      // creatorStore.resetModel();
       // self.closeAndResetObjectMenu();
     }
   }))
@@ -223,9 +222,9 @@ const World3dStore = types
       // self.setSelectedTab('inspector');
 
       // TODO move it as child store here??
-      const {odysseyCreatorStore} = getRootStore(self);
-      odysseyCreatorStore.setSelectedObjectId(objectId);
-      odysseyCreatorStore.setSelectedTab('inspector');
+      const {creatorStore} = getRootStore(self);
+      creatorStore.setSelectedObjectId(objectId);
+      creatorStore.setSelectedTab('inspector');
     },
     undo() {
       // UnityService.undo();
@@ -241,9 +240,9 @@ const World3dStore = types
     closeAndResetObjectMenu() {
       console.log('closeAndResetObjectMenu', self.selectedObjectId);
 
-      const {odysseyCreatorStore} = getRootStore(self);
-      odysseyCreatorStore.setSelectedObjectId(null);
-      odysseyCreatorStore.setSelectedTab(null);
+      const {creatorStore} = getRootStore(self);
+      creatorStore.setSelectedObjectId(null);
+      creatorStore.setSelectedTab(null);
 
       self._deselectObject();
       self.gizmoMode = GizmoTypeEnum.POSITION;
