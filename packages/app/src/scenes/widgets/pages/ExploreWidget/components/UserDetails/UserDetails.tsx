@@ -20,13 +20,13 @@ interface PropsInterface {
 
 const UserDetails: FC<PropsInterface> = (props) => {
   const {userDetails, worldsOwned, worldsStakedIn, onVisitWorld, onSelectWorld, onClose} = props;
-  const {user} = userDetails;
+  const {user, userId} = userDetails;
 
   const {t} = useI18n();
 
   useEffect(() => {
-    Universe3dEmitter.emit('UserSelected', user.id);
-  }, [user.id]);
+    Universe3dEmitter.emit('UserSelected', userId);
+  }, [userId]);
 
   return (
     <styled.Container data-testid="UserDetails-test">
@@ -35,23 +35,23 @@ const UserDetails: FC<PropsInterface> = (props) => {
         size="normal"
         icon="astronaut"
         variant="primary"
-        image={getImageAbsoluteUrl(user.profile.avatarHash, ImageSizeEnum.S3)}
+        image={getImageAbsoluteUrl(user?.profile.avatarHash, ImageSizeEnum.S3)}
         title={t('labels.memberProfile')}
         onClose={onClose}
       >
         <styled.Wrapper>
           <ProfileImage
-            name={user.name}
-            image={user.profile.avatarHash}
+            name={user?.name || ''}
+            image={user?.profile.avatarHash}
             imageErrorIcon="astronaut"
           />
 
           <styled.GeneralScrollable>
             <ProfileInfo
-              hash="some hash" // FIXME: REAL DATA
-              description={user.description}
-              address={user.profile.profileLink}
-              joinDate={new Date().toISOString()}
+              hash={user?.wallet}
+              description={user?.profile.bio}
+              address={user?.profile.profileLink}
+              joinDate={user?.createdAt}
             />
 
             <styled.OdysseyList>

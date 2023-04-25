@@ -124,6 +124,13 @@ class PosBusService {
         break;
       }
 
+      case MsgType.OBJECT_TRANSFORM: {
+        console.log('PosBus object_transform', data);
+        const {id, object_transform} = data;
+        Event3dEmitter.emit('ObjectTransform', id, object_transform);
+        break;
+      }
+
       // TODO add to MsgType
       case 'set_object_data' as MsgType: {
         console.log('PosBus set_object_data', data);
@@ -205,8 +212,7 @@ class PosBusService {
       this.main.port?.postMessage([
         MsgType.LOCK_OBJECT,
         {
-          id: objectId,
-          state: 1
+          id: objectId
         }
       ]);
     }

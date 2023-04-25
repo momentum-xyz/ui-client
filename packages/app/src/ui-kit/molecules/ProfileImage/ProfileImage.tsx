@@ -10,13 +10,14 @@ import * as styled from './ProfileImage.styled';
 interface PropsInterface {
   name: string;
   image?: string | null;
+  imageHeight?: number;
   imageErrorIcon: IconNameType;
   byName?: string;
   onByClick?: () => void;
 }
 
 const ProfileImage: FC<PropsInterface> = (props) => {
-  const {name, image, imageErrorIcon, byName, onByClick} = props;
+  const {name, image, imageErrorIcon, byName, imageHeight = 200, onByClick} = props;
 
   const {t} = useI18n();
 
@@ -27,7 +28,7 @@ const ProfileImage: FC<PropsInterface> = (props) => {
           <Image
             src={getImageAbsoluteUrl(image, ImageSizeEnum.S6)}
             errorIcon={imageErrorIcon}
-            height={200}
+            height={imageHeight}
           />
           <div>
             <styled.Name>{name}</styled.Name>

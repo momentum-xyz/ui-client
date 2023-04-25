@@ -67,9 +67,12 @@ const hexagonSizeIconSizeMap: {[key in HexagonSizeType]: IconSizeType} = {
   large: 'xl'
 };
 
+export type HexagonIndicatorType = 'voice';
+
 export interface HexagonPropsInterface {
   type: HexagonType;
   color?: HexagonColorType;
+  indicator?: HexagonIndicatorType;
   isActive?: boolean;
   noHover?: boolean;
   skipOuterBorder?: boolean;
@@ -84,6 +87,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
   const {
     type = 'primary',
     color = 'normal',
+    indicator,
     isActive,
     noHover,
     skipOuterBorder,
@@ -140,6 +144,12 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
     >
       {showSparkle && (
         <styled.Sparkle src={Sparkle} alt="sparkle" className={cn(isMenu && 'menu')} />
+      )}
+
+      {indicator === 'voice' && (
+        <styled.IndicatorVoice>
+          <IconSvg name="talk" size="xxs" isWhite />
+        </styled.IndicatorVoice>
       )}
 
       <styled.Hexagon

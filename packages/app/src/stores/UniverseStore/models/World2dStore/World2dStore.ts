@@ -1,9 +1,9 @@
 import {flow, types, cast} from 'mobx-state-tree';
-import {Event3dEmitter, Odyssey3dUserInterface, RequestModel, ResetModel} from '@momentum-xyz/core';
+import {Event3dEmitter, RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api, SpaceAttributeItemResponse, SpaceInterface} from 'api';
 import {mapper} from 'api/mapper';
-import {NftItemModelInterface, Object, UserInfo, WorldInfo} from 'core/models';
+import {NftItemModelInterface, Object, UserDetails, WorldInfo} from 'core/models';
 import {getImageAbsoluteUrl, getRootStore} from 'core/utils';
 
 const World2dStore = types.compose(
@@ -12,7 +12,7 @@ const World2dStore = types.compose(
     .model('World2dStore', {
       worldId: types.optional(types.string, ''),
       worldInfo: types.maybeNull(WorldInfo),
-      onlineUsersList: types.optional(types.array(UserInfo), []),
+      onlineUsersList: types.optional(types.array(UserDetails), []),
 
       // TODO: Removal
       request: types.optional(RequestModel, {}),
@@ -30,20 +30,21 @@ const World2dStore = types.compose(
       },
       subscribeToUsers(): void {
         Event3dEmitter.on('UserAdded', (onlineUser) => {
-          this.addOnlineUser(onlineUser);
+          this.addOnlineUser(onlineUser.id);
+        });
+        Event3dEmitter.on('UserRemoved', (userId) => {
+          this.removeOnlineUser(userId);
         });
       },
-      addOnlineUser(user: Odyssey3dUserInterface) {
+      addOnlineUser(userId: string) {
+        const userDetails = UserDetails.create({userId});
+        userDetails.init();
+
+        self.onlineUsersList = cast([...self.onlineUsersList, userDetails]);
+      },
+      removeOnlineUser(userId: string) {
         self.onlineUsersList = cast([
-          ...self.onlineUsersList,
-          {
-            id: user.id,
-            name: user.name,
-            description: '',
-            profile: {
-              avatarHash: user.avatar
-            }
-          }
+          ...self.onlineUsersList.filter((user) => user.userId !== userId)
         ]);
       },
       // TODO: Removal

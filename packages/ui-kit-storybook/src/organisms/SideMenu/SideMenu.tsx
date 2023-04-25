@@ -40,7 +40,7 @@ const SideMenu = <T,>({
             onClick={() => onSelect(id)}
             className={cn(orientation === 'left' && 'inverted')}
           >
-            <Hexagon type="primary" isActive={id === activeId} iconName={iconName} />
+            <Hexagon type="menu" isActive={id === activeId} iconName={iconName} />
             <MenuLabel text={label} type={orientation} />
             {pinNumber && (
               <styled.MenuItemNumberPin className={cn(orientation === 'left' && 'inverted')}>
@@ -51,7 +51,7 @@ const SideMenu = <T,>({
           </styled.MenuItem>
 
           <styled.MenuItemSeparator>
-            <Hexagon type="blank" />
+            <Hexagon type="blank-small" />
           </styled.MenuItemSeparator>
         </styled.MenuItemContainer>
       ))}

@@ -8,7 +8,7 @@ import * as styled from './Panel.styled';
 
 export interface PanelPropsInterface extends PropsWithChildren {
   variant: 'primary' | 'secondary';
-  size: 'normal' | 'large' | 'wide';
+  size: 'small' | 'normal' | 'large' | 'wide';
   title: string;
   label?: string;
   image?: string | null;

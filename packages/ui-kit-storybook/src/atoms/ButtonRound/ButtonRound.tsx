@@ -12,11 +12,12 @@ export interface ButtonRoundPropsInterface {
   variant?: 'primary';
   disabled?: boolean;
   isLabel?: boolean;
+  isActive?: boolean;
   onClick?: () => void;
 }
 
 const ButtonRound = forwardRef<HTMLButtonElement, ButtonRoundPropsInterface>(
-  ({icon, variant = 'primary', size = 'normal', isLabel, disabled, onClick}, ref) => {
+  ({icon, variant = 'primary', size = 'normal', isLabel, disabled, isActive, onClick}, ref) => {
     return (
       <styled.Button
         data-testid="ButtonRound-test"
@@ -24,7 +25,7 @@ const ButtonRound = forwardRef<HTMLButtonElement, ButtonRoundPropsInterface>(
         type="button"
         disabled={disabled}
         onClick={onClick}
-        className={cn(variant, size, isLabel && 'label')}
+        className={cn(variant, size, isLabel && 'label', isActive && 'isActive')}
       >
         <IconSvg name={icon} size="xs" />
       </styled.Button>

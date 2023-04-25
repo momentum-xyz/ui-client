@@ -56,14 +56,14 @@ const Universe2dStore = types.compose(
         }
       }),
       selectWorld(worldId: string): void {
-        self.selectedWorld = WorldDetails.create({world: worldId});
+        self.selectedWorld = WorldDetails.create({worldId});
+        self.selectedWorld.init();
         self.selectedUser = null;
-        self.selectedWorld?.init();
       },
       selectUser(userId: string): void {
-        self.selectedUser = UserDetails.create({user: userId});
+        self.selectedUser = UserDetails.create({userId});
+        self.selectedUser.init();
         self.selectedWorld = null;
-        self.selectedUser?.init();
       },
       resetUnits(): void {
         self.selectedWorld = null;

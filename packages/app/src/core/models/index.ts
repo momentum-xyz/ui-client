@@ -28,3 +28,4 @@ export * from './WorldInfo';
 export * from './WorldDetails';
 export * from './FilterField';
 export * from './SortField';
+export * from './World';

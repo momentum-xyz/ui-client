@@ -14,12 +14,13 @@ export interface ButtonEllipsePropsInterface {
   isLabel?: boolean;
   variant?: 'primary';
   disabled?: boolean;
+  wide?: boolean;
   onClick?: () => void;
 }
 
 const ButtonEllipse = forwardRef<HTMLButtonElement, ButtonEllipsePropsInterface>(
   (
-    {icon, label, variant = 'primary', isActive, isLabel, size = 'normal', disabled, onClick},
+    {icon, label, variant = 'primary', isActive, isLabel, size = 'normal', disabled, wide, onClick},
     ref
   ) => {
     return (
@@ -34,7 +35,8 @@ const ButtonEllipse = forwardRef<HTMLButtonElement, ButtonEllipsePropsInterface>
           size,
           !!icon && !label && 'only-icon',
           isActive && 'active',
-          isLabel && 'label'
+          isLabel && 'label',
+          wide && 'wide'
         )}
       >
         {icon && <IconSvg name={icon} size="xs" />}
