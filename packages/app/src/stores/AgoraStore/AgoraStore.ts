@@ -36,7 +36,7 @@ const AgoraStore = types
     }),
     leaveVoiceChat: flow(function* () {
       if (self.agoraVoiceChatStore.hasJoined) {
-        self.userDevicesStore.cleanupLocalTracks();
+        yield self.userDevicesStore.cleanupLocalTracks();
         self.agoraVoiceChatStore.cleanupListeners();
         yield self.agoraVoiceChatStore.leave();
       }

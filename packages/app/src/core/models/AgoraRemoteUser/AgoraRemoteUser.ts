@@ -4,10 +4,18 @@ import {IAgoraRTCRemoteUser, IRemoteAudioTrack, IRemoteVideoTrack} from 'agora-r
 const AgoraRemoteUser = types
   .model('AgoraRemoteUser', {
     uid: types.union(types.string, types.number),
-    soundLevel: types.maybe(types.number),
-    isMuted: types.boolean
+    soundLevel: 0,
+    isMuted: true
   })
   .volatile<{agoraRTCUser?: IAgoraRTCRemoteUser}>(() => ({}))
+  .actions((self) => ({
+    setIsMuted(isMuted: boolean) {
+      self.isMuted = isMuted;
+    },
+    setSoundLevel(soundLevel: number) {
+      self.soundLevel = soundLevel;
+    }
+  }))
   .views((self) => ({
     get audioTrack(): IRemoteAudioTrack | undefined {
       return self.agoraRTCUser?.audioTrack;

@@ -25,6 +25,7 @@ const AgoraVoiceChatStore = types
       connectionState: types.optional(types.frozen<ConnectionState>(), 'DISCONNECTED'),
       localSoundLevel: 0,
 
+      // FIXME: These arrays must be joined
       users: types.array(VoiceChatUser),
       agoraRemoteUsers: types.optional(types.array(AgoraRemoteUser), []),
 
@@ -78,11 +79,6 @@ const AgoraVoiceChatStore = types
     }
   }))
   .actions((self) => ({
-    getAgoraRemoteUser(userId: string): AgoraRemoteUserInterface | undefined {
-      return self.agoraRemoteUsers.find((user) => user.uid === userId);
-    }
-  }))
-  .actions((self) => ({
     handleUserPublished: flow(function* (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') {
       yield self.client.subscribe(user, mediaType);
 
@@ -95,7 +91,7 @@ const AgoraVoiceChatStore = types
         updatedUser.agoraRTCUser = user;
 
         if (mediaType === 'audio') {
-          updatedUser.isMuted = !user.hasAudio;
+          updatedUser.setIsMuted(!user.hasAudio);
           updatedUser.audioTrack = user.audioTrack;
         }
       }
@@ -109,12 +105,11 @@ const AgoraVoiceChatStore = types
         }
 
         if (mediaType === 'audio') {
-          foundUser.isMuted = true;
+          foundUser.setIsMuted(true);
         }
       }
     },
     handleAgoraRemoteUserJoined(user: IAgoraRTCRemoteUser) {
-      console.log('Agora handleAgoraRemoteUserJoined:', user?.uid);
       if (String(user?.uid).split('|')[0] === 'ss') {
         return;
       }
@@ -145,7 +140,7 @@ const AgoraVoiceChatStore = types
 
       self.agoraRemoteUsers.forEach((remoteUser) => {
         const user = users.find((user) => remoteUser.uid === user.uid);
-        remoteUser.soundLevel = user?.level ?? 0;
+        remoteUser.setSoundLevel(user?.level ?? 0);
       });
     },
     setupAgoraListeners() {
@@ -171,7 +166,7 @@ const AgoraVoiceChatStore = types
       });
 
       yield self.client.publish(publishedAudioTrack);
-      publishedAudioTrack.setEnabled(isTrackEnabled);
+      yield publishedAudioTrack.setEnabled(isTrackEnabled);
 
       return publishedAudioTrack;
     })
@@ -268,6 +263,22 @@ const AgoraVoiceChatStore = types
         }
       });
     })*/
+  }))
+  .views((self) => ({
+    get joinedUsers() {
+      return self.users
+        .filter((user) => user.id !== self.userId)
+        .map((user) => {
+          const userState = [...self.agoraRemoteUsers].find((au) => au.uid === user.id);
+          return {
+            id: user.id,
+            name: user.name,
+            image: user.avatarHash,
+            isMuted: userState ? userState.isMuted : true,
+            soundLevel: userState?.soundLevel || 0
+          };
+        });
+    }
   }));
 
 export {AgoraVoiceChatStore};

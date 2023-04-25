@@ -1,4 +1,4 @@
-import {FC, memo} from 'react';
+import {FC} from 'react';
 
 import {ButtonRound, Hexagon} from '../../atoms';
 
@@ -36,4 +36,4 @@ const VoiceUserLine: FC<VoiceUserLinePropsInterface> = ({
   );
 };
 
-export default memo(VoiceUserLine);
+export default VoiceUserLine;

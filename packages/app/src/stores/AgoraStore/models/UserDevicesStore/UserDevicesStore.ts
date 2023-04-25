@@ -142,11 +142,12 @@ const UserDevicesStore = types
     ) {
       yield self.createLocalAudioTrack(createAudioTrack);
     }),
-    cleanupLocalTracks() {
+    cleanupLocalTracks: flow(function* () {
+      yield self.mute();
       self.localAudioTrack?.stop();
       self.localAudioTrack?.close();
       self.localAudioTrack = undefined;
-    },
+    }),
     toggleMicrophone(mute?: boolean) {
       if (mute !== undefined) {
         mute ? self.mute() : self.unmute();

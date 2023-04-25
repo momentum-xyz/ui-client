@@ -54,20 +54,15 @@ const VoiceChatWidget: FC = () => {
                 />
               )}
 
-              {agoraVoiceChatStore.users
-                .filter((u) => u.id !== user?.id)
-                .map((user) => {
-                  const remoteUser = agoraVoiceChatStore.getAgoraRemoteUser(user.id);
-                  return (
-                    <VoiceChatUser
-                      key={user.id}
-                      name={user.name}
-                      avatarSrc={user.avatarSrc}
-                      soundLevel={remoteUser?.soundLevel ?? 0}
-                      isMuted={remoteUser?.isMuted ?? true}
-                    />
-                  );
-                })}
+              {agoraVoiceChatStore.joinedUsers.map((user) => (
+                <VoiceChatUser
+                  key={user.id}
+                  name={user.name}
+                  avatarSrc={user.image}
+                  soundLevel={user.soundLevel}
+                  isMuted={user.isMuted}
+                />
+              ))}
             </styled.VoiceChatUsers>
           </styled.ScrollableContainer>
 
