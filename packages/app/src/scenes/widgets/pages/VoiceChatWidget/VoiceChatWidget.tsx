@@ -5,6 +5,7 @@ import {Hexagon, Panel} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
+import {getImageAbsoluteUrl} from 'core/utils';
 
 import {VoiceChatUser} from './components';
 import * as styled from './VoiceChatWidget.styled';
@@ -48,7 +49,7 @@ const VoiceChatWidget: FC = () => {
                 <VoiceChatUser
                   key={user.id}
                   name={user.name}
-                  avatarSrc={user.avatarSrc}
+                  avatarSrc={getImageAbsoluteUrl(user.profile.avatarHash)}
                   soundLevel={agoraVoiceChatStore.localSoundLevel}
                   isMuted={userDevicesStore.muted}
                 />
@@ -58,7 +59,7 @@ const VoiceChatWidget: FC = () => {
                 <VoiceChatUser
                   key={user.id}
                   name={user.name}
-                  avatarSrc={user.image}
+                  avatarSrc={getImageAbsoluteUrl(user.image)}
                   soundLevel={user.soundLevel}
                   isMuted={user.isMuted}
                 />
