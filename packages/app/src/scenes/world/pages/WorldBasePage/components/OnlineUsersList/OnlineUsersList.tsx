@@ -12,9 +12,16 @@ import * as styled from './OnlineUsersList.styled';
 interface PropsInterface {
   onlineUsers: UserDetailsModelType[];
   voiceChatUsers: string[];
+  onInviteToVoiceChat: (userId: string) => void;
+  onSendHighFive: (userId: string) => void;
 }
 
-const OnlineUsersList: FC<PropsInterface> = ({onlineUsers, voiceChatUsers}) => {
+const OnlineUsersList: FC<PropsInterface> = ({
+  onlineUsers,
+  voiceChatUsers,
+  onInviteToVoiceChat,
+  onSendHighFive
+}) => {
   const [activeUser, setActiveUser] = useState<UserDetailsModelType | null>(null);
 
   const {t} = useI18n();
@@ -62,8 +69,18 @@ const OnlineUsersList: FC<PropsInterface> = ({onlineUsers, voiceChatUsers}) => {
               </styled.Info>
 
               <styled.Actions>
-                <ButtonEllipse icon="voice_chat" label={t('labels.voiceChat')} wide />
-                <ButtonEllipse icon="high-five" label={t('labels.highFive')} wide />
+                <ButtonEllipse
+                  icon="voice_chat"
+                  label={t('labels.voiceChat')}
+                  wide
+                  onClick={() => onInviteToVoiceChat(activeUser.userId)}
+                />
+                <ButtonEllipse
+                  icon="high-five"
+                  label={t('labels.highFive')}
+                  wide
+                  onClick={() => onSendHighFive(activeUser.userId)}
+                />
               </styled.Actions>
             </styled.Wrapper>
           </Panel>

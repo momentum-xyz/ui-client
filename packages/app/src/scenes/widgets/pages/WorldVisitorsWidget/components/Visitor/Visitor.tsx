@@ -89,8 +89,16 @@ const Visitor: FC<PropsInterface> = ({
           </styled.Line>
 
           <styled.SubActions>
-            <ButtonEllipse icon="voice_chat" label={t('labels.voiceChat')} />
-            <ButtonEllipse icon="high-five" label={t('labels.highFive')} />
+            <ButtonEllipse
+              icon="voice_chat"
+              label={t('labels.voiceChat')}
+              onClick={() => onInviteToVoiceChat(userDetails.userId)}
+            />
+            <ButtonEllipse
+              icon="high-five"
+              label={t('labels.highFive')}
+              onClick={() => onSendHighFive(userDetails.userId)}
+            />
           </styled.SubActions>
         </styled.Details>
       )}

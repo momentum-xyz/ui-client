@@ -9,11 +9,13 @@ import {
   ObjectTransformInterface,
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
+import {toast} from 'react-toastify';
 
 import {WORLD_ROUTES} from 'scenes/App.routes';
 import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
+import {usePosBusEvent, useStore} from 'shared/hooks';
 import {PosBusService} from 'shared/services';
+import {HighFiveContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 
 import * as styled from './WorldPage.styled';
 
@@ -157,21 +159,23 @@ const WorldPage: FC = () => {
   //   }
   // });
 
-  /*usePosBusEvent('high-five', (senderId, message) => {
+  usePosBusEvent('high-five', (senderId, message) => {
     console.info('[POSBUS EVENT] high-five', senderId, message);
     toast.info(
       <HighFiveContent
         message={message}
         sendBack={() => {
-          world3dStore?.sendHighFiveBack(senderId);
+          // TODO turn/fly to sender???
+          world3dStore?.sendHighFive(senderId);
         }}
         showCloseButton
       />,
       TOAST_BASE_OPTIONS
     );
+    Event3dEmitter.emit('ReceiveHighFive', senderId);
   });
 
-  usePosBusEvent('high-five-sent', (message) => {
+  /*usePosBusEvent('high-five-sent', (message) => {
     console.info('[POSBUS EVENT] high-five-sent', message);
     toast.info(
       <ToastContent

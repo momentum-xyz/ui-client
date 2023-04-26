@@ -189,6 +189,15 @@ class PosBusService {
         break;
       }
 
+      case MsgType.HIGH_FIVE: {
+        console.log('Handle posbus message high_five', data);
+        const {sender_id, message} = data;
+        console.log('High five from', sender_id, message);
+
+        PosBusEventEmitter.emit('high-five', sender_id, message);
+        break;
+      }
+
       default:
         console.log('Unhandled posbus message', message.data);
     }
@@ -215,6 +224,17 @@ class PosBusService {
       ]);
     }
     // else what? TODO
+  }
+
+  static sendHighFive(sender_id: string, receiver_id: string) {
+    this.main.port?.postMessage([
+      MsgType.HIGH_FIVE,
+      {
+        sender_id,
+        receiver_id,
+        message: 'High five!'
+      }
+    ]);
   }
 
   public get subscribedAttributeTypeTopics(): Set<string> {
