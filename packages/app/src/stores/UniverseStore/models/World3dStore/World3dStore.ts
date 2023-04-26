@@ -12,6 +12,7 @@ import {UnityControlInterface} from '@momentum-xyz/sdk';
 import {GizmoTypeEnum, PosBusEventEnum} from 'core/enums';
 import {UnityPositionInterface} from 'core/interfaces';
 import {getRootStore} from 'core/utils';
+import {PosBusService} from 'shared/services';
 
 const DEFAULT_UNITY_VOLUME = 0.75;
 // const UNITY_VOLUME_STEP = 0.1;
@@ -121,12 +122,13 @@ const World3dStore = types
       // UnityService.setKeyboardControl(isActive);
     },
     sendHighFive(receiverId: string): void {
-      // TODO use posbus
-      // UnityService.sendHighFive(receiverId);
-    },
-    sendHighFiveBack(receiverId: string): void {
-      // UnityService.sendHighFive(receiverId);
-      // UnityService.lookAtWisp(receiverId);
+      console.log('sendHighFive', receiverId);
+      const sender_id = getRootStore(self).sessionStore.user?.id;
+      if (sender_id) {
+        console.log('sendHighFive from', sender_id, 'to', receiverId);
+        PosBusService.sendHighFive(sender_id, receiverId);
+        Event3dEmitter.emit('SendHighFive', receiverId);
+      }
     },
     pause(): void {
       // TODO

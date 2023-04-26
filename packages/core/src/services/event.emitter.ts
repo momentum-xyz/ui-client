@@ -33,6 +33,9 @@ export type Event3dType = {
 
   ObjectEditModeChanged: (objectId: string, isEditOn: boolean) => void;
 
+  SendHighFive: (userId: string) => void;
+  ReceiveHighFive: (fromUserId: string) => void;
+
   // ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
 };
 

@@ -96,6 +96,13 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
       events.on('ObjectEditModeChanged', (objectId, isOn) => {
         WorldCreatorHelper.toggleGizmo(objectId, isOn);
       });
+
+      events.on('SendHighFive', (userId) => {
+        console.log('TODO Babylon handle SendHighFive to', userId);
+      });
+      events.on('ReceiveHighFive', (userId) => {
+        console.log('TODO Babylon handle ReceiveHighFive from', userId);
+      });
     } else {
       console.error('There is no canvas for Babylon.');
     }
