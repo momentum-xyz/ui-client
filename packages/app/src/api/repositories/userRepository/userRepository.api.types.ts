@@ -24,11 +24,34 @@ export interface UserInfoInterface {
   profile: UserProfileInterface;
 }
 
+export interface StakeInfoInterface {
+  wallet_id: string;
+  amount: string;
+  blockchain_id: string;
+  lastComment: string | null;
+  name: string;
+  object_id: string;
+  reward: string | null;
+  updatedAt: string;
+}
+
 /** FETCH ME **/
 
 export interface FetchMeRequest {}
 
 export interface FetchMeResponse extends UserInterface {}
+
+/** FETCH MY WALLETS **/
+
+export interface FetchMyWalletsRequest {}
+
+export interface FetchMyWalletsResponse {}
+
+/** FETCH MY STAKES **/
+
+export interface FetchMyStakesRequest {}
+
+export interface FetchMyStakesResponse extends Array<StakeInfoInterface> {}
 
 /** FETCH User **/
 
