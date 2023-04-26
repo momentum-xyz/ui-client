@@ -72,6 +72,28 @@ const SkyboxSelectorStore = types
         )
       ];
     },
+    get communitySkyboxesList(): Asset3dInterface[] {
+      return Object.entries(self.defaultSkyboxes.toJSON()).map(
+        ([id, d]) =>
+          ({
+            id,
+            ...d,
+            isUserAttribute: false,
+            image: self.generateImageFromHash(id)
+          } as Asset3dInterface)
+      );
+    },
+    get userSkyboxesList(): Asset3dInterface[] {
+      return Object.entries(self.userSkyboxes.toJSON()).map(
+        ([id, d]) =>
+          ({
+            id,
+            ...d,
+            isUserAttribute: true,
+            image: self.generateImageFromHash(id)
+          } as Asset3dInterface)
+      );
+    },
     get currPageSkyboxes(): Asset3dInterface[] {
       const start = self.skyboxCurrentPage * PAGE_SIZE;
       const end = start + PAGE_SIZE;

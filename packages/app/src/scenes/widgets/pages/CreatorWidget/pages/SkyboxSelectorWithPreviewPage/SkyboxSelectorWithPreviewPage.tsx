@@ -1,14 +1,17 @@
-import {FC, useEffect} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Text, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
+import {Button as OldButton, Text, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
+import {Frame, Button, Input} from '@momentum-xyz/ui-kit-storybook';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
+import {Asset3dInterface} from 'core/models';
 
 import {UploadSkyboxDialog, DeleteSkyboxDialog} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
+import {SkyboxList} from './components/SkyboxList';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
   const {creatorStore, sessionStore, universeStore} = useStore();
@@ -24,12 +27,20 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
     skyboxPageCnt,
     allSkyboxes,
     skyboxCurrentPage,
-    currentItemId
+    currentItemId,
+
+    communitySkyboxesList,
+    userSkyboxesList
   } = skyboxSelectorStore;
   const {user} = sessionStore;
   const {worldId} = universeStore;
 
   const {t} = useI18n();
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [previewSkybox, setPreviewSkybox] = useState<Asset3dInterface | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [skyboxPreviewType, setSkyboxPreviewType] = useState<'COMMUNITY' | 'PRIVATE'>('COMMUNITY');
 
   useEffect(() => {
     if (!user) {
@@ -43,6 +54,50 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
 
   return (
     <>
+      <styled.ContainerNew>
+        <styled.ControlsContainer>
+          <Frame>
+            <styled.ControlsInnerContainer>
+              <styled.SkyboxTypeContainer>
+                <Button
+                  label="Community Skybox Library"
+                  onClick={() => {
+                    setPreviewSkybox(null);
+                    setSkyboxPreviewType('COMMUNITY');
+                  }}
+                />
+                <Button
+                  label="Private skybox Library"
+                  onClick={() => {
+                    setPreviewSkybox(null);
+                    setSkyboxPreviewType('PRIVATE');
+                  }}
+                />
+              </styled.SkyboxTypeContainer>
+              <styled.SkyboxSearchContainer>
+                <Input
+                  placeholder="Search Community Library"
+                  isSearch
+                  onChange={console.log}
+                  wide
+                />
+              </styled.SkyboxSearchContainer>
+              <Button label="Upload Custom Skybox" wide icon="astronaut" />
+            </styled.ControlsInnerContainer>
+          </Frame>
+          <styled.Separator />
+        </styled.ControlsContainer>
+      </styled.ContainerNew>
+
+      {!previewSkybox && (
+        <SkyboxList
+          skyboxes={skyboxPreviewType === 'COMMUNITY' ? communitySkyboxesList : userSkyboxesList}
+          onSkyboxSelect={console.log}
+        />
+      )}
+
+      {/* -------------------------------------------------- */}
+
       <styled.Container className={hasDialogOpen ? 'blur' : ''}>
         <styled.ItemsGallery>
           <styled.SkyboxCountContainer>
@@ -81,7 +136,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                         <span>{item.isUserAttribute ? user?.name : 'Odyssey'}</span>
                       </styled.ItemCreatedBy>
                       <styled.ItemButtonHolder>
-                        <Button
+                        <OldButton
                           label={
                             currentItem === item
                               ? t('titles.selectedSkybox')

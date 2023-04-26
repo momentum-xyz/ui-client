@@ -176,3 +176,25 @@ export const PagerArrowHolder = styled.div`
     background-color: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.2)};
   }
 `;
+
+export const Separator = styled.div`
+  height: 1px;
+  width: calc(100% - 20px);
+  background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
+  margin: 10px;
+`;
+
+export const ContainerNew = styled.div``;
+export const ControlsContainer = styled.div``;
+export const ControlsInnerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+export const SkyboxTypeContainer = styled.div`
+  display: flex;
+  & > button {
+    flex: 1;
+  }
+`;
+export const SkyboxSearchContainer = styled.div``;
