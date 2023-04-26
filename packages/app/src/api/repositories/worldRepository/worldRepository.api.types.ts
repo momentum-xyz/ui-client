@@ -15,6 +15,7 @@ export interface WorldInterface {
   name: string;
   description?: string;
   avatarHash: string | null;
+  createdAt?: string;
   last_staking_comment: string | null;
   owner_id: string;
   owner_name?: string | null;

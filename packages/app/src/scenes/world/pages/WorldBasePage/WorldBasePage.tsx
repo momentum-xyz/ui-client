@@ -19,6 +19,10 @@ const WorldBasePage: FC = () => {
     console.log('Invite to the Voice chat: ', userId);
   }, []);
 
+  const onStakeWorld = (worldId: string) => {
+    console.log('Stake into world: ', worldId);
+  };
+
   const onSendHighFive = useCallback(
     (userId: string) => {
       world3dStore?.sendHighFive(userId);
@@ -40,7 +44,13 @@ const WorldBasePage: FC = () => {
       </styled.OnlineUsers>
 
       <styled.World>
-        {!isRightWidgetShown && <CurrentWorld worldId={world2dStore?.worldId || ''} />}
+        {!isRightWidgetShown && (
+          <>
+            {world2dStore?.worldDetails?.world && (
+              <CurrentWorld world={world2dStore.worldDetails.world} onStakeWorld={onStakeWorld} />
+            )}
+          </>
+        )}
       </styled.World>
     </styled.Container>
   );

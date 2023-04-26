@@ -149,25 +149,11 @@ const Widgets: FC<PropsInterface> = (props) => {
                   <Text
                     className="odyssey-name"
                     size="m"
-                    text={world2dStore?.nftOfWorld?.name || null}
+                    text={null}
                     transform="uppercase"
                     weight="bold"
                   />
-                  <ToolbarIcon
-                    title=""
-                    state={{canGoBack: true}}
-                    icon={world2dStore?.worldImageSrc ? undefined : 'people'}
-                    size="medium"
-                  >
-                    {world2dStore?.worldImageSrc && (
-                      <Avatar
-                        size="extra-small"
-                        avatarSrc={world2dStore.worldImageSrc}
-                        showBorder
-                        showHover
-                      />
-                    )}
-                  </ToolbarIcon>
+                  <ToolbarIcon title="" state={{canGoBack: true}} icon="people" size="medium" />
                 </styled.CurrentOdyssey>
               </Tooltip>
 
