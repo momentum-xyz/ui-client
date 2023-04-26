@@ -1,11 +1,10 @@
-import {AttributeValueInterface} from '@momentum-xyz/sdk';
+import {AttributeNameEnum, AttributeValueInterface} from '@momentum-xyz/sdk';
 import {
   Client,
   loadClientWorker,
   MsgType,
   PosbusEvent,
   PosbusPort
-  // posbus
 } from '@momentum-xyz/posbus-client';
 import {
   Event3dEmitter,
@@ -15,27 +14,8 @@ import {
 
 // import {VoiceChatActionEnum} from 'api/enums';
 import {PosBusEventEmitter} from 'core/constants';
-import {
-  PosBusMessageTypeEnum
-  // PosBusNotificationEnum
-} from 'core/enums';
-import {
-  // PosBusVibeMessageType,
-  // PosBusHigh5MessageType,
-  // PosBusMessageStatusType,
-  // PosBusInviteMessageType,
-  // PosBusBroadcastMessageType,
-  // PosBusGatheringMessageType,
-  // PosBusCommunicationMessageType,
-  // PosBusEmojiMessageType,
-  // PosBusMegamojiMessageType,
-  // PosBusFlyWithMeType,
-  // PosBusScreenShareMessageType,
-  PosBusMiroStateMessageType as PosBusAttributeMessageType
-  // PosBusFlyToMeType,
-  // PosBusVoiceChatActionMessageType,
-  // PosBusVoiceChatUserMessageType
-} from 'core/types';
+import {PosBusMessageTypeEnum} from 'core/enums';
+import {PosBusMiroStateMessageType as PosBusAttributeMessageType} from 'core/types';
 import {appVariables} from 'api/constants';
 
 class PosBusService {
@@ -191,6 +171,33 @@ class PosBusService {
         break;
       }
 
+      case MsgType.ATTRIBUTE_VALUE_CHANGED: {
+        console.log('[PosBus Msg] ATTRIBUTE_VALUE_CHANGED: ', data);
+        switch (data.topic) {
+          case 'voice-chat-user': {
+            const {attribute_name, value} = data.data;
+            if (attribute_name === AttributeNameEnum.VOICE_CHAT_USER) {
+              if (value && value.joined) {
+                Event3dEmitter.emit('UserJoinedVoiceChat', value.userId);
+              } else if (value) {
+                Event3dEmitter.emit('UserLeftVoiceChat', value.userId);
+              }
+            }
+            break;
+          }
+        }
+        break;
+      }
+
+      case MsgType.HIGH_FIVE: {
+        console.log('Handle posbus message high_five', data);
+        const {sender_id, message} = data;
+        console.log('High five from', sender_id, message);
+
+        PosBusEventEmitter.emit('high-five', sender_id, message);
+        break;
+      }
+
       default:
         console.log('Unhandled posbus message', message.data);
     }
@@ -217,6 +224,17 @@ class PosBusService {
       ]);
     }
     // else what? TODO
+  }
+
+  static sendHighFive(sender_id: string, receiver_id: string) {
+    this.main.port?.postMessage([
+      MsgType.HIGH_FIVE,
+      {
+        sender_id,
+        receiver_id,
+        message: 'High five!'
+      }
+    ]);
   }
 
   public get subscribedAttributeTypeTopics(): Set<string> {

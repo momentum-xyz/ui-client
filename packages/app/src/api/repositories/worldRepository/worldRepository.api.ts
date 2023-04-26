@@ -7,6 +7,8 @@ import {worldRepositoryEndpoints} from './worldRepository.api.endpoints';
 import {
   FetchWorldListRequest,
   FetchWorldListResponse,
+  FetchWorldRequest,
+  FetchWorldResponse,
   GetOnlineUsersRequest,
   OdysseyOnlineUsersResponse
 } from './worldRepository.api.types';
@@ -16,7 +18,13 @@ export const fetchWorldList: RequestInterface<FetchWorldListRequest, FetchWorldL
 ) => {
   const {limit, sortDirection, ...restOptions} = options;
   restOptions.params = {sort: sortDirection, limit};
-  return request.get(worldRepositoryEndpoints().list, restOptions);
+  return request.get(worldRepositoryEndpoints().worldList, restOptions);
+};
+
+export const fetchWorld: RequestInterface<FetchWorldRequest, FetchWorldResponse> = (options) => {
+  const {worldId, ...restOptions} = options;
+  const url = generatePath(worldRepositoryEndpoints().world, {worldId});
+  return request.get(url, restOptions);
 };
 
 export const fetchOnlineUsers: RequestInterface<

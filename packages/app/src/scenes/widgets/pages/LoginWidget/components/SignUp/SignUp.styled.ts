@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Container = styled.div`
-  --scroll-offset: 350px;
+  --scroll-offset: 330px;
 `;
 
 export const ScrollableContainer = styled.div`

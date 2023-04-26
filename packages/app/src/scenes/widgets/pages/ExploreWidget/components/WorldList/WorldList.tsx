@@ -65,11 +65,11 @@ const WorldList: FC<PropsInterface> = ({
               <ItemCard
                 key={item.id}
                 name={item.name}
-                byName={item.name}
+                byName={item.owner_name || item.owner_id}
                 imageErrorIcon="rabbit_fill"
                 description={item.description}
                 imageUrl={getImageAbsoluteUrl(item.avatarHash, ImageSizeEnum.S5)}
-                onByNameClick={() => onSelectUser(item.id)}
+                onByNameClick={() => onSelectUser(item.owner_id)}
                 onInfoClick={() => onSelectWorld(item.id)}
                 onVisitClick={() => onVisitWorld(item.id)}
                 onStakeClick={() => onStakeWorld(item.id)}

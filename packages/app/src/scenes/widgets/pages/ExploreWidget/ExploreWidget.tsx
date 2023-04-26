@@ -77,7 +77,7 @@ const ExploreWidget: FC = () => {
                   searchQuery={universe2dStore.searchQuery}
                   searchResults={universe2dStore.filteredWorlds}
                   lastCreatedWorlds={universe2dStore.lastCreatedWorlds}
-                  mostStakedWorlds={universe2dStore.mostStatedInWorlds}
+                  mostStakedWorlds={universe2dStore.mostStakedWorlds}
                   onSelectWorld={onSelectWorld}
                   onSelectUser={onSelectUser}
                   onVisitWorld={onVisitWorld}
@@ -90,7 +90,7 @@ const ExploreWidget: FC = () => {
                   searchQuery={universe2dStore.searchQuery}
                   searchResults={universe2dStore.filteredUsers}
                   lastCreatedUsers={universe2dStore.lastCreatedUsers}
-                  mostStakedUsers={universe2dStore.mostStatedUsers}
+                  mostStakedUsers={universe2dStore.mostStakedUsers}
                   onSelectUser={onSelectUser}
                 />
               )}
@@ -100,10 +100,10 @@ const ExploreWidget: FC = () => {
       </styled.ExplorePanel>
 
       {/* SHOW WORLD OVERVIEW */}
-      {universe2dStore.selectedWorld && (
+      {universe2dStore.selectedWorld?.world && (
         <styled.Details>
           <WorldDetails
-            worldDetails={universe2dStore.selectedWorld}
+            world={universe2dStore.selectedWorld.world}
             onSelectUser={onSelectUser}
             onVisitWorld={onVisitWorld}
             onStakeWorld={onVisitWorld}
@@ -117,8 +117,6 @@ const ExploreWidget: FC = () => {
         <styled.Details>
           <UserDetails
             userDetails={universe2dStore.selectedUser}
-            worldsOwned={universe2dStore.selectedUser.worldsOwned}
-            worldsStakedIn={universe2dStore.selectedUser.worldsStakedIn}
             onVisitWorld={onVisitWorld}
             onSelectWorld={onSelectWorld}
             onClose={universe2dStore.resetUnits}

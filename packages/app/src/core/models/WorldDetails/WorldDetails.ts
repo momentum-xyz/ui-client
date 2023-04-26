@@ -1,29 +1,31 @@
-import {castToSnapshot, Instance, types} from 'mobx-state-tree';
-import {ResetModel} from '@momentum-xyz/core';
+import {cast, flow, Instance, types} from 'mobx-state-tree';
+import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {NftItem} from 'core/models';
 import {World} from 'core/models/World';
-import {getRootStore} from 'core/utils';
+import {api, WorldInterface} from 'api';
 
-// FIXME: It should be the same like UserDetails.
-// FIXME: Remove `types.reference` to avoid missing data.
 const WorldDetails = types.compose(
   ResetModel,
   types
     .model('WorldDetails', {
       worldId: types.string,
       world: types.maybeNull(World),
-      usersStakedIn: types.optional(types.array(types.reference(NftItem)), []),
-      lastStakingComment: '',
-      totalAmountStaked: 0
+      request: types.optional(RequestModel, {})
     })
     .actions((self) => ({
-      init(): void {
-        // TODO: implementation
-        const {nftItems} = getRootStore(self).nftStore;
-        self.usersStakedIn = castToSnapshot(nftItems.slice(30, 40));
-        self.lastStakingComment = 'Lorem ipsum dolor sit amet, consecteer adipiscing elit. Aenean.';
-        self.totalAmountStaked = 0;
+      fetchWorld: flow(function* () {
+        const response: WorldInterface = yield self.request.send(api.worldRepository.fetchWorld, {
+          worldId: self.worldId
+        });
+
+        if (response) {
+          self.world = cast(response);
+        }
+      })
+    }))
+    .actions((self) => ({
+      afterCreate() {
+        self.fetchWorld();
       }
     }))
 );

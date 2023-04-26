@@ -3,8 +3,9 @@ import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {Hexagon, Panel} from '@momentum-xyz/ui-kit-storybook';
 
-import {usePosBusEvent, useStore} from 'shared/hooks';
+import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
+import {getImageAbsoluteUrl} from 'core/utils';
 
 import {VoiceChatUser} from './components';
 import * as styled from './VoiceChatWidget.styled';
@@ -18,17 +19,9 @@ const VoiceChatWidget: FC = () => {
 
   useEffect(() => {
     if (!agoraStore.hasJoined) {
-      agoraStore.init(universeStore.worldId, sessionStore.userId);
+      agoraStore.initAgora(universeStore.worldId, sessionStore.userId);
     }
   }, [agoraStore, universeStore.worldId, sessionStore]);
-
-  console.log('VoiceChat: all agora users: ', agoraVoiceChatStore.allAgoraUsers);
-
-  usePosBusEvent('voice-chat-mute-user', agoraStore.handleUserMuted);
-  usePosBusEvent('voice-chat-mute-all', agoraStore.handleAllMuted);
-  usePosBusEvent('voice-chat-kick-user', agoraVoiceChatStore.handleUserKicked);
-  usePosBusEvent('voice-chat-user-joined', agoraVoiceChatStore.handleUserJoined);
-  usePosBusEvent('voice-chat-user-left', agoraVoiceChatStore.handleUserLeft);
 
   const handleToggleVoiceChat = useCallback(() => {
     if (agoraVoiceChatStore.hasJoined) {
@@ -38,10 +31,6 @@ const VoiceChatWidget: FC = () => {
     }
   }, [agoraVoiceChatStore, agoraStore]);
 
-  const handleClose = useCallback(() => {
-    widgetManagerStore.close(WidgetEnum.VOICE_CHAT);
-  }, [widgetManagerStore]);
-
   return (
     <styled.Container data-testid="VoiceChatWidget-test">
       <Panel
@@ -50,7 +39,7 @@ const VoiceChatWidget: FC = () => {
         icon="voice_chat"
         variant="primary"
         title={t('labels.voiceChat')}
-        onClose={handleClose}
+        onClose={() => widgetManagerStore.close(WidgetEnum.VOICE_CHAT)}
       >
         <styled.Content>
           <styled.ScrollableContainer>
@@ -60,46 +49,28 @@ const VoiceChatWidget: FC = () => {
                 <VoiceChatUser
                   key={user.id}
                   name={user.name}
-                  avatarSrc={user.avatarSrc}
+                  avatarSrc={getImageAbsoluteUrl(user.profile.avatarHash)}
                   soundLevel={agoraVoiceChatStore.localSoundLevel}
                   isMuted={userDevicesStore.muted}
                 />
               )}
 
-              {agoraVoiceChatStore.users.map((user) => {
-                const remoteUser = agoraVoiceChatStore.getAgoraRemoteUser(user.id);
-                return (
-                  <VoiceChatUser
-                    key={user.id}
-                    name={user.name}
-                    avatarSrc={user.avatarSrc}
-                    soundLevel={remoteUser?.soundLevel ?? 0}
-                    onUserKick={() => agoraVoiceChatStore.kickUser(user.id)}
-                    onUserMute={() => agoraVoiceChatStore.muteUser(user.id)}
-                    isMuted={remoteUser?.isMuted ?? true}
-                    isRemote
-                  />
-                );
-              })}
+              {agoraVoiceChatStore.joinedUsers.map((user) => (
+                <VoiceChatUser
+                  key={user.id}
+                  name={user.name}
+                  avatarSrc={getImageAbsoluteUrl(user.image)}
+                  soundLevel={user.soundLevel}
+                  isMuted={user.isMuted}
+                />
+              ))}
             </styled.VoiceChatUsers>
           </styled.ScrollableContainer>
 
           {/* MY ACTIONS */}
           <styled.Footer>
-            {!agoraVoiceChatStore.hasJoined ? (
+            {!agoraVoiceChatStore.hasJoined && (
               <styled.JoinTitle>{t('actions.joinVoiceChat')}</styled.JoinTitle>
-            ) : (
-              <>
-                {/*<styled.MuteAllAction>
-                  <button
-                    onClick={agoraVoiceChatStore.muteAll}
-                    disabled={agoraVoiceChatStore.muteAllRequest.isPending}
-                  >
-                    <IconSvg name="microphoneOff" isWhite />
-                    <span>{t('actions.muteAll')}</span>
-                  </button>
-                </styled.MuteAllAction>*/}
-              </>
             )}
 
             <styled.VoiceChatActions>

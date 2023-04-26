@@ -1,9 +1,20 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Panel} from '@momentum-xyz/ui-kit-storybook';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
+import {
+  Panel,
+  IconSvg,
+  ItemCard,
+  PositionEnum,
+  ImageSizeEnum
+} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
+import {WidgetEnum} from 'core/enums';
+import {ROUTES} from 'core/constants';
+import {getImageAbsoluteUrl} from 'core/utils';
+import {ProfileImage, ProfileInfo} from 'ui-kit';
 import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 
 import * as styled from './UserDetailsWidget.styled';
@@ -14,10 +25,11 @@ const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {userDetails} = userDetailsStore;
 
   const {t} = useI18n();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (data?.id) {
-      Universe3dEmitter.emit('UserSelected', (data?.id || '').toString());
+      Universe3dEmitter.emit('UserSelected', data.id.toString());
       userDetailsStore.init(data.id.toString());
     }
     return () => {
@@ -25,9 +37,19 @@ const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
     };
   }, [userDetailsStore, data?.id]);
 
+  const onSelectWorld = (worldId: string) => {
+    widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id: worldId});
+  };
+
+  const onVisitWorld = (worldId: string) => {
+    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+  };
+
   if (!userDetails?.user) {
     return <></>;
   }
+
+  const {user, worldsOwned, worldsStakedIn} = userDetails;
 
   return (
     <styled.Container data-testid="UserDetailsWidget-test">
@@ -37,16 +59,71 @@ const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         icon="astronaut"
         variant="primary"
         title={t('labels.memberProfile')}
-        onClose={widgetManagerStore.closeAll}
+        image={getImageAbsoluteUrl(user?.profile.avatarHash, ImageSizeEnum.S3)}
+        onClose={() => widgetManagerStore.close(WidgetEnum.USER_DETAILS)}
       >
-        <styled.Content>
-          <div>{userDetails.user.name}</div>
-          <div>{userDetails.user.id}</div>
+        <styled.Wrapper>
+          <ProfileImage
+            name={user.name || ''}
+            image={user.profile.avatarHash}
+            imageErrorIcon="astronaut"
+          />
 
-          {/* All required data are already available inside userDetails model. */}
-          {/* It doesn't need to make additional requests to BE. Just use. */}
-          {/* Copy markup from ExploreWidget/components/UserDetails */}
-        </styled.Content>
+          <styled.GeneralScrollable>
+            <ProfileInfo
+              hash={user.wallet}
+              description={user?.profile.bio}
+              address={user?.profile.profileLink}
+              joinDate={user?.createdAt}
+            />
+
+            <styled.OdysseyList>
+              {worldsOwned.length > 0 && (
+                <>
+                  <styled.Title>
+                    <IconSvg name="rabbit_fill" size="xs" isWhite />
+                    <span>{t('labels.odysseysOwned')}</span>
+                  </styled.Title>
+                  {worldsOwned.map((world) => (
+                    <ItemCard
+                      key={world.id}
+                      variant="small"
+                      name={world.name}
+                      imageHeight={95}
+                      description={world.description}
+                      imageErrorIcon="rabbit_fill"
+                      imageUrl={getImageAbsoluteUrl(world.avatarHash, ImageSizeEnum.S5)}
+                      onVisitClick={() => onVisitWorld(world.id)}
+                      onInfoClick={() => onSelectWorld(world.id)}
+                    />
+                  ))}
+                </>
+              )}
+
+              {worldsStakedIn.length > 0 && (
+                <>
+                  <styled.Title>
+                    <IconSvg name="stake" size="xs" isWhite />
+                    <span>{t('labels.odysseysStakedIn')}</span>
+                  </styled.Title>
+                  {worldsStakedIn.map((world) => (
+                    <ItemCard
+                      key={world.id}
+                      variant="small"
+                      name={world.name}
+                      imageHeight={95}
+                      description={world.description}
+                      imageErrorIcon="rabbit_fill"
+                      imageUrl={getImageAbsoluteUrl(world.avatarHash, ImageSizeEnum.S5)}
+                      onVisitClick={() => onVisitWorld(world.id)}
+                      onInfoClick={() => onSelectWorld(world.id)}
+                    />
+                  ))}
+                </>
+              )}
+            </styled.OdysseyList>
+          </styled.GeneralScrollable>
+        </styled.Wrapper>
       </Panel>
     </styled.Container>
   );

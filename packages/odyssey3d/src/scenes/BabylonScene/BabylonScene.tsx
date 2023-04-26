@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import {Scene} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
@@ -13,6 +13,20 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
   const onMove = useMutableCallback(callbacks.onMove);
   const onObjectTransform = useMutableCallback(callbacks.onObjectTransform);
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);
+
+  useEffect(() => {
+    return () => {
+      // Cleaning everything
+      events.off('SetWorld');
+      events.off('ObjectCreated');
+      events.off('ObjectTextureChanged');
+      events.off('ObjectTransform');
+      events.off('UserAdded');
+      events.off('UserRemoved');
+      events.off('UsersTransformChanged');
+      events.off('ObjectEditModeChanged');
+    };
+  }, [events]);
 
   /* Will run one time. */
   const onSceneReady = async (scene: Scene) => {
@@ -82,6 +96,13 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
 
       events.on('ObjectEditModeChanged', (objectId, isOn) => {
         WorldCreatorHelper.toggleGizmo(objectId, isOn);
+      });
+
+      events.on('SendHighFive', (userId) => {
+        console.log('TODO Babylon handle SendHighFive to', userId);
+      });
+      events.on('ReceiveHighFive', (userId) => {
+        console.log('TODO Babylon handle ReceiveHighFive from', userId);
       });
     } else {
       console.error('There is no canvas for Babylon.');

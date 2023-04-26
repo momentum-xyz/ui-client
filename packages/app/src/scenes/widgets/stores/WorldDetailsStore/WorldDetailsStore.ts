@@ -10,10 +10,8 @@ const WorldDetailsStore = types.compose(
       worldDetails: types.maybeNull(WorldDetails)
     })
     .actions((self) => ({
-      // FIXME: It should be only worldId (like UserDetails model)
       init(worldId: string): void {
-        self.worldDetails = WorldDetails.create({worldId: worldId});
-        self.worldDetails.init();
+        self.worldDetails = WorldDetails.create({worldId});
       }
     }))
 );

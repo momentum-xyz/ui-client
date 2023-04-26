@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useLocation, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {
   Avatar,
   Button,
@@ -14,7 +14,7 @@ import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {ToolbarCreatorIcon} from 'ui-kit';
+// import {ToolbarCreatorIcon} from 'ui-kit';
 
 import {
   SignInWidget,
@@ -43,13 +43,16 @@ const Widgets: FC<PropsInterface> = (props) => {
 
   const {sessionStore, widgetsStore, universeStore, agoraStore, nftStore} = useStore();
   const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} = widgetsStore;
-  const {world2dStore, world3dStore} = universeStore;
+  const {
+    world2dStore
+    // world3dStore
+  } = universeStore;
   const {agoraScreenShareStore} = agoraStore;
   const {user} = sessionStore;
 
   const {t} = useI18n();
   const navigate = useNavigate();
-  const {pathname} = useLocation();
+  // const {pathname} = useLocation();
 
   useEffect(() => {
     onlineUsersStore.init(universeStore.worldId, sessionStore.userId);
@@ -146,25 +149,11 @@ const Widgets: FC<PropsInterface> = (props) => {
                   <Text
                     className="odyssey-name"
                     size="m"
-                    text={world2dStore?.nftOfWorld?.name || null}
+                    text={null}
                     transform="uppercase"
                     weight="bold"
                   />
-                  <ToolbarIcon
-                    title=""
-                    state={{canGoBack: true}}
-                    icon={world2dStore?.worldImageSrc ? undefined : 'people'}
-                    size="medium"
-                  >
-                    {world2dStore?.worldImageSrc && (
-                      <Avatar
-                        size="extra-small"
-                        avatarSrc={world2dStore.worldImageSrc}
-                        showBorder
-                        showHover
-                      />
-                    )}
-                  </ToolbarIcon>
+                  <ToolbarIcon title="" state={{canGoBack: true}} icon="people" size="medium" />
                 </styled.CurrentOdyssey>
               </Tooltip>
 
@@ -224,14 +213,14 @@ const Widgets: FC<PropsInterface> = (props) => {
                 state={{canGoBack: true}}
               />
 
-              <ToolbarCreatorIcon
+              {/* <ToolbarCreatorIcon
                 worldId={universeStore.worldId}
                 isAdmin={universeStore.isCurrentUserWorldAdmin}
                 onCloseAndReset={world3dStore?.closeAndResetObjectMenu}
                 isBuilderMode={pathname.includes(
                   generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId})
                 )}
-              />
+              /> */}
             </ToolbarIconList>
           </styled.RightToolbars>
         )}

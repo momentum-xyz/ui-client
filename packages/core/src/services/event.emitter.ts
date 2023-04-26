@@ -28,7 +28,13 @@ export type Event3dType = {
   UserRemoved: (userId: string) => void;
   UsersTransformChanged: (users: Odyssey3dUserTransformInterface[]) => void;
 
+  UserJoinedVoiceChat: (userId: string) => void;
+  UserLeftVoiceChat: (userId: string) => void;
+
   ObjectEditModeChanged: (objectId: string, isEditOn: boolean) => void;
+
+  SendHighFive: (userId: string) => void;
+  ReceiveHighFive: (fromUserId: string) => void;
 
   // ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
 };

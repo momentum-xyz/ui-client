@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import cn from 'classnames';
 import {signUpDateString, useI18n} from '@momentum-xyz/core';
-import {ProfileLine, ButtonEllipse} from '@momentum-xyz/ui-kit-storybook';
+import {ProfileLine, ButtonEllipse, WalletHash} from '@momentum-xyz/ui-kit-storybook';
 
 import * as styled from './ProfileInfo.styled';
 
@@ -22,7 +22,6 @@ const ProfileInfo: FC<PropsInterface> = (props) => {
 
   return (
     <styled.Container data-testid="ProfileInfo-test" className={cn(hideBorder && 'hideBorder')}>
-      {hash && <styled.Hash>{hash}</styled.Hash>}
       {description && <div>{description}</div>}
       {address && (
         <ProfileLine
@@ -37,6 +36,8 @@ const ProfileInfo: FC<PropsInterface> = (props) => {
       {joinDate && (
         <ProfileLine icon="astro" label={`${t('actions.joined')} ${signUpDateString(joinDate)}`} />
       )}
+
+      {hash && <WalletHash icon="talisman" hash={hash} />}
 
       {(!!onVisit || !!onStake) && (
         <styled.Actions>

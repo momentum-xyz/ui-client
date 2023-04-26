@@ -1,23 +1,41 @@
-import {FC, useEffect} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Panel} from '@momentum-xyz/ui-kit-storybook';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
+import {
+  Panel,
+  Hexagon,
+  IconSvg,
+  SymbolAmount,
+  ButtonEllipse,
+  ImageSizeEnum,
+  PositionEnum
+} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
+import {WidgetEnum} from 'core/enums';
+import {ROUTES} from 'core/constants';
+import {getImageAbsoluteUrl} from 'core/utils';
+import {ProfileImage, ProfileInfo} from 'ui-kit';
 import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 
 import * as styled from './WorldDetailsWidget.styled';
+
+const USERS_MAX = 2;
 
 const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {widgetManagerStore, widgetStore} = useStore();
   const {worldDetailsStore} = widgetStore;
   const {worldDetails} = worldDetailsStore;
 
+  const [isButtonShown, setIsButtonShown] = useState(false);
+
   const {t} = useI18n();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (data?.id) {
-      Universe3dEmitter.emit('WorldSelected', (data?.id || '').toString());
+      Universe3dEmitter.emit('WorldSelected', data.id.toString());
       worldDetailsStore.init(data.id.toString());
     }
 
@@ -26,9 +44,29 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
     };
   }, [worldDetailsStore, data?.id]);
 
-  if (!worldDetails) {
+  useEffect(() => {
+    const stakersCount = worldDetails?.world?.stakers?.length || 0;
+    setIsButtonShown(stakersCount > USERS_MAX);
+  }, [worldDetails?.world?.stakers?.length]);
+
+  const onSelectUser = (userId: string) => {
+    widgetManagerStore.open(WidgetEnum.USER_DETAILS, PositionEnum.LEFT, {id: userId});
+  };
+
+  const onVisitWorld = (worldId: string) => {
+    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+  };
+
+  const onStakeWorld = (worldId: string) => {
+    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+  };
+
+  if (!worldDetails?.world) {
     return <></>;
   }
+
+  const {world} = worldDetails;
+  const {stakers} = world;
 
   return (
     <styled.Container data-testid="WorldDetailsWidget-test">
@@ -38,15 +76,76 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         icon="rabbit_fill"
         variant="primary"
         title={t('labels.odysseyOverview')}
-        onClose={widgetManagerStore.closeAll}
+        image={getImageAbsoluteUrl(world?.avatarHash, ImageSizeEnum.S3)}
+        onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_DETAILS)}
       >
-        <styled.Content>
-          <div>{worldDetails.worldId}</div>
+        <styled.Wrapper>
+          <ProfileImage
+            name={world.name}
+            image={world.avatarHash}
+            imageErrorIcon="rabbit_fill"
+            byName={world.owner_name || ''}
+            onByClick={() => onSelectUser(world.owner_id)}
+          />
 
-          {/* All required data are already available inside worldDetails model. */}
-          {/* It doesn't need to make additional requests to BE. Just use. */}
-          {/* Copy markup from ExploreWidget/components/WorldDetails */}
-        </styled.Content>
+          <styled.GeneralScrollable>
+            <ProfileInfo
+              description={world.description}
+              // joinDate={new Date().toISOString()}
+              onVisit={() => onVisitWorld(world.id)}
+              onStake={() => onStakeWorld(world.id)}
+            />
+
+            <styled.TitleContainer>
+              <styled.Title>
+                <IconSvg name="stake" size="xs" isWhite />
+                <span>{t('labels.staked')}</span>
+              </styled.Title>
+            </styled.TitleContainer>
+
+            <styled.TotalAmount>
+              <div>{t('labels.totalAmountStaked')}:</div>
+              <SymbolAmount value={world.stake_total || 0} tokenSymbol="MOM" />
+            </styled.TotalAmount>
+
+            {!!world.last_staking_comment && (
+              <styled.StakingCommentContainer>
+                <div>{t('labels.lastStakingComment')}:</div>
+                <styled.StakingComment>{world.last_staking_comment}</styled.StakingComment>
+              </styled.StakingCommentContainer>
+            )}
+
+            {stakers && (stakers?.length || 0) > 0 && (
+              <styled.StakedInUsersContainer>
+                <styled.Title>
+                  <IconSvg name="connect" size="xs" isWhite />
+                  <span>{t('labels.connections')}</span>
+                </styled.Title>
+
+                {(isButtonShown ? stakers.slice(0, USERS_MAX) : stakers).map((user, index) => (
+                  <styled.StakedInUser
+                    key={user.user_id}
+                    onClick={() => onSelectUser(user.user_id)}
+                  >
+                    <Hexagon type="fourth-borderless" skipOuterBorder imageSrc={user.avatarHash} />
+                    <styled.Link>
+                      {index < USERS_MAX ? `${t('labels.topConnector')}: ${user.name}` : user.name}
+                    </styled.Link>
+                  </styled.StakedInUser>
+                ))}
+
+                {isButtonShown && (
+                  <styled.ShowAllButtonContainer>
+                    <ButtonEllipse
+                      label={t('actions.seeAll')}
+                      onClick={() => setIsButtonShown(false)}
+                    />
+                  </styled.ShowAllButtonContainer>
+                )}
+              </styled.StakedInUsersContainer>
+            )}
+          </styled.GeneralScrollable>
+        </styled.Wrapper>
       </Panel>
     </styled.Container>
   );

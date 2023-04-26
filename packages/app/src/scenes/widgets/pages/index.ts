@@ -7,3 +7,4 @@ export * from './UserDetailsWidget';
 export * from './StakingViewWidget';
 export * from './VoiceChatWidget';
 export * from './WorldVisitorsWidget';
+export * from './CreatorWidget';

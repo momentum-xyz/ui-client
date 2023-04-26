@@ -6,11 +6,11 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-  padding: 10px 0;
+  padding: 20px 0 0 0;
 `;
 
 export const Steps = styled.div`
   position: absolute;
   right: 10px;
-  top: 70px;
+  top: 60px;
 `;

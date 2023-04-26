@@ -5,6 +5,7 @@ export const userRepositoryEndpoints = () => {
     list: `${BASE_URL}`,
     me: `${BASE_URL}/me`,
     profile: `${BASE_URL}/:userId`,
-    worldList: `${BASE_URL}/:userId/worlds`
+    ownedWorldList: `${BASE_URL}/:userId/worlds`,
+    stakedWorldList: `${BASE_URL}/:userId/staked-worlds`
   };
 };

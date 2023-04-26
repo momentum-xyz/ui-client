@@ -17,8 +17,8 @@ interface PropsInterface {
 const Visitor: FC<PropsInterface> = ({
   userDetails,
   onVisitWorld,
-  onSendHighFive,
-  onInviteToVoiceChat
+  onSendHighFive
+  //onInviteToVoiceChat
 }) => {
   const [isDetailsShown, setIsDetailsShown] = useState<boolean>(false);
   const {user} = userDetails;
@@ -47,11 +47,11 @@ const Visitor: FC<PropsInterface> = ({
         <styled.Actions>
           {!isDetailsShown && (
             <>
-              <ButtonRound
+              {/*<ButtonRound
                 icon="voice_chat"
                 variant="primary"
                 onClick={() => onInviteToVoiceChat(userDetails.userId)}
-              />
+              />*/}
               <ButtonRound
                 icon="high-five"
                 variant="primary"
@@ -89,8 +89,16 @@ const Visitor: FC<PropsInterface> = ({
           </styled.Line>
 
           <styled.SubActions>
-            <ButtonEllipse icon="voice_chat" label={t('labels.voiceChat')} />
-            <ButtonEllipse icon="high-five" label={t('labels.highFive')} />
+            {/*<ButtonEllipse
+              icon="voice_chat"
+              label={t('labels.voiceChat')}
+              onClick={() => onInviteToVoiceChat(userDetails.userId)}
+            />*/}
+            <ButtonEllipse
+              icon="high-five"
+              label={t('labels.highFive')}
+              onClick={() => onSendHighFive(userDetails.userId)}
+            />
           </styled.SubActions>
         </styled.Details>
       )}
