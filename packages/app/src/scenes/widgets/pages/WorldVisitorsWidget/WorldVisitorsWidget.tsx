@@ -13,7 +13,7 @@ import * as styled from './WorldVisitorsWidget.styled';
 
 const WorldVisitorsWidget: FC = () => {
   const {universeStore, widgetManagerStore} = useStore();
-  const {world2dStore} = universeStore;
+  const {world2dStore, world3dStore} = universeStore;
 
   const {t} = useI18n();
   const navigate = useNavigate();
@@ -29,9 +29,12 @@ const WorldVisitorsWidget: FC = () => {
     console.log('Invite to the Voice chat: ', userId);
   }, []);
 
-  const onSendHighFive = useCallback((userId: string) => {
-    console.log('Send High Five to: ', userId);
-  }, []);
+  const onSendHighFive = useCallback(
+    (userId: string) => {
+      world3dStore?.sendHighFive(userId);
+    },
+    [world3dStore]
+  );
 
   return (
     <styled.Container data-testid="WorldVisitorsWidget-test">
