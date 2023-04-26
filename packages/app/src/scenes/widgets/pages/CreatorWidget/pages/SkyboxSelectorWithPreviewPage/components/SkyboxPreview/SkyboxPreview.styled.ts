@@ -33,4 +33,3 @@ export const ControlsRow = styled.div`
   width: 100%;
   justify-content: space-between;
 `;
-
