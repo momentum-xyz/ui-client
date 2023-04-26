@@ -16,7 +16,7 @@ export const SkyboxList = ({skyboxes, onSkyboxSelect}: PropsInterface): JSX.Elem
     <styled.Container>
       {skyboxes.length &&
         skyboxes.map((sb) => (
-          <styled.SkyboxContainer key={sb.id}>
+          <styled.SkyboxContainer key={sb.id} onClick={() => onSkyboxSelect(sb)}>
             <Frame>
               <styled.SkyboxInnerContainer>
                 <img src={sb.image} alt="" />
