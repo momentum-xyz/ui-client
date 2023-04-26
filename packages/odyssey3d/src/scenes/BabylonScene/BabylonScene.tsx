@@ -15,7 +15,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);
 
   /* Will run one time. */
-  const onSceneReady = (scene: Scene) => {
+  const onSceneReady = async (scene: Scene) => {
     const view = scene.getEngine().getRenderingCanvas();
     const engine = scene.getEngine();
     if (view?.id) {
@@ -32,14 +32,14 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         // onMove,
       );
 
-      WorldCreatorHelper.initialize(scene, onObjectTransform);
+      await WorldCreatorHelper.initialize(scene, onObjectTransform);
       //SkyboxHelper.setCubemapSkybox(scene);
       SkyboxHelper.set360Skybox(
         scene,
         'https://dev2.odyssey.ninja/api/v3/render/texture/s8/26485e74acb29223ba7a9fa600d36c7f'
       );
 
-      if (window.sessionStorage.getItem('babylon_debug')) {
+      if (!window.sessionStorage.getItem('babylon_debug')) {
         Promise.all([
           import('@babylonjs/core/Debug/debugLayer'),
           import('@babylonjs/inspector')
