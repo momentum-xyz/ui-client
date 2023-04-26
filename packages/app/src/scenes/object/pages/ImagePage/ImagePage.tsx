@@ -1,30 +1,34 @@
 import React, {FC} from 'react';
-import {Button, SvgButton, Text} from '@momentum-xyz/ui-kit';
+import {SvgButton, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useNavigate, useParams} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n} from '@momentum-xyz/core';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {ChangeImageDialog} from 'scenes/object/components';
+// import {ChangeImageDialog} from 'scenes/object/components';
 
 import * as styled from './ImagePage.styled';
 
 const ImagePage: FC = () => {
   const {objectStore, universeStore} = useStore();
   const {assetStore} = objectStore;
-  const {changeTileDialog, content, imageSrc} = assetStore;
+  const {
+    // changeTileDialog,
+    content,
+    imageSrc
+  } = assetStore;
 
-  const isAdmin = universeStore.isCurrentUserWorldAdmin;
+  // const isAdmin = universeStore.isCurrentUserWorldAdmin;
 
   const navigate = useNavigate();
   const {t} = useI18n();
 
-  const {worldId} = useParams<{worldId: string}>();
+  const {worldId} = universeStore;
 
   return (
     <styled.Modal data-testid="ImagePage-test">
-      {changeTileDialog.isOpen && <ChangeImageDialog />}
+      {/* {changeTileDialog.isOpen && <ChangeImageDialog />} */}
       <styled.Container>
         <styled.ContentWrapper>
           {imageSrc && <styled.ImageWrapper src={imageSrc} alt="" />}
@@ -39,11 +43,11 @@ const ImagePage: FC = () => {
             />
           </styled.Title>
         </styled.HeaderElement>
-        {isAdmin && (
+        {/* {isAdmin && (
           <styled.HeaderElement className="button">
             <Button label={t('actions.changeImage')} onClick={changeTileDialog.open} />
           </styled.HeaderElement>
-        )}
+        )} */}
         <styled.HeaderElement className="right">
           <styled.Button>
             <SvgButton
