@@ -193,7 +193,14 @@ const SkyboxSelectorStore = types
 
       return self.worldSettingsRequest.isDone;
     }),
-    uploadSkybox: flow(function* (worldId: string, userId: string, file: File, name: string) {
+    uploadSkybox: flow(function* (
+      worldId: string,
+      userId: string,
+      file: File,
+      name: string,
+      artistName: string,
+      type: 'COMMUNITY' | 'PRIVATE'
+    ) {
       const uploadImageResponse: UploadImageResponse = yield self.createSkyboxRequest.send(
         api.mediaRepository.uploadImage,
         {file}
@@ -209,7 +216,7 @@ const SkyboxSelectorStore = types
 
       const value = {
         ...self.userSkyboxes.toJSON(),
-        [hash]: {name}
+        [hash]: {name, artistName, type}
       };
       yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
         spaceId: appVariables.NODE_ID,

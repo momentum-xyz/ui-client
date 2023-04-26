@@ -4,7 +4,7 @@ import {Asset3dInterface} from 'core/models';
 
 import * as styled from './SkyboxPreview.styled';
 
-export interface PropsInterface {
+interface PropsInterface {
   skybox: Asset3dInterface;
   onSkyboxSelect: (skybox: Asset3dInterface) => void;
   onBack: () => void;

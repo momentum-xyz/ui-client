@@ -51,7 +51,7 @@ const UploadSkyboxDialog: FC = () => {
     if (!user) {
       return;
     }
-    const isUploadOK = await uploadSkybox(worldId, user.id, file, name);
+    const isUploadOK = await uploadSkybox(worldId, user.id, file, name, '', 'COMMUNITY');
     if (!isUploadOK) {
       setError('file', {
         type: 'submit'
@@ -155,7 +155,7 @@ const UploadSkyboxDialog: FC = () => {
                 />
               )}
               <FileUploader
-                label={value ? t('actions.changeImage') : t('actions.selectImage')}
+                label={value ? '' : t('actions.selectImage')}
                 dragActiveLabel={t('fileUploader.dragActiveLabel')}
                 maxSize={MAX_ASSET_SIZE_B}
                 onFilesUpload={(file) => {

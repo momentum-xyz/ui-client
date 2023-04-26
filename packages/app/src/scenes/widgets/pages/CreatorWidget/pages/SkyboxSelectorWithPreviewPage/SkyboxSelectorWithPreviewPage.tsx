@@ -9,10 +9,14 @@ import {useI18n} from '@momentum-xyz/core';
 import {useStore} from 'shared/hooks';
 import {Asset3dInterface} from 'core/models';
 
-import {UploadSkyboxDialog, DeleteSkyboxDialog} from './components';
+import {
+  UploadSkyboxDialog,
+  DeleteSkyboxDialog,
+  UploadSkybox,
+  SkyboxList,
+  SkyboxPreview
+} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
-import {SkyboxList} from './components/SkyboxList';
-import {SkyboxPreview} from './components/SkyboxPreview';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
   const {creatorStore, sessionStore, universeStore} = useStore();
@@ -38,10 +42,9 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
 
   const {t} = useI18n();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [previewSkybox, setPreviewSkybox] = useState<Asset3dInterface | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [skyboxPreviewType, setSkyboxPreviewType] = useState<'COMMUNITY' | 'PRIVATE'>('COMMUNITY');
+  const [isUploadingSkybox, setIsUploadingSkybox] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -64,6 +67,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                   label="Community Skybox Library"
                   onClick={() => {
                     setPreviewSkybox(null);
+                    setIsUploadingSkybox(false);
                     setSkyboxPreviewType('COMMUNITY');
                   }}
                 />
@@ -71,6 +75,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                   label="Private skybox Library"
                   onClick={() => {
                     setPreviewSkybox(null);
+                    setIsUploadingSkybox(false);
                     setSkyboxPreviewType('PRIVATE');
                   }}
                 />
@@ -83,20 +88,29 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                   wide
                 />
               </styled.SkyboxSearchContainer>
-              <Button label="Upload Custom Skybox" wide icon="astronaut" />
+              <Button
+                label="Upload Custom Skybox"
+                wide
+                icon="astronaut"
+                onClick={() => {
+                  setIsUploadingSkybox(true);
+                  setPreviewSkybox(null);
+                }}
+              />
             </styled.ControlsInnerContainer>
           </Frame>
           <styled.Separator />
         </styled.ControlsContainer>
       </styled.ContainerNew>
 
-      {!previewSkybox && (
+      {isUploadingSkybox && <UploadSkybox onBack={() => setIsUploadingSkybox(false)} />}
+      {!isUploadingSkybox && !previewSkybox && (
         <SkyboxList
           skyboxes={skyboxPreviewType === 'COMMUNITY' ? communitySkyboxesList : userSkyboxesList}
           onSkyboxSelect={(sb) => setPreviewSkybox(sb)}
         />
       )}
-      {previewSkybox && (
+      {!isUploadingSkybox && previewSkybox && (
         <SkyboxPreview
           skybox={previewSkybox}
           onSkyboxSelect={(sb) => {
