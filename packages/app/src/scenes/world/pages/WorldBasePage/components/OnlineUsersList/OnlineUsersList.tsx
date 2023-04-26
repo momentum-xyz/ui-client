@@ -19,7 +19,7 @@ interface PropsInterface {
 const OnlineUsersList: FC<PropsInterface> = ({
   onlineUsers,
   voiceChatUsers,
-  onInviteToVoiceChat,
+  //onInviteToVoiceChat,
   onSendHighFive
 }) => {
   const [activeUser, setActiveUser] = useState<UserDetailsModelType | null>(null);
@@ -69,12 +69,12 @@ const OnlineUsersList: FC<PropsInterface> = ({
               </styled.Info>
 
               <styled.Actions>
-                <ButtonEllipse
+                {/*<ButtonEllipse
                   icon="voice_chat"
                   label={t('labels.voiceChat')}
                   wide
                   onClick={() => onInviteToVoiceChat(activeUser.userId)}
-                />
+                />*/}
                 <ButtonEllipse
                   icon="high-five"
                   label={t('labels.highFive')}

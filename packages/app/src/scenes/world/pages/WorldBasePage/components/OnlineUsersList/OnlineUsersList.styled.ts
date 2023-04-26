@@ -13,9 +13,7 @@ export const ActiveUserContainer = styled.div`
   top: 0;
 `;
 
-export const Wrapper = styled.div`
-  margin: -20px 0 0 0;
-`;
+export const Wrapper = styled.div``;
 
 export const Info = styled.div`
   padding: 0 10px;

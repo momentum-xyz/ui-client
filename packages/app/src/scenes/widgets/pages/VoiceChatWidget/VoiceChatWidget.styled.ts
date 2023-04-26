@@ -8,7 +8,6 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-  margin: -10px 0 0 0;
   display: flex;
   height: 100%;
   flex-direction: column;
@@ -16,6 +15,7 @@ export const Content = styled.div`
 `;
 
 export const ScrollableContainer = styled.div`
+  margin: 10px 0 0 0;
   height: calc(100vh - var(--scroll-offset));
   overflow: auto;
 `;
