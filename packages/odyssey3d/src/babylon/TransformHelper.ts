@@ -20,7 +20,6 @@ export function setNodeTransform(
   const totalTime = 1000;
 
   scene.onBeforeRenderObservable.add(() => {
-    // TODO: Add a check to not do this every frame if there are no position changes.
     elapsedTime += scene.getEngine().getDeltaTime();
 
     Vector3.SmoothToRef(startVec, posToVec3(targetVec), elapsedTime, totalTime, slerpPos);
