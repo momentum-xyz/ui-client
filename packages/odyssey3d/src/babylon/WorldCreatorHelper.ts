@@ -63,7 +63,7 @@ export class WorldCreatorHelper {
     this.setGizmoType(GizmoTypesEnum.Rotation);
     this.setGizmoType(GizmoTypesEnum.Scale);
     await this.setupCustomGizmoParts();
-    WorldCreatorHelper.setCustomGizmoForModel();
+    WorldCreatorHelper.setupCustomGizmo();
   }
 
   static async setupCustomGizmoParts() {
@@ -98,7 +98,7 @@ export class WorldCreatorHelper {
     });
   }
 
-  static setCustomGizmoForModel() {
+  static setupCustomGizmo() {
     if (
       this.gizmoManager.gizmos.positionGizmo &&
       this.gizmoManager.gizmos.rotationGizmo &&
@@ -257,6 +257,8 @@ export class WorldCreatorHelper {
       this.gizmoManager.gizmos.scaleGizmo.uniformScaleGizmo.setCustomMesh(
         uniformScaleClone as Mesh
       );
+
+      this.disableAllGizmos();
     } else {
       console.log('Position, rotation or scale gizmo doesnt exist');
     }
@@ -307,7 +309,6 @@ export class WorldCreatorHelper {
   }
 
   static toggleGizmo(objectId: string, on: boolean) {
-    console.log('toggleGizmo');
     if (on) {
       this.setGizmoType(GizmoTypesEnum.Position);
       this.setGizmoType(GizmoTypesEnum.Rotation);
