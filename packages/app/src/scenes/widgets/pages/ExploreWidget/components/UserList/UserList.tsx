@@ -33,6 +33,8 @@ const UserList: FC<PropsInterface> = ({
 }) => {
   const {t} = useI18n();
 
+  console.log(searchResults);
+
   return (
     <styled.Wrapper data-testid="UserList-test">
       <Frame>
@@ -60,7 +62,7 @@ const UserList: FC<PropsInterface> = ({
                 key={item.id}
                 name={item.name}
                 imageErrorIcon="astronaut"
-                description={item.description}
+                description={item.profile.bio}
                 imageUrl={getImageAbsoluteUrl(item.profile.avatarHash, ImageSizeEnum.S5)}
                 onInfoClick={() => onSelectUser(item.id)}
               />

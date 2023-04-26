@@ -5,7 +5,6 @@ import {UserProfile} from 'core/models';
 const UserInfo = types.model('UserInfo', {
   id: types.identifier,
   name: types.string,
-  description: types.maybe(types.string),
   profile: UserProfile
 });
 

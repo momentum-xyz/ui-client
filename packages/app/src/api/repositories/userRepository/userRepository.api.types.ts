@@ -21,7 +21,6 @@ export interface UserInterface {
 export interface UserInfoInterface {
   id: string;
   name: string;
-  description?: string;
   profile: UserProfileInterface;
 }
 
