@@ -5,22 +5,20 @@ import {Panel, ImageSizeEnum, IconSvg, ItemCard} from '@momentum-xyz/ui-kit-stor
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ProfileInfo, ProfileImage} from 'ui-kit';
-import {UserDetailsModelType, WorldInfoModelInterface} from 'core/models';
+import {UserDetailsModelType} from 'core/models';
 
 import * as styled from './UserDetails.styled';
 
 interface PropsInterface {
   userDetails: UserDetailsModelType;
-  worldsOwned: WorldInfoModelInterface[];
-  worldsStakedIn: WorldInfoModelInterface[];
   onVisitWorld: (worldId: string) => void;
   onSelectWorld: (worldId: string) => void;
   onClose: () => void;
 }
 
 const UserDetails: FC<PropsInterface> = (props) => {
-  const {userDetails, worldsOwned, worldsStakedIn, onVisitWorld, onSelectWorld, onClose} = props;
-  const {user, userId} = userDetails;
+  const {userDetails, onVisitWorld, onSelectWorld, onClose} = props;
+  const {user, userId, worldsOwned, worldsStakedIn} = userDetails;
 
   const {t} = useI18n();
 
