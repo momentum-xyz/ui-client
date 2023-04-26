@@ -44,6 +44,8 @@ export class ObjectHelper {
     onClickOutside: () => void
   ): void {
     this.scene = scene;
+    scene.useRightHandedSystem = true;
+
     this.firstID = '';
     // Mouse Click Listener
     scene.onPointerDown = function castRay() {
@@ -162,10 +164,6 @@ export class ObjectHelper {
     if (this.firstID === '') {
       this.firstID = object.id;
     }
-    /*const meshes = node.getChildMeshes();
-    for (const mesh of meshes) {
-      console.log(mesh.name);
-    }*/
 
     const babylonObject = {
       container: container,

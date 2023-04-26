@@ -33,7 +33,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
     const view = scene.getEngine().getRenderingCanvas();
     const engine = scene.getEngine();
     if (view?.id) {
-      PlayerHelper.initialize(scene, view, onMove);
+      PlayerHelper.initialize(scene, view, true, onMove);
       LightHelper.initialize(scene);
       ObjectHelper.initialize(
         scene,

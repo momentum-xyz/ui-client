@@ -23,6 +23,8 @@ import {posToVec3, vec3ToPos, setNodeTransform, TransformTypesEnum} from './Tran
 const NORMAL_SPEED = 0.5;
 const FAST_SPEED = 1.5;
 const PLAYER_OFFSET = new Vector3(0, -0.5, 2);
+const PLAYER_OFFSET_RH = new Vector3(0, -0.5, -2);
+
 // TODO: Set this from PosBusSelfPosMsg
 const CAMERA_POS = new Vector3(50, 50, 150);
 
@@ -42,13 +44,16 @@ export class PlayerHelper {
   static playerAvatar3D: string;
   static playerId: string;
   static playerInterface: Odyssey3dUserInterface;
+  static rightHanded = false;
 
   static initialize(
     scene: Scene,
     canvas: HTMLCanvasElement,
+    rh: boolean,
     onMove?: (transform: TransformNoScaleInterface) => void
   ) {
     this.scene = scene;
+    this.rightHanded = rh;
     // This creates and positions a UniversalCamera camera (non-mesh)
     const camera = new UniversalCamera('UniversalCamera', CAMERA_POS, scene);
     camera.rotationQuaternion = new Quaternion();
@@ -141,7 +146,11 @@ export class PlayerHelper {
     const playerNode = instance.rootNodes[0];
     playerNode.name = 'Player';
     playerNode.parent = this.camera;
-    playerNode.position = PLAYER_OFFSET;
+    if (this.rightHanded) {
+      playerNode.position = PLAYER_OFFSET_RH;
+    } else {
+      playerNode.position = PLAYER_OFFSET;
+    }
     playerNode.rotation = new Vector3(0, 0, 0);
     playerNode.scaling = new Vector3(1, 1, 1);
 

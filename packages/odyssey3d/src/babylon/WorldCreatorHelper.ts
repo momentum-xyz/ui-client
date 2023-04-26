@@ -25,7 +25,7 @@ import zScale_green from '../static/Gizmo/scale_green.glb';
 import scale_uniform from '../static/Gizmo/scale_origin.glb';
 
 import {getNodeFromId} from './UtilityHelper';
-import {vec3ToPos, setNodeTransform, TransformTypesEnum, vec3Equals} from './TransformHelper';
+import {vec3ToPos, posToVec3} from './TransformHelper';
 import {ObjectHelper} from './ObjectHelper';
 
 export enum GizmoTypesEnum {
@@ -264,14 +264,14 @@ export class WorldCreatorHelper {
 
   static subscribeForTransformUpdates(objectId: string, node: TransformNode) {
     const updateTransformCallback = () => {
+      console.log('Sending ObjectTransform node.position: ' + node.position);
+
       const myTransfrom: ObjectTransformInterface = {
         position: vec3ToPos(node.position),
         rotation: vec3ToPos(node.rotation),
         scale: vec3ToPos(node.scaling)
       };
 
-      // TODO: Check how often data should be sent to onObjectTransform
-      console.log('qq: ' + node.rotation.x);
       this.onObjectTransform(objectId, myTransfrom);
     };
 
@@ -292,72 +292,22 @@ export class WorldCreatorHelper {
     const objToMove = ObjectHelper.objectsMap.get(id);
     if (objToMove) {
       const transformNode = objToMove.objectInstance.rootNodes[0];
-
-      if (!vec3Equals(objToMove.objectDefinition.transform.position, transform.position)) {
-        console.log(
-          'objToMove.objectDefinition.transform.position x: ' +
-            objToMove.objectDefinition.transform.position.x
-        );
-        console.log('transform.position.x: ' + transform.position.x);
-
-        console.log(
-          'objToMove.objectDefinition.transform.position y: ' +
-            objToMove.objectDefinition.transform.position.y
-        );
-        console.log('transform.position.y: ' + transform.position.y);
-
-        console.log(
-          'objToMove.objectDefinition.transform.position z: ' +
-            objToMove.objectDefinition.transform.position.z
-        );
-        console.log('transform.position.z: ' + transform.position.z);
-
-        console.log('pos changed');
-      } else if (!vec3Equals(objToMove.objectDefinition.transform.rotation, transform.rotation)) {
-        console.log(
-          'objToMove.objectDefinition.transform.rotation x: ' +
-            objToMove.objectDefinition.transform.rotation.x
-        );
-        console.log('transform.rotation.x: ' + transform.rotation.x);
-
-        console.log(
-          'objToMove.objectDefinition.transform.rotation y: ' +
-            objToMove.objectDefinition.transform.rotation.y
-        );
-        console.log('transform.rotation.y: ' + transform.rotation.y);
-
-        console.log(
-          'objToMove.objectDefinition.transform.rotation z: ' +
-            objToMove.objectDefinition.transform.rotation.z
-        );
-        console.log('transform.rotation.z: ' + transform.rotation.z);
-
-        console.log('rot changed');
-      } else if (!vec3Equals(objToMove.objectDefinition.transform.scale, transform.scale)) {
-        console.log('scale changed');
-      } else {
-        console.log('nothing changed');
-      }
-
-      setNodeTransform(
-        transformNode,
-        transformNode.position,
-        transform.position,
-        TransformTypesEnum.Position,
-        this.scene
-      );
+      transformNode.position = posToVec3(transform.position);
+      //TODO: Add rotation
+      transformNode.scaling = posToVec3(transform.scale);
     }
   }
 
   static toggleCreatorMode() {
-    this.isCreatorMode = !this.isCreatorMode;
+    /*this.isCreatorMode = !this.isCreatorMode;
     this.unlockLastObject();
     this.setGizmoType(GizmoTypesEnum.Position);
     this.setGizmoType(GizmoTypesEnum.Rotation);
-    this.setGizmoType(GizmoTypesEnum.Scale);
+    this.setGizmoType(GizmoTypesEnum.Scale);*/
   }
 
   static toggleGizmo(objectId: string, on: boolean) {
+    console.log('toggleGizmo');
     if (on) {
       this.setGizmoType(GizmoTypesEnum.Position);
       this.setGizmoType(GizmoTypesEnum.Rotation);

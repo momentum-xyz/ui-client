@@ -23,9 +23,7 @@ export function setNodeTransform(
     // TODO: Add a check to not do this every frame if there are no position changes.
     elapsedTime += scene.getEngine().getDeltaTime();
 
-    //const startingPos = userNode.position;
     Vector3.SmoothToRef(startVec, posToVec3(targetVec), elapsedTime, totalTime, slerpPos);
-    userNode.position = slerpPos;
 
     switch (transformType) {
       case TransformTypesEnum.Position:
@@ -42,7 +40,13 @@ export function setNodeTransform(
 }
 
 export function vec3Equals(vec1: PositionInterface, vec2: PositionInterface) {
-  if (vec1.x === vec2.x && vec1.y === vec2.y && vec1.z === vec2.z) {
+  const tolerance = 0.001;
+
+  if (
+    Math.abs(vec1.x - vec2.x) < tolerance &&
+    Math.abs(vec1.y - vec2.y) < tolerance &&
+    Math.abs(vec1.z - vec2.z) < tolerance
+  ) {
     return true;
   } else {
     return false;
