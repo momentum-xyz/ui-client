@@ -8,14 +8,14 @@ const WorldDetails = types.compose(
   ResetModel,
   types
     .model('WorldDetails', {
-      id: types.string,
+      worldId: types.string,
       world: types.maybeNull(World),
       request: types.optional(RequestModel, {})
     })
     .actions((self) => ({
       fetchWorld: flow(function* () {
         const response: WorldInterface = yield self.request.send(api.worldRepository.fetchWorld, {
-          worldId: self.id
+          worldId: self.worldId
         });
 
         if (response) {

@@ -56,7 +56,7 @@ const Universe2dStore = types.compose(
         }
       }),
       selectWorld(worldId: string): void {
-        self.selectedWorld = WorldDetails.create({id: worldId});
+        self.selectedWorld = WorldDetails.create({worldId});
         self.selectedUser = null;
       },
       selectUser(userId: string): void {
