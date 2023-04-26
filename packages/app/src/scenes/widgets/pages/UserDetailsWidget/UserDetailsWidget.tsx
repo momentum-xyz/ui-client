@@ -56,6 +56,7 @@ const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
       <Panel
         isFullHeight
         size="normal"
+        icon="astronaut"
         variant="primary"
         title={t('labels.memberProfile')}
         image={getImageAbsoluteUrl(user?.profile.avatarHash, ImageSizeEnum.S3)}
