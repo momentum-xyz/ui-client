@@ -28,8 +28,6 @@ import {
   OdysseyBioWidget,
   SearchUsersWidget,
   MutualConnectionsWidget,
-  StakingWidget,
-  ConnectWidget,
   MagicLinkWidget
 } from './pages';
 import * as styled from './Widgets.styled';
@@ -254,8 +252,6 @@ const Widgets: FC<PropsInterface> = (props) => {
       {widgetsStore.screenShareStore.dialog.isOpen && <ScreenShareWidget />}
       {widgetsStore.calendarStore.dialog.isOpen && <CalendarWidget />}
       {widgetsStore.textChatStore.dialog.isOpen && <TextChatWidget />}
-      {nftStore.stakingDashorboardDialog.isOpen && <StakingWidget />}
-      {!!nftStore.connectToNftItemId && <ConnectWidget />}
     </>
   );
 };
