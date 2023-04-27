@@ -59,8 +59,11 @@ export const useStaking = () => {
         .send({from: account});
       console.log('StakingOverviewWidget stake approve result', res);
 
+      const nftId = '0x' + worldId.replace(/-/g, '');
+
+      console.log('StakingOverviewWidget stake into nftId', nftId, amount, tokenKind);
       const result = await stakingContract?.methods
-        .stake(worldId, amount, tokenKind)
+        .stake(nftId, amount, tokenKind)
         .send({from: account});
       console.log('StakingOverviewWidget stake result', result);
     },

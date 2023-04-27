@@ -10,7 +10,7 @@ import {availableWallets, WalletConfigInterface} from 'wallets';
 import * as styled from './SignIn.styled';
 
 interface PropsInterface {
-  onConnected: () => void;
+  onConnected?: () => void;
 }
 
 const SignIn: FC<PropsInterface> = ({onConnected}) => {
