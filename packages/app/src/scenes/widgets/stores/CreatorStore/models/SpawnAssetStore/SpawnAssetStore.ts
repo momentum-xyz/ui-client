@@ -6,6 +6,7 @@ import {api, FetchAssets3dResponse, PostSpaceResponse, UploadAsset3dRequest} fro
 import {Asset3dCategoryEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 import {Asset3d, Asset3dInterface, SearchQuery} from 'core/models';
+import {PosBusService} from 'shared/services';
 
 const SpawnAssetStore = types
   .compose(
@@ -158,6 +159,8 @@ const SpawnAssetStore = types
       self.selectedAsset = asset ? Asset3d.create({...asset}) : undefined;
     },
     spawnObject: flow(function* (worldId: string) {
+      PosBusService.attachNextReceivedObjectToCamera = true;
+
       const response: PostSpaceResponse | undefined = yield self.spawnObjectRequest.send(
         // TODO rename SPACE to OBJECT
         api.spaceRepository.postSpace,

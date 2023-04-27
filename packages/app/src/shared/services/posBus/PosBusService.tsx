@@ -27,6 +27,8 @@ class PosBusService {
   private port: PosbusPort | null = null;
   private static userId: string;
 
+  public static attachNextReceivedObjectToCamera = false;
+
   public static init(token: string, userId: string) {
     console.log('PosBusService init', token, userId);
     const workerUrl = new URL('@momentum-xyz/posbus-client/worker.mjs', import.meta.url);
@@ -140,13 +142,19 @@ class PosBusService {
         for (const object of objects) {
           console.log('Add object', object);
           // TODO we should equalise these
-          Event3dEmitter.emit('ObjectCreated', {
-            ...object,
-            asset_3d_id: object.asset_type,
-            transform: {
-              ...object.transform
-            }
-          });
+          Event3dEmitter.emit(
+            'ObjectCreated',
+            {
+              ...object,
+              asset_3d_id: object.asset_type,
+              transform: {
+                ...object.transform
+              }
+            },
+            this.attachNextReceivedObjectToCamera
+          );
+
+          this.attachNextReceivedObjectToCamera = false;
         }
         break;
       }

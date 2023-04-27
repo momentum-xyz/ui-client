@@ -18,7 +18,7 @@ import {
 
 // TODO: Define proper types
 export type Event3dType = {
-  ObjectCreated: (object: Object3dInterface) => void;
+  ObjectCreated: (object: Object3dInterface, attachToCamera?: boolean) => void;
   ObjectChanged: (object: Object3dInterface) => void;
   ObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
   SetWorld: (world: SetWorldInterface, userId: string) => void;
@@ -32,6 +32,7 @@ export type Event3dType = {
   UserLeftVoiceChat: (userId: string) => void;
 
   ObjectEditModeChanged: (objectId: string, isEditOn: boolean) => void;
+  DetachObjectFromCamera: (objectId: string) => void;
 
   SendHighFive: (userId: string) => void;
   ReceiveHighFive: (fromUserId: string) => void;
