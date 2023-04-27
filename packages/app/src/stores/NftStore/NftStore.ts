@@ -589,91 +589,100 @@ const NftStore = types
         stakedAtOthers: stakedAtOthersAddresses
       };
     }),
-    stake: flow(function* (address: string, amount: BN, itemId: number) {
-      const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
+    stake: flow(function* (address: string, amount: BN, itemId: number | string) {
+      // const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
       address = formatAddress(address);
-      console.log('Stake', itemId, amount, address);
-      if (!self.channel) {
-        throw new Error('Channel is not initialized');
-      }
-      const {account, options} = yield prepareSignAndSend(address);
+      console.log('TODO Stake', itemId, amount, address);
+      yield Promise.resolve();
+      // if (!self.channel) {
+      //   throw new Error('Channel is not initialized');
+      // }
+      // const {account, options} = yield prepareSignAndSend(address);
 
-      const tx = self.channel.tx.stake.stake(collectionId, itemId, amount);
-      console.log('Sign and send', tx);
+      // const tx = self.channel.tx.stake.stake(collectionId, itemId, amount);
+      // console.log('Sign and send', tx);
 
-      try {
-        const res = yield tx.signAndSend(account.address, options, ({status}) => {
-          if (status.isInBlock) {
-            const blockHash = status.asInBlock.toString();
-            console.log(`Completed at block hash #${blockHash}`);
-            // resolve(blockHash);
-          } else {
-            console.log(`Current transaction status: ${status.type}`);
-          }
-        });
-        console.log('res', res);
-      } catch (err) {
-        console.log('Error staking:', err);
-        throw err;
-      }
+      // try {
+      //   const res = yield tx.signAndSend(account.address, options, ({status}) => {
+      //     if (status.isInBlock) {
+      //       const blockHash = status.asInBlock.toString();
+      //       console.log(`Completed at block hash #${blockHash}`);
+      //       // resolve(blockHash);
+      //     } else {
+      //       console.log(`Current transaction status: ${status.type}`);
+      //     }
+      //   });
+      //   console.log('res', res);
+      // } catch (err) {
+      //   console.log('Error staking:', err);
+      //   throw err;
+      // }
     }),
-    unstake: flow(function* (address: string, amount: number | null, itemId: number) {
-      const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
+    unstake: flow(function* (address: string, amount: number | null, itemId: number | string) {
+      // const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
       address = formatAddress(address);
       console.log('Unstake', itemId, address);
-      if (!self.channel) {
-        throw new Error('Channel is not initialized');
-      }
-      const {account, options} = yield prepareSignAndSend(address);
+      yield Promise.resolve();
+      // if (!self.channel) {
+      //   throw new Error('Channel is not initialized');
+      // }
+      // const {account, options} = yield prepareSignAndSend(address);
 
-      const tx = self.channel.tx.stake.unstake(collectionId, itemId, null);
-      console.log('Sign and send', tx);
+      // const tx = self.channel.tx.stake.unstake(collectionId, itemId, null);
+      // console.log('Sign and send', tx);
 
-      try {
-        const res = yield tx.signAndSend(account.address, options, ({status}) => {
-          if (status.isInBlock) {
-            const blockHash = status.asInBlock.toString();
-            console.log(`Completed at block hash #${blockHash}`);
-            // resolve(blockHash);
-          } else {
-            console.log(`Current transaction status: ${status.type}`);
-          }
-        });
-        console.log('res', res);
-      } catch (err) {
-        console.log('Error unstaking:', err);
-        throw err;
-      }
+      // try {
+      //   const res = yield tx.signAndSend(account.address, options, ({status}) => {
+      //     if (status.isInBlock) {
+      //       const blockHash = status.asInBlock.toString();
+      //       console.log(`Completed at block hash #${blockHash}`);
+      //       // resolve(blockHash);
+      //     } else {
+      //       console.log(`Current transaction status: ${status.type}`);
+      //     }
+      //   });
+      //   console.log('res', res);
+      // } catch (err) {
+      //   console.log('Error unstaking:', err);
+      //   throw err;
+      // }
     }),
     getRewards: flow(function* (address: string) {
       address = formatAddress(address);
-      console.log('Get rewards', address);
-      if (!self.channel) {
-        throw new Error('Channel is not initialized');
-      }
-      const {account, options} = yield prepareSignAndSend(address);
+      console.log('TODO Get rewards', address);
+      yield Promise.resolve();
+      // if (!self.channel) {
+      //   throw new Error('Channel is not initialized');
+      // }
+      // const {account, options} = yield prepareSignAndSend(address);
 
-      const tx = self.channel.tx.stake.getRewards();
-      console.log('Sign and send', tx);
+      // const tx = self.channel.tx.stake.getRewards();
+      // console.log('Sign and send', tx);
 
-      try {
-        const res = yield tx.signAndSend(account.address, options, ({status}) => {
-          if (status.isInBlock) {
-            const blockHash = status.asInBlock.toString();
-            console.log(`Completed at block hash #${blockHash}`);
-            // resolve(blockHash);
-          } else {
-            console.log(`Current transaction status: ${status.type}`);
-          }
-        });
-        console.log('res', res);
-      } catch (err) {
-        console.log('Error getting rewards:', err);
-        throw err;
-      }
+      // try {
+      //   const res = yield tx.signAndSend(account.address, options, ({status}) => {
+      //     if (status.isInBlock) {
+      //       const blockHash = status.asInBlock.toString();
+      //       console.log(`Completed at block hash #${blockHash}`);
+      //       // resolve(blockHash);
+      //     } else {
+      //       console.log(`Current transaction status: ${status.type}`);
+      //     }
+      //   });
+      //   console.log('res', res);
+      // } catch (err) {
+      //   console.log('Error getting rewards:', err);
+      //   throw err;
+      // }
     }),
     requestAirdrop: flow(function* (address: string) {
-      console.log('Request airdrop', address);
+      console.log('TODO Request airdrop', address);
+
+      if (Date.now()) {
+        yield Promise.resolve();
+        return;
+      }
+
       self.setRequestFundsStatus('pending');
       if (!self.channel) {
         self.setRequestFundsStatus('error');
@@ -685,22 +694,22 @@ const NftStore = types
         throw new Error('Wait at least 24 hours before requesting airdrop again');
       }
 
-      const {account, options} = yield prepareSignAndSend(address);
-      const tx = self.channel.tx.faucet.getTokens();
+      // const {account, options} = yield prepareSignAndSend(address);
+      // const tx = self.channel.tx.faucet.getTokens();
 
-      console.log('Sign and send', tx);
+      // console.log('Sign and send', tx);
       try {
-        yield new Promise((resolve, reject) => {
-          tx.signAndSend(account.address, options, ({status}) => {
-            if (status.isInBlock) {
-              const blockHash = status.asInBlock.toString();
-              console.log(`Completed at block hash #${blockHash}`);
-              resolve(blockHash);
-            } else {
-              console.log(`Current transaction status: ${status.type}`);
-            }
-          }).catch(reject);
-        });
+        //   yield new Promise((resolve, reject) => {
+        //     tx.signAndSend(account.address, options, ({status}) => {
+        //       if (status.isInBlock) {
+        //         const blockHash = status.asInBlock.toString();
+        //         console.log(`Completed at block hash #${blockHash}`);
+        //         resolve(blockHash);
+        //       } else {
+        //         console.log(`Current transaction status: ${status.type}`);
+        //       }
+        //     }).catch(reject);
+        //   });
         self.setRequestFundsStatus('success');
         saveLastAirdropInfo(address);
         console.log('Request airdrop success');
