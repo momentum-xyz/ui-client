@@ -44,6 +44,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
               <styled.SkyboxTypeContainer>
                 <Button
                   label={t('titles.communitySkyboxLibrary')}
+                  active={skyboxPreviewType === 'COMMUNITY'}
                   onClick={() => {
                     setPreviewSkybox(null);
                     setIsUploadingSkybox(false);
@@ -52,6 +53,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                 />
                 <Button
                   label={t('titles.privateSkyboxLibrary')}
+                  active={skyboxPreviewType === 'PRIVATE'}
                   onClick={() => {
                     setPreviewSkybox(null);
                     setIsUploadingSkybox(false);
