@@ -674,6 +674,8 @@ export const enGb = {
       setAsDefault: 'Set as default',
       editProfile: 'Edit profile',
       claimRewards: 'Claim Rewards',
+      requestAirdropTokens: 'Request Airdrop tokens',
+      startAirdrop: 'Start airdrop',
       selectWallet: 'Select wallet',
       createOdyssey: 'Create your Odyssey',
       installWallet: 'Install your wallet',

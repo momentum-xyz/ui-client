@@ -65,10 +65,10 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
           <Button icon="wallet" label={t('actions.claimRewards')} />
         </styled.RewardsContainer>
 
-        <styled.Title>Request Airdrop tokens</styled.Title>
+        <styled.Title>{t('actions.requestAirdropTokens')}</styled.Title>
         <styled.AirdropContainer>
           <span>Lorem ipsum dolor sit amet, ligula consectetuer adipiscing elit.</span>
-          <Button icon="wallet" label="Start airdrop" />
+          <Button icon="air" label={t('actions.startAirdrop')} />
         </styled.AirdropContainer>
 
         <styled.ScrollableContainer>
@@ -83,8 +83,7 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={0}
-                  // value={selectedWallet?.balanceAmount} // TODO
+                  value={Number(selectedWallet?.balance)}
                   tokenSymbol="MOM"
                   decimalScale={DECIMAL_SCALE}
                 />
@@ -101,8 +100,7 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={0}
-                  // value={selectedWallet?.transferableAmount} // TODO
+                  value={Number(selectedWallet?.transferable)}
                   tokenSymbol="MOM"
                   decimalScale={DECIMAL_SCALE}
                 />
@@ -119,8 +117,7 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={0}
-                  //value={selectedWallet?.stakedAmount} // TODO
+                  value={Number(selectedWallet?.staked)}
                   tokenSymbol="MOM"
                   decimalScale={DECIMAL_SCALE}
                 />
@@ -137,8 +134,7 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={0}
-                  // value={selectedWallet?.unbondingAmount} // TODO
+                  value={Number(selectedWallet?.unbonding)}
                   tokenSymbol="MOM"
                   decimalScale={DECIMAL_SCALE}
                 />

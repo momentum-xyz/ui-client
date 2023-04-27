@@ -41,6 +41,9 @@ export interface WalletInterface {
   blockchain_name: string;
   contract_id: string;
   updated_at: string;
+  transferable?: string;
+  staked?: string;
+  unbonding?: string;
 }
 
 /** FETCH ME **/
