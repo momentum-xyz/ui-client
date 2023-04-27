@@ -5,22 +5,31 @@ import {useI18n} from '@momentum-xyz/core';
 import {ButtonEllipse, Frame, WalletHash} from '@momentum-xyz/ui-kit-storybook';
 
 import {WalletLogin, TrustPoints} from 'ui-kit';
-import {UserModelInterface} from 'core/models';
+import {WalletModelInterface} from 'core/models';
 import {availableWallets, WalletConfigInterface} from 'wallets';
 
 import * as styled from './ManageWallet.styled';
 
 interface PropsInterface {
-  user: UserModelInterface;
+  defaultWalletId: string;
+  wallets: WalletModelInterface[];
+  onChangeDefaultWallet: (walletId: string) => void;
+  onReloadWallets: () => void;
 }
 
-const ManageWallet: FC<PropsInterface> = ({user}) => {
+const ManageWallet: FC<PropsInterface> = ({
+  wallets,
+  defaultWalletId,
+  onChangeDefaultWallet,
+  onReloadWallets
+}) => {
   const [selectedWallet, setSelectedWallet] = useState<WalletConfigInterface | null>(null);
 
   const {t} = useI18n();
 
   const handleAccountConnected = () => {
     setSelectedWallet(null);
+    onReloadWallets();
   };
 
   return (
@@ -29,26 +38,28 @@ const ManageWallet: FC<PropsInterface> = ({user}) => {
         <styled.Title>{t('titles.myWalletAccounts')}</styled.Title>
         <styled.GeneralScrollable>
           <styled.WalletContainer>
-            {user.wallets?.map((wallet, index) => (
-              <styled.Wallet key={wallet}>
-                <WalletHash hash={wallet} icon="metamask" />
-                {index === 0 ? (
+            {wallets.map(({wallet_id}) => {
+              const isDefault = wallet_id === defaultWalletId;
+
+              return (
+                <styled.Wallet key={wallet_id}>
+                  <WalletHash hash={wallet_id} icon="metamask" />
                   <styled.WalletActions>
-                    <ButtonEllipse isLabel icon="starOn" label={t('actions.default')} />
-                    <ButtonEllipse icon="bin" label={t('actions.remove')} disabled />
+                    <ButtonEllipse
+                      isLabel={isDefault}
+                      icon={isDefault ? 'starOn' : 'star'}
+                      label={isDefault ? t('actions.default') : t('actions.setAsDefault')}
+                      onClick={() => onChangeDefaultWallet(wallet_id)}
+                    />
+                    <ButtonEllipse icon="bin" label={t('actions.remove')} disabled={isDefault} />
                   </styled.WalletActions>
-                ) : (
-                  <styled.WalletActions>
-                    <ButtonEllipse icon="star" label={t('actions.setAsDefault')} />
-                    <ButtonEllipse icon="bin" label={t('actions.remove')} />
-                  </styled.WalletActions>
-                )}
-              </styled.Wallet>
-            ))}
+                </styled.Wallet>
+              );
+            })}
           </styled.WalletContainer>
 
           <styled.ConnectContainer>
-            <styled.Title>{t('title.connectAnotherWallet')}</styled.Title>
+            <styled.Title>{t('titles.connectAnotherWallet')}</styled.Title>
             <styled.Methods>
               {availableWallets
                 .filter((m) => m.name !== 'Polkadot')

@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n, i18n} from '@momentum-xyz/core';
@@ -20,7 +20,7 @@ const TABS_LIST: TabInterface<StakingTabType>[] = [
 ];
 
 const StakingViewWidget: FC = () => {
-  const {widgetManagerStore, widgetStore} = useStore();
+  const {widgetManagerStore, widgetStore, nftStore} = useStore();
   const {stakingViewStore} = widgetStore;
   const {close} = widgetManagerStore;
 
@@ -29,15 +29,7 @@ const StakingViewWidget: FC = () => {
   const {t} = useI18n();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    stakingViewStore.init();
-
-    return () => {
-      stakingViewStore.resetModel();
-    };
-  }, [stakingViewStore]);
-
-  const walletOptions: SelectOptionInterface<string>[] = stakingViewStore.wallets.map((wallet) => ({
+  const walletOptions: SelectOptionInterface<string>[] = nftStore.wallets.map((wallet) => ({
     value: wallet.wallet_id,
     label: wallet.wallet_id,
     icon: 'talisman'
@@ -93,7 +85,7 @@ const StakingViewWidget: FC = () => {
             )}
 
             {activeTab === 'wallet' && (
-              <MyWallet wallets={stakingViewStore.wallets} walletOptions={walletOptions} />
+              <MyWallet wallets={nftStore.wallets} walletOptions={walletOptions} />
             )}
           </styled.Content>
         </styled.Wrapper>
