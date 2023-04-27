@@ -26,7 +26,12 @@ const Image: FC<ImagePropsInterface> = ({
   const [isError, setIsError] = useState<boolean>(false);
 
   return (
-    <styled.Container className={cn(bordered && 'bordered')} height={height} data-testid="Image-test" onClick={onClick}>
+    <styled.Container
+      className={cn(bordered && 'bordered')}
+      height={height}
+      data-testid="Image-test"
+      onClick={onClick}
+    >
       {src && !isError ? (
         <styled.Image src={src} onError={() => setIsError(true)} />
       ) : (
