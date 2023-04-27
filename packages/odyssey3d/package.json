@@ -13,7 +13,7 @@
     "start": "yarn copy-files && tsc -w",
     "dev": "react-scripts start",
     "build": "yarn clean && tsc --listEmittedFiles && yarn copy-files",
-    "copy-files": "copyfiles -u 1 src/static/** dist/"
+    "copy-files": "copyfiles -u 1 src/static/**/** dist/"
   },
   "dependencies": {
     "@babylonjs/core": "^5.48.0",
