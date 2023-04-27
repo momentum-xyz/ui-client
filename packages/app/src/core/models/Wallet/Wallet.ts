@@ -4,6 +4,7 @@ const Wallet = types.model('Wallet', {
   wallet_id: types.string,
   balance: types.string,
   blockchain_name: types.string,
+  reward: types.string,
   contract_id: types.string,
   updated_at: types.string,
   transferable: types.string,

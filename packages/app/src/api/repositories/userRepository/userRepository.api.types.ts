@@ -38,6 +38,7 @@ export interface StakeInterface {
 export interface WalletInterface {
   wallet_id: string;
   balance: string;
+  reward: string;
   blockchain_name: string;
   contract_id: string;
   updated_at: string;

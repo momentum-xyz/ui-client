@@ -9,6 +9,7 @@ import {
   SelectOptionInterface
 } from '@momentum-xyz/ui-kit-storybook';
 
+import {formatBigInt} from 'core/utils';
 import {WalletModelInterface} from 'core/models';
 
 import * as styled from './MyWallet.styled';
@@ -17,8 +18,6 @@ interface PropsInterface {
   wallets: WalletModelInterface[];
   walletOptions: SelectOptionInterface<string>[];
 }
-
-const DECIMAL_SCALE = 2;
 
 const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
   const [selectedWallet, setSelectedWallet] = useState<WalletModelInterface>();
@@ -56,11 +55,7 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
         <styled.RewardsContainer>
           <span>{t('labels.totalRewards')}</span>
           <styled.Amount>
-            <SymbolAmount
-              value={Number(selectedWallet?.balance)}
-              tokenSymbol="MOM"
-              decimalScale={DECIMAL_SCALE}
-            />
+            <SymbolAmount tokenSymbol="MOM" stringValue={formatBigInt(selectedWallet?.reward)} />
           </styled.Amount>
           <Button icon="wallet" label={t('actions.claimRewards')} />
         </styled.RewardsContainer>
@@ -83,9 +78,8 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={Number(selectedWallet?.balance)}
                   tokenSymbol="MOM"
-                  decimalScale={DECIMAL_SCALE}
+                  stringValue={formatBigInt(selectedWallet?.balance)}
                 />
               </styled.Amount>
             </styled.TokenBlockData>
@@ -100,9 +94,8 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={Number(selectedWallet?.transferable)}
                   tokenSymbol="MOM"
-                  decimalScale={DECIMAL_SCALE}
+                  stringValue={formatBigInt(selectedWallet?.transferable)}
                 />
               </styled.Amount>
             </styled.TokenBlockData>
@@ -117,9 +110,8 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={Number(selectedWallet?.staked)}
                   tokenSymbol="MOM"
-                  decimalScale={DECIMAL_SCALE}
+                  stringValue={formatBigInt(selectedWallet?.staked)}
                 />
               </styled.Amount>
             </styled.TokenBlockData>
@@ -134,9 +126,8 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={Number(selectedWallet?.unbonding)}
                   tokenSymbol="MOM"
-                  decimalScale={DECIMAL_SCALE}
+                  stringValue={formatBigInt(selectedWallet?.unbonding)}
                 />
               </styled.Amount>
             </styled.TokenBlockData>
