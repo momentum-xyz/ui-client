@@ -223,6 +223,7 @@ export class PlayerHelper {
     console.log('userInstantiate with userid: ' + user.id + ', playerId: ' + this.playerId);
     if (user.id === this.playerId) {
       this.playerInterface = user;
+      this.updateUserAvatar(user, this.playerInstance);
       return;
     } else {
       const instance = container.instantiateModelsToScene();
