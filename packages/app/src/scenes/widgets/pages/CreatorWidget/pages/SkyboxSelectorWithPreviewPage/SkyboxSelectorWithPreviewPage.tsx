@@ -7,7 +7,7 @@ import {useI18n} from '@momentum-xyz/core';
 import {useStore} from 'shared/hooks';
 import {Asset3dInterface} from 'core/models';
 
-import {UploadSkybox, SkyboxList, SkyboxPreview} from './components';
+import {UploadSkybox, SkyboxList, SkyboxPreview, DeleteSkyboxDialog} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
@@ -62,7 +62,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
               <styled.SkyboxSearchContainer>
                 <Input
                   placeholder={t(
-                    `titles.${
+                    `placeholders.${
                       skyboxPreviewType === 'COMMUNITY'
                         ? 'searchCommunityLibrary'
                         : 'searchPrivateLibrary'
@@ -122,11 +122,14 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
               toast.error(err.message);
             });
           }}
+          onSkyboxDelete={(sb) => {
+            skyboxSelectorStore.openSkyboxDeletion(sb.id);
+            setPreviewSkybox(null);
+          }}
           onBack={() => setPreviewSkybox(null)}
         />
       )}
-
-      {/* {skyboxSelectorStore.deleteDialog.isOpen && <DeleteSkyboxDialog />} */}
+      {skyboxSelectorStore.deleteDialog.isOpen && <DeleteSkyboxDialog />}
     </>
   );
 };

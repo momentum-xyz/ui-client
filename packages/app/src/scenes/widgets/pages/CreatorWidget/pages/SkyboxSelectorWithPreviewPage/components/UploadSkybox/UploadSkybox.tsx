@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {FC, useEffect} from 'react';
-import {FileUploader, Text, ErrorsEnum} from '@momentum-xyz/ui-kit';
+import {FileUploader, ErrorsEnum} from '@momentum-xyz/ui-kit';
 import {Button, Input, Radio} from '@momentum-xyz/ui-kit-storybook';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
@@ -94,6 +93,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
           text={t('assetsUploader.successMessage')}
         />
       );
+      onBack();
     }
   };
 
@@ -138,16 +138,18 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
                   style={{backgroundImage: `url(${URL.createObjectURL(value)})`}}
                 />
               )}
-              <FileUploader
-                label={value ? t('actions.changeImage') : t('actions.selectImage')}
-                dragActiveLabel={t('fileUploader.dragActiveLabel')}
-                maxSize={MAX_ASSET_SIZE_B}
-                onFilesUpload={(file) => {
-                  onChange(file || null);
-                }}
-                onError={handleUploadError}
-                fileType="image"
-              />
+              {!isUploadPending && (
+                <FileUploader
+                  label={value ? t('actions.changeImage') : t('actions.selectImage')}
+                  dragActiveLabel={t('fileUploader.dragActiveLabel')}
+                  maxSize={MAX_ASSET_SIZE_B}
+                  onFilesUpload={(file) => {
+                    onChange(file || null);
+                  }}
+                  onError={handleUploadError}
+                  fileType="image"
+                />
+              )}
             </styled.ImageUploadContainer>
           )}
         />
@@ -200,7 +202,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
         </styled.InputsContainer>
       </styled.FormContainer>
       <styled.ControlsRow>
-        <Button label="Go Back" variant="secondary" onClick={onBack} />
+        <Button label={t('actions.goBack')} variant="secondary" onClick={onBack} />
         <Button
           label="Publish"
           onClick={() => {

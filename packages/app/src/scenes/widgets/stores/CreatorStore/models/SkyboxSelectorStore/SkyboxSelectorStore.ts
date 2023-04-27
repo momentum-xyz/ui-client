@@ -214,9 +214,9 @@ const SkyboxSelectorStore = types
       return self.createSkyboxRequest.isDone;
     }),
     removeUserSkybox: flow(function* (worldId: string, userId: string, hash: string) {
-      if (hash === self.currentItemId) {
-        return;
-      }
+      // if (hash === self.currentItemId) {
+      //   return;
+      // }
 
       const value = {...self.userSkyboxes.toJSON()};
       delete value[hash];

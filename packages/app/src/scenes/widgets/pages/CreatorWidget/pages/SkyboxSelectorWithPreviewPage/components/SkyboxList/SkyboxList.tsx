@@ -1,4 +1,4 @@
-import {Frame} from '@momentum-xyz/ui-kit-storybook';
+import {Frame, Loader} from '@momentum-xyz/ui-kit-storybook';
 
 import {Asset3dInterface} from 'core/models';
 
@@ -14,7 +14,7 @@ export const SkyboxList = ({skyboxes, onSkyboxSelect}: PropsInterface): JSX.Elem
 
   return (
     <styled.Container>
-      {skyboxes.length &&
+      {!!skyboxes.length &&
         skyboxes.map((sb) => (
           <styled.SkyboxContainer key={sb.id} onClick={() => onSkyboxSelect(sb)}>
             <Frame>
@@ -25,6 +25,7 @@ export const SkyboxList = ({skyboxes, onSkyboxSelect}: PropsInterface): JSX.Elem
             </Frame>
           </styled.SkyboxContainer>
         ))}
+      {!skyboxes.length && <Loader />}
     </styled.Container>
   );
 };
