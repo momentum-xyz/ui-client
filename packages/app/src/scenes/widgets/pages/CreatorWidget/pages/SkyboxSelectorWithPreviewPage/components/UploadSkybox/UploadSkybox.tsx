@@ -1,4 +1,4 @@
-import {FC, useEffect} from 'react';
+import {FC} from 'react';
 import {FileUploader, ErrorsEnum} from '@momentum-xyz/ui-kit';
 import {Button, Input, Radio} from '@momentum-xyz/ui-kit-storybook';
 import {observer} from 'mobx-react-lite';
@@ -30,18 +30,10 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
   const {creatorStore, universeStore, sessionStore} = useStore();
   const {skyboxSelectorStore} = creatorStore;
   const {uploadSkybox, isUploadPending} = skyboxSelectorStore;
-  const {world3dStore} = universeStore;
   const {user} = sessionStore;
   const worldId = universeStore.worldId;
 
   const {t} = useI18n();
-
-  useEffect(() => {
-    world3dStore?.changeKeyboardControl(false);
-    return () => {
-      world3dStore?.changeKeyboardControl(true);
-    };
-  }, [world3dStore]);
 
   const {
     control,
