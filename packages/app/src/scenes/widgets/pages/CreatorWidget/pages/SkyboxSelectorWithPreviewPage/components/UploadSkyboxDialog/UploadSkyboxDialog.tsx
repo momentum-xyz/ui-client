@@ -51,7 +51,7 @@ const UploadSkyboxDialog: FC = () => {
     if (!user) {
       return;
     }
-    const isUploadOK = await uploadSkybox(worldId, user.id, file, name, '', 'COMMUNITY');
+    const isUploadOK = await uploadSkybox(worldId, user.id, file, name, '');
     if (!isUploadOK) {
       setError('file', {
         type: 'submit'

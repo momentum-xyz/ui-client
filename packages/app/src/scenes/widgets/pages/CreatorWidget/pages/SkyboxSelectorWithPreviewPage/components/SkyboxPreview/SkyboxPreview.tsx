@@ -13,10 +13,12 @@ interface PropsInterface {
 export const SkyboxPreview = ({skybox, onSkyboxSelect, onBack}: PropsInterface): JSX.Element => {
   return (
     <styled.Container>
-      <Frame>
-        <styled.SkyboxImage src={skybox.image} />
-      </Frame>
-      <styled.SkyboxTitle>{skybox.name}</styled.SkyboxTitle>
+      <styled.SkyboxInfoContainer>
+        <Frame>
+          <styled.SkyboxImage src={skybox.image} />
+        </Frame>
+        <styled.SkyboxTitle>{skybox.name}</styled.SkyboxTitle>
+      </styled.SkyboxInfoContainer>
 
       <styled.ControlsRow>
         <Button label="Go Back" variant="secondary" onClick={onBack} />

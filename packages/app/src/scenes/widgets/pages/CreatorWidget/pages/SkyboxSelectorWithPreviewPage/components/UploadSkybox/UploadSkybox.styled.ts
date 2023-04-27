@@ -4,7 +4,10 @@ export const Container = styled.div`
   padding: 0 80px;
   display: flex;
   flex-direction: column;
+  min-height: calc(100vh - 370px);
+  justify-content: space-between;
 `;
+export const FormContainer = styled.div``;
 
 export const InputsContainer = styled.div`
   display: flex;

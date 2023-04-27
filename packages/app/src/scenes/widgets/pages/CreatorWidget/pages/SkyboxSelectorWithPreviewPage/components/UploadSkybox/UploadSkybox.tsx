@@ -70,7 +70,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
     if (!user) {
       return;
     }
-    const isUploadOK = await uploadSkybox(worldId, user.id, file, name, artistName, type);
+    const isUploadOK = await uploadSkybox(worldId, user.id, file, name, artistName);
     if (!isUploadOK) {
       setError('file', {
         type: 'submit'
@@ -118,93 +118,93 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
 
   return (
     <styled.Container>
-      <Controller
-        name="file"
-        control={control}
-        rules={{required: true}}
-        render={({field: {value, onChange}}) => (
-          <styled.ImageUploadContainer
-            className={cn(!!errors.file && 'error', value && 'has-image', 'testttt')}
-          >
-            {!value && (
-              <styled.SkyboxInformation>
-                <h1>{t('messages.uploadCustomSkyboxInfoTitle')}</h1>
-                <span>{t('messages.uploadCustomSkyboxInfoDescription')}</span>
-              </styled.SkyboxInformation>
-            )}
-            {!!value && (
-              <styled.PreviewImageHolder
-                style={{backgroundImage: `url(${URL.createObjectURL(value)})`}}
-              />
-            )}
-            <FileUploader
-              label={value ? t('actions.changeImage') : t('actions.selectImage')}
-              dragActiveLabel={t('fileUploader.dragActiveLabel')}
-              maxSize={MAX_ASSET_SIZE_B}
-              onFilesUpload={(file) => {
-                onChange(file || null);
-              }}
-              onError={handleUploadError}
-              fileType="image"
-            />
-          </styled.ImageUploadContainer>
-        )}
-      />
-      <styled.InputsContainer>
+      <styled.FormContainer>
         <Controller
-          name="name"
+          name="file"
           control={control}
           rules={{required: true}}
           render={({field: {value, onChange}}) => (
-            <Input
-              placeholder={'Name your Asset*' || ''}
-              value={value}
-              wide
-              onChange={(value: string) => {
-                onChange(value);
-              }}
-              disabled={isUploadPending}
-            />
+            <styled.ImageUploadContainer
+              className={cn(!!errors.file && 'error', value && 'has-image', 'testttt')}
+            >
+              {!value && (
+                <styled.SkyboxInformation>
+                  <h1>{t('messages.uploadCustomSkyboxInfoTitle')}</h1>
+                  <span>{t('messages.uploadCustomSkyboxInfoDescription')}</span>
+                </styled.SkyboxInformation>
+              )}
+              {!!value && (
+                <styled.PreviewImageHolder
+                  style={{backgroundImage: `url(${URL.createObjectURL(value)})`}}
+                />
+              )}
+              <FileUploader
+                label={value ? t('actions.changeImage') : t('actions.selectImage')}
+                dragActiveLabel={t('fileUploader.dragActiveLabel')}
+                maxSize={MAX_ASSET_SIZE_B}
+                onFilesUpload={(file) => {
+                  onChange(file || null);
+                }}
+                onError={handleUploadError}
+                fileType="image"
+              />
+            </styled.ImageUploadContainer>
           )}
         />
-        <Controller
-          name="artistName"
-          control={control}
-          render={({field: {value, onChange}}) => (
-            <Input
-              placeholder={'Name the Artist' || ''}
-              value={value}
-              wide
-              onChange={(value: string) => {
-                onChange(value);
-              }}
-              disabled={isUploadPending}
-            />
-          )}
-        />
-        <Controller
-          name="type"
-          control={control}
-          render={({field: {value, onChange}}) => (
-            <Radio
-              name="type"
-              value={value}
-              onChange={(value: string) => {
-                onChange(value);
-              }}
-              options={options}
-            />
-          )}
-        />
-      </styled.InputsContainer>
+        <styled.InputsContainer>
+          <Controller
+            name="name"
+            control={control}
+            rules={{required: true}}
+            render={({field: {value, onChange}}) => (
+              <Input
+                placeholder={'Name your Asset*' || ''}
+                value={value}
+                wide
+                onChange={(value: string) => {
+                  onChange(value);
+                }}
+                disabled={isUploadPending}
+              />
+            )}
+          />
+          <Controller
+            name="artistName"
+            control={control}
+            render={({field: {value, onChange}}) => (
+              <Input
+                placeholder={'Name the Artist' || ''}
+                value={value}
+                wide
+                onChange={(value: string) => {
+                  onChange(value);
+                }}
+                disabled={isUploadPending}
+              />
+            )}
+          />
+          <Controller
+            name="type"
+            control={control}
+            render={({field: {value, onChange}}) => (
+              <Radio
+                name="type"
+                value={value}
+                onChange={(value: string) => {
+                  onChange(value);
+                }}
+                options={options}
+              />
+            )}
+          />
+        </styled.InputsContainer>
+      </styled.FormContainer>
       <styled.ControlsRow>
         <Button label="Go Back" variant="secondary" onClick={onBack} />
         <Button
           label="Publish"
           onClick={() => {
-            // eslint-disable-next-line no-debugger
-            debugger;
-            handleSubmit(formSubmitHandler);
+            handleSubmit(formSubmitHandler)();
           }}
         />
       </styled.ControlsRow>

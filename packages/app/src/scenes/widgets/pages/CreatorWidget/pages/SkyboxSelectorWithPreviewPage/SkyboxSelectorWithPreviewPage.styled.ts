@@ -198,3 +198,14 @@ export const SkyboxTypeContainer = styled.div`
   }
 `;
 export const SkyboxSearchContainer = styled.div``;
+export const SkyboxListHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  line-height: 24px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+`;
+

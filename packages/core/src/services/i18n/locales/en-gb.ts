@@ -611,7 +611,12 @@ export const enGb = {
       owner: 'Owner',
       colourPicker: 'Colour Picker',
       setSpawnPoint: 'Set Spawn Point',
-      statistics: 'Statistics'
+      statistics: 'Statistics',
+      communitySkyboxLibrary: 'Community Skybox Library',
+      privateSkyboxLibrary: 'Private Skybox Library',
+      odysseySkyboxLibraryHeader: 'Odyssey Library',
+      communitySkyboxLibraryHeader: 'Community',
+      privateSkyboxLibraryHeader: 'Private Library',
     },
     textMessage: {
       you: 'you',
@@ -642,7 +647,9 @@ export const enGb = {
       nameYourAssetForYourLibrary: 'Name your Asset for your library',
       selectAnOption: 'Select an Option',
       nameYourObjectNavigation: 'Name your Object (Navigation)',
-      selectAccount: 'Select Account'
+      selectAccount: 'Select Account',
+      searchCommunityLibrary: 'Search Community Library',
+      searchPrivateLibrary: 'Search Private Library',
     },
     fields: {
       nickname: 'Nickname',
@@ -788,6 +795,7 @@ export const enGb = {
       changeImage: 'Change Image',
       selectImage: 'Select Image',
       uploadYourAsset: 'UPLOAD YOUR ASSET',
+      uploadCustomSkybox: 'Upload Custom Skybox',
       move: 'Move',
       rotate: 'Rotate',
       scale: 'Scale',

@@ -5,6 +5,13 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 0 80px;
+  min-height: calc(100vh - 370px);
+  justify-content: space-between;
+`;
+export const SkyboxInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const SkyboxImage = styled.img`
