@@ -16,7 +16,9 @@ import {Object3dInterface, Texture3dInterface, ClickPositionInterface} from '@mo
 
 import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
-import {getAssetFileName, posToVec3} from './UtilityHelper';
+import {getAssetFileName} from './UtilityHelper';
+import {posToVec3} from './TransformHelper';
+import {WorldCreatorHelper} from './WorldCreatorHelper';
 
 interface BabylonObjectInterface {
   container: AssetContainer;
@@ -42,6 +44,8 @@ export class ObjectHelper {
     onClickOutside: () => void
   ): void {
     this.scene = scene;
+    scene.useRightHandedSystem = true;
+
     this.firstID = '';
     // Mouse Click Listener
     scene.onPointerDown = function castRay() {
@@ -68,6 +72,7 @@ export class ObjectHelper {
           console.log('clicked on object with id: ' + parent.metadata);
           if (ObjectHelper.objectsMap.has(parent.metadata)) {
             onObjectClick(parent.metadata, lastClick);
+            WorldCreatorHelper.selectedObject = parent.metadata;
           } else if (
             PlayerHelper.playerId === parent.metadata ||
             PlayerHelper.userMap.has(parent.metadata)
@@ -81,6 +86,7 @@ export class ObjectHelper {
           }*/
         } else {
           // WorldCreatorHelper.unlockLastObject();
+          WorldCreatorHelper.selectedObject = '';
           onClickOutside();
         }
       }
@@ -158,10 +164,6 @@ export class ObjectHelper {
     if (this.firstID === '') {
       this.firstID = object.id;
     }
-    /*const meshes = node.getChildMeshes();
-    for (const mesh of meshes) {
-      console.log(mesh.name);
-    }*/
 
     const babylonObject = {
       container: container,

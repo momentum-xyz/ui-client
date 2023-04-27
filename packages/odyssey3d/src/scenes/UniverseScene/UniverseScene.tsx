@@ -38,7 +38,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
     console.log('onSceneReady', scene);
     const view = scene.getEngine().getRenderingCanvas();
     if (view?.id) {
-      PlayerHelper.initialize(scene, view);
+      PlayerHelper.initialize(scene, view, false);
       LightHelper.initialize(scene);
       await UniverseBuilderHelper.initialize(scene, onWorldClick, onUserClick, onClickOutside);
     }
