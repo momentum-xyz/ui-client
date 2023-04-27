@@ -27,11 +27,11 @@ export interface UserInfoInterface {
 export interface StakeInterface {
   wallet_id: string;
   amount: string;
+  reward: string;
   blockchain_id: string;
   lastComment: string | null;
   name: string;
   object_id: string;
-  reward: string | null;
   updatedAt: string;
 }
 
@@ -41,9 +41,9 @@ export interface WalletInterface {
   blockchain_name: string;
   contract_id: string;
   updated_at: string;
-  transferable?: string;
-  staked?: string;
-  unbonding?: string;
+  transferable: string;
+  staked: string;
+  unbonding: string;
 }
 
 /** FETCH ME **/
