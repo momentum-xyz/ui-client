@@ -124,6 +124,7 @@ const ProfileWidget: FC = () => {
               {activeMenuId === 'editProfile' && (
                 <ProfileEditor
                   user={sessionStore.user}
+                  defaultWalletId={nftStore.defaultWalletId}
                   formErrors={profileStore.formErrors}
                   isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
                   onUpdate={handleProfileUpdate}

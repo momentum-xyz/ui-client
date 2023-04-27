@@ -21,15 +21,21 @@ import * as styled from './ProfileEditor.styled';
 
 interface PropsInterface {
   user: UserModelInterface;
+  defaultWalletId: string;
   formErrors: FieldErrorInterface[];
   isUpdating: boolean;
   onUpdate: (form: ProfileFormInterface, previousImageHash?: string) => void;
   onCancel: () => void;
 }
 
-const ProfileEditor: FC<PropsInterface> = (props) => {
-  const {user, formErrors, isUpdating, onUpdate, onCancel} = props;
-
+const ProfileEditor: FC<PropsInterface> = ({
+  user,
+  defaultWalletId,
+  formErrors,
+  isUpdating,
+  onUpdate,
+  onCancel
+}) => {
   const {t} = useI18n();
 
   const {
@@ -148,7 +154,7 @@ const ProfileEditor: FC<PropsInterface> = (props) => {
             label={`${t('actions.joined')} ${signUpDateString(user.createdAt)}`}
           />
 
-          <WalletHash icon="talisman" hash={user.wallet || ''} />
+          <WalletHash icon="talisman" hash={defaultWalletId} />
         </styled.Info>
       </Frame>
     </styled.Container>

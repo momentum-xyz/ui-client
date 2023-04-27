@@ -64,7 +64,7 @@ const Map3dPage: FC = () => {
         widgetManagerStore.open(WidgetEnum.USER_DETAILS, PositionEnum.LEFT, {id});
       }}
       onClickOutside={() => {
-        widgetManagerStore.closeAll(); // ???
+        //widgetManagerStore.closeAll();
       }}
     />
   );
