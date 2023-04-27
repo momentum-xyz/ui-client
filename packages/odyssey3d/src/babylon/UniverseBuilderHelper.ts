@@ -392,7 +392,7 @@ export class UniverseBuilderHelper {
       if (odysseysInThisRing <= 0) {
         return;
       }
-      totalOdysseys = totalOdysseys - odysseysInThisRing;
+      odysseysInThisRing = Math.min(totalOdysseys, odysseysInThisRing);
 
       // Build the ring.
       const newRing: TransformNode = this.buildRing(
@@ -407,6 +407,7 @@ export class UniverseBuilderHelper {
       AllOdysseyRings.push(newRing);
       zValueRing = zValueRing * 1.2;
 
+      totalOdysseys = totalOdysseys - odysseysInThisRing;
       if (totalOdysseys >= halfAmountOfOdysseys) {
         // prepare amount for the next ring.
         odysseysInThisRing = Math.floor(odysseysInThisRing * 1.2);
@@ -496,7 +497,6 @@ export class UniverseBuilderHelper {
   }
 
   static defineCustomMaterial() {
-    // TODO: Check with Frank how is this supposed to look
     const customOrbGlassMat = new PBRMaterial('orbGlass', this.scene);
 
     customOrbGlassMat.reflectionTexture = new Texture(hdrTexture);

@@ -17,11 +17,14 @@ import {
 } from '@momentum-xyz/core';
 
 import {ObjectHelper} from './ObjectHelper';
-import {getAssetFileName, posToVec3, vec3ToPos} from './UtilityHelper';
+import {getAssetFileName} from './UtilityHelper';
+import {posToVec3, vec3ToPos, setNodeTransform, TransformTypesEnum} from './TransformHelper';
 
 const NORMAL_SPEED = 0.5;
 const FAST_SPEED = 1.5;
 const PLAYER_OFFSET = new Vector3(0, -0.5, 2);
+const PLAYER_OFFSET_RH = new Vector3(0, -0.5, -2);
+
 // TODO: Set this from PosBusSelfPosMsg
 const CAMERA_POS = new Vector3(50, 50, 150);
 
@@ -41,13 +44,16 @@ export class PlayerHelper {
   static playerAvatar3D: string;
   static playerId: string;
   static playerInterface: Odyssey3dUserInterface;
+  static rightHanded = false;
 
   static initialize(
     scene: Scene,
     canvas: HTMLCanvasElement,
+    rh: boolean,
     onMove?: (transform: TransformNoScaleInterface) => void
   ) {
     this.scene = scene;
+    this.rightHanded = rh;
     // This creates and positions a UniversalCamera camera (non-mesh)
     const camera = new UniversalCamera('UniversalCamera', CAMERA_POS, scene);
     camera.rotationQuaternion = new Quaternion();
@@ -86,7 +92,7 @@ export class PlayerHelper {
       // TODO: Consider where to apply the offset between player and camera
 
       const playerTransform: TransformNoScaleInterface = {
-        position: vec3ToPos(this.camera.position.subtract(PLAYER_OFFSET)),
+        position: vec3ToPos(this.camera.position /*.add(PLAYER_OFFSET)*/),
         rotation: vec3ToPos(this.camera.rotation)
       };
 
@@ -140,7 +146,11 @@ export class PlayerHelper {
     const playerNode = instance.rootNodes[0];
     playerNode.name = 'Player';
     playerNode.parent = this.camera;
-    playerNode.position = PLAYER_OFFSET;
+    if (this.rightHanded) {
+      playerNode.position = PLAYER_OFFSET_RH;
+    } else {
+      playerNode.position = PLAYER_OFFSET;
+    }
     playerNode.rotation = new Vector3(0, 0, 0);
     playerNode.scaling = new Vector3(1, 1, 1);
 
@@ -190,6 +200,12 @@ export class PlayerHelper {
       }
 
       const userNode = instance.rootNodes[0];
+      userNode.scaling = new Vector3(1, 1, 1);
+      const childNodes = userNode.getChildTransformNodes();
+      if (childNodes.length > 0) {
+        childNodes[0].position = PLAYER_OFFSET;
+      }
+
       userNode.name = user.name;
       if (user.transform?.position) {
         userNode.position = posToVec3(user.transform.position);
@@ -218,11 +234,14 @@ export class PlayerHelper {
           console.log('Cant set position, because the instance of user has no rootnode.');
           continue;
         }
-
         const transformNode = userObj.userInstance.rootNodes[0];
-
-        transformNode.position = posToVec3(user.transform.position);
-        transformNode.rotation = posToVec3(user.transform.rotation);
+        setNodeTransform(
+          transformNode,
+          transformNode.position,
+          user.transform.position,
+          TransformTypesEnum.Position,
+          this.scene
+        );
       }
     }
   }
