@@ -7,11 +7,7 @@ import {useI18n} from '@momentum-xyz/core';
 import {useStore} from 'shared/hooks';
 import {Asset3dInterface} from 'core/models';
 
-import {
-  UploadSkybox,
-  SkyboxList,
-  SkyboxPreview
-} from './components';
+import {UploadSkybox, SkyboxList, SkyboxPreview} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
@@ -65,7 +61,13 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
               </styled.SkyboxTypeContainer>
               <styled.SkyboxSearchContainer>
                 <Input
-                  placeholder={t(`titles.${skyboxPreviewType === 'COMMUNITY' ? 'searchCommunityLibrary' : 'searchPrivateLibrary'}`)}
+                  placeholder={t(
+                    `titles.${
+                      skyboxPreviewType === 'COMMUNITY'
+                        ? 'searchCommunityLibrary'
+                        : 'searchPrivateLibrary'
+                    }`
+                  )}
                   isSearch
                   onChange={console.log}
                   wide
@@ -90,8 +92,21 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
       {!isUploadingSkybox && !previewSkybox && (
         <>
           <styled.SkyboxListHeader>
-            <span>{t(`titles.${skyboxPreviewType === 'COMMUNITY' ? 'odysseySkyboxLibraryHeader' : 'privateSkyboxLibraryHeader'}`)}</span>
-            <span>{(skyboxPreviewType === 'COMMUNITY' ? communitySkyboxesList : userSkyboxesList).length}</span>
+            <span>
+              {t(
+                `titles.${
+                  skyboxPreviewType === 'COMMUNITY'
+                    ? 'odysseySkyboxLibraryHeader'
+                    : 'privateSkyboxLibraryHeader'
+                }`
+              )}
+            </span>
+            <span>
+              {
+                (skyboxPreviewType === 'COMMUNITY' ? communitySkyboxesList : userSkyboxesList)
+                  .length
+              }
+            </span>
           </styled.SkyboxListHeader>
           <SkyboxList
             skyboxes={skyboxPreviewType === 'COMMUNITY' ? communitySkyboxesList : userSkyboxesList}

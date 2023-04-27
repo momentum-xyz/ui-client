@@ -208,4 +208,3 @@ export const SkyboxListHeader = styled.div`
   text-transform: uppercase;
   margin-bottom: 10px;
 `;
-

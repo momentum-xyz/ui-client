@@ -616,7 +616,7 @@ export const enGb = {
       privateSkyboxLibrary: 'Private Skybox Library',
       odysseySkyboxLibraryHeader: 'Odyssey Library',
       communitySkyboxLibraryHeader: 'Community',
-      privateSkyboxLibraryHeader: 'Private Library',
+      privateSkyboxLibraryHeader: 'Private Library'
     },
     textMessage: {
       you: 'you',
@@ -649,7 +649,7 @@ export const enGb = {
       nameYourObjectNavigation: 'Name your Object (Navigation)',
       selectAccount: 'Select Account',
       searchCommunityLibrary: 'Search Community Library',
-      searchPrivateLibrary: 'Search Private Library',
+      searchPrivateLibrary: 'Search Private Library'
     },
     fields: {
       nickname: 'Nickname',
