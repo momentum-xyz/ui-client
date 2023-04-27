@@ -140,7 +140,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
               )}
               {!isUploadPending && (
                 <FileUploader
-                  label={value ? t('actions.changeImage') : t('actions.selectImage')}
+                  label={value ? t('actions.changeImage') : t('actions.uploadYourAsset')}
                   dragActiveLabel={t('fileUploader.dragActiveLabel')}
                   maxSize={MAX_ASSET_SIZE_B}
                   onFilesUpload={(file) => {

@@ -5,6 +5,8 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 370px);
+  max-height: calc(100vh - 370px);
+  overflow: scroll;
   justify-content: space-between;
 `;
 export const FormContainer = styled.div``;
@@ -13,6 +15,8 @@ export const InputsContainer = styled.div`
   display: flex;
   gap: 12px;
   flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
 `;
 
 export const ControlsRow = styled.div`
@@ -44,6 +48,14 @@ export const ImageUploadContainer = styled.div`
 
   &.error {
     border: 1px dashed ${(props) => props.theme.danger};
+  }
+
+  & button {
+    color: ${(props) => props.theme.text};
+    letter-spacing: 0.08em;
+    font-size: 14px !important;
+    padding: 20px !important;
+    width: 100%;
   }
 `;
 
