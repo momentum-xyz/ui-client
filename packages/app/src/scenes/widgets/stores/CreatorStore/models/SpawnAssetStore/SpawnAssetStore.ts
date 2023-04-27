@@ -7,6 +7,7 @@ import {Asset3dCategoryEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 import {Asset3d, Asset3dInterface, SearchQuery} from 'core/models';
 import {PosBusService} from 'shared/services';
+import {getRootStore} from 'core/utils';
 
 const SpawnAssetStore = types
   .compose(
@@ -159,6 +160,9 @@ const SpawnAssetStore = types
       self.selectedAsset = asset ? Asset3d.create({...asset}) : undefined;
     },
     spawnObject: flow(function* (worldId: string) {
+      // it's pretty ugly solution but having 2 comm channels (API and WS) leads to possibility of race condition
+      // and it's not clear after we receive response here whether we've already received it from WS or not
+      // and babylon module is not currently flexible enough to handle this situation
       PosBusService.attachNextReceivedObjectToCamera = true;
 
       const response: PostSpaceResponse | undefined = yield self.spawnObjectRequest.send(
@@ -173,8 +177,13 @@ const SpawnAssetStore = types
           minimap: self.isVisibleInNavigation
         }
       );
+      const objectId = response?.object_id;
 
-      return response?.space_id;
+      if (objectId) {
+        getRootStore(self).universeStore.world3dStore?.setAttachedToCamera(objectId);
+      }
+
+      return objectId;
     })
   }))
   .views((self) => ({
