@@ -29,14 +29,14 @@ export const ScrollableContainer = styled.div`
 export const RewardsContainer = styled.div`
   padding: 12px 0 10px 0;
   display: grid;
-  grid-template-columns: 120px 1fr auto;
+  grid-template-columns: 120px 1fr 200px;
   align-items: center;
 `;
 
 export const AirdropContainer = styled.div`
   padding: 12px 0 20px 0;
   display: grid;
-  grid-template-columns: 1fr 196px;
+  grid-template-columns: 1fr 200px;
   border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
   align-items: center;
 `;
