@@ -7,12 +7,10 @@ import {
   stringInputMask,
   Select,
   StakeCard,
-  ImageSizeEnum,
   SelectOptionInterface,
   doThreeDotsInside
 } from '@momentum-xyz/ui-kit-storybook';
 
-import {getImageAbsoluteUrl} from 'core/utils';
 import {StakeSortType} from 'core/types';
 import {
   FilterFieldModelType,
@@ -90,14 +88,14 @@ const StakeList: FC<PropsInterface> = ({
           {stakeList.map((stake, index) => (
             <StakeCard
               key={index}
-              nftName={stake.nftName}
-              nftImageUrl={getImageAbsoluteUrl(stake.nftImage, ImageSizeEnum.S5)}
-              stakedAmount={stake.stakedAmount}
-              rewardAmount={stake.rewardAmount}
-              tokenSymbol={stake.tokenSymbol}
-              onInfoClick={() => onSelectStake(stake.uuid)}
-              onStakeClick={() => onStake(stake.uuid)}
-              onUnstakeClick={() => onUnstake(stake.nftId)}
+              nftName={stake.name}
+              nftImageUrl={null} // ???
+              stakedAmount={Number(stake.amount)}
+              rewardAmount={Number(stake.reward)}
+              tokenSymbol="MOM"
+              onInfoClick={() => onSelectStake(stake.blockchain_id)}
+              onStakeClick={() => onStake(stake.blockchain_id)}
+              onUnstakeClick={() => onUnstake(stake.blockchain_id)}
             />
           ))}
         </styled.SearchContainer>

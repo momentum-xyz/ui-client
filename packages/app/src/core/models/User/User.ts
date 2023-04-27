@@ -14,7 +14,6 @@ const User = types
     createdAt: types.string,
     updatedAt: types.maybeNull(types.string),
     wallet: types.maybeNull(types.string),
-    wallets: types.maybeNull(types.array(types.string)),
     status: types.maybeNull(types.enumeration(Object.values(UserStatusEnum))),
     profile: UserProfile,
     isGuest: types.maybe(types.boolean)

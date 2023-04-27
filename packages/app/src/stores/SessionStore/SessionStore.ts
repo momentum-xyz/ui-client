@@ -9,7 +9,6 @@ import {PolkadotAddressInterface, User} from 'core/models';
 import {getAccessToken, refreshAxiosToken} from 'api/request';
 import {api, AuthChallengeRequest, CheckProfileUpdatingJobResponse, FetchMeResponse} from 'api';
 import PolkadotImplementation from 'shared/services/web3/polkadot.class';
-import {PluginIdEnum} from 'api/enums';
 
 const SessionStore = types
   .model('SessionStore', {
@@ -138,7 +137,7 @@ const SessionStore = types
             throw new Error(attachResponse.error?.message || 'Error attaching account');
           }
 
-          self.user.wallets = cast(attachResponse.wallet);
+          //self.user.wallets = cast(attachResponse.wallet);
 
           return;
         }
@@ -174,7 +173,7 @@ const SessionStore = types
         self.signUpUser = cast(null);
       }
 
-      if (!self.user?.isGuest) {
+      /*if (!self.user?.isGuest) {
         // TODO change fetchMe EP to return multiple wallets
         const responseWallets = yield self.profileRequest.send(
           api.userAttributeRepository.getPluginUserAttributeValue,
@@ -188,7 +187,7 @@ const SessionStore = types
         if (responseWallets?.wallet && self.user) {
           self.user.wallets = cast(responseWallets.wallet);
         }
-      }
+      }*/
 
       return true;
     }),

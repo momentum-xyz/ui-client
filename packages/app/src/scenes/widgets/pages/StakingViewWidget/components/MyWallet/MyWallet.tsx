@@ -41,10 +41,10 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
           <Select
             wide
             options={walletOptions}
-            value={selectedWallet?.hash}
+            value={selectedWallet?.wallet_id}
             placeholder={t('actions.selectWallet')}
-            onSingleChange={(hash) => {
-              const wallet = wallets.find((i) => i.hash === hash);
+            onSingleChange={(wallet_id) => {
+              const wallet = wallets.find((i) => i.wallet_id === wallet_id);
               if (wallet) {
                 setSelectedWallet(wallet);
               }
@@ -53,18 +53,23 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
         </styled.Filters>
 
         <styled.Title>{t('labels.rewards')}</styled.Title>
-
         <styled.RewardsContainer>
           <span>{t('labels.totalRewards')}</span>
           <styled.Amount>
             <SymbolAmount
-              value={selectedWallet?.rewardsAmount}
-              tokenSymbol={selectedWallet?.symbol}
+              value={Number(selectedWallet?.balance)}
+              tokenSymbol="MOM"
               decimalScale={DECIMAL_SCALE}
             />
           </styled.Amount>
           <Button icon="wallet" label={t('actions.claimRewards')} />
         </styled.RewardsContainer>
+
+        <styled.Title>{t('actions.requestAirdropTokens')}</styled.Title>
+        <styled.AirdropContainer>
+          <span>Lorem ipsum dolor sit amet, ligula consectetuer adipiscing elit.</span>
+          <Button icon="air" label={t('actions.startAirdrop')} />
+        </styled.AirdropContainer>
 
         <styled.ScrollableContainer>
           <styled.Title>{t('labels.balance')}</styled.Title>
@@ -78,8 +83,8 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={selectedWallet?.balanceAmount}
-                  tokenSymbol={selectedWallet?.symbol}
+                  value={Number(selectedWallet?.balance)}
+                  tokenSymbol="MOM"
                   decimalScale={DECIMAL_SCALE}
                 />
               </styled.Amount>
@@ -95,8 +100,8 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={selectedWallet?.transferableAmount}
-                  tokenSymbol={selectedWallet?.symbol}
+                  value={Number(selectedWallet?.transferable)}
+                  tokenSymbol="MOM"
                   decimalScale={DECIMAL_SCALE}
                 />
               </styled.Amount>
@@ -112,8 +117,8 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={selectedWallet?.stakedAmount}
-                  tokenSymbol={selectedWallet?.symbol}
+                  value={Number(selectedWallet?.staked)}
+                  tokenSymbol="MOM"
                   decimalScale={DECIMAL_SCALE}
                 />
               </styled.Amount>
@@ -129,8 +134,8 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={selectedWallet?.unbondingAmount}
-                  tokenSymbol={selectedWallet?.symbol}
+                  value={Number(selectedWallet?.unbonding)}
+                  tokenSymbol="MOM"
                   decimalScale={DECIMAL_SCALE}
                 />
               </styled.Amount>

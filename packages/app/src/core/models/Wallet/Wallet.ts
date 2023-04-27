@@ -1,13 +1,14 @@
 import {types, Instance} from 'mobx-state-tree';
 
 const Wallet = types.model('Wallet', {
-  hash: types.identifier,
-  rewardsAmount: types.number,
-  balanceAmount: types.number,
-  transferableAmount: types.number,
-  unbondingAmount: types.number,
-  stakedAmount: types.number,
-  symbol: types.string
+  wallet_id: types.string,
+  balance: types.string,
+  blockchain_name: types.string,
+  contract_id: types.string,
+  updated_at: types.string,
+  transferable: types.maybe(types.string),
+  staked: types.maybe(types.string),
+  unbonding: types.maybe(types.string)
 });
 
 export interface WalletModelInterface extends Instance<typeof Wallet> {}

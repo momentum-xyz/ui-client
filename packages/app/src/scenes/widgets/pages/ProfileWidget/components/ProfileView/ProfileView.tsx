@@ -17,13 +17,14 @@ import * as styled from './ProfileView.styled';
 
 interface PropsInterface {
   user: UserModelInterface;
+  defaultWalletId: string;
   worldList: WorldInfoModelInterface[];
   onInfoWorld: (uuid: string) => void;
   onVisitWorld: (uuid: string) => void;
 }
 
 const ProfileView: FC<PropsInterface> = (props) => {
-  const {user, worldList, onInfoWorld, onVisitWorld} = props;
+  const {user, defaultWalletId, worldList, onInfoWorld, onVisitWorld} = props;
 
   const {t} = useI18n();
 
@@ -50,7 +51,7 @@ const ProfileView: FC<PropsInterface> = (props) => {
               icon="astro"
               label={`${t('actions.joined')} ${signUpDateString(user.createdAt)}`}
             />
-            <WalletHash icon="talisman" hash={user.wallet || ''} />
+            <WalletHash icon="talisman" hash={defaultWalletId || ''} />
           </styled.GeneralInfo>
 
           {worldList.length > 0 && (
