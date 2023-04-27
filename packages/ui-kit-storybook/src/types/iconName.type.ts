@@ -3,6 +3,7 @@ export type IconNameType =
   | 'Instagram'
   | 'add'
   | 'adjust'
+  | 'air'
   | 'airport-signal'
   | 'alert'
   | 'approved'

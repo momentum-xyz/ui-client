@@ -11,13 +11,22 @@ import {
 } from '@momentum-xyz/core';
 import {IconNameType, OptionInterface} from '@momentum-xyz/ui-kit';
 
-import {PolkadotAddress, SearchQuery, NftItem, NftItemModelInterface} from 'core/models';
+import {
+  PolkadotAddress,
+  SearchQuery,
+  NftItem,
+  NftItemModelInterface,
+  Wallet,
+  Stake
+} from 'core/models';
+import {storage} from 'shared/services';
+import {StorageKeyEnum} from 'core/enums';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
 import {fetchIpfs, isIpfsHash, wait} from 'core/utils';
 import {KeyringAddressType} from 'core/types';
 import {mintNft, mintNftCheckJob} from 'api/repositories';
 import {appVariables} from 'api/constants';
-import {MintNftCheckJobResponse} from 'api';
+import {api, MintNftCheckJobResponse, StakeInterface, WalletInterface} from 'api';
 import {WalletConnectionsInterface} from 'core/interfaces';
 import PolkadotImplementation from 'shared/services/web3/polkadot.class';
 
@@ -70,6 +79,10 @@ const NftStore = types
   .compose(
     ResetModel,
     types.model('NftStore', {
+      wallets: types.optional(types.array(Wallet), []),
+      stakes: types.optional(types.array(Stake), []),
+      defaultWalletId: '',
+
       addresses: types.optional(types.array(PolkadotAddress), []),
       chainDecimals: types.maybe(types.number),
       tokenSymbol: '',
@@ -97,6 +110,9 @@ const NftStore = types
         // miscFrozen: 0,
         // feeFrozen: 0
       }),
+
+      walletsRequest: types.optional(RequestModel, {}),
+      stakesRequest: types.optional(RequestModel, {}),
       requestingFundsStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
       mintingNftStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
 
@@ -112,6 +128,38 @@ const NftStore = types
     channel: null,
     unsubscribeStakingSubscription: null,
     unsubscribeBalanceSubscription: null
+  }))
+  .actions((self) => ({
+    loadMyWallets: flow(function* () {
+      const response: Array<WalletInterface> = yield self.walletsRequest.send(
+        api.userRepository.fetchMyWallets,
+        {}
+      );
+      if (response) {
+        self.wallets = cast(response);
+      }
+    }),
+    loadMyStakes: flow(function* () {
+      const response: Array<StakeInterface> = yield self.walletsRequest.send(
+        api.userRepository.fetchMyStakes,
+        {}
+      );
+      if (response) {
+        self.stakes = cast(response);
+      }
+    }),
+    loadDefaultWalletId(): void {
+      const storedAccount = storage.get<string>(StorageKeyEnum.DefaultAccount);
+      if (storedAccount && self.wallets.find((w) => w.wallet_id === storedAccount)) {
+        self.setDefaultWalletId(storedAccount);
+      } else if (self.wallets.length > 0) {
+        self.setDefaultWalletId(self.wallets[0].wallet_id);
+      }
+    },
+    setDefaultWalletId(walletId: string) {
+      storage.setString(StorageKeyEnum.DefaultAccount, walletId);
+      self.defaultWalletId = walletId;
+    }
   }))
   .views((self) => {
     return {
@@ -814,6 +862,11 @@ const NftStore = types
       self.getChainInformation();
 
       self.setIsLoading(false);
+    }),
+    initMyWalletsAndStakes: flow(function* () {
+      yield self.loadMyWallets();
+      yield self.loadMyStakes();
+      self.loadDefaultWalletId();
     }),
     initWeb3ExtensionIfNeeded: flow(function* () {
       if (!self.isWeb3Injected) {

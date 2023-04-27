@@ -2,11 +2,11 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Wrapper = styled.div`
-  --scroll-offset: 438px;
+  --scroll-offset: 515px;
 `;
 
 export const Title = styled.div`
-  padding: 20px 0 0 0;
+  padding: 10px 0 0 0;
   font-size: var(--font-size-xl);
   text-transform: uppercase;
   line-height: 24px;
@@ -15,7 +15,7 @@ export const Title = styled.div`
 `;
 
 export const Filters = styled.div`
-  padding: 12px 0 0 0;
+  padding: 12px 0 10px 0;
   display: grid;
   grid-template-columns: 120px 1fr;
   align-items: center;
@@ -27,9 +27,16 @@ export const ScrollableContainer = styled.div`
 `;
 
 export const RewardsContainer = styled.div`
+  padding: 12px 0 10px 0;
+  display: grid;
+  grid-template-columns: 120px 1fr 200px;
+  align-items: center;
+`;
+
+export const AirdropContainer = styled.div`
   padding: 12px 0 20px 0;
   display: grid;
-  grid-template-columns: 120px 1fr auto;
+  grid-template-columns: 1fr 200px;
   border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
   align-items: center;
 `;

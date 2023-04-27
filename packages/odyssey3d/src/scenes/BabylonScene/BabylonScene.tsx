@@ -53,7 +53,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         'https://dev2.odyssey.ninja/api/v3/render/texture/s8/26485e74acb29223ba7a9fa600d36c7f'
       );
 
-      if (!window.sessionStorage.getItem('babylon_debug')) {
+      if (window.sessionStorage.getItem('babylon_debug')) {
         Promise.all([
           import('@babylonjs/core/Debug/debugLayer'),
           import('@babylonjs/inspector')

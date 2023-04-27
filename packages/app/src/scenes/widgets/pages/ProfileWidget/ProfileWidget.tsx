@@ -15,7 +15,7 @@ import * as styled from './ProfileWidget.styled';
 type MenuItemType = 'viewProfile' | 'editProfile' | 'settings' | 'wallet' | 'logout';
 
 const ProfileWidget: FC = () => {
-  const {sessionStore, agoraStore, widgetStore, widgetManagerStore} = useStore();
+  const {nftStore, sessionStore, agoraStore, widgetStore, widgetManagerStore} = useStore();
   const {userDevicesStore} = agoraStore;
   const {profileStore} = widgetStore;
 
@@ -114,6 +114,7 @@ const ProfileWidget: FC = () => {
               {activeMenuId === 'viewProfile' && (
                 <ProfileView
                   user={sessionStore.user}
+                  defaultWalletId={nftStore.defaultWalletId}
                   worldList={profileStore.worldList}
                   onVisitWorld={onVisitWorld}
                   onInfoWorld={onInfoWorld}
@@ -123,6 +124,7 @@ const ProfileWidget: FC = () => {
               {activeMenuId === 'editProfile' && (
                 <ProfileEditor
                   user={sessionStore.user}
+                  defaultWalletId={nftStore.defaultWalletId}
                   formErrors={profileStore.formErrors}
                   isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
                   onUpdate={handleProfileUpdate}
@@ -145,7 +147,14 @@ const ProfileWidget: FC = () => {
                 />
               )}
 
-              {activeMenuId === 'wallet' && <ManageWallet user={sessionStore.user} />}
+              {activeMenuId === 'wallet' && (
+                <ManageWallet
+                  wallets={nftStore.wallets}
+                  defaultWalletId={nftStore.defaultWalletId}
+                  onChangeDefaultWallet={nftStore.setDefaultWalletId}
+                  onReloadWallets={nftStore.loadMyWallets}
+                />
+              )}
             </styled.Wrapper>
           )}
         </Panel>

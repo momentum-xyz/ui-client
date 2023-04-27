@@ -7,7 +7,7 @@ export enum TransformTypesEnum {
   Scale
 }
 
-export function setNodeTransform(
+export function smoothUserNodeTransform(
   userNode: TransformNode,
   startVec: Vector3,
   targetVec: PositionInterface,

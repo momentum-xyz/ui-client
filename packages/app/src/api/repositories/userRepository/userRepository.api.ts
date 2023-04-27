@@ -6,6 +6,10 @@ import {RequestInterface} from 'api/interfaces';
 import {
   FetchMeRequest,
   FetchMeResponse,
+  FetchMyStakesRequest,
+  FetchMyStakesResponse,
+  FetchMyWalletsRequest,
+  FetchMyWalletsResponse,
   FetchUserListRequest,
   FetchUserListResponse,
   FetchUserRequest,
@@ -19,6 +23,18 @@ import {userRepositoryEndpoints} from './userRepository.api.endpoints';
 
 export const fetchMe: RequestInterface<FetchMeRequest, FetchMeResponse> = (options) => {
   return request.get(userRepositoryEndpoints().me, options);
+};
+
+export const fetchMyWallets: RequestInterface<FetchMyWalletsRequest, FetchMyWalletsResponse> = (
+  options
+) => {
+  return request.get(userRepositoryEndpoints().myWallets, options);
+};
+
+export const fetchMyStakes: RequestInterface<FetchMyStakesRequest, FetchMyStakesResponse> = (
+  options
+) => {
+  return request.get(userRepositoryEndpoints().myStakes, options);
 };
 
 export const fetchUser: RequestInterface<FetchUserRequest, FetchUserResponse> = (options) => {
