@@ -7,7 +7,10 @@ import {
   AssetContainer,
   ActionManager,
   ExecuteCodeAction,
-  InstantiatedEntries
+  InstantiatedEntries,
+  NodeMaterial,
+  Texture,
+  TransformNode
 } from '@babylonjs/core';
 import {
   Odyssey3dUserInterface,
@@ -16,14 +19,16 @@ import {
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
 
-import {ObjectHelper} from './ObjectHelper';
-import {getAssetFileName} from './UtilityHelper';
-import {posToVec3, vec3ToPos, setNodeTransform, TransformTypesEnum} from './TransformHelper';
+import wisp from '../static/Wisp.glb';
+import defaultAvatar from '../static/Rabbit.png';
+import wispNodeMaterial from '../static/nodeMaterialWisp.json';
+
+import {posToVec3, vec3ToPos, smoothUserNodeTransform, TransformTypesEnum} from './TransformHelper';
 
 const NORMAL_SPEED = 0.5;
 const FAST_SPEED = 1.5;
-const PLAYER_OFFSET = new Vector3(0, -0.5, 2);
-const PLAYER_OFFSET_RH = new Vector3(0, -0.5, -2);
+const PLAYER_OFFSET = new Vector3(0, -0.5, 3);
+const PLAYER_OFFSET_RH = new Vector3(0, -0.5, -3);
 
 // TODO: Set this from PosBusSelfPosMsg
 const CAMERA_POS = new Vector3(50, 50, 150);
@@ -115,10 +120,11 @@ export class PlayerHelper {
   static spawnPlayer(scene: Scene) {
     // TODO: Commented out the actual line, as currently the assetID coming from BE is a Unity asset, so doesn't load
     //const assetUrl = getAssetFileName(PlayerHelper.playerAvatar3D);
-    const assetUrl = getAssetFileName('d906e070-3d2e-b1a5-3e3f-703423225945');
+    //const assetUrl = getAssetFileName('d906e070-3d2e-b1a5-3e3f-703423225945');
+
     SceneLoader.LoadAssetContainer(
-      ObjectHelper.assetRootUrl,
-      assetUrl,
+      wisp, //ObjectHelper.assetRootUrl,
+      '', //assetUrl,
       scene,
       (container) => {
         this.playerInstantiate(container);
@@ -144,16 +150,22 @@ export class PlayerHelper {
 
     // TODO: Set camera pos
     const playerNode = instance.rootNodes[0];
+    this.setUserAvatar(playerNode);
+
     playerNode.name = 'Player';
     playerNode.parent = this.camera;
-    if (this.rightHanded) {
-      playerNode.position = PLAYER_OFFSET_RH;
-    } else {
-      playerNode.position = PLAYER_OFFSET;
-    }
     playerNode.rotation = new Vector3(0, 0, 0);
     playerNode.scaling = new Vector3(1, 1, 1);
 
+    if (this.rightHanded) {
+      // manually account for RH
+      playerNode.scaling = new Vector3(1, 1, -1);
+      playerNode.position = PLAYER_OFFSET_RH;
+      playerNode.rotation = new Vector3(Math.PI / 16, Math.PI, Math.PI);
+    } else {
+      playerNode.position = PLAYER_OFFSET;
+      playerNode.rotation = new Vector3(-Math.PI / 16, Math.PI, Math.PI);
+    }
     // Animations
     for (const group of instance.animationGroups) {
       group.play(true);
@@ -162,7 +174,27 @@ export class PlayerHelper {
     this.playerInstance = instance;
   }
 
+  static setUserAvatar(node: TransformNode) {
+    const meshes = node.getChildMeshes();
+    const customNodeMat = NodeMaterial.Parse(wispNodeMaterial, this.scene);
+    const textures = customNodeMat.getTextureBlocks();
+    const defaultTexture = new Texture(defaultAvatar);
+    textures[2].texture = defaultTexture;
+    meshes[0].material = customNodeMat;
+  }
+
+  static updateUserAvatar(user: Odyssey3dUserInterface, instance: InstantiatedEntries) {
+    const meshes = instance.rootNodes[0].getChildMeshes();
+    const myNodeMat = meshes[0].material as NodeMaterial;
+    const textureBlocks = myNodeMat.getTextureBlocks();
+    if (user.avatar) {
+      const avatarTexture = new Texture(user.avatar);
+      textureBlocks[2].texture = avatarTexture;
+    }
+  }
+
   static async userEnteredAsync(user: Odyssey3dUserInterface) {
+    console.log('user avatar: ' + user.avatar);
     console.log('userEntered: ' + user.id);
     await this.spawnUserAsync(this.scene, user);
   }
@@ -171,11 +203,11 @@ export class PlayerHelper {
   static async spawnUserAsync(scene: Scene, user: Odyssey3dUserInterface) {
     // TODO: Commented out the actual line, as currently the assetID coming from BE is a Unity asset, so doesn't load
     //const assetUrl = getAssetFileName(this.playerAvatar3D);
-    const assetUrl = getAssetFileName('d906e070-3d2e-b1a5-3e3f-703423225945');
+    //const assetUrl = getAssetFileName('d906e070-3d2e-b1a5-3e3f-703423225945');
 
     await SceneLoader.LoadAssetContainerAsync(
-      ObjectHelper.assetRootUrl,
-      assetUrl,
+      wisp, //ObjectHelper.assetRootUrl,
+      '', //assetUrl,
       scene,
       (event) => {
         // On progress callback
@@ -200,10 +232,13 @@ export class PlayerHelper {
       }
 
       const userNode = instance.rootNodes[0];
-      userNode.scaling = new Vector3(1, 1, 1);
+      this.setUserAvatar(userNode);
+
+      userNode.scaling = new Vector3(1, 1, -1);
       const childNodes = userNode.getChildTransformNodes();
       if (childNodes.length > 0) {
-        childNodes[0].position = PLAYER_OFFSET;
+        childNodes[0].position = PLAYER_OFFSET_RH;
+        childNodes[0].rotation = new Vector3(0, Math.PI, Math.PI);
       }
 
       userNode.name = user.name;
@@ -219,6 +254,7 @@ export class PlayerHelper {
         userInstance: instance
       };
       this.userMap.set(user.id, babylonUser);
+      this.updateUserAvatar(user, instance);
     }
   }
 
@@ -235,11 +271,20 @@ export class PlayerHelper {
           continue;
         }
         const transformNode = userObj.userInstance.rootNodes[0];
-        setNodeTransform(
+
+        smoothUserNodeTransform(
           transformNode,
           transformNode.position,
           user.transform.position,
           TransformTypesEnum.Position,
+          this.scene
+        );
+
+        smoothUserNodeTransform(
+          transformNode,
+          transformNode.rotation,
+          user.transform.rotation,
+          TransformTypesEnum.Rotation,
           this.scene
         );
       }

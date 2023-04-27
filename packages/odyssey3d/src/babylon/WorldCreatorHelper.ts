@@ -266,8 +266,6 @@ export class WorldCreatorHelper {
 
   static subscribeForTransformUpdates(objectId: string, node: TransformNode) {
     const updateTransformCallback = () => {
-      console.log('Sending ObjectTransform node.position: ' + node.position);
-
       const myTransfrom: ObjectTransformInterface = {
         position: vec3ToPos(node.position),
         rotation: vec3ToPos(node.rotation),
@@ -295,7 +293,7 @@ export class WorldCreatorHelper {
     if (objToMove) {
       const transformNode = objToMove.objectInstance.rootNodes[0];
       transformNode.position = posToVec3(transform.position);
-      //TODO: Add rotation
+      transformNode.rotation = posToVec3(transform.rotation);
       transformNode.scaling = posToVec3(transform.scale);
     }
   }
