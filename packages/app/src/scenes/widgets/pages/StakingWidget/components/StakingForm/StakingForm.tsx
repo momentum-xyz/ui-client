@@ -15,7 +15,7 @@ import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
-import {convertToHex} from 'core/utils';
+// import {convertToHex} from 'core/utils';
 //import {NewsfeedTypeEnum} from 'core/enums';
 
 import * as styled from './StakingForm.styled';
@@ -25,7 +25,7 @@ const ODYSSEY_GET_STARTED_WALLET = 'https://discover.odyssey.org/create-your-ody
 
 interface PropsInterface {
   isGuest?: boolean;
-  nftItemId: number;
+  nftItemId: number | string;
   onComplete: () => void;
 }
 
@@ -81,8 +81,9 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
 
   const amountAtoms = new BN(+amountString * 1_000).mul(new BN(Math.pow(10, 9)));
 
-  const nft = nftItems.find((nft) => nft.id === nftItemId);
-  const myNft = nftItems.find((nft) => nft.owner === wallet);
+  const nft = nftItems.find((nft) => nft.uuid === nftItemId);
+  // const myNft = nftItems.find((nft) => nft.owner === wallet);
+  console.log('StakingForm', {nft, nftItemId, nftItems});
 
   console.log('StakingForm', {wallet, addresses, authWallet, amountString, amountAtoms, nft});
   console.log('initiatorAccount', initiatorAccount, nft);
@@ -92,43 +93,43 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
       console.log('onStake', wallet, nftItemId, amountAtoms);
       await nftStore.stake(wallet, amountAtoms, nftItemId);
 
-      if (myNft && nft) {
-        const isMutual = nftStore.stakingAtMe.has(nft.owner);
-        console.log(isMutual ? 'MUTUAL STAKING' : 'No mutual staking');
+      // if (myNft && nft) {
+      //   const isMutual = nftStore.stakingAtMe.has(nft.owner);
+      //   console.log(isMutual ? 'MUTUAL STAKING' : 'No mutual staking');
 
-        // FIXME: Movement from the Explore store
-        /*await widgetsStore.exploreStore.createNewsfeedItem({
-          uuid: myNft.uuid,
-          type: NewsfeedTypeEnum.CONNECTED,
-          date: new Date().toISOString(),
-          connectedTo: {
-            uuid: nft.uuid,
-            isMutual
-          }
-        });*/
+      //   // FIXME: Movement from the Explore store
+      //   /*await widgetsStore.exploreStore.createNewsfeedItem({
+      //     uuid: myNft.uuid,
+      //     type: NewsfeedTypeEnum.CONNECTED,
+      //     date: new Date().toISOString(),
+      //     connectedTo: {
+      //       uuid: nft.uuid,
+      //       isMutual
+      //     }
+      //   });*/
 
-        if (isMutual) {
-          const walletAHex = convertToHex(wallet);
-          const walletBHex = convertToHex(nft?.owner);
-          console.log({walletAHex, walletBHex});
+      //   if (isMutual) {
+      //     const walletAHex = convertToHex(wallet);
+      //     const walletBHex = convertToHex(nft?.owner);
+      //     console.log({walletAHex, walletBHex});
 
-          // FIXME: Movement from the Explore store
-          //await widgetsStore.exploreStore.createMutualDocks(walletAHex, walletBHex);
-        }
+      //     // FIXME: Movement from the Explore store
+      //     //await widgetsStore.exploreStore.createMutualDocks(walletAHex, walletBHex);
+      //   }
 
-        console.log('stake success');
-        toast.info(
-          <ToastContent
-            headerIconName="alert"
-            title={t('staking.stakeSuccessTitle')}
-            text={t('staking.stakeSuccess', {
-              amount: amountString,
-              name: nft?.name
-            })}
-            showCloseButton
-          />
-        );
-      }
+      //   console.log('stake success');
+      //   toast.info(
+      //     <ToastContent
+      //       headerIconName="alert"
+      //       title={t('staking.stakeSuccessTitle')}
+      //       text={t('staking.stakeSuccess', {
+      //         amount: amountString,
+      //         name: nft?.name
+      //       })}
+      //       showCloseButton
+      //     />
+      //   );
+      // }
     } catch (err) {
       console.log('stake error', err);
       toast.error(
@@ -166,9 +167,10 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
 
   const isBalanceTooLow = !canBeStaked(amountAtoms);
 
-  const isStakingInSelf = nft === myNft;
+  // const isStakingInSelf = nft === myNft;
   const validStringCheck = (val: string): boolean => !val || amountStringValueCheckRegex.test(val);
 
+  // TEMP disable
   if (!nft) {
     console.log('StakingForm - no nft found');
     return null;
@@ -270,7 +272,10 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
               <Button
                 label={t('staking.next')}
                 onClick={() => setActiveTab(tabBarTabs[2])}
-                disabled={!amountString || isBalanceTooLow || isStakingInSelf}
+                disabled={
+                  !amountString || isBalanceTooLow
+                  // || isStakingInSelf
+                }
               />
             </styled.Buttons>
           </>
