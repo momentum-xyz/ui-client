@@ -8,13 +8,14 @@ import {
   Matrix,
   InstantiatedEntries,
   Texture,
-  PBRMaterial
+  PBRMaterial,
+  TransformNode
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import {Object3dInterface, Texture3dInterface, ClickPositionInterface} from '@momentum-xyz/core';
 //import {GLTFFileLoader} from '@babylonjs/loaders';
 
-import {PlayerHelper} from './PlayerHelper';
+import {PLAYER_OFFSET_RH, PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
 import {getAssetFileName} from './UtilityHelper';
 import {posToVec3} from './TransformHelper';
@@ -34,6 +35,10 @@ export class ObjectHelper {
   static objectsMap = new Map<string, BabylonObjectInterface>();
   static firstID: string;
   static scene: Scene;
+  static attachedNode: TransformNode;
+  static testMe = false;
+  static transformSubscription: {unsubscribe: () => void} | undefined;
+  static selectedObjectFromSpawn = '';
 
   static initialize(
     scene: Scene,
@@ -72,7 +77,7 @@ export class ObjectHelper {
           console.log('clicked on object with id: ' + parent.metadata);
           if (ObjectHelper.objectsMap.has(parent.metadata)) {
             onObjectClick(parent.metadata, lastClick);
-            WorldCreatorHelper.selectedObject = parent.metadata;
+            WorldCreatorHelper.selectedObjectFromGizmo = parent.metadata;
           } else if (
             PlayerHelper.playerId === parent.metadata ||
             PlayerHelper.userMap.has(parent.metadata)
@@ -86,7 +91,7 @@ export class ObjectHelper {
           }*/
         } else {
           // WorldCreatorHelper.unlockLastObject();
-          WorldCreatorHelper.selectedObject = '';
+          WorldCreatorHelper.selectedObjectFromGizmo = '';
           onClickOutside();
         }
       }
@@ -99,7 +104,7 @@ export class ObjectHelper {
     console.log('assetID is: ' + assetUrl);
   }
 
-  static async spawnObjectAsync(scene: Scene, object: Object3dInterface) {
+  static async spawnObjectAsync(scene: Scene, object: Object3dInterface, attachToCam: boolean) {
     const assetUrl = getAssetFileName(object.asset_3d_id);
 
     await SceneLoader.LoadAssetContainerAsync(
@@ -112,7 +117,7 @@ export class ObjectHelper {
       },
       '.glb'
     ).then((container) => {
-      this.instantiateObject(container, object);
+      this.instantiateObject(container, object, attachToCam);
     });
   }
 
@@ -140,7 +145,8 @@ export class ObjectHelper {
     }
   }
 
-  static instantiateObject(container: AssetContainer, object: Object3dInterface) {
+  static instantiateObject(container: AssetContainer, object: Object3dInterface, attach: boolean) {
+    console.log('attach never true: ' + attach);
     const instance = container.instantiateModelsToScene();
 
     if (instance.rootNodes.length === 0) {
@@ -176,6 +182,32 @@ export class ObjectHelper {
     for (const group of instance.animationGroups) {
       group.play(true);
     }
+
+    //attach is never true so using this instead
+    if (this.testMe) {
+      this.attachToCamera(object.id, node);
+    }
+  }
+
+  static attachToCamera(objectId: string, node: TransformNode) {
+    this.attachedNode = node;
+    node.setParent(PlayerHelper.playerInstance.rootNodes[0]);
+    node.position = PLAYER_OFFSET_RH;
+
+    this.selectedObjectFromSpawn = objectId;
+    this.transformSubscription = WorldCreatorHelper.subscribeForTransformUpdates(
+      objectId,
+      node,
+      true
+    );
+  }
+
+  static detachFromCamera() {
+    this.transformSubscription?.unsubscribe();
+
+    this.attachedNode.setParent(null, undefined, true);
+    this.selectedObjectFromSpawn = '';
+    PlayerHelper.playerInstance.rootNodes[0].position = PLAYER_OFFSET_RH;
   }
 
   static removeObject(id: string) {
