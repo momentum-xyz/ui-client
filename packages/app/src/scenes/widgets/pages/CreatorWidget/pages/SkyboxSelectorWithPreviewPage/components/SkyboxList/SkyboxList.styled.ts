@@ -14,13 +14,6 @@ export const SkyboxInnerContainer = styled.button`
   flex-direction: column;
   gap: 10px;
 
-  & > img {
-    width: 160px;
-    height: 160px;
-    object-fit: cover;
-    border: 0.4px solid ${(props) => props.theme.text};
-    border-radius: 4px;
-  }
   & > span {
     width: 160px;
     text-align: center;

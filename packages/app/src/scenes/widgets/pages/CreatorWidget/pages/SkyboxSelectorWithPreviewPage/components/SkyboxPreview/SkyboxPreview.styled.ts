@@ -14,14 +14,6 @@ export const SkyboxInfoContainer = styled.div`
   align-items: center;
 `;
 
-export const SkyboxImage = styled.img`
-  margin: 5px;
-  width: 360px;
-  height: 360px;
-  object-fit: cover;
-  border: 0.4px solid ${(props) => props.theme.text};
-  border-radius: 4px;
-`;
 export const SkyboxTitle = styled.div`
   font-weight: 700;
   font-size: 16px;

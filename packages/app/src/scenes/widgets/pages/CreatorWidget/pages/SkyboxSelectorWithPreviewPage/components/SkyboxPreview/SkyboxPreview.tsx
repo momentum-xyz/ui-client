@@ -1,4 +1,4 @@
-import {Frame, Button} from '@momentum-xyz/ui-kit-storybook';
+import {Frame, Button, Image} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 
 import {Asset3dInterface} from 'core/models';
@@ -24,7 +24,7 @@ export const SkyboxPreview = ({
     <styled.Container>
       <styled.SkyboxInfoContainer>
         <Frame>
-          <styled.SkyboxImage src={skybox.image} />
+          <Image src={skybox.image} height={360} bordered />
         </Frame>
         <styled.SkyboxTitle>{skybox.name}</styled.SkyboxTitle>
       </styled.SkyboxInfoContainer>
