@@ -98,7 +98,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         WorldCreatorHelper.toggleGizmo(objectId, isOn);
       });
       events.on('DetachObjectFromCamera', (objectId) => {
-        console.log('TODO Babylon handle DetachObjectFromCamera', objectId);
+        ObjectHelper.detachFromCamera();
       });
 
       events.on('SendHighFive', (userId) => {

@@ -39,7 +39,6 @@ export class ObjectHelper {
   static firstID: string;
   static scene: Scene;
   static attachedNode: TransformNode;
-  static testMe = false;
   static transformSubscription: {unsubscribe: () => void} | undefined;
   static selectedObjectFromSpawn = '';
   static spawningMaterial: PBRMaterial;
@@ -190,7 +189,7 @@ export class ObjectHelper {
     }
 
     //attach is never true so using this instead
-    if (this.testMe) {
+    if (attach) {
       this.attachToCamera(object.id, node);
     }
   }
@@ -223,8 +222,6 @@ export class ObjectHelper {
     this.mySpawningClone?.dispose();
     this.selectedObjectFromSpawn = '';
 
-    // Somehow babylon managed to change the value of PLAYER_OFFSET_RH?????????
-    // TODO: Check where else this is  affected and whether to hardcode this everywhere
     PlayerHelper.playerInstance.rootNodes[0].position = new Vector3(0, -0.5, -3);
   }
 

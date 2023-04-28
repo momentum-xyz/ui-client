@@ -24,7 +24,6 @@ import defaultAvatar from '../static/Rabbit.png';
 import wispNodeMaterial from '../static/nodeMaterialWisp.json';
 
 import {posToVec3, vec3ToPos, smoothUserNodeTransform, TransformTypesEnum} from './TransformHelper';
-import {ObjectHelper} from './ObjectHelper';
 
 const NORMAL_SPEED = 0.5;
 const FAST_SPEED = 1.5;
@@ -82,14 +81,6 @@ export class PlayerHelper {
       new ExecuteCodeAction(ActionManager.OnKeyDownTrigger, function (evt) {
         if (evt.sourceEvent.key === 'Shift') {
           PlayerHelper.camera.speed = FAST_SPEED;
-        }
-
-        if (evt.sourceEvent.key === 'q') {
-          ObjectHelper.testMe = true;
-        }
-
-        if (evt.sourceEvent.key === 'e') {
-          ObjectHelper.detachFromCamera();
         }
       })
     );
