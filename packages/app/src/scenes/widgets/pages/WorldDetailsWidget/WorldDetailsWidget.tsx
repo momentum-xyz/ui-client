@@ -14,7 +14,7 @@ import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {formatBigInt, getImageAbsoluteUrl} from 'core/utils';
-import {ProfileImage, ProfileInfo, StakersList} from 'ui-kit';
+import {ProfileImage, ProfileInfo, StakersList, StakingComment} from 'ui-kit';
 import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 
 import * as styled from './WorldDetailsWidget.styled';
@@ -97,10 +97,7 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
             </styled.TotalAmount>
 
             {!!world.last_staking_comment && (
-              <styled.StakingCommentContainer>
-                <div>{t('labels.lastStakingComment')}:</div>
-                <styled.StakingComment>{world.last_staking_comment}</styled.StakingComment>
-              </styled.StakingCommentContainer>
+              <StakingComment comment={world.last_staking_comment} />
             )}
 
             <StakersList stakers={world.stakers} onSelectUser={onSelectUser} />

@@ -4,7 +4,7 @@ import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
 import {Panel, ImageSizeEnum, IconSvg, SymbolAmount} from '@momentum-xyz/ui-kit-storybook';
 
 import {formatBigInt, getImageAbsoluteUrl} from 'core/utils';
-import {ProfileInfo, ProfileImage, StakersList} from 'ui-kit';
+import {ProfileInfo, ProfileImage, StakersList, StakingComment} from 'ui-kit';
 import {WorldModelInterface} from 'core/models';
 
 import * as styled from './WorldDetails.styled';
@@ -71,10 +71,7 @@ const WorldDetails: FC<PropsInterface> = ({
             </styled.TotalAmount>
 
             {!!world.last_staking_comment && (
-              <styled.StakingCommentContainer>
-                <div>{t('labels.lastStakingComment')}:</div>
-                <styled.StakingComment>{world.last_staking_comment}</styled.StakingComment>
-              </styled.StakingCommentContainer>
+              <StakingComment comment={world.last_staking_comment} />
             )}
 
             <StakersList stakers={world.stakers} onSelectUser={onSelectUser} />
