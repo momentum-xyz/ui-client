@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
-import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
+import {useI18n} from '@momentum-xyz/core';
 import {
   Panel,
   Hexagon,
@@ -17,16 +17,14 @@ import {WidgetEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {formatBigInt, getImageAbsoluteUrl} from 'core/utils';
 import {ProfileImage, ProfileInfo} from 'ui-kit';
-import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 
-import * as styled from './WorldDetailsWidget.styled';
+import * as styled from './WorldProfileWidget.styled';
 
 const USERS_MAX = 2;
 
-const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
-  const {widgetManagerStore, widgetStore} = useStore();
-  const {worldDetailsStore} = widgetStore;
-  const {worldDetails} = worldDetailsStore;
+const WorldProfileWidget: FC = () => {
+  const {widgetManagerStore, universeStore} = useStore();
+  const {world2dStore} = universeStore;
 
   const [isButtonShown, setIsButtonShown] = useState(false);
 
@@ -34,42 +32,27 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (data?.id) {
-      Universe3dEmitter.emit('WorldSelected', data.id.toString());
-      worldDetailsStore.init(data.id.toString());
-    }
-
-    return () => {
-      worldDetailsStore.resetModel();
-    };
-  }, [worldDetailsStore, data?.id]);
-
-  useEffect(() => {
-    const stakersCount = worldDetails?.world?.stakers?.length || 0;
+    const stakersCount = world2dStore?.worldDetails?.world?.stakers?.length || 0;
     setIsButtonShown(stakersCount > USERS_MAX);
-  }, [worldDetails?.world?.stakers?.length]);
+  }, [world2dStore?.worldDetails?.world?.stakers?.length]);
 
   const onSelectUser = (userId: string) => {
     widgetManagerStore.open(WidgetEnum.USER_DETAILS, PositionEnum.LEFT, {id: userId});
-  };
-
-  const onVisitWorld = (worldId: string) => {
-    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
   };
 
   const onStakeWorld = (worldId: string) => {
     navigate(generatePath(ROUTES.odyssey.base, {worldId}));
   };
 
-  if (!worldDetails?.world) {
+  if (!world2dStore?.worldDetails?.world) {
     return <></>;
   }
 
-  const {world} = worldDetails;
+  const {world} = world2dStore.worldDetails;
   const {stakers} = world;
 
   return (
-    <styled.Container data-testid="WorldDetailsWidget-test">
+    <styled.Container data-testid="WorldProfileWidget-test">
       <Panel
         isFullHeight
         size="normal"
@@ -77,7 +60,7 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         variant="primary"
         title={t('labels.odysseyOverview')}
         image={getImageAbsoluteUrl(world?.avatarHash, ImageSizeEnum.S3)}
-        onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_PROFILE)}
+        onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_DETAILS)}
       >
         <styled.Wrapper>
           <ProfileImage
@@ -92,7 +75,6 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
             <ProfileInfo
               description={world.description}
               joinDate={world.createdAt}
-              onVisit={() => onVisitWorld(world.id)}
               onStake={() => onStakeWorld(world.id)}
             />
 
@@ -158,4 +140,4 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   );
 };
 
-export default observer(WorldDetailsWidget);
+export default observer(WorldProfileWidget);
