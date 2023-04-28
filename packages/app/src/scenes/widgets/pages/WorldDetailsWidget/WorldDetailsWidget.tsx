@@ -15,7 +15,7 @@ import {
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
-import {getImageAbsoluteUrl} from 'core/utils';
+import {formatBigInt, getImageAbsoluteUrl} from 'core/utils';
 import {ProfileImage, ProfileInfo} from 'ui-kit';
 import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 
@@ -105,7 +105,7 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
 
             <styled.TotalAmount>
               <div>{t('labels.totalAmountStaked')}:</div>
-              <SymbolAmount value={world.stake_total || 0} tokenSymbol="MOM" />
+              <SymbolAmount stringValue={formatBigInt(world.momStaked)} tokenSymbol="MOM" />
             </styled.TotalAmount>
 
             {!!world.last_staking_comment && (

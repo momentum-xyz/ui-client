@@ -10,7 +10,7 @@ import {
   ButtonEllipse
 } from '@momentum-xyz/ui-kit-storybook';
 
-import {getImageAbsoluteUrl} from 'core/utils';
+import {formatBigInt, getImageAbsoluteUrl} from 'core/utils';
 import {ProfileInfo, ProfileImage} from 'ui-kit';
 import {WorldModelInterface} from 'core/models';
 
@@ -79,7 +79,7 @@ const WorldDetails: FC<PropsInterface> = ({
 
             <styled.TotalAmount>
               <div>{t('labels.totalAmountStaked')}:</div>
-              <SymbolAmount value={world.stake_total || 0} tokenSymbol="MOM" />
+              <SymbolAmount stringValue={formatBigInt(world.momStaked)} tokenSymbol="MOM" />
             </styled.TotalAmount>
 
             {!!world.last_staking_comment && (

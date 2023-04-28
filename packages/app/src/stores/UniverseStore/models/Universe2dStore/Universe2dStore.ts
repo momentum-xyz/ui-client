@@ -1,4 +1,5 @@
 import {cast, flow, types} from 'mobx-state-tree';
+import BN from 'bn.js';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {ImageSizeEnum, SliderItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
@@ -82,9 +83,11 @@ const Universe2dStore = types.compose(
         }));
       },
       get mostStakedWorlds(): SliderItemInterface<string>[] {
-        const sortedWorlds = [...self.allWorlds].sort(
-          (a, b) => (b.stake_total || 0) - (a.stake_total || 0)
-        );
+        const sortedWorlds = [...self.allWorlds].sort((a, b) => {
+          const aBN = new BN(a.stake_total || '0');
+          const bBN = new BN(b.stake_total || '0');
+          return bBN.sub(aBN).toNumber();
+        });
         return sortedWorlds.slice(0, 6).map((item) => ({
           id: item.id,
           name: item.name,

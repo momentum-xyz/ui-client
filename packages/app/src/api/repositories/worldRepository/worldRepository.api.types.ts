@@ -7,7 +7,7 @@ export interface WorldInfoInterface {
   avatarHash: string | null;
   owner_id: string;
   owner_name?: string | null;
-  stake_total?: number;
+  stake_total?: string;
 }
 
 export interface WorldInterface {
@@ -19,7 +19,7 @@ export interface WorldInterface {
   last_staking_comment: string | null;
   owner_id: string;
   owner_name?: string | null;
-  stake_total?: number | null;
+  stake_total?: string;
   stakers: WorldStakerInterface[] | null;
 }
 
