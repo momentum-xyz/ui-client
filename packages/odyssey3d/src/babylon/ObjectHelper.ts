@@ -11,7 +11,8 @@ import {
   PBRMaterial,
   TransformNode,
   Color3,
-  Nullable
+  Nullable,
+  Vector3
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import {Object3dInterface, Texture3dInterface, ClickPositionInterface} from '@momentum-xyz/core';
@@ -218,7 +219,10 @@ export class ObjectHelper {
     this.attachedNode.setEnabled(true);
     this.mySpawningClone?.dispose();
     this.selectedObjectFromSpawn = '';
-    PlayerHelper.playerInstance.rootNodes[0].position = PLAYER_OFFSET_RH;
+
+    // Somehow babylon managed to change the value of PLAYER_OFFSET_RH?????????
+    // TODO: Check where else this is  affected and whether to hardcode this everywhere
+    PlayerHelper.playerInstance.rootNodes[0].position = new Vector3(0, -0.5, -3);
   }
 
   static setSpawningMaterial(node: TransformNode) {
