@@ -155,11 +155,11 @@ export class PlayerHelper {
     playerNode.name = 'Player';
     playerNode.parent = this.camera;
     playerNode.rotation = new Vector3(0, 0, 0);
-    playerNode.scaling = new Vector3(1, 1, 1);
+    playerNode.scaling = new Vector3(0.5, 0.5, 0.5);
 
     if (this.rightHanded) {
       // manually account for RH
-      playerNode.scaling = new Vector3(1, 1, -1);
+      playerNode.scaling = new Vector3(0.5, 0.5, -0.5);
       playerNode.position = PLAYER_OFFSET_RH;
       playerNode.rotation = new Vector3(Math.PI / 16, Math.PI, Math.PI);
     } else {
@@ -235,7 +235,7 @@ export class PlayerHelper {
       const userNode = instance.rootNodes[0];
       this.setUserAvatar(userNode);
 
-      userNode.scaling = new Vector3(1, 1, -1);
+      userNode.scaling = new Vector3(0.5, 0.5, -0.5);
       const childNodes = userNode.getChildTransformNodes();
       if (childNodes.length > 0) {
         childNodes[0].position = PLAYER_OFFSET_RH;
