@@ -9,7 +9,9 @@ import {
   InstantiatedEntries,
   Texture,
   PBRMaterial,
-  TransformNode
+  TransformNode,
+  Color3,
+  Nullable
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import {Object3dInterface, Texture3dInterface, ClickPositionInterface} from '@momentum-xyz/core';
@@ -39,6 +41,8 @@ export class ObjectHelper {
   static testMe = false;
   static transformSubscription: {unsubscribe: () => void} | undefined;
   static selectedObjectFromSpawn = '';
+  static spawningMaterial: PBRMaterial;
+  static mySpawningClone: Nullable<TransformNode>;
 
   static initialize(
     scene: Scene,
@@ -193,6 +197,7 @@ export class ObjectHelper {
     this.attachedNode = node;
     node.setParent(PlayerHelper.playerInstance.rootNodes[0]);
     node.position = PLAYER_OFFSET_RH;
+    this.setSpawningMaterial(node);
 
     this.selectedObjectFromSpawn = objectId;
     this.transformSubscription = WorldCreatorHelper.subscribeForTransformUpdates(
@@ -206,8 +211,35 @@ export class ObjectHelper {
     this.transformSubscription?.unsubscribe();
 
     this.attachedNode.setParent(null, undefined, true);
+    const attachedNodeChildren = this.attachedNode.getChildMeshes();
+    attachedNodeChildren.forEach((element) => {
+      element.setEnabled(true);
+    });
+    this.attachedNode.setEnabled(true);
+    this.mySpawningClone?.dispose();
     this.selectedObjectFromSpawn = '';
     PlayerHelper.playerInstance.rootNodes[0].position = PLAYER_OFFSET_RH;
+  }
+
+  static setSpawningMaterial(node: TransformNode) {
+    const myClone = node.clone('clone', PlayerHelper.playerInstance.rootNodes[0]);
+    const spawningMat = new PBRMaterial('spawning');
+    spawningMat.albedoColor = Color3.Gray();
+    spawningMat._reflectivityColor = Color3.Gray();
+    spawningMat.alpha = 0.3;
+
+    if (myClone) {
+      const cloneChildren = myClone.getChildMeshes();
+      cloneChildren.forEach((element) => {
+        element.material = spawningMat;
+      });
+    }
+    this.mySpawningClone = myClone;
+
+    const childMeshes = node.getChildMeshes();
+    childMeshes.forEach((element) => {
+      element.setEnabled(false);
+    });
   }
 
   static removeObject(id: string) {
