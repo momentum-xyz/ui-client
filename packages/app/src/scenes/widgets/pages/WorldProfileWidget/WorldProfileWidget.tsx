@@ -14,6 +14,7 @@ import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {getImageAbsoluteUrl} from 'core/utils';
+import {WorldFormInterface} from 'core/interfaces';
 
 import {WorldEditor, WorldView} from './components';
 import * as styled from './WorldProfileWidget.styled';
@@ -21,7 +22,8 @@ import * as styled from './WorldProfileWidget.styled';
 type MenuItemType = 'viewWorld' | 'editWorld';
 
 const WorldProfileWidget: FC = () => {
-  const {widgetManagerStore, universeStore} = useStore();
+  const {widgetManagerStore, universeStore, widgetStore} = useStore();
+  const {worldProfileStore} = widgetStore;
   const {world2dStore} = universeStore;
 
   const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewWorld');
@@ -35,6 +37,17 @@ const WorldProfileWidget: FC = () => {
 
   const onStakeWorld = (worldId: string) => {
     navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+  };
+
+  const onEditWorld = async (form: WorldFormInterface, previousImageHash?: string | null) => {
+    if (!world2dStore?.worldDetails?.world) {
+      return;
+    }
+    const {worldDetails, worldId} = world2dStore;
+    if (await worldProfileStore.editWorld(worldId, form, previousImageHash || undefined)) {
+      await worldDetails.fetchWorld();
+      setActiveMenuId('viewWorld');
+    }
   };
 
   const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = useMemo(
@@ -92,7 +105,14 @@ const WorldProfileWidget: FC = () => {
             )}
 
             {activeMenuId === 'editWorld' && (
-              <WorldEditor world={world} onSelectUser={onSelectUser} onStakeWorld={onStakeWorld} />
+              <WorldEditor
+                world={world}
+                isUpdating={worldProfileStore.isUpdating}
+                formErrors={worldProfileStore.formErrors}
+                onSelectUser={onSelectUser}
+                onEditWorld={onEditWorld}
+                onCancel={() => setActiveMenuId('viewWorld')}
+              />
             )}
           </styled.Wrapper>
         </Panel>

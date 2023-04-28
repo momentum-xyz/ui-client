@@ -1,4 +1,5 @@
 import {Instance, types} from 'mobx-state-tree';
+import {ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {WorldStaker} from 'core/models/WorldStaker';
@@ -19,6 +20,9 @@ const World = types
   .views((self) => ({
     get imageSrc(): string | null {
       return getImageAbsoluteUrl(self.avatarHash);
+    },
+    get imageLargeSrc(): string | null {
+      return getImageAbsoluteUrl(self.avatarHash, ImageSizeEnum.S5);
     },
     get momStaked(): string {
       return self.stake_total || '0';
