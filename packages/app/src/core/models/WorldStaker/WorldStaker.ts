@@ -3,7 +3,7 @@ import {Instance, types} from 'mobx-state-tree';
 const WorldStaker = types.model('WorldStaker', {
   user_id: types.string,
   name: types.string,
-  stake: types.maybeNull(types.number),
+  stake: types.string,
   avatarHash: types.maybeNull(types.string)
 });
 

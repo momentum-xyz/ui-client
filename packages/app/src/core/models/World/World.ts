@@ -13,15 +13,15 @@ const World = types
     last_staking_comment: types.maybeNull(types.string),
     owner_id: types.string,
     owner_name: types.maybeNull(types.string),
-    stake_total: types.maybeNull(types.number),
+    stake_total: types.maybeNull(types.string),
     stakers: types.maybeNull(types.optional(types.array(WorldStaker), []))
   })
   .views((self) => ({
     get imageSrc(): string | null {
       return getImageAbsoluteUrl(self.avatarHash);
     },
-    get momStaked(): number {
-      return self.stake_total || 0;
+    get momStaked(): string {
+      return self.stake_total || '0';
     },
     get stakersCount(): number {
       return self.stakers?.length || 0;
