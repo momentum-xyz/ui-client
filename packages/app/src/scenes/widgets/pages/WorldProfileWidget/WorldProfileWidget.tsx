@@ -14,8 +14,8 @@ import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {getImageAbsoluteUrl} from 'core/utils';
-import {ProfileImage, ProfileInfo, StakersList, StakingAmount, StakingComment} from 'ui-kit';
 
+import {WorldEditor, WorldView} from './components';
 import * as styled from './WorldProfileWidget.styled';
 
 type MenuItemType = 'viewWorld' | 'editWorld';
@@ -48,12 +48,18 @@ const WorldProfileWidget: FC = () => {
     [t]
   );
 
+  const panelIcon = useMemo(() => {
+    if (activeMenuId !== 'viewWorld') {
+      return sideMenuItems.find((i) => i.id === activeMenuId)?.iconName;
+    }
+    return undefined;
+  }, [activeMenuId, sideMenuItems]);
+
   if (!world2dStore?.worldDetails?.world) {
     return <></>;
   }
 
   const {world} = world2dStore.worldDetails;
-  const {stakers} = world;
 
   return (
     <styled.Container data-testid="WorldProfileWidget-test">
@@ -74,36 +80,20 @@ const WorldProfileWidget: FC = () => {
         <Panel
           isFullHeight
           size="normal"
-          icon="rabbit_fill"
           variant="primary"
+          icon={panelIcon}
           title={t('labels.odysseyOverview')}
-          image={getImageAbsoluteUrl(world?.avatarHash, ImageSizeEnum.S3)}
+          image={!panelIcon ? getImageAbsoluteUrl(world?.avatarHash, ImageSizeEnum.S3) : null}
           onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_PROFILE)}
         >
           <styled.Wrapper>
-            <ProfileImage
-              name={world.name || world.id}
-              image={world.avatarHash}
-              imageErrorIcon="rabbit_fill"
-              byName={world.owner_name || world.owner_id}
-              onByClick={() => onSelectUser(world.owner_id)}
-            />
+            {activeMenuId === 'viewWorld' && (
+              <WorldView world={world} onSelectUser={onSelectUser} onStakeWorld={onStakeWorld} />
+            )}
 
-            <styled.GeneralScrollable>
-              <ProfileInfo
-                description={world.description}
-                joinDate={world.createdAt}
-                onStake={() => onStakeWorld(world.id)}
-              />
-
-              <StakingAmount stakedAmount={world.momStaked} tokenSymbol="MOM" />
-
-              {!!world.last_staking_comment && (
-                <StakingComment comment={world.last_staking_comment} />
-              )}
-
-              <StakersList stakers={stakers} onSelectUser={onSelectUser} />
-            </styled.GeneralScrollable>
+            {activeMenuId === 'editWorld' && (
+              <WorldEditor world={world} onSelectUser={onSelectUser} onStakeWorld={onStakeWorld} />
+            )}
           </styled.Wrapper>
         </Panel>
       </styled.PanelContainer>

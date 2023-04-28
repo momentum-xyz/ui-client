@@ -1,0 +1,13 @@
+import styled from 'styled-components';
+
+export const Container = styled.div`
+  --scroll-offset: 455px;
+`;
+
+export const GeneralScrollable = styled.div`
+  margin: 0 10px;
+  display: flex;
+  height: calc(100vh - var(--scroll-offset));
+  flex-direction: column;
+  overflow: auto;
+`;
