@@ -6,6 +6,7 @@ import {Universe3dEmitterType} from '@momentum-xyz/core';
 
 import {PlayerHelper, LightHelper, SkyboxHelper} from '../../babylon';
 import {UniverseBuilderHelper} from '../../babylon/UniverseBuilderHelper';
+import skyboxWorld from '../../static/mushjungledark.jpeg';
 
 export interface PropsInterface {
   events: Universe3dEmitterType;
@@ -32,7 +33,8 @@ export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
   const onSceneReady = async (scene: Scene) => {
     SkyboxHelper.set360Skybox(
       scene,
-      'https://dev2.odyssey.ninja/api/v3/render/texture/s8/27a7d8904d525b5d163754624ae46bc8'
+      //'https://dev2.odyssey.ninja/api/v3/render/texture/s8/27a7d8904d525b5d163754624ae46bc8'
+      skyboxWorld
     );
 
     console.log('onSceneReady', scene);
