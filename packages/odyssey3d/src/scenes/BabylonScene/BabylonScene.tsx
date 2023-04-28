@@ -14,6 +14,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
   const onMove = useMutableCallback(callbacks.onMove);
   const onObjectTransform = useMutableCallback(callbacks.onObjectTransform);
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);
+  // const onBumpReady = useMutableCallback(callbacks.onBumpReady);
+  // TODO handle it
 
   useEffect(() => {
     return () => {
@@ -26,6 +28,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
       events.off('UserRemoved');
       events.off('UsersTransformChanged');
       events.off('ObjectEditModeChanged');
+      events.off('TriggerBump');
     };
   }, [events]);
 
@@ -108,6 +111,15 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
       });
       events.on('ReceiveHighFive', (userId) => {
         console.log('TODO Babylon handle ReceiveHighFive from', userId);
+      });
+
+      events.on('TriggerBump', (userId) => {
+        console.log('TODO Babylon handle TriggerBump', userId);
+
+        // setTimeout(() => {
+        //   console.log('DUMMY onBumpReady');
+        //   onBumpReady();
+        // }, 1000);
       });
     } else {
       console.error('There is no canvas for Babylon.');
