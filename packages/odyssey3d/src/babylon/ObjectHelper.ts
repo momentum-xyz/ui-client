@@ -126,10 +126,11 @@ export class ObjectHelper {
   }
 
   static setObjectTexture(scene: Scene, texture: Texture3dInterface): void {
+    console.log('setting texture for object: ', texture);
     if (texture.label === 'skybox_custom') {
       SkyboxHelper.set360Skybox(
         scene,
-        this.textureRootUrl + SkyboxHelper.defaultSkyboxTextureSize + texture.hash
+        this.textureRootUrl + SkyboxHelper.defaultSkyboxTextureSize + '/' + texture.hash
       );
       return;
     }
@@ -138,7 +139,7 @@ export class ObjectHelper {
 
     if (meshes) {
       for (const mesh of meshes) {
-        const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
+        const textureUrl = this.textureRootUrl + this.textureDefaultSize + '/' + texture.hash;
         const newTexture = new Texture(textureUrl, scene);
         // TODO: check if material can be casted as PBRMaterial
         const meshMater = mesh.material as PBRMaterial;

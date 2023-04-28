@@ -113,21 +113,30 @@ class PosBusService {
         break;
       }
 
-      // TODO add to MsgType
-      case 'set_object_data' as MsgType: {
+      case MsgType.OBJECT_DATA: {
         console.log('PosBus set_object_data', data);
 
         const {id, entries} = data as any;
-        if (entries?.texture?.name) {
-          Event3dEmitter.emit('ObjectTextureChanged', {
-            objectId: entries.texture.name,
-            hash: id
-            // textureColor
+        if (entries?.texture) {
+          Object.entries(entries.texture).forEach(([label, hash]: any) => {
+            Event3dEmitter.emit('ObjectTextureChanged', {
+              objectId: id,
+              label,
+              hash
+            });
           });
         }
+        // TODO handle
+        //   {
+        //     "id": "0187c396-bbe8-7a2b-91b2-7f6a142e771f",
+        //     "entries": {
+        //         "string": {
+        //             "object_color": "#8d1a1a"
+        //         }
+        //     }
+        // }
         break;
       }
-
       case MsgType.SET_WORLD: {
         console.log('Handle posbus set_world', data);
         Event3dEmitter.emit('SetWorld', data, PosBusService.userId);
