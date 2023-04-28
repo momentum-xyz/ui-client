@@ -74,5 +74,11 @@ export const useStaking = () => {
     console.log('TODO StakingOverviewWidget unstake');
   };
 
-  return {isWalletActive: !!library, account, stake, unstake};
+  const claimRewards = useCallback(async () => {
+    console.log('useStaking claimRewards');
+    const result = await stakingContract?.methods.claim_rewards().send({from: account});
+    console.log('useStaking claimRewards result', result);
+  }, [stakingContract?.methods, account]);
+
+  return {isWalletActive: !!library, account, stake, unstake, claimRewards};
 };

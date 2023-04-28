@@ -11,7 +11,7 @@ import {
 
 import {formatBigInt} from 'core/utils';
 import {WalletModelInterface} from 'core/models';
-import {useBlockchainAirdrop} from 'shared/hooks/useBlockchainAirdrop';
+import {useStaking, useBlockchainAirdrop} from 'shared/hooks';
 import {SignIn} from 'scenes/widgets/pages/LoginWidget/components';
 
 import * as styled from './MyWallet.styled';
@@ -33,6 +33,7 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
   }, [selectedWallet, wallets, wallets.length]);
 
   const {isWalletActive, getTokens} = useBlockchainAirdrop();
+  const {isWalletActive: isStakingWalletActive, claimRewards} = useStaking();
 
   const handleAirdrop = async () => {
     try {
@@ -40,6 +41,15 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
       console.log(tokens);
     } catch (err) {
       console.log('Error requesting airdrop:', err);
+    }
+  };
+
+  const handleClaimRewards = async () => {
+    try {
+      const tx = await claimRewards();
+      console.log(tx);
+    } catch (err) {
+      console.log('Error claiming rewards:', err);
     }
   };
 
@@ -70,7 +80,12 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
           <styled.Amount>
             <SymbolAmount tokenSymbol="MOM" stringValue={formatBigInt(selectedWallet?.reward)} />
           </styled.Amount>
-          <Button icon="wallet" label={t('actions.claimRewards')} />
+          <Button
+            icon="wallet"
+            label={t('actions.claimRewards')}
+            disabled={!isStakingWalletActive}
+            onClick={handleClaimRewards}
+          />
         </styled.RewardsContainer>
 
         <styled.Title>{t('actions.requestAirdropTokens')}</styled.Title>
