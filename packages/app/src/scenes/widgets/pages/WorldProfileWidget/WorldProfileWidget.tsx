@@ -1,13 +1,11 @@
-import {FC, useEffect, useState} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n} from '@momentum-xyz/core';
 import {
   Panel,
-  Hexagon,
   IconSvg,
   SymbolAmount,
-  ButtonEllipse,
   ImageSizeEnum,
   PositionEnum
 } from '@momentum-xyz/ui-kit-storybook';
@@ -16,25 +14,16 @@ import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {formatBigInt, getImageAbsoluteUrl} from 'core/utils';
-import {ProfileImage, ProfileInfo} from 'ui-kit';
+import {ProfileImage, ProfileInfo, StakersList} from 'ui-kit';
 
 import * as styled from './WorldProfileWidget.styled';
-
-const USERS_MAX = 2;
 
 const WorldProfileWidget: FC = () => {
   const {widgetManagerStore, universeStore} = useStore();
   const {world2dStore} = universeStore;
 
-  const [isButtonShown, setIsButtonShown] = useState(false);
-
   const {t} = useI18n();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const stakersCount = world2dStore?.worldDetails?.world?.stakers?.length || 0;
-    setIsButtonShown(stakersCount > USERS_MAX);
-  }, [world2dStore?.worldDetails?.world?.stakers?.length]);
 
   const onSelectUser = (userId: string) => {
     widgetManagerStore.open(WidgetEnum.USER_DETAILS, PositionEnum.LEFT, {id: userId});
@@ -60,7 +49,7 @@ const WorldProfileWidget: FC = () => {
         variant="primary"
         title={t('labels.odysseyOverview')}
         image={getImageAbsoluteUrl(world?.avatarHash, ImageSizeEnum.S3)}
-        onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_DETAILS)}
+        onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_PROFILE)}
       >
         <styled.Wrapper>
           <ProfileImage
@@ -97,42 +86,7 @@ const WorldProfileWidget: FC = () => {
               </styled.StakingCommentContainer>
             )}
 
-            {stakers && (stakers?.length || 0) > 0 && (
-              <styled.StakedInUsersContainer>
-                <styled.Title>
-                  <IconSvg name="connect" size="xs" isWhite />
-                  <span>{t('labels.connections')}</span>
-                </styled.Title>
-
-                {(isButtonShown ? stakers.slice(0, USERS_MAX) : stakers).map((user, index) => {
-                  const username = user.name || user.user_id;
-                  return (
-                    <styled.StakedInUser
-                      key={user.user_id}
-                      onClick={() => onSelectUser(user.user_id)}
-                    >
-                      <Hexagon
-                        type="fourth-borderless"
-                        skipOuterBorder
-                        imageSrc={user.avatarHash}
-                      />
-                      <styled.Link>
-                        {index < USERS_MAX ? `${t('labels.topConnector')}: ${username}` : username}
-                      </styled.Link>
-                    </styled.StakedInUser>
-                  );
-                })}
-
-                {isButtonShown && (
-                  <styled.ShowAllButtonContainer>
-                    <ButtonEllipse
-                      label={t('actions.seeAll')}
-                      onClick={() => setIsButtonShown(false)}
-                    />
-                  </styled.ShowAllButtonContainer>
-                )}
-              </styled.StakedInUsersContainer>
-            )}
+            <StakersList stakers={stakers} onSelectUser={onSelectUser} />
           </styled.GeneralScrollable>
         </styled.Wrapper>
       </Panel>

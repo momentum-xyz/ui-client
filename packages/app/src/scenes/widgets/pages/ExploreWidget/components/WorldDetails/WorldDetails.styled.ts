@@ -49,29 +49,3 @@ export const StakingComment = styled.div`
   font-size: var(--font-size-s);
   line-height: 18px;
 `;
-
-export const StakedInUsersContainer = styled.div`
-  padding: 10px 0 0 0;
-`;
-
-export const StakedInUser = styled.div`
-  margin: 10px 0 0 0;
-  padding: 8px 10px;
-  display: flex;
-  align-items: center;
-  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
-  box-shadow: -1px -1px 2px ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.1)};
-  border-radius: 4px;
-  cursor: pointer;
-  gap: 10px;
-`;
-
-export const Link = styled.a`
-  font-size: var(--font-size-s);
-  text-decoration: none;
-`;
-
-export const ShowAllButtonContainer = styled.div`
-  margin: 0 1px;
-  padding: 10px 0 0 0;
-`;
