@@ -27,3 +27,11 @@ export const SearchContainer = styled.div`
   flex-direction: column;
   gap: 10px;
 `;
+
+export const NoOwnStakes = styled.div`
+  font-weight: 600;
+  font-size: var(--font-size-s);
+  line-height: 18px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+`;
