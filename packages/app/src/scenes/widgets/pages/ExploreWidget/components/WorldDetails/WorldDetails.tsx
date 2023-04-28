@@ -1,10 +1,10 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
-import {Panel, ImageSizeEnum, IconSvg, SymbolAmount} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
 
-import {formatBigInt, getImageAbsoluteUrl} from 'core/utils';
-import {ProfileInfo, ProfileImage, StakersList, StakingComment} from 'ui-kit';
+import {getImageAbsoluteUrl} from 'core/utils';
+import {ProfileInfo, ProfileImage, StakersList, StakingComment, StakingAmount} from 'ui-kit';
 import {WorldModelInterface} from 'core/models';
 
 import * as styled from './WorldDetails.styled';
@@ -46,7 +46,7 @@ const WorldDetails: FC<PropsInterface> = ({
             name={world.name || world.id}
             image={world.avatarHash}
             imageErrorIcon="rabbit_fill"
-            byName={world.owner_name || ''}
+            byName={world.owner_name || world.owner_id}
             onByClick={() => onSelectUser(world.owner_id)}
           />
 
@@ -58,17 +58,7 @@ const WorldDetails: FC<PropsInterface> = ({
               onStake={() => onStakeWorld(world.id)}
             />
 
-            <styled.TitleContainer>
-              <styled.Title>
-                <IconSvg name="stake" size="xs" isWhite />
-                <span>{t('labels.staked')}</span>
-              </styled.Title>
-            </styled.TitleContainer>
-
-            <styled.TotalAmount>
-              <div>{t('labels.totalAmountStaked')}:</div>
-              <SymbolAmount stringValue={formatBigInt(world.momStaked)} tokenSymbol="MOM" />
-            </styled.TotalAmount>
+            <StakingAmount stakedAmount={world.momStaked} tokenSymbol="MOM" />
 
             {!!world.last_staking_comment && (
               <StakingComment comment={world.last_staking_comment} />

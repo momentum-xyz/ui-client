@@ -2,19 +2,13 @@ import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
-import {
-  Panel,
-  IconSvg,
-  SymbolAmount,
-  ImageSizeEnum,
-  PositionEnum
-} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, ImageSizeEnum, PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
-import {formatBigInt, getImageAbsoluteUrl} from 'core/utils';
-import {ProfileImage, ProfileInfo, StakersList, StakingComment} from 'ui-kit';
+import {getImageAbsoluteUrl} from 'core/utils';
+import {ProfileImage, ProfileInfo, StakersList, StakingAmount, StakingComment} from 'ui-kit';
 import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 
 import * as styled from './WorldDetailsWidget.styled';
@@ -72,7 +66,7 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
             name={world.name || world.id}
             image={world.avatarHash}
             imageErrorIcon="rabbit_fill"
-            byName={world.owner_name || ''}
+            byName={world.owner_name || world.owner_id}
             onByClick={() => onSelectUser(world.owner_id)}
           />
 
@@ -84,17 +78,7 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
               onStake={() => onStakeWorld(world.id)}
             />
 
-            <styled.TitleContainer>
-              <styled.Title>
-                <IconSvg name="stake" size="xs" isWhite />
-                <span>{t('labels.staked')}</span>
-              </styled.Title>
-            </styled.TitleContainer>
-
-            <styled.TotalAmount>
-              <div>{t('labels.totalAmountStaked')}:</div>
-              <SymbolAmount stringValue={formatBigInt(world.momStaked)} tokenSymbol="MOM" />
-            </styled.TotalAmount>
+            <StakingAmount stakedAmount={world.momStaked} tokenSymbol="MOM" />
 
             {!!world.last_staking_comment && (
               <StakingComment comment={world.last_staking_comment} />
