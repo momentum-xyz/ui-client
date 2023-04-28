@@ -18,7 +18,7 @@ import '@babylonjs/loaders/glTF';
 import {Object3dInterface, Texture3dInterface, ClickPositionInterface} from '@momentum-xyz/core';
 //import {GLTFFileLoader} from '@babylonjs/loaders';
 
-import {PLAYER_OFFSET_RH, PlayerHelper} from './PlayerHelper';
+import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
 import {getAssetFileName} from './UtilityHelper';
 import {posToVec3} from './TransformHelper';
@@ -171,6 +171,7 @@ export class ObjectHelper {
     node.name = object.name;
 
     node.position = posToVec3(object.transform.position);
+
     node.metadata = object.id;
     if (this.firstID === '') {
       this.firstID = object.id;
@@ -195,17 +196,19 @@ export class ObjectHelper {
   }
 
   static attachToCamera(objectId: string, node: TransformNode) {
-    this.attachedNode = node;
-    node.setParent(PlayerHelper.playerInstance.rootNodes[0]);
-    node.position = PLAYER_OFFSET_RH;
-    this.setSpawningMaterial(node);
+    if (this.selectedObjectFromSpawn === '') {
+      this.attachedNode = node;
+      node.setParent(PlayerHelper.playerInstance.rootNodes[0]);
+      node.position = new Vector3(0, -0.5, -3);
+      this.setSpawningMaterial(node);
 
-    this.selectedObjectFromSpawn = objectId;
-    this.transformSubscription = WorldCreatorHelper.subscribeForTransformUpdates(
-      objectId,
-      node,
-      true
-    );
+      this.selectedObjectFromSpawn = objectId;
+      this.transformSubscription = WorldCreatorHelper.subscribeForTransformUpdates(
+        objectId,
+        node,
+        true
+      );
+    }
   }
 
   static detachFromCamera() {
