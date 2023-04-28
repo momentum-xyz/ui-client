@@ -140,7 +140,12 @@ class PosBusService {
 
         const {objects} = data;
         for (const object of objects) {
-          console.log('Add object', object);
+          console.log(
+            'Add object',
+            object,
+            'Attach to camera',
+            PosBusService.attachNextReceivedObjectToCamera
+          );
           // TODO we should equalise these
           Event3dEmitter.emit(
             'ObjectCreated',
@@ -151,10 +156,10 @@ class PosBusService {
                 ...object.transform
               }
             },
-            this.attachNextReceivedObjectToCamera
+            PosBusService.attachNextReceivedObjectToCamera
           );
 
-          this.attachNextReceivedObjectToCamera = false;
+          PosBusService.attachNextReceivedObjectToCamera = false;
         }
         break;
       }
