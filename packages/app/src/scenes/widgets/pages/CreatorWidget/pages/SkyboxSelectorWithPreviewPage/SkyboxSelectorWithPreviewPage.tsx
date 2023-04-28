@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Frame, Button, Input} from '@momentum-xyz/ui-kit-storybook';
 import {toast} from 'react-toastify';
@@ -27,6 +27,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
   const [previewSkybox, setPreviewSkybox] = useState<Asset3dInterface | null>(null);
   const [skyboxPreviewType, setSkyboxPreviewType] = useState<'COMMUNITY' | 'PRIVATE'>('COMMUNITY');
   const [isUploadingSkybox, setIsUploadingSkybox] = useState(false);
+  const [searchInputValue, setSearchInputValue] = useState<string>('');
 
   useEffect(() => {
     if (!user) {
@@ -35,9 +36,14 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
     skyboxSelectorStore.fetchItems(worldId, user.id);
   }, [skyboxSelectorStore, user, worldId]);
 
+  const filteredSkyboxList = useMemo(() => {
+    const list = skyboxPreviewType === 'COMMUNITY' ? communitySkyboxesList : userSkyboxesList;
+    return list.filter((sb) => sb.name.toLowerCase().includes(searchInputValue.toLowerCase()));
+  }, [communitySkyboxesList, skyboxPreviewType, userSkyboxesList, searchInputValue]);
+
   return (
     <>
-      <styled.ContainerNew>
+      <styled.Container>
         <styled.ControlsContainer>
           <Frame>
             <styled.ControlsInnerContainer>
@@ -49,6 +55,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                     setPreviewSkybox(null);
                     setIsUploadingSkybox(false);
                     setSkyboxPreviewType('COMMUNITY');
+                    setSearchInputValue('');
                   }}
                 />
                 <Button
@@ -58,6 +65,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                     setPreviewSkybox(null);
                     setIsUploadingSkybox(false);
                     setSkyboxPreviewType('PRIVATE');
+                    setSearchInputValue('');
                   }}
                 />
               </styled.SkyboxTypeContainer>
@@ -70,8 +78,9 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
                         : 'searchPrivateLibrary'
                     }`
                   )}
+                  value={searchInputValue}
                   isSearch
-                  onChange={console.log}
+                  onChange={setSearchInputValue}
                   wide
                 />
               </styled.SkyboxSearchContainer>
@@ -88,7 +97,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
           </Frame>
           <styled.Separator />
         </styled.ControlsContainer>
-      </styled.ContainerNew>
+      </styled.Container>
 
       {isUploadingSkybox && <UploadSkybox onBack={() => setIsUploadingSkybox(false)} />}
       {!isUploadingSkybox && !previewSkybox && (
@@ -110,10 +119,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
               }
             </span>
           </styled.SkyboxListHeader>
-          <SkyboxList
-            skyboxes={skyboxPreviewType === 'COMMUNITY' ? communitySkyboxesList : userSkyboxesList}
-            onSkyboxSelect={(sb) => setPreviewSkybox(sb)}
-          />
+          <SkyboxList skyboxes={filteredSkyboxList} onSkyboxSelect={(sb) => setPreviewSkybox(sb)} />
         </>
       )}
       {!isUploadingSkybox && previewSkybox && (
