@@ -91,7 +91,7 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
           <styled.GeneralScrollable>
             <ProfileInfo
               description={world.description}
-              // joinDate={new Date().toISOString()}
+              joinDate={world.createdAt}
               onVisit={() => onVisitWorld(world.id)}
               onStake={() => onStakeWorld(world.id)}
             />
