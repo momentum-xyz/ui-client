@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {signUpDateString, useI18n} from '@momentum-xyz/core';
 import {Hexagon, MenuLabel, ProfileLine} from '@momentum-xyz/ui-kit-storybook';
 
+import {formatBigInt} from 'core/utils';
 import {WorldModelInterface} from 'core/models';
 
 import * as styled from './CurrentWorld.styled';
@@ -16,6 +17,8 @@ const CurrentWorld: FC<PropsInterface> = ({world, onStakeWorld}) => {
   const {id, name, imageSrc, createdAt, stakersCount, momStaked} = world;
   const {t} = useI18n();
 
+  console.log('[WORLD] MOMs staked into world: ', momStaked);
+
   return (
     <styled.Container data-testid="CurrentWorld-test">
       <styled.Content>
@@ -23,7 +26,7 @@ const CurrentWorld: FC<PropsInterface> = ({world, onStakeWorld}) => {
         <styled.Information>
           <ProfileLine
             icon="stake"
-            label={`${momStaked} MOM ${t('labels.stakedIn').toLowerCase()}`}
+            label={`${formatBigInt(momStaked)} MOM ${t('labels.stakedIn').toLowerCase()}`}
           />
           <ProfileLine icon="connect" label={`${stakersCount} ${t('labels.stakers')}`} />
           <ProfileLine

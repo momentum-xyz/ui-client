@@ -1,4 +1,5 @@
 import {cast, flow, types} from 'mobx-state-tree';
+import BN from 'bn.js';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {ImageSizeEnum, SliderItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
@@ -74,18 +75,24 @@ const Universe2dStore = types.compose(
           ? self.allWorlds.filter((world) => world.name.includes(self.searchQuery.queryLowerCased))
           : [];
       },
-      get lastCreatedWorlds(): SliderItemInterface<string>[] {
+      get lastCreatedSliderWorlds(): SliderItemInterface<string>[] {
         return self.allWorlds.slice(0, 6).map((item) => ({
           id: item.id,
           name: item.name,
           image: getImageAbsoluteUrl(item.avatarHash, ImageSizeEnum.S5) || ''
         }));
       },
-      get mostStakedWorlds(): SliderItemInterface<string>[] {
-        const sortedWorlds = [...self.allWorlds].sort(
-          (a, b) => (b.stake_total || 0) - (a.stake_total || 0)
-        );
-        return sortedWorlds.slice(0, 6).map((item) => ({
+      get mostStakedWorlds(): WorldInfoModelInterface[] {
+        return [...self.allWorlds]
+          .sort((a, b) => {
+            const aBN = new BN(a.stake_total || '0');
+            const bBN = new BN(b.stake_total || '0');
+            return bBN.sub(aBN).toNumber();
+          })
+          .slice(0, 6);
+      },
+      get mostStakedSliderWorlds(): SliderItemInterface<string>[] {
+        return this.mostStakedWorlds.map((item) => ({
           id: item.id,
           name: item.name,
           image: getImageAbsoluteUrl(item.avatarHash, ImageSizeEnum.S5) || ''
@@ -98,7 +105,7 @@ const Universe2dStore = types.compose(
           ? self.allUsers.filter((user) => user.name.includes(self.searchQuery.queryLowerCased))
           : [];
       },
-      get lastCreatedUsers(): SliderItemInterface<string>[] {
+      get lastCreatedSliderUsers(): SliderItemInterface<string>[] {
         return self.allUsers.slice(0, 6).map((item) => ({
           id: item.id,
           name: item.name,

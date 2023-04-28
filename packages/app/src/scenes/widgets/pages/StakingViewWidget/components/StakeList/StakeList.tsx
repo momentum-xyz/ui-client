@@ -12,11 +12,13 @@ import {
 } from '@momentum-xyz/ui-kit-storybook';
 
 import {StakeSortType} from 'core/types';
+import {formatBigInt, getImageAbsoluteUrl} from 'core/utils';
 import {
   FilterFieldModelType,
   SearchQueryModelModelType,
   SortFieldModelType,
-  StakeModelInterface
+  StakeModelInterface,
+  WorldInfoModelInterface
 } from 'core/models';
 
 import * as styled from './StakeList.styled';
@@ -24,11 +26,13 @@ import * as styled from './StakeList.styled';
 interface PropsInterface {
   searchQuery: SearchQueryModelModelType;
   stakeList: StakeModelInterface[];
+  isStakeListEmpty: boolean;
+  mostStakedWorlds: WorldInfoModelInterface[];
   filterField: FilterFieldModelType;
   filterOptions: SelectOptionInterface<string>[];
   sortField: SortFieldModelType;
   sortOptions: SelectOptionInterface<StakeSortType>[];
-  onSelectStake: (uuid: string) => void;
+  onSelectWorld: (worldId: string) => void;
   onUnstake: (uuid: string) => void;
   onStake: (worldId: string) => void;
 }
@@ -36,11 +40,13 @@ interface PropsInterface {
 const StakeList: FC<PropsInterface> = ({
   searchQuery,
   stakeList,
+  isStakeListEmpty,
+  mostStakedWorlds,
   filterField,
   filterOptions,
   sortField,
   sortOptions,
-  onSelectStake,
+  onSelectWorld,
   onUnstake,
   onStake
 }) => {
@@ -53,6 +59,7 @@ const StakeList: FC<PropsInterface> = ({
           <Input
             isSearch
             isClearable
+            disabled={isStakeListEmpty}
             value={searchQuery.query}
             placeholder={t('actions.searchStakes')}
             opts={stringInputMask}
@@ -65,6 +72,7 @@ const StakeList: FC<PropsInterface> = ({
           <Select
             wide
             isClearable
+            isDisabled={isStakeListEmpty}
             options={sortOptions}
             value={sortField.fieldName}
             placeholder={t('actions.sort')}
@@ -73,6 +81,7 @@ const StakeList: FC<PropsInterface> = ({
           <Select
             wide
             isClearable
+            isDisabled={isStakeListEmpty}
             options={filterOptions.map((option) => ({
               ...option,
               label: doThreeDotsInside(option.label, 5, 5)
@@ -85,19 +94,42 @@ const StakeList: FC<PropsInterface> = ({
       </Frame>
       <styled.ScrollableContainer>
         <styled.SearchContainer>
-          {stakeList.map((stake, index) => (
-            <StakeCard
-              key={index}
-              nftName={stake.name}
-              nftImageUrl={null} // ???
-              stakedAmount={Number(stake.amount)}
-              rewardAmount={Number(stake.reward)}
-              tokenSymbol="MOM"
-              onInfoClick={() => onSelectStake(stake.blockchain_id)}
-              onStakeClick={() => onStake(stake.blockchain_id)}
-              onUnstakeClick={() => onUnstake(stake.blockchain_id)}
-            />
-          ))}
+          {isStakeListEmpty ? (
+            <>
+              {/* RENDER MOST STAKED WORLDS */}
+              <styled.NoOwnStakes>
+                Make your first stake, here are the most staked into Odysseys
+              </styled.NoOwnStakes>
+              {mostStakedWorlds.map((stake, index) => (
+                <StakeCard
+                  key={index}
+                  worldName={stake.name}
+                  worldImageUrl={getImageAbsoluteUrl(stake.avatarHash)}
+                  staked={formatBigInt(stake.stake_total)}
+                  tokenSymbol="MOM"
+                  onInfoClick={() => onSelectWorld(stake.owner_id)}
+                  onStakeClick={() => onStake(stake.owner_id)}
+                />
+              ))}
+            </>
+          ) : (
+            <>
+              {/* RENDER MY STAKES */}
+              {stakeList.map((stake, index) => (
+                <StakeCard
+                  key={index}
+                  worldName={stake.name}
+                  worldImageUrl={null} // ???
+                  staked={formatBigInt(stake.amount)}
+                  reward={formatBigInt(stake.reward)}
+                  tokenSymbol="MOM"
+                  onInfoClick={() => onSelectWorld(stake.object_id)}
+                  onStakeClick={() => onStake(stake.object_id)}
+                  onUnstakeClick={() => onUnstake(stake.object_id)}
+                />
+              ))}
+            </>
+          )}
         </styled.SearchContainer>
       </styled.ScrollableContainer>
     </styled.Wrapper>

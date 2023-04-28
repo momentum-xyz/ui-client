@@ -76,8 +76,8 @@ const ExploreWidget: FC = () => {
                 <WorldList
                   searchQuery={universe2dStore.searchQuery}
                   searchResults={universe2dStore.filteredWorlds}
-                  lastCreatedWorlds={universe2dStore.lastCreatedWorlds}
-                  mostStakedWorlds={universe2dStore.mostStakedWorlds}
+                  lastCreatedWorlds={universe2dStore.lastCreatedSliderWorlds}
+                  mostStakedWorlds={universe2dStore.mostStakedSliderWorlds}
                   onSelectWorld={onSelectWorld}
                   onSelectUser={onSelectUser}
                   onVisitWorld={onVisitWorld}
@@ -89,7 +89,7 @@ const ExploreWidget: FC = () => {
                 <UserList
                   searchQuery={universe2dStore.searchQuery}
                   searchResults={universe2dStore.filteredUsers}
-                  lastCreatedUsers={universe2dStore.lastCreatedUsers}
+                  lastCreatedUsers={universe2dStore.lastCreatedSliderUsers}
                   mostStakedUsers={universe2dStore.mostStakedUsers}
                   onSelectUser={onSelectUser}
                 />

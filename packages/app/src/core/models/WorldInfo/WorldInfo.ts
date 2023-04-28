@@ -7,7 +7,7 @@ const WorldInfo = types.model('WorldInfo', {
   avatarHash: types.maybeNull(types.string),
   owner_id: types.string,
   owner_name: types.maybeNull(types.string),
-  stake_total: types.maybe(types.number)
+  stake_total: types.maybe(types.string)
 });
 
 export interface WorldInfoModelInterface extends Instance<typeof WorldInfo> {}
