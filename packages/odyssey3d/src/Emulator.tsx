@@ -42,7 +42,7 @@ const WorldEmulator: FC = () => {
         i = i + 1;
         const randomIndex = Math.floor(Math.random() * assetIDs.length);
 
-        Event3dEmitter.emit('ObjectCreated', {
+        Event3dEmitter.emit('AddObject', {
           id: uuidv4(),
           name: 'Cool name' + randomNumber(),
           transform: {

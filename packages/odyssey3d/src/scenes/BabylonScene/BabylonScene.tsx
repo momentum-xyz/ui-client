@@ -6,6 +6,7 @@ import {useMutableCallback} from '@momentum-xyz/ui-kit';
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
 import {PlayerHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babylon';
 import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
+import skyboxWorld from '../../static/PANOSKYGB.jpeg';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
   const onObjectClick = useMutableCallback(callbacks.onObjectClick);
@@ -18,7 +19,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
     return () => {
       // Cleaning everything
       events.off('SetWorld');
-      events.off('ObjectCreated');
+      events.off('AddObject');
       events.off('ObjectTextureChanged');
       events.off('ObjectTransform');
       events.off('UserAdded');
@@ -50,7 +51,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
       //SkyboxHelper.setCubemapSkybox(scene);
       SkyboxHelper.set360Skybox(
         scene,
-        'https://dev2.odyssey.ninja/api/v3/render/texture/s8/26485e74acb29223ba7a9fa600d36c7f'
+        //'https://dev2.odyssey.ninja/api/v3/render/texture/s8/26485e74acb29223ba7a9fa600d36c7f'
+        skyboxWorld
       );
 
       if (window.sessionStorage.getItem('babylon_debug')) {
@@ -69,8 +71,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         //PlayerHelper.spawnPlayer(scene, 'd906e070-3d2e-b1a5-3e3f-703423225945');
       });
 
-      events.on('ObjectCreated', async (object) => {
-        await ObjectHelper.spawnObjectAsync(scene, object);
+      events.on('AddObject', async (object, attachToCamera = false) => {
+        await ObjectHelper.spawnObjectAsync(scene, object, attachToCamera);
       });
 
       events.on('ObjectTextureChanged', (object) => {
@@ -96,6 +98,9 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
 
       events.on('ObjectEditModeChanged', (objectId, isOn) => {
         WorldCreatorHelper.toggleGizmo(objectId, isOn);
+      });
+      events.on('DetachObjectFromCamera', (objectId) => {
+        ObjectHelper.detachFromCamera();
       });
 
       events.on('SendHighFive', (userId) => {

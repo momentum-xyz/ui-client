@@ -21,7 +21,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
   const {sessionStore, widgetManagerStore, universeStore, agoraStore} = useStore();
   const {toggle, activeWidgetList} = widgetManagerStore;
   const {isGuest, userImageUrl} = sessionStore;
-  const {isMyWorld} = universeStore;
+  const {isMyWorld, world3dStore} = universeStore;
 
   const navigate = useNavigate();
 
@@ -77,6 +77,13 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
       iconName: 'pencil',
       isHidden: !isWorld || !isMyWorld,
       onClick: toggle
+    },
+    {
+      key: WidgetEnum.GO_TO,
+      position: PositionEnum.CENTER, // TODO 2nd floor
+      iconName: 'checked',
+      onClick: () => world3dStore?.setAttachedToCamera(null),
+      isHidden: !world3dStore?.attachedToCameraObjectId
     },
     {
       key: WidgetEnum.VOICE_CHAT,
