@@ -34,13 +34,14 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   const {sessionStore, nftStore} = useStore();
   const {wallet: authWallet} = sessionStore;
   const {
-    balanceTotal,
-    balanceReserved,
+    // balanceTotal,
+    // balanceReserved,
     balanceTransferrable,
     canBeStaked,
     addresses,
     accountOptions,
     nftItems,
+    chainDecimals,
     tokenSymbol
   } = nftStore;
 
@@ -80,7 +81,8 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   const [amountString, setAmountString] = useState(DEFAULT_STAKING_AMOUNT.toString());
   const amountStringValueCheckRegex = /^\d{1,12}((\.|,)\d{0,4})?$/;
 
-  const amountAtoms = new BN(+amountString * 1_000).mul(new BN(Math.pow(10, 9)));
+  // this allows us to use decimals while also validating with BN
+  const amountAtoms = new BN(+amountString * 1_000).mul(new BN(Math.pow(10, chainDecimals - 3)));
 
   const nft = nftItems.find((nft) => nft.uuid === nftItemId);
   // const myNft = nftItems.find((nft) => nft.owner === wallet);
@@ -161,9 +163,9 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   };
 
   const balanceSections = [
-    {label: t('staking.balanceTypes.account'), value: balanceTotal},
-    {label: t('staking.balanceTypes.transferable'), value: balanceTransferrable},
-    {label: t('staking.balanceTypes.staked'), value: balanceReserved}
+    // {label: t('staking.balanceTypes.account'), value: balanceTotal},
+    {label: t('staking.balanceTypes.transferable'), value: balanceTransferrable}
+    // {label: t('staking.balanceTypes.staked'), value: balanceReserved}
     // {label: 'Unbonding', value: null}
   ].map(({label, value}) => (
     <styled.BalanceEntityContainer key={label}>
@@ -178,10 +180,10 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   const validStringCheck = (val: string): boolean => !val || amountStringValueCheckRegex.test(val);
 
   // TEMP disable
-  if (!nft) {
-    console.log('StakingForm - no nft found');
-    return null;
-  }
+  // if (!nft) {
+  //   console.log('StakingForm - no nft found');
+  //   return null;
+  // }
 
   return (
     <styled.Container>
@@ -270,7 +272,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
                   <styled.LabeledLineLabelContainer>
                     <Text size="xxs" align="right" text={t('staking.destination')} />
                   </styled.LabeledLineLabelContainer>
-                  <Text size="xxs" text={`${nft.name} ${nft.owner.substring(0, 20)}...`} />
+                  {/* <Text size="xxs" text={`${nft.name} ${nft.owner.substring(0, 20)}...`} /> */}
                 </styled.LabeledLineContainer>
               </styled.Section>
             </div>
