@@ -64,7 +64,7 @@ const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
       >
         <styled.Wrapper>
           <ProfileImage
-            name={user.name || ''}
+            name={user.name || user.id}
             image={user.profile.avatarHash}
             imageErrorIcon="astronaut"
           />
