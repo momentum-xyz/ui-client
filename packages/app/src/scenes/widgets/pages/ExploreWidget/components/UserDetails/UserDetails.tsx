@@ -39,7 +39,7 @@ const UserDetails: FC<PropsInterface> = (props) => {
       >
         <styled.Wrapper>
           <ProfileImage
-            name={user?.name || ''}
+            name={user?.name || user?.id || ''}
             image={user?.profile.avatarHash}
             imageErrorIcon="astronaut"
           />
