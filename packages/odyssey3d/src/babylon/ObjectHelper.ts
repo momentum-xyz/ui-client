@@ -160,6 +160,8 @@ export class ObjectHelper {
     node.name = object.name;
 
     node.position = posToVec3(object.transform.position);
+    node.rotation = posToVec3(object.transform.rotation);
+    node.scaling = posToVec3(object.transform.scale);
     node.metadata = object.id;
     if (this.firstID === '') {
       this.firstID = object.id;
