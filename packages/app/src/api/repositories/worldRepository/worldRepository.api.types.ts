@@ -26,8 +26,8 @@ export interface WorldInterface {
 export interface WorldStakerInterface {
   user_id: string;
   name: string;
-  stake?: number | null;
-  avatarHash?: string | null;
+  stake: string;
+  avatarHash: string | null;
 }
 
 /** FETCH WORLD LIST **/

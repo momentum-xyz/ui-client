@@ -96,17 +96,24 @@ const WorldDetails: FC<PropsInterface> = ({
                   <span>{t('labels.connections')}</span>
                 </styled.Title>
 
-                {(isButtonShown ? stakers.slice(0, USERS_MAX) : stakers).map((user, index) => (
-                  <styled.StakedInUser
-                    key={user.user_id}
-                    onClick={() => onSelectUser(user.user_id)}
-                  >
-                    <Hexagon type="fourth-borderless" skipOuterBorder imageSrc={user.avatarHash} />
-                    <styled.Link>
-                      {index < USERS_MAX ? `${t('labels.topConnector')}: ${user.name}` : user.name}
-                    </styled.Link>
-                  </styled.StakedInUser>
-                ))}
+                {(isButtonShown ? stakers.slice(0, USERS_MAX) : stakers).map((user, index) => {
+                  const username = user.name || user.user_id;
+                  return (
+                    <styled.StakedInUser
+                      key={user.user_id}
+                      onClick={() => onSelectUser(user.user_id)}
+                    >
+                      <Hexagon
+                        type="fourth-borderless"
+                        skipOuterBorder
+                        imageSrc={user.avatarHash}
+                      />
+                      <styled.Link>
+                        {index < USERS_MAX ? `${t('labels.topConnector')}: ${username}` : username}
+                      </styled.Link>
+                    </styled.StakedInUser>
+                  );
+                })}
 
                 {isButtonShown && (
                   <styled.ShowAllButtonContainer>
