@@ -148,7 +148,7 @@ class PosBusService {
           );
           // TODO we should equalise these
           Event3dEmitter.emit(
-            'ObjectCreated',
+            'AddObject',
             {
               ...object,
               asset_3d_id: object.asset_type,

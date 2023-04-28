@@ -18,8 +18,8 @@ import {
 
 // TODO: Define proper types
 export type Event3dType = {
-  ObjectCreated: (object: Object3dInterface, attachToCamera?: boolean) => void;
-  ObjectChanged: (object: Object3dInterface) => void;
+  AddObject: (object: Object3dInterface, attachToCamera?: boolean) => void;
+  ChangeObject: (object: Object3dInterface) => void;
   ObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
   SetWorld: (world: SetWorldInterface, userId: string) => void;
   ObjectTextureChanged: (texture: Texture3dInterface) => void;
