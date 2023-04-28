@@ -8,5 +8,6 @@ export class LightHelper {
     this.light = new HemisphericLight('light', new Vector3(0, 1, 0), scene);
     // Dim the light a small amount 0 - 1
     this.light.intensity = 0.7;
+    scene.createDefaultEnvironment({createSkybox:false});
   }
 }
