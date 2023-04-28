@@ -11,6 +11,8 @@ import {
 
 import {formatBigInt} from 'core/utils';
 import {WalletModelInterface} from 'core/models';
+import {useBlockchainAirdrop} from 'shared/hooks/useBlockchainAirdrop';
+import {SignIn} from 'scenes/widgets/pages/LoginWidget/components';
 
 import * as styled from './MyWallet.styled';
 
@@ -29,6 +31,17 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
       setSelectedWallet(wallets[0]);
     }
   }, [selectedWallet, wallets, wallets.length]);
+
+  const {isWalletActive, getTokens} = useBlockchainAirdrop();
+
+  const handleAirdrop = async () => {
+    try {
+      const tokens = await getTokens();
+      console.log(tokens);
+    } catch (err) {
+      console.log('Error requesting airdrop:', err);
+    }
+  };
 
   return (
     <styled.Wrapper data-testid="MyWallet-test">
@@ -63,7 +76,12 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
         <styled.Title>{t('actions.requestAirdropTokens')}</styled.Title>
         <styled.AirdropContainer>
           <span>Lorem ipsum dolor sit amet, ligula consectetuer adipiscing elit.</span>
-          <Button icon="air" label={t('actions.startAirdrop')} />
+          {isWalletActive ? (
+            <Button icon="air" label={t('actions.startAirdrop')} onClick={handleAirdrop} />
+          ) : (
+            // TODO will be done automatically
+            <SignIn />
+          )}
         </styled.AirdropContainer>
 
         <styled.ScrollableContainer>
