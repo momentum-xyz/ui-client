@@ -1,7 +1,7 @@
 export enum WidgetEnum {
   LOGIN = 'LOGIN',
   EXPLORE = 'EXPLORE',
-  GO_TO = 'GO_TO',
+  GO_TO = 'GO_TO', // TODO rename to ACTION_BUTTON
   MY_PROFILE = 'MY_PROFILE',
   CREATOR = 'CREATOR',
   STAKING = 'STAKING',

@@ -41,7 +41,7 @@ export class WorldCreatorHelper {
   static gizmoManager: GizmoManager;
   static transformSubscription: {unsubscribe: () => void} | undefined;
   static onObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
-  static selectedObject = '';
+  static selectedObjectFromGizmo = '';
   static scene: Scene;
 
   static placeholder: AbstractMesh;
@@ -54,7 +54,7 @@ export class WorldCreatorHelper {
     this.onObjectTransform = onObjectTransform;
     this.isCreatorMode = false;
     this.lastLockedID = '';
-    this.selectedObject = '';
+    this.selectedObjectFromGizmo = '';
     this.scene = scene;
 
     // Custom gizmo
@@ -264,12 +264,25 @@ export class WorldCreatorHelper {
     }
   }
 
-  static subscribeForTransformUpdates(objectId: string, node: TransformNode) {
+  static subscribeForTransformUpdates(objectId: string, node: TransformNode, spawn = false) {
+    let posToSend: Vector3;
+    let rotToSend: Vector3;
+    let scaleToSend: Vector3;
+
+    if (spawn) {
+      posToSend = node.absolutePosition;
+      rotToSend = new Vector3(0, 0, 0);
+      scaleToSend = new Vector3(1, 1, 1);
+    } else {
+      posToSend = node.position;
+      rotToSend = node.rotation;
+      scaleToSend = node.scaling;
+    }
     const updateTransformCallback = () => {
       const myTransfrom: ObjectTransformInterface = {
-        position: vec3ToPos(node.position),
-        rotation: vec3ToPos(node.rotation),
-        scale: vec3ToPos(node.scaling)
+        position: vec3ToPos(posToSend),
+        rotation: vec3ToPos(rotToSend),
+        scale: vec3ToPos(scaleToSend)
       };
 
       this.onObjectTransform(objectId, myTransfrom);
@@ -285,7 +298,7 @@ export class WorldCreatorHelper {
   }
 
   static setObjectTransform(id: string, transform: ObjectTransformInterface) {
-    if (id === this.selectedObject) {
+    if (id === this.selectedObjectFromGizmo || id === ObjectHelper.selectedObjectFromSpawn) {
       return;
     }
 

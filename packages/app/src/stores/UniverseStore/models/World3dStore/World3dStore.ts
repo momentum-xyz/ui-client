@@ -36,6 +36,7 @@ const World3dStore = types
 
     isCreatorMode: false,
     selectedObjectId: types.maybeNull(types.string),
+    attachedToCameraObjectId: types.maybeNull(types.string),
 
     gizmoMode: types.optional(
       types.enumeration(Object.values(GizmoTypeEnum)),
@@ -227,6 +228,12 @@ const World3dStore = types
       const {creatorStore} = getRootStore(self);
       creatorStore.setSelectedObjectId(objectId);
       creatorStore.setSelectedTab('inspector');
+    },
+    setAttachedToCamera(objectId: string | null) {
+      if (!objectId && self.attachedToCameraObjectId) {
+        Event3dEmitter.emit('DetachObjectFromCamera', self.attachedToCameraObjectId);
+      }
+      self.attachedToCameraObjectId = objectId;
     },
     undo() {
       // UnityService.undo();

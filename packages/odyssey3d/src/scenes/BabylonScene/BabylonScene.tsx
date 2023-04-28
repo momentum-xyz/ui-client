@@ -18,7 +18,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
     return () => {
       // Cleaning everything
       events.off('SetWorld');
-      events.off('ObjectCreated');
+      events.off('AddObject');
       events.off('ObjectTextureChanged');
       events.off('ObjectTransform');
       events.off('UserAdded');
@@ -69,8 +69,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         //PlayerHelper.spawnPlayer(scene, 'd906e070-3d2e-b1a5-3e3f-703423225945');
       });
 
-      events.on('ObjectCreated', async (object) => {
-        await ObjectHelper.spawnObjectAsync(scene, object);
+      events.on('AddObject', async (object, attachToCamera = false) => {
+        await ObjectHelper.spawnObjectAsync(scene, object, attachToCamera);
       });
 
       events.on('ObjectTextureChanged', (object) => {
@@ -96,6 +96,9 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
 
       events.on('ObjectEditModeChanged', (objectId, isOn) => {
         WorldCreatorHelper.toggleGizmo(objectId, isOn);
+      });
+      events.on('DetachObjectFromCamera', (objectId) => {
+        ObjectHelper.detachFromCamera();
       });
 
       events.on('SendHighFive', (userId) => {
