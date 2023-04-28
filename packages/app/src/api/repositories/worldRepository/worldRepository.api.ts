@@ -10,7 +10,9 @@ import {
   FetchWorldRequest,
   FetchWorldResponse,
   GetOnlineUsersRequest,
-  OdysseyOnlineUsersResponse
+  OdysseyOnlineUsersResponse,
+  PatchWorldRequest,
+  PatchWorldResponse
 } from './worldRepository.api.types';
 
 export const fetchWorldList: RequestInterface<FetchWorldListRequest, FetchWorldListResponse> = (
@@ -25,6 +27,13 @@ export const fetchWorld: RequestInterface<FetchWorldRequest, FetchWorldResponse>
   const {worldId, ...restOptions} = options;
   const url = generatePath(worldRepositoryEndpoints().world, {worldId});
   return request.get(url, restOptions);
+};
+
+export const patchWorld: RequestInterface<PatchWorldRequest, PatchWorldResponse> = (options) => {
+  const {worldId, name, description, website_link, avatarHash, ...rest} = options;
+  const data = {name, description, website_link, avatarHash};
+  const url = generatePath(worldRepositoryEndpoints().world, {worldId});
+  return request.patch(url, data, rest);
 };
 
 export const fetchOnlineUsers: RequestInterface<

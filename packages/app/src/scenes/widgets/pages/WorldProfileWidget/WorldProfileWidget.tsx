@@ -1,40 +1,35 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n} from '@momentum-xyz/core';
 import {
   Panel,
-  Hexagon,
-  IconSvg,
-  SymbolAmount,
-  ButtonEllipse,
   ImageSizeEnum,
-  PositionEnum
+  PositionEnum,
+  SideMenu,
+  SideMenuItemInterface
 } from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
-import {formatBigInt, getImageAbsoluteUrl} from 'core/utils';
-import {ProfileImage, ProfileInfo} from 'ui-kit';
+import {getImageAbsoluteUrl} from 'core/utils';
+import {WorldFormInterface} from 'core/interfaces';
 
+import {WorldEditor, WorldView} from './components';
 import * as styled from './WorldProfileWidget.styled';
 
-const USERS_MAX = 2;
+type MenuItemType = 'viewWorld' | 'editWorld';
 
 const WorldProfileWidget: FC = () => {
-  const {widgetManagerStore, universeStore} = useStore();
+  const {widgetManagerStore, universeStore, widgetStore} = useStore();
+  const {worldProfileStore} = widgetStore;
   const {world2dStore} = universeStore;
 
-  const [isButtonShown, setIsButtonShown] = useState(false);
+  const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewWorld');
 
   const {t} = useI18n();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const stakersCount = world2dStore?.worldDetails?.world?.stakers?.length || 0;
-    setIsButtonShown(stakersCount > USERS_MAX);
-  }, [world2dStore?.worldDetails?.world?.stakers?.length]);
 
   const onSelectUser = (userId: string) => {
     widgetManagerStore.open(WidgetEnum.USER_DETAILS, PositionEnum.LEFT, {id: userId});
@@ -44,98 +39,84 @@ const WorldProfileWidget: FC = () => {
     navigate(generatePath(ROUTES.odyssey.base, {worldId}));
   };
 
+  const onEditWorld = async (form: WorldFormInterface, previousImageHash?: string | null) => {
+    if (!world2dStore?.worldDetails?.world) {
+      return;
+    }
+    const {worldDetails, worldId} = world2dStore;
+    if (await worldProfileStore.editWorld(worldId, form, previousImageHash || undefined)) {
+      await worldDetails.fetchWorld();
+      setActiveMenuId('viewWorld');
+    }
+  };
+
+  const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = useMemo(
+    () => [
+      {
+        id: 'editWorld',
+        iconName: 'edit',
+        label: t('actions.edit')
+      }
+    ],
+    [t]
+  );
+
+  const panelIcon = useMemo(() => {
+    if (activeMenuId !== 'viewWorld') {
+      return sideMenuItems.find((i) => i.id === activeMenuId)?.iconName;
+    }
+    return undefined;
+  }, [activeMenuId, sideMenuItems]);
+
   if (!world2dStore?.worldDetails?.world) {
     return <></>;
   }
 
   const {world} = world2dStore.worldDetails;
-  const {stakers} = world;
 
   return (
     <styled.Container data-testid="WorldProfileWidget-test">
-      <Panel
-        isFullHeight
-        size="normal"
-        icon="rabbit_fill"
-        variant="primary"
-        title={t('labels.odysseyOverview')}
-        image={getImageAbsoluteUrl(world?.avatarHash, ImageSizeEnum.S3)}
-        onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_DETAILS)}
-      >
-        <styled.Wrapper>
-          <ProfileImage
-            name={world.name || world.id}
-            image={world.avatarHash}
-            imageErrorIcon="rabbit_fill"
-            byName={world.owner_name || ''}
-            onByClick={() => onSelectUser(world.owner_id)}
+      {world2dStore.isMyWorld && (
+        <styled.SideMenuContainer>
+          <SideMenu
+            orientation="left"
+            activeId={activeMenuId}
+            sideMenuItems={sideMenuItems}
+            onSelect={(menuId) => {
+              setActiveMenuId(activeMenuId === menuId ? 'viewWorld' : menuId);
+            }}
           />
+        </styled.SideMenuContainer>
+      )}
 
-          <styled.GeneralScrollable>
-            <ProfileInfo
-              description={world.description}
-              joinDate={world.createdAt}
-              onStake={() => onStakeWorld(world.id)}
-            />
-
-            <styled.TitleContainer>
-              <styled.Title>
-                <IconSvg name="stake" size="xs" isWhite />
-                <span>{t('labels.staked')}</span>
-              </styled.Title>
-            </styled.TitleContainer>
-
-            <styled.TotalAmount>
-              <div>{t('labels.totalAmountStaked')}:</div>
-              <SymbolAmount stringValue={formatBigInt(world.momStaked)} tokenSymbol="MOM" />
-            </styled.TotalAmount>
-
-            {!!world.last_staking_comment && (
-              <styled.StakingCommentContainer>
-                <div>{t('labels.lastStakingComment')}:</div>
-                <styled.StakingComment>{world.last_staking_comment}</styled.StakingComment>
-              </styled.StakingCommentContainer>
+      <styled.PanelContainer>
+        <Panel
+          isFullHeight
+          size="normal"
+          variant="primary"
+          icon={panelIcon}
+          title={t('labels.odysseyOverview')}
+          image={!panelIcon ? getImageAbsoluteUrl(world?.avatarHash, ImageSizeEnum.S3) : null}
+          onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_PROFILE)}
+        >
+          <styled.Wrapper>
+            {activeMenuId === 'viewWorld' && (
+              <WorldView world={world} onSelectUser={onSelectUser} onStakeWorld={onStakeWorld} />
             )}
 
-            {stakers && (stakers?.length || 0) > 0 && (
-              <styled.StakedInUsersContainer>
-                <styled.Title>
-                  <IconSvg name="connect" size="xs" isWhite />
-                  <span>{t('labels.connections')}</span>
-                </styled.Title>
-
-                {(isButtonShown ? stakers.slice(0, USERS_MAX) : stakers).map((user, index) => {
-                  const username = user.name || user.user_id;
-                  return (
-                    <styled.StakedInUser
-                      key={user.user_id}
-                      onClick={() => onSelectUser(user.user_id)}
-                    >
-                      <Hexagon
-                        type="fourth-borderless"
-                        skipOuterBorder
-                        imageSrc={user.avatarHash}
-                      />
-                      <styled.Link>
-                        {index < USERS_MAX ? `${t('labels.topConnector')}: ${username}` : username}
-                      </styled.Link>
-                    </styled.StakedInUser>
-                  );
-                })}
-
-                {isButtonShown && (
-                  <styled.ShowAllButtonContainer>
-                    <ButtonEllipse
-                      label={t('actions.seeAll')}
-                      onClick={() => setIsButtonShown(false)}
-                    />
-                  </styled.ShowAllButtonContainer>
-                )}
-              </styled.StakedInUsersContainer>
+            {activeMenuId === 'editWorld' && (
+              <WorldEditor
+                world={world}
+                isUpdating={worldProfileStore.isUpdating}
+                formErrors={worldProfileStore.formErrors}
+                onSelectUser={onSelectUser}
+                onEditWorld={onEditWorld}
+                onCancel={() => setActiveMenuId('viewWorld')}
+              />
             )}
-          </styled.GeneralScrollable>
-        </styled.Wrapper>
-      </Panel>
+          </styled.Wrapper>
+        </Panel>
+      </styled.PanelContainer>
     </styled.Container>
   );
 };

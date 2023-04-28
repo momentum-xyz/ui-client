@@ -5,3 +5,4 @@ export * from './loginGuest.interface';
 export * from './signUp.interface';
 export * from './profile.interface';
 export * from './tiles.interface';
+export * from './world.interface';
