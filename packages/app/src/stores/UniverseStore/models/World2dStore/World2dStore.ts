@@ -41,7 +41,7 @@ const World2dStore = types.compose(
     }))
     .views((self) => ({
       get isMyWorld(): boolean {
-        return self.worldId === getRootStore(self).sessionStore.userId;
+        return self.worldDetails?.world?.owner_id === getRootStore(self).sessionStore.userId;
       },
       get isCurrentUserWorldAdmin(): boolean {
         return this.isMyWorld;

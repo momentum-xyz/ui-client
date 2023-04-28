@@ -672,6 +672,7 @@ export const enGb = {
       settings: 'Settings',
       default: 'Default',
       setAsDefault: 'Set as default',
+      edit: 'Edit',
       editProfile: 'Edit profile',
       claimRewards: 'Claim Rewards',
       requestAirdropTokens: 'Request Airdrop tokens',
