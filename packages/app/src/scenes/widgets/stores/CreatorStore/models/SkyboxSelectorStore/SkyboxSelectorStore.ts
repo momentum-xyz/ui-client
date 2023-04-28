@@ -8,7 +8,7 @@ import {api, UploadImageResponse} from 'api';
 import {PluginIdEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 
-const UNITY_SKYBOX_ASSET_ID = '313a597a-8b9a-47a7-9908-52bdc7a21a3e';
+// const UNITY_SKYBOX_ASSET_ID = '313a597a-8b9a-47a7-9908-52bdc7a21a3e';
 const PAGE_SIZE = 5;
 
 const SkyboxDatabaseModel = types.model({
@@ -89,20 +89,21 @@ const SkyboxSelectorStore = types
       yield self.fetchDefaultSkyboxes();
       yield self.fetchUserSkyboxes(worldId, userId);
 
-      const {objects} = yield self.worldSettingsRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
-        {
-          spaceId: worldId,
-          plugin_id: PluginIdEnum.CORE,
-          attribute_name: AttributeNameEnum.WORLD_SETTINGS,
-          sub_attribute_key: 'objects'
-        }
-      );
+      // const {objects} = yield self.worldSettingsRequest.send(
+      //   api.spaceAttributeRepository.getSpaceAttribute,
+      //   {
+      //     spaceId: worldId,
+      //     plugin_id: PluginIdEnum.CORE,
+      //     attribute_name: AttributeNameEnum.WORLD_SETTINGS,
+      //     sub_attribute_key: 'objects'
+      //   }
+      // );
 
       const activeSkyboxData = yield self.createSkyboxRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
-          spaceId: objects.skybox,
+          // spaceId: objects.skybox,
+          spaceId: worldId,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.ACTIVE_SKYBOX
         }
@@ -145,23 +146,24 @@ const SkyboxSelectorStore = types
     saveItem: flow(function* (id: string, worldId: string) {
       self.currentItemId = id;
 
-      const {objects} = yield self.worldSettingsRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
-        {
-          spaceId: worldId,
-          plugin_id: PluginIdEnum.CORE,
-          attribute_name: AttributeNameEnum.WORLD_SETTINGS,
-          sub_attribute_key: 'objects'
-        }
-      );
+      // const {objects} = yield self.worldSettingsRequest.send(
+      //   api.spaceAttributeRepository.getSpaceAttribute,
+      //   {
+      //     spaceId: worldId,
+      //     plugin_id: PluginIdEnum.CORE,
+      //     attribute_name: AttributeNameEnum.WORLD_SETTINGS,
+      //     sub_attribute_key: 'objects'
+      //   }
+      // );
 
-      yield self.worldSettingsRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
-        spaceId: objects.skybox,
-        asset_3d_id: UNITY_SKYBOX_ASSET_ID
-      });
+      // yield self.worldSettingsRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
+      //   spaceId: objects.skybox,
+      //   asset_3d_id: UNITY_SKYBOX_ASSET_ID
+      // });
 
       yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-        spaceId: objects.skybox,
+        // spaceId: objects.skybox,
+        spaceId: worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.ACTIVE_SKYBOX,
         value: {render_hash: id}

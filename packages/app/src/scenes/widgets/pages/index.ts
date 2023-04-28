@@ -3,6 +3,7 @@ export * from './LoginWidget';
 export * from './ExploreWidget';
 export * from './ProfileWidget';
 export * from './WorldDetailsWidget';
+export * from './WorldProfileWidget';
 export * from './UserDetailsWidget';
 export * from './StakingViewWidget';
 export * from './StakingWidget';

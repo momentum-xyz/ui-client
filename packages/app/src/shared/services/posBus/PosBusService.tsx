@@ -27,6 +27,8 @@ class PosBusService {
   private port: PosbusPort | null = null;
   private static userId: string;
 
+  public static attachNextReceivedObjectToCamera = false;
+
   public static init(token: string, userId: string) {
     console.log('PosBusService init', token, userId);
     const workerUrl = new URL('@momentum-xyz/posbus-client/worker.mjs', import.meta.url);
@@ -111,21 +113,27 @@ class PosBusService {
         break;
       }
 
-      // TODO add to MsgType
-      case 'set_object_data' as MsgType: {
+      case MsgType.OBJECT_DATA: {
         console.log('PosBus set_object_data', data);
 
         const {id, entries} = data as any;
-        if (entries?.texture?.name) {
+        if (entries?.texture) {
+          Object.entries(entries.texture).forEach(([label, hash]: any) => {
+            Event3dEmitter.emit('ObjectTextureChanged', {
+              objectId: id,
+              label,
+              hash
+            });
+          });
+        } else if (entries?.string?.object_color) {
           Event3dEmitter.emit('ObjectTextureChanged', {
-            objectId: entries.texture.name,
-            hash: id
-            // textureColor
+            objectId: id,
+            label: 'object_color',
+            hash: entries.string.object_color
           });
         }
         break;
       }
-
       case MsgType.SET_WORLD: {
         console.log('Handle posbus set_world', data);
         Event3dEmitter.emit('SetWorld', data, PosBusService.userId);
@@ -138,15 +146,26 @@ class PosBusService {
 
         const {objects} = data;
         for (const object of objects) {
-          console.log('Add object', object);
+          console.log(
+            'Add object',
+            object,
+            'Attach to camera',
+            PosBusService.attachNextReceivedObjectToCamera
+          );
           // TODO we should equalise these
-          Event3dEmitter.emit('ObjectCreated', {
-            ...object,
-            asset_3d_id: object.asset_type,
-            transform: {
-              ...object.transform
-            }
-          });
+          Event3dEmitter.emit(
+            'AddObject',
+            {
+              ...object,
+              asset_3d_id: object.asset_type,
+              transform: {
+                ...object.transform
+              }
+            },
+            PosBusService.attachNextReceivedObjectToCamera
+          );
+
+          PosBusService.attachNextReceivedObjectToCamera = false;
         }
         break;
       }

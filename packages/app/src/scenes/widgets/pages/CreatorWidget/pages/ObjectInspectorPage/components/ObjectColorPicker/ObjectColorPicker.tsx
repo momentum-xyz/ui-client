@@ -26,7 +26,7 @@ const ObjectColorPage: FC = () => {
   // TODO move these to parent
   const changeUnityObjectColor = useDebouncedCallback((colorHex: string) => {
     world3dStore?.colorPickedPreview(objectId, colorHex);
-    objectColorStore.updateObjectColor(objectId, colorHex);
+    objectColorStore.updateObjectColor(objectId, colorHex.replace(/-/g, ''));
   }, DEBOUNCE_DELAY_MS);
 
   useEffect(() => {

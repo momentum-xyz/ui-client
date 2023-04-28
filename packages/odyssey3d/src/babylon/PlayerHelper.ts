@@ -28,7 +28,7 @@ import {posToVec3, vec3ToPos, smoothUserNodeTransform, TransformTypesEnum} from 
 const NORMAL_SPEED = 0.5;
 const FAST_SPEED = 1.5;
 const PLAYER_OFFSET = new Vector3(0, -0.5, 3);
-const PLAYER_OFFSET_RH = new Vector3(0, -0.5, -3);
+export const PLAYER_OFFSET_RH = new Vector3(0, -0.5, -3);
 
 // TODO: Set this from PosBusSelfPosMsg
 const CAMERA_POS = new Vector3(50, 50, 150);
@@ -168,8 +168,11 @@ export class PlayerHelper {
     }
     // Animations
     for (const group of instance.animationGroups) {
-      group.play(true);
+      console.log('animation group name: ' + group.name);
+      //group.play(true);
     }
+    instance.animationGroups[4].loopAnimation = true;
+    instance.animationGroups[4].play();
 
     this.playerInstance = instance;
   }
