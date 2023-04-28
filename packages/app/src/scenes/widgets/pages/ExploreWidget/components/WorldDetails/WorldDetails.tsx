@@ -55,7 +55,7 @@ const WorldDetails: FC<PropsInterface> = ({
       >
         <styled.Wrapper>
           <ProfileImage
-            name={world.name}
+            name={world.name || world.id}
             image={world.avatarHash}
             imageErrorIcon="rabbit_fill"
             byName={world.owner_name || ''}

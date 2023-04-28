@@ -40,8 +40,12 @@ export const ItemNameContainer = styled.div`
 `;
 
 export const ItemName = styled.div`
+  max-width: 270px;
   text-transform: uppercase;
   letter-spacing: 0.2em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 
   &.normal {
     line-height: var(--font-size-xl);
