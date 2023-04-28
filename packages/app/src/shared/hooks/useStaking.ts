@@ -70,9 +70,17 @@ export const useStaking = () => {
     [momContract?.methods, account, stakingContract?.methods]
   );
 
-  const unstake = () => {
-    console.log('TODO useStaking unstake');
-  };
+  const unstake = useCallback(
+    async (worldId: string, tokenKind = TokenEnum.MOM_TOKEN) => {
+      console.log('useStaking unstake');
+      const nftId = '0x' + worldId.replace(/-/g, '');
+
+      console.log('useStaking unstake from nftId', nftId, tokenKind);
+      const result = await stakingContract?.methods.unstake(nftId, tokenKind).send({from: account});
+      console.log('useStaking unstake result', result);
+    },
+    [account, stakingContract?.methods]
+  );
 
   const claimRewards = useCallback(async () => {
     console.log('useStaking claimRewards');
