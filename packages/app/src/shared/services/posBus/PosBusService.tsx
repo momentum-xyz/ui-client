@@ -125,7 +125,8 @@ class PosBusService {
               hash
             });
           });
-        } else if (entries?.string?.object_color) {
+        }
+        if (entries?.string?.object_color) {
           Event3dEmitter.emit('ObjectTextureChanged', {
             objectId: id,
             label: 'object_color',
