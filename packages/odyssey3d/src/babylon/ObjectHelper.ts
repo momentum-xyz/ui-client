@@ -133,6 +133,9 @@ export class ObjectHelper {
         this.textureRootUrl + SkyboxHelper.defaultSkyboxTextureSize + '/' + texture.hash
       );
       return;
+    } else if (texture.label === 'object_color') {
+      console.log('TODO setting object color', texture);
+      return;
     }
 
     const meshes = this.objectsMap.get(this.firstID)?.objectInstance.rootNodes[0].getChildMeshes();
