@@ -6,6 +6,7 @@ import {useMutableCallback} from '@momentum-xyz/ui-kit';
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
 import {PlayerHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babylon';
 import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
+import skyboxWorld from '../../static/PANOSKYGB.jpeg';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
   const onObjectClick = useMutableCallback(callbacks.onObjectClick);
@@ -50,7 +51,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
       //SkyboxHelper.setCubemapSkybox(scene);
       SkyboxHelper.set360Skybox(
         scene,
-        'https://dev2.odyssey.ninja/api/v3/render/texture/s8/26485e74acb29223ba7a9fa600d36c7f'
+        //'https://dev2.odyssey.ninja/api/v3/render/texture/s8/26485e74acb29223ba7a9fa600d36c7f'
+        skyboxWorld
       );
 
       if (window.sessionStorage.getItem('babylon_debug')) {
