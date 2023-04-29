@@ -1,11 +1,12 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useNavigate} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {Menu, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {WidgetEnum} from 'core/enums';
+import {getImageAbsoluteUrl} from 'core/utils';
 
 import * as styled from './WidgetMenuPage.styled';
 
@@ -24,6 +25,15 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
   const {isMyWorld, world3dStore} = universeStore;
 
   const navigate = useNavigate();
+
+  const ODYSSEY_ITEMS: MenuItemExtendedInterface[] = sessionStore.worldList.map((world) => ({
+    key: WidgetEnum.GO_TO,
+    position: PositionEnum.LEFT,
+    iconName: !world.avatarHash ? 'rabbit_fill' : undefined,
+    image: getImageAbsoluteUrl(world.avatarHash) || undefined,
+    isHidden: isWorld,
+    onClick: () => navigate(generatePath(ROUTES.odyssey.base, {worldId: world.id}))
+  }));
 
   const MENU_ITEMS: MenuItemExtendedInterface[] = [
     {
@@ -62,6 +72,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
       isHidden: isGuest,
       onClick: toggle
     },
+    ...ODYSSEY_ITEMS,
     {
       key: WidgetEnum.STAKING,
       position: PositionEnum.CENTER,

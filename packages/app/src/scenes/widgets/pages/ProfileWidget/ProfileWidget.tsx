@@ -25,8 +25,6 @@ const ProfileWidget: FC = () => {
   const {t} = useI18n();
 
   useEffect(() => {
-    profileStore.init(sessionStore.userId);
-
     return () => {
       profileStore.resetModel();
     };
@@ -115,7 +113,7 @@ const ProfileWidget: FC = () => {
                 <ProfileView
                   user={sessionStore.user}
                   defaultWalletId={nftStore.defaultWalletId}
-                  worldList={profileStore.worldList}
+                  worldList={sessionStore.worldList}
                   onVisitWorld={onVisitWorld}
                   onInfoWorld={onInfoWorld}
                 />
