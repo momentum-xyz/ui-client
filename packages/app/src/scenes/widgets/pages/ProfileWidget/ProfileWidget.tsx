@@ -133,15 +133,15 @@ const ProfileWidget: FC = () => {
               {activeMenuId === 'settings' && (
                 <ProfileSettings
                   inputAudioDeviceId={userDevicesStore.currentAudioInput?.deviceId}
-                  outputAudioDeviceId={userDevicesStore.currentAudioInput?.deviceId} // TODO: Connect;
+                  outputAudioDeviceId={userDevicesStore.currentAudioOutput?.deviceId}
                   inputAudioDeviceList={userDevicesStore.audioInputOptions}
                   outputAudioDeviceList={userDevicesStore.audioOutputOptions}
+                  onCancel={() => setActiveMenuId('viewProfile')}
                   onChangeAudioDevices={(inputId, outputId) => {
                     userDevicesStore.selectAudioInput(inputId || '');
-                    // userDevicesStore.selectAudioInput(inputId || ''); // TODO: Connect;
+                    userDevicesStore.selectAudioOutput(outputId || '');
+                    setActiveMenuId('viewProfile');
                   }}
-                  onCancel={() => setActiveMenuId('viewProfile')}
-                  isUpdating={false}
                 />
               )}
 

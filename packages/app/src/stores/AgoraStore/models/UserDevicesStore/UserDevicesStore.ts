@@ -14,13 +14,14 @@ const UserDevicesStore = types
         microphoneConsent: false,
         microphoneAccessDialog: types.optional(Dialog, {}),
         microphoneRequirementDialog: types.optional(Dialog, {}),
-        muted: true,
-        isTogglingMicrophone: false
+        isTogglingMicrophone: false,
+        muted: true
       })
       .volatile<{
         audioInputs: InputDeviceInfo[];
         audioOutputs: MediaDeviceInfo[];
-        _currentAudioInput?: MediaDeviceInfo;
+        _currentAudioInput?: InputDeviceInfo;
+        _currentAudioOutput?: MediaDeviceInfo;
         _localAudioTrack?: IMicrophoneAudioTrack;
       }>(() => ({
         audioInputs: [],
@@ -40,14 +41,20 @@ const UserDevicesStore = types
         label: input.label
       }));
     },
-    get currentAudioInput(): MediaDeviceInfo | undefined {
+    get currentAudioInput(): InputDeviceInfo | undefined {
       return self._currentAudioInput;
+    },
+    set currentAudioInput(info: InputDeviceInfo | undefined) {
+      self._currentAudioInput = info;
+    },
+    get currentAudioOutput(): MediaDeviceInfo | undefined {
+      return self._currentAudioOutput;
+    },
+    set currentAudioOutput(info: MediaDeviceInfo | undefined) {
+      self._currentAudioOutput = info;
     },
     get localAudioTrack(): IMicrophoneAudioTrack | undefined {
       return self._localAudioTrack;
-    },
-    set currentAudioInput(info: MediaDeviceInfo | undefined) {
-      self._currentAudioInput = info;
     },
     set localAudioTrack(microphoneTrack: IMicrophoneAudioTrack | undefined) {
       self._localAudioTrack = microphoneTrack;
@@ -119,20 +126,25 @@ const UserDevicesStore = types
         self.audioOutputs = devices.filter((i: MediaDeviceInfo) => i.kind === 'audiooutput');
 
         try {
-          self.currentAudioInput =
-            self.audioInputs.find(
-              (item) => item.deviceId === storage.get(StorageKeyEnum.PreferredAudioInput)
-            ) ?? (yield AgoraRTC.getMicrophones())[0];
+          const storedInputId = storage.get<string>(StorageKeyEnum.PreferredAudioInput);
+          const foundInput = self.audioInputs.find((item) => item.deviceId === storedInputId);
+          self.currentAudioInput = foundInput || (yield AgoraRTC.getMicrophones())[0];
+
+          const storedOutputId = storage.get<string>(StorageKeyEnum.PreferredAudioOutput);
+          const foundOutput = self.audioOutputs.find((item) => item.deviceId === storedOutputId);
+          self.currentAudioOutput = foundOutput || (yield AgoraRTC.getPlaybackDevices())[0];
         } catch (error) {
           console.error('[UserDevicesStore] Got audio devices error!', error);
         }
       }
     }),
     selectAudioInput(deviceId: string) {
-      const device = self.audioInputs.find((device) => device.deviceId === deviceId);
-      self.currentAudioInput = device;
-
+      self.currentAudioInput = self.audioInputs.find((device) => device.deviceId === deviceId);
       storage.set(StorageKeyEnum.PreferredAudioInput, deviceId);
+    },
+    selectAudioOutput(deviceId: string) {
+      self.currentAudioOutput = self.audioOutputs.find((device) => device.deviceId === deviceId);
+      storage.set(StorageKeyEnum.PreferredAudioOutput, deviceId);
     },
     createLocalTracks: flow(function* (
       createAudioTrack: (
