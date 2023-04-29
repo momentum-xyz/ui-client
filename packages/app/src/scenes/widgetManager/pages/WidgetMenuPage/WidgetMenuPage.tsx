@@ -64,16 +64,16 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
     },
     {
       key: WidgetEnum.STAKING,
-      // position: PositionEnum.CENTER,
-      position: PositionEnum.RIGHT, // TEMP, TODO fix widget manager
+      position: PositionEnum.CENTER,
+      viewPosition: PositionEnum.RIGHT,
       iconName: 'stake',
       onClick: toggle,
       isHidden: !isWorld || isGuest
     },
     {
       key: WidgetEnum.CREATOR,
-      // position: PositionEnum.CENTER,
-      position: PositionEnum.RIGHT, // TEMP, TODO fix widget manager
+      position: PositionEnum.CENTER,
+      viewPosition: PositionEnum.RIGHT,
       iconName: 'pencil',
       isHidden: !isWorld || !isMyWorld,
       onClick: toggle

@@ -17,6 +17,7 @@ export interface MenuItemInterface<T> {
   iconIndicator?: HexagonIndicatorType;
   tooltip?: string;
   position: PositionEnum;
+  viewPosition?: PositionEnum;
   subMenuItems?: MenuItemInterface<T>[];
   onClick?: (key: T, position: PositionEnum) => void;
 }
@@ -106,7 +107,7 @@ const Menu = <T,>({activeKeys = [], items = []}: MenuPropsInterface<T>) => {
           indicator={action.iconIndicator}
           isActive={activeKeys.includes(action.key)}
           onClick={() => {
-            action.onClick?.(action.key, action.position);
+            action.onClick?.(action.key, action.viewPosition || action.position);
           }}
         />
       ))}
