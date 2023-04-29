@@ -549,6 +549,8 @@ export const enGb = {
       removeSkyboxCurrentConfirmation:
         'This Skybox is your Current skybox; removing this will change your skybox to the default one.',
       removeSkyboxFinalConfirmation: 'Are you sure you want to do this?',
+      uploadAssetInfoTitle: 'Drag and drop your asset here',
+      uploadAssetInfoDescription: 'We support GLB Models & the max file size cannot exceed 50mb',
       uploadCustomSkyboxInfoTitle: 'Drag and drop your custom skybox here',
       uploadCustomSkyboxInfoDescription:
         'Your image must be a 360-degree image. This will allow your skybox to fully surround and immerse you in your world. To avoid any pixelation or distortion, we recommend that your image is high-resolution. Our preferred resolution for images is 4k x 2k, but 2k x 1k is acceptable.',
@@ -645,11 +647,14 @@ export const enGb = {
       worldname: 'worldname',
       selectPlugin: 'Select Plugin',
       nameYourAssetForYourLibrary: 'Name your Asset for your library',
+      nameYourAsset: 'Name your Asset*',
+      nameTheArtist: 'Name the Artist',
       selectAnOption: 'Select an Option',
       nameYourObjectNavigation: 'Name your Object (Navigation)',
       selectAccount: 'Select Account',
       searchCommunityLibrary: 'Search Community Library',
-      searchPrivateLibrary: 'Search Private Library'
+      searchPrivateLibrary: 'Search Private Library',
+      defaultAssetName: 'Default Asset Name'
     },
     fields: {
       nickname: 'Nickname',

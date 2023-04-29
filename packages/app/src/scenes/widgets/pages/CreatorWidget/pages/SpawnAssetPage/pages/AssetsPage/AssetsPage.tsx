@@ -11,16 +11,20 @@ interface PropsInterface {
   assetCategory: Asset3dCategoryEnum;
   showPreview?: boolean;
   setFunctionalityAfterCreation?: boolean;
+  assetPageHeader?: string;
 }
 
 const AssetsPage: FC<PropsInterface> = ({
   assetCategory,
   // TODO remove?
   setFunctionalityAfterCreation = false,
-  showPreview
+  showPreview,
+  assetPageHeader
 }) => {
   const {creatorStore} = useStore();
   const {spawnAssetStore} = creatorStore;
+
+  const assetList = spawnAssetStore.filteredAsset3dList(assetCategory);
 
   useEffect(() => {
     spawnAssetStore.fetchAssets3d(assetCategory);
@@ -31,13 +35,21 @@ const AssetsPage: FC<PropsInterface> = ({
   }, [spawnAssetStore, assetCategory]);
 
   return (
-    <styled.Contaier>
-      <AssetsGrid
-        assets={spawnAssetStore.filteredAsset3dList(assetCategory)}
-        showPreview={showPreview}
-        onSelected={spawnAssetStore.selectAsset}
-      />
-    </styled.Contaier>
+    <styled.Container>
+      {assetPageHeader && (
+        <styled.Header>
+          <span>{assetPageHeader}</span>
+          <span>{assetList.length}</span>
+        </styled.Header>
+      )}
+      <styled.GridContainer>
+        <AssetsGrid
+          assets={assetList}
+          showPreview={showPreview}
+          onSelected={spawnAssetStore.selectAsset}
+        />
+      </styled.GridContainer>
+    </styled.Container>
   );
 };
 

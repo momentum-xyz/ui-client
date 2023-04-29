@@ -20,7 +20,7 @@ export const SkyboxList = ({skyboxes, onSkyboxSelect}: PropsInterface): JSX.Elem
             <Frame>
               <styled.SkyboxInnerContainer>
                 <Image src={sb.image} height={160} bordered />
-                <span>{sb.name}</span>
+                <styled.SkyboxName>{sb.name}</styled.SkyboxName>
               </styled.SkyboxInnerContainer>
             </Frame>
           </styled.SkyboxContainer>

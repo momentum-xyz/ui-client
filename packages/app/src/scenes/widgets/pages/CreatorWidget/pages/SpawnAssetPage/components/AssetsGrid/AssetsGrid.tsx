@@ -1,7 +1,7 @@
-import {Button, Text} from '@momentum-xyz/ui-kit';
-import React, {FC, useState} from 'react';
+import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Model3dPreview} from '@momentum-xyz/map3d';
+import {Frame, Image} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 
 import {Asset3dInterface} from 'core/models';
@@ -22,7 +22,7 @@ const AssetGrid: FC<PropsInterface> = ({assets, showPreview, onSelected}) => {
   if (assets.length === 0) {
     return (
       <styled.EmptyResult>
-        <Text text={t('messages.noResultsFound')} size="xs" />
+        <styled.ObjectName>{t('messages.noResultsFound')}</styled.ObjectName>
       </styled.EmptyResult>
     );
   }
@@ -39,25 +39,24 @@ const AssetGrid: FC<PropsInterface> = ({assets, showPreview, onSelected}) => {
             setHoveringAsset(null);
           }}
         >
-          {hoveringAsset !== asset || !showPreview ? (
-            <styled.GridItemImage src={asset.previewUrl} />
-          ) : (
-            <styled.GridItemPreview>
-              <Model3dPreview
-                previewUrl={asset.previewUrl}
-                delayLoadingMsec={500}
-                filename={hoveringAsset.thumbnailAssetDownloadUrl}
-              />
-            </styled.GridItemPreview>
-          )}
-          <Text text={asset.name} size="m" breakLongWord />
-          <Button
-            label={t('actions.select')}
-            size="medium"
-            onClick={() => {
-              onSelected(asset);
-            }}
-          />
+          <Frame>
+            <styled.GridItemInnerContainer onClick={() => onSelected(asset)}>
+              {hoveringAsset !== asset || !showPreview ? (
+                // <styled.GridItemImage src={asset.previewUrl} />
+                <Image src={asset.previewUrl} height={160} bordered />
+              ) : (
+                <styled.GridItemPreview>
+                  <Model3dPreview
+                    previewUrl={asset.previewUrl}
+                    delayLoadingMsec={500}
+                    filename={hoveringAsset.thumbnailAssetDownloadUrl}
+                  />
+                </styled.GridItemPreview>
+              )}
+              {/* <Text text={asset.name} size="m" breakLongWord /> */}
+              <styled.ObjectName>{asset.name}</styled.ObjectName>
+            </styled.GridItemInnerContainer>
+          </Frame>
         </styled.GridItem>
       ))}
     </styled.Grid>

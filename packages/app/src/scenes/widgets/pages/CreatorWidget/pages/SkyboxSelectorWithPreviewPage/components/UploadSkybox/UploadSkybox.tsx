@@ -117,7 +117,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
           rules={{required: true}}
           render={({field: {value, onChange}}) => (
             <styled.ImageUploadContainer
-              className={cn(!!errors.file && 'error', value && 'has-image', 'testttt')}
+              className={cn(!!errors.file && 'error', value && 'has-image')}
             >
               {!value && (
                 <styled.SkyboxInformation>
