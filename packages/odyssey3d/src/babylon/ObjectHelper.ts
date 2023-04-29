@@ -16,7 +16,6 @@ import {
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import {Object3dInterface, Texture3dInterface, ClickPositionInterface} from '@momentum-xyz/core';
-//import {GLTFFileLoader} from '@babylonjs/loaders';
 
 import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
@@ -147,7 +146,7 @@ export class ObjectHelper {
         //TODO Parse color hash to actual Color3.
         const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
         const basicShapeMat = childMeshes[0].material as PBRMaterial;
-        basicShapeMat.albedoColor = Color3.Red();
+        basicShapeMat.albedoColor = Color3.FromHexString(texture.hash);
         this.awaitingTexturesMap.delete(texture.objectId);
       }
       return;
@@ -177,12 +176,6 @@ export class ObjectHelper {
         'instance.rootNodes.length === 0. Something went wrong with loading ' + object.asset_3d_id
       );
       return;
-    }
-
-    if (instance.rootNodes.length > 1) {
-      console.log(
-        'instance.rootNodes.length > 1. Using only the first one from ' + object.asset_3d_id
-      );
     }
 
     const node = instance.rootNodes[0];
