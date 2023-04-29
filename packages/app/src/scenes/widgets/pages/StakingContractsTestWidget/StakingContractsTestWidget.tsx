@@ -6,7 +6,7 @@ import {BN} from 'bn.js';
 
 import {useStaking} from 'shared/hooks';
 
-import {SignIn} from '../LoginWidget/components';
+import {WalletSelector} from '../LoginWidget/components';
 
 const StakingContractsTestWidget: FC = () => {
   const {isWalletActive, account, stake} = useStaking();
@@ -16,7 +16,7 @@ const StakingContractsTestWidget: FC = () => {
     <div>
       <Panel variant="primary" size="normal" title="Staking TEST" icon="stake">
         {!isWalletActive && (
-          <SignIn
+          <WalletSelector
             onConnected={() => {
               console.log('Wallet connected');
             }}

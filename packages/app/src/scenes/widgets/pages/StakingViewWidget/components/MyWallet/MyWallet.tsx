@@ -12,7 +12,7 @@ import {
 import {formatBigInt} from 'core/utils';
 import {WalletModelInterface} from 'core/models';
 import {useStaking, useBlockchainAirdrop} from 'shared/hooks';
-import {SignIn} from 'scenes/widgets/pages/LoginWidget/components';
+import {WalletSelector} from 'scenes/widgets/pages/LoginWidget/components';
 
 import * as styled from './MyWallet.styled';
 
@@ -95,7 +95,7 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
             <Button icon="air" label={t('actions.startAirdrop')} onClick={handleAirdrop} />
           ) : (
             // TODO will be done automatically
-            <SignIn />
+            <WalletSelector />
           )}
         </styled.AirdropContainer>
 

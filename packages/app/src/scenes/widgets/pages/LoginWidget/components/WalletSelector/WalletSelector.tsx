@@ -7,13 +7,13 @@ import {Button, Frame} from '@momentum-xyz/ui-kit-storybook';
 import {TrustPoints, WalletLogin} from 'ui-kit';
 import {availableWallets, WalletConfigInterface} from 'wallets';
 
-import * as styled from './SignIn.styled';
+import * as styled from './WalletSelector.styled';
 
 interface PropsInterface {
   onConnected?: () => void;
 }
 
-const SignIn: FC<PropsInterface> = ({onConnected}) => {
+const WalletSelector: FC<PropsInterface> = ({onConnected}) => {
   const {t} = useI18n();
 
   const [selectedWallet, setSelectedWallet] = useState<WalletConfigInterface | null>(null);
@@ -91,4 +91,4 @@ const SignIn: FC<PropsInterface> = ({onConnected}) => {
   );
 };
 
-export default observer(SignIn);
+export default observer(WalletSelector);

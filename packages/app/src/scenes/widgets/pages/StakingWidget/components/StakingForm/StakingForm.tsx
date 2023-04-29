@@ -15,7 +15,7 @@ import {useI18n} from '@momentum-xyz/core';
 
 import {useStaking, useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
-import {SignIn} from 'scenes/widgets/pages/LoginWidget/components';
+import {WalletSelector} from 'scenes/widgets/pages/LoginWidget/components';
 // import {convertToHex} from 'core/utils';
 //import {NewsfeedTypeEnum} from 'core/enums';
 
@@ -276,7 +276,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
                 </styled.LabeledLineContainer>
               </styled.Section>
             </div>
-            {!isWalletActive && <SignIn />}
+            {!isWalletActive && <WalletSelector />}
             <styled.Buttons>
               {/* <Button label={t('staking.back')} onClick={() => setActiveTab(tabBarTabs[0])} /> */}
               <Button
