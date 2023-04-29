@@ -85,7 +85,7 @@ export const SelectedPage: FC = () => {
         <styled.ObjectTitle>{asset.name}</styled.ObjectTitle>
 
         {/* Where to get the data for the bellow stuff? */}
-        <styled.Row>
+        {/* <styled.Row>
           <styled.Prop>
             <styled.PropName>Size:</styled.PropName>
             <styled.PropValue>12.3 mb</styled.PropValue>
@@ -98,7 +98,7 @@ export const SelectedPage: FC = () => {
             <styled.PropName>Vertices:</styled.PropName>
             <styled.PropValue>7.81k</styled.PropValue>
           </styled.Prop>
-        </styled.Row>
+        </styled.Row> */}
 
         <styled.Row>
           <styled.Prop>

@@ -126,9 +126,13 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
         <SkyboxPreview
           skybox={previewSkybox}
           onSkyboxSelect={(sb) => {
-            saveItem(sb.id, worldId).catch((err) => {
-              toast.error(err.message);
-            });
+            saveItem(sb.id, worldId)
+              .then(() => {
+                setPreviewSkybox(null);
+              })
+              .catch((err) => {
+                toast.error(err.message);
+              });
           }}
           onSkyboxDelete={(sb) => {
             skyboxSelectorStore.openSkyboxDeletion(sb.id);
