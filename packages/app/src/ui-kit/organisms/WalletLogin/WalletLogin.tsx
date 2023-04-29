@@ -12,7 +12,7 @@ import * as styled from './WalletLogin.styled';
 interface PropsInterface {
   walletConf: WalletConfigInterface;
   attachSecondaryAccount?: boolean;
-  onConnected: () => void;
+  onConnected?: () => void;
   onError?: (error: any) => void;
 }
 

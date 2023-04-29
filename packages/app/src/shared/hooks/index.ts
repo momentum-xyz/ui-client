@@ -5,3 +5,4 @@ export * from './useSupernova';
 export * from './useApiHandlers';
 export * from './useNavigation';
 export * from './useStaking';
+export * from './useBlockchainAirdrop';

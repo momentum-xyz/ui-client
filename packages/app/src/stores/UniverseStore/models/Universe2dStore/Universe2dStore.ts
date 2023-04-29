@@ -14,6 +14,7 @@ import {
   UserInfoModelInterface,
   WorldInfoModelInterface
 } from 'core/models';
+import {BN_ONE} from 'core/constants';
 
 const Universe2dStore = types.compose(
   ResetModel,
@@ -87,7 +88,7 @@ const Universe2dStore = types.compose(
           .sort((a, b) => {
             const aBN = new BN(a.stake_total || '0');
             const bBN = new BN(b.stake_total || '0');
-            return bBN.sub(aBN).toNumber();
+            return bBN.sub(aBN).mod(BN_ONE).toNumber();
           })
           .slice(0, 6);
       },

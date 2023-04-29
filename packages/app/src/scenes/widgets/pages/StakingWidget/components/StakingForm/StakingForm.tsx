@@ -13,8 +13,9 @@ import {toast} from 'react-toastify';
 import BN from 'bn.js';
 import {useI18n} from '@momentum-xyz/core';
 
-import {useStore} from 'shared/hooks';
+import {useStaking, useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
+import {SignIn} from 'scenes/widgets/pages/LoginWidget/components';
 // import {convertToHex} from 'core/utils';
 //import {NewsfeedTypeEnum} from 'core/enums';
 
@@ -33,13 +34,14 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   const {sessionStore, nftStore} = useStore();
   const {wallet: authWallet} = sessionStore;
   const {
-    balanceTotal,
-    balanceReserved,
+    // balanceTotal,
+    // balanceReserved,
     balanceTransferrable,
     canBeStaked,
     addresses,
     accountOptions,
     nftItems,
+    chainDecimals,
     tokenSymbol
   } = nftStore;
 
@@ -75,11 +77,12 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
     }
   ];
 
-  const [activeTab, setActiveTab] = useState<TabBarTabInterface>(tabBarTabs[0]);
+  const [activeTab, setActiveTab] = useState<TabBarTabInterface>(tabBarTabs[1]);
   const [amountString, setAmountString] = useState(DEFAULT_STAKING_AMOUNT.toString());
   const amountStringValueCheckRegex = /^\d{1,12}((\.|,)\d{0,4})?$/;
 
-  const amountAtoms = new BN(+amountString * 1_000).mul(new BN(Math.pow(10, 9)));
+  // this allows us to use decimals while also validating with BN
+  const amountAtoms = new BN(+amountString * 1_000).mul(new BN(Math.pow(10, chainDecimals - 3)));
 
   const nft = nftItems.find((nft) => nft.uuid === nftItemId);
   // const myNft = nftItems.find((nft) => nft.owner === wallet);
@@ -88,10 +91,16 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   console.log('StakingForm', {wallet, addresses, authWallet, amountString, amountAtoms, nft});
   console.log('initiatorAccount', initiatorAccount, nft);
 
+  const {isWalletActive, account, stake} = useStaking();
+  // TODO make sure account === selectedAccount
+
+  console.log('StakeForm useStaking', {isWalletActive, account, stake});
+
   const onStake = async (amountAtoms: BN) => {
     try {
       console.log('onStake', wallet, nftItemId, amountAtoms);
-      await nftStore.stake(wallet, amountAtoms, nftItemId);
+      // await nftStore.stake(wallet, amountAtoms, nftItemId);
+      await stake(nftItemId as string, amountAtoms);
 
       // if (myNft && nft) {
       //   const isMutual = nftStore.stakingAtMe.has(nft.owner);
@@ -117,18 +126,18 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
       //     //await widgetsStore.exploreStore.createMutualDocks(walletAHex, walletBHex);
       //   }
 
-      //   console.log('stake success');
-      //   toast.info(
-      //     <ToastContent
-      //       headerIconName="alert"
-      //       title={t('staking.stakeSuccessTitle')}
-      //       text={t('staking.stakeSuccess', {
-      //         amount: amountString,
-      //         name: nft?.name
-      //       })}
-      //       showCloseButton
-      //     />
-      //   );
+      console.log('stake success');
+      toast.info(
+        <ToastContent
+          headerIconName="alert"
+          title={t('staking.stakeSuccessTitle')}
+          text={t('staking.stakeSuccess', {
+            amount: amountString,
+            name: nft?.name
+          })}
+          showCloseButton
+        />
+      );
       // }
     } catch (err) {
       console.log('stake error', err);
@@ -154,9 +163,9 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   };
 
   const balanceSections = [
-    {label: t('staking.balanceTypes.account'), value: balanceTotal},
-    {label: t('staking.balanceTypes.transferable'), value: balanceTransferrable},
-    {label: t('staking.balanceTypes.staked'), value: balanceReserved}
+    // {label: t('staking.balanceTypes.account'), value: balanceTotal},
+    {label: t('staking.balanceTypes.transferable'), value: balanceTransferrable}
+    // {label: t('staking.balanceTypes.staked'), value: balanceReserved}
     // {label: 'Unbonding', value: null}
   ].map(({label, value}) => (
     <styled.BalanceEntityContainer key={label}>
@@ -171,10 +180,10 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   const validStringCheck = (val: string): boolean => !val || amountStringValueCheckRegex.test(val);
 
   // TEMP disable
-  if (!nft) {
-    console.log('StakingForm - no nft found');
-    return null;
-  }
+  // if (!nft) {
+  //   console.log('StakingForm - no nft found');
+  //   return null;
+  // }
 
   return (
     <styled.Container>
@@ -263,17 +272,18 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
                   <styled.LabeledLineLabelContainer>
                     <Text size="xxs" align="right" text={t('staking.destination')} />
                   </styled.LabeledLineLabelContainer>
-                  <Text size="xxs" text={`${nft.name} ${nft.owner.substring(0, 20)}...`} />
+                  {/* <Text size="xxs" text={`${nft.name} ${nft.owner.substring(0, 20)}...`} /> */}
                 </styled.LabeledLineContainer>
               </styled.Section>
             </div>
+            {!isWalletActive && <SignIn />}
             <styled.Buttons>
-              <Button label={t('staking.back')} onClick={() => setActiveTab(tabBarTabs[0])} />
+              {/* <Button label={t('staking.back')} onClick={() => setActiveTab(tabBarTabs[0])} /> */}
               <Button
                 label={t('staking.next')}
                 onClick={() => setActiveTab(tabBarTabs[2])}
                 disabled={
-                  !amountString || isBalanceTooLow
+                  !amountString || isBalanceTooLow || !isWalletActive
                   // || isStakingInSelf
                 }
               />
