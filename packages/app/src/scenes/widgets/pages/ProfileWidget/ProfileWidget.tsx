@@ -138,8 +138,8 @@ const ProfileWidget: FC = () => {
                   outputAudioDeviceList={userDevicesStore.audioOutputOptions}
                   onCancel={() => setActiveMenuId('viewProfile')}
                   onChangeAudioDevices={(inputId, outputId) => {
-                    userDevicesStore.selectAudioInput(inputId || '');
-                    userDevicesStore.selectAudioOutput(outputId || '');
+                    agoraStore.selectAudioInput(inputId || '');
+                    agoraStore.selectAudioOutput(outputId || '');
                     setActiveMenuId('viewProfile');
                   }}
                 />
