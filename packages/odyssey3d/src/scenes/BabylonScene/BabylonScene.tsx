@@ -7,6 +7,7 @@ import {Odyssey3dPropsInterface} from '../../core/interfaces';
 import {PlayerHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babylon';
 import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
 import skyboxWorld from '../../static/PANOSKYGB.jpeg';
+import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
   const onObjectClick = useMutableCallback(callbacks.onObjectClick);
@@ -14,6 +15,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
   const onMove = useMutableCallback(callbacks.onMove);
   const onObjectTransform = useMutableCallback(callbacks.onObjectTransform);
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);
+  // Sent from user1 to BE to trigger sparkles
   // const onBumpReady = useMutableCallback(callbacks.onBumpReady);
   // TODO handle it
 
@@ -39,6 +41,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
     if (view?.id) {
       PlayerHelper.initialize(scene, view, true, onMove);
       LightHelper.initialize(scene);
+      InteractionEffectHelper.initialize(scene);
+
       ObjectHelper.initialize(
         scene,
         engine,
@@ -106,13 +110,16 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         ObjectHelper.detachFromCamera();
       });
 
-      /*events.on('SendHighFive', (userId) => {
+      // Received by user1 to spawn particles
+      events.on('SendHighFive', (userId) => {
         console.log('TODO Babylon handle SendHighFive to', userId);
       });
+      // Received by user2 to spawn particles
       events.on('ReceiveHighFive', (userId) => {
         console.log('TODO Babylon handle ReceiveHighFive from', userId);
-      });*/
+      });
 
+      // Received by user1 to start chasing
       events.on('TriggerBump', (userId) => {
         console.log('TODO Babylon handle TriggerBump', userId);
 
