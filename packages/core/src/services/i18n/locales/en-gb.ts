@@ -549,7 +549,9 @@ export const enGb = {
       removeSkyboxCurrentConfirmation:
         'This Skybox is your Current skybox; removing this will change your skybox to the default one.',
       removeSkyboxFinalConfirmation: 'Are you sure you want to do this?',
-      uploadCustomSkyboxInfoTitle: 'Uploading a Custom Skybox',
+      uploadCustomSkyboxInfoTitle: 'Drag and drop your custom skybox here',
+      uploadCustomSkyboxInfoDescription:
+        'Your image must be a 360-degree image. This will allow your skybox to fully surround and immerse you in your world. To avoid any pixelation or distortion, we recommend that your image is high-resolution. Our preferred resolution for images is 4k x 2k, but 2k x 1k is acceptable.',
       uploadCustomSkyboxInfoLine1:
         'To ensure that your skybox looks its best, we have a few specifications to keep in mind when uploading your image.',
       uploadCustomSkyboxInfoLine2:
@@ -609,7 +611,12 @@ export const enGb = {
       owner: 'Owner',
       colourPicker: 'Colour Picker',
       setSpawnPoint: 'Set Spawn Point',
-      statistics: 'Statistics'
+      statistics: 'Statistics',
+      communitySkyboxLibrary: 'Community Skybox Library',
+      privateSkyboxLibrary: 'Private Skybox Library',
+      odysseySkyboxLibraryHeader: 'Odyssey Library',
+      communitySkyboxLibraryHeader: 'Community',
+      privateSkyboxLibraryHeader: 'Private Library'
     },
     textMessage: {
       you: 'you',
@@ -640,7 +647,9 @@ export const enGb = {
       nameYourAssetForYourLibrary: 'Name your Asset for your library',
       selectAnOption: 'Select an Option',
       nameYourObjectNavigation: 'Name your Object (Navigation)',
-      selectAccount: 'Select Account'
+      selectAccount: 'Select Account',
+      searchCommunityLibrary: 'Search Community Library',
+      searchPrivateLibrary: 'Search Private Library'
     },
     fields: {
       nickname: 'Nickname',
@@ -785,6 +794,8 @@ export const enGb = {
       changeText: 'Change Text',
       changeImage: 'Change Image',
       selectImage: 'Select Image',
+      uploadYourAsset: 'UPLOAD YOUR ASSET',
+      uploadCustomSkybox: 'Upload Custom Skybox',
       move: 'Move',
       rotate: 'Rotate',
       scale: 'Scale',
