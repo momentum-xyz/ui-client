@@ -4,6 +4,8 @@ import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
 
 import {
+  FetchBigStakersListRequest,
+  FetchBigStakersListResponse,
   FetchMeRequest,
   FetchMeResponse,
   FetchMyStakesRequest,
@@ -49,6 +51,13 @@ export const fetchUserList: RequestInterface<FetchUserListRequest, FetchUserList
   const {limit, sortDirection, ...restOptions} = options;
   restOptions.params = {sort: sortDirection, limit};
   return request.get(userRepositoryEndpoints().list, restOptions);
+};
+
+export const fetchBigStakersList: RequestInterface<
+  FetchBigStakersListRequest,
+  FetchBigStakersListResponse
+> = (options) => {
+  return request.get(userRepositoryEndpoints().bigStakers, options);
 };
 
 export const fetchOwnedWorldList: RequestInterface<

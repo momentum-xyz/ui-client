@@ -33,8 +33,6 @@ const UserList: FC<PropsInterface> = ({
 }) => {
   const {t} = useI18n();
 
-  console.log(searchResults);
-
   return (
     <styled.Wrapper data-testid="UserList-test">
       <Frame>
