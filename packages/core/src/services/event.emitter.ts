@@ -37,6 +37,8 @@ export type Event3dType = {
   SendHighFive: (userId: string) => void;
   ReceiveHighFive: (fromUserId: string) => void;
 
+  TriggerBump: (userId: string) => void;
+
   // ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
 };
 
