@@ -67,7 +67,10 @@ const SpawnAssetPage: FC = () => {
               label={t('labels.uploadCustomObject')}
               wide
               icon="astro"
-              onClick={() => setActiveTab('upload')}
+              onClick={() => {
+                setActiveTab('upload');
+                selectAsset(null);
+              }}
             />
           </styled.ControlsInnerContainer>
         </Frame>

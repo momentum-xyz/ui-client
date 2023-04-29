@@ -8,7 +8,6 @@ export const Container = styled.div`
   min-height: calc(100vh - 370px);
   max-height: calc(100vh - 370px);
   overflow: scroll;
-  min-height: calc(100vh - 370px);
   justify-content: space-between;
 `;
 export const SkyboxInfoContainer = styled.div`

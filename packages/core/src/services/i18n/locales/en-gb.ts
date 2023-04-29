@@ -649,7 +649,8 @@ export const enGb = {
       nameYourObjectNavigation: 'Name your Object (Navigation)',
       selectAccount: 'Select Account',
       searchCommunityLibrary: 'Search Community Library',
-      searchPrivateLibrary: 'Search Private Library'
+      searchPrivateLibrary: 'Search Private Library',
+      defaultAssetName: 'Default Asset Name'
     },
     fields: {
       nickname: 'Nickname',
