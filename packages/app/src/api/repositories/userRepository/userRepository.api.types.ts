@@ -24,6 +24,13 @@ export interface UserInfoInterface {
   profile: UserProfileInterface;
 }
 
+export interface BigStakerInfoInterface {
+  user_id: string;
+  name: string;
+  avatarHash: string | null;
+  stake_count: number;
+}
+
 export interface StakeInterface {
   wallet_id: string;
   amount: string;
@@ -81,6 +88,12 @@ export interface FetchUserListRequest {
 }
 
 export interface FetchUserListResponse extends Array<UserInfoInterface> {}
+
+/** FETCH BIG STAKERS LIST **/
+
+export interface FetchBigStakersListRequest {}
+
+export interface FetchBigStakersListResponse extends Array<BigStakerInfoInterface> {}
 
 /** FETCH OWNED WORLD LIST **/
 

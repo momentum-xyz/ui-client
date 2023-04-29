@@ -20,7 +20,7 @@ import {HighFiveContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 import * as styled from './WorldPage.styled';
 
 const WorldPage: FC = () => {
-  const {agoraStore, universeStore, widgetsStore, widgetManagerStore} = useStore();
+  const {agoraStore, universeStore, widgetsStore, widgetManagerStore, sessionStore} = useStore();
   const {world3dStore} = universeStore;
 
   const navigate = useNavigate();
@@ -131,6 +131,18 @@ const WorldPage: FC = () => {
     {maxWait: 250}
   );
 
+  const handleBumpReady = () => {
+    const sender_id = sessionStore.user?.id;
+    if (world3dStore?.waitingForBumpEffectReadyUserId && sender_id) {
+      const receiverId = world3dStore.waitingForBumpEffectReadyUserId;
+      world3dStore.setWaitingForBumpEffectReadyUserId(null);
+
+      console.log('Bump effect ready - sendHighFive from', sender_id, 'to', receiverId);
+      PosBusService.sendHighFive(sender_id, receiverId);
+      Event3dEmitter.emit('SendHighFive', receiverId);
+    }
+  };
+
   // usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
   //   if (sessionStore.userId === userId) {
   //     toast.info(
@@ -231,6 +243,7 @@ const WorldPage: FC = () => {
         onObjectTransform={handleObjectTransform}
         onUserClick={handleUserClick}
         onClickOutside={handleClickOutside}
+        onBumpReady={handleBumpReady}
       />
     </styled.Inner>
   );

@@ -12,7 +12,6 @@ import {UnityControlInterface} from '@momentum-xyz/sdk';
 import {GizmoTypeEnum, PosBusEventEnum} from 'core/enums';
 import {UnityPositionInterface} from 'core/interfaces';
 import {getRootStore} from 'core/utils';
-import {PosBusService} from 'shared/services';
 
 const DEFAULT_UNITY_VOLUME = 0.75;
 // const UNITY_VOLUME_STEP = 0.1;
@@ -37,6 +36,8 @@ const World3dStore = types
     isCreatorMode: false,
     selectedObjectId: types.maybeNull(types.string),
     attachedToCameraObjectId: types.maybeNull(types.string),
+
+    waitingForBumpEffectReadyUserId: types.maybeNull(types.string),
 
     gizmoMode: types.optional(
       types.enumeration(Object.values(GizmoTypeEnum)),
@@ -123,12 +124,25 @@ const World3dStore = types
       // UnityService.setKeyboardControl(isActive);
     },
     sendHighFive(receiverId: string): void {
-      console.log('sendHighFive', receiverId);
+      console.log('World3dStore: sendHighFive', receiverId);
+      if (self.waitingForBumpEffectReadyUserId) {
+        console.log(
+          'World3dStore: sendHighFive: already waitingForBumpEffectReadyUserId',
+          self.waitingForBumpEffectReadyUserId,
+          ' - ignore'
+        );
+        return;
+      }
+
       const sender_id = getRootStore(self).sessionStore.user?.id;
       if (sender_id) {
-        console.log('sendHighFive from', sender_id, 'to', receiverId);
-        PosBusService.sendHighFive(sender_id, receiverId);
-        Event3dEmitter.emit('SendHighFive', receiverId);
+        // console.log('sendHighFive from', sender_id, 'to', receiverId);
+        // PosBusService.sendHighFive(sender_id, receiverId);
+        // Event3dEmitter.emit('SendHighFive', receiverId);
+
+        console.log('Request Bump from', sender_id, 'to', receiverId);
+        self.waitingForBumpEffectReadyUserId = receiverId;
+        Event3dEmitter.emit('TriggerBump', receiverId);
       }
     },
     pause(): void {
@@ -234,6 +248,9 @@ const World3dStore = types
         Event3dEmitter.emit('DetachObjectFromCamera', self.attachedToCameraObjectId);
       }
       self.attachedToCameraObjectId = objectId;
+    },
+    setWaitingForBumpEffectReadyUserId(userId: string | null) {
+      self.waitingForBumpEffectReadyUserId = userId;
     },
     undo() {
       // UnityService.undo();
