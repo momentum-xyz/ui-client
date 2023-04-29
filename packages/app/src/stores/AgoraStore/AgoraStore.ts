@@ -43,16 +43,26 @@ const AgoraStore = types
     }),
     selectAudioInput(deviceId: string) {
       self.userDevicesStore.selectAudioInput(deviceId);
-      self.userDevicesStore.localAudioTrack?.stop();
-      self.userDevicesStore.localAudioTrack?.close();
 
-      if (self.userDevicesStore.localAudioTrack) {
-        self.agoraVoiceChatStore.client.unpublish(self.userDevicesStore.localAudioTrack);
+      if (self.agoraVoiceChatStore.hasJoined) {
+        self.userDevicesStore.localAudioTrack?.stop();
+        self.userDevicesStore.localAudioTrack?.close();
+
+        if (self.userDevicesStore.localAudioTrack) {
+          self.agoraVoiceChatStore.client.unpublish(self.userDevicesStore.localAudioTrack);
+        }
+
+        self.userDevicesStore.createLocalAudioTrack(
+          self.agoraVoiceChatStore.createAudioTrackAndPublish
+        );
       }
+    },
+    selectAudioOutput(deviceId: string) {
+      self.userDevicesStore.selectAudioOutput(deviceId);
 
-      self.userDevicesStore.createLocalAudioTrack(
-        self.agoraVoiceChatStore.createAudioTrackAndPublish
-      );
+      if (self.agoraVoiceChatStore.hasJoined) {
+        // TODO: Implementation
+      }
     }
   }))
   .views((self) => ({
