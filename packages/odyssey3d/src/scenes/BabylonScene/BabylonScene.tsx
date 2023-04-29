@@ -106,12 +106,12 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         ObjectHelper.detachFromCamera();
       });
 
-      events.on('SendHighFive', (userId) => {
+      /*events.on('SendHighFive', (userId) => {
         console.log('TODO Babylon handle SendHighFive to', userId);
       });
       events.on('ReceiveHighFive', (userId) => {
         console.log('TODO Babylon handle ReceiveHighFive from', userId);
-      });
+      });*/
 
       events.on('TriggerBump', (userId) => {
         console.log('TODO Babylon handle TriggerBump', userId);
