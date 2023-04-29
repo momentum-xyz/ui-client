@@ -36,10 +36,10 @@ export interface StakeInterface {
   amount: string;
   reward: string;
   blockchain_id: string;
-  lastComment: string | null;
+  last_comment: string | null;
   name: string;
   object_id: string;
-  updatedAt: string;
+  updated_at: string;
 }
 
 export interface WalletInterface {
