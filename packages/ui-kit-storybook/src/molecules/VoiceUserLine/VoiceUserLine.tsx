@@ -1,4 +1,4 @@
-import {FC, memo} from 'react';
+import {FC} from 'react';
 
 import {ButtonRound, Hexagon} from '../../atoms';
 
@@ -7,33 +7,33 @@ import * as styled from './VoiceUserLine.styled';
 export interface VoiceUserLinePropsInterface {
   imageSrc: string;
   username: string;
-  isCallHidden?: boolean;
-  onCallClick?: () => void;
+  isSpeaking?: boolean;
+  isMicrophoneOff?: boolean;
 }
 
 const VoiceUserLine: FC<VoiceUserLinePropsInterface> = ({
   imageSrc,
   username,
-  isCallHidden,
-  onCallClick
+  isSpeaking,
+  isMicrophoneOff
 }) => {
   return (
-    <styled.Container data-testid="Widget-test">
+    <styled.Container data-testid="VoiceUserLine-test">
       <styled.Hexagon>
-        <Hexagon type="third-borderless" imageSrc={imageSrc} />
+        <Hexagon type={isSpeaking ? 'third' : 'third-borderless'} imageSrc={imageSrc} />
       </styled.Hexagon>
 
       <styled.TitleContainer>
         <styled.Title>{username}</styled.Title>
       </styled.TitleContainer>
 
-      {!isCallHidden && (
+      {isMicrophoneOff && (
         <styled.Actions>
-          <ButtonRound icon="call_connect" variant="primary" onClick={onCallClick} />
+          <ButtonRound icon="microphoneOff" variant="primary" isLabel />
         </styled.Actions>
       )}
     </styled.Container>
   );
 };
 
-export default memo(VoiceUserLine);
+export default VoiceUserLine;

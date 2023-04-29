@@ -1,96 +1,80 @@
-import React, {FC} from 'react';
+import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Dropdown, Heading, IconSvg, OptionInterface} from '@momentum-xyz/ui-kit';
-import cn from 'classnames';
+import {Select, Button, ButtonRound, SelectOptionInterface} from '@momentum-xyz/ui-kit-storybook';
+import {Frame} from '@momentum-xyz/ui-kit-storybook';
 
 import * as styled from './ProfileSettings.styled';
 
 interface PropsInterface {
-  isGuest: boolean;
-  isEditMode: boolean;
-  isDeviceSettings: boolean;
-  audioDeviceId?: string;
-  audioDeviceList: OptionInterface[];
-  onSelectAudioDevice: (id: string) => void;
-  onToggleEditMode: () => void;
-  onToggleDeviceSettings: () => void;
-  onSignIn?: () => void;
-  onSignOut?: () => void;
+  inputAudioDeviceId?: string;
+  outputAudioDeviceId?: string;
+  inputAudioDeviceList: SelectOptionInterface<string>[];
+  outputAudioDeviceList: SelectOptionInterface<string>[];
+  isUpdating: boolean;
+  onChangeAudioDevices: (inputId: string | undefined, outputId: string | undefined) => void;
+  onCancel: () => void;
 }
 
 const ProfileSettings: FC<PropsInterface> = ({
-  isGuest,
-  isEditMode,
-  isDeviceSettings,
-  audioDeviceId,
-  audioDeviceList,
-  onSelectAudioDevice,
-  onToggleDeviceSettings,
-  onToggleEditMode,
-  onSignIn,
-  onSignOut
+  inputAudioDeviceId,
+  outputAudioDeviceId,
+  inputAudioDeviceList,
+  outputAudioDeviceList,
+  isUpdating,
+  onChangeAudioDevices,
+  onCancel
 }) => {
+  const [selectedInputAudioDeviceId, setInputAudioDeviceId] = useState(inputAudioDeviceId);
+  const [selectedOutputAudioDeviceId, setOutputAudioDeviceId] = useState(outputAudioDeviceId);
+
   const {t} = useI18n();
 
   return (
-    <styled.Settings>
-      <styled.SettingsHeader>
-        <IconSvg name="gear" size="normal" />
-        <Heading type="h2" label="Settings" align="left" weight="bold" />
-      </styled.SettingsHeader>
+    <styled.Container>
+      <Frame>
+        <styled.Title>{t('labels.sound')}</styled.Title>
+        <styled.DeviceItem>
+          <ButtonRound variant="primary" isLabel icon="microphoneOn" />
+          <Select
+            placeholder={`${t('devices.selectInputSource')}`}
+            value={selectedInputAudioDeviceId}
+            options={inputAudioDeviceList}
+            onSingleChange={(value) => {
+              if (!value) {
+                return;
+              }
+              setInputAudioDeviceId(value);
+            }}
+          />
+        </styled.DeviceItem>
+        <styled.DeviceItem>
+          <ButtonRound variant="primary" isLabel icon="sound_louder" />
+          <Select
+            placeholder={`${t('devices.selectOutputSource')}`}
+            value={selectedOutputAudioDeviceId}
+            options={outputAudioDeviceList}
+            onSingleChange={(value) => {
+              if (!value) {
+                return;
+              }
+              setOutputAudioDeviceId(value);
+            }}
+          />
+        </styled.DeviceItem>
 
-      <styled.SettingsContainer>
-        {!isGuest && (
-          <styled.SettingsItem className={cn(isEditMode && 'active')}>
-            <IconSvg name={!isEditMode ? 'pencil' : 'check'} size="normal" />
-            <styled.SettingsValue onClick={onToggleEditMode}>Edit profile</styled.SettingsValue>
-          </styled.SettingsItem>
-        )}
-
-        <styled.SettingsItem className={cn(isDeviceSettings && 'active')}>
-          <IconSvg name={!isDeviceSettings ? 'gear' : 'check'} size="normal" />
-          <styled.SettingsValue onClick={onToggleDeviceSettings}>
-            Device settings
-          </styled.SettingsValue>
-        </styled.SettingsItem>
-
-        {isDeviceSettings && (
-          <styled.DeviceItem>
-            <IconSvg name="microphoneOn" size="normal" />
-            <Dropdown
-              placeholder={`${t('devices.audio')}`}
-              variant="third"
-              value={audioDeviceId}
-              options={audioDeviceList}
-              onOptionSelect={(option) => {
-                onSelectAudioDevice(option.value);
-              }}
-              dropdownSize="small"
-            />
-          </styled.DeviceItem>
-        )}
-
-        <styled.SettingsItem>
-          {onSignOut && (
-            <>
-              <IconSvg name="go" size="normal" />
-              <styled.SettingsValue onClick={() => onSignOut()}>
-                {t('actions.signOut')}
-              </styled.SettingsValue>
-            </>
-          )}
-          {onSignIn && (
-            <>
-              <IconSvg name="shield-open" size="normal" />
-              <styled.SettingsValue onClick={() => onSignIn()}>
-                {t('actions.signIn')}
-              </styled.SettingsValue>
-            </>
-          )}
-        </styled.SettingsItem>
-      </styled.SettingsContainer>
-    </styled.Settings>
+        <styled.Actions>
+          <Button variant="secondary" label={t('actions.cancel')} onClick={onCancel} />
+          <Button
+            label={t('actions.save')}
+            disabled={isUpdating}
+            onClick={() => {
+              onChangeAudioDevices(selectedInputAudioDeviceId, selectedOutputAudioDeviceId);
+            }}
+          />
+        </styled.Actions>
+      </Frame>
+    </styled.Container>
   );
 };
 

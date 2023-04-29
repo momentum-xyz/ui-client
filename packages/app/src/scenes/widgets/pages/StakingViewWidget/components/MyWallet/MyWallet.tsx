@@ -9,7 +9,10 @@ import {
   SelectOptionInterface
 } from '@momentum-xyz/ui-kit-storybook';
 
+import {formatBigInt} from 'core/utils';
 import {WalletModelInterface} from 'core/models';
+import {useStaking, useBlockchainAirdrop} from 'shared/hooks';
+import {SignIn} from 'scenes/widgets/pages/LoginWidget/components';
 
 import * as styled from './MyWallet.styled';
 
@@ -17,8 +20,6 @@ interface PropsInterface {
   wallets: WalletModelInterface[];
   walletOptions: SelectOptionInterface<string>[];
 }
-
-const DECIMAL_SCALE = 2;
 
 const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
   const [selectedWallet, setSelectedWallet] = useState<WalletModelInterface>();
@@ -31,6 +32,27 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
     }
   }, [selectedWallet, wallets, wallets.length]);
 
+  const {isWalletActive, getTokens} = useBlockchainAirdrop();
+  const {isWalletActive: isStakingWalletActive, claimRewards} = useStaking();
+
+  const handleAirdrop = async () => {
+    try {
+      const tokens = await getTokens();
+      console.log(tokens);
+    } catch (err) {
+      console.log('Error requesting airdrop:', err);
+    }
+  };
+
+  const handleClaimRewards = async () => {
+    try {
+      const tx = await claimRewards();
+      console.log(tx);
+    } catch (err) {
+      console.log('Error claiming rewards:', err);
+    }
+  };
+
   return (
     <styled.Wrapper data-testid="MyWallet-test">
       <Frame>
@@ -41,10 +63,10 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
           <Select
             wide
             options={walletOptions}
-            value={selectedWallet?.hash}
+            value={selectedWallet?.wallet_id}
             placeholder={t('actions.selectWallet')}
-            onSingleChange={(hash) => {
-              const wallet = wallets.find((i) => i.hash === hash);
+            onSingleChange={(wallet_id) => {
+              const wallet = wallets.find((i) => i.wallet_id === wallet_id);
               if (wallet) {
                 setSelectedWallet(wallet);
               }
@@ -53,18 +75,29 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
         </styled.Filters>
 
         <styled.Title>{t('labels.rewards')}</styled.Title>
-
         <styled.RewardsContainer>
           <span>{t('labels.totalRewards')}</span>
           <styled.Amount>
-            <SymbolAmount
-              value={selectedWallet?.rewardsAmount}
-              tokenSymbol={selectedWallet?.symbol}
-              decimalScale={DECIMAL_SCALE}
-            />
+            <SymbolAmount tokenSymbol="MOM" stringValue={formatBigInt(selectedWallet?.reward)} />
           </styled.Amount>
-          <Button icon="wallet" label={t('actions.claimRewards')} />
+          <Button
+            icon="wallet"
+            label={t('actions.claimRewards')}
+            disabled={!isStakingWalletActive}
+            onClick={handleClaimRewards}
+          />
         </styled.RewardsContainer>
+
+        <styled.Title>{t('actions.requestAirdropTokens')}</styled.Title>
+        <styled.AirdropContainer>
+          <span>Lorem ipsum dolor sit amet, ligula consectetuer adipiscing elit.</span>
+          {isWalletActive ? (
+            <Button icon="air" label={t('actions.startAirdrop')} onClick={handleAirdrop} />
+          ) : (
+            // TODO will be done automatically
+            <SignIn />
+          )}
+        </styled.AirdropContainer>
 
         <styled.ScrollableContainer>
           <styled.Title>{t('labels.balance')}</styled.Title>
@@ -78,9 +111,8 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={selectedWallet?.balanceAmount}
-                  tokenSymbol={selectedWallet?.symbol}
-                  decimalScale={DECIMAL_SCALE}
+                  tokenSymbol="MOM"
+                  stringValue={formatBigInt(selectedWallet?.balance)}
                 />
               </styled.Amount>
             </styled.TokenBlockData>
@@ -95,9 +127,8 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={selectedWallet?.transferableAmount}
-                  tokenSymbol={selectedWallet?.symbol}
-                  decimalScale={DECIMAL_SCALE}
+                  tokenSymbol="MOM"
+                  stringValue={formatBigInt(selectedWallet?.transferable)}
                 />
               </styled.Amount>
             </styled.TokenBlockData>
@@ -112,9 +143,8 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={selectedWallet?.stakedAmount}
-                  tokenSymbol={selectedWallet?.symbol}
-                  decimalScale={DECIMAL_SCALE}
+                  tokenSymbol="MOM"
+                  stringValue={formatBigInt(selectedWallet?.staked)}
                 />
               </styled.Amount>
             </styled.TokenBlockData>
@@ -129,9 +159,8 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
               </span>
               <styled.Amount>
                 <SymbolAmount
-                  value={selectedWallet?.unbondingAmount}
-                  tokenSymbol={selectedWallet?.symbol}
-                  decimalScale={DECIMAL_SCALE}
+                  tokenSymbol="MOM"
+                  stringValue={formatBigInt(selectedWallet?.unbonding)}
                 />
               </styled.Amount>
             </styled.TokenBlockData>

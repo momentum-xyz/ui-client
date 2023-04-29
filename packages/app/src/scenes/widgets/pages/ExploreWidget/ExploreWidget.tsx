@@ -56,6 +56,8 @@ const ExploreWidget: FC = () => {
     <styled.Container data-testid="ExploreWidget-test">
       <styled.ExplorePanel className={cn(hasSelectedUnit && 'collapsed')}>
         <Panel
+          isFullHeight
+          size="large"
           icon="explore"
           variant="primary"
           title={t('labels.explore')}
@@ -74,8 +76,8 @@ const ExploreWidget: FC = () => {
                 <WorldList
                   searchQuery={universe2dStore.searchQuery}
                   searchResults={universe2dStore.filteredWorlds}
-                  lastCreatedWorlds={universe2dStore.lastCreatedWorlds}
-                  mostStakedWorlds={universe2dStore.mostStatedInWorlds}
+                  lastCreatedWorlds={universe2dStore.lastCreatedSliderWorlds}
+                  mostStakedWorlds={universe2dStore.mostStakedSliderWorlds}
                   onSelectWorld={onSelectWorld}
                   onSelectUser={onSelectUser}
                   onVisitWorld={onVisitWorld}
@@ -87,8 +89,8 @@ const ExploreWidget: FC = () => {
                 <UserList
                   searchQuery={universe2dStore.searchQuery}
                   searchResults={universe2dStore.filteredUsers}
-                  lastCreatedUsers={universe2dStore.lastCreatedUsers}
-                  mostStakedUsers={universe2dStore.mostStatedUsers}
+                  lastCreatedUsers={universe2dStore.lastCreatedSliderUsers}
+                  mostStakedUsers={universe2dStore.mostStakedUsers}
                   onSelectUser={onSelectUser}
                 />
               )}
@@ -98,10 +100,10 @@ const ExploreWidget: FC = () => {
       </styled.ExplorePanel>
 
       {/* SHOW WORLD OVERVIEW */}
-      {universe2dStore.selectedWorld && (
+      {universe2dStore.selectedWorld?.world && (
         <styled.Details>
           <WorldDetails
-            worldDetails={universe2dStore.selectedWorld}
+            world={universe2dStore.selectedWorld.world}
             onSelectUser={onSelectUser}
             onVisitWorld={onVisitWorld}
             onStakeWorld={onVisitWorld}
@@ -115,8 +117,6 @@ const ExploreWidget: FC = () => {
         <styled.Details>
           <UserDetails
             userDetails={universe2dStore.selectedUser}
-            nftOwned={universe2dStore.selectedUser.nftOwned}
-            nftStakedIn={universe2dStore.selectedUser.nftStakedIn}
             onVisitWorld={onVisitWorld}
             onSelectWorld={onSelectWorld}
             onClose={universe2dStore.resetUnits}

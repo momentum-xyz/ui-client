@@ -5,41 +5,35 @@ import {request} from 'api/request';
 
 import {worldRepositoryEndpoints} from './worldRepository.api.endpoints';
 import {
+  FetchWorldListRequest,
+  FetchWorldListResponse,
+  FetchWorldRequest,
+  FetchWorldResponse,
   GetOnlineUsersRequest,
-  GetSpaceWithSubSpacesRequest,
-  GetSpaceWithSubSpacesResponse,
-  SearchSpacesRequest,
-  SearchSpacesResponse,
-  OdysseyOnlineUsersResponse
+  OdysseyOnlineUsersResponse,
+  PatchWorldRequest,
+  PatchWorldResponse
 } from './worldRepository.api.types';
 
-export const fetchSpaceWithSubSpaces: RequestInterface<
-  GetSpaceWithSubSpacesRequest,
-  GetSpaceWithSubSpacesResponse
-> = (options) => {
-  const {worldId, spaceId, ...restOptions} = options;
+export const fetchWorldList: RequestInterface<FetchWorldListRequest, FetchWorldListResponse> = (
+  options
+) => {
+  const {limit, sortDirection, ...restOptions} = options;
+  restOptions.params = {sort: sortDirection, limit};
+  return request.get(worldRepositoryEndpoints().worldList, restOptions);
+};
 
-  restOptions.params = {
-    ...restOptions.params,
-    space_id: spaceId
-  };
-
-  const url = generatePath(worldRepositoryEndpoints().getSpaceWithSubspaces, {worldId});
+export const fetchWorld: RequestInterface<FetchWorldRequest, FetchWorldResponse> = (options) => {
+  const {worldId, ...restOptions} = options;
+  const url = generatePath(worldRepositoryEndpoints().world, {worldId});
   return request.get(url, restOptions);
 };
 
-export const searchSpaces: RequestInterface<SearchSpacesRequest, SearchSpacesResponse> = (
-  options
-) => {
-  const {worldId, query, ...restOptions} = options;
-
-  restOptions.params = {
-    ...restOptions.params,
-    query
-  };
-
-  const url = generatePath(worldRepositoryEndpoints().searchSpaces, {worldId});
-  return request.get(url, restOptions);
+export const patchWorld: RequestInterface<PatchWorldRequest, PatchWorldResponse> = (options) => {
+  const {worldId, name, description, website_link, avatarHash, ...rest} = options;
+  const data = {name, description, website_link, avatarHash};
+  const url = generatePath(worldRepositoryEndpoints().world, {worldId});
+  return request.patch(url, data, rest);
 };
 
 export const fetchOnlineUsers: RequestInterface<

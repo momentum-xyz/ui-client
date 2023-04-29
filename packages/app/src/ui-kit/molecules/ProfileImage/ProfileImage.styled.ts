@@ -11,6 +11,9 @@ export const Wrapper = styled.div`
 `;
 
 export const Name = styled.div`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
   font-size: var(--font-size-xl);
   text-transform: uppercase;
   letter-spacing: 0.2em;

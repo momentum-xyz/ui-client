@@ -8,7 +8,11 @@ import {
   Matrix,
   InstantiatedEntries,
   Texture,
-  PBRMaterial
+  PBRMaterial,
+  TransformNode,
+  Color3,
+  Nullable,
+  Vector3
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import {Object3dInterface, Texture3dInterface, ClickPositionInterface} from '@momentum-xyz/core';
@@ -17,6 +21,8 @@ import {Object3dInterface, Texture3dInterface, ClickPositionInterface} from '@mo
 import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
 import {getAssetFileName} from './UtilityHelper';
+import {posToVec3} from './TransformHelper';
+import {WorldCreatorHelper} from './WorldCreatorHelper';
 
 interface BabylonObjectInterface {
   container: AssetContainer;
@@ -32,6 +38,11 @@ export class ObjectHelper {
   static objectsMap = new Map<string, BabylonObjectInterface>();
   static firstID: string;
   static scene: Scene;
+  static attachedNode: TransformNode;
+  static transformSubscription: {unsubscribe: () => void} | undefined;
+  static selectedObjectFromSpawn = '';
+  static spawningMaterial: PBRMaterial;
+  static mySpawningClone: Nullable<TransformNode>;
 
   static initialize(
     scene: Scene,
@@ -42,6 +53,8 @@ export class ObjectHelper {
     onClickOutside: () => void
   ): void {
     this.scene = scene;
+    scene.useRightHandedSystem = true;
+
     this.firstID = '';
     // Mouse Click Listener
     scene.onPointerDown = function castRay() {
@@ -68,6 +81,7 @@ export class ObjectHelper {
           console.log('clicked on object with id: ' + parent.metadata);
           if (ObjectHelper.objectsMap.has(parent.metadata)) {
             onObjectClick(parent.metadata, lastClick);
+            WorldCreatorHelper.selectedObjectFromGizmo = parent.metadata;
           } else if (
             PlayerHelper.playerId === parent.metadata ||
             PlayerHelper.userMap.has(parent.metadata)
@@ -81,6 +95,7 @@ export class ObjectHelper {
           }*/
         } else {
           // WorldCreatorHelper.unlockLastObject();
+          WorldCreatorHelper.selectedObjectFromGizmo = '';
           onClickOutside();
         }
       }
@@ -93,7 +108,7 @@ export class ObjectHelper {
     console.log('assetID is: ' + assetUrl);
   }
 
-  static async spawnObjectAsync(scene: Scene, object: Object3dInterface) {
+  static async spawnObjectAsync(scene: Scene, object: Object3dInterface, attachToCam: boolean) {
     const assetUrl = getAssetFileName(object.asset_3d_id);
 
     await SceneLoader.LoadAssetContainerAsync(
@@ -106,16 +121,20 @@ export class ObjectHelper {
       },
       '.glb'
     ).then((container) => {
-      this.instantiateObject(container, object);
+      this.instantiateObject(container, object, attachToCam);
     });
   }
 
   static setObjectTexture(scene: Scene, texture: Texture3dInterface): void {
+    console.log('setting texture for object: ', texture);
     if (texture.label === 'skybox_custom') {
       SkyboxHelper.set360Skybox(
         scene,
-        this.textureRootUrl + SkyboxHelper.defaultSkyboxTextureSize + texture.hash
+        this.textureRootUrl + SkyboxHelper.defaultSkyboxTextureSize + '/' + texture.hash
       );
+      return;
+    } else if (texture.label === 'object_color') {
+      console.log('TODO setting object color', texture);
       return;
     }
 
@@ -123,7 +142,7 @@ export class ObjectHelper {
 
     if (meshes) {
       for (const mesh of meshes) {
-        const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
+        const textureUrl = this.textureRootUrl + this.textureDefaultSize + '/' + texture.hash;
         const newTexture = new Texture(textureUrl, scene);
         // TODO: check if material can be casted as PBRMaterial
         const meshMater = mesh.material as PBRMaterial;
@@ -134,7 +153,8 @@ export class ObjectHelper {
     }
   }
 
-  static instantiateObject(container: AssetContainer, object: Object3dInterface) {
+  static instantiateObject(container: AssetContainer, object: Object3dInterface, attach: boolean) {
+    console.log('attach never true: ' + attach);
     const instance = container.instantiateModelsToScene();
 
     if (instance.rootNodes.length === 0) {
@@ -153,17 +173,13 @@ export class ObjectHelper {
     const node = instance.rootNodes[0];
     node.name = object.name;
 
-    node.position.x = object.transform.position.x;
-    node.position.y = object.transform.position.y;
-    node.position.z = object.transform.position.z;
+    node.position = posToVec3(object.transform.position);
+    node.rotation = posToVec3(object.transform.rotation);
+    node.scaling = posToVec3(object.transform.scale);
     node.metadata = object.id;
     if (this.firstID === '') {
       this.firstID = object.id;
     }
-    /*const meshes = node.getChildMeshes();
-    for (const mesh of meshes) {
-      console.log(mesh.name);
-    }*/
 
     const babylonObject = {
       container: container,
@@ -176,6 +192,63 @@ export class ObjectHelper {
     for (const group of instance.animationGroups) {
       group.play(true);
     }
+
+    //attach is never true so using this instead
+    if (attach) {
+      this.attachToCamera(object.id, node);
+    }
+  }
+
+  static attachToCamera(objectId: string, node: TransformNode) {
+    if (this.selectedObjectFromSpawn === '') {
+      this.attachedNode = node;
+      node.setParent(PlayerHelper.playerInstance.rootNodes[0]);
+      node.position = new Vector3(0, -0.5, -3);
+      this.setSpawningMaterial(node);
+
+      this.selectedObjectFromSpawn = objectId;
+      this.transformSubscription = WorldCreatorHelper.subscribeForTransformUpdates(
+        objectId,
+        node,
+        true
+      );
+    }
+  }
+
+  static detachFromCamera() {
+    this.transformSubscription?.unsubscribe();
+
+    this.attachedNode.setParent(null, undefined, true);
+    const attachedNodeChildren = this.attachedNode.getChildMeshes();
+    attachedNodeChildren.forEach((element) => {
+      element.setEnabled(true);
+    });
+    this.attachedNode.setEnabled(true);
+    this.mySpawningClone?.dispose();
+    this.selectedObjectFromSpawn = '';
+
+    PlayerHelper.playerInstance.rootNodes[0].position = new Vector3(0, -0.5, -3);
+  }
+
+  static setSpawningMaterial(node: TransformNode) {
+    const myClone = node.clone('clone', PlayerHelper.playerInstance.rootNodes[0]);
+    const spawningMat = new PBRMaterial('spawning');
+    spawningMat.albedoColor = Color3.Gray();
+    spawningMat._reflectivityColor = Color3.Gray();
+    spawningMat.alpha = 0.3;
+
+    if (myClone) {
+      const cloneChildren = myClone.getChildMeshes();
+      cloneChildren.forEach((element) => {
+        element.material = spawningMat;
+      });
+    }
+    this.mySpawningClone = myClone;
+
+    const childMeshes = node.getChildMeshes();
+    childMeshes.forEach((element) => {
+      element.setEnabled(false);
+    });
   }
 
   static removeObject(id: string) {

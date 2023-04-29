@@ -1,6 +1,6 @@
 import {UserStatusEnum} from '@momentum-xyz/ui-kit';
 
-import {UserProfileInterface} from 'api';
+import {UserProfileInterface, WorldInfoInterface} from 'api';
 
 /** COMMON **/
 
@@ -18,19 +18,52 @@ export interface UserInterface {
   isGuest?: boolean;
 }
 
-/** CHECK USER **/
-
-export interface CheckUserRequest {
-  idToken?: string;
+export interface UserInfoInterface {
+  id: string;
+  name: string;
+  profile: UserProfileInterface;
 }
 
-export interface CheckUserResponse extends UserInterface {}
+export interface StakeInterface {
+  wallet_id: string;
+  amount: string;
+  reward: string;
+  blockchain_id: string;
+  lastComment: string | null;
+  name: string;
+  object_id: string;
+  updatedAt: string;
+}
+
+export interface WalletInterface {
+  wallet_id: string;
+  balance: string;
+  reward: string;
+  blockchain_name: string;
+  contract_id: string;
+  updated_at: string;
+  transferable: string;
+  staked: string;
+  unbonding: string;
+}
 
 /** FETCH ME **/
 
 export interface FetchMeRequest {}
 
 export interface FetchMeResponse extends UserInterface {}
+
+/** FETCH MY WALLETS **/
+
+export interface FetchMyWalletsRequest {}
+
+export interface FetchMyWalletsResponse extends Array<WalletInterface> {}
+
+/** FETCH MY STAKES **/
+
+export interface FetchMyStakesRequest {}
+
+export interface FetchMyStakesResponse extends Array<StakeInterface> {}
 
 /** FETCH User **/
 
@@ -40,10 +73,27 @@ export interface FetchUserRequest {
 
 export interface FetchUserResponse extends UserInterface {}
 
-/** Mutual docs */
-export interface MutualDocksRequest {
-  walletA: string;
-  walletB: string;
+/** FETCH USER LIST **/
+
+export interface FetchUserListRequest {
+  sortDirection: 'DESC' | 'ASC';
+  limit: number;
 }
 
-export interface MutualDocksResponse {}
+export interface FetchUserListResponse extends Array<UserInfoInterface> {}
+
+/** FETCH OWNED WORLD LIST **/
+
+export interface FetchUserWorldListRequest {
+  userId: string;
+}
+
+export interface FetchUserWorldListResponse extends Array<WorldInfoInterface> {}
+
+/** FETCH STAKED WORLD LIST **/
+
+export interface FetchUserStakedWorldListRequest {
+  userId: string;
+}
+
+export interface FetchUserStakedWorldListResponse extends Array<WorldInfoInterface> {}

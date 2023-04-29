@@ -1,24 +1,20 @@
-import React, {FC, useCallback, useEffect} from 'react';
+import {FC, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Universe3dEmitter} from '@momentum-xyz/core';
-import {Map3dCanvas} from '@momentum-xyz/map3d';
-import {PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 import {UniverseScene} from '@momentum-xyz/odyssey3d';
+import {PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
-import {getImageAbsoluteUrl} from 'core/utils';
 import {WidgetEnum} from 'core/enums';
+import {getImageAbsoluteUrl} from 'core/utils';
 
-interface PropsInterface {
-  isClickActive?: boolean;
-}
+const Map3dPage: FC = () => {
+  const {widgetManagerStore, universeStore} = useStore();
+  const {allWorlds, allUsers} = universeStore.universe2dStore;
 
-// TEMP
-const isBabylonUniverse = window.sessionStorage.getItem('babylon_universe');
-
-const Map3dPage: FC<PropsInterface> = () => {
-  const {nftStore, widgetsStore, sessionStore, widgetManagerStore} = useStore();
-  const {previewOdysseyStore, odysseyInfoStore} = widgetsStore;
+  // FIXME: Workaround to prevent sending twice lists
+  const usersWereInitialised = useRef<boolean>(false);
+  const worldsWereInitialised = useRef<boolean>(false);
 
   useEffect(() => {
     return () => {
@@ -26,49 +22,50 @@ const Map3dPage: FC<PropsInterface> = () => {
     };
   }, [widgetManagerStore]);
 
-  const handleSelect = useCallback(
-    (uuid: string) => {
-      if (sessionStore.isGuest) {
-        const nft = nftStore.getNftByUuid(uuid);
-        previewOdysseyStore.open(nft!);
-      }
+  useEffect(() => {
+    console.log('Map3dPage: useEffect', allWorlds, allUsers);
+    if (allWorlds.length > 0 && !usersWereInitialised.current) {
+      usersWereInitialised.current = true;
+      Universe3dEmitter.emit(
+        'WorldsAdded',
+        allWorlds.map((world) => ({
+          id: `${world.id}_temp`,
+          name: world.name,
+          description: world.description || '',
+          image: getImageAbsoluteUrl(world.avatarHash) || '',
+          owner: ''
+        }))
+      );
+    }
 
-      if (!sessionStore.isGuest) {
-        widgetManagerStore.open(WidgetEnum.WORLD_OVERVIEW, PositionEnum.LEFT, {id: uuid});
-        odysseyInfoStore.open(uuid);
-      }
-    },
-    [nftStore, odysseyInfoStore, previewOdysseyStore, sessionStore.isGuest, widgetManagerStore]
-  );
+    if (allUsers.length > 0 && !worldsWereInitialised.current) {
+      worldsWereInitialised.current = true;
+      Universe3dEmitter.emit(
+        'UsersAdded',
+        allUsers.map((user) => ({
+          id: user.id,
+          name: user.name,
+          avatar: getImageAbsoluteUrl(user.profile.avatarHash) || ''
+        }))
+      );
+    }
+  }, [allWorlds, allUsers, allUsers.length, allWorlds.length]);
 
-  const handleSelectUser = useCallback((uuid: string) => {
-    console.log('Map3dPage: handleSelectUser', uuid);
-    // widgetManagerStore.open(WidgetEnum.WORLD_OVERVIEW, PositionEnum.LEFT, {id: uuid});
-  }, []);
-
-  const handleClickOutside = useCallback(() => {
-    widgetManagerStore.closeAll();
-  }, [widgetManagerStore]);
-
-  if (nftStore.isLoading || !sessionStore.map3dUser) {
-    return <></>;
-  }
-
-  return isBabylonUniverse ? (
+  return (
     <UniverseScene
       events={Universe3dEmitter}
-      onWorldClick={handleSelect}
-      onUserClick={handleSelectUser}
-      onClickOutside={handleClickOutside}
-    />
-  ) : (
-    <Map3dCanvas
-      currentUser={sessionStore.map3dUser}
-      selectedUuid={odysseyInfoStore.nftId}
-      items={nftStore.nftItems}
-      getConnections={nftStore.getStakedAtOthersByWallet}
-      getImageUrl={getImageAbsoluteUrl}
-      onSelect={handleSelect}
+      onWorldClick={(id) => {
+        console.log('Map3dPage: Select world: ', id);
+        const real_id = id.split('_')[0];
+        widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id: real_id});
+      }}
+      onUserClick={(id) => {
+        console.log('Map3dPage: Select user: ', id);
+        widgetManagerStore.open(WidgetEnum.USER_DETAILS, PositionEnum.LEFT, {id});
+      }}
+      onClickOutside={() => {
+        //widgetManagerStore.closeAll();
+      }}
     />
   );
 };

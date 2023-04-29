@@ -17,12 +17,7 @@ export default {
 
 const Template: Story<TabsPropsInterface<string>> = (args) => {
   const [selectedId, setSelectedId] = useState<string>();
-
-  return (
-    <Tabs {...args} activeId={selectedId} onSelect={setSelectedId}>
-      {selectedId && <>Tab id is {selectedId}</>}
-    </Tabs>
-  );
+  return <Tabs {...args} activeId={selectedId} onSelect={setSelectedId} />;
 };
 
 export const General = Template.bind({});

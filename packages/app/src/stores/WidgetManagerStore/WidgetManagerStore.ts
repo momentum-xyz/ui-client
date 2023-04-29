@@ -55,6 +55,12 @@ const WidgetManagerStore = types
       }
 
       return widgets;
+    },
+    get isLeftWidgetShown(): boolean {
+      return !!self.leftActiveWidget;
+    },
+    get isRightWidgetShown(): boolean {
+      return !!self.rightActiveWidget;
     }
   }));
 

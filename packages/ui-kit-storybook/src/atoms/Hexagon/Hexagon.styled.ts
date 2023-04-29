@@ -22,6 +22,15 @@ export const Wrapper = styled.div`
   --border-hexagon-large-width: 60px;
   --border-hexagon-large-height: 70px;
 
+  --hexagon-medium-large-width: 38px; // this one
+  --hexagon-medium-large-height: 44px; // this one
+
+  --hexagon-small-blank-width: 28px; // small blank
+  --hexagon-small-blank-height: 33px; // small blank
+
+  --border-hexagon-small-width: 48px; // smaller bordered
+  --border-hexagon-small-height: 56px; // smaller bordered
+
   position: relative;
 
   width: var(--hexagon-width);
@@ -49,16 +58,37 @@ export const Wrapper = styled.div`
     width: var(--hexagon-large-width);
     height: var(--hexagon-large-height);
   }
+  &.menu {
+    width: var(--hexagon-medium-large-width);
+    height: var(--hexagon-medium-large-height);
+  }
 
   &.blank {
     width: var(--hexagon-medium-width);
     height: var(--hexagon-medium-height);
     cursor: default;
+
+    &.small {
+      width: var(--hexagon-small-blank-width);
+      height: var(--hexagon-small-blank-height);
+      &:after {
+        width: var(--hexagon-small-blank-width);
+        height: var(--hexagon-small-blank-height);
+      }
+      &:before {
+        width: var(--hexagon-small-blank-width);
+        height: var(--hexagon-small-blank-height);
+      }
+    }
   }
 
   &.outer-border {
     width: var(--border-hexagon-large-width);
     height: var(--border-hexagon-large-height);
+    &.menu {
+      width: var(--border-hexagon-small-width);
+      height: var(--border-hexagon-small-height);
+    }
   }
 
   &.no-hover {
@@ -201,6 +231,18 @@ export const Hexagon = styled.div`
       height: var(--hexagon-large-height);
     }
   }
+  &.menu {
+    // width: var(--hexagon-medium-large-width);
+    // height: var(--hexagon-medium-large-height);
+    &:after {
+      width: var(--hexagon-medium-large-width);
+      height: var(--hexagon-medium-large-height);
+    }
+    &:before {
+      width: var(--hexagon-medium-large-width);
+      height: var(--hexagon-medium-large-height);
+    }
+  }
 
   &.blank {
     opacity: 0.2;
@@ -214,6 +256,19 @@ export const Hexagon = styled.div`
       width: var(--hexagon-medium-width);
       height: var(--hexagon-medium-height);
     }
+
+    &.small {
+      width: var(--hexagon-small-blank-width);
+      height: var(--hexagon-small-blank-height);
+      &:after {
+        width: var(--hexagon-small-blank-width);
+        height: var(--hexagon-small-blank-height);
+      }
+      &:before {
+        width: var(--hexagon-small-blank-width);
+        height: var(--hexagon-small-blank-height);
+      }
+    }
   }
 
   &.outer-border {
@@ -226,14 +281,44 @@ export const Hexagon = styled.div`
       width: var(--border-hexagon-large-width);
       height: var(--border-hexagon-large-height);
     }
+    &.menu {
+      &:after {
+        width: var(--border-hexagon-small-width);
+        height: var(--border-hexagon-small-height);
+      }
+      &:before {
+        width: var(--border-hexagon-small-width);
+        height: var(--border-hexagon-small-height);
+      }
+    }
   }
 `;
 
 export const Sparkle = styled.img`
   position: absolute;
-  top: -16.5px;
+  top: -9.5px;
   left: 1px;
   width: 32px;
+  height: 50px;
   pointer-events: none;
+  z-index: 10;
+
+  &.menu {
+    top: -12.5px;
+    left: -1px;
+  }
+`;
+
+export const IndicatorVoice = styled.div`
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: var(--green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  right: 4px;
   z-index: 10;
 `;

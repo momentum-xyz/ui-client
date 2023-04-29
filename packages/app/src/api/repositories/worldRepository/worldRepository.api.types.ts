@@ -1,37 +1,63 @@
 import {UserInterface} from 'api';
 
-export interface SpaceWithSubspacesInterface {
+export interface WorldInfoInterface {
   id: string;
   name: string;
-  description: string | null;
-  subSpaces?: Array<SubSpaceInterface>;
+  description?: string;
+  avatarHash: string | null;
+  owner_id: string;
+  owner_name?: string | null;
+  stake_total?: string;
 }
 
-export interface SubSpaceInterface {
+export interface WorldInterface {
   id: string;
   name: string;
-  subSpaces?: Array<SubSpaceInterface>;
+  description?: string;
+  avatarHash: string | null;
+  createdAt?: string;
+  last_staking_comment: string | null;
+  owner_id: string;
+  owner_name?: string | null;
+  stake_total?: string;
+  stakers: WorldStakerInterface[] | null;
 }
 
-/** Get space with subspaces (1 level of subspaces) **/
+export interface WorldStakerInterface {
+  user_id: string;
+  name: string;
+  stake: string;
+  avatarHash: string | null;
+}
 
-export interface GetSpaceWithSubSpacesRequest {
-  spaceId: string;
+/** FETCH WORLD LIST **/
+
+export interface FetchWorldListRequest {
+  sortDirection: 'DESC' | 'ASC';
+  limit: number;
+}
+
+export interface FetchWorldListResponse extends Array<WorldInfoInterface> {}
+
+/** FETCH WORLD **/
+
+export interface FetchWorldRequest {
   worldId: string;
 }
 
-export interface GetSpaceWithSubSpacesResponse extends SpaceWithSubspacesInterface {}
+export interface FetchWorldResponse extends WorldInterface {}
 
-/** Search spaces **/
+/** PATCH WORLD **/
 
-export interface SearchSpacesRequest {
+export interface PatchWorldRequest {
   worldId: string;
-  query: string;
+  name: string;
+  description: string;
+  website_link: string;
+  avatarHash?: string;
 }
 
-export interface SearchSpacesResponse {
-  [categoryName: string]: SpaceWithSubspacesInterface[];
-}
+export interface PatchWorldResponse {}
 
 /** Online Users **/
 

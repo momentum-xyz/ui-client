@@ -1,11 +1,10 @@
-import {AttributeValueInterface} from '@momentum-xyz/sdk';
+import {AttributeNameEnum, AttributeValueInterface} from '@momentum-xyz/sdk';
 import {
   Client,
   loadClientWorker,
   MsgType,
   PosbusEvent,
   PosbusPort
-  // posbus
 } from '@momentum-xyz/posbus-client';
 import {
   Event3dEmitter,
@@ -15,27 +14,8 @@ import {
 
 // import {VoiceChatActionEnum} from 'api/enums';
 import {PosBusEventEmitter} from 'core/constants';
-import {
-  PosBusMessageTypeEnum
-  // PosBusNotificationEnum
-} from 'core/enums';
-import {
-  // PosBusVibeMessageType,
-  // PosBusHigh5MessageType,
-  // PosBusMessageStatusType,
-  // PosBusInviteMessageType,
-  // PosBusBroadcastMessageType,
-  // PosBusGatheringMessageType,
-  // PosBusCommunicationMessageType,
-  // PosBusEmojiMessageType,
-  // PosBusMegamojiMessageType,
-  // PosBusFlyWithMeType,
-  // PosBusScreenShareMessageType,
-  PosBusMiroStateMessageType as PosBusAttributeMessageType
-  // PosBusFlyToMeType,
-  // PosBusVoiceChatActionMessageType,
-  // PosBusVoiceChatUserMessageType
-} from 'core/types';
+import {PosBusMessageTypeEnum} from 'core/enums';
+import {PosBusMiroStateMessageType as PosBusAttributeMessageType} from 'core/types';
 import {appVariables} from 'api/constants';
 
 class PosBusService {
@@ -46,6 +26,8 @@ class PosBusService {
   private client: Client | null = null;
   private port: PosbusPort | null = null;
   private static userId: string;
+
+  public static attachNextReceivedObjectToCamera = false;
 
   public static init(token: string, userId: string) {
     console.log('PosBusService init', token, userId);
@@ -124,21 +106,34 @@ class PosBusService {
         break;
       }
 
-      // TODO add to MsgType
-      case 'set_object_data' as MsgType: {
+      case MsgType.OBJECT_TRANSFORM: {
+        console.log('PosBus object_transform', data);
+        const {id, object_transform} = data;
+        Event3dEmitter.emit('ObjectTransform', id, object_transform);
+        break;
+      }
+
+      case MsgType.OBJECT_DATA: {
         console.log('PosBus set_object_data', data);
 
         const {id, entries} = data as any;
-        if (entries?.texture?.name) {
+        if (entries?.texture) {
+          Object.entries(entries.texture).forEach(([label, hash]: any) => {
+            Event3dEmitter.emit('ObjectTextureChanged', {
+              objectId: id,
+              label,
+              hash
+            });
+          });
+        } else if (entries?.string?.object_color) {
           Event3dEmitter.emit('ObjectTextureChanged', {
-            objectId: entries.texture.name,
-            hash: id
-            // textureColor
+            objectId: id,
+            label: 'object_color',
+            hash: entries.string.object_color
           });
         }
         break;
       }
-
       case MsgType.SET_WORLD: {
         console.log('Handle posbus set_world', data);
         Event3dEmitter.emit('SetWorld', data, PosBusService.userId);
@@ -151,15 +146,26 @@ class PosBusService {
 
         const {objects} = data;
         for (const object of objects) {
-          console.log('Add object', object);
+          console.log(
+            'Add object',
+            object,
+            'Attach to camera',
+            PosBusService.attachNextReceivedObjectToCamera
+          );
           // TODO we should equalise these
-          Event3dEmitter.emit('ObjectCreated', {
-            ...object,
-            asset_3d_id: object.asset_type,
-            transform: {
-              ...object.transform
-            }
-          });
+          Event3dEmitter.emit(
+            'AddObject',
+            {
+              ...object,
+              asset_3d_id: object.asset_type,
+              transform: {
+                ...object.transform
+              }
+            },
+            PosBusService.attachNextReceivedObjectToCamera
+          );
+
+          PosBusService.attachNextReceivedObjectToCamera = false;
         }
         break;
       }
@@ -184,6 +190,33 @@ class PosBusService {
         break;
       }
 
+      case MsgType.ATTRIBUTE_VALUE_CHANGED: {
+        console.log('[PosBus Msg] ATTRIBUTE_VALUE_CHANGED: ', data);
+        switch (data.topic) {
+          case 'voice-chat-user': {
+            const {attribute_name, value} = data.data;
+            if (attribute_name === AttributeNameEnum.VOICE_CHAT_USER) {
+              if (value && value.joined) {
+                Event3dEmitter.emit('UserJoinedVoiceChat', value.userId);
+              } else if (value) {
+                Event3dEmitter.emit('UserLeftVoiceChat', value.userId);
+              }
+            }
+            break;
+          }
+        }
+        break;
+      }
+
+      case MsgType.HIGH_FIVE: {
+        console.log('Handle posbus message high_five', data);
+        const {sender_id, message} = data;
+        console.log('High five from', sender_id, message);
+
+        PosBusEventEmitter.emit('high-five', sender_id, message);
+        break;
+      }
+
       default:
         console.log('Unhandled posbus message', message.data);
     }
@@ -205,12 +238,22 @@ class PosBusService {
       this.main.port?.postMessage([
         MsgType.LOCK_OBJECT,
         {
-          id: objectId,
-          state: 1
+          id: objectId
         }
       ]);
     }
     // else what? TODO
+  }
+
+  static sendHighFive(sender_id: string, receiver_id: string) {
+    this.main.port?.postMessage([
+      MsgType.HIGH_FIVE,
+      {
+        sender_id,
+        receiver_id,
+        message: 'High five!'
+      }
+    ]);
   }
 
   public get subscribedAttributeTypeTopics(): Set<string> {

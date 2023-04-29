@@ -42,7 +42,7 @@ const WorldEmulator: FC = () => {
         i = i + 1;
         const randomIndex = Math.floor(Math.random() * assetIDs.length);
 
-        Event3dEmitter.emit('ObjectCreated', {
+        Event3dEmitter.emit('AddObject', {
           id: uuidv4(),
           name: 'Cool name' + randomNumber(),
           transform: {
@@ -89,24 +89,26 @@ const WorldEmulator: FC = () => {
 
 const UniverseEmulator = () => {
   useEffect(() => {
-    for (let i = 0; i < 10; i++) {
-      Universe3dEmitter.emit('WorldAdded', {
+    Universe3dEmitter.emit(
+      'WorldsAdded',
+      Array.from({length: 10}, (_, i) => ({
         id: '0d5b35b9-33c0-d917-c095-7ba3670755da',
         name: 'Cool world ' + i,
         description: 'Cool description',
         image: 'https://picsum.photos/100',
         owner: '123' + i
-      });
-    }
+      }))
+    );
 
-    for (let i = 0; i < 10; i++) {
-      Universe3dEmitter.emit('UserAdded', {
+    Universe3dEmitter.emit(
+      'UsersAdded',
+      Array.from({length: 10}, (_, i) => ({
         id: '123',
         name: 'Cool user',
         avatar: 'https://picsum.photos/100',
         is_guest: false
-      });
-    }
+      }))
+    );
   }, []);
 
   return (

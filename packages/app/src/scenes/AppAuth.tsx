@@ -1,21 +1,19 @@
-import React, {FC, ReactNode, useEffect} from 'react';
+import {FC, ReactNode, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {toast} from 'react-toastify';
-import {CheckJobStatusEnum, useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {PosBusService} from 'shared/services';
-import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
+//import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
 
-const PROFILE_JOB_CHECKER_MS = 3 * 1000;
+//const PROFILE_JOB_CHECKER_MS = 3 * 1000;
 
 const AppAuth: FC<{children: ReactNode}> = ({children}) => {
   const {sessionStore, nftStore} = useStore();
 
-  const {t} = useI18n();
+  //const {t} = useI18n();
 
   // FIXME: It should be removed. Profile changes should come from a new PosBus
-  useEffect(() => {
+  /*useEffect(() => {
     let jobInterval: NodeJS.Timer | undefined;
 
     if (sessionStore.profileJobId) {
@@ -55,13 +53,19 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
     return () => {
       clearInterval(jobInterval);
     };
-  }, [sessionStore.profileJobId, sessionStore, nftStore, t]);
+  }, [sessionStore.profileJobId, sessionStore, nftStore, t]);*/
 
   useEffect(() => {
     if (sessionStore.wallet && !nftStore.isLoading) {
       nftStore.activateWallet(sessionStore.wallet);
     }
   }, [nftStore, nftStore.isLoading, sessionStore.wallet]);
+
+  useEffect(() => {
+    if (sessionStore.user && !sessionStore.user.isGuest) {
+      nftStore.initMyWalletsAndStakes();
+    }
+  }, [nftStore, sessionStore.user]);
 
   useEffect(() => {
     if (sessionStore.token && sessionStore.user) {

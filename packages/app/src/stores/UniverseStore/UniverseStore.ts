@@ -1,6 +1,6 @@
 import {types} from 'mobx-state-tree';
 
-import {NftItemModelInterface} from 'core/models';
+import {WorldInfoModelInterface, UserInfoModelInterface} from 'core/models';
 
 import {Universe2dStore, Universe3dStore, World2dStore, World3dStore} from './models';
 
@@ -40,10 +40,10 @@ const UniverseStore = types
     }
   }))
   .views((self) => ({
-    get allWorlds(): NftItemModelInterface[] {
+    get allWorlds(): WorldInfoModelInterface[] {
       return self.universe2dStore.allWorlds;
     },
-    get allUsers(): NftItemModelInterface[] {
+    get allUsers(): UserInfoModelInterface[] {
       return self.universe2dStore.allUsers;
     }
   }));

@@ -1,18 +1,20 @@
 import {useMemo, useRef, useState} from 'react';
 
 import {IconNameType} from '../../types';
-import {Hexagon} from '../../atoms';
+import {Hexagon, HexagonIndicatorType} from '../../atoms';
 import {useResize} from '../../hooks';
 import {PositionEnum} from '../../enums';
 
 import * as styled from './Menu.styled';
 
-const MENU_ITEM_WIDTH = 60;
+const MENU_ITEM_WIDTH = 48;
+const BLANK_MARGIN = 10;
 
 export interface MenuItemInterface<T> {
   key: T;
   imageSrc?: string;
   iconName?: IconNameType;
+  iconIndicator?: HexagonIndicatorType;
   tooltip?: string;
   position: PositionEnum;
   subMenuItems?: MenuItemInterface<T>[];
@@ -27,8 +29,8 @@ export interface MenuPropsInterface<T> {
 const Menu = <T,>({activeKeys = [], items = []}: MenuPropsInterface<T>) => {
   const ref = useRef<HTMLDivElement>(null);
 
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  useResize(ref, () => setWindowWidth(window.innerWidth));
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth - 20);
+  useResize(ref, () => setWindowWidth(window.innerWidth - 20));
 
   const leftItems: MenuItemInterface<T>[] = items.filter((i) => i.position === PositionEnum.LEFT);
 
@@ -98,9 +100,10 @@ const Menu = <T,>({activeKeys = [], items = []}: MenuPropsInterface<T>) => {
       {items.map((action, index) => (
         <Hexagon
           key={index}
-          type="primary"
+          type="menu"
           iconName={action.iconName}
           imageSrc={action.imageSrc}
+          indicator={action.iconIndicator}
           isActive={activeKeys.includes(action.key)}
           onClick={() => {
             action.onClick?.(action.key, action.position);
@@ -119,13 +122,17 @@ const Menu = <T,>({activeKeys = [], items = []}: MenuPropsInterface<T>) => {
       {visualizeSection(leftItems)}
 
       {new Array(leftBlankCount).fill(null).map((_, i) => (
-        <Hexagon key={`blank_${i}`} type="blank" margin={12} />
+        <Hexagon key={`blank_${i}`} type="blank-small" margin={BLANK_MARGIN} />
       ))}
 
       {visualizeSection(centerItems)}
 
       {new Array(rightBlankCount).fill(null).map((_, i) => (
-        <Hexagon key={`blank_${i + (leftBlankCount || 0)}`} type="blank" margin={12} />
+        <Hexagon
+          key={`blank_${i + (leftBlankCount || 0)}`}
+          type="blank-small"
+          margin={BLANK_MARGIN}
+        />
       ))}
 
       {visualizeSection(rightItems)}

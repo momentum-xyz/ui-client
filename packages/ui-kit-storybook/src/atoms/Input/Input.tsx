@@ -17,6 +17,7 @@ export interface InputPropsInterface {
   isSearch?: boolean;
   danger?: boolean;
   wide?: boolean;
+  isClearable?: boolean;
   onChange: (value: string) => void;
   onEnter?: () => void;
 }
@@ -30,6 +31,7 @@ const Input: FC<InputPropsInterface> = ({
   danger,
   wide,
   isSearch,
+  isClearable,
   onChange,
   onEnter
 }) => {
@@ -59,10 +61,16 @@ const Input: FC<InputPropsInterface> = ({
         }}
       />
 
-      {isSearch && (
+      {((isSearch && !isClearable) || (isSearch && isClearable && !value)) && (
         <styled.IconSearch>
           <IconSvg name="search" size="m" isWhite />
         </styled.IconSearch>
+      )}
+
+      {isClearable && (!!value || value === 0) && (
+        <styled.IconClear onClick={() => onChange('')}>
+          <IconSvg name="close_large" size="s" />
+        </styled.IconClear>
       )}
     </styled.Container>
   );

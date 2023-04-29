@@ -1,6 +1,6 @@
 import {cast, castToSnapshot, flow, getSnapshot, types} from 'mobx-state-tree';
 import {ApiPromise, Keyring} from '@polkadot/api';
-import {compactStripLength, formatBalance} from '@polkadot/util';
+import {compactStripLength} from '@polkadot/util';
 import BN from 'bn.js';
 import {
   ResetModel,
@@ -11,13 +11,22 @@ import {
 } from '@momentum-xyz/core';
 import {IconNameType, OptionInterface} from '@momentum-xyz/ui-kit';
 
-import {PolkadotAddress, SearchQuery, NftItem, NftItemModelInterface} from 'core/models';
+import {
+  PolkadotAddress,
+  SearchQuery,
+  NftItem,
+  NftItemModelInterface,
+  Wallet,
+  Stake
+} from 'core/models';
+import {storage} from 'shared/services';
+import {StorageKeyEnum} from 'core/enums';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
-import {fetchIpfs, isIpfsHash, wait} from 'core/utils';
+import {fetchIpfs, formatBigInt, isIpfsHash, wait} from 'core/utils';
 import {KeyringAddressType} from 'core/types';
 import {mintNft, mintNftCheckJob} from 'api/repositories';
 import {appVariables} from 'api/constants';
-import {MintNftCheckJobResponse} from 'api';
+import {api, MintNftCheckJobResponse, StakeInterface, WalletInterface} from 'api';
 import {WalletConnectionsInterface} from 'core/interfaces';
 import PolkadotImplementation from 'shared/services/web3/polkadot.class';
 
@@ -62,17 +71,22 @@ const itemMetadataToString = (itemMetadata: any): string | null => {
 interface AccountBalanceInterface {
   free: BN;
   reserved: BN;
-  // miscFrozen: number;
-  // feeFrozen: number;
+  // transferable: BN; // don't use yet, not implemendted in BE
+  unbonding: BN;
 }
 
 const NftStore = types
   .compose(
     ResetModel,
     types.model('NftStore', {
+      wallets: types.optional(types.array(Wallet), []),
+      stakes: types.optional(types.array(Stake), []),
+      defaultWalletId: '',
+      selectedWalletId: '',
+
       addresses: types.optional(types.array(PolkadotAddress), []),
-      chainDecimals: types.maybe(types.number),
-      tokenSymbol: '',
+      chainDecimals: types.optional(types.number, 18),
+      tokenSymbol: 'MOM',
       existentialDeposit: types.optional(types.frozen(), 0),
       ss58Format: types.maybe(types.number),
       isWeb3Injected: false,
@@ -91,12 +105,15 @@ const NftStore = types
       stakingAtOthers: types.map(StakeDetail),
       stakingDashorboardDialog: types.optional(Dialog, {}),
       accumulatedRewards: types.frozen(new BN(0)),
-      balance: types.optional(types.frozen<AccountBalanceInterface>(), {
-        free: new BN(0),
-        reserved: new BN(0)
-        // miscFrozen: 0,
-        // feeFrozen: 0
-      }),
+      // balance: types.optional(types.frozen<AccountBalanceInterface>(), {
+      //   free: new BN(0),
+      //   reserved: new BN(0)
+      //   // miscFrozen: 0,
+      //   // feeFrozen: 0
+      // }),
+
+      walletsRequest: types.optional(RequestModel, {}),
+      stakesRequest: types.optional(RequestModel, {}),
       requestingFundsStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
       mintingNftStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
 
@@ -104,6 +121,27 @@ const NftStore = types
       isBalanceLoading: false
     })
   )
+  .views((self) => ({
+    get balance(): AccountBalanceInterface {
+      const walletId = self.selectedWalletId || self.defaultWalletId || self.wallets[0]?.wallet_id;
+      const wallet = self.wallets.find((w) => w.wallet_id === walletId);
+      console.log('BALANCE', wallet, walletId, self.wallets);
+      if (!wallet) {
+        return {
+          free: new BN(0),
+          reserved: new BN(0),
+          // transferable: new BN(0),
+          unbonding: new BN(0)
+        };
+      }
+      return {
+        free: new BN(wallet.balance),
+        reserved: new BN(wallet.staked),
+        // transferable: new BN(wallet.transferable),
+        unbonding: new BN(wallet.unbonding)
+      };
+    }
+  }))
   .volatile<{
     channel: ApiPromise | null;
     unsubscribeBalanceSubscription: (() => void) | null;
@@ -112,6 +150,38 @@ const NftStore = types
     channel: null,
     unsubscribeStakingSubscription: null,
     unsubscribeBalanceSubscription: null
+  }))
+  .actions((self) => ({
+    loadMyWallets: flow(function* () {
+      const response: Array<WalletInterface> = yield self.walletsRequest.send(
+        api.userRepository.fetchMyWallets,
+        {}
+      );
+      if (response) {
+        self.wallets = cast(response);
+      }
+    }),
+    loadMyStakes: flow(function* () {
+      const response: Array<StakeInterface> = yield self.walletsRequest.send(
+        api.userRepository.fetchMyStakes,
+        {}
+      );
+      if (response) {
+        self.stakes = cast(response);
+      }
+    }),
+    loadDefaultWalletId(): void {
+      const storedAccount = storage.get<string>(StorageKeyEnum.DefaultAccount);
+      if (storedAccount && self.wallets.find((w) => w.wallet_id === storedAccount)) {
+        self.setDefaultWalletId(storedAccount);
+      } else if (self.wallets.length > 0) {
+        self.setDefaultWalletId(self.wallets[0].wallet_id);
+      }
+    },
+    setDefaultWalletId(walletId: string) {
+      storage.setString(StorageKeyEnum.DefaultAccount, walletId);
+      self.defaultWalletId = walletId;
+    }
   }))
   .views((self) => {
     return {
@@ -159,11 +229,12 @@ const NftStore = types
         return self.stakingAtOthers.has(address);
       },
       balanceFormat(amount: BN) {
-        return formatBalance(
-          amount,
-          {withSi: true, withUnit: self.tokenSymbol},
-          self.chainDecimals
-        );
+        return formatBigInt(amount.toString()); // TODO remove this
+        // return formatBalance(
+        //   amount,
+        //   {withSi: true, withUnit: self.tokenSymbol},
+        //   self.chainDecimals
+        // );
       }
     };
   })
@@ -182,20 +253,27 @@ const NftStore = types
       return self.balance.free.isZero();
     },
     get balanceTotal(): string {
-      try {
-        const total = self.balance.free.clone().add(self.balance.reserved);
-        return self.balanceFormat(total);
-      } catch (err) {
-        console.error(err);
-        return '0';
-      }
+      return self.balance.free.toString();
+      // try {
+      //   const total = self.balance.free.clone().add(self.balance.reserved);
+      //   return self.balanceFormat(total);
+      // } catch (err) {
+      //   console.error(err);
+      //   return '0';
+      // }
     },
     get balanceReserved(): string {
+      // TODO remove
       return self.balanceFormat(self.balance.reserved);
     },
     get balanceTransferrableBN(): BN {
+      // TODO remove
+      // return self.balance.free.clone();
       try {
-        const transferrable = self.balance.free.clone().sub(self.existentialDeposit);
+        const transferrable = self.balance.free
+          .clone()
+          .sub(self.balance.reserved)
+          .sub(self.balance.unbonding);
         const zero = new BN(0);
         return transferrable.gt(zero) ? transferrable : zero;
       } catch (err) {
@@ -245,9 +323,9 @@ const NftStore = types
     setMintingNftStatus(status: 'pending' | 'success' | 'error') {
       self.mintingNftStatus = status;
     },
-    setBalance(payload: AccountBalanceInterface) {
-      self.balance = payload;
-    },
+    // setBalance(payload: AccountBalanceInterface) {
+    //   self.balance = payload;
+    // },
     setAccumulatedRewards(amount: BN) {
       self.accumulatedRewards = amount;
     },
@@ -589,91 +667,100 @@ const NftStore = types
         stakedAtOthers: stakedAtOthersAddresses
       };
     }),
-    stake: flow(function* (address: string, amount: BN, itemId: number) {
-      const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
+    stake: flow(function* (address: string, amount: BN, itemId: number | string) {
+      // const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
       address = formatAddress(address);
-      console.log('Stake', itemId, amount, address);
-      if (!self.channel) {
-        throw new Error('Channel is not initialized');
-      }
-      const {account, options} = yield prepareSignAndSend(address);
+      console.log('TODO Stake', itemId, amount, address);
+      yield Promise.resolve();
+      // if (!self.channel) {
+      //   throw new Error('Channel is not initialized');
+      // }
+      // const {account, options} = yield prepareSignAndSend(address);
 
-      const tx = self.channel.tx.stake.stake(collectionId, itemId, amount);
-      console.log('Sign and send', tx);
+      // const tx = self.channel.tx.stake.stake(collectionId, itemId, amount);
+      // console.log('Sign and send', tx);
 
-      try {
-        const res = yield tx.signAndSend(account.address, options, ({status}) => {
-          if (status.isInBlock) {
-            const blockHash = status.asInBlock.toString();
-            console.log(`Completed at block hash #${blockHash}`);
-            // resolve(blockHash);
-          } else {
-            console.log(`Current transaction status: ${status.type}`);
-          }
-        });
-        console.log('res', res);
-      } catch (err) {
-        console.log('Error staking:', err);
-        throw err;
-      }
+      // try {
+      //   const res = yield tx.signAndSend(account.address, options, ({status}) => {
+      //     if (status.isInBlock) {
+      //       const blockHash = status.asInBlock.toString();
+      //       console.log(`Completed at block hash #${blockHash}`);
+      //       // resolve(blockHash);
+      //     } else {
+      //       console.log(`Current transaction status: ${status.type}`);
+      //     }
+      //   });
+      //   console.log('res', res);
+      // } catch (err) {
+      //   console.log('Error staking:', err);
+      //   throw err;
+      // }
     }),
-    unstake: flow(function* (address: string, amount: number | null, itemId: number) {
-      const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
+    unstake: flow(function* (address: string, amount: number | null, itemId: number | string) {
+      // const collectionId = +appVariables.NFT_COLLECTION_ODYSSEY_ID;
       address = formatAddress(address);
       console.log('Unstake', itemId, address);
-      if (!self.channel) {
-        throw new Error('Channel is not initialized');
-      }
-      const {account, options} = yield prepareSignAndSend(address);
+      yield Promise.resolve();
+      // if (!self.channel) {
+      //   throw new Error('Channel is not initialized');
+      // }
+      // const {account, options} = yield prepareSignAndSend(address);
 
-      const tx = self.channel.tx.stake.unstake(collectionId, itemId, null);
-      console.log('Sign and send', tx);
+      // const tx = self.channel.tx.stake.unstake(collectionId, itemId, null);
+      // console.log('Sign and send', tx);
 
-      try {
-        const res = yield tx.signAndSend(account.address, options, ({status}) => {
-          if (status.isInBlock) {
-            const blockHash = status.asInBlock.toString();
-            console.log(`Completed at block hash #${blockHash}`);
-            // resolve(blockHash);
-          } else {
-            console.log(`Current transaction status: ${status.type}`);
-          }
-        });
-        console.log('res', res);
-      } catch (err) {
-        console.log('Error unstaking:', err);
-        throw err;
-      }
+      // try {
+      //   const res = yield tx.signAndSend(account.address, options, ({status}) => {
+      //     if (status.isInBlock) {
+      //       const blockHash = status.asInBlock.toString();
+      //       console.log(`Completed at block hash #${blockHash}`);
+      //       // resolve(blockHash);
+      //     } else {
+      //       console.log(`Current transaction status: ${status.type}`);
+      //     }
+      //   });
+      //   console.log('res', res);
+      // } catch (err) {
+      //   console.log('Error unstaking:', err);
+      //   throw err;
+      // }
     }),
     getRewards: flow(function* (address: string) {
       address = formatAddress(address);
-      console.log('Get rewards', address);
-      if (!self.channel) {
-        throw new Error('Channel is not initialized');
-      }
-      const {account, options} = yield prepareSignAndSend(address);
+      console.log('TODO Get rewards', address);
+      yield Promise.resolve();
+      // if (!self.channel) {
+      //   throw new Error('Channel is not initialized');
+      // }
+      // const {account, options} = yield prepareSignAndSend(address);
 
-      const tx = self.channel.tx.stake.getRewards();
-      console.log('Sign and send', tx);
+      // const tx = self.channel.tx.stake.getRewards();
+      // console.log('Sign and send', tx);
 
-      try {
-        const res = yield tx.signAndSend(account.address, options, ({status}) => {
-          if (status.isInBlock) {
-            const blockHash = status.asInBlock.toString();
-            console.log(`Completed at block hash #${blockHash}`);
-            // resolve(blockHash);
-          } else {
-            console.log(`Current transaction status: ${status.type}`);
-          }
-        });
-        console.log('res', res);
-      } catch (err) {
-        console.log('Error getting rewards:', err);
-        throw err;
-      }
+      // try {
+      //   const res = yield tx.signAndSend(account.address, options, ({status}) => {
+      //     if (status.isInBlock) {
+      //       const blockHash = status.asInBlock.toString();
+      //       console.log(`Completed at block hash #${blockHash}`);
+      //       // resolve(blockHash);
+      //     } else {
+      //       console.log(`Current transaction status: ${status.type}`);
+      //     }
+      //   });
+      //   console.log('res', res);
+      // } catch (err) {
+      //   console.log('Error getting rewards:', err);
+      //   throw err;
+      // }
     }),
     requestAirdrop: flow(function* (address: string) {
-      console.log('Request airdrop', address);
+      console.log('TODO Request airdrop', address);
+
+      if (Date.now()) {
+        yield Promise.resolve();
+        return;
+      }
+
       self.setRequestFundsStatus('pending');
       if (!self.channel) {
         self.setRequestFundsStatus('error');
@@ -685,22 +772,22 @@ const NftStore = types
         throw new Error('Wait at least 24 hours before requesting airdrop again');
       }
 
-      const {account, options} = yield prepareSignAndSend(address);
-      const tx = self.channel.tx.faucet.getTokens();
+      // const {account, options} = yield prepareSignAndSend(address);
+      // const tx = self.channel.tx.faucet.getTokens();
 
-      console.log('Sign and send', tx);
+      // console.log('Sign and send', tx);
       try {
-        yield new Promise((resolve, reject) => {
-          tx.signAndSend(account.address, options, ({status}) => {
-            if (status.isInBlock) {
-              const blockHash = status.asInBlock.toString();
-              console.log(`Completed at block hash #${blockHash}`);
-              resolve(blockHash);
-            } else {
-              console.log(`Current transaction status: ${status.type}`);
-            }
-          }).catch(reject);
-        });
+        //   yield new Promise((resolve, reject) => {
+        //     tx.signAndSend(account.address, options, ({status}) => {
+        //       if (status.isInBlock) {
+        //         const blockHash = status.asInBlock.toString();
+        //         console.log(`Completed at block hash #${blockHash}`);
+        //         resolve(blockHash);
+        //       } else {
+        //         console.log(`Current transaction status: ${status.type}`);
+        //       }
+        //     }).catch(reject);
+        //   });
         self.setRequestFundsStatus('success');
         saveLastAirdropInfo(address);
         console.log('Request airdrop success');
@@ -719,30 +806,30 @@ const NftStore = types
       const isEnabled = yield SubstrateProvider.isExtensionEnabled();
       self.isWeb3Injected = cast(isEnabled);
     }),
-    getChainInformation() {
-      self.tokenSymbol = cast(
-        self.channel?.registry.chainTokens[0] ? self.channel?.registry.chainTokens[0] : ''
-      );
+    // getChainInformation() {
+    //   self.tokenSymbol = cast(
+    //     self.channel?.registry.chainTokens[0] ? self.channel?.registry.chainTokens[0] : ''
+    //   );
 
-      self.ss58Format = cast(self.channel?.registry.chainSS58);
-      self.chainDecimals = cast(self.channel?.registry.chainDecimals[0]);
-      SubstrateProvider.setDefaultBalanceFormatting(
-        self.channel?.registry.chainDecimals[0],
-        self.channel?.registry.chainTokens[0]
-      );
+    //   self.ss58Format = cast(self.channel?.registry.chainSS58);
+    //   self.chainDecimals = cast(self.channel?.registry.chainDecimals[0]);
+    //   SubstrateProvider.setDefaultBalanceFormatting(
+    //     self.channel?.registry.chainDecimals[0],
+    //     self.channel?.registry.chainTokens[0]
+    //   );
 
-      self.existentialDeposit = cast(self.channel?.consts.balances.existentialDeposit);
-      console.log(
-        'Chain Info',
-        self.tokenSymbol,
-        'ss58Format',
-        self.ss58Format,
-        'chainDecimals',
-        self.chainDecimals,
-        'existentialDeposit',
-        self.existentialDeposit
-      );
-    },
+    //   self.existentialDeposit = cast(self.channel?.consts.balances.existentialDeposit);
+    //   console.log(
+    //     'Chain Info',
+    //     self.tokenSymbol,
+    //     'ss58Format',
+    //     self.ss58Format,
+    //     'chainDecimals',
+    //     self.chainDecimals,
+    //     'existentialDeposit',
+    //     self.existentialDeposit
+    //   );
+    // },
     getStatisticsByWallet: flow(function* (wallet: string) {
       const walletConnections: WalletConnectionsInterface = yield self.getStakesInfo(wallet);
       const {stakedAtWallet, stakedAtOthers} = walletConnections;
@@ -791,20 +878,26 @@ const NftStore = types
     }),
     activateWallet(wallet: string): void {
       console.log(`Activate wallet ${wallet}`);
-      self.subscribeToBalanceChanges(wallet);
-      self.subscribeToStakingInfo(wallet);
+      // self.subscribeToBalanceChanges(wallet);
+      // self.subscribeToStakingInfo(wallet);
     }
   }))
   .actions((self) => ({
     init: flow(function* () {
-      self.setIsLoading(true);
+      yield Promise.resolve();
+      // self.setIsLoading(true);
 
-      yield self.connectToChain();
-      yield self.fetchNfts();
+      // yield self.connectToChain();
+      // yield self.fetchNfts();
 
-      self.getChainInformation();
+      // self.getChainInformation();
 
-      self.setIsLoading(false);
+      // self.setIsLoading(false);
+    }),
+    initMyWalletsAndStakes: flow(function* () {
+      yield self.loadMyWallets();
+      yield self.loadMyStakes();
+      self.loadDefaultWalletId();
     }),
     initWeb3ExtensionIfNeeded: flow(function* () {
       if (!self.isWeb3Injected) {

@@ -1,5 +1,3 @@
-import {PropsWithChildren} from 'react';
-
 import {IconNameType} from '../../types';
 import {ButtonEllipse} from '../../atoms';
 
@@ -17,23 +15,19 @@ export interface TabsPropsInterface<T> {
   onSelect?: (id: T) => void;
 }
 
-const Tabs = <T,>(props: PropsWithChildren<TabsPropsInterface<T>>) => {
-  const {tabList, activeId, children, onSelect} = props;
+const Tabs = <T,>({tabList, activeId, onSelect}: TabsPropsInterface<T>) => {
   return (
-    <styled.Inner data-testid="Tabs-test">
-      <styled.Tabs>
-        {tabList.map((tab, index) => (
-          <ButtonEllipse
-            key={`${tab.id}${index}`}
-            icon={tab.icon}
-            label={tab.label}
-            isActive={tab.id === activeId}
-            onClick={() => onSelect?.(tab.id)}
-          />
-        ))}
-      </styled.Tabs>
-      {children}
-    </styled.Inner>
+    <styled.Tabs data-testid="Tabs-test">
+      {tabList.map((tab, index) => (
+        <ButtonEllipse
+          key={`${tab.id}${index}`}
+          icon={tab.icon}
+          label={tab.label}
+          isActive={tab.id === activeId}
+          onClick={() => onSelect?.(tab.id)}
+        />
+      ))}
+    </styled.Tabs>
   );
 };
 

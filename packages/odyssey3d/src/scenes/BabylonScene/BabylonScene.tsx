@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import {Scene} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
@@ -6,6 +6,7 @@ import {useMutableCallback} from '@momentum-xyz/ui-kit';
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
 import {PlayerHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babylon';
 import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
+import skyboxWorld from '../../static/PANOSKYGB.jpeg';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
   const onObjectClick = useMutableCallback(callbacks.onObjectClick);
@@ -14,12 +15,26 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
   const onObjectTransform = useMutableCallback(callbacks.onObjectTransform);
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);
 
+  useEffect(() => {
+    return () => {
+      // Cleaning everything
+      events.off('SetWorld');
+      events.off('AddObject');
+      events.off('ObjectTextureChanged');
+      events.off('ObjectTransform');
+      events.off('UserAdded');
+      events.off('UserRemoved');
+      events.off('UsersTransformChanged');
+      events.off('ObjectEditModeChanged');
+    };
+  }, [events]);
+
   /* Will run one time. */
-  const onSceneReady = (scene: Scene) => {
+  const onSceneReady = async (scene: Scene) => {
     const view = scene.getEngine().getRenderingCanvas();
     const engine = scene.getEngine();
     if (view?.id) {
-      PlayerHelper.initialize(scene, view, onMove);
+      PlayerHelper.initialize(scene, view, true, onMove);
       LightHelper.initialize(scene);
       ObjectHelper.initialize(
         scene,
@@ -32,11 +47,12 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         // onMove,
       );
 
-      WorldCreatorHelper.initialize(scene, onObjectTransform);
+      await WorldCreatorHelper.initialize(scene, onObjectTransform);
       //SkyboxHelper.setCubemapSkybox(scene);
       SkyboxHelper.set360Skybox(
         scene,
-        'https://dev2.odyssey.ninja/api/v3/render/texture/s8/26485e74acb29223ba7a9fa600d36c7f'
+        //'https://dev2.odyssey.ninja/api/v3/render/texture/s8/26485e74acb29223ba7a9fa600d36c7f'
+        skyboxWorld
       );
 
       if (window.sessionStorage.getItem('babylon_debug')) {
@@ -55,12 +71,17 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         //PlayerHelper.spawnPlayer(scene, 'd906e070-3d2e-b1a5-3e3f-703423225945');
       });
 
-      events.on('ObjectCreated', async (object) => {
-        await ObjectHelper.spawnObjectAsync(scene, object);
+      events.on('AddObject', async (object, attachToCamera = false) => {
+        await ObjectHelper.spawnObjectAsync(scene, object, attachToCamera);
       });
 
       events.on('ObjectTextureChanged', (object) => {
         ObjectHelper.setObjectTexture(scene, object);
+      });
+
+      events.on('ObjectTransform', (id, object) => {
+        WorldCreatorHelper.setObjectTransform(id, object);
+        console.log('TODO handle ObjectTransform', id, object);
       });
 
       events.on('UserAdded', async (user) => {
@@ -77,6 +98,16 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
 
       events.on('ObjectEditModeChanged', (objectId, isOn) => {
         WorldCreatorHelper.toggleGizmo(objectId, isOn);
+      });
+      events.on('DetachObjectFromCamera', (objectId) => {
+        ObjectHelper.detachFromCamera();
+      });
+
+      events.on('SendHighFive', (userId) => {
+        console.log('TODO Babylon handle SendHighFive to', userId);
+      });
+      events.on('ReceiveHighFive', (userId) => {
+        console.log('TODO Babylon handle ReceiveHighFive from', userId);
       });
     } else {
       console.error('There is no canvas for Babylon.');

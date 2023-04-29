@@ -1,13 +1,19 @@
 import {types} from 'mobx-state-tree';
 
 import {SignInStore} from './SignInStore';
-import {StakingViewStore} from './StakingViewStore';
 import {ProfileStore} from './ProfileStore';
+import {WorldDetailsStore} from './WorldDetailsStore';
+import {UserDetailsStore} from './UserDetailsStore';
+import {StakingViewStore} from './StakingViewStore';
+import {WorldProfileStore} from './WorldProfileStore';
 
 const WidgetsStore = types.model('WidgetsStore', {
   signInStore: types.optional(SignInStore, {}),
-  stakingViewStore: types.optional(StakingViewStore, {}),
-  profileStore: types.optional(ProfileStore, {})
+  profileStore: types.optional(ProfileStore, {}),
+  worldProfileStore: types.optional(WorldProfileStore, {}),
+  worldDetailsStore: types.optional(WorldDetailsStore, {}),
+  userDetailsStore: types.optional(UserDetailsStore, {}),
+  stakingViewStore: types.optional(StakingViewStore, {})
 });
 
 export {WidgetsStore};

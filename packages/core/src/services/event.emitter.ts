@@ -2,6 +2,7 @@ import EventEmitter from 'eventemitter3';
 
 import {
   Object3dInterface,
+  ObjectTransformInterface,
   Odyssey3dUserInterface,
   Odyssey3dUserTransformInterface,
   SetWorldInterface,
@@ -17,8 +18,9 @@ import {
 
 // TODO: Define proper types
 export type Event3dType = {
-  ObjectCreated: (object: Object3dInterface) => void;
-  ObjectChanged: (object: Object3dInterface) => void;
+  AddObject: (object: Object3dInterface, attachToCamera?: boolean) => void;
+  ChangeObject: (object: Object3dInterface) => void;
+  ObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
   SetWorld: (world: SetWorldInterface, userId: string) => void;
   ObjectTextureChanged: (texture: Texture3dInterface) => void;
 
@@ -26,7 +28,14 @@ export type Event3dType = {
   UserRemoved: (userId: string) => void;
   UsersTransformChanged: (users: Odyssey3dUserTransformInterface[]) => void;
 
+  UserJoinedVoiceChat: (userId: string) => void;
+  UserLeftVoiceChat: (userId: string) => void;
+
   ObjectEditModeChanged: (objectId: string, isEditOn: boolean) => void;
+  DetachObjectFromCamera: (objectId: string) => void;
+
+  SendHighFive: (userId: string) => void;
+  ReceiveHighFive: (fromUserId: string) => void;
 
   // ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
 };
@@ -37,10 +46,12 @@ export const Event3dEmitter = new EventEmitter<Event3dType>();
 export type Event3dEmitterType = typeof Event3dEmitter;
 
 export type Universe3dType = {
-  WorldAdded: (world: WorldInfoInterface) => void;
-  // WorldChanged: (world: WorldInfoInterface) => void;
-  UserAdded: (user: Odyssey3dUserInterface) => void;
-  // UserChanged: (user: Odyssey3dUserInterface) => void;
+  WorldsAdded: (worlds: WorldInfoInterface[]) => void;
+  WorldSelected: (id: string) => void;
+  WorldChanged: (world: WorldInfoInterface) => void;
+  UsersAdded: (users: Odyssey3dUserInterface[]) => void;
+  UserSelected: (id: string) => void;
+  UserChanged: (user: Odyssey3dUserInterface) => void;
 };
 
 export const Universe3dEmitter = new EventEmitter<Universe3dType>();

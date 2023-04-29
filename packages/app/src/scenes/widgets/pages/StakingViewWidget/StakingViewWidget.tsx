@@ -1,8 +1,14 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n, i18n} from '@momentum-xyz/core';
-import {TabInterface, Tabs, Panel, SelectOptionInterface} from '@momentum-xyz/ui-kit-storybook';
+import {
+  TabInterface,
+  Tabs,
+  Panel,
+  SelectOptionInterface,
+  PositionEnum
+} from '@momentum-xyz/ui-kit-storybook';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
@@ -20,7 +26,8 @@ const TABS_LIST: TabInterface<StakingTabType>[] = [
 ];
 
 const StakingViewWidget: FC = () => {
-  const {widgetManagerStore, widgetStore} = useStore();
+  const {widgetManagerStore, widgetStore, nftStore, universeStore} = useStore();
+  const {universe2dStore} = universeStore;
   const {stakingViewStore} = widgetStore;
   const {close} = widgetManagerStore;
 
@@ -29,17 +36,10 @@ const StakingViewWidget: FC = () => {
   const {t} = useI18n();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    stakingViewStore.init();
-
-    return () => {
-      stakingViewStore.resetModel();
-    };
-  }, [stakingViewStore]);
-
-  const walletOptions: SelectOptionInterface<string>[] = stakingViewStore.wallets.map((wallet) => ({
-    value: wallet.hash,
-    label: wallet.hash
+  const walletOptions: SelectOptionInterface<string>[] = nftStore.wallets.map((wallet) => ({
+    value: wallet.wallet_id,
+    label: wallet.wallet_id,
+    icon: 'talisman'
   }));
 
   const sortOptions: SelectOptionInterface<StakeSortType>[] = [
@@ -49,8 +49,8 @@ const StakingViewWidget: FC = () => {
     }
   ];
 
-  const onSelectStake = (uuid: string) => {
-    console.log(uuid);
+  const onSelectWorld = (worldId: string) => {
+    widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id: worldId});
   };
 
   const onUnstake = (uuid: string) => {
@@ -64,6 +64,8 @@ const StakingViewWidget: FC = () => {
   return (
     <styled.Container data-testid="StakingViewWidget-test">
       <Panel
+        isFullHeight
+        size="large"
         icon="status-2"
         variant="primary"
         title={t('labels.stakingOverview')}
@@ -79,18 +81,20 @@ const StakingViewWidget: FC = () => {
               <StakeList
                 searchQuery={stakingViewStore.searchQuery}
                 stakeList={stakingViewStore.filteredAndSortedStakeList}
+                mostStakedWorlds={universe2dStore.mostStakedWorlds}
+                isStakeListEmpty={nftStore.stakes.length === 0}
                 filterField={stakingViewStore.filterField}
                 filterOptions={walletOptions}
                 sortField={stakingViewStore.sortField}
                 sortOptions={sortOptions}
-                onSelectStake={onSelectStake}
+                onSelectWorld={onSelectWorld}
                 onUnstake={onUnstake}
                 onStake={onStake}
               />
             )}
 
             {activeTab === 'wallet' && (
-              <MyWallet wallets={stakingViewStore.wallets} walletOptions={walletOptions} />
+              <MyWallet wallets={nftStore.wallets} walletOptions={walletOptions} />
             )}
           </styled.Content>
         </styled.Wrapper>

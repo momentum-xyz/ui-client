@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
-import {WidgetInfoModelType} from 'stores/WidgetManagerStore';
+import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 import * as widgets from 'scenes/widgets/pages';
 
 import * as styled from './WidgetViewerPage.styled';
@@ -12,18 +12,30 @@ const WidgetViewerPage: FC = () => {
   const {widgetManagerStore} = useStore();
   const {leftActiveWidget, rightActiveWidget} = widgetManagerStore;
 
-  const visualizeSection = (widgetInfo: WidgetInfoModelType | null) => {
+  const visualizeSection = (widgetInfo: WidgetInfoModelInterface) => {
     switch (widgetInfo?.type) {
       case WidgetEnum.LOGIN:
         return <widgets.LoginWidget />;
-      case WidgetEnum.PROFILE:
+      case WidgetEnum.MY_PROFILE:
         return <widgets.ProfileWidget />;
+      case WidgetEnum.CREATOR:
+        return <widgets.CreatorWidget />;
       case WidgetEnum.EXPLORE:
         return <widgets.ExploreWidget />;
-      case WidgetEnum.WORLD_OVERVIEW:
-        return <widgets.WorldOverviewWidget />;
+      case WidgetEnum.USER_DETAILS:
+        return <widgets.UserDetailsWidget {...widgetInfo} />;
+      case WidgetEnum.WORLD_DETAILS:
+        return <widgets.WorldDetailsWidget {...widgetInfo} />;
       case WidgetEnum.STAKING_VIEW:
         return <widgets.StakingViewWidget />;
+      case WidgetEnum.STAKING:
+        return <widgets.StakingWidget {...widgetInfo} />;
+      case WidgetEnum.VOICE_CHAT:
+        return <widgets.VoiceChatWidget />;
+      case WidgetEnum.WORLD_PROFILE:
+        return <widgets.WorldProfileWidget />;
+      case WidgetEnum.WORLD_VISITORS:
+        return <widgets.WorldVisitorsWidget />;
       default:
         return <></>;
     }
@@ -32,16 +44,16 @@ const WidgetViewerPage: FC = () => {
   return (
     <styled.Container data-testid="WidgetListPage-test">
       <styled.LeftSection>
-        <styled.Widget>{visualizeSection(leftActiveWidget)}</styled.Widget>
+        <styled.Widget>{leftActiveWidget && visualizeSection(leftActiveWidget)}</styled.Widget>
       </styled.LeftSection>
 
       {/* TEST */}
-      <styled.Widget>
+      {/* <styled.Widget>
         <widgets.StakingContractsTestWidget />
-      </styled.Widget>
+      </styled.Widget> */}
 
       <styled.RightSection>
-        <styled.Widget>{visualizeSection(rightActiveWidget)}</styled.Widget>
+        <styled.Widget>{rightActiveWidget && visualizeSection(rightActiveWidget)}</styled.Widget>
       </styled.RightSection>
     </styled.Container>
   );

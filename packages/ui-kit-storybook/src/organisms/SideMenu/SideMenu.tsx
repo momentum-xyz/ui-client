@@ -1,4 +1,3 @@
-import {FC, memo} from 'react';
 import cn from 'classnames';
 
 import {Hexagon, MenuLabel} from '../../atoms';
@@ -10,48 +9,49 @@ const TEN = 10;
 
 type SideMenuOrientationType = 'left' | 'right';
 
-interface SideMenuItemInterface {
+export interface SideMenuItemInterface<T> {
+  id: T;
   label: string;
   iconName: IconNameType;
   pinNumber?: number;
 }
 
-export interface SideMenuPropsInterface {
-  sideMenuItems: SideMenuItemInterface[];
-  activeIdx?: number;
-  onMenuItemSelection: (idx: number) => void;
+export interface SideMenuPropsInterface<T> {
+  activeId?: T;
   orientation?: SideMenuOrientationType;
+  sideMenuItems: SideMenuItemInterface<T>[];
+  onSelect: (id: T) => void;
 }
 
-const SideMenu: FC<SideMenuPropsInterface> = ({
+const SideMenu = <T,>({
+  activeId,
   sideMenuItems,
-  activeIdx,
   orientation = 'right',
-  onMenuItemSelection = (idx: number) => {}
-}) => {
+  onSelect
+}: SideMenuPropsInterface<T>) => {
   return (
     <styled.Wrapper>
-      {sideMenuItems.map((sideMenuItem, idx) => (
+      {sideMenuItems.map(({id, label, iconName, pinNumber}) => (
         <styled.MenuItemContainer
-          className={cn(idx === activeIdx && 'active', orientation === 'left' && 'inverted')}
-          key={sideMenuItem.label}
+          key={label}
+          className={cn(id === activeId && 'active', orientation === 'left' && 'inverted')}
         >
           <styled.MenuItem
-            onClick={() => onMenuItemSelection(idx)}
+            onClick={() => onSelect(id)}
             className={cn(orientation === 'left' && 'inverted')}
           >
-            <Hexagon type="primary" isActive={idx === activeIdx} iconName={sideMenuItem.iconName} />
-            <MenuLabel text={sideMenuItem.label} type={orientation} />
-            {sideMenuItem.pinNumber && (
+            <Hexagon type="menu" isActive={id === activeId} iconName={iconName} />
+            <MenuLabel text={label} type={orientation} />
+            {pinNumber && (
               <styled.MenuItemNumberPin className={cn(orientation === 'left' && 'inverted')}>
-                {sideMenuItem.pinNumber < TEN ? '0' : ''}
-                {sideMenuItem.pinNumber}
+                {pinNumber < TEN ? '0' : ''}
+                {pinNumber}
               </styled.MenuItemNumberPin>
             )}
           </styled.MenuItem>
 
           <styled.MenuItemSeparator>
-            <Hexagon type="blank" />
+            <Hexagon type="blank-small" />
           </styled.MenuItemSeparator>
         </styled.MenuItemContainer>
       ))}
@@ -59,4 +59,4 @@ const SideMenu: FC<SideMenuPropsInterface> = ({
   );
 };
 
-export default memo(SideMenu);
+export default SideMenu;

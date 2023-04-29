@@ -1,133 +1,178 @@
-import React, {FC, useCallback, useState} from 'react';
+import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {toast} from 'react-toastify';
-import {Heading, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
+import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n} from '@momentum-xyz/core';
+import {Panel, PositionEnum, SideMenu, SideMenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
-import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
+import {ROUTES} from 'core/constants';
+import {useStore} from 'shared/hooks';
+import {WidgetEnum} from 'core/enums';
 import {ProfileFormInterface} from 'core/interfaces';
-import {useNavigation, useStore} from 'shared/hooks';
 
-import {ProfileSettings, ProfileView, ProfileEditor} from './components';
+import {ProfileSettings, ProfileView, ProfileEditor, ManageWallet} from './components';
 import * as styled from './ProfileWidget.styled';
 
+type MenuItemType = 'viewProfile' | 'editProfile' | 'settings' | 'wallet' | 'logout';
+
 const ProfileWidget: FC = () => {
-  const {sessionStore, agoraStore, universeStore, widgetStore} = useStore();
-  const {world3dStore} = universeStore;
+  const {nftStore, sessionStore, agoraStore, widgetStore, widgetManagerStore} = useStore();
+  const {userDevicesStore} = agoraStore;
   const {profileStore} = widgetStore;
 
-  const [isEditMode, setIsEditMode] = useState<boolean>(false);
-  const [isDeviceSettings, setIsDeviceSettings] = useState<boolean>(false);
+  const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewProfile');
 
+  const navigate = useNavigate();
   const {t} = useI18n();
-  const {goToOdysseyHome} = useNavigation();
 
-  const isTeleportAvailable = true;
-  // const isTeleportAvailable = useMemo(() => {
-  //   return isUnityAvailable
-  //     ? !sessionStore.isGuest && universeStore.worldId !== sessionStore.userId
-  //     : !sessionStore.isGuest;
-  // }, [isUnityAvailable, sessionStore.userId, sessionStore.isGuest, universeStore.worldId]);
+  useEffect(() => {
+    profileStore.init(sessionStore.userId);
 
-  const handleTeleport = useCallback(() => {
-    goToOdysseyHome(sessionStore.userId);
-    profileStore.resetModel();
-  }, [goToOdysseyHome, profileStore, sessionStore.userId]);
+    return () => {
+      profileStore.resetModel();
+    };
+  }, [profileStore, sessionStore.userId]);
+
+  const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = useMemo(
+    () => [
+      {
+        id: 'editProfile',
+        iconName: 'edit',
+        label: t('actions.editProfile')
+      },
+      {
+        id: 'settings',
+        iconName: 'settings',
+        label: t('actions.settings')
+      },
+      {
+        id: 'wallet',
+        iconName: 'wallet',
+        label: t('actions.manageWallet')
+      },
+      {
+        id: 'logout',
+        iconName: 'leave-left',
+        label: t('actions.logOut')
+      }
+    ],
+    [t]
+  );
+
+  const panelIcon = useMemo(() => {
+    if (activeMenuId !== 'viewProfile') {
+      return sideMenuItems.find((i) => i.id === activeMenuId)?.iconName;
+    }
+    return undefined;
+  }, [activeMenuId, sideMenuItems]);
+
+  const panelTitle = useMemo(() => {
+    return sideMenuItems.find((i) => i.id === activeMenuId)?.label || t('titles.myProfile');
+  }, [activeMenuId, sideMenuItems, t]);
 
   const handleProfileUpdate = useCallback(
     async (form: ProfileFormInterface, previousHash?: string) => {
-      const {jobId, isDone} = await profileStore.editProfile(form, previousHash);
-      if (isDone && !jobId) {
+      const {isDone} = await profileStore.editProfile(form, previousHash);
+      if (isDone) {
         await sessionStore.loadUserProfile();
-        setIsEditMode(false);
-
-        toast.info(
-          <ToastContent
-            headerIconName="people"
-            title={t('titles.alert')}
-            text={t('editProfileWidget.saveSuccess')}
-            showCloseButton
-          />,
-          TOAST_GROUND_OPTIONS
-        );
-      }
-
-      if (isDone && jobId) {
-        sessionStore.setupJobId(jobId);
-        setIsEditMode(false);
-
-        toast.info(
-          <ToastContent
-            headerIconName="people"
-            title={t('titles.alert')}
-            text={t('editProfileWidget.saveInProgress')}
-            showCloseButton
-          />,
-          TOAST_GROUND_OPTIONS
-        );
-      }
-
-      if (!isDone) {
-        toast.error(
-          <ToastContent
-            isDanger
-            headerIconName="people"
-            title={t('titles.alert')}
-            text={t('editProfileWidget.saveFailure')}
-            showCloseButton
-          />
-        );
+        setActiveMenuId('viewProfile');
       }
     },
-    [profileStore, sessionStore, t]
+    [profileStore, sessionStore]
+  );
+
+  const onInfoWorld = useCallback(
+    (id: string) => {
+      widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id});
+    },
+    [widgetManagerStore]
+  );
+
+  const onVisitWorld = useCallback(
+    (worldId: string) => {
+      navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+    },
+    [navigate]
   );
 
   return (
     <styled.Container data-testid="ProfileWidget-test">
-      <styled.Header>
-        <styled.Name>
-          <IconSvg name="people" size="medium" />
-          <Heading type="h2" label={t('titles.profile')} isTruncate />
-        </styled.Name>
-        <SvgButton iconName="close" size="normal" onClick={profileStore.resetModel} />
-      </styled.Header>
-      <styled.Body>
-        {!!sessionStore.user && (
-          <styled.Wrapper>
-            {!isEditMode && (
-              <ProfileView
-                isVisitAvailable={isTeleportAvailable}
-                user={sessionStore.user}
-                onTeleportToOdyssey={handleTeleport}
-              />
-            )}
+      <styled.PanelContainer>
+        <Panel
+          isFullHeight
+          size="normal"
+          variant="primary"
+          title={panelTitle}
+          icon={panelIcon}
+          image={!panelIcon ? sessionStore.userImageUrl : null}
+          onClose={() => {
+            profileStore.resetModel();
+            widgetManagerStore.close(WidgetEnum.MY_PROFILE);
+          }}
+        >
+          {!!sessionStore.user && (
+            <styled.Wrapper>
+              {activeMenuId === 'viewProfile' && (
+                <ProfileView
+                  user={sessionStore.user}
+                  defaultWalletId={nftStore.defaultWalletId}
+                  worldList={profileStore.worldList}
+                  onVisitWorld={onVisitWorld}
+                  onInfoWorld={onInfoWorld}
+                />
+              )}
 
-            {isEditMode && (
-              <ProfileEditor
-                user={sessionStore.user}
-                formErrors={profileStore.formErrors}
-                isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
-                onChangeKeyboardControl={world3dStore?.changeKeyboardControl}
-                onUpdate={handleProfileUpdate}
-                onCancel={() => setIsEditMode(!isEditMode)}
-              />
-            )}
+              {activeMenuId === 'editProfile' && (
+                <ProfileEditor
+                  user={sessionStore.user}
+                  defaultWalletId={nftStore.defaultWalletId}
+                  formErrors={profileStore.formErrors}
+                  isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
+                  onUpdate={handleProfileUpdate}
+                  onCancel={() => setActiveMenuId('viewProfile')}
+                />
+              )}
 
-            <ProfileSettings
-              isGuest={sessionStore.isGuest}
-              isEditMode={isEditMode}
-              isDeviceSettings={isDeviceSettings}
-              audioDeviceId={agoraStore.userDevicesStore.currentAudioInput?.deviceId}
-              audioDeviceList={agoraStore.userDevicesStore.audioInputOptions}
-              onSelectAudioDevice={agoraStore.selectAudioInput}
-              onToggleDeviceSettings={() => setIsDeviceSettings(!isDeviceSettings)}
-              onToggleEditMode={() => setIsEditMode(!isEditMode)}
-              {...(!sessionStore.isGuest && {onSignOut: sessionStore.signOutRedirect})}
-              {...(sessionStore.isGuest && {onSignIn: sessionStore.signInRedirect})}
-            />
-          </styled.Wrapper>
-        )}
-      </styled.Body>
+              {activeMenuId === 'settings' && (
+                <ProfileSettings
+                  inputAudioDeviceId={userDevicesStore.currentAudioInput?.deviceId}
+                  outputAudioDeviceId={userDevicesStore.currentAudioInput?.deviceId} // TODO: Connect;
+                  inputAudioDeviceList={userDevicesStore.audioInputOptions}
+                  outputAudioDeviceList={userDevicesStore.audioOutputOptions}
+                  onChangeAudioDevices={(inputId, outputId) => {
+                    userDevicesStore.selectAudioInput(inputId || '');
+                    // userDevicesStore.selectAudioInput(inputId || ''); // TODO: Connect;
+                  }}
+                  onCancel={() => setActiveMenuId('viewProfile')}
+                  isUpdating={false}
+                />
+              )}
+
+              {activeMenuId === 'wallet' && (
+                <ManageWallet
+                  wallets={nftStore.wallets}
+                  defaultWalletId={nftStore.defaultWalletId}
+                  onChangeDefaultWallet={nftStore.setDefaultWalletId}
+                  onReloadWallets={nftStore.loadMyWallets}
+                />
+              )}
+            </styled.Wrapper>
+          )}
+        </Panel>
+      </styled.PanelContainer>
+
+      <styled.SideMenuContainer>
+        <SideMenu
+          activeId={activeMenuId}
+          sideMenuItems={sideMenuItems}
+          onSelect={(menuId) => {
+            if (menuId === 'logout') {
+              sessionStore.signOutRedirect();
+            } else {
+              setActiveMenuId(activeMenuId === menuId ? 'viewProfile' : menuId);
+            }
+          }}
+        />
+      </styled.SideMenuContainer>
     </styled.Container>
   );
 };

@@ -14,7 +14,7 @@ const ProfileLine: FC<ProfileLinePropsInterface> = ({icon, label}) => {
   return (
     <styled.Container data-testid="ProfileLine-test">
       <ButtonRound icon={icon} isLabel />
-      <span>{label}</span>
+      <styled.Label>{label}</styled.Label>
     </styled.Container>
   );
 };

@@ -1,7 +1,6 @@
 import {cast, types} from 'mobx-state-tree';
 import {
   RequestModel,
-  Dialog,
   Event3dEmitter,
   ClickPositionInterface,
   TransformNoScaleInterface
@@ -12,11 +11,13 @@ import {UnityControlInterface} from '@momentum-xyz/sdk';
 // import {appVariables} from 'api/constants';
 import {GizmoTypeEnum, PosBusEventEnum} from 'core/enums';
 import {UnityPositionInterface} from 'core/interfaces';
+import {getRootStore} from 'core/utils';
+import {PosBusService} from 'shared/services';
 
 const DEFAULT_UNITY_VOLUME = 0.75;
 // const UNITY_VOLUME_STEP = 0.1;
 
-const defaultClickPosition = {x: 0, y: 0};
+// const defaultClickPosition = {x: 0, y: 0};
 
 const World3dStore = types
   .model('World3dStore', {
@@ -27,13 +28,15 @@ const World3dStore = types
     volume: types.optional(types.number, DEFAULT_UNITY_VOLUME),
     nodeRequest: types.optional(RequestModel, {}),
     // lastClickPosition: types.optional(types.frozen<{x: number; y: number}>(), {x: 0, y: 0}),
-    objectMenuPosition: types.optional(
-      types.frozen<ClickPositionInterface>(),
-      defaultClickPosition
-    ),
-    objectMenu: types.optional(Dialog, {}),
+    // objectMenuPosition: types.optional(
+    //   types.frozen<ClickPositionInterface>(),
+    //   defaultClickPosition
+    // ),
+    // objectMenu: types.optional(Dialog, {}),
+
     isCreatorMode: false,
     selectedObjectId: types.maybeNull(types.string),
+    attachedToCameraObjectId: types.maybeNull(types.string),
 
     gizmoMode: types.optional(
       types.enumeration(Object.values(GizmoTypeEnum)),
@@ -50,6 +53,17 @@ const World3dStore = types
         Event3dEmitter.emit('ObjectEditModeChanged', self.selectedObjectId, false);
         self.selectedObjectId = null;
       }
+    }
+  }))
+  .actions((self) => ({
+    enableCreatorMode() {
+      self.isCreatorMode = true;
+    },
+    disableCreatorMode() {
+      self.isCreatorMode = false;
+      // const {creatorStore} = getRootStore(self);
+      // creatorStore.resetModel();
+      // self.closeAndResetObjectMenu();
     }
   }))
   .actions((self) => ({
@@ -109,12 +123,13 @@ const World3dStore = types
       // UnityService.setKeyboardControl(isActive);
     },
     sendHighFive(receiverId: string): void {
-      // TODO use posbus
-      // UnityService.sendHighFive(receiverId);
-    },
-    sendHighFiveBack(receiverId: string): void {
-      // UnityService.sendHighFive(receiverId);
-      // UnityService.lookAtWisp(receiverId);
+      console.log('sendHighFive', receiverId);
+      const sender_id = getRootStore(self).sessionStore.user?.id;
+      if (sender_id) {
+        console.log('sendHighFive from', sender_id, 'to', receiverId);
+        PosBusService.sendHighFive(sender_id, receiverId);
+        Event3dEmitter.emit('SendHighFive', receiverId);
+      }
     },
     pause(): void {
       // TODO
@@ -203,10 +218,22 @@ const World3dStore = types
 
       self._deselectObject();
 
-      self.objectMenuPosition = clickPos || defaultClickPosition;
+      // self.objectMenuPosition = clickPos || defaultClickPosition;
 
       self._selectObject(objectId);
-      self.objectMenu.open();
+      // self.objectMenu.open();
+      // self.setSelectedTab('inspector');
+
+      // TODO move it as child store here??
+      const {creatorStore} = getRootStore(self);
+      creatorStore.setSelectedObjectId(objectId);
+      creatorStore.setSelectedTab('inspector');
+    },
+    setAttachedToCamera(objectId: string | null) {
+      if (!objectId && self.attachedToCameraObjectId) {
+        Event3dEmitter.emit('DetachObjectFromCamera', self.attachedToCameraObjectId);
+      }
+      self.attachedToCameraObjectId = objectId;
     },
     undo() {
       // UnityService.undo();
@@ -221,23 +248,17 @@ const World3dStore = types
     },
     closeAndResetObjectMenu() {
       console.log('closeAndResetObjectMenu', self.selectedObjectId);
-      self.objectMenu.close();
+
+      const {creatorStore} = getRootStore(self);
+      creatorStore.setSelectedObjectId(null);
+      creatorStore.setSelectedTab(null);
+
       self._deselectObject();
       self.gizmoMode = GizmoTypeEnum.POSITION;
     },
     colorPickedPreview(objectId: string, colorHex: string) {
       // TODO notify babylon
       // UnityService.colorPickedPreview(objectId, colorHex);
-    }
-  }))
-  .actions((self) => ({
-    enableCreatorMode() {
-      self.isCreatorMode = true;
-    },
-    disableCreatorMode() {
-      self.isCreatorMode = false;
-
-      self.closeAndResetObjectMenu();
     }
   }))
   .views((self) => ({

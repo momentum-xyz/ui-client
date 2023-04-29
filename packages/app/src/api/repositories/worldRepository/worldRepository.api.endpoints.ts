@@ -1,9 +1,9 @@
 export const worldRepositoryEndpoints = () => {
-  const BASE_URL = '/worlds/:worldId';
+  const BASE_URL = '/worlds';
 
   return {
-    getSpaceWithSubspaces: `${BASE_URL}/explore`,
-    searchSpaces: `${BASE_URL}/explore/search`,
-    onlineUsers: `${BASE_URL}/online-users`
+    worldList: `${BASE_URL}`,
+    world: `${BASE_URL}/:worldId`,
+    onlineUsers: `${BASE_URL}/:worldId/online-users`
   };
 };

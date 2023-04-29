@@ -1,76 +1,86 @@
-import React, {FC} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Avatar, Button, Heading, IconSvg, Text} from '@momentum-xyz/ui-kit';
-import {absoluteLink, registrationDateString, withoutProtocol, useI18n} from '@momentum-xyz/core';
+import {
+  Image,
+  Frame,
+  IconSvg,
+  ProfileLine,
+  WalletHash,
+  ItemCard
+} from '@momentum-xyz/ui-kit-storybook';
+import {absoluteLink, withoutProtocol, useI18n, signUpDateString} from '@momentum-xyz/core';
 
-import {UserModelInterface} from 'core/models';
-
-import {Accounts} from '../Accounts';
+import {getImageAbsoluteUrl} from 'core/utils';
+import {UserModelInterface, WorldInfoModelInterface} from 'core/models';
 
 import * as styled from './ProfileView.styled';
 
 interface PropsInterface {
   user: UserModelInterface;
-  isVisitAvailable: boolean;
-  onTeleportToOdyssey: () => void;
+  defaultWalletId: string;
+  worldList: WorldInfoModelInterface[];
+  onInfoWorld: (uuid: string) => void;
+  onVisitWorld: (uuid: string) => void;
 }
 
 const ProfileView: FC<PropsInterface> = (props) => {
-  const {user, isVisitAvailable, onTeleportToOdyssey} = props;
+  const {user, defaultWalletId, worldList, onInfoWorld, onVisitWorld} = props;
 
   const {t} = useI18n();
 
   return (
-    <>
-      <styled.AvatarContainer>
-        <Avatar avatarSrc={user.avatarSrc} size="normal" status={user.status} />
-        <styled.NameContainer>
-          <Heading
-            type="h1"
-            label={user.name}
-            isTruncate
-            transform="uppercase"
-            align="left"
-            weight="bold"
-          />
-          <div>
-            <Button
-              icon="fly-portal"
-              size="medium"
-              label={t('labels.visit')}
-              disabled={!isVisitAvailable}
-              onClick={onTeleportToOdyssey}
+    <styled.Container>
+      <Frame>
+        <Image src={user.avatarLargeSrc} height={200} />
+        <styled.NameContainer>{user.name}</styled.NameContainer>
+
+        <styled.ScrollableContainer>
+          <styled.GeneralInfo>
+            {user.profile?.bio && <div>{user.profile?.bio}</div>}
+            {user.profile.profileLink && (
+              <ProfileLine
+                icon="link"
+                label={
+                  <styled.LinkAccent target="_blank" href={absoluteLink(user.profile.profileLink)}>
+                    {withoutProtocol(user.profile.profileLink)}
+                  </styled.LinkAccent>
+                }
+              />
+            )}
+            <ProfileLine
+              icon="astro"
+              label={`${t('actions.joined')} ${signUpDateString(user.createdAt)}`}
             />
-          </div>
-        </styled.NameContainer>
-      </styled.AvatarContainer>
+            <WalletHash icon="talisman" hash={defaultWalletId || ''} />
+          </styled.GeneralInfo>
 
-      <styled.Info>
-        <Accounts user={user} />
+          {worldList.length > 0 && (
+            <styled.OwnedOdysseys>
+              <styled.OwnedOdysseysTitle>
+                <IconSvg name="rabbit_fill" isWhite />
+                {t('labels.odysseysOwned')}
+              </styled.OwnedOdysseysTitle>
 
-        {user.profile?.bio && (
-          <Text text={user.profile.bio} size="xxs" align="left" breakLongWord />
-        )}
-
-        {user.profile?.profileLink && (
-          <styled.InfoItem>
-            <IconSvg name="link" size="normal" />
-            <styled.Link href={absoluteLink(user.profile.profileLink)} target="_blank">
-              {withoutProtocol(user.profile.profileLink)}
-            </styled.Link>
-          </styled.InfoItem>
-        )}
-
-        <styled.InfoItem>
-          <IconSvg name="astro" size="normal" />
-          <Text
-            size="xxs"
-            text={`${t('actions.joined')} ${registrationDateString(user.createdAt)}`}
-            isMultiline={false}
-          />
-        </styled.InfoItem>
-      </styled.Info>
-    </>
+              <styled.NftContainer>
+                {worldList.map((world) => (
+                  <ItemCard
+                    variant="small"
+                    key={world.id}
+                    name={world.name}
+                    description={world.description}
+                    imageHeight={95}
+                    imageErrorIcon="rabbit_fill"
+                    imageUrl={getImageAbsoluteUrl(world.avatarHash)}
+                    onInfoClick={() => onInfoWorld(world.id)}
+                    onVisitClick={() => onVisitWorld(world.id)}
+                  />
+                ))}
+              </styled.NftContainer>
+            </styled.OwnedOdysseys>
+          )}
+        </styled.ScrollableContainer>
+      </Frame>
+    </styled.Container>
   );
 };
 

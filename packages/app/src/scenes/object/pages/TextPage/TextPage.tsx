@@ -1,13 +1,13 @@
 import React, {FC} from 'react';
-import {Button, Heading, SvgButton} from '@momentum-xyz/ui-kit';
+import {Heading, SvgButton} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useNavigate, useParams} from 'react-router-dom';
+import {generatePath, useNavigate} from 'react-router-dom';
 import ReactLinkifyOriginal, {Props as ReactLinkifyProps} from 'react-linkify';
 import {useI18n} from '@momentum-xyz/core';
 
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {ChangeTextDialog} from 'scenes/object/components';
+// import {ChangeTextDialog} from 'scenes/object/components';
 
 import * as styled from './TextPage.styled';
 
@@ -17,17 +17,20 @@ const TextPage: FC = () => {
   const navigate = useNavigate();
   const {objectStore, universeStore} = useStore();
   const {assetStore} = objectStore;
-  const {changeTileDialog, content} = assetStore;
+  const {
+    // changeTileDialog,
+    content
+  } = assetStore;
 
-  const isAdmin = universeStore.isCurrentUserWorldAdmin;
+  // const isAdmin = universeStore.isCurrentUserWorldAdmin;
 
-  const {worldId} = useParams<{worldId: string}>();
+  const {worldId} = universeStore;
 
   const {t} = useI18n();
 
   return (
     <styled.Modal data-testid="TextPage-test">
-      {changeTileDialog.isOpen && <ChangeTextDialog />}
+      {/* {changeTileDialog.isOpen && <ChangeTextDialog />} */}
       <styled.Container>
         <styled.ContentWrapper>
           <ReactLinkify
@@ -49,11 +52,11 @@ const TextPage: FC = () => {
             />
           </styled.Title>
         </styled.HeaderElement>
-        {isAdmin && (
+        {/* {isAdmin && (
           <styled.HeaderElement className="button">
             <Button label={t('actions.changeText')} onClick={changeTileDialog.open} />
           </styled.HeaderElement>
-        )}
+        )} */}
         <styled.HeaderElement className="right">
           <styled.Button>
             <SvgButton

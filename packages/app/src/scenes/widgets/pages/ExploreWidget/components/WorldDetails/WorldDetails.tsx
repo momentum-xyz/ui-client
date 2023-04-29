@@ -1,122 +1,70 @@
-import {FC, useState} from 'react';
+import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useI18n} from '@momentum-xyz/core';
-import {
-  Panel,
-  ImageSizeEnum,
-  IconSvg,
-  SymbolAmount,
-  Hexagon,
-  ButtonEllipse
-} from '@momentum-xyz/ui-kit-storybook';
+import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
+import {Panel, ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {getImageAbsoluteUrl} from 'core/utils';
-import {ProfileInfo, ProfileImage} from 'ui-kit';
-import {WorldDetailsType} from 'stores/UniverseStore/models';
+import {ProfileInfo, ProfileImage, StakersList, StakingComment, StakingAmount} from 'ui-kit';
+import {WorldModelInterface} from 'core/models';
 
 import * as styled from './WorldDetails.styled';
 
 interface PropsInterface {
-  worldDetails: WorldDetailsType;
+  world: WorldModelInterface;
   onSelectUser: (userId: string) => void;
   onVisitWorld: (worldId: string) => void;
   onStakeWorld: (worldId: string) => void;
   onClose: () => void;
 }
 
-const USERS_MAX = 2;
-
 const WorldDetails: FC<PropsInterface> = ({
-  worldDetails,
+  world,
   onVisitWorld,
   onStakeWorld,
   onSelectUser,
   onClose
 }) => {
-  const {world, usersStakedIn, lastStakingComment, totalAmountStaked} = worldDetails;
-
-  const [isButtonShown, setIsButtonShown] = useState(usersStakedIn.length > USERS_MAX);
-
   const {t} = useI18n();
+
+  useEffect(() => {
+    Universe3dEmitter.emit('WorldSelected', world.id);
+  }, [world.id]);
 
   return (
     <styled.Container data-testid="WorldDetails-test">
       <Panel
+        isFullHeight
+        size="normal"
         icon="rabbit_fill"
         variant="primary"
-        image={getImageAbsoluteUrl(world.image, ImageSizeEnum.S3)}
+        image={getImageAbsoluteUrl(world?.avatarHash, ImageSizeEnum.S3)}
         title={t('labels.odysseyOverview')}
         onClose={onClose}
       >
         <styled.Wrapper>
-          {/* FIXME: REAL DATA */}
           <ProfileImage
-            name={world.name}
-            image={world.image}
+            name={world.name || world.id}
+            image={world.avatarHash}
             imageErrorIcon="rabbit_fill"
-            byName={world.name}
-            onByClick={() => onSelectUser(world.uuid)}
+            byName={world.owner_name || world.owner_id}
+            onByClick={() => onSelectUser(world.owner_id)}
           />
 
           <styled.GeneralScrollable>
-            {/* FIXME: REAL DATA */}
             <ProfileInfo
-              description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean commodo ligula eget dolor..."
-              address="http://www.google.com"
-              joinDate={new Date().toISOString()}
-              onVisit={() => onVisitWorld(world.uuid)}
-              onStake={() => onStakeWorld(world.uuid)}
+              description={world.description}
+              joinDate={world.createdAt}
+              onVisit={() => onVisitWorld(world.id)}
+              onStake={() => onStakeWorld(world.id)}
             />
 
-            <styled.TitleContainer>
-              <styled.Title>
-                <IconSvg name="stake" size="xs" isWhite />
-                <span>{t('labels.staked')}</span>
-              </styled.Title>
-            </styled.TitleContainer>
+            <StakingAmount stakedAmount={world.momStaked} tokenSymbol="MOM" />
 
-            <styled.TotalAmount>
-              <div>{t('labels.totalAmountStaked')}:</div>
-              <SymbolAmount value={totalAmountStaked} tokenSymbol="MOM" />
-            </styled.TotalAmount>
-
-            {!!lastStakingComment && (
-              <styled.StakingCommentContainer>
-                <div>{t('labels.lastStakingComment')}:</div>
-                <styled.StakingComment>{lastStakingComment}</styled.StakingComment>
-              </styled.StakingCommentContainer>
+            {!!world.last_staking_comment && (
+              <StakingComment comment={world.last_staking_comment} />
             )}
 
-            {usersStakedIn.length > 0 && (
-              <styled.StakedInUsersContainer>
-                <styled.Title>
-                  <IconSvg name="connect" size="xs" isWhite />
-                  <span>{t('labels.connections')}</span>
-                </styled.Title>
-
-                {(isButtonShown ? usersStakedIn.slice(0, USERS_MAX) : usersStakedIn).map(
-                  (user, index) => (
-                    <styled.StakedInUser key={user.uuid} onClick={() => onSelectUser(user.uuid)}>
-                      <Hexagon type="fourth-borderless" skipOuterBorder imageSrc={user.image} />
-                      <styled.Link>
-                        {index < USERS_MAX
-                          ? `${t('labels.topConnector')}: ${user.name}`
-                          : user.name}
-                      </styled.Link>
-                    </styled.StakedInUser>
-                  )
-                )}
-
-                {isButtonShown && (
-                  <styled.ShowAllButtonContainer>
-                    <ButtonEllipse
-                      label={t('actions.seeAll')}
-                      onClick={() => setIsButtonShown(false)}
-                    />
-                  </styled.ShowAllButtonContainer>
-                )}
-              </styled.StakedInUsersContainer>
-            )}
+            <StakersList stakers={world.stakers} onSelectUser={onSelectUser} />
           </styled.GeneralScrollable>
         </styled.Wrapper>
       </Panel>

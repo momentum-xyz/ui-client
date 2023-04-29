@@ -23,12 +23,20 @@ const Template: Story<VoiceUserLinePropsInterface> = (args) => {
 export const General = Template.bind({});
 General.args = {
   username: 'Username',
-  imageSrc: IMAGE_SRC
+  imageSrc: IMAGE_SRC,
+  isMicrophoneOff: false
 };
 
-export const NoCall = Template.bind({});
-NoCall.args = {
+export const IsSpeaking = Template.bind({});
+IsSpeaking.args = {
   username: 'Username',
   imageSrc: IMAGE_SRC,
-  isCallHidden: true
+  isSpeaking: true
+};
+
+export const IsMuted = Template.bind({});
+IsMuted.args = {
+  username: 'Username',
+  imageSrc: IMAGE_SRC,
+  isMicrophoneOff: true
 };

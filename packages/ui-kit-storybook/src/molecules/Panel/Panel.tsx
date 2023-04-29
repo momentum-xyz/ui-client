@@ -8,9 +8,11 @@ import * as styled from './Panel.styled';
 
 export interface PanelPropsInterface extends PropsWithChildren {
   variant: 'primary' | 'secondary';
+  size: 'small' | 'normal' | 'large' | 'wide';
   title: string;
   label?: string;
   image?: string | null;
+  isFullHeight?: boolean;
   icon?: IconNameType;
   closeIcon?: IconNameType;
   onClose?: () => void;
@@ -18,16 +20,18 @@ export interface PanelPropsInterface extends PropsWithChildren {
 
 const Panel: FC<PanelPropsInterface> = ({
   variant,
+  size,
   title,
   label,
   image,
   icon,
+  isFullHeight,
   closeIcon = 'close_large',
   children,
   onClose
 }) => {
   return (
-    <styled.Container data-testid="Widget-test" className={cn(variant)}>
+    <styled.Container data-testid="Widget-test" className={cn(variant, `size-${size}`)}>
       <styled.Header className={cn(variant)}>
         <styled.Hexagon>
           {variant === 'primary' && (
@@ -46,7 +50,7 @@ const Panel: FC<PanelPropsInterface> = ({
         </styled.Actions>
       </styled.Header>
 
-      <styled.Content>{children}</styled.Content>
+      <styled.Content className={cn(isFullHeight && 'fullHeight')}>{children}</styled.Content>
     </styled.Container>
   );
 };
