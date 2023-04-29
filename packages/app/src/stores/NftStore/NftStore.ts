@@ -1,6 +1,6 @@
 import {cast, castToSnapshot, flow, getSnapshot, types} from 'mobx-state-tree';
 import {ApiPromise, Keyring} from '@polkadot/api';
-import {compactStripLength, formatBalance} from '@polkadot/util';
+import {compactStripLength} from '@polkadot/util';
 import BN from 'bn.js';
 import {
   ResetModel,
@@ -22,7 +22,7 @@ import {
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
-import {fetchIpfs, isIpfsHash, wait} from 'core/utils';
+import {fetchIpfs, formatBigInt, isIpfsHash, wait} from 'core/utils';
 import {KeyringAddressType} from 'core/types';
 import {mintNft, mintNftCheckJob} from 'api/repositories';
 import {appVariables} from 'api/constants';
@@ -71,8 +71,8 @@ const itemMetadataToString = (itemMetadata: any): string | null => {
 interface AccountBalanceInterface {
   free: BN;
   reserved: BN;
-  // miscFrozen: number;
-  // feeFrozen: number;
+  // transferable: BN; // don't use yet, not implemendted in BE
+  unbonding: BN;
 }
 
 const NftStore = types
@@ -82,10 +82,11 @@ const NftStore = types
       wallets: types.optional(types.array(Wallet), []),
       stakes: types.optional(types.array(Stake), []),
       defaultWalletId: '',
+      selectedWalletId: '',
 
       addresses: types.optional(types.array(PolkadotAddress), []),
-      chainDecimals: types.maybe(types.number),
-      tokenSymbol: '',
+      chainDecimals: types.optional(types.number, 18),
+      tokenSymbol: 'MOM',
       existentialDeposit: types.optional(types.frozen(), 0),
       ss58Format: types.maybe(types.number),
       isWeb3Injected: false,
@@ -104,12 +105,12 @@ const NftStore = types
       stakingAtOthers: types.map(StakeDetail),
       stakingDashorboardDialog: types.optional(Dialog, {}),
       accumulatedRewards: types.frozen(new BN(0)),
-      balance: types.optional(types.frozen<AccountBalanceInterface>(), {
-        free: new BN(0),
-        reserved: new BN(0)
-        // miscFrozen: 0,
-        // feeFrozen: 0
-      }),
+      // balance: types.optional(types.frozen<AccountBalanceInterface>(), {
+      //   free: new BN(0),
+      //   reserved: new BN(0)
+      //   // miscFrozen: 0,
+      //   // feeFrozen: 0
+      // }),
 
       walletsRequest: types.optional(RequestModel, {}),
       stakesRequest: types.optional(RequestModel, {}),
@@ -120,6 +121,27 @@ const NftStore = types
       isBalanceLoading: false
     })
   )
+  .views((self) => ({
+    get balance(): AccountBalanceInterface {
+      const walletId = self.selectedWalletId || self.defaultWalletId || self.wallets[0]?.wallet_id;
+      const wallet = self.wallets.find((w) => w.wallet_id === walletId);
+      console.log('BALANCE', wallet, walletId, self.wallets);
+      if (!wallet) {
+        return {
+          free: new BN(0),
+          reserved: new BN(0),
+          // transferable: new BN(0),
+          unbonding: new BN(0)
+        };
+      }
+      return {
+        free: new BN(wallet.balance),
+        reserved: new BN(wallet.staked),
+        // transferable: new BN(wallet.transferable),
+        unbonding: new BN(wallet.unbonding)
+      };
+    }
+  }))
   .volatile<{
     channel: ApiPromise | null;
     unsubscribeBalanceSubscription: (() => void) | null;
@@ -207,11 +229,12 @@ const NftStore = types
         return self.stakingAtOthers.has(address);
       },
       balanceFormat(amount: BN) {
-        return formatBalance(
-          amount,
-          {withSi: true, withUnit: self.tokenSymbol},
-          self.chainDecimals
-        );
+        return formatBigInt(amount.toString()); // TODO remove this
+        // return formatBalance(
+        //   amount,
+        //   {withSi: true, withUnit: self.tokenSymbol},
+        //   self.chainDecimals
+        // );
       }
     };
   })
@@ -230,20 +253,27 @@ const NftStore = types
       return self.balance.free.isZero();
     },
     get balanceTotal(): string {
-      try {
-        const total = self.balance.free.clone().add(self.balance.reserved);
-        return self.balanceFormat(total);
-      } catch (err) {
-        console.error(err);
-        return '0';
-      }
+      return self.balance.free.toString();
+      // try {
+      //   const total = self.balance.free.clone().add(self.balance.reserved);
+      //   return self.balanceFormat(total);
+      // } catch (err) {
+      //   console.error(err);
+      //   return '0';
+      // }
     },
     get balanceReserved(): string {
+      // TODO remove
       return self.balanceFormat(self.balance.reserved);
     },
     get balanceTransferrableBN(): BN {
+      // TODO remove
+      // return self.balance.free.clone();
       try {
-        const transferrable = self.balance.free.clone().sub(self.existentialDeposit);
+        const transferrable = self.balance.free
+          .clone()
+          .sub(self.balance.reserved)
+          .sub(self.balance.unbonding);
         const zero = new BN(0);
         return transferrable.gt(zero) ? transferrable : zero;
       } catch (err) {
@@ -293,9 +323,9 @@ const NftStore = types
     setMintingNftStatus(status: 'pending' | 'success' | 'error') {
       self.mintingNftStatus = status;
     },
-    setBalance(payload: AccountBalanceInterface) {
-      self.balance = payload;
-    },
+    // setBalance(payload: AccountBalanceInterface) {
+    //   self.balance = payload;
+    // },
     setAccumulatedRewards(amount: BN) {
       self.accumulatedRewards = amount;
     },
@@ -776,30 +806,30 @@ const NftStore = types
       const isEnabled = yield SubstrateProvider.isExtensionEnabled();
       self.isWeb3Injected = cast(isEnabled);
     }),
-    getChainInformation() {
-      self.tokenSymbol = cast(
-        self.channel?.registry.chainTokens[0] ? self.channel?.registry.chainTokens[0] : ''
-      );
+    // getChainInformation() {
+    //   self.tokenSymbol = cast(
+    //     self.channel?.registry.chainTokens[0] ? self.channel?.registry.chainTokens[0] : ''
+    //   );
 
-      self.ss58Format = cast(self.channel?.registry.chainSS58);
-      self.chainDecimals = cast(self.channel?.registry.chainDecimals[0]);
-      SubstrateProvider.setDefaultBalanceFormatting(
-        self.channel?.registry.chainDecimals[0],
-        self.channel?.registry.chainTokens[0]
-      );
+    //   self.ss58Format = cast(self.channel?.registry.chainSS58);
+    //   self.chainDecimals = cast(self.channel?.registry.chainDecimals[0]);
+    //   SubstrateProvider.setDefaultBalanceFormatting(
+    //     self.channel?.registry.chainDecimals[0],
+    //     self.channel?.registry.chainTokens[0]
+    //   );
 
-      self.existentialDeposit = cast(self.channel?.consts.balances.existentialDeposit);
-      console.log(
-        'Chain Info',
-        self.tokenSymbol,
-        'ss58Format',
-        self.ss58Format,
-        'chainDecimals',
-        self.chainDecimals,
-        'existentialDeposit',
-        self.existentialDeposit
-      );
-    },
+    //   self.existentialDeposit = cast(self.channel?.consts.balances.existentialDeposit);
+    //   console.log(
+    //     'Chain Info',
+    //     self.tokenSymbol,
+    //     'ss58Format',
+    //     self.ss58Format,
+    //     'chainDecimals',
+    //     self.chainDecimals,
+    //     'existentialDeposit',
+    //     self.existentialDeposit
+    //   );
+    // },
     getStatisticsByWallet: flow(function* (wallet: string) {
       const walletConnections: WalletConnectionsInterface = yield self.getStakesInfo(wallet);
       const {stakedAtWallet, stakedAtOthers} = walletConnections;
@@ -854,14 +884,15 @@ const NftStore = types
   }))
   .actions((self) => ({
     init: flow(function* () {
-      self.setIsLoading(true);
+      yield Promise.resolve();
+      // self.setIsLoading(true);
 
-      yield self.connectToChain();
-      yield self.fetchNfts();
+      // yield self.connectToChain();
+      // yield self.fetchNfts();
 
-      self.getChainInformation();
+      // self.getChainInformation();
 
-      self.setIsLoading(false);
+      // self.setIsLoading(false);
     }),
     initMyWalletsAndStakes: flow(function* () {
       yield self.loadMyWallets();

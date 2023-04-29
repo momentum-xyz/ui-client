@@ -7,3 +7,4 @@ export * from './ToolbarCreatorIcon';
 export * from './ProfileInfo';
 export * from './ProfileImage';
 export * from './TrustPoints';
+export * from './StakersList';

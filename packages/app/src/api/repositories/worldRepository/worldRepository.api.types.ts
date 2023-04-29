@@ -47,6 +47,18 @@ export interface FetchWorldRequest {
 
 export interface FetchWorldResponse extends WorldInterface {}
 
+/** PATCH WORLD **/
+
+export interface PatchWorldRequest {
+  worldId: string;
+  name: string;
+  description: string;
+  website_link: string;
+  avatarHash?: string;
+}
+
+export interface PatchWorldResponse {}
+
 /** Online Users **/
 
 export interface GetOnlineUsersRequest {

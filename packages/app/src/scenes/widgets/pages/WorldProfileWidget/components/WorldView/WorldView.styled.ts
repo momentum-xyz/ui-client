@@ -4,10 +4,6 @@ export const Container = styled.div`
   --scroll-offset: 455px;
 `;
 
-export const Wrapper = styled.div`
-  padding: 0;
-`;
-
 export const GeneralScrollable = styled.div`
   margin: 0 10px;
   display: flex;

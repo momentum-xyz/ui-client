@@ -4,15 +4,16 @@ import {Panel} from '@momentum-xyz/ui-kit-storybook';
 
 import {WidgetEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
+import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 
 import * as styled from './StakingWidget.styled';
 import {StakingForm} from './components';
 
-const StakingWidget: FC = () => {
+const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {widgetManagerStore, sessionStore, nftStore, universeStore} = useStore();
   const {close} = widgetManagerStore;
 
-  const worldId = universeStore.worldId;
+  const nftId = data?.id || universeStore.worldId;
 
   const handleOnClose = () => {
     nftStore.setConnectToNftItemId(null); // TODO
@@ -31,7 +32,7 @@ const StakingWidget: FC = () => {
       <styled.FullSizeWrapper>
         <StakingForm
           isGuest={sessionStore.isGuest}
-          nftItemId={worldId}
+          nftItemId={nftId}
           onComplete={() => {
             // need toast here ???
             handleOnClose();

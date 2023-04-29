@@ -21,6 +21,8 @@ export interface AppConfigInterface {
   CONTRACT_STAKING_ADDRESS: string;
   CONTRACT_MOM_ADDRESS: string;
   CONTRACT_DAD_ADDRESS: string;
+  CONTRACT_NFT_ADDRESS: string;
+  CONTRACT_FAUCET_ADDRESS: string;
   NODE_ID: string;
 }
 

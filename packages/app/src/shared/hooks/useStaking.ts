@@ -17,7 +17,7 @@ export const useStaking = () => {
   const {library, account, activate, active} = useWeb3React();
   // const [balance, setBalance] = useState(0);
 
-  console.log('StakingOverviewWidget', {library, account, activate, active});
+  console.log('useStaking', {library, account, activate, active});
 
   const [, stakingContract, momContract] = useMemo(() => {
     if (!library) {
@@ -38,38 +38,55 @@ export const useStaking = () => {
   //     return;
   //   }
 
-  //   console.log('StakingOverviewWidget getBalance');
+  //   console.log('useStaking getBalance');
   //   web3.eth
   //     .getBalance(account)
   //     .then((balance) => {
-  //       console.log('StakingOverviewWidget balance', balance);
+  //       console.log('useStaking balance', balance);
   //       setBalance(+balance);
   //     })
   //     .catch((err) => {
-  //       console.log('StakingOverviewWidget getBalance err', err);
+  //       console.log('useStaking getBalance err', err);
   //     });
-  //   console.log('StakingOverviewWidget getBalance ret', ret);
+  //   console.log('useStaking getBalance ret', ret);
   // }, [web3, account]);
 
   const stake = useCallback(
     async (worldId: string, amount: BN, tokenKind = TokenEnum.MOM_TOKEN) => {
-      console.log('StakingOverviewWidget stake');
+      console.log('useStaking stake');
       const res = await momContract?.methods
         .approve(appVariables.CONTRACT_STAKING_ADDRESS, amount)
         .send({from: account});
-      console.log('StakingOverviewWidget stake approve result', res);
+      console.log('useStaking stake approve result', res);
 
+      const nftId = '0x' + worldId.replace(/-/g, '');
+
+      console.log('useStaking stake into nftId', nftId, amount, tokenKind);
       const result = await stakingContract?.methods
-        .stake(worldId, amount, tokenKind)
+        .stake(nftId, amount, tokenKind)
         .send({from: account});
-      console.log('StakingOverviewWidget stake result', result);
+      console.log('useStaking stake result', result);
     },
     [momContract?.methods, account, stakingContract?.methods]
   );
 
-  const unstake = () => {
-    console.log('TODO StakingOverviewWidget unstake');
-  };
+  const unstake = useCallback(
+    async (worldId: string, tokenKind = TokenEnum.MOM_TOKEN) => {
+      console.log('useStaking unstake');
+      const nftId = '0x' + worldId.replace(/-/g, '');
 
-  return {isWalletActive: !!library, account, stake, unstake};
+      console.log('useStaking unstake from nftId', nftId, tokenKind);
+      const result = await stakingContract?.methods.unstake(nftId, tokenKind).send({from: account});
+      console.log('useStaking unstake result', result);
+    },
+    [account, stakingContract?.methods]
+  );
+
+  const claimRewards = useCallback(async () => {
+    console.log('useStaking claimRewards');
+    const result = await stakingContract?.methods.claim_rewards().send({from: account});
+    console.log('useStaking claimRewards result', result);
+  }, [stakingContract?.methods, account]);
+
+  return {isWalletActive: !!library, account, stake, unstake, claimRewards};
 };

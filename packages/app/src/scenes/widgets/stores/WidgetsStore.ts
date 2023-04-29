@@ -5,10 +5,12 @@ import {ProfileStore} from './ProfileStore';
 import {WorldDetailsStore} from './WorldDetailsStore';
 import {UserDetailsStore} from './UserDetailsStore';
 import {StakingViewStore} from './StakingViewStore';
+import {WorldProfileStore} from './WorldProfileStore';
 
 const WidgetsStore = types.model('WidgetsStore', {
   signInStore: types.optional(SignInStore, {}),
   profileStore: types.optional(ProfileStore, {}),
+  worldProfileStore: types.optional(WorldProfileStore, {}),
   worldDetailsStore: types.optional(WorldDetailsStore, {}),
   userDetailsStore: types.optional(UserDetailsStore, {}),
   stakingViewStore: types.optional(StakingViewStore, {})
