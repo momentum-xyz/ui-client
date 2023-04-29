@@ -9,7 +9,8 @@ import {
   checkIfCanRequestAirdrop,
   saveLastAirdropInfo
 } from '@momentum-xyz/core';
-import {IconNameType, OptionInterface} from '@momentum-xyz/ui-kit';
+import {OptionInterface} from '@momentum-xyz/ui-kit';
+import {IconNameType} from '@momentum-xyz/ui-kit-storybook';
 
 import {
   PolkadotAddress,
@@ -26,9 +27,11 @@ import {fetchIpfs, formatBigInt, isIpfsHash, wait} from 'core/utils';
 import {KeyringAddressType} from 'core/types';
 import {mintNft, mintNftCheckJob} from 'api/repositories';
 import {appVariables} from 'api/constants';
+import {PluginIdEnum} from 'api/enums';
 import {api, MintNftCheckJobResponse, StakeInterface, WalletInterface} from 'api';
 import {WalletConnectionsInterface} from 'core/interfaces';
 import PolkadotImplementation from 'shared/services/web3/polkadot.class';
+import {getWalletByAddress} from 'wallets';
 
 import {StakeDetail, StakeDetailInterface} from './models';
 
@@ -79,10 +82,11 @@ const NftStore = types
   .compose(
     ResetModel,
     types.model('NftStore', {
-      wallets: types.optional(types.array(Wallet), []),
+      _wallets: types.optional(types.array(Wallet), []),
+      walletsAddresses: types.optional(types.array(types.string), []), // TEMP
       stakes: types.optional(types.array(Stake), []),
       defaultWalletId: '',
-      selectedWalletId: '',
+      _selectedWalletId: types.maybeNull(types.string),
 
       addresses: types.optional(types.array(PolkadotAddress), []),
       chainDecimals: types.optional(types.number, 18),
@@ -123,8 +127,8 @@ const NftStore = types
   )
   .views((self) => ({
     get balance(): AccountBalanceInterface {
-      const walletId = self.selectedWalletId || self.defaultWalletId || self.wallets[0]?.wallet_id;
-      const wallet = self.wallets.find((w) => w.wallet_id === walletId);
+      const walletId = self._selectedWalletId || self.defaultWalletId || self.walletsAddresses[0];
+      const wallet = self._wallets.find((w) => w.wallet_id === walletId);
       console.log('BALANCE', wallet, walletId, self.wallets);
       if (!wallet) {
         return {
@@ -140,6 +144,45 @@ const NftStore = types
         // transferable: new BN(wallet.transferable),
         unbonding: new BN(wallet.unbonding)
       };
+    },
+    get selectedWalletId(): string {
+      console.log(
+        'selectedWalletId',
+        self._selectedWalletId,
+        self.defaultWalletId,
+        self.walletsAddresses[0]
+      );
+      return self._selectedWalletId || self.defaultWalletId || self.walletsAddresses[0];
+    },
+    get wallets(): WalletInterface[] {
+      return self.walletsAddresses.map(
+        (address) =>
+          self._wallets.find((w) => w.wallet_id === address) || {
+            wallet_id: address,
+            balance: '0',
+            staked: '0',
+            unbonding: '0',
+            transferable: '0',
+            reward: '0',
+            blockchain_name: '',
+            contract_id: '',
+            updated_at: ''
+          }
+      );
+    },
+
+    get walletOptions(): Array<{label: string; value: string; icon: IconNameType}> {
+      console.log('walletOptions', self.walletsAddresses);
+      return self.walletsAddresses.map((address) => ({
+        label: address,
+        value: address,
+        icon: (getWalletByAddress(address)?.icon || 'wallet') as IconNameType
+      }));
+    }
+  }))
+  .views((self) => ({
+    get selectedWallet(): WalletInterface | undefined {
+      return self.wallets.find((w) => w.wallet_id === self.selectedWalletId);
     }
   }))
   .volatile<{
@@ -152,13 +195,27 @@ const NftStore = types
     unsubscribeBalanceSubscription: null
   }))
   .actions((self) => ({
-    loadMyWallets: flow(function* () {
+    loadMyWallets: flow(function* (userId) {
       const response: Array<WalletInterface> = yield self.walletsRequest.send(
         api.userRepository.fetchMyWallets,
         {}
       );
       if (response) {
-        self.wallets = cast(response);
+        self._wallets = cast(response);
+      }
+
+      // TEMP, fetchMyWallets doesn't return empty wallet addresses
+      const responseWallets = yield self.walletsRequest.send(
+        api.userAttributeRepository.getPluginUserAttributeValue,
+        {
+          attributeName: 'wallet',
+          userId,
+          pluginId: PluginIdEnum.WALLETS
+        }
+      );
+      console.log('responseWallets', responseWallets);
+      if (responseWallets?.wallet) {
+        self.walletsAddresses = cast(responseWallets.wallet);
       }
     }),
     loadMyStakes: flow(function* () {
@@ -181,6 +238,10 @@ const NftStore = types
     setDefaultWalletId(walletId: string) {
       storage.setString(StorageKeyEnum.DefaultAccount, walletId);
       self.defaultWalletId = walletId;
+      self._selectedWalletId = walletId;
+    },
+    setSelectedWalletId(walletId: string | null) {
+      self._selectedWalletId = walletId;
     }
   }))
   .views((self) => {
@@ -894,8 +955,8 @@ const NftStore = types
 
       // self.setIsLoading(false);
     }),
-    initMyWalletsAndStakes: flow(function* () {
-      yield self.loadMyWallets();
+    initMyWalletsAndStakes: flow(function* (userId: string) {
+      yield self.loadMyWallets(userId);
       yield self.loadMyStakes();
       self.loadDefaultWalletId();
     }),

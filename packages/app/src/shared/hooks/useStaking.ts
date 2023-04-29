@@ -1,9 +1,10 @@
-import {useCallback, useMemo} from 'react';
-import {useWeb3React} from '@web3-react/core';
+import {useCallback, useEffect, useMemo, useState} from 'react';
+// import {useWeb3React} from '@web3-react/core';
 import Web3 from 'web3';
 import BN from 'bn.js';
 
 import {appVariables} from 'api/constants';
+import {getWalletByAddress} from 'wallets';
 
 import stackingABI from './contract_staking.ABI.json';
 import momABI from './contract_MOM.ABI.json';
@@ -13,11 +14,35 @@ enum TokenEnum {
   DAD_TOKEN = 1
 }
 
-export const useStaking = () => {
-  const {library, account, activate, active} = useWeb3React();
-  // const [balance, setBalance] = useState(0);
+export interface UseStakingPropsInterface {
+  requiredAccountAddress: string;
+}
 
-  console.log('useStaking', {library, account, activate, active});
+export const useStaking = ({requiredAccountAddress}: UseStakingPropsInterface) => {
+  const {useWallet} = getWalletByAddress(requiredAccountAddress || '');
+  const {
+    web3Library: library,
+    account,
+    activate,
+    isActive
+  } = useWallet({appVariables: appVariables as any});
+  // const {library, account, activate, active} = useWeb3React();
+  // const [balance, setBalance] = useState(0);
+  // console.log('useStaking', {library, account, activate, active});
+
+  console.log('useStaking', {library, account, activate, isActive, requiredAccountAddress});
+
+  const [isActivating, setIsActivating] = useState(false);
+  useEffect(() => {
+    if (!isActive) {
+      setIsActivating(true);
+      activate()
+        .catch((err) => {
+          console.log('useStaking activate err', err);
+        })
+        .finally(() => setIsActivating(false));
+    }
+  }, [activate, isActive]);
 
   const [, stakingContract, momContract] = useMemo(() => {
     if (!library) {
@@ -67,7 +92,7 @@ export const useStaking = () => {
         .send({from: account});
       console.log('useStaking stake result', result);
     },
-    [momContract?.methods, account, stakingContract?.methods]
+    [momContract, account, stakingContract]
   );
 
   const unstake = useCallback(
@@ -79,14 +104,20 @@ export const useStaking = () => {
       const result = await stakingContract?.methods.unstake(nftId, tokenKind).send({from: account});
       console.log('useStaking unstake result', result);
     },
-    [account, stakingContract?.methods]
+    [account, stakingContract]
   );
 
   const claimRewards = useCallback(async () => {
     console.log('useStaking claimRewards');
     const result = await stakingContract?.methods.claim_rewards().send({from: account});
     console.log('useStaking claimRewards result', result);
-  }, [stakingContract?.methods, account]);
+  }, [stakingContract, account]);
 
-  return {isWalletActive: !!library, account, stake, unstake, claimRewards};
+  return {
+    isWalletActive: isActivating ? undefined : isActive,
+    account,
+    stake,
+    unstake,
+    claimRewards
+  };
 };

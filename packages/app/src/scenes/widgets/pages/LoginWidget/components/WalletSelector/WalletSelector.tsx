@@ -43,7 +43,7 @@ const WalletSelector: FC<PropsInterface> = ({onConnected}) => {
                     setConnectWithWallet(true);
                   }}
                 >
-                  <img src={wallet.icon} alt={`${wallet.name}-icon`} />
+                  <img src={wallet.logo} alt={`${wallet.name}-icon`} />
                   <span>{wallet.name}</span>
                 </styled.MethodItem>
               ))}
@@ -55,7 +55,7 @@ const WalletSelector: FC<PropsInterface> = ({onConnected}) => {
           {selectedWallet && (
             <>
               <styled.ConnectWithWalletRow>
-                <img src={selectedWallet.icon} alt={`${selectedWallet.name}-icon`} />
+                <img src={selectedWallet.logo} alt={`${selectedWallet.name}-icon`} />
                 <span>{t('login.connectWith', {wallet: selectedWallet.name})}</span>
               </styled.ConnectWithWalletRow>
 

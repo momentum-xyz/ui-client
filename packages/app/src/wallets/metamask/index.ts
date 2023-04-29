@@ -1,11 +1,13 @@
 import {WalletConfigInterface} from 'wallets';
-import icon from 'static/images/walletMetamask.svg';
+import logo from 'static/images/walletMetamask.svg';
 
 import {useWallet} from './useWallet';
 
 const config: WalletConfigInterface = {
+  id: 'metamask',
   name: 'Metamask',
-  icon,
+  logo,
+  icon: 'metamask',
   browserExtensionUrl: 'https://metamask.io/download/',
   useWallet
 };

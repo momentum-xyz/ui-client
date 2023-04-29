@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {
@@ -17,23 +17,22 @@ import {WalletSelector} from 'scenes/widgets/pages/LoginWidget/components';
 import * as styled from './MyWallet.styled';
 
 interface PropsInterface {
-  wallets: WalletModelInterface[];
   walletOptions: SelectOptionInterface<string>[];
+  onSelectWallet: (walletId: string | null) => void;
+  selectedWallet?: WalletModelInterface;
 }
 
-const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
-  const [selectedWallet, setSelectedWallet] = useState<WalletModelInterface>();
-
+const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWallet}) => {
   const {t} = useI18n();
 
-  useEffect(() => {
-    if (wallets.length > 0 && !selectedWallet) {
-      setSelectedWallet(wallets[0]);
-    }
-  }, [selectedWallet, wallets, wallets.length]);
+  const requiredAccountAddress = selectedWallet?.wallet_id || 'n/a';
+  console.log('MyWallet', {selectedWallet, requiredAccountAddress});
 
-  const {isWalletActive, getTokens} = useBlockchainAirdrop();
-  const {isWalletActive: isStakingWalletActive, claimRewards} = useStaking();
+  const {getTokens} = useBlockchainAirdrop({requiredAccountAddress});
+
+  const {isWalletActive, claimRewards} = useStaking({
+    requiredAccountAddress
+  });
 
   const handleAirdrop = async () => {
     try {
@@ -65,14 +64,11 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
             options={walletOptions}
             value={selectedWallet?.wallet_id}
             placeholder={t('actions.selectWallet')}
-            onSingleChange={(wallet_id) => {
-              const wallet = wallets.find((i) => i.wallet_id === wallet_id);
-              if (wallet) {
-                setSelectedWallet(wallet);
-              }
-            }}
+            onSingleChange={onSelectWallet}
           />
         </styled.Filters>
+
+        {isWalletActive === false && <WalletSelector />}
 
         <styled.Title>{t('labels.rewards')}</styled.Title>
         <styled.RewardsContainer>
@@ -83,7 +79,7 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
           <Button
             icon="wallet"
             label={t('actions.claimRewards')}
-            disabled={!isStakingWalletActive}
+            disabled={!isWalletActive}
             onClick={handleClaimRewards}
           />
         </styled.RewardsContainer>
@@ -91,11 +87,8 @@ const MyWallet: FC<PropsInterface> = ({wallets, walletOptions}) => {
         <styled.Title>{t('actions.requestAirdropTokens')}</styled.Title>
         <styled.AirdropContainer>
           <span>Lorem ipsum dolor sit amet, ligula consectetuer adipiscing elit.</span>
-          {isWalletActive ? (
+          {isWalletActive && (
             <Button icon="air" label={t('actions.startAirdrop')} onClick={handleAirdrop} />
-          ) : (
-            // TODO will be done automatically
-            <WalletSelector />
           )}
         </styled.AirdropContainer>
 

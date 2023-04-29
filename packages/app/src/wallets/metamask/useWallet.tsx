@@ -17,6 +17,7 @@ export const useWallet: UseWalletType = () => {
   // this structure exists when both Metamask and Coinbase Wallet are installed
   const metamaskProvider = ethereum?.providers?.find((p: any) => p.isMetaMask);
   const isInstalled = !!metamaskProvider || ethereum?.isMetaMask;
+  console.log('MetaMask useWallet metamaskProvider', metamaskProvider);
 
   const signChallenge = useCallback(
     async (challenge: string) => {
@@ -27,13 +28,7 @@ export const useWallet: UseWalletType = () => {
     [account, library]
   );
 
-  useEffect(() => {
-    console.log('MetaMask useWallet metamaskProvider', metamaskProvider);
-    if (!isInstalled) {
-      console.log('MetaMask useWallet not installed');
-      return;
-    }
-
+  const activateWallet = useCallback(async () => {
     console.log('MetaMask useWallet activate');
 
     // It's a workaround to fix the issue with opening Coinbase Wallet when it's also installed
@@ -49,22 +44,42 @@ export const useWallet: UseWalletType = () => {
     // when swtiching from Coinbase Wallet to MetaMask there's some internal race condition
     // that leaves connector deactivated so timeout helps here
     // https://github.com/Uniswap/web3-react/issues/78
-    setTimeout(() => {
-      activate(connector)
-        .then((res) => {
-          console.log('MetaMask useWallet activated res', res);
-        })
-        .catch((err) => {
-          console.log('MetaMask useWallet activate err', err);
-        });
-    }, 500);
+    return new Promise<void>((resolve, reject) => {
+      setTimeout(() => {
+        activate(connector)
+          .then((res) => {
+            console.log('MetaMask useWallet activated res', res);
+            resolve();
+          })
+          .catch((err) => {
+            console.log('MetaMask useWallet activate err', err);
+            reject(err);
+          });
+      }, 500);
+    });
+  }, [activate, ethereum, metamaskProvider]);
+
+  useEffect(() => {
+    if (!isInstalled) {
+      console.log('MetaMask useWallet not installed');
+      return;
+    }
+
+    activateWallet();
 
     return () => {
-      // temp disable
-      // console.log('MetaMask useWallet deactivate');
-      // deactivate();
+      console.log('MetaMask useWallet deactivate');
+      deactivate();
     };
-  }, [activate, deactivate, ethereum, isInstalled, metamaskProvider]);
+  }, [activateWallet, deactivate, isInstalled]);
 
-  return {account, accountHex: account, isInstalled, signChallenge};
+  return {
+    account,
+    accountHex: account,
+    isInstalled,
+    web3Library: library,
+    activate: activateWallet,
+    isActive: active,
+    signChallenge
+  };
 };

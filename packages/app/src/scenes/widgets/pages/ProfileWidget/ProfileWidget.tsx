@@ -152,7 +152,7 @@ const ProfileWidget: FC = () => {
                   wallets={nftStore.wallets}
                   defaultWalletId={nftStore.defaultWalletId}
                   onChangeDefaultWallet={nftStore.setDefaultWalletId}
-                  onReloadWallets={nftStore.loadMyWallets}
+                  onReloadWallets={() => nftStore.loadMyWallets(sessionStore.userId)}
                 />
               )}
             </styled.Wrapper>

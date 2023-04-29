@@ -34,13 +34,7 @@ const talismanConnector = new TalismanConnector({
 // };
 
 export const useWallet: UseWalletType = ({appVariables}) => {
-  const {
-    library,
-    account,
-    activate,
-    //  deactivate,
-    active
-  } = useWeb3React();
+  const {library, account, activate, deactivate, active} = useWeb3React();
   console.log('Talisman useWallet', {library, account, activate, active});
 
   // const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
@@ -51,12 +45,7 @@ export const useWallet: UseWalletType = ({appVariables}) => {
   const talismanEth = (window as any)?.talismanEth;
   const isInstalled = !!talismanEth;
 
-  useEffect(() => {
-    if (!isInstalled) {
-      console.log('Talisman Wallet is not installed');
-      return;
-    }
-
+  const activateWallet = useCallback(async () => {
     // const enable = async () => {
     //   console.log('web3Enable start');
     //   await web3Enable(appVariables.POLKADOT_CONNECTION_STRING);
@@ -68,29 +57,45 @@ export const useWallet: UseWalletType = ({appVariables}) => {
 
     // enable();
 
-    // another workaround for Coinbase Wallet
-    // when swtiching from Coinbase Wallet to MetaMask there's some internal race condition
-    // that leaves connector deactivated so timeout helps here
-    // https://github.com/Uniswap/web3-react/issues/78
-    setTimeout(() => {
-      activate(talismanConnector)
-        .then((res) => {
-          console.log('Talisman useWallet activated res', res);
+    return new Promise<void>((resolve, reject) => {
+      // another workaround for Coinbase Wallet
+      // when swtiching from Coinbase Wallet to MetaMask there's some internal race condition
+      // that leaves connector deactivated so timeout helps here
+      // https://github.com/Uniswap/web3-react/issues/78
+      setTimeout(() => {
+        activate(talismanConnector)
+          .then((res) => {
+            console.log('Talisman useWallet activated res', res);
+            resolve();
+            // talismanEth
+            //   .request({method: 'eth_requestAccounts'})
+            //   .then((res: any) => {
+            //     console.log('Talisman useWallet eth_requestAccounts res', res);
+            //   })
+            //   .catch((err: any) => {
+            //     console.log('Talisman useWallet eth_requestAccounts err', err);
+            //   });
+          })
+          .catch((err) => {
+            console.log('Talisman useWallet activate err', err);
+            reject(err);
+          });
+      }, 500);
+    });
+  }, [activate]);
 
-          talismanEth
-            .request({method: 'eth_requestAccounts'})
-            .then((res: any) => {
-              console.log('Talisman useWallet eth_requestAccounts res', res);
-            })
-            .catch((err: any) => {
-              console.log('Talisman useWallet eth_requestAccounts err', err);
-            });
-        })
-        .catch((err) => {
-          console.log('Talisman useWallet activate err', err);
-        });
-    }, 500);
-  }, [activate, appVariables, isInstalled, talismanEth]);
+  useEffect(() => {
+    if (!isInstalled) {
+      console.log('Talisman Wallet is not installed');
+      return;
+    }
+
+    activateWallet();
+
+    return () => {
+      deactivate();
+    };
+  }, [activateWallet, deactivate, isInstalled]);
 
   const signChallenge = useCallback(
     async (challenge: string) => {
@@ -173,7 +178,10 @@ export const useWallet: UseWalletType = ({appVariables}) => {
     account,
     accountHex,
     isInstalled,
+    activate: activateWallet,
+    isActive: active,
     // content,
+    web3Library: library,
     signChallenge
   };
 };

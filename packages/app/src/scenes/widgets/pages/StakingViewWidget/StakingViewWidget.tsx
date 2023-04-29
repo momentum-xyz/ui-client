@@ -36,12 +36,6 @@ const StakingViewWidget: FC = () => {
   const {t} = useI18n();
   const navigate = useNavigate();
 
-  const walletOptions: SelectOptionInterface<string>[] = nftStore.wallets.map((wallet) => ({
-    value: wallet.wallet_id,
-    label: wallet.wallet_id,
-    icon: 'talisman'
-  }));
-
   const sortOptions: SelectOptionInterface<StakeSortType>[] = [
     {
       value: 'mostStaked',
@@ -84,7 +78,7 @@ const StakingViewWidget: FC = () => {
                 mostStakedWorlds={universe2dStore.mostStakedWorlds}
                 isStakeListEmpty={nftStore.stakes.length === 0}
                 filterField={stakingViewStore.filterField}
-                filterOptions={walletOptions}
+                filterOptions={nftStore.walletOptions}
                 sortField={stakingViewStore.sortField}
                 sortOptions={sortOptions}
                 onSelectWorld={onSelectWorld}
@@ -94,7 +88,12 @@ const StakingViewWidget: FC = () => {
             )}
 
             {activeTab === 'wallet' && (
-              <MyWallet wallets={nftStore.wallets} walletOptions={walletOptions} />
+              <MyWallet
+                key={nftStore.selectedWallet?.wallet_id}
+                walletOptions={nftStore.walletOptions}
+                selectedWallet={nftStore.selectedWallet}
+                onSelectWallet={nftStore.setSelectedWalletId}
+              />
             )}
           </styled.Content>
         </styled.Wrapper>

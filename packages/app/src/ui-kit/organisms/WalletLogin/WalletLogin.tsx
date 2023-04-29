@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {Button} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 
-import {WalletConfigInterface} from 'wallets';
+import {WalletConfigInterface, storeWalletByAddress} from 'wallets';
 import {useStore} from 'shared/hooks';
 import {appVariables} from 'api/constants';
 
@@ -41,7 +41,10 @@ const WalletLogin: FC<PropsInterface> = ({
       ? sessionStore.attachAnotherAccount(accountHex, signChallenge)
       : sessionStore.fetchTokenByWallet2(accountHex, signChallenge)
     )
-      .then(onConnected)
+      .then(() => {
+        storeWalletByAddress(accountHex, walletConf.id);
+        onConnected?.();
+      })
       .catch((err) => {
         console.log('Error connecting wallet', err);
         onError?.(err);

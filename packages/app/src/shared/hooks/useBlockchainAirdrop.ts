@@ -1,8 +1,9 @@
 import {useCallback, useMemo} from 'react';
-import {useWeb3React} from '@web3-react/core';
+// import {useWeb3React} from '@web3-react/core';
 import Web3 from 'web3';
 
 import {appVariables} from 'api/constants';
+import {getWalletByAddress} from 'wallets';
 
 import faucetABI from './contract_faucet.ABI.json';
 
@@ -11,10 +12,23 @@ enum TokenEnum {
   DAD_TOKEN = 1
 }
 
-export const useBlockchainAirdrop = () => {
-  const {library, account, activate, active} = useWeb3React();
+export interface UseBlockchainAirdropPropsInterface {
+  requiredAccountAddress: string;
+}
 
-  console.log('useBlockchainAirdrop', {library, account, activate, active});
+// TODO merge into useStaking?
+export const useBlockchainAirdrop = ({
+  requiredAccountAddress
+}: UseBlockchainAirdropPropsInterface) => {
+  const {useWallet} = getWalletByAddress(requiredAccountAddress || '');
+  const {
+    web3Library: library,
+    account,
+    activate,
+    isActive
+  } = useWallet({appVariables: appVariables as any});
+
+  console.log('useBlockchainAirdrop', {library, account, activate, isActive});
 
   const [, faucetContract] = useMemo(() => {
     if (!library) {
@@ -32,8 +46,8 @@ export const useBlockchainAirdrop = () => {
       const result = await faucetContract?.methods.get_tokens(tokenKind).send({from: account});
       console.log('useBlockchainAirdrop getTokens result', result);
     },
-    [account, faucetContract?.methods]
+    [account, faucetContract]
   );
 
-  return {isWalletActive: !!library, account, getTokens};
+  return {isWalletActive: isActive, account, getTokens};
 };

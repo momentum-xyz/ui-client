@@ -1,28 +1,23 @@
 import React, {FC, useState} from 'react';
-import {
-  Button,
-  Heading,
-  IconSvg,
-  Input,
-  TabBar,
-  TabBarTabInterface,
-  Text
-} from '@momentum-xyz/ui-kit';
+import {Heading, Input, TabBar, TabBarTabInterface, Text} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import BN from 'bn.js';
 import {useI18n} from '@momentum-xyz/core';
+import {Button, Select} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStaking, useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
 import {WalletSelector} from 'scenes/widgets/pages/LoginWidget/components';
+// import {WalletModelInterface} from 'core/models';
+// import {getWalletByAddress} from 'wallets';
 // import {convertToHex} from 'core/utils';
 //import {NewsfeedTypeEnum} from 'core/enums';
 
 import * as styled from './StakingForm.styled';
 
 const DEFAULT_STAKING_AMOUNT = 1;
-const ODYSSEY_GET_STARTED_WALLET = 'https://discover.odyssey.org/create-your-odyssey/get-a-wallet';
+// const ODYSSEY_GET_STARTED_WALLET = 'https://discover.odyssey.org/create-your-odyssey/get-a-wallet';
 
 interface PropsInterface {
   isGuest?: boolean;
@@ -34,12 +29,16 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   const {sessionStore, nftStore} = useStore();
   const {wallet: authWallet} = sessionStore;
   const {
+    // wallets,
+    walletOptions,
+    selectedWalletId: wallet,
+    setSelectedWalletId,
     // balanceTotal,
     // balanceReserved,
     balanceTransferrable,
     canBeStaked,
     addresses,
-    accountOptions,
+    // accountOptions,
     nftItems,
     chainDecimals,
     tokenSymbol
@@ -47,11 +46,13 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
 
   const {t} = useI18n();
 
-  const [wallet = addresses[0]?.address] = useState(authWallet);
-  const initiatorAccount = accountOptions.find((account) => account.value === wallet);
-  const initiatorInfo = initiatorAccount
-    ? `${initiatorAccount.label} (${initiatorAccount.value.substring(0, 20)}...)`
-    : '';
+  // const [selectedWallet = wallets[0], setSelectedWallet] = useState<WalletModelInterface>();
+
+  // const [wallet = addresses[0]?.address] = useState(authWallet);
+  // const initiatorAccount = accountOptions.find((account) => account.value === wallet);
+  // const initiatorInfo = initiatorAccount
+  //   ? `${initiatorAccount.label} (${initiatorAccount.value.substring(0, 20)}...)`
+  //   : '';
 
   const tabBarTabs: TabBarTabInterface[] = [
     {
@@ -89,9 +90,9 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   console.log('StakingForm', {nft, nftItemId, nftItems});
 
   console.log('StakingForm', {wallet, addresses, authWallet, amountString, amountAtoms, nft});
-  console.log('initiatorAccount', initiatorAccount, nft);
+  // console.log('initiatorAccount', initiatorAccount, nft);
 
-  const {isWalletActive, account, stake} = useStaking();
+  const {isWalletActive, account, stake} = useStaking({requiredAccountAddress: wallet});
   // TODO make sure account === selectedAccount
 
   console.log('StakeForm useStaking', {isWalletActive, account, stake});
@@ -101,32 +102,8 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
       console.log('onStake', wallet, nftItemId, amountAtoms);
       // await nftStore.stake(wallet, amountAtoms, nftItemId);
       await stake(nftItemId as string, amountAtoms);
-
-      // if (myNft && nft) {
-      //   const isMutual = nftStore.stakingAtMe.has(nft.owner);
-      //   console.log(isMutual ? 'MUTUAL STAKING' : 'No mutual staking');
-
-      //   // FIXME: Movement from the Explore store
-      //   /*await widgetsStore.exploreStore.createNewsfeedItem({
-      //     uuid: myNft.uuid,
-      //     type: NewsfeedTypeEnum.CONNECTED,
-      //     date: new Date().toISOString(),
-      //     connectedTo: {
-      //       uuid: nft.uuid,
-      //       isMutual
-      //     }
-      //   });*/
-
-      //   if (isMutual) {
-      //     const walletAHex = convertToHex(wallet);
-      //     const walletBHex = convertToHex(nft?.owner);
-      //     console.log({walletAHex, walletBHex});
-
-      //     // FIXME: Movement from the Explore store
-      //     //await widgetsStore.exploreStore.createMutualDocks(walletAHex, walletBHex);
-      //   }
-
       console.log('stake success');
+
       toast.info(
         <ToastContent
           headerIconName="alert"
@@ -189,46 +166,6 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
     <styled.Container>
       <TabBar tabs={tabBarTabs} selectedTab={activeTab} onTabSelect={(tab) => setActiveTab(tab)} />
       <styled.TabContent>
-        {activeTab.id === 'start' && (
-          <>
-            {isGuest && (
-              <styled.NoWalletContainer>
-                <IconSvg name="alert" size="medium" />
-                <styled.AlertMessage>
-                  <Text size="s" text={t('staking.guestStakingMessage')} align="left" />
-                  <a href={ODYSSEY_GET_STARTED_WALLET} target="_blank" rel="noreferrer">
-                    <styled.BottomText
-                      size="s"
-                      text={t('staking.guestWalletMessage')}
-                      align="left"
-                    />
-                  </a>
-                </styled.AlertMessage>
-              </styled.NoWalletContainer>
-            )}
-            <styled.Section>
-              <styled.SectionHeader>
-                <Heading type="h2" align="left" label={t('staking.connectTitle')} />
-              </styled.SectionHeader>
-              <Text size="s" text={t('staking.connectMessage')} align="left" />
-            </styled.Section>
-            <styled.Section>
-              <styled.SectionHeader>
-                <Heading type="h2" align="left" label={t('staking.label')} />
-              </styled.SectionHeader>
-              <Text size="s" text={t('staking.stakingMessage')} align="left" />
-            </styled.Section>
-            <styled.Buttons>
-              <span />
-              <Button
-                icon="wallet"
-                label={t('staking.startContributing')}
-                onClick={() => setActiveTab(tabBarTabs[1])}
-                disabled={isGuest}
-              />
-            </styled.Buttons>
-          </>
-        )}
         {activeTab.id === 'wallet' && (
           <>
             <div>
@@ -237,10 +174,17 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
                   <Heading type="h2" align="left" label={t('staking.walletAccount')} />
                 </styled.SectionHeader>
                 <styled.LabeledLineContainer>
-                  <styled.LabeledLineLabelContainer>
-                    <Text size="xxs" align="right" text={t('staking.account')} />
-                  </styled.LabeledLineLabelContainer>
-                  <Text size="xxs" text={initiatorInfo} />
+                  <styled.Filters>
+                    <div>{t('labels.account')}</div>
+                    <Select
+                      wide
+                      options={walletOptions}
+                      value={wallet}
+                      placeholder={t('actions.selectWallet')}
+                      onSingleChange={setSelectedWalletId}
+                    />
+                  </styled.Filters>
+                  {/* <Text size="xxs" text={initiatorInfo} /> */}
                 </styled.LabeledLineContainer>
               </styled.Section>
               <styled.Section>
@@ -276,7 +220,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
                 </styled.LabeledLineContainer>
               </styled.Section>
             </div>
-            {!isWalletActive && <WalletSelector />}
+            {isWalletActive === false && <WalletSelector />}
             <styled.Buttons>
               {/* <Button label={t('staking.back')} onClick={() => setActiveTab(tabBarTabs[0])} /> */}
               <Button
@@ -313,7 +257,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
                   <styled.LabeledLineLabelContainer>
                     <Text size="xxs" align="right" text={t('staking.sendingFrom')} />
                   </styled.LabeledLineLabelContainer>
-                  <Text size="xxs" text={initiatorInfo} />
+                  {/* <Text size="xxs" text={initiatorInfo} /> */}
                 </styled.LabeledLineContainer>
                 <styled.ConsentContainer>
                   <Text size="s" align="left" text={t('staking.contributionMessage')} />
