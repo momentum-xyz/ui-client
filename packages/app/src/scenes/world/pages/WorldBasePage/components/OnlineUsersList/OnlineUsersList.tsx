@@ -1,7 +1,13 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {ButtonEllipse, Hexagon, ImageSizeEnum, Panel} from '@momentum-xyz/ui-kit-storybook';
+import {
+  ButtonEllipse,
+  Hexagon,
+  ImageSizeEnum,
+  Panel,
+  ProfileLine
+} from '@momentum-xyz/ui-kit-storybook';
 
 import {UserDetailsModelType} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -12,6 +18,7 @@ import * as styled from './OnlineUsersList.styled';
 interface PropsInterface {
   onlineUsers: UserDetailsModelType[];
   voiceChatUsers: string[];
+  onVisitWorld: (worldId: string) => void;
   onInviteToVoiceChat: (userId: string) => void;
   onSendHighFive: (userId: string) => void;
 }
@@ -19,6 +26,7 @@ interface PropsInterface {
 const OnlineUsersList: FC<PropsInterface> = ({
   onlineUsers,
   voiceChatUsers,
+  onVisitWorld,
   //onInviteToVoiceChat,
   onSendHighFive
 }) => {
@@ -66,6 +74,14 @@ const OnlineUsersList: FC<PropsInterface> = ({
                   joinDate={activeUser.user?.createdAt}
                   hideBorder
                 />
+
+                {activeUser.worldsOwned.map(({id, name}) => (
+                  <ProfileLine
+                    key={id}
+                    icon="rabbit_fill"
+                    label={<styled.Link onClick={() => onVisitWorld(id)}>{name}</styled.Link>}
+                  />
+                ))}
               </styled.Info>
 
               <styled.Actions>

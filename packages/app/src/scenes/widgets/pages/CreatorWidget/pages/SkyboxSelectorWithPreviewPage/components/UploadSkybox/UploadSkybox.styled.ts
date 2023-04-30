@@ -4,29 +4,11 @@ export const Container = styled.div`
   padding: 0 80px;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 382px);
-  max-height: calc(100vh - 382px);
+  min-height: calc(100vh - 370px);
+  max-height: calc(100vh - 370px);
   overflow: scroll;
   justify-content: space-between;
 `;
-
-export const FileUploaderContainer = styled.div`
-  position: relative;
-  height: 50px;
-  width: 100%;
-`;
-
-export const Error = styled.p`
-  color: red;
-`;
-
-export const PreviewContainer = styled.div`
-  width: 300px;
-  height: 300px;
-
-  border-radius: 10px;
-`;
-
 export const FormContainer = styled.div``;
 
 export const InputsContainer = styled.div`
@@ -43,7 +25,7 @@ export const ControlsRow = styled.div`
   justify-content: space-between;
 `;
 
-export const UploadContainer = styled.div`
+export const ImageUploadContainer = styled.div`
   position: relative;
   margin: 20px 0px 10px;
   display: flex;
@@ -77,7 +59,7 @@ export const UploadContainer = styled.div`
   }
 `;
 
-export const AssetInformation = styled.div`
+export const SkyboxInformation = styled.div`
   margin-bottom: 20px;
   & > h1 {
     font-weight: 500;
@@ -90,4 +72,17 @@ export const AssetInformation = styled.div`
     line-height: 22px;
     letter-spacing: 0.02em;
   }
+`;
+
+export const PreviewImageHolder = styled.div`
+  height: 360px;
+  width: 360px;
+  background-position: center center;
+  background-size: cover;
+  position: absolute;
+`;
+
+export const Image = styled.img`
+  height: 100%;
+  width: 100%;
 `;

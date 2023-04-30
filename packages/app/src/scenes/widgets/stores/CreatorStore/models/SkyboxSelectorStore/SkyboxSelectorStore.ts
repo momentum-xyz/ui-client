@@ -9,7 +9,6 @@ import {PluginIdEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 
 // const UNITY_SKYBOX_ASSET_ID = '313a597a-8b9a-47a7-9908-52bdc7a21a3e';
-const PAGE_SIZE = 5;
 
 const SkyboxDatabaseModel = types.model({
   name: types.string
@@ -29,11 +28,7 @@ const SkyboxSelectorStore = types
       defaultSkyboxes: types.optional(types.map(SkyboxDatabaseModel), {}),
       userSkyboxes: types.optional(types.map(SkyboxDatabaseModel), {}),
 
-      skyboxPageCnt: types.optional(types.number, 0),
-      skyboxCurrentPage: types.optional(types.number, 0),
-
       skyboxToDeleteId: types.maybe(types.string),
-      uploadDialog: types.optional(Dialog, {}),
       deleteDialog: types.optional(Dialog, {})
     })
   )
@@ -72,14 +67,27 @@ const SkyboxSelectorStore = types
         )
       ];
     },
-    get currPageSkyboxes(): Asset3dInterface[] {
-      const start = self.skyboxCurrentPage * PAGE_SIZE;
-      const end = start + PAGE_SIZE;
-
-      return this.allSkyboxes.slice(start, end);
+    get communitySkyboxesList(): Asset3dInterface[] {
+      return Object.entries(self.defaultSkyboxes.toJSON()).map(
+        ([id, d]) =>
+          ({
+            id,
+            ...d,
+            isUserAttribute: false,
+            image: self.generateImageFromHash(id)
+          } as Asset3dInterface)
+      );
     },
-    get pages(): number[] {
-      return Array.from(Array(self.skyboxPageCnt).keys());
+    get userSkyboxesList(): Asset3dInterface[] {
+      return Object.entries(self.userSkyboxes.toJSON()).map(
+        ([id, d]) =>
+          ({
+            id,
+            ...d,
+            isUserAttribute: true,
+            image: self.generateImageFromHash(id)
+          } as Asset3dInterface)
+      );
     }
   }))
   .actions((self) => ({
@@ -111,9 +119,6 @@ const SkyboxSelectorStore = types
 
       self.selectedItemId = activeSkyboxData?.render_hash || self.allSkyboxes?.[0]?.id;
       self.currentItemId = self.selectedItemId;
-
-      self.skyboxPageCnt = Math.ceil(self.allSkyboxes.length / PAGE_SIZE);
-      self.skyboxCurrentPage = 0;
     }),
     fetchDefaultSkyboxes: flow(function* () {
       const response = yield self.fetchSkyboxRequest.send(
@@ -171,7 +176,13 @@ const SkyboxSelectorStore = types
 
       return self.worldSettingsRequest.isDone;
     }),
-    uploadSkybox: flow(function* (worldId: string, userId: string, file: File, name: string) {
+    uploadSkybox: flow(function* (
+      worldId: string,
+      userId: string,
+      file: File,
+      name: string,
+      artistName: string
+    ) {
       const uploadImageResponse: UploadImageResponse = yield self.createSkyboxRequest.send(
         api.mediaRepository.uploadImage,
         {file}
@@ -187,7 +198,7 @@ const SkyboxSelectorStore = types
 
       const value = {
         ...self.userSkyboxes.toJSON(),
-        [hash]: {name}
+        [hash]: {name, artistName}
       };
       yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
         spaceId: appVariables.NODE_ID,
@@ -199,14 +210,13 @@ const SkyboxSelectorStore = types
 
       yield self.saveItem(hash, worldId);
       yield self.fetchUserSkyboxes(worldId, userId);
-      self.skyboxPageCnt = Math.ceil(self.allSkyboxes.length / PAGE_SIZE);
 
       return self.createSkyboxRequest.isDone;
     }),
     removeUserSkybox: flow(function* (worldId: string, userId: string, hash: string) {
-      if (hash === self.currentItemId) {
-        return;
-      }
+      // if (hash === self.currentItemId) {
+      //   return;
+      // }
 
       const value = {...self.userSkyboxes.toJSON()};
       delete value[hash];
@@ -219,11 +229,6 @@ const SkyboxSelectorStore = types
       });
 
       yield self.fetchUserSkyboxes(worldId, userId);
-      self.skyboxPageCnt = Math.ceil(self.allSkyboxes.length / PAGE_SIZE);
-      if (self.skyboxCurrentPage >= self.skyboxPageCnt) {
-        self.skyboxCurrentPage = self.skyboxPageCnt - 1;
-      }
-
       self.closeSkyboxDeletion();
       return self.createSkyboxRequest.isDone;
     }),
@@ -240,21 +245,6 @@ const SkyboxSelectorStore = types
       return hash
         ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${hash}`
         : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222';
-    },
-    changePage: function (page: number) {
-      self.skyboxCurrentPage = page;
-    },
-    nextPage: function () {
-      self.skyboxCurrentPage += 1;
-      if (self.skyboxCurrentPage >= self.skyboxPageCnt) {
-        self.skyboxCurrentPage = 0;
-      }
-    },
-    prevPage: function () {
-      self.skyboxCurrentPage -= 1;
-      if (self.skyboxCurrentPage < 0) {
-        self.skyboxCurrentPage = self.skyboxPageCnt - 1;
-      }
     }
   }));
 

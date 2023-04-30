@@ -19,17 +19,44 @@ export const Header = styled.div`
 export const Body = styled.div`
   display: flex;
   flex-grow: 1;
-  overflow: hidden;
+  overflow: scroll;
 `;
 
 export const AssetsGroupList = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 export const Separator = styled.div`
   height: 1px;
-  width: 100%;
+  width: calc(100% - 20px);
   background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
-  margin: 20px 0;
+  margin: 10px;
 `;
+
+export const ControlsContainer = styled.div``;
+export const ControlsInnerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+export const SkyboxTypeContainer = styled.div`
+  display: flex;
+  border: 0.2px solid ${(props) => props.theme.text && rgba(props.theme.text, 0.5)};
+  border-radius: 4px;
+  & > button {
+    flex: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: -0.2px;
+    &:not(.active) {
+      box-shadow: none;
+      border-color: transparent;
+      background: transparent;
+    }
+  }
+`;
+export const SkyboxSearchContainer = styled.div``;

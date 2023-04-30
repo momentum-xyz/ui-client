@@ -1,6 +1,6 @@
 import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useEffect} from 'react';
-import {Button, FileUploader, Text} from '@momentum-xyz/ui-kit';
+import {Button, Frame, Input} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 import {Model3dPreview} from '@momentum-xyz/map3d';
 
@@ -11,7 +11,7 @@ import * as styled from './SelectedPage.styled';
 export const SelectedPage: FC = () => {
   const {creatorStore, universeStore} = useStore();
   const {spawnAssetStore} = creatorStore;
-  const {world3dStore, worldId} = universeStore;
+  const {worldId} = universeStore;
 
   const {selectedAsset: asset, selectAsset} = spawnAssetStore;
 
@@ -45,21 +45,21 @@ export const SelectedPage: FC = () => {
     }
   };
 
-  const handleDevUpload = (file: File | undefined) => {
-    console.log({file, asset});
-    if (asset && file) {
-      spawnAssetStore
-        .uploadImageToMediaManager(file)
-        .then((imageHash) => {
-          alert(
-            `UPDATE asset_3d SET meta = jsonb_set(meta, '{preview_hash}', '"${imageHash}"', TRUE) WHERE asset_3d_id = '${asset.id}';`
-          );
-        })
-        .catch((err) => {
-          alert(err);
-        });
-    }
-  };
+  // const handleDevUpload = (file: File | undefined) => {
+  //   console.log({file, asset});
+  //   if (asset && file) {
+  //     spawnAssetStore
+  //       .uploadImageToMediaManager(file)
+  //       .then((imageHash) => {
+  //         alert(
+  //           `UPDATE asset_3d SET meta = jsonb_set(meta, '{preview_hash}', '"${imageHash}"', TRUE) WHERE asset_3d_id = '${asset.id}';`
+  //         );
+  //       })
+  //       .catch((err) => {
+  //         alert(err);
+  //       });
+  //   }
+  // };
 
   const handleGoBack = () => {
     selectAsset(null);
@@ -70,46 +70,95 @@ export const SelectedPage: FC = () => {
   }
 
   return (
-    <styled.Container>
-      <styled.PreviewContainer>
-        <Model3dPreview
-          filename={asset.thumbnailAssetDownloadUrl}
-          previewUrl={asset.previewUrl}
-          onSnapshot={asset.category === 'custom' ? handleSnapshot : undefined}
+    <styled.Container className="just-to-be-sure">
+      <styled.ObjectInfoContainer>
+        <Frame>
+          <styled.PreviewContainer>
+            <Model3dPreview
+              filename={asset.thumbnailAssetDownloadUrl}
+              previewUrl={asset.previewUrl}
+              onSnapshot={asset.category === 'custom' ? handleSnapshot : undefined}
+            />
+          </styled.PreviewContainer>
+        </Frame>
+
+        <styled.ObjectTitle>{asset.name}</styled.ObjectTitle>
+
+        {/* Where to get the data for the bellow stuff? */}
+        {/* <styled.Row>
+          <styled.Prop>
+            <styled.PropName>Size:</styled.PropName>
+            <styled.PropValue>12.3 mb</styled.PropValue>
+          </styled.Prop>
+          <styled.Prop>
+            <styled.PropName>Triangles:</styled.PropName>
+            <styled.PropValue>21.3k</styled.PropValue>
+          </styled.Prop>
+          <styled.Prop>
+            <styled.PropName>Vertices:</styled.PropName>
+            <styled.PropValue>7.81k</styled.PropValue>
+          </styled.Prop>
+        </styled.Row> */}
+
+        <styled.Row>
+          <styled.Prop>
+            <styled.PropName>Added by:</styled.PropName>
+            <styled.PropValue>test</styled.PropValue>
+          </styled.Prop>
+        </styled.Row>
+        <styled.Row>
+          <styled.Prop>
+            <styled.PropName>Added on:</styled.PropName>
+            <styled.PropValue>test</styled.PropValue>
+          </styled.Prop>
+        </styled.Row>
+        <styled.Row>
+          <styled.Prop>
+            <styled.PropName>Created by:</styled.PropName>
+            <styled.PropValue>test</styled.PropValue>
+          </styled.Prop>
+        </styled.Row>
+
+        <styled.Row>
+          <styled.Prop>
+            <styled.PropName>Change name:</styled.PropName>
+            {/* <styled.PropValue>test</styled.PropValue> */}
+            <Input
+              placeholder={t('placeholders.defaultAssetName')}
+              onChange={spawnAssetStore.setNavigationObjectName}
+            />
+          </styled.Prop>
+        </styled.Row>
+        {/*
+        <styled.CheckBoxLabel>
+          <styled.CheckBox
+            type="checkbox"
+            checked={spawnAssetStore.isVisibleInNavigation}
+            onChange={spawnAssetStore.toggleIsVisibleInNavigation}
+          />
+          <Text text={t('labels.visibleInNavigation')} size="m" weight="light" />
+        </styled.CheckBoxLabel>
+        */}
+        {/* {process.env.NODE_ENV === 'development' && (
+          <FileUploader
+            label="DEV - Upload PREVIEW Image"
+            dragActiveLabel="Drop the files here..."
+            fileType="image"
+            buttonSize="small"
+            onFilesUpload={handleDevUpload}
+            onError={(error) => console.error(error)}
+            enableDragAndDrop={false}
+          />
+        )} */}
+      </styled.ObjectInfoContainer>
+      <styled.ControlsRow>
+        <Button label={t('actions.goBack')} variant="secondary" onClick={handleGoBack} />
+        <Button
+          label={t('actions.spawnObject')}
+          disabled={!spawnAssetStore.navigationObjectName}
+          onClick={handleSpawn}
         />
-      </styled.PreviewContainer>
-      <styled.NameLabel text={asset.name} size="m" />
-      <styled.CheckBoxLabel>
-        <styled.CheckBox
-          type="checkbox"
-          checked={spawnAssetStore.isVisibleInNavigation}
-          onChange={spawnAssetStore.toggleIsVisibleInNavigation}
-        />
-        <Text text={t('labels.visibleInNavigation')} size="m" weight="light" />
-      </styled.CheckBoxLabel>
-      <styled.NameInput
-        placeholder={t('placeholders.nameYourObjectNavigation') || ''}
-        onFocus={() => world3dStore?.changeKeyboardControl(false)}
-        onBlur={() => world3dStore?.changeKeyboardControl(true)}
-        onChange={spawnAssetStore.setNavigationObjectName}
-      />
-      <Button
-        label={t('actions.spawnObject')}
-        disabled={!spawnAssetStore.navigationObjectName}
-        onClick={handleSpawn}
-      />
-      <Button label={t('actions.goBack')} onClick={handleGoBack} />
-      {process.env.NODE_ENV === 'development' && (
-        <FileUploader
-          label="DEV - Upload PREVIEW Image"
-          dragActiveLabel="Drop the files here..."
-          fileType="image"
-          buttonSize="small"
-          onFilesUpload={handleDevUpload}
-          onError={(error) => console.error(error)}
-          enableDragAndDrop={false}
-        />
-      )}
+      </styled.ControlsRow>
     </styled.Container>
   );
 };

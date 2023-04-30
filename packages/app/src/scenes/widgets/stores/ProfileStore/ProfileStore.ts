@@ -1,8 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {WorldInfo} from 'core/models';
-import {api, UploadImageResponse, WorldInfoInterface} from 'api';
+import {api, UploadImageResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
 import {ProfileFormInterface} from 'core/interfaces';
 
@@ -10,27 +9,11 @@ const ProfileStore = types.compose(
   ResetModel,
   types
     .model('ProfileStore', {
-      worldList: types.optional(types.array(WorldInfo), []),
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), []),
-
-      worldsRequest: types.optional(RequestModel, {}),
       editRequest: types.optional(RequestModel, {}),
       editAvatarRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
-      init(userId: string): void {
-        this.loadWorlds(userId);
-      },
-      loadWorlds: flow(function* (userId: string) {
-        const userWorlds: WorldInfoInterface[] = yield self.worldsRequest.send(
-          api.userRepository.fetchOwnedWorldList,
-          {userId}
-        );
-
-        if (userWorlds) {
-          self.worldList = cast(userWorlds);
-        }
-      }),
       editProfile: flow(function* (form: ProfileFormInterface, previousImageHash?: string) {
         self.fieldErrors = cast([]);
 

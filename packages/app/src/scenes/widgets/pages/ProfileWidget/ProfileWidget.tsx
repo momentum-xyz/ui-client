@@ -25,8 +25,6 @@ const ProfileWidget: FC = () => {
   const {t} = useI18n();
 
   useEffect(() => {
-    profileStore.init(sessionStore.userId);
-
     return () => {
       profileStore.resetModel();
     };
@@ -115,7 +113,7 @@ const ProfileWidget: FC = () => {
                 <ProfileView
                   user={sessionStore.user}
                   defaultWalletId={nftStore.defaultWalletId}
-                  worldList={profileStore.worldList}
+                  worldList={sessionStore.worldList}
                   onVisitWorld={onVisitWorld}
                   onInfoWorld={onInfoWorld}
                 />
@@ -135,15 +133,15 @@ const ProfileWidget: FC = () => {
               {activeMenuId === 'settings' && (
                 <ProfileSettings
                   inputAudioDeviceId={userDevicesStore.currentAudioInput?.deviceId}
-                  outputAudioDeviceId={userDevicesStore.currentAudioInput?.deviceId} // TODO: Connect;
+                  outputAudioDeviceId={userDevicesStore.currentAudioOutput?.deviceId}
                   inputAudioDeviceList={userDevicesStore.audioInputOptions}
                   outputAudioDeviceList={userDevicesStore.audioOutputOptions}
-                  onChangeAudioDevices={(inputId, outputId) => {
-                    userDevicesStore.selectAudioInput(inputId || '');
-                    // userDevicesStore.selectAudioInput(inputId || ''); // TODO: Connect;
-                  }}
                   onCancel={() => setActiveMenuId('viewProfile')}
-                  isUpdating={false}
+                  onChangeAudioDevices={(inputId, outputId) => {
+                    agoraStore.selectAudioInput(inputId || '');
+                    agoraStore.selectAudioOutput(outputId || '');
+                    setActiveMenuId('viewProfile');
+                  }}
                 />
               )}
 

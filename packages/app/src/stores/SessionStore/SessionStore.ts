@@ -5,10 +5,16 @@ import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {getImageAbsoluteUrl} from 'core/utils';
-import {PolkadotAddressInterface, User} from 'core/models';
 import {getAccessToken, refreshAxiosToken} from 'api/request';
-import {api, AuthChallengeRequest, CheckProfileUpdatingJobResponse, FetchMeResponse} from 'api';
+import {PolkadotAddressInterface, User, WorldInfo} from 'core/models';
 import PolkadotImplementation from 'shared/services/web3/polkadot.class';
+import {
+  api,
+  AuthChallengeRequest,
+  CheckProfileUpdatingJobResponse,
+  FetchMeResponse,
+  WorldInfoInterface
+} from 'api';
 
 const SessionStore = types
   .model('SessionStore', {
@@ -16,13 +22,16 @@ const SessionStore = types
     isAuthenticating: true,
     user: types.maybeNull(User),
     signUpUser: types.maybeNull(User),
+    worldList: types.optional(types.array(WorldInfo), []),
     profileJobId: types.maybeNull(types.string),
+
     guestTokenRequest: types.optional(RequestModel, {}),
     challengeRequest: types.optional(RequestModel, {}),
     tokenRequest: types.optional(RequestModel, {}),
     attachAccountRequest: types.optional(RequestModel, {}),
     profileRequest: types.optional(RequestModel, {}),
-    profileJobRequest: types.optional(RequestModel, {})
+    profileJobRequest: types.optional(RequestModel, {}),
+    worldsRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
     updateAxiosAndUnityTokens(token: string): void {
@@ -172,24 +181,17 @@ const SessionStore = types
         self.user = cast(response);
         self.signUpUser = cast(null);
       }
-
-      /*if (!self.user?.isGuest) {
-        // TODO change fetchMe EP to return multiple wallets
-        const responseWallets = yield self.profileRequest.send(
-          api.userAttributeRepository.getPluginUserAttributeValue,
-          {
-            attributeName: 'wallet',
-            userId: response.id,
-            pluginId: PluginIdEnum.WALLETS
-          }
-        );
-        console.log('responseWallets', responseWallets);
-        if (responseWallets?.wallet && self.user) {
-          self.user.wallets = cast(responseWallets.wallet);
-        }
-      }*/
-
       return true;
+    }),
+    loadWorlds: flow(function* () {
+      const userWorlds: WorldInfoInterface[] = yield self.worldsRequest.send(
+        api.userRepository.fetchOwnedWorldList,
+        {userId: self.user?.id || ''}
+      );
+
+      if (userWorlds) {
+        self.worldList = cast(userWorlds);
+      }
     }),
     signOutRedirect(): void {
       self.clearJobId();
@@ -214,6 +216,9 @@ const SessionStore = types
       }
 
       yield self.loadUserProfile();
+      if (self.user && !self.user.isGuest) {
+        yield self.loadWorlds();
+      }
 
       self.initJobId();
       self.isAuthenticating = false;
