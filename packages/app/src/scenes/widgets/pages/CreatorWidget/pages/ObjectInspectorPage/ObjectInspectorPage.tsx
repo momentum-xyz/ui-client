@@ -1,7 +1,8 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Model3dPreview} from '@momentum-xyz/map3d';
-import {Frame} from '@momentum-xyz/ui-kit-storybook';
+import {useI18n} from '@momentum-xyz/core';
+import {Frame, Input} from '@momentum-xyz/ui-kit-storybook';
 
 import {Asset3d} from 'core/models';
 import {useStore} from 'shared/hooks';
@@ -13,6 +14,8 @@ const ObjectInspector: FC = () => {
   const {creatorStore} = useStore();
   const {objectName, objectInfo, spawnAssetStore} = creatorStore;
   const {assets3dBasic, assets3dCustom} = spawnAssetStore;
+
+  const {t} = useI18n();
 
   const canChangeColor = assets3dBasic.some((asset) => asset.id === objectInfo?.asset_3d_id);
 
@@ -26,7 +29,7 @@ const ObjectInspector: FC = () => {
     <styled.Container>
       <styled.Section>
         <Frame>
-          <styled.ObjectName>{objectName}</styled.ObjectName>
+          <styled.Title>{objectName}</styled.Title>
           <styled.ObjectPreviewModelContainer>
             {actualObjectAsset && (
               <Model3dPreview
@@ -39,8 +42,58 @@ const ObjectInspector: FC = () => {
         </Frame>
       </styled.Section>
       <styled.Separator />
-      <styled.Section>
-        <div>TODO transform inputs</div>
+      <styled.Section className="large-gap">
+        <styled.ControlsRow>
+          <styled.ControlsRowTitle>{t('titles.scale')}</styled.ControlsRowTitle>
+          <styled.ControlsRowInputsContainer>
+            <styled.ControlsRowInputContainer>
+              <styled.ControlsRowInputTitle>W</styled.ControlsRowInputTitle>
+              <Input onChange={() => {}} />
+            </styled.ControlsRowInputContainer>
+            <styled.ControlsRowInputContainer>
+              <styled.ControlsRowInputTitle>H</styled.ControlsRowInputTitle>
+              <Input onChange={() => {}} />
+            </styled.ControlsRowInputContainer>
+            <styled.ControlsRowInputContainer>
+              <styled.ControlsRowInputTitle>D</styled.ControlsRowInputTitle>
+              <Input onChange={() => {}} />
+            </styled.ControlsRowInputContainer>
+          </styled.ControlsRowInputsContainer>
+        </styled.ControlsRow>
+        <styled.ControlsRow>
+          <styled.ControlsRowTitle>{t('titles.position')}</styled.ControlsRowTitle>
+          <styled.ControlsRowInputsContainer>
+            <styled.ControlsRowInputContainer>
+              <styled.ControlsRowInputTitle>X</styled.ControlsRowInputTitle>
+              <Input onChange={() => {}} />
+            </styled.ControlsRowInputContainer>
+            <styled.ControlsRowInputContainer>
+              <styled.ControlsRowInputTitle>Y</styled.ControlsRowInputTitle>
+              <Input onChange={() => {}} />
+            </styled.ControlsRowInputContainer>
+            <styled.ControlsRowInputContainer>
+              <styled.ControlsRowInputTitle>Z</styled.ControlsRowInputTitle>
+              <Input onChange={() => {}} />
+            </styled.ControlsRowInputContainer>
+          </styled.ControlsRowInputsContainer>
+        </styled.ControlsRow>
+        <styled.ControlsRow>
+          <styled.ControlsRowTitle>{t('titles.rotation')}</styled.ControlsRowTitle>
+          <styled.ControlsRowInputsContainer>
+            <styled.ControlsRowInputContainer>
+              <styled.ControlsRowInputTitle>X</styled.ControlsRowInputTitle>
+              <Input onChange={() => {}} />
+            </styled.ControlsRowInputContainer>
+            <styled.ControlsRowInputContainer>
+              <styled.ControlsRowInputTitle>Y</styled.ControlsRowInputTitle>
+              <Input onChange={() => {}} />
+            </styled.ControlsRowInputContainer>
+            <styled.ControlsRowInputContainer>
+              <styled.ControlsRowInputTitle>Z</styled.ControlsRowInputTitle>
+              <Input onChange={() => {}} />
+            </styled.ControlsRowInputContainer>
+          </styled.ControlsRowInputsContainer>
+        </styled.ControlsRow>
         {/* <Input
           placeholder={t('labels.search')}
           isSearch
@@ -51,7 +104,8 @@ const ObjectInspector: FC = () => {
         /> */}
       </styled.Section>
       {canChangeColor && (
-        <styled.Section>
+        <styled.Section className="margin-top">
+          <styled.Title>{t('titles.colourPicker')}</styled.Title>
           <ObjectColorPicker />
         </styled.Section>
       )}
