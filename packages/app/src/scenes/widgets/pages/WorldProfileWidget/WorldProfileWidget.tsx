@@ -46,7 +46,8 @@ const WorldProfileWidget: FC = () => {
     const {worldDetails, worldId} = world2dStore;
     if (await worldProfileStore.editWorld(worldId, form, previousImageHash || undefined)) {
       await worldDetails.fetchWorld();
-      await sessionStore.loadWorlds();
+      await sessionStore.loadOwnWorlds();
+      await sessionStore.loadStakedWorlds();
       setActiveMenuId('viewWorld');
     }
   };
