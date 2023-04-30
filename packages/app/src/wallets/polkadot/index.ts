@@ -7,7 +7,7 @@ const config: WalletConfigInterface = {
   id: 'polkadot',
   name: 'Polkadot', //'Polkadot{.js}',
   logo,
-  icon: 'wallet',
+  icon: 'polkadotprofile',
   browserExtensionUrl: 'https://polkadot.js.org/extension/',
   useWallet
 };
