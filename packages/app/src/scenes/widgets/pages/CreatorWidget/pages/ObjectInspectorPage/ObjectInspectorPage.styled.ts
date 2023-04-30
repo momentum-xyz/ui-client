@@ -22,6 +22,16 @@ export const Body = styled.div`
   overflow: hidden;
 `;
 
+export const ObjectName = styled.h1`
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 22px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+`;
+
+export const ObjectPreviewModelContainer = styled.div``;
+
 export const Separator = styled.div`
   height: 1px;
   width: 100%;
