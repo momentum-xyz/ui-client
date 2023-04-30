@@ -34,7 +34,7 @@ const talismanConnector = new TalismanConnector({
 // };
 
 export const useWallet: UseWalletType = ({appVariables}) => {
-  const {library, account, activate, deactivate, active} = useWeb3React();
+  const {library, chainId, account, activate, deactivate, active} = useWeb3React();
   console.log('Talisman useWallet', {library, account, activate, active});
 
   // const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
@@ -182,6 +182,7 @@ export const useWallet: UseWalletType = ({appVariables}) => {
     isActive: active,
     // content,
     web3Library: library,
+    chainId,
     signChallenge
   };
 };

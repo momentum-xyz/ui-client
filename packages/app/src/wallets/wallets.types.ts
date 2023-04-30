@@ -9,6 +9,7 @@ export interface UseWalletHookReturnInterface {
   isActive: boolean | undefined;
   content?: ReactNode;
   web3Library?: any;
+  chainId?: number;
   signChallenge: (challenge: string) => Promise<string>;
 }
 export interface UseWalletPropsInterface {

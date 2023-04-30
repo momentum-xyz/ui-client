@@ -29,6 +29,7 @@ export const useBlockchain = ({requiredAccountAddress}: UseStakingPropsInterface
 
   const [account, setAccount] = useState<string>();
   const [library, setLibrary] = useState<any>();
+  const [isWrongNetwork, setIsWrongNetwork] = useState(false);
   const [isWalletActive, setIsWalletActive] = useState<boolean | undefined>();
 
   const isCorrectAccount = account === requiredAccountAddress;
@@ -145,11 +146,12 @@ export const useBlockchain = ({requiredAccountAddress}: UseStakingPropsInterface
         onActivationDone={setIsWalletActive}
         onSelectedAccountChanged={setAccount}
         onLibraryLoaded={setLibrary}
+        onNetworkStatusChanged={setIsWrongNetwork}
       />
     );
 
   return {
-    isBlockchainReady: isWalletActive && isCorrectAccount,
+    isBlockchainReady: isWalletActive && isCorrectAccount && !isWrongNetwork,
     account,
     walletSelectContent,
     stake,
@@ -165,6 +167,7 @@ interface WalletSelectHelperPropsInterface {
   onActivationDone: (isSuccess: boolean) => void;
   onSelectedAccountChanged: (account: string) => void;
   onLibraryLoaded: (library: any) => void;
+  onNetworkStatusChanged: (isWrongNetwork: boolean) => void;
 }
 
 const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
@@ -172,11 +175,13 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
   requiredAccountAddress,
   onActivationDone,
   onSelectedAccountChanged,
-  onLibraryLoaded
+  onLibraryLoaded,
+  onNetworkStatusChanged
 }) => {
   const {useWallet} = walletConf;
   const {
     web3Library: library,
+    chainId,
     account,
     activate,
     isActive
@@ -204,12 +209,23 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
       .finally(() => onActivationDone(true));
   }, [activate, onActivationDone]);
 
-  if (account && account !== requiredAccountAddress) {
-    return <Text text="Please select another account in the wallet" size="m" />;
-  }
+  const isWrongNetwork = !!chainId && chainId !== appVariables.BLOCKCHAIN_ID;
+
+  useEffect(() => {
+    onNetworkStatusChanged(isWrongNetwork);
+  }, [isWrongNetwork, onNetworkStatusChanged]);
 
   if (isActive && !library) {
     return <Text text="This account cannot be used" size="m" />;
+  }
+
+  if (isWrongNetwork) {
+    console.log('WalletSelectHelper current chainId', chainId, library);
+    return <Text text="Please switch to Arbitrum network in the wallet" size="m" />; // TODO switch automatically
+  }
+
+  if (account && account !== requiredAccountAddress) {
+    return <Text text="Please switch to selected account in the wallet" size="m" />;
   }
 
   return null;

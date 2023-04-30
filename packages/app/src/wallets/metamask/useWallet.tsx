@@ -10,7 +10,7 @@ const connector = new InjectedConnector({
 });
 
 export const useWallet: UseWalletType = () => {
-  const {library, account, activate, deactivate, active} = useWeb3React();
+  const {library, chainId, account, activate, deactivate, active} = useWeb3React();
   console.log('MetaMask useWallet', {library, account, activate, active});
 
   const {ethereum} = window as any;
@@ -78,6 +78,7 @@ export const useWallet: UseWalletType = () => {
     accountHex: account,
     isInstalled,
     web3Library: library,
+    chainId,
     activate: activateWallet,
     isActive: active,
     signChallenge
