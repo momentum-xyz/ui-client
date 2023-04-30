@@ -23,7 +23,14 @@ import wisp from '../static/Wisp.glb';
 import defaultAvatar from '../static/Rabbit.png';
 import wispNodeMaterial from '../static/nodeMaterialWisp.json';
 
-import {posToVec3, vec3ToPos, smoothUserNodeTransform, TransformTypesEnum} from './TransformHelper';
+import {
+  posToVec3,
+  vec3ToPos,
+  smoothUserNodeTransform,
+  smoothCameraTransform,
+  TransformTypesEnum
+} from './TransformHelper';
+//import {InteractionEffectHelper} from './InteractionEffectHelper';
 
 const NORMAL_SPEED = 0.5;
 const FAST_SPEED = 1.5;
@@ -50,6 +57,7 @@ export class PlayerHelper {
   static playerId: string;
   static playerInterface: Odyssey3dUserInterface;
   static rightHanded = false;
+  static lastJoinedID = '';
 
   static initialize(
     scene: Scene,
@@ -82,6 +90,11 @@ export class PlayerHelper {
         if (evt.sourceEvent.key === 'Shift') {
           PlayerHelper.camera.speed = FAST_SPEED;
         }
+
+        if (evt.sourceEvent.key === 'q') {
+          //InteractionEffectHelper.startParticles(new Vector3(0, 0, 0));
+          PlayerHelper.followPlayer('a');
+        }
       })
     );
 
@@ -110,7 +123,6 @@ export class PlayerHelper {
   static setWorld(world: SetWorldInterface, userId: string) {
     this.playerAvatar3D = world.avatar_3d_asset_id;
     this.playerId = userId;
-
     this.spawnPlayer(PlayerHelper.scene);
   }
 
@@ -197,8 +209,7 @@ export class PlayerHelper {
   }
 
   static async userEnteredAsync(user: Odyssey3dUserInterface) {
-    console.log('user avatar: ' + user.avatar);
-    console.log('userEntered: ' + user.id);
+    //console.log('user avatar: ' + user.avatar);
     await this.spawnUserAsync(this.scene, user);
   }
 
@@ -223,10 +234,11 @@ export class PlayerHelper {
   }
 
   static userInstantiate(container: AssetContainer, user: Odyssey3dUserInterface) {
-    console.log('userInstantiate with userid: ' + user.id + ', playerId: ' + this.playerId);
     if (user.id === this.playerId) {
       this.playerInterface = user;
-      this.updateUserAvatar(user, this.playerInstance);
+      if (this.playerInstance) {
+        this.updateUserAvatar(user, this.playerInstance);
+      }
       return;
     } else {
       const instance = container.instantiateModelsToScene();
@@ -259,6 +271,7 @@ export class PlayerHelper {
       };
       this.userMap.set(user.id, babylonUser);
       this.updateUserAvatar(user, instance);
+      this.lastJoinedID = user.id;
     }
   }
 
@@ -292,6 +305,30 @@ export class PlayerHelper {
           this.scene
         );
       }
+    }
+  }
+
+  static followPlayer(idToFollow: string) {
+    // TODO: Replace lastJoinedID with idToFollow when FE is there
+    const userToFollow = this.userMap.get(this.lastJoinedID);
+    if (userToFollow) {
+      const userNodeToFollow = userToFollow.userInstance.rootNodes[0];
+
+      smoothCameraTransform(
+        this.camera.target,
+        userNodeToFollow,
+        TransformTypesEnum.Rotation,
+        500,
+        this.scene
+      );
+
+      smoothCameraTransform(
+        this.camera.position,
+        userNodeToFollow,
+        TransformTypesEnum.Position,
+        2000,
+        this.scene
+      );
     }
   }
 

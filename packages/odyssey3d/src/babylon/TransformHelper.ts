@@ -1,6 +1,8 @@
 import {Scene, TransformNode, Vector3} from '@babylonjs/core';
 import {PositionInterface} from '@momentum-xyz/core';
 
+import {PlayerHelper} from './PlayerHelper';
+
 export enum TransformTypesEnum {
   Position,
   Rotation,
@@ -19,7 +21,7 @@ export function smoothUserNodeTransform(
   let elapsedTime = 0;
   const totalTime = 1000;
 
-  scene.onBeforeRenderObservable.add(() => {
+  const observable = scene.onBeforeRenderObservable.add(() => {
     elapsedTime += scene.getEngine().getDeltaTime();
 
     Vector3.SmoothToRef(startVec, posToVec3(targetVec), elapsedTime, totalTime, slerpPos);
@@ -34,6 +36,43 @@ export function smoothUserNodeTransform(
       case TransformTypesEnum.Scale:
         userNode.scaling = slerpPos;
         break;
+    }
+
+    // consider doing totalTime * 1.1 or something similar to further smoothen movement at the end
+    if (elapsedTime > totalTime) {
+      scene.onBeforeRenderObservable.remove(observable);
+    }
+  });
+}
+
+export function smoothCameraTransform(
+  startVec: Vector3,
+  targetUser: TransformNode,
+  transformType: TransformTypesEnum,
+  totalTime: number,
+  scene: Scene
+) {
+  const slerpPos = Vector3.Zero();
+
+  let elapsedTime = 0;
+
+  const observable = scene.onBeforeRenderObservable.add(() => {
+    elapsedTime += scene.getEngine().getDeltaTime();
+
+    Vector3.SmoothToRef(startVec, targetUser.position, elapsedTime, totalTime, slerpPos);
+
+    switch (transformType) {
+      case TransformTypesEnum.Position:
+        PlayerHelper.camera.position = slerpPos;
+        break;
+      case TransformTypesEnum.Rotation:
+        PlayerHelper.camera.target = slerpPos;
+        break;
+    }
+
+    if (elapsedTime > totalTime) {
+      // Chase finished
+      scene.onBeforeRenderObservable.remove(observable);
     }
   });
 }
