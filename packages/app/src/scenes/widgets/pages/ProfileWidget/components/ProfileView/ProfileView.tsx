@@ -1,16 +1,9 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {
-  Image,
-  Frame,
-  IconSvg,
-  ProfileLine,
-  WalletHash,
-  ItemCard
-} from '@momentum-xyz/ui-kit-storybook';
+import {Image, Frame, ProfileLine, WalletHash} from '@momentum-xyz/ui-kit-storybook';
 import {absoluteLink, withoutProtocol, useI18n, signUpDateString} from '@momentum-xyz/core';
 
-import {getImageAbsoluteUrl} from 'core/utils';
+import {WorldsOwnedList, WorldsStakedList} from 'ui-kit';
 import {UserModelInterface, WorldInfoModelInterface} from 'core/models';
 
 import * as styled from './ProfileView.styled';
@@ -18,14 +11,20 @@ import * as styled from './ProfileView.styled';
 interface PropsInterface {
   user: UserModelInterface;
   defaultWalletId: string;
-  worldList: WorldInfoModelInterface[];
+  worldsOwnedList: WorldInfoModelInterface[];
+  worldsStakedList: WorldInfoModelInterface[];
   onInfoWorld: (uuid: string) => void;
   onVisitWorld: (uuid: string) => void;
 }
 
-const ProfileView: FC<PropsInterface> = (props) => {
-  const {user, defaultWalletId, worldList, onInfoWorld, onVisitWorld} = props;
-
+const ProfileView: FC<PropsInterface> = ({
+  user,
+  defaultWalletId,
+  worldsOwnedList,
+  worldsStakedList,
+  onInfoWorld,
+  onVisitWorld
+}) => {
   const {t} = useI18n();
 
   return (
@@ -54,30 +53,17 @@ const ProfileView: FC<PropsInterface> = (props) => {
             <WalletHash icon="talisman" hash={defaultWalletId || ''} />
           </styled.GeneralInfo>
 
-          {worldList.length > 0 && (
-            <styled.OwnedOdysseys>
-              <styled.OwnedOdysseysTitle>
-                <IconSvg name="rabbit_fill" isWhite />
-                {t('labels.odysseysOwned')}
-              </styled.OwnedOdysseysTitle>
+          <WorldsOwnedList
+            worldsOwned={worldsOwnedList}
+            onSelectWorld={onInfoWorld}
+            onVisitWorld={onVisitWorld}
+          />
 
-              <styled.NftContainer>
-                {worldList.map((world) => (
-                  <ItemCard
-                    variant="small"
-                    key={world.id}
-                    name={world.name}
-                    description={world.description}
-                    imageHeight={95}
-                    imageErrorIcon="rabbit_fill"
-                    imageUrl={getImageAbsoluteUrl(world.avatarHash)}
-                    onInfoClick={() => onInfoWorld(world.id)}
-                    onVisitClick={() => onVisitWorld(world.id)}
-                  />
-                ))}
-              </styled.NftContainer>
-            </styled.OwnedOdysseys>
-          )}
+          <WorldsStakedList
+            worldsStakedIn={worldsStakedList}
+            onSelectWorld={onInfoWorld}
+            onVisitWorld={onVisitWorld}
+          />
         </styled.ScrollableContainer>
       </Frame>
     </styled.Container>

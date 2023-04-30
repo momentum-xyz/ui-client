@@ -26,7 +26,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
 
   const navigate = useNavigate();
 
-  const ODYSSEY_ITEMS: MenuItemExtendedInterface[] = sessionStore.worldList.map((world) => ({
+  const ODYSSEY_ITEMS: MenuItemExtendedInterface[] = sessionStore.worldsOwnedList.map((world) => ({
     key: WidgetEnum.GO_TO,
     position: PositionEnum.LEFT,
     iconName: !world.avatarHash ? 'rabbit_fill' : undefined,

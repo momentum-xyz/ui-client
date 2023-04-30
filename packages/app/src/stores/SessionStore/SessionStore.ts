@@ -22,7 +22,8 @@ const SessionStore = types
     isAuthenticating: true,
     user: types.maybeNull(User),
     signUpUser: types.maybeNull(User),
-    worldList: types.optional(types.array(WorldInfo), []),
+    worldsOwnedList: types.optional(types.array(WorldInfo), []),
+    worldsStakedList: types.optional(types.array(WorldInfo), []),
     profileJobId: types.maybeNull(types.string),
 
     guestTokenRequest: types.optional(RequestModel, {}),
@@ -183,14 +184,24 @@ const SessionStore = types
       }
       return true;
     }),
-    loadWorlds: flow(function* () {
+    loadOwnWorlds: flow(function* () {
       const userWorlds: WorldInfoInterface[] = yield self.worldsRequest.send(
         api.userRepository.fetchOwnedWorldList,
         {userId: self.user?.id || ''}
       );
 
       if (userWorlds) {
-        self.worldList = cast(userWorlds);
+        self.worldsOwnedList = cast(userWorlds);
+      }
+    }),
+    loadStakedWorlds: flow(function* () {
+      const userWorlds: WorldInfoInterface[] = yield self.worldsRequest.send(
+        api.userRepository.fetchStakedWorldList,
+        {userId: self.user?.id || ''}
+      );
+
+      if (userWorlds) {
+        self.worldsStakedList = cast(userWorlds);
       }
     }),
     signOutRedirect(): void {
@@ -217,7 +228,8 @@ const SessionStore = types
 
       yield self.loadUserProfile();
       if (self.user && !self.user.isGuest) {
-        yield self.loadWorlds();
+        yield self.loadOwnWorlds();
+        yield self.loadStakedWorlds();
       }
 
       self.initJobId();
