@@ -6,7 +6,7 @@ import {useI18n} from '@momentum-xyz/core';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './LoginWidget.styled';
-import {WalletSelector, SignUp} from './components';
+import {SignIn, SignUp} from './components';
 
 type StepsType = 'signIn' | 'signUp';
 
@@ -57,7 +57,7 @@ const LoginWidget: FC = () => {
         </styled.Steps>
 
         <styled.Content>
-          {isSignIn && <WalletSelector onConnected={() => handleAccountConnected(false)} />}
+          {isSignIn && <SignIn onConnected={() => handleAccountConnected(false)} />}
           {isSignUp && <SignUp onCreated={() => handleAccountConnected(true)} />}
         </styled.Content>
       </Panel>
