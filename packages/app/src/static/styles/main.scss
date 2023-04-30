@@ -6,17 +6,12 @@ body {
   overflow: hidden;
 }
 
-#main {
-  display: flex;
-  height: 100vh;
-  z-index: 30;
-}
-
-.main-content {
-  display: flex;
-  width:100%;
+main {
+  position: absolute;
   pointer-events: none;
-  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
 #sectioned-screen-container {

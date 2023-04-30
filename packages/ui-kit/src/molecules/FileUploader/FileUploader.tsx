@@ -72,18 +72,14 @@ const FileUploader: FC<PropsInterface> = ({
       {isDragActive ? (
         <styled.Text>{dragActiveLabel}</styled.Text>
       ) : (
-        <>
-          {label && (
-            <Button
-              theme={theme}
-              label={label}
-              size={buttonSize}
-              onClick={onClick}
-              disabled={disabled}
-              className={buttonClassName}
-            />
-          )}
-        </>
+        <Button
+          theme={theme}
+          label={label}
+          size={buttonSize}
+          onClick={onClick}
+          disabled={disabled}
+          className={buttonClassName}
+        />
       )}
     </styled.Container>
   );
