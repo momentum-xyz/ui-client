@@ -19,11 +19,11 @@ enum TokenEnum {
 
 const DELAY_REFRESH_DATA_MS = 2000;
 
-export interface UseStakingPropsInterface {
+export interface UseBlockchainPropsInterface {
   requiredAccountAddress: string;
 }
 
-export const useBlockchain = ({requiredAccountAddress}: UseStakingPropsInterface) => {
+export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterface) => {
   const {selectedWalletConf, setWalletIdByAddress, loadMyWallets, loadMyStakes} =
     useStore().nftStore;
 
@@ -57,7 +57,7 @@ export const useBlockchain = ({requiredAccountAddress}: UseStakingPropsInterface
 
   const stake = useCallback(
     async (worldId: string, amount: BN, tokenKind = TokenEnum.MOM_TOKEN) => {
-      console.log('useStaking stake');
+      console.log('useBlockchain stake');
       if (!isCorrectAccount) {
         console.log('Incorrect account selected');
         return;
@@ -66,15 +66,15 @@ export const useBlockchain = ({requiredAccountAddress}: UseStakingPropsInterface
       const res = await momContract?.methods
         .approve(appVariables.CONTRACT_STAKING_ADDRESS, amount)
         .send({from: account});
-      console.log('useStaking stake approve result', res);
+      console.log('useBlockchain stake approve result', res);
 
       const nftId = '0x' + worldId.replace(/-/g, '');
 
-      console.log('useStaking stake into nftId', nftId, amount, tokenKind);
+      console.log('useBlockchain stake into nftId', nftId, amount, tokenKind);
       const result = await stakingContract?.methods
         .stake(nftId, amount, tokenKind)
         .send({from: account});
-      console.log('useStaking stake result', result);
+      console.log('useBlockchain stake result', result);
 
       setTimeout(() => loadMyStakes().catch(console.error), DELAY_REFRESH_DATA_MS);
     },
@@ -83,7 +83,7 @@ export const useBlockchain = ({requiredAccountAddress}: UseStakingPropsInterface
 
   const unstake = useCallback(
     async (worldId: string, tokenKind = TokenEnum.MOM_TOKEN) => {
-      console.log('useStaking unstake');
+      console.log('useBlockchain unstake');
       if (!isCorrectAccount) {
         console.log('Incorrect account selected');
         return;
@@ -91,9 +91,9 @@ export const useBlockchain = ({requiredAccountAddress}: UseStakingPropsInterface
 
       const nftId = '0x' + worldId.replace(/-/g, '');
 
-      console.log('useStaking unstake from nftId', nftId, tokenKind);
+      console.log('useBlockchain unstake from nftId', nftId, tokenKind);
       const result = await stakingContract?.methods.unstake(nftId, tokenKind).send({from: account});
-      console.log('useStaking unstake result', result);
+      console.log('useBlockchain unstake result', result);
 
       setTimeout(() => loadMyStakes().catch(console.error), DELAY_REFRESH_DATA_MS);
     },
@@ -102,14 +102,14 @@ export const useBlockchain = ({requiredAccountAddress}: UseStakingPropsInterface
 
   const getTokens = useCallback(
     async (tokenKind = TokenEnum.MOM_TOKEN) => {
-      console.log('useBlockchainAirdrop getTokens', {tokenKind});
+      console.log('useBlockchain getTokens', {tokenKind});
       if (!isCorrectAccount) {
         console.log('Incorrect account selected');
         return;
       }
 
       const result = await faucetContract?.methods.get_tokens(tokenKind).send({from: account});
-      console.log('useBlockchainAirdrop getTokens result', result);
+      console.log('useBlockchain getTokens result', result);
 
       setTimeout(() => loadMyWallets().catch(console.error), DELAY_REFRESH_DATA_MS);
     },
@@ -117,14 +117,14 @@ export const useBlockchain = ({requiredAccountAddress}: UseStakingPropsInterface
   );
 
   const claimRewards = useCallback(async () => {
-    console.log('useStaking claimRewards');
+    console.log('useBlockchain claimRewards');
     if (!isCorrectAccount) {
       console.log('Incorrect account selected');
       return;
     }
 
     const result = await stakingContract?.methods.claim_rewards().send({from: account});
-    console.log('useStaking claimRewards result', result);
+    console.log('useBlockchain claimRewards result', result);
 
     setTimeout(() => loadMyWallets().catch(console.error), DELAY_REFRESH_DATA_MS);
   }, [stakingContract, account, isCorrectAccount, loadMyWallets]);
@@ -186,7 +186,7 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
     activate,
     isActive
   } = useWallet({appVariables: appVariables as any});
-  console.log('useStaking', {library, account, activate, isActive, requiredAccountAddress});
+  console.log('WalletSelectHelper', {library, account, activate, isActive, requiredAccountAddress});
 
   useEffect(() => {
     if (account) {
@@ -203,7 +203,7 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
   useEffect(() => {
     activate()
       .catch((err) => {
-        console.log('useStaking activate err', err);
+        console.log('WalletSelectHelper activate err', err);
         onActivationDone(false);
       })
       .finally(() => onActivationDone(true));
@@ -213,6 +213,7 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
 
   useEffect(() => {
     onNetworkStatusChanged(isWrongNetwork);
+    // TODO switch automatically
   }, [isWrongNetwork, onNetworkStatusChanged]);
 
   if (isActive && !library) {
@@ -221,7 +222,7 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
 
   if (isWrongNetwork) {
     console.log('WalletSelectHelper current chainId', chainId, library);
-    return <Text text="Please switch to Arbitrum network in the wallet" size="m" />; // TODO switch automatically
+    return <Text text="Please switch to Arbitrum network in the wallet" size="m" />;
   }
 
   if (account && account !== requiredAccountAddress) {
