@@ -1,11 +1,12 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import cn from 'classnames';
 import {useI18n} from '@momentum-xyz/core';
 import {Button, Frame} from '@momentum-xyz/ui-kit-storybook';
 
 import {TrustPoints, WalletLogin} from 'ui-kit';
-import {availableWallets, WalletConfigInterface} from 'wallets';
+import {WalletConfigInterface} from 'wallets';
+
+import {WalletSelector} from '../WalletSelector';
 
 import * as styled from './SignIn.styled';
 
@@ -33,21 +34,12 @@ const SignIn: FC<PropsInterface> = ({onConnected}) => {
         <styled.ScrollableContainer>
           <styled.SignInMethodsContainer>
             <styled.Title>{t('login.installWalletOrConnect')}</styled.Title>
-            <styled.Methods>
-              {availableWallets.map((wallet) => (
-                <styled.MethodItem
-                  key={wallet.name}
-                  className={cn(selectedWallet?.name === wallet.name && 'active')}
-                  onClick={() => {
-                    setSelectedWallet(wallet);
-                    setConnectWithWallet(true);
-                  }}
-                >
-                  <img src={wallet.icon} alt={`${wallet.name}-icon`} />
-                  <span>{wallet.name}</span>
-                </styled.MethodItem>
-              ))}
-            </styled.Methods>
+            <WalletSelector
+              onSelect={(wallet) => {
+                setSelectedWallet(wallet);
+                setConnectWithWallet(true);
+              }}
+            />
           </styled.SignInMethodsContainer>
 
           {!selectedWallet && !connectWithWallet && <TrustPoints />}
@@ -55,7 +47,7 @@ const SignIn: FC<PropsInterface> = ({onConnected}) => {
           {selectedWallet && (
             <>
               <styled.ConnectWithWalletRow>
-                <img src={selectedWallet.icon} alt={`${selectedWallet.name}-icon`} />
+                <img src={selectedWallet.logo} alt={`${selectedWallet.name}-icon`} />
                 <span>{t('login.connectWith', {wallet: selectedWallet.name})}</span>
               </styled.ConnectWithWalletRow>
 

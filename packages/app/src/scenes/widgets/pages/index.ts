@@ -1,4 +1,3 @@
-export * from './StakingContractsTestWidget';
 export * from './LoginWidget';
 export * from './ExploreWidget';
 export * from './ProfileWidget';
