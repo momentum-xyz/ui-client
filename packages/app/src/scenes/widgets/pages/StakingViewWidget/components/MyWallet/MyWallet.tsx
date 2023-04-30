@@ -43,6 +43,7 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
   const handleClaimRewards = async () => {
     try {
       await claimRewards();
+
       console.log('Claim rewards success');
     } catch (err) {
       console.log('Error claiming rewards:', err);

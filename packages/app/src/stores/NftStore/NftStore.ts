@@ -23,7 +23,7 @@ import {
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
-import {fetchIpfs, formatBigInt, isIpfsHash, wait} from 'core/utils';
+import {fetchIpfs, formatBigInt, getRootStore, isIpfsHash, wait} from 'core/utils';
 import {KeyringAddressType} from 'core/types';
 import {mintNft, mintNftCheckJob} from 'api/repositories';
 import {appVariables} from 'api/constants';
@@ -216,7 +216,7 @@ const NftStore = types
     unsubscribeBalanceSubscription: null
   }))
   .actions((self) => ({
-    loadMyWallets: flow(function* (userId) {
+    loadMyWallets: flow(function* () {
       const response: Array<WalletInterface> = yield self.walletsRequest.send(
         api.userRepository.fetchMyWallets,
         {}
@@ -224,6 +224,8 @@ const NftStore = types
       if (response) {
         self._wallets = cast(response);
       }
+
+      const userId: string = getRootStore(self).sessionStore.user!.id;
 
       // TEMP, fetchMyWallets doesn't return empty wallet addresses
       const responseWallets = yield self.walletsRequest.send(
@@ -976,8 +978,8 @@ const NftStore = types
 
       // self.setIsLoading(false);
     }),
-    initMyWalletsAndStakes: flow(function* (userId: string) {
-      yield self.loadMyWallets(userId);
+    initMyWalletsAndStakes: flow(function* () {
+      yield self.loadMyWallets();
       yield self.loadMyStakes();
       self.loadDefaultWalletId();
     }),

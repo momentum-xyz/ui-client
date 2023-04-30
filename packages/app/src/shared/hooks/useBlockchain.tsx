@@ -17,12 +17,15 @@ enum TokenEnum {
   DAD_TOKEN = 1
 }
 
+const DELAY_REFRESH_DATA_MS = 2000;
+
 export interface UseStakingPropsInterface {
   requiredAccountAddress: string;
 }
 
 export const useBlockchain = ({requiredAccountAddress}: UseStakingPropsInterface) => {
-  const {selectedWalletConf, setWalletIdByAddress} = useStore().nftStore;
+  const {selectedWalletConf, setWalletIdByAddress, loadMyWallets, loadMyStakes} =
+    useStore().nftStore;
 
   const [account, setAccount] = useState<string>();
   const [library, setLibrary] = useState<any>();
@@ -71,8 +74,10 @@ export const useBlockchain = ({requiredAccountAddress}: UseStakingPropsInterface
         .stake(nftId, amount, tokenKind)
         .send({from: account});
       console.log('useStaking stake result', result);
+
+      setTimeout(() => loadMyStakes().catch(console.error), DELAY_REFRESH_DATA_MS);
     },
-    [momContract, account, stakingContract, isCorrectAccount]
+    [momContract, account, stakingContract, isCorrectAccount, loadMyStakes]
   );
 
   const unstake = useCallback(
@@ -88,8 +93,10 @@ export const useBlockchain = ({requiredAccountAddress}: UseStakingPropsInterface
       console.log('useStaking unstake from nftId', nftId, tokenKind);
       const result = await stakingContract?.methods.unstake(nftId, tokenKind).send({from: account});
       console.log('useStaking unstake result', result);
+
+      setTimeout(() => loadMyStakes().catch(console.error), DELAY_REFRESH_DATA_MS);
     },
-    [account, stakingContract, isCorrectAccount]
+    [account, stakingContract, isCorrectAccount, loadMyStakes]
   );
 
   const getTokens = useCallback(
@@ -102,8 +109,10 @@ export const useBlockchain = ({requiredAccountAddress}: UseStakingPropsInterface
 
       const result = await faucetContract?.methods.get_tokens(tokenKind).send({from: account});
       console.log('useBlockchainAirdrop getTokens result', result);
+
+      setTimeout(() => loadMyWallets().catch(console.error), DELAY_REFRESH_DATA_MS);
     },
-    [account, faucetContract, isCorrectAccount]
+    [account, faucetContract, isCorrectAccount, loadMyWallets]
   );
 
   const claimRewards = useCallback(async () => {
@@ -115,7 +124,9 @@ export const useBlockchain = ({requiredAccountAddress}: UseStakingPropsInterface
 
     const result = await stakingContract?.methods.claim_rewards().send({from: account});
     console.log('useStaking claimRewards result', result);
-  }, [stakingContract, account, isCorrectAccount]);
+
+    setTimeout(() => loadMyWallets().catch(console.error), DELAY_REFRESH_DATA_MS);
+  }, [stakingContract, account, isCorrectAccount, loadMyWallets]);
 
   const walletSelectContent =
     selectedWalletConf === dummyWalletConf ? (

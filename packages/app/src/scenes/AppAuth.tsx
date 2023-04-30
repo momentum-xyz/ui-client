@@ -69,7 +69,7 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
 
   useEffect(() => {
     if (sessionStore.user && !sessionStore.user.isGuest) {
-      nftStore.initMyWalletsAndStakes(sessionStore.user.id);
+      nftStore.initMyWalletsAndStakes();
     }
   }, [nftStore, sessionStore.user, sessionStore.user?.isGuest]);
 
