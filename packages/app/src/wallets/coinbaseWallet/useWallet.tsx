@@ -5,7 +5,7 @@ import {WalletLinkConnector} from '@web3-react/walletlink-connector';
 import {UseWalletType} from 'wallets';
 
 export const useWallet: UseWalletType = ({appVariables}) => {
-  const {library, account, activate, deactivate, active} = useWeb3React();
+  const {library, chainId, account, activate, deactivate, active} = useWeb3React();
   console.log('CoinbaseWallet useWallet', {library, account, activate, active});
 
   const {ethereum} = window as any;
@@ -61,6 +61,7 @@ export const useWallet: UseWalletType = ({appVariables}) => {
     activate: activateWallet,
     isActive: active,
     web3Library: library,
+    chainId,
     signChallenge
   };
 };
