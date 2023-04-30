@@ -10,6 +10,8 @@ import collisionCirclejson from '../static/Particles/collisionCircle.json';
 import collisionStayOrbJson from '../static/Particles/StayBehindOrb.json';
 import collisionSmokeJson from '../static/Particles/collisionSmoke.json';
 
+import {PLAYER_OFFSET_RH, PlayerHelper} from './PlayerHelper';
+
 export class InteractionEffectHelper {
   static scene: Scene;
 
@@ -17,7 +19,11 @@ export class InteractionEffectHelper {
     this.scene = scene;
   }
 
-  static startParticles(location: Vector3) {
+  static startParticlesForPlayer() {
+    this.startParticlesAtLocation(PlayerHelper.camera.position.add(PLAYER_OFFSET_RH));
+  }
+
+  static startParticlesAtLocation(location: Vector3) {
     const particleSystem = this.hi5Particles(location);
     particleSystem.start();
   }
@@ -58,7 +64,6 @@ export class InteractionEffectHelper {
       collisionSparkFlying
     ]);
 
-    //collisionSet.start();
     return collisionSet;
   }
 }

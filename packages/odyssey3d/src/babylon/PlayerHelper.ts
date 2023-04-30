@@ -48,7 +48,6 @@ interface BabylonUserInterface {
 
 export class PlayerHelper {
   static camera: UniversalCamera;
-  static playerMoveEvent: {unsubscribe: () => void} | undefined;
   static scene: Scene;
   static userMap = new Map<string, BabylonUserInterface>();
 
@@ -58,15 +57,18 @@ export class PlayerHelper {
   static playerInterface: Odyssey3dUserInterface;
   static rightHanded = false;
   static lastJoinedID = '';
+  static onSpawnParticles: (() => void) | undefined;
 
   static initialize(
     scene: Scene,
     canvas: HTMLCanvasElement,
     rh: boolean,
-    onMove?: (transform: TransformNoScaleInterface) => void
+    onMove?: (transform: TransformNoScaleInterface) => void,
+    onSpawnParticles?: () => void
   ) {
     this.scene = scene;
     this.rightHanded = rh;
+    this.onSpawnParticles = onSpawnParticles;
     // This creates and positions a UniversalCamera camera (non-mesh)
     const camera = new UniversalCamera('UniversalCamera', CAMERA_POS, scene);
     camera.rotationQuaternion = new Quaternion();
@@ -327,7 +329,8 @@ export class PlayerHelper {
         userNodeToFollow,
         TransformTypesEnum.Position,
         2000,
-        this.scene
+        this.scene,
+        true
       );
     }
   }

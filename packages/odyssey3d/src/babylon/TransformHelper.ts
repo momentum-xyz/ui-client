@@ -2,6 +2,7 @@ import {Scene, TransformNode, Vector3} from '@babylonjs/core';
 import {PositionInterface} from '@momentum-xyz/core';
 
 import {PlayerHelper} from './PlayerHelper';
+import {InteractionEffectHelper} from './InteractionEffectHelper';
 
 export enum TransformTypesEnum {
   Position,
@@ -40,6 +41,9 @@ export function smoothUserNodeTransform(
 
     // consider doing totalTime * 1.1 or something similar to further smoothen movement at the end
     if (elapsedTime > totalTime) {
+      if (PlayerHelper.onSpawnParticles) {
+        PlayerHelper.onSpawnParticles();
+      }
       scene.onBeforeRenderObservable.remove(observable);
     }
   });
@@ -50,7 +54,8 @@ export function smoothCameraTransform(
   targetUser: TransformNode,
   transformType: TransformTypesEnum,
   totalTime: number,
-  scene: Scene
+  scene: Scene,
+  spawnParticles = false
 ) {
   const slerpPos = Vector3.Zero();
 
@@ -72,6 +77,10 @@ export function smoothCameraTransform(
 
     if (elapsedTime > totalTime) {
       // Chase finished
+      if (spawnParticles) {
+        InteractionEffectHelper.startParticlesAtLocation(targetUser.position);
+      }
+
       scene.onBeforeRenderObservable.remove(observable);
     }
   });

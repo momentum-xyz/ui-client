@@ -16,7 +16,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
   const onObjectTransform = useMutableCallback(callbacks.onObjectTransform);
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);
   // Sent from user1 to BE to trigger sparkles
-  // const onBumpReady = useMutableCallback(callbacks.onBumpReady);
+  const onBumpReady = useMutableCallback(callbacks.onBumpReady);
   // TODO handle it
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
     const view = scene.getEngine().getRenderingCanvas();
     const engine = scene.getEngine();
     if (view?.id) {
-      PlayerHelper.initialize(scene, view, true, onMove);
+      PlayerHelper.initialize(scene, view, true, onMove, onBumpReady);
       LightHelper.initialize(scene);
       InteractionEffectHelper.initialize(scene);
 
@@ -112,21 +112,16 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
 
       // Received by user1 to spawn particles
       events.on('SendHighFive', (userId) => {
-        console.log('TODO Babylon handle SendHighFive to', userId);
+        InteractionEffectHelper.startParticlesForPlayer();
       });
       // Received by user2 to spawn particles
       events.on('ReceiveHighFive', (userId) => {
-        console.log('TODO Babylon handle ReceiveHighFive from', userId);
+        InteractionEffectHelper.startParticlesForPlayer();
       });
 
       // Received by user1 to start chasing
       events.on('TriggerBump', (userId) => {
-        console.log('TODO Babylon handle TriggerBump', userId);
-
-        // setTimeout(() => {
-        //   console.log('DUMMY onBumpReady');
-        //   onBumpReady();
-        // }, 1000);
+        PlayerHelper.followPlayer(userId);
       });
     } else {
       console.error('There is no canvas for Babylon.');
