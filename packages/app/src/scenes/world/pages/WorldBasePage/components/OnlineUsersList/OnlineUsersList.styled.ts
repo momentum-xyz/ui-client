@@ -17,6 +17,13 @@ export const Wrapper = styled.div``;
 
 export const Info = styled.div`
   padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const Link = styled.a`
+  padding: 0;
 `;
 
 export const Actions = styled.div`

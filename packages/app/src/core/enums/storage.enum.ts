@@ -2,7 +2,7 @@ export enum StorageKeyEnum {
   Theme = 'v2.theme',
   DefaultAccount = 'Default_Account',
   WalletsByAddress = 'Wallets_By_Address',
-  NoCameraInfo = 'no-camera-info',
-  PreferredAudioInput = 'audio-input',
+  PreferredAudioInput = 'Audio_Input',
+  PreferredAudioOutput = 'Audio_Output',
   ProfileJobId = 'profile-job-id'
 }

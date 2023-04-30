@@ -15,6 +15,9 @@ export const Container = styled.div<{height: number}>`
   &:hover {
     cursor: pointer;
   }
+  &.bordered {
+    border: 0.4px solid ${(props) => props.theme.text};
+  }
 `;
 
 export const Image = styled.img`

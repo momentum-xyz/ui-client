@@ -8,7 +8,7 @@ import {PosBusService} from 'shared/services';
 //const PROFILE_JOB_CHECKER_MS = 3 * 1000;
 
 const AppAuth: FC<{children: ReactNode}> = ({children}) => {
-  const {sessionStore, nftStore} = useStore();
+  const {sessionStore, nftStore, universeStore} = useStore();
 
   //const {t} = useI18n();
 
@@ -62,6 +62,12 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
   }, [nftStore, nftStore.isLoading, sessionStore.wallet]);
 
   useEffect(() => {
+    if (sessionStore.token && sessionStore.user) {
+      PosBusService.init(sessionStore.token, sessionStore.user.id);
+    }
+  }, [sessionStore.token, sessionStore.user]);
+
+  useEffect(() => {
     if (sessionStore.user && !sessionStore.user.isGuest) {
       nftStore.initMyWalletsAndStakes(sessionStore.user.id);
     }
@@ -69,9 +75,9 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
 
   useEffect(() => {
     if (sessionStore.token && sessionStore.user) {
-      PosBusService.init(sessionStore.token, sessionStore.user.id);
+      universeStore.init();
     }
-  }, [sessionStore.token, sessionStore.user]);
+  }, [sessionStore.token, sessionStore.user, universeStore]);
 
   return <>{sessionStore.isUserReady && children}</>;
 };

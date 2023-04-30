@@ -22,7 +22,7 @@ import * as styled from './WorldProfileWidget.styled';
 type MenuItemType = 'viewWorld' | 'editWorld';
 
 const WorldProfileWidget: FC = () => {
-  const {widgetManagerStore, universeStore, widgetStore} = useStore();
+  const {sessionStore, widgetManagerStore, universeStore, widgetStore} = useStore();
   const {worldProfileStore} = widgetStore;
   const {world2dStore} = universeStore;
 
@@ -46,6 +46,8 @@ const WorldProfileWidget: FC = () => {
     const {worldDetails, worldId} = world2dStore;
     if (await worldProfileStore.editWorld(worldId, form, previousImageHash || undefined)) {
       await worldDetails.fetchWorld();
+      await sessionStore.loadOwnWorlds();
+      await sessionStore.loadStakedWorlds();
       setActiveMenuId('viewWorld');
     }
   };

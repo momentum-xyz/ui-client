@@ -1,7 +1,7 @@
 import {FC, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n, i18n} from '@momentum-xyz/core';
-import {Button, Input, TabInterface, Tabs} from '@momentum-xyz/ui-kit-storybook';
+import {Frame, Button, Input, TabInterface} from '@momentum-xyz/ui-kit-storybook';
 import {Text} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
@@ -37,7 +37,46 @@ const SpawnAssetPage: FC = () => {
 
   return (
     <styled.Container>
-      <styled.Header>
+      <styled.ControlsContainer>
+        <Frame>
+          <styled.ControlsInnerContainer>
+            <styled.SkyboxTypeContainer>
+              {TABS_LIST.map((tab) => (
+                <Button
+                  key={tab.id}
+                  label={tab.label}
+                  active={activeTab === tab.id}
+                  onClick={() => handleTabSelect(tab.id)}
+                />
+              ))}
+            </styled.SkyboxTypeContainer>
+            <styled.SkyboxSearchContainer>
+              <Input
+                placeholder={t(
+                  `placeholders.${
+                    activeTab === 'community' ? 'searchCommunityLibrary' : 'searchPrivateLibrary'
+                  }`
+                )}
+                value={spawnAssetStore.searchQuery.query}
+                isSearch
+                onChange={spawnAssetStore.searchQuery.setQuery}
+                wide
+              />
+            </styled.SkyboxSearchContainer>
+            <Button
+              label={t('labels.uploadCustomObject')}
+              wide
+              icon="astro"
+              onClick={() => {
+                setActiveTab('upload');
+                selectAsset(null);
+              }}
+            />
+          </styled.ControlsInnerContainer>
+        </Frame>
+        <styled.Separator />
+      </styled.ControlsContainer>
+      {/* <styled.Header>
         <Tabs tabList={TABS_LIST} activeId={activeTab as TabType} onSelect={handleTabSelect} />
         <Input
           placeholder={t('labels.search')}
@@ -53,8 +92,7 @@ const SpawnAssetPage: FC = () => {
           icon="astro"
           onClick={() => setActiveTab('upload')}
         />
-      </styled.Header>
-      <styled.Separator />
+      </styled.Header> */}
       <styled.Body>
         {selectedAsset ? (
           <SelectedPage />
@@ -62,10 +100,18 @@ const SpawnAssetPage: FC = () => {
           <>
             {activeTab === 'community' && (
               <styled.AssetsGroupList>
-                <Text text={t('labels.wrappableAssetPack')} size="l" transform="uppercase" />
-                <AssetsPage assetCategory={Asset3dCategoryEnum.BASIC} showPreview />
-                <Text text={t('labels.communityAssetPack')} size="l" transform="uppercase" />
-                <AssetsPage assetCategory={Asset3dCategoryEnum.CUSTOM} showPreview />
+                {/* <Text text={t('labels.wrappableAssetPack')} size="l" transform="uppercase" /> */}
+                <AssetsPage
+                  assetCategory={Asset3dCategoryEnum.BASIC}
+                  showPreview
+                  assetPageHeader={t('labels.wrappableAssetPack')}
+                />
+                {/* <Text text={t('labels.communityAssetPack')} size="l" transform="uppercase" /> */}
+                <AssetsPage
+                  assetCategory={Asset3dCategoryEnum.CUSTOM}
+                  showPreview
+                  assetPageHeader={t('labels.communityAssetPack')}
+                />
               </styled.AssetsGroupList>
             )}
             {activeTab === 'private' && <Text text="Coming soon!" size="l" />}
