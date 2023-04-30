@@ -59,7 +59,7 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         variant="primary"
         title={t('labels.odysseyOverview')}
         image={getImageAbsoluteUrl(world?.avatarHash, ImageSizeEnum.S3)}
-        onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_PROFILE)}
+        onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_DETAILS)}
       >
         <styled.Wrapper>
           <ProfileImage

@@ -38,7 +38,7 @@ const Textarea: FC<TextareaPropsInterface> = ({
         onChange={(event) => onChange?.(event.target.value)}
         cols={lineLength}
         rows={lines}
-        className={cn(size, !isResizable && 'disableResize' && danger && 'danger')}
+        className={cn(size, !isResizable && 'disableResize', danger && 'danger')}
       />
     </styled.Container>
   );

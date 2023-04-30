@@ -11,9 +11,9 @@ const AppLayers: FC<PropsWithChildren> = ({children}) => {
   return (
     // <UnityControlContextProvider value={universeStore.world3dStore?.unityControlInst}>*/}
     <UnityControlContextProvider value={dummyUnityControl}>
-      <main id="main" data-testid="AppLayers-test">
+      <main data-testid="AppLayers-test">
         <ToastMessage position={toast.POSITION.BOTTOM_RIGHT} />
-        <div className="main-content">{children}</div>
+        {children}
       </main>
     </UnityControlContextProvider>
   );
