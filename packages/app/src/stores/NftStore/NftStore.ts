@@ -31,7 +31,7 @@ import {PluginIdEnum} from 'api/enums';
 import {api, MintNftCheckJobResponse, StakeInterface, WalletInterface} from 'api';
 import {WalletConnectionsInterface} from 'core/interfaces';
 import PolkadotImplementation from 'shared/services/web3/polkadot.class';
-import {getWalletByAddress} from 'wallets';
+import {availableWallets, dummyWalletConf, WalletConfigInterface} from 'wallets';
 
 import {StakeDetail, StakeDetailInterface} from './models';
 
@@ -84,6 +84,7 @@ const NftStore = types
     types.model('NftStore', {
       _wallets: types.optional(types.array(Wallet), []),
       walletsAddresses: types.optional(types.array(types.string), []), // TEMP
+      walletsIdByAddress: types.optional(types.map(types.string), {}),
       stakes: types.optional(types.array(Stake), []),
       defaultWalletId: '',
       _selectedWalletId: types.maybeNull(types.string),
@@ -169,20 +170,40 @@ const NftStore = types
             updated_at: ''
           }
       );
-    },
-
-    get walletOptions(): Array<{label: string; value: string; icon: IconNameType}> {
-      console.log('walletOptions', self.walletsAddresses);
-      return self.walletsAddresses.map((address) => ({
-        label: address,
-        value: address,
-        icon: (getWalletByAddress(address)?.icon || 'wallet') as IconNameType
-      }));
     }
   }))
   .views((self) => ({
     get selectedWallet(): WalletInterface | undefined {
       return self.wallets.find((w) => w.wallet_id === self.selectedWalletId);
+    },
+    get selectedWalletConf(): WalletConfigInterface {
+      const walletId = self.walletsIdByAddress.get(self.selectedWalletId);
+      return availableWallets.find((w) => w.id === walletId) || dummyWalletConf;
+    }
+  }))
+  .views((self) => ({
+    get walletOptions(): Array<{label: string; value: string; icon: IconNameType}> {
+      console.log('walletOptions', self.walletsAddresses);
+      return self.walletsAddresses.map((address) => {
+        const walletId = self.walletsIdByAddress.get(address);
+        const conf = availableWallets.find((w) => w.id === walletId) || dummyWalletConf;
+
+        return {
+          label: address,
+          value: address,
+          icon: conf.icon
+        };
+      });
+    }
+  }))
+  .actions((self) => ({
+    afterCreate() {
+      self.walletsIdByAddress = cast(storage.get<any>(StorageKeyEnum.WalletsByAddress) || {});
+    },
+    setWalletIdByAddress(address: string, walletId: string) {
+      self.walletsIdByAddress.set(address, walletId);
+      const map = getSnapshot(self.walletsIdByAddress);
+      storage.set<typeof map>(StorageKeyEnum.WalletsByAddress, map);
     }
   }))
   .volatile<{

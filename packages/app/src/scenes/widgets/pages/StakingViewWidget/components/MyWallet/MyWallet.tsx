@@ -11,8 +11,7 @@ import {
 
 import {formatBigInt} from 'core/utils';
 import {WalletModelInterface} from 'core/models';
-import {useStaking, useBlockchainAirdrop} from 'shared/hooks';
-import {WalletSelector} from 'scenes/widgets/pages/LoginWidget/components';
+import {useBlockchain} from 'shared/hooks';
 
 import * as styled from './MyWallet.styled';
 
@@ -28,16 +27,14 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
   const requiredAccountAddress = selectedWallet?.wallet_id || 'n/a';
   console.log('MyWallet', {selectedWallet, requiredAccountAddress});
 
-  const {getTokens} = useBlockchainAirdrop({requiredAccountAddress});
-
-  const {isWalletActive, claimRewards} = useStaking({
+  const {isBlockchainReady, walletSelectContent, claimRewards, getTokens} = useBlockchain({
     requiredAccountAddress
   });
 
   const handleAirdrop = async () => {
     try {
-      const tokens = await getTokens();
-      console.log(tokens);
+      await getTokens();
+      console.log('Airdop success');
     } catch (err) {
       console.log('Error requesting airdrop:', err);
     }
@@ -45,8 +42,8 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
 
   const handleClaimRewards = async () => {
     try {
-      const tx = await claimRewards();
-      console.log(tx);
+      await claimRewards();
+      console.log('Claim rewards success');
     } catch (err) {
       console.log('Error claiming rewards:', err);
     }
@@ -68,7 +65,7 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
           />
         </styled.Filters>
 
-        {isWalletActive === false && <WalletSelector />}
+        {walletSelectContent}
 
         <styled.Title>{t('labels.rewards')}</styled.Title>
         <styled.RewardsContainer>
@@ -79,7 +76,7 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
           <Button
             icon="wallet"
             label={t('actions.claimRewards')}
-            disabled={!isWalletActive}
+            disabled={!isBlockchainReady}
             onClick={handleClaimRewards}
           />
         </styled.RewardsContainer>
@@ -87,9 +84,12 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
         <styled.Title>{t('actions.requestAirdropTokens')}</styled.Title>
         <styled.AirdropContainer>
           <span>Lorem ipsum dolor sit amet, ligula consectetuer adipiscing elit.</span>
-          {isWalletActive && (
-            <Button icon="air" label={t('actions.startAirdrop')} onClick={handleAirdrop} />
-          )}
+          <Button
+            icon="air"
+            label={t('actions.startAirdrop')}
+            disabled={!isBlockchainReady}
+            onClick={handleAirdrop}
+          />
         </styled.AirdropContainer>
 
         <styled.ScrollableContainer>

@@ -89,7 +89,6 @@ const StakingViewWidget: FC = () => {
 
             {activeTab === 'wallet' && (
               <MyWallet
-                key={nftStore.selectedWallet?.wallet_id}
                 walletOptions={nftStore.walletOptions}
                 selectedWallet={nftStore.selectedWallet}
                 onSelectWallet={nftStore.setSelectedWalletId}

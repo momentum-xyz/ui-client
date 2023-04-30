@@ -6,9 +6,8 @@ import BN from 'bn.js';
 import {useI18n} from '@momentum-xyz/core';
 import {Button, Select} from '@momentum-xyz/ui-kit-storybook';
 
-import {useStaking, useStore} from 'shared/hooks';
+import {useBlockchain, useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
-import {WalletSelector} from 'scenes/widgets/pages/LoginWidget/components';
 // import {WalletModelInterface} from 'core/models';
 // import {getWalletByAddress} from 'wallets';
 // import {convertToHex} from 'core/utils';
@@ -26,8 +25,7 @@ interface PropsInterface {
 }
 
 const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
-  const {sessionStore, nftStore} = useStore();
-  const {wallet: authWallet} = sessionStore;
+  const {nftStore} = useStore();
   const {
     // wallets,
     walletOptions,
@@ -89,13 +87,15 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
   // const myNft = nftItems.find((nft) => nft.owner === wallet);
   console.log('StakingForm', {nft, nftItemId, nftItems});
 
-  console.log('StakingForm', {wallet, addresses, authWallet, amountString, amountAtoms, nft});
+  console.log('StakingForm', {wallet, addresses, amountString, amountAtoms, nft});
   // console.log('initiatorAccount', initiatorAccount, nft);
 
-  const {isWalletActive, account, stake} = useStaking({requiredAccountAddress: wallet});
+  const {isBlockchainReady, walletSelectContent, account, stake} = useBlockchain({
+    requiredAccountAddress: wallet
+  });
   // TODO make sure account === selectedAccount
 
-  console.log('StakeForm useStaking', {isWalletActive, account, stake});
+  console.log('StakeForm useStaking', {isBlockchainReady, account, stake});
 
   const onStake = async (amountAtoms: BN) => {
     try {
@@ -186,6 +186,7 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
                   </styled.Filters>
                   {/* <Text size="xxs" text={initiatorInfo} /> */}
                 </styled.LabeledLineContainer>
+                {walletSelectContent}
               </styled.Section>
               <styled.Section>
                 <styled.SectionHeader>
@@ -220,14 +221,13 @@ const StakingForm: FC<PropsInterface> = ({isGuest, nftItemId, onComplete}) => {
                 </styled.LabeledLineContainer>
               </styled.Section>
             </div>
-            {isWalletActive === false && <WalletSelector />}
             <styled.Buttons>
               {/* <Button label={t('staking.back')} onClick={() => setActiveTab(tabBarTabs[0])} /> */}
               <Button
                 label={t('staking.next')}
                 onClick={() => setActiveTab(tabBarTabs[2])}
                 disabled={
-                  !amountString || isBalanceTooLow || !isWalletActive
+                  !amountString || isBalanceTooLow || !isBlockchainReady
                   // || isStakingInSelf
                 }
               />

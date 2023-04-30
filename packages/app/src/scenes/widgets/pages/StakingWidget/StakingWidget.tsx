@@ -31,7 +31,6 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
     >
       <styled.FullSizeWrapper>
         <StakingForm
-          key={nftStore.selectedWalletId}
           isGuest={sessionStore.isGuest}
           nftItemId={nftId}
           onComplete={() => {

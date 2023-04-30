@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {Button} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 
-import {WalletConfigInterface, storeWalletByAddress} from 'wallets';
+import {WalletConfigInterface} from 'wallets';
 import {useStore} from 'shared/hooks';
 import {appVariables} from 'api/constants';
 
@@ -23,7 +23,7 @@ const WalletLogin: FC<PropsInterface> = ({
   attachSecondaryAccount = false
 }) => {
   const {name, useWallet, browserExtensionUrl} = walletConf;
-  const {sessionStore} = useStore();
+  const {sessionStore, nftStore} = useStore();
 
   const {t} = useI18n();
 
@@ -42,7 +42,7 @@ const WalletLogin: FC<PropsInterface> = ({
       : sessionStore.fetchTokenByWallet2(accountHex, signChallenge)
     )
       .then(() => {
-        storeWalletByAddress(accountHex, walletConf.id);
+        nftStore.setWalletIdByAddress(accountHex, walletConf.id);
         onConnected?.();
       })
       .catch((err) => {
