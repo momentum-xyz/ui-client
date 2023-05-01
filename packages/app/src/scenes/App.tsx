@@ -8,7 +8,7 @@ import {LoaderFallback} from '@momentum-xyz/ui-kit';
 import {ROUTES} from 'core/constants';
 import {useApiHandlers, useStore} from 'shared/hooks';
 import {httpErrorCodes} from 'api/constants';
-import {SystemWideError} from 'ui-kit';
+import {SystemWideError, Toast} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
 import {WorldPage} from 'scenes/world';
 import {Map3dPage} from 'scenes/map3d';
@@ -111,6 +111,7 @@ const App: FC = () => {
         <GlobalStyles />
         {isTargetRoute(pathname, WORLD_ROUTES) ? (
           <>
+            <Toast />
             <WorldPage />
             <WidgetManager isWorld />
             <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
@@ -119,6 +120,7 @@ const App: FC = () => {
           </>
         ) : (
           <>
+            <Toast />
             <Map3dPage />
             <WidgetManager />
             <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>

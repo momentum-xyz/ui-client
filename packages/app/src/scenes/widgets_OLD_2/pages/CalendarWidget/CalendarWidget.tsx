@@ -37,7 +37,7 @@ const CalendarWidget: FC = () => {
       if (await calendarStore.removeEvent(universeStore.worldId)) {
         toast.info(
           <ToastContent
-            headerIconName="calendar"
+            icon="calendar"
             title={t('titles.alert')}
             text={t('messages.removeEventSuccess')}
             showCloseButton
@@ -47,7 +47,7 @@ const CalendarWidget: FC = () => {
         toast.error(
           <ToastContent
             isDanger
-            headerIconName="calendar"
+            icon="calendar"
             title={t('titles.alert')}
             text={t('errors.couldNotRemoveEvent')}
             showCloseButton

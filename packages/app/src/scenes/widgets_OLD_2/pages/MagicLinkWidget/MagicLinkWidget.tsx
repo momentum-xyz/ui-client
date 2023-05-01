@@ -36,7 +36,7 @@ const MagicLinkWidget: FC = () => {
 
       toast.info(
         <ToastContent
-          headerIconName="alert"
+          icon="alert"
           title={t('titles.alert')}
           text={t('messages.linkCopied')}
           showCloseButton

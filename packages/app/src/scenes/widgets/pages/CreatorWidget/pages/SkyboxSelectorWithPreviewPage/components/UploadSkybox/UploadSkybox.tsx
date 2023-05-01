@@ -70,7 +70,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
         <ToastContent
           isDanger
           showCloseButton
-          headerIconName="alert"
+          icon="alert"
           title={t('labels.addCustomSkybox')}
           text={t('assetsUploader.errorSave')}
         />
@@ -80,7 +80,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
       toast.info(
         <ToastContent
           showCloseButton
-          headerIconName="alert"
+          icon="alert"
           title={t('labels.addCustomSkybox')}
           text={t('assetsUploader.successMessage')}
         />
@@ -100,7 +100,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
       <ToastContent
         isDanger
         showCloseButton
-        headerIconName="alert"
+        icon="alert"
         title={t('labels.addCustomSkybox')}
         text={message}
       />

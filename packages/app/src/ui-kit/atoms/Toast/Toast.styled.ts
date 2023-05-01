@@ -2,37 +2,23 @@ import styled from 'styled-components';
 import {ToastContainer} from 'react-toastify';
 import {rgba} from 'polished';
 
-export const Div = styled.div``;
-
 export const ToastContainerStyled = styled(ToastContainer)`
-  &&&.Toastify__toast-container {
-    text-align: center;
-    margin: 40px 0px;
-    padding: 0px;
-    width: 490px;
-    color: ${(props) => props.theme.text} !important;
+  &.Toastify__toast-container {
+    margin: 0 0 50px 0;
+    padding: 0;
+    width: 400px;
   }
+
   .Toastify__toast {
-    border-radius: 10px !important;
-    min-height: 64px;
+    border-radius: 4px;
   }
+
   .Toastify__toast-body {
-    font-size: var(--font-size-s);
     padding: 0;
   }
 
   .Toastify__toast-icon {
     display: none;
-  }
-
-  .Toastify__close-button {
-    margin: auto;
-    color: ${(props) => props.theme.text} !important;
-  }
-
-  .Toastify__close-button > svg {
-    height: 16px;
-    width: 16px;
   }
 
   .Toastify__toast--default {
@@ -51,6 +37,7 @@ export const ToastContainerStyled = styled(ToastContainer)`
     background: #0517451a;
     padding: 0;
     border: none;
+
     .Toastify__progress-bar {
       background: ${(props) => props.theme.accentText} !important;
     }
@@ -70,6 +57,7 @@ export const ToastContainerStyled = styled(ToastContainer)`
       display: none;
     }
   }
+
   .Toastify__toast--success {
     padding: 15px 20px;
     background: ${(props) =>
