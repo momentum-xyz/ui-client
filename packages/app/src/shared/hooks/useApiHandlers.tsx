@@ -28,7 +28,7 @@ export const useApiHandlers = () => {
             <ToastContent
               isDanger
               icon="alert"
-              text={`${statusString}: ${t('errors.underMaintenance')}`}
+              text={`${statusString}: ${t('systemMessages.underMaintenance')}`}
             />
           );
           break;
