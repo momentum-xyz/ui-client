@@ -3,8 +3,9 @@ import {UserInterface} from 'api';
 export interface WorldInfoInterface {
   id: string;
   name: string;
-  description?: string;
+  description?: string | null;
   avatarHash: string | null;
+  website_link?: string | null;
   owner_id: string;
   owner_name?: string | null;
   stake_total?: string;

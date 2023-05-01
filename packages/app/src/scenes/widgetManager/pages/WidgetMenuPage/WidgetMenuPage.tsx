@@ -6,7 +6,6 @@ import {Menu, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit-storyb
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {WidgetEnum} from 'core/enums';
-import {getImageAbsoluteUrl} from 'core/utils';
 
 import * as styled from './WidgetMenuPage.styled';
 
@@ -29,8 +28,8 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
   const ODYSSEY_ITEMS: MenuItemExtendedInterface[] = sessionStore.worldsOwnedList.map((world) => ({
     key: WidgetEnum.GO_TO,
     position: PositionEnum.LEFT,
-    iconName: !world.avatarHash ? 'rabbit_fill' : undefined,
-    image: getImageAbsoluteUrl(world.avatarHash) || undefined,
+    iconName: 'rabbit_fill',
+    imageSrc: world.imageSrc,
     isHidden: isWorld,
     onClick: () => navigate(generatePath(ROUTES.odyssey.base, {worldId: world.id}))
   }));
