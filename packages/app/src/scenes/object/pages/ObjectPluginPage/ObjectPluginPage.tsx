@@ -58,7 +58,7 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
         <ToastContent
           isDanger
           showCloseButton
-          headerIconName="alert"
+          icon="stake"
           title={t('titles.alert')}
           text={t('errors.failedToLoadDynamicScript', {url: pluginLoader.scriptUrl})}
         />

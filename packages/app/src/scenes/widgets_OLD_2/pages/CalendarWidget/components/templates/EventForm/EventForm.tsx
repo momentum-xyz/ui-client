@@ -85,7 +85,7 @@ const EventForm: FC = () => {
       formDialog.close();
       toast.info(
         <ToastContent
-          headerIconName="alert"
+          icon="alert"
           title={t('titles.alert')}
           text={t('eventForm.createSuccess')}
           showCloseButton
@@ -96,7 +96,7 @@ const EventForm: FC = () => {
       toast.error(
         <ToastContent
           isDanger
-          headerIconName="alert"
+          icon="alert"
           title={t('titles.alert')}
           text={t('eventForm.createFailed')}
           showCloseButton

@@ -101,7 +101,7 @@ const StakingDashboard: FC = () => {
         console.log('getRewards success');
         toast.info(
           <ToastContent
-            headerIconName="alert"
+            icon="alert"
             title={t('staking.rewardSuccessTitle')}
             text={t('staking.successGetRewards')}
             showCloseButton
@@ -113,7 +113,7 @@ const StakingDashboard: FC = () => {
         console.log('stake error', err);
         toast.error(
           <ToastContent
-            headerIconName="alert"
+            icon="alert"
             isDanger
             title={t('staking.rewardErrorTitle')}
             text={t('staking.error')}
@@ -143,7 +143,7 @@ const StakingDashboard: FC = () => {
         console.log('unstake success');
         toast.info(
           <ToastContent
-            headerIconName="alert"
+            icon="alert"
             title={t('staking.unStakeSuccessTitle')}
             text={t('staking.successUnstake', {
               amount: formatTokenAmount(amount, chainDecimals, tokenSymbol),
@@ -158,7 +158,7 @@ const StakingDashboard: FC = () => {
         console.log('unstake error', err);
         toast.error(
           <ToastContent
-            headerIconName="alert"
+            icon="alert"
             isDanger
             title={t('staking.unStakeErrorTitle')}
             text={t('staking.error')}
@@ -176,7 +176,7 @@ const StakingDashboard: FC = () => {
         console.log('requestAirdrop success');
         toast.info(
           <ToastContent
-            headerIconName="alert"
+            icon="alert"
             title={t('staking.airdropSuccessTitle')}
             text={t('staking.requestAirdropSuccess')}
             showCloseButton
@@ -189,7 +189,7 @@ const StakingDashboard: FC = () => {
         console.log('requestAirdrop error', err);
         toast.error(
           <ToastContent
-            headerIconName="alert"
+            icon="alert"
             isDanger
             title={t('staking.airdropErrorTitle')}
             text={t('staking.requestAirdropFailed')}

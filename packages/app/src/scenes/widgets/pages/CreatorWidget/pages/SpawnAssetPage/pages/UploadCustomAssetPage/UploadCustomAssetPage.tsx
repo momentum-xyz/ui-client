@@ -71,7 +71,7 @@ const UploadCustomAssetPage: FC = () => {
     if (await spawnAssetStore.uploadAsset(file, preview_hash)) {
       toast.info(
         <ToastContent
-          headerIconName="check"
+          icon="check"
           title={t('titles.success')}
           text={t('messages.assetUploaded')}
           showCloseButton
@@ -82,7 +82,7 @@ const UploadCustomAssetPage: FC = () => {
       toast.error(
         <ToastContent
           isDanger
-          headerIconName="alert"
+          icon="alert"
           title={t('titles.failedToUpload')}
           text={t('messages.assetNotUploaded')}
           showCloseButton
