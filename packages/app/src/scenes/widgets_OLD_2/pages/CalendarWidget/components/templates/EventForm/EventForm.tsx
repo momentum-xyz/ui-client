@@ -83,25 +83,10 @@ const EventForm: FC = () => {
 
     if (isSuccess) {
       formDialog.close();
-      toast.info(
-        <ToastContent
-          icon="alert"
-          title={t('titles.alert')}
-          text={t('eventForm.createSuccess')}
-          showCloseButton
-        />
-      );
+      toast.info(<ToastContent icon="alert" text={t('eventForm.createSuccess')} />);
       await eventList.fetchSpaceEvents(universeStore.worldId);
     } else {
-      toast.error(
-        <ToastContent
-          isDanger
-          icon="alert"
-          title={t('titles.alert')}
-          text={t('eventForm.createFailed')}
-          showCloseButton
-        />
-      );
+      toast.error(<ToastContent isDanger icon="alert" text={t('eventForm.createFailed')} />);
     }
   };
 

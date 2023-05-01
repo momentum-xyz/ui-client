@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import {ToastContainer} from 'react-toastify';
-import {rgba} from 'polished';
 
 export const ToastContainerStyled = styled(ToastContainer)`
   &.Toastify__toast-container {
@@ -21,56 +20,52 @@ export const ToastContainerStyled = styled(ToastContainer)`
     display: none;
   }
 
-  .Toastify__toast--default {
-    padding: 0;
-    .Toastify__close-button {
-      display: none;
-    }
+  .Toastify__close-button {
+    display: none;
   }
 
   .Toastify__progress-bar {
-    background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 1)} !important;
-    height: 3px;
+    height: 1px;
+  }
+
+  .Toastify__toast--default {
+    padding: 0;
   }
 
   .Toastify__toast--info {
-    background: #0517451a;
     padding: 0;
     border: none;
+    background: none;
 
     .Toastify__progress-bar {
       background: ${(props) => props.theme.accentText} !important;
     }
-    .Toastify__close-button {
-      display: none;
+  }
+
+  .Toastify__toast--success {
+    padding: 0;
+    border: none;
+    background: none;
+
+    .Toastify__progress-bar {
+      background: ${(props) => props.theme.success} !important;
     }
   }
 
   .Toastify__toast--error {
-    background: #0517451a;
     padding: 0;
     border: none;
+    background: none;
+
     .Toastify__progress-bar {
       background: ${(props) => props.theme.danger} !important;
     }
-    .Toastify__close-button {
-      display: none;
-    }
-  }
-
-  .Toastify__toast--success {
-    padding: 15px 20px;
-    background: ${(props) =>
-      props.theme.accentText && rgba(props.theme.accentText, 0.7)} !important;
-    border: 1px solid;
-    border-color: ${(props) => props.theme.accentText} !important;
   }
 
   .Toastify__toast--warning {
-    padding: 15px 20px;
-    background: ${(props) => props.theme.danger && rgba(props.theme.danger, 0.7)} !important;
-    border: 1px solid;
-    border-color: ${(props) => props.theme.danger} !important;
+    padding: 0;
+    border: none;
+    background: none;
 
     .Toastify__progress-bar {
       background: ${(props) => props.theme.danger} !important;
