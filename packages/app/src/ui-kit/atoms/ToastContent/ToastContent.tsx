@@ -1,4 +1,5 @@
 import {FC, memo} from 'react';
+import cn from 'classnames';
 import {Hexagon, IconNameType, ButtonEllipse, IconButton} from '@momentum-xyz/ui-kit-storybook';
 
 import {ToastButtonInfoInterface} from 'ui-kit/interfaces';
@@ -25,8 +26,11 @@ const ToastContent: FC<PropsInterface> = ({
   onClose
 }) => {
   return (
-    <styled.ToastContainer data-testid="ToastContent-test">
-      {icon && <Hexagon iconName={icon} type="fourth" noHover />}
+    <styled.ToastContainer data-testid="ToastContent-test" className={cn(isDanger && 'danger')}>
+      {icon && (
+        <Hexagon iconName={icon} type="fourth" noHover color={isDanger ? 'danger' : 'normal'} />
+      )}
+
       <styled.Content>
         <styled.Message>{text}</styled.Message>
         <styled.Buttons>
@@ -46,6 +50,7 @@ const ToastContent: FC<PropsInterface> = ({
           )}
         </styled.Buttons>
       </styled.Content>
+
       {!hideCloseButton && (
         <styled.CloseButton>
           <IconButton name="close_large" onClick={onClose} />

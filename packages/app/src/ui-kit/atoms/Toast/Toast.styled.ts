@@ -58,7 +58,7 @@ export const ToastContainerStyled = styled(ToastContainer)`
     background: none;
 
     .Toastify__progress-bar {
-      background: ${(props) => props.theme.danger} !important;
+      background: ${(props) => props.theme.text} !important;
     }
   }
 
