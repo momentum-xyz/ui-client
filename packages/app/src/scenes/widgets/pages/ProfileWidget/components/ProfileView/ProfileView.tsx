@@ -2,15 +2,8 @@ import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Image, Frame, ProfileLine, WalletHash} from '@momentum-xyz/ui-kit-storybook';
 import {absoluteLink, withoutProtocol, useI18n, signUpDateString} from '@momentum-xyz/core';
-//import {toast} from 'react-toastify';
 
-import {
-  //TOAST_GROUND_OPTIONS,
-  //TOAST_NOT_AUTO_CLOSE_OPTIONS,
-  //ToastContent,
-  WorldsOwnedList,
-  WorldsStakedList
-} from 'ui-kit';
+import {WorldsOwnedList, WorldsStakedList} from 'ui-kit';
 import {UserModelInterface, WorldInfoModelInterface} from 'core/models';
 
 import * as styled from './ProfileView.styled';
@@ -34,34 +27,11 @@ const ProfileView: FC<PropsInterface> = ({
 }) => {
   const {t} = useI18n();
 
-  // FIXME: Removal after testing alerts
-  /*const showToast = () => {
-    toast.info(
-      <ToastContent
-        icon="stake"
-        title={t('titles.alert')}
-        text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes"
-        approveInfo={{
-          title: 'Yes',
-          onClick: () => {}
-        }}
-        declineInfo={{
-          title: 'No',
-          onClick: () => {}
-        }}
-        showCloseButton
-      />,
-      TOAST_NOT_AUTO_CLOSE_OPTIONS
-    );
-  };*/
-
   return (
     <styled.Container>
       <Frame>
         <Image src={user.avatarLargeSrc} height={200} />
         <styled.NameContainer>{user.name}</styled.NameContainer>
-
-        {/*<button onClick={showToast}>TOAST</button>*/}
 
         <styled.ScrollableContainer>
           <styled.GeneralInfo>

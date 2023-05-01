@@ -66,25 +66,10 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
       setError('file', {
         type: 'submit'
       });
-      toast.error(
-        <ToastContent
-          isDanger
-          showCloseButton
-          icon="alert"
-          title={t('labels.addCustomSkybox')}
-          text={t('assetsUploader.errorSave')}
-        />
-      );
+      toast.error(<ToastContent isDanger icon="alert" text={t('assetsUploader.errorSave')} />);
       return;
     } else {
-      toast.info(
-        <ToastContent
-          showCloseButton
-          icon="alert"
-          title={t('labels.addCustomSkybox')}
-          text={t('assetsUploader.successMessage')}
-        />
-      );
+      toast.info(<ToastContent icon="alert" text={t('assetsUploader.successMessage')} />);
       onBack();
     }
   };
@@ -96,15 +81,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
         ? t('assetsUploader.errorTooLargeFile', {size: MAX_ASSET_SIZE_MB})
         : t('assetsUploader.errorSave');
 
-    toast.error(
-      <ToastContent
-        isDanger
-        showCloseButton
-        icon="alert"
-        title={t('labels.addCustomSkybox')}
-        text={message}
-      />
-    );
+    toast.error(<ToastContent isDanger icon="alert" text={message} />);
     setError('file', {message: 'upload'});
   };
 

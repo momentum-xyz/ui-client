@@ -141,34 +141,6 @@ const WorldPage: FC = () => {
     }
   };
 
-  // usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
-  //   if (sessionStore.userId === userId) {
-  //     toast.info(
-  //       <ToastContent
-  //         headerIconName="fly-with-me"
-  //         title="Fly to me Request"
-  //         text="Your request was sent!"
-  //         showCloseButton
-  //       />,
-  //       TOAST_COMMON_OPTIONS
-  //     );
-  //   } else {
-  //     toast.info(
-  //       <ToastContent
-  //         headerIconName="fly-with-me"
-  //         title="Fly to me Request"
-  //         text={`${userName} has invited you to fly to them`}
-  //         declineInfo={{title: t('actions.decline')}}
-  //         approveInfo={{
-  //           title: t('actions.join'),
-  //           onClick: () => instance3DStore.teleportToUser(userId)
-  //         }}
-  //       />,
-  //       TOAST_NOT_AUTO_CLOSE_OPTIONS
-  //     );
-  //   }
-  // });
-
   usePosBusEvent('high-five', (senderId, message) => {
     console.info('[POSBUS EVENT] high-five', senderId, message);
     toast.info(

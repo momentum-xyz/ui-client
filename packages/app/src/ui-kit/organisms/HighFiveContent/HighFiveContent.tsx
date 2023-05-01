@@ -24,12 +24,10 @@ const HighFiveContent: FC<PropsInterface> = ({message, sendBack, showCloseButton
   return (
     <ToastContent
       icon="stake"
-      text={t('messages.highFiveReceivedText')}
-      title={t('messages.highFiveReceivedTitle', {
+      text={`${t('messages.highFiveReceivedText')}. ${t('messages.highFiveReceivedTitle', {
         name: message
-      })}
+      })}`}
       approveInfo={{title: t('titles.returnHighFive'), onClick: handleClick}}
-      showCloseButton={showCloseButton}
     />
   );
 };

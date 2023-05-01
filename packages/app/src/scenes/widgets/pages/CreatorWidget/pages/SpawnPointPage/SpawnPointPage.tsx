@@ -24,22 +24,12 @@ const SpawnPointPage: FC = () => {
 
     if (position && rotation && (await setSpawnPoint(worldId, position, rotation))) {
       toast.info(
-        <ToastContent
-          icon="locator"
-          title={t('labels.spawnPoint')}
-          text={t('messages.spawnPointUpdated')}
-          showCloseButton
-        />,
+        <ToastContent icon="locator" text={t('messages.spawnPointUpdated')} />,
         TOAST_COMMON_OPTIONS
       );
     } else {
       toast.error(
-        <ToastContent
-          icon="locator"
-          title={t('labels.spawnPoint')}
-          text={t('messages.spawnPointNotUpdated')}
-          showCloseButton
-        />,
+        <ToastContent icon="locator" text={t('messages.spawnPointNotUpdated')} />,
         TOAST_COMMON_OPTIONS
       );
     }

@@ -35,23 +35,10 @@ const CalendarWidget: FC = () => {
   const handleEventDelete = async () => {
     if (universeStore.worldId) {
       if (await calendarStore.removeEvent(universeStore.worldId)) {
-        toast.info(
-          <ToastContent
-            icon="calendar"
-            title={t('titles.alert')}
-            text={t('messages.removeEventSuccess')}
-            showCloseButton
-          />
-        );
+        toast.info(<ToastContent icon="calendar" text={t('messages.removeEventSuccess')} />);
       } else {
         toast.error(
-          <ToastContent
-            isDanger
-            icon="calendar"
-            title={t('titles.alert')}
-            text={t('errors.couldNotRemoveEvent')}
-            showCloseButton
-          />
+          <ToastContent isDanger icon="calendar" text={t('errors.couldNotRemoveEvent')} />
         );
       }
     }
