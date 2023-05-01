@@ -45,6 +45,9 @@ const World2dStore = types.compose(
       },
       get isCurrentUserWorldAdmin(): boolean {
         return this.isMyWorld;
+      },
+      get imageSrc(): string | null {
+        return self.worldDetails?.world?.imageSrc || null;
       }
     }))
 );

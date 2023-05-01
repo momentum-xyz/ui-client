@@ -67,7 +67,7 @@ const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
             <ProfileInfo
               hash={user.wallet}
               description={user?.profile.bio}
-              address={user?.profile.profileLink}
+              weblink={user?.profile.profileLink}
               joinDate={user?.createdAt}
             />
 

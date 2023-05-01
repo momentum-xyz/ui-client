@@ -70,7 +70,7 @@ const OnlineUsersList: FC<PropsInterface> = ({
               <styled.Info>
                 <ProfileInfo
                   description={activeUser.user?.profile.bio}
-                  address={activeUser.user?.profile.profileLink}
+                  weblink={activeUser.user?.profile.profileLink}
                   joinDate={activeUser.user?.createdAt}
                   hideBorder
                 />

@@ -41,8 +41,8 @@ const WorldEditor: FC<PropsInterface> = ({
   useEffect(() => {
     setValue('name', world.name);
     setValue('description', world.description || '');
-    setValue('website_link', ''); // FIXME: No field
-  }, [world.name, world.description, setValue]);
+    setValue('website_link', world.website_link || '');
+  }, [world, setValue]);
 
   useEffect(() => {
     formErrors.forEach(({fieldName, errorMessage}) => {
