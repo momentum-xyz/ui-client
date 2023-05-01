@@ -8,6 +8,10 @@ export const ToastContainer = styled.div`
   align-items: flex-start;
   background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
   gap: 10px;
+
+  &.danger {
+    background: ${(props) => props.theme.accentBg && rgba(props.theme.danger, 0.6)};
+  }
 `;
 
 export const Content = styled.div``;
