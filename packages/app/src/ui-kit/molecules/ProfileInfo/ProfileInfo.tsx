@@ -6,35 +6,50 @@ import {ProfileLine, ButtonEllipse, WalletHash} from '@momentum-xyz/ui-kit-story
 import * as styled from './ProfileInfo.styled';
 
 interface PropsInterface {
-  address?: string;
+  weblink?: string | null;
   hash?: string | null;
-  description?: string;
-  joinDate?: string;
+  description?: string | null;
+  joinDate?: string | null;
+  createDate?: string | null;
   hideBorder?: boolean;
   onVisit?: () => void;
   onStake?: () => void;
 }
 
-const ProfileInfo: FC<PropsInterface> = (props) => {
-  const {hash, description, address, joinDate, hideBorder, onVisit, onStake} = props;
-
+const ProfileInfo: FC<PropsInterface> = ({
+  hash,
+  description,
+  weblink,
+  joinDate,
+  createDate,
+  hideBorder,
+  onVisit,
+  onStake
+}) => {
   const {t} = useI18n();
 
   return (
     <styled.Container data-testid="ProfileInfo-test" className={cn(hideBorder && 'hideBorder')}>
       {description && <div>{description}</div>}
-      {address && (
+      {weblink && (
         <ProfileLine
           icon="link"
           label={
-            <styled.LinkAccent target="_blank" href={address}>
-              {address}
+            <styled.LinkAccent target="_blank" href={weblink}>
+              {weblink}
             </styled.LinkAccent>
           }
         />
       )}
       {joinDate && (
         <ProfileLine icon="astro" label={`${t('actions.joined')} ${signUpDateString(joinDate)}`} />
+      )}
+
+      {createDate && (
+        <ProfileLine
+          icon="star"
+          label={`${t('actions.created')} ${signUpDateString(createDate)}`}
+        />
       )}
 
       {hash && <WalletHash icon="talisman" hash={hash} />}

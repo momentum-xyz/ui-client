@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {Hexagon, IconSvg, ButtonEllipse} from '@momentum-xyz/ui-kit-storybook';
 
+import {getImageAbsoluteUrl} from 'core/utils';
 import {WorldStakerModelInterface} from 'core/models';
 
 import * as styled from './StakersList.styled';
@@ -37,7 +38,11 @@ const StakersList: FC<PropsInterface> = ({stakers, onSelectUser}) => {
             const username = user.name || user.user_id;
             return (
               <styled.StakedInUser key={user.user_id} onClick={() => onSelectUser?.(user.user_id)}>
-                <Hexagon type="fourth-borderless" skipOuterBorder imageSrc={user.avatarHash} />
+                <Hexagon
+                  type="fourth-borderless"
+                  skipOuterBorder
+                  imageSrc={getImageAbsoluteUrl(user.avatarHash)}
+                />
                 <styled.Link>
                   {index < USERS_MAX ? `${t('labels.topConnector')}: ${username}` : username}
                 </styled.Link>

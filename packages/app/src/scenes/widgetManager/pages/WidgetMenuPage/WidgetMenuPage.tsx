@@ -22,7 +22,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
   const {sessionStore, widgetManagerStore, universeStore, agoraStore} = useStore();
   const {toggle, activeWidgetList} = widgetManagerStore;
   const {isGuest, userImageUrl} = sessionStore;
-  const {isMyWorld, world3dStore} = universeStore;
+  const {isMyWorld, world3dStore, world2dStore} = universeStore;
 
   const navigate = useNavigate();
 
@@ -117,7 +117,8 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
     {
       key: WidgetEnum.WORLD_PROFILE,
       position: PositionEnum.RIGHT,
-      iconName: 'rabbit_fill', // FIXME: World image
+      iconName: 'rabbit_fill',
+      imageSrc: world2dStore?.imageSrc,
       onClick: toggle,
       isHidden: !isWorld
     }

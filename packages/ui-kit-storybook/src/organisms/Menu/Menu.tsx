@@ -12,8 +12,8 @@ const BLANK_MARGIN = 10;
 
 export interface MenuItemInterface<T> {
   key: T;
-  imageSrc?: string;
-  iconName?: IconNameType;
+  imageSrc?: string | null;
+  iconName?: IconNameType | null;
   iconIndicator?: HexagonIndicatorType;
   tooltip?: string;
   position: PositionEnum;
