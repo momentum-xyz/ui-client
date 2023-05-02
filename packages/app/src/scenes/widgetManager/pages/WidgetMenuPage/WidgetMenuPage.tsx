@@ -18,7 +18,7 @@ interface PropsInterface {
 }
 
 const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
-  const {sessionStore, widgetManagerStore, universeStore, agoraStore} = useStore();
+  const {sessionStore, widgetManagerStore, universeStore, creatorStore, agoraStore} = useStore();
   const {toggle, activeWidgetList} = widgetManagerStore;
   const {isGuest, userImageUrl} = sessionStore;
   const {isMyWorld, world3dStore, world2dStore} = universeStore;
@@ -94,6 +94,13 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
       iconName: 'checked',
       onClick: () => world3dStore?.setAttachedToCamera(null),
       isHidden: !world3dStore?.attachedToCameraObjectId
+    },
+    {
+      key: WidgetEnum.GO_TO,
+      position: PositionEnum.CENTER, // TODO 2nd floor
+      iconName: 'bin',
+      onClick: creatorStore.removeObjectDialog.open,
+      isHidden: !creatorStore.selectedObjectId
     },
     {
       key: WidgetEnum.VOICE_CHAT,

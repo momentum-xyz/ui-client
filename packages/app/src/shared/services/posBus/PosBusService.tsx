@@ -171,6 +171,15 @@ class PosBusService {
         break;
       }
 
+      case MsgType.REMOVE_OBJECTS: {
+        console.log('Handle posbus message remove_object', message.data);
+        const {objects} = data;
+        for (const objectId of objects) {
+          Event3dEmitter.emit('RemoveObject', objectId);
+        }
+        break;
+      }
+
       case MsgType.LOCK_OBJECT: {
         console.log('Temp ignore posbus message lock_object', message.data);
         // console.log('Handle posbus message lock_object', message.data);
