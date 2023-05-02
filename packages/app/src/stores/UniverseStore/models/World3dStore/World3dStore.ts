@@ -57,17 +57,6 @@ const World3dStore = types
     }
   }))
   .actions((self) => ({
-    enableCreatorMode() {
-      self.isCreatorMode = true;
-    },
-    disableCreatorMode() {
-      self.isCreatorMode = false;
-      // const {creatorStore} = getRootStore(self);
-      // creatorStore.resetModel();
-      // self.closeAndResetObjectMenu();
-    }
-  }))
-  .actions((self) => ({
     // triggerTeleport(url?: string, worldId?: string): void {
     //   UnityService.triggerTeleport(url, worldId);
     // },
@@ -276,6 +265,15 @@ const World3dStore = types
     colorPickedPreview(objectId: string, colorHex: string) {
       // TODO notify babylon
       // UnityService.colorPickedPreview(objectId, colorHex);
+    }
+  }))
+  .actions((self) => ({
+    enableCreatorMode() {
+      self.isCreatorMode = true;
+    },
+    disableCreatorMode() {
+      self.isCreatorMode = false;
+      self.closeAndResetObjectMenu();
     }
   }))
   .views((self) => ({
