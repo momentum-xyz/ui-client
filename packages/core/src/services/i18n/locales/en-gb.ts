@@ -439,6 +439,8 @@ export const enGb = {
       pleaseConfirm: 'Please confirm',
       delete: 'Are you sure you want to delete this?',
       deleteNamedObject: 'Are you sure you want to delete "{{name}}"?',
+      objectDeleted: 'Object removed',
+      errorDeletingObject: 'Error removing object',
       removeEventSuccess: 'Removed event successfully.',
       avatarSuccess: 'Avatar saved successfully',
       avatarFailure: 'There was a problem saving the avatar',

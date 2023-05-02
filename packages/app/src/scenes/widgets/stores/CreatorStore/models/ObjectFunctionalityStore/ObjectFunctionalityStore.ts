@@ -19,7 +19,7 @@ const ObjectFunctionalityStore = types
       objectInfo: types.maybe(types.frozen<GetSpaceInfoResponse>()),
       getObjectInfoRequest: types.optional(RequestModel, {}),
       updateAsset2dRequest: types.optional(RequestModel, {}),
-      removeObjectRequest: types.optional(RequestModel, {}),
+
       getAttributeItemRequest: types.optional(RequestModel, {}),
       currentAssetId: types.maybe(types.string),
       isObjectPortal: types.optional(types.boolean, false)
@@ -55,15 +55,6 @@ const ObjectFunctionalityStore = types
     selectAsset(id: string) {
       self.currentAssetId = id;
     },
-    deleteObject: flow(function* () {
-      if (!self.objectId) {
-        return;
-      }
-
-      yield self.removeObjectRequest.send(api.spaceRepository.deleteSpace, {
-        spaceId: self.objectId
-      });
-    }),
     fetchObjectName: flow(function* (spaceId: string) {
       const attributeName = AttributeNameEnum.NAME;
       const response = yield self.getAttributeItemRequest.send(
