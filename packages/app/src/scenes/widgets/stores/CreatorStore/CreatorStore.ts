@@ -5,6 +5,7 @@ import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {GetSpaceInfoResponse, api} from 'api';
 import {PluginIdEnum} from 'api/enums';
 import {CreatorTabsEnum} from 'core/enums';
+import {getRootStore} from 'core/utils';
 
 import {
   SkyboxSelectorStore,
@@ -63,16 +64,6 @@ const CreatorStore = types
       }
 
       self.objectName = response[attributeName];
-    }),
-
-    removeObject: flow(function* () {
-      if (!self.selectedObjectId) {
-        return;
-      }
-
-      yield self.removeObjectRequest.send(api.spaceRepository.deleteSpace, {
-        spaceId: self.selectedObjectId
-      });
     })
   }))
   .actions((self) => ({
@@ -88,6 +79,20 @@ const CreatorStore = types
     setSelectedTab(tab: CreatorTabsType | null) {
       self.selectedTab = tab;
     }
+  }))
+  .actions((self) => ({
+    removeObject: flow(function* () {
+      if (!self.selectedObjectId) {
+        return;
+      }
+
+      yield self.removeObjectRequest.send(api.spaceRepository.deleteSpace, {
+        spaceId: self.selectedObjectId
+      });
+
+      // TODO merge these stores??
+      getRootStore(self).universeStore.world3dStore?.closeAndResetObjectMenu();
+    })
   }));
 
 export {CreatorStore};
