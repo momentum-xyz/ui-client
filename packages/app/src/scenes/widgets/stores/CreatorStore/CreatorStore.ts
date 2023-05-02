@@ -1,5 +1,5 @@
 import {flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
 import {GetSpaceInfoResponse, api} from 'api';
@@ -31,7 +31,10 @@ const CreatorStore = types
       objectName: types.maybeNull(types.string),
       objectInfo: types.maybeNull(types.frozen<GetSpaceInfoResponse>()),
       getObjectInfoRequest: types.optional(RequestModel, {}),
-      getObjectNameRequest: types.optional(RequestModel, {})
+      getObjectNameRequest: types.optional(RequestModel, {}),
+
+      removeObjectDialog: types.optional(Dialog, {}),
+      removeObjectRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -60,6 +63,16 @@ const CreatorStore = types
       }
 
       self.objectName = response[attributeName];
+    }),
+
+    removeObject: flow(function* () {
+      if (!self.selectedObjectId) {
+        return;
+      }
+
+      yield self.removeObjectRequest.send(api.spaceRepository.deleteSpace, {
+        spaceId: self.selectedObjectId
+      });
     })
   }))
   .actions((self) => ({
