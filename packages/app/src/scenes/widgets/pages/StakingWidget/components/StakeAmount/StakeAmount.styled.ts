@@ -6,7 +6,6 @@ export const Container = styled.div``;
 
 export const TabContent = styled.div`
   height: 300px;
-  width: 500px;
   display: flex;
   flex-direction: column;
 `;
