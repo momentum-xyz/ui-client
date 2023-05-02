@@ -22,7 +22,9 @@ const CurrentWorld: FC<PropsInterface> = ({world, onStakeWorld}) => {
   return (
     <styled.Container data-testid="CurrentWorld-test">
       <styled.Content>
-        <styled.Name>{name}</styled.Name>
+        <styled.Name>
+          <span>{name}</span>
+        </styled.Name>
         <styled.Information>
           <ProfileLine
             icon="stake"
@@ -52,7 +54,7 @@ const CurrentWorld: FC<PropsInterface> = ({world, onStakeWorld}) => {
             <Hexagon type="blank-small" />
           </styled.BlankHexagon3>
         </styled.BlankHexagons>
-        <Hexagon type="menu" iconName="stake" imageSrc={imageSrc} onClick={onStakeWorld} />
+        <Hexagon type="menu" iconName="stake" onClick={onStakeWorld} />
         <styled.BlankHexagonLast>
           <Hexagon type="blank-small" />
         </styled.BlankHexagonLast>

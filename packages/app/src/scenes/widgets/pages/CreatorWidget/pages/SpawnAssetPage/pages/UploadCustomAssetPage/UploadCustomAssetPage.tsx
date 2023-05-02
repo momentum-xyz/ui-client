@@ -69,25 +69,10 @@ const UploadCustomAssetPage: FC = () => {
     }
     spawnAssetStore.setUploadedAssetName(name);
     if (await spawnAssetStore.uploadAsset(file, preview_hash)) {
-      toast.info(
-        <ToastContent
-          headerIconName="check"
-          title={t('titles.success')}
-          text={t('messages.assetUploaded')}
-          showCloseButton
-        />
-      );
+      toast.info(<ToastContent icon="check" text={t('messages.assetUploaded')} />);
       spawnAssetStore.setActiveTab('community');
     } else {
-      toast.error(
-        <ToastContent
-          isDanger
-          headerIconName="alert"
-          title={t('titles.failedToUpload')}
-          text={t('messages.assetNotUploaded')}
-          showCloseButton
-        />
-      );
+      toast.error(<ToastContent isDanger icon="alert" text={t('messages.assetNotUploaded')} />);
     }
   };
 

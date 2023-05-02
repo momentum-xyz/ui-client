@@ -59,7 +59,7 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         variant="primary"
         title={t('labels.odysseyOverview')}
         image={getImageAbsoluteUrl(world?.avatarHash, ImageSizeEnum.S3)}
-        onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_PROFILE)}
+        onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_DETAILS)}
       >
         <styled.Wrapper>
           <ProfileImage
@@ -73,7 +73,8 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
           <styled.GeneralScrollable>
             <ProfileInfo
               description={world.description}
-              joinDate={world.createdAt}
+              weblink={world.website_link}
+              createDate={world.createdAt}
               onVisit={() => onVisitWorld(world.id)}
               onStake={() => onStakeWorld(world.id)}
             />

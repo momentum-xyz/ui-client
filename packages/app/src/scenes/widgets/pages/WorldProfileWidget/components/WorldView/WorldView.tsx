@@ -8,7 +8,7 @@ import * as styled from './WorldView.styled';
 
 interface PropsInterface {
   world: WorldModelInterface;
-  onStakeWorld: (worldId: string) => void;
+  onStakeWorld: () => void;
   onSelectUser: (userId: string) => void;
 }
 
@@ -26,8 +26,9 @@ const WorldView: FC<PropsInterface> = ({world, onStakeWorld, onSelectUser}) => {
       <styled.GeneralScrollable>
         <ProfileInfo
           description={world.description}
-          joinDate={world.createdAt}
-          onStake={() => onStakeWorld(world.id)}
+          weblink={world.website_link}
+          createDate={world.createdAt}
+          onStake={onStakeWorld}
         />
 
         <StakingAmount stakedAmount={world.momStaked} tokenSymbol="MOM" />

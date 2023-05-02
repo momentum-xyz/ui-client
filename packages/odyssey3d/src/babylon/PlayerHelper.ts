@@ -46,6 +46,20 @@ interface BabylonUserInterface {
   userInstance: InstantiatedEntries;
 }
 
+const enum KeysEnum {
+  LEFT = 37,
+  UP = 38,
+  RIGHT = 39,
+  DOWN = 40,
+
+  A = 65,
+  D = 68,
+  E = 69,
+  Q = 81,
+  S = 83,
+  W = 87
+}
+
 export class PlayerHelper {
   static camera: UniversalCamera;
   static scene: Scene;
@@ -77,10 +91,12 @@ export class PlayerHelper {
     camera.attachControl(canvas, true);
 
     // WASD controls
-    camera.keysUp = [87];
-    camera.keysLeft = [65];
-    camera.keysDown = [83];
-    camera.keysRight = [68];
+    camera.keysUp = [KeysEnum.W, KeysEnum.UP];
+    camera.keysLeft = [KeysEnum.A, KeysEnum.LEFT];
+    camera.keysDown = [KeysEnum.S, KeysEnum.DOWN];
+    camera.keysRight = [KeysEnum.D, KeysEnum.RIGHT];
+    camera.keysUpward = [KeysEnum.E];
+    camera.keysDownward = [KeysEnum.Q];
 
     this.camera = camera;
 

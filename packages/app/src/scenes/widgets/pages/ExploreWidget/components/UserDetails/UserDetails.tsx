@@ -1,10 +1,10 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
-import {Panel, ImageSizeEnum, IconSvg, ItemCard} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {getImageAbsoluteUrl} from 'core/utils';
-import {ProfileInfo, ProfileImage} from 'ui-kit';
+import {ProfileInfo, ProfileImage, WorldsOwnedList, WorldsStakedList} from 'ui-kit';
 import {UserDetailsModelType} from 'core/models';
 
 import * as styled from './UserDetails.styled';
@@ -48,55 +48,21 @@ const UserDetails: FC<PropsInterface> = (props) => {
             <ProfileInfo
               hash={user?.wallet}
               description={user?.profile.bio}
-              address={user?.profile.profileLink}
+              weblink={user?.profile.profileLink}
               joinDate={user?.createdAt}
             />
 
-            <styled.OdysseyList>
-              {worldsOwned.length > 0 && (
-                <>
-                  <styled.Title>
-                    <IconSvg name="rabbit_fill" size="xs" isWhite />
-                    <span>{t('labels.odysseysOwned')}</span>
-                  </styled.Title>
-                  {worldsOwned.map((world) => (
-                    <ItemCard
-                      key={world.id}
-                      variant="small"
-                      name={world.name}
-                      imageHeight={95}
-                      description={world.description}
-                      imageErrorIcon="rabbit_fill"
-                      imageUrl={getImageAbsoluteUrl(world.avatarHash, ImageSizeEnum.S5)}
-                      onVisitClick={() => onVisitWorld(world.id)}
-                      onInfoClick={() => onSelectWorld(world.id)}
-                    />
-                  ))}
-                </>
-              )}
+            <WorldsOwnedList
+              worldsOwned={worldsOwned}
+              onSelectWorld={onSelectWorld}
+              onVisitWorld={onVisitWorld}
+            />
 
-              {worldsStakedIn.length > 0 && (
-                <>
-                  <styled.Title>
-                    <IconSvg name="stake" size="xs" isWhite />
-                    <span>{t('labels.odysseysStakedIn')}</span>
-                  </styled.Title>
-                  {worldsStakedIn.map((world) => (
-                    <ItemCard
-                      key={world.id}
-                      variant="small"
-                      name={world.name}
-                      imageHeight={95}
-                      description={world.description}
-                      imageErrorIcon="rabbit_fill"
-                      imageUrl={getImageAbsoluteUrl(world.avatarHash, ImageSizeEnum.S5)}
-                      onVisitClick={() => onVisitWorld(world.id)}
-                      onInfoClick={() => onSelectWorld(world.id)}
-                    />
-                  ))}
-                </>
-              )}
-            </styled.OdysseyList>
+            <WorldsStakedList
+              worldsStakedIn={worldsStakedIn}
+              onSelectWorld={onSelectWorld}
+              onVisitWorld={onVisitWorld}
+            />
           </styled.GeneralScrollable>
         </styled.Wrapper>
       </Panel>

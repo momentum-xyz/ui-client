@@ -40,6 +40,7 @@ export const BlankHexagonLast = styled.div`
 export const Content = styled.div``;
 
 export const Name = styled.div`
+  width: 220px;
   display: flex;
   height: 56px;
   justify-content: right;
@@ -49,6 +50,12 @@ export const Name = styled.div`
   letter-spacing: 0.2em;
   text-align: right;
   font-weight: 700;
+
+  span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 `;
 
 export const Information = styled.div`

@@ -1,5 +1,6 @@
 import {FC, useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
+import {toast} from 'react-toastify';
 import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-dom';
 import {useDebouncedCallback} from '@momentum-xyz/ui-kit-storybook';
 import {BabylonScene} from '@momentum-xyz/odyssey3d';
@@ -9,15 +10,12 @@ import {
   ObjectTransformInterface,
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
-import {toast} from 'react-toastify';
 
 import {WORLD_ROUTES} from 'scenes/App.routes';
 import {ROUTES} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {PosBusService} from 'shared/services';
 import {HighFiveContent, TOAST_BASE_OPTIONS} from 'ui-kit';
-
-import * as styled from './WorldPage.styled';
 
 const WorldPage: FC = () => {
   const {agoraStore, universeStore, widgetsStore, widgetManagerStore, sessionStore} = useStore();
@@ -143,34 +141,6 @@ const WorldPage: FC = () => {
     }
   };
 
-  // usePosBusEvent('fly-to-me', (spaceId, userId, userName) => {
-  //   if (sessionStore.userId === userId) {
-  //     toast.info(
-  //       <ToastContent
-  //         headerIconName="fly-with-me"
-  //         title="Fly to me Request"
-  //         text="Your request was sent!"
-  //         showCloseButton
-  //       />,
-  //       TOAST_COMMON_OPTIONS
-  //     );
-  //   } else {
-  //     toast.info(
-  //       <ToastContent
-  //         headerIconName="fly-with-me"
-  //         title="Fly to me Request"
-  //         text={`${userName} has invited you to fly to them`}
-  //         declineInfo={{title: t('actions.decline')}}
-  //         approveInfo={{
-  //           title: t('actions.join'),
-  //           onClick: () => instance3DStore.teleportToUser(userId)
-  //         }}
-  //       />,
-  //       TOAST_NOT_AUTO_CLOSE_OPTIONS
-  //     );
-  //   }
-  // });
-
   usePosBusEvent('high-five', (senderId, message) => {
     console.info('[POSBUS EVENT] high-five', senderId, message);
     toast.info(
@@ -235,17 +205,15 @@ const WorldPage: FC = () => {
   console.log('WorldPage render', {worldId, world3dStore});
 
   return (
-    <styled.Inner data-testid="WorldPage-test">
-      <BabylonScene
-        events={Event3dEmitter}
-        onMove={handleUserMove}
-        onObjectClick={handleObjectClick}
-        onObjectTransform={handleObjectTransform}
-        onUserClick={handleUserClick}
-        onClickOutside={handleClickOutside}
-        onBumpReady={handleBumpReady}
-      />
-    </styled.Inner>
+    <BabylonScene
+      events={Event3dEmitter}
+      onMove={handleUserMove}
+      onObjectClick={handleObjectClick}
+      onObjectTransform={handleObjectTransform}
+      onUserClick={handleUserClick}
+      onClickOutside={handleClickOutside}
+      onBumpReady={handleBumpReady}
+    />
   );
 };
 

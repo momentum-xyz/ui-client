@@ -113,7 +113,8 @@ const ProfileWidget: FC = () => {
                 <ProfileView
                   user={sessionStore.user}
                   defaultWalletId={nftStore.defaultWalletId}
-                  worldList={sessionStore.worldList}
+                  worldsOwnedList={sessionStore.worldsOwnedList}
+                  worldsStakedList={sessionStore.worldsStakedList}
                   onVisitWorld={onVisitWorld}
                   onInfoWorld={onInfoWorld}
                 />

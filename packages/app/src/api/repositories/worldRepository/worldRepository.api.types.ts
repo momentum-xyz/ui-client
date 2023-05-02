@@ -3,8 +3,9 @@ import {UserInterface} from 'api';
 export interface WorldInfoInterface {
   id: string;
   name: string;
-  description?: string;
+  description?: string | null;
   avatarHash: string | null;
+  website_link?: string | null;
   owner_id: string;
   owner_name?: string | null;
   stake_total?: string;
@@ -13,13 +14,14 @@ export interface WorldInfoInterface {
 export interface WorldInterface {
   id: string;
   name: string;
-  description?: string;
+  description?: string | null;
+  website_link?: string | null;
   avatarHash: string | null;
   createdAt?: string;
   last_staking_comment: string | null;
   owner_id: string;
   owner_name?: string | null;
-  stake_total?: string;
+  stake_total?: string | null;
   stakers: WorldStakerInterface[] | null;
 }
 

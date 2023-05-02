@@ -1,6 +1,5 @@
 import {FC, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n} from '@momentum-xyz/core';
 import {
   Panel,
@@ -12,7 +11,6 @@ import {
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
-import {ROUTES} from 'core/constants';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {WorldFormInterface} from 'core/interfaces';
 
@@ -29,14 +27,13 @@ const WorldProfileWidget: FC = () => {
   const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewWorld');
 
   const {t} = useI18n();
-  const navigate = useNavigate();
 
   const onSelectUser = (userId: string) => {
     widgetManagerStore.open(WidgetEnum.USER_DETAILS, PositionEnum.LEFT, {id: userId});
   };
 
-  const onStakeWorld = (worldId: string) => {
-    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+  const onStakeWorld = () => {
+    widgetManagerStore.open(WidgetEnum.STAKING, PositionEnum.RIGHT);
   };
 
   const onEditWorld = async (form: WorldFormInterface, previousImageHash?: string | null) => {
@@ -46,7 +43,9 @@ const WorldProfileWidget: FC = () => {
     const {worldDetails, worldId} = world2dStore;
     if (await worldProfileStore.editWorld(worldId, form, previousImageHash || undefined)) {
       await worldDetails.fetchWorld();
-      await sessionStore.loadWorlds();
+      await sessionStore.loadOwnWorlds();
+      await sessionStore.loadStakedWorlds();
+      await universeStore.universe2dStore.loadWorlds();
       setActiveMenuId('viewWorld');
     }
   };

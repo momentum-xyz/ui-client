@@ -25,17 +25,17 @@ export const Button = styled.button`
   --primary-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
 
   --secondary-border-color: ${(props) => props.theme.text};
-  --secondary-border-color-hover: ${(props) => props.theme.accentBg};
+  --secondary-border-color-hover: ${(props) => props.theme.accentText};
   --secondary-border-color-active: ${(props) => props.theme.accentText};
   --secondary-border-color-disabled: transparent;
   --secondary-bg-color: transparent;
   --secondary-bg-color-hover: transparent;
   --secondary-bg-color-active: ${(props) => props.theme.accentText};
   --secondary-bg-color-disabled: ${(props) =>
-    props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
+    props.theme.accentText && rgba(props.theme.accentText, 0.2)};
   --secondary-color: ${(props) => props.theme.text};
-  --secondary-color-hover: ${(props) => props.theme.accentBg};
-  --secondary-color-active: ${(props) => props.theme.accentBg};
+  --secondary-color-hover: ${(props) => props.theme.accentText};
+  --secondary-color-active: ${(props) => props.theme.accentText};
   --secondary-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
 
   --normal-height: 40px;

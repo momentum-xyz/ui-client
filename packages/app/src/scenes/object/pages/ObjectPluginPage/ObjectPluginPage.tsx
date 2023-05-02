@@ -57,9 +57,7 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
       toast.error(
         <ToastContent
           isDanger
-          showCloseButton
-          headerIconName="alert"
-          title={t('titles.alert')}
+          icon="stake"
           text={t('errors.failedToLoadDynamicScript', {url: pluginLoader.scriptUrl})}
         />
       );

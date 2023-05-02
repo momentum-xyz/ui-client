@@ -23,7 +23,7 @@ const WalletLogin: FC<PropsInterface> = ({
   attachSecondaryAccount = false
 }) => {
   const {name, useWallet, browserExtensionUrl} = walletConf;
-  const {sessionStore} = useStore();
+  const {sessionStore, nftStore} = useStore();
 
   const {t} = useI18n();
 
@@ -41,7 +41,10 @@ const WalletLogin: FC<PropsInterface> = ({
       ? sessionStore.attachAnotherAccount(accountHex, signChallenge)
       : sessionStore.fetchTokenByWallet2(accountHex, signChallenge)
     )
-      .then(onConnected)
+      .then(() => {
+        nftStore.setWalletIdByAddress(accountHex, walletConf.id);
+        onConnected?.();
+      })
       .catch((err) => {
         console.log('Error connecting wallet', err);
         onError?.(err);
