@@ -6,7 +6,7 @@ import {Dialog} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 
 import {ToastContent} from 'ui-kit';
-import {useStore} from 'shared/hooks';
+import {useNavigation, useStore} from 'shared/hooks';
 import {CreatorTabsEnum} from 'core/enums';
 
 import * as styled from './CreatorWidget.styled';
@@ -69,9 +69,12 @@ const CreatorWidget: FC = () => {
 
   const {t} = useI18n();
 
+  const {goToOdysseyHome} = useNavigation();
+
   console.log('CreatorWidget render', {selectedTab});
 
   useEffect(() => {
+    goToOdysseyHome(); // we don't want to have selected objects or smt
     world3dStore.enableCreatorMode();
     spawnAssetStore.init(worldId); // TEMP
     spawnAssetStore.fetchAllAssets3d(); // TEMP
@@ -79,7 +82,7 @@ const CreatorWidget: FC = () => {
       world3dStore.disableCreatorMode();
       creatorStore.resetModel();
     };
-  }, [creatorStore, world3dStore, spawnAssetStore, worldId]);
+  }, [creatorStore, world3dStore, spawnAssetStore, worldId, goToOdysseyHome]);
 
   const content =
     useMemo(() => {

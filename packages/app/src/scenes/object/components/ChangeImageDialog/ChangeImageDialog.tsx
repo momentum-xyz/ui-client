@@ -2,7 +2,6 @@ import React, {FC, MutableRefObject} from 'react';
 import {FileUploader} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
-import {useParams} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 
 import {ImageObjectInterface} from 'core/interfaces';
@@ -12,16 +11,15 @@ import * as styled from './ChangeImageDialog.styled';
 
 interface PropsInterface {
   actionRef: MutableRefObject<{doSave: () => void}>;
+  objectId: string;
 }
 
-const ChangeVideoDialog: FC<PropsInterface> = ({actionRef}) => {
+const ChangeVideoDialog: FC<PropsInterface> = ({actionRef, objectId}) => {
   const {objectStore} = useStore();
   const {assetStore} = objectStore;
   const {changeTileDialog} = assetStore;
 
   const {t} = useI18n();
-
-  const {objectId} = useParams<{objectId: string}>();
 
   const {handleSubmit, control} = useForm<ImageObjectInterface>();
 
@@ -32,7 +30,7 @@ const ChangeVideoDialog: FC<PropsInterface> = ({actionRef}) => {
       return;
     }
 
-    await assetStore.postNewImage(objectId!, data.image);
+    await assetStore.postNewImage(objectId, data.image);
 
     changeTileDialog.close();
   };
@@ -43,21 +41,6 @@ const ChangeVideoDialog: FC<PropsInterface> = ({actionRef}) => {
   };
 
   return (
-    // <Dialog
-    //   title={t('labels.changeImage')}
-    //   approveInfo={{
-    //     title: t('actions.change'),
-    //     onClick: handleSubmit(formSubmitHandler)
-    //   }}
-    //   declineInfo={{
-    //     title: t('actions.cancel'),
-    //     onClick: changeTileDialog.close
-    //   }}
-    //   onClose={changeTileDialog.close}
-    //   showCloseButton
-    //   showBackground
-    //   hasBorder
-    // >
     <styled.Container>
       <Controller
         control={control}
@@ -82,7 +65,6 @@ const ChangeVideoDialog: FC<PropsInterface> = ({actionRef}) => {
         )}
       />
     </styled.Container>
-    // </Dialog>
   );
 };
 

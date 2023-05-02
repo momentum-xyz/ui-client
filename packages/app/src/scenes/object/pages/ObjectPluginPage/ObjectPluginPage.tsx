@@ -1,13 +1,7 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {
-  ErrorBoundary,
-  ScreenSectionsEnum,
-  SectionedScreenPortal,
-  Text,
-  WindowPanel
-} from '@momentum-xyz/ui-kit';
+import {ErrorBoundary, Heading, Text} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
 import {
@@ -103,32 +97,20 @@ const PluginInnerWrapper = ({
   const {content, objectView} = plugin.usePlugin(pluginProps);
 
   return !pluginLoader.isError ? (
-    <SectionedScreenPortal
-      data-testid="ObjectPluginPage-test"
-      section={
-        pluginLoader.isExpanded ? ScreenSectionsEnum.TOP_LEFT : ScreenSectionsEnum.BOTTOM_RIGHT
-      }
-      maximized={pluginLoader.isExpanded}
-    >
+    <>
       {content ? (
         <styled.Container className={cn(pluginLoader.isExpanded && 'expanded')}>
           {content}
         </styled.Container>
       ) : objectView ? (
-        <WindowPanel
-          title={objectView.title || ''}
-          subtitle={objectView.subtitle}
-          actions={objectView.actions}
-          initialIsExpanded={pluginLoader.isExpanded}
-          onToggleExpand={pluginProps.onToggleExpand}
-          onClose={pluginProps.onClose}
-        >
+        <>
+          <Heading type="h3" label={objectView.title || ''} align="left" transform="uppercase" />
           {objectView.content}
-        </WindowPanel>
+        </>
       ) : (
         <Text text={t('errors.errorPluginContactDev')} size="l" />
       )}
-    </SectionedScreenPortal>
+    </>
   ) : (
     <Text text={t('errors.errorWhileLoadingPlugin')} size="l" />
   );
