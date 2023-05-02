@@ -76,6 +76,8 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
         .send({from: account});
       console.log('useBlockchain stake result', result);
 
+      return result;
+
       setTimeout(() => loadMyStakes().catch(console.error), DELAY_REFRESH_DATA_MS);
     },
     [momContract, account, stakingContract, isCorrectAccount, loadMyStakes]

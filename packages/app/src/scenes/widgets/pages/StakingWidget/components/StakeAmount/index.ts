@@ -1,1 +1,1 @@
-export {default as StakeAmount} from './StakingAmount';
+export {default as StakeAmount} from './StakeAmount';

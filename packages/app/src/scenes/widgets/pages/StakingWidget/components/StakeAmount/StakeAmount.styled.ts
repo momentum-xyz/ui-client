@@ -22,6 +22,13 @@ export const Section = styled.div`
   border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
 `;
 
+export const Name = styled.div`
+  font-weight: 600;
+  font-size: var(--font-size-m);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+`;
+
 export const SectionGrid = styled.div`
   padding: 10px 0 0 0;
   display: grid;
@@ -29,7 +36,7 @@ export const SectionGrid = styled.div`
   align-items: center;
 `;
 
-export const OdysseyName = styled.div`
+export const BorderedValue = styled.div`
   padding: 0 20px;
   display: flex;
   height: 40px;

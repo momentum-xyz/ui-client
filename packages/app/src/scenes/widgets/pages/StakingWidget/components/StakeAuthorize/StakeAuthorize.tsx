@@ -1,64 +1,77 @@
-import {FC} from 'react';
-import {Heading, Input, Text} from '@momentum-xyz/ui-kit';
+import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useI18n} from '@momentum-xyz/core';
-import {Button} from '@momentum-xyz/ui-kit-storybook';
+import {Button, Input, numberInputSuffixMask, Textarea} from '@momentum-xyz/ui-kit-storybook';
 
 import * as styled from './StakeAuthorize.styled';
 
 interface PropsInterface {
+  worldName: string;
   amountValue: string;
   tokenSymbol: string;
+  selectedWalletId: string | null;
   onChangeAmountValue: (value: string) => void;
-  onStakeClick: () => void;
+  onStakeClick: (comment: string) => void;
   onBackClick: () => void;
 }
 
 const StakeAuthorize: FC<PropsInterface> = ({
+  worldName,
   amountValue,
   tokenSymbol,
+  selectedWalletId,
   onChangeAmountValue,
   onStakeClick,
   onBackClick
 }) => {
-  const {t} = useI18n();
+  const [comment, setComment] = useState('');
 
   return (
-    <styled.Container>
-      <styled.TabContent>
-        <div>
-          <styled.Section>
-            <styled.SectionHeader>
-              <Heading type="h2" align="left" label={t('staking.authorizeContribution')} />
-            </styled.SectionHeader>
-            <styled.LabeledLineContainer>
-              <styled.LabeledLineLabelContainer>
-                <Text
-                  size="xxs"
-                  align="right"
-                  text={t('staking.tokenAmount', {amount: tokenSymbol})}
-                />
-              </styled.LabeledLineLabelContainer>
-              <styled.LabeledLineInputContainer className="view-only">
-                <Input value={amountValue} onChange={onChangeAmountValue} disabled />
-              </styled.LabeledLineInputContainer>
-            </styled.LabeledLineContainer>
-            <styled.LabeledLineContainer>
-              <styled.LabeledLineLabelContainer>
-                <Text size="xxs" align="right" text={t('staking.sendingFrom')} />
-              </styled.LabeledLineLabelContainer>
-            </styled.LabeledLineContainer>
-            <styled.ConsentContainer>
-              <Text size="s" align="left" text={t('staking.contributionMessage')} />
-            </styled.ConsentContainer>
-          </styled.Section>
-        </div>
+    <styled.Container data-testid="StakeAmount-test">
+      <styled.Title>Authorise</styled.Title>
+      <styled.Description>
+        Double check if the information presented below is correct and authorise your transaction by
+        pressing sign and stake.
+      </styled.Description>
 
-        <styled.Buttons>
-          <Button label={t('staking.back')} onClick={onBackClick} />
-          <Button label={t('staking.signAndConnect')} icon="check" onClick={onStakeClick} />
-        </styled.Buttons>
-      </styled.TabContent>
+      <styled.Section>
+        <styled.SectionGrid>
+          <div>Amount</div>
+          <Input
+            wide
+            value={amountValue}
+            opts={numberInputSuffixMask(tokenSymbol, 5)}
+            onChange={onChangeAmountValue}
+          />
+        </styled.SectionGrid>
+
+        <styled.SectionGrid>
+          <div>Sending From</div>
+          <styled.BorderedValue>
+            <span>{selectedWalletId}</span>
+          </styled.BorderedValue>
+        </styled.SectionGrid>
+
+        <styled.SectionGrid>
+          <div>Sending To</div>
+          <styled.BorderedValue>
+            <span>{worldName}</span>
+          </styled.BorderedValue>
+        </styled.SectionGrid>
+      </styled.Section>
+
+      <styled.Comment>
+        <styled.Name>Write a comment</styled.Name>
+        <Textarea
+          value={comment}
+          placeholder="Why do you want to stake in this Odyssey?"
+          onChange={setComment}
+        />
+      </styled.Comment>
+
+      <styled.Buttons>
+        <Button label="Go back" onClick={onBackClick} variant="secondary" />
+        <Button label="Sign & Stake" onClick={() => onStakeClick(comment)} />
+      </styled.Buttons>
     </styled.Container>
   );
 };

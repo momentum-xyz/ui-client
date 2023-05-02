@@ -5,8 +5,10 @@ import BN from 'bn.js';
 import {useI18n} from '@momentum-xyz/core';
 import {Panel, StepInterface, Steps} from '@momentum-xyz/ui-kit-storybook';
 
-import {ProfileImage, ToastContent} from 'ui-kit';
 import {WidgetEnum} from 'core/enums';
+import {PosBusService} from 'shared/services';
+import {convertUuidToNftId} from 'core/utils';
+import {ProfileImage, ToastContent} from 'ui-kit';
 import {useBlockchain, useStore} from 'shared/hooks';
 import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 
@@ -30,47 +32,51 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
     requiredAccountAddress: selectedWalletId
   });
 
-  console.log('StakeForm useStaking', {isBlockchainReady, account, stake});
+  const worldId = data?.id?.toString() || universeStore.worldId;
+  const worldName = world2dStore?.worldDetails?.world?.name || '';
+  const worldNameWithHash = `${worldName} - ${convertUuidToNftId(world2dStore?.worldId)}`;
 
-  const amountStringValueCheckRegex = /^\d{1,12}((\.|,)\d{0,4})?$/;
-
-  const nftId = data?.id || universeStore.worldId;
   // this allows us to use decimals while also validating with BN
   const amountAtoms = new BN(+amountString * 1_000).mul(new BN(Math.pow(10, chainDecimals - 3)));
   const isBalanceTooLow = !canBeStaked(amountAtoms);
 
-  const validStringCheck = (val: string): boolean => !val || amountStringValueCheckRegex.test(val);
-  const onStakeAmountInput = (val: string) => {
-    if (!validStringCheck(val)) {
-      return;
-    }
-    setAmountString(val);
-  };
-
+  console.log('StakeForm useStaking', {isBlockchainReady, account, stake});
   console.log('StakingForm', {selectedWalletId, addresses, amountString, amountAtoms});
 
   const handleOnClose = () => {
     widgetManagerStore.close(WidgetEnum.STAKING);
   };
 
-  const onStake = async () => {
+  const onStake = async (comment: string) => {
     try {
-      console.log('onStake', nftStore.selectedWalletId, nftId, amountAtoms);
-      await stake(nftId as string, amountAtoms);
+      console.log('onStake', nftStore.selectedWalletId, worldId, amountAtoms);
+      const result = await stake(worldId, amountAtoms);
       console.log('stake success');
+
+      if (result?.transactionHash && !!comment) {
+        PosBusService.userStakedInOdyssey(
+          result.transactionHash,
+          worldId,
+          amountAtoms.toString(),
+          comment
+        );
+      }
 
       toast.info(
         <ToastContent
           icon="alert"
-          text={t('staking.stakeSuccess', {
-            amount: amountString,
-            name: 'nft?.name'
-          })}
+          text="Your transaction has been processed. You have successfully staked into another odyssey!"
         />
       );
     } catch (err) {
       console.log('stake error', err);
-      toast.error(<ToastContent icon="alert" isDanger text={t('staking.error')} />);
+      toast.error(
+        <ToastContent
+          isDanger
+          icon="alert"
+          text="Your transaction was not processed. You were unable to successfully stake into another odyssey, please try again."
+        />
+      );
     } finally {
       handleOnClose();
     }
@@ -100,12 +106,13 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
 
         <styled.WordContainer>
           <ProfileImage image={world2dStore?.image} imageErrorIcon="rabbit_fill" />
-          <styled.WorldName>{world2dStore?.worldDetails?.world?.name}</styled.WorldName>
+          <styled.WorldName>{worldName}</styled.WorldName>
         </styled.WordContainer>
 
         <styled.ScrollableContainer>
           {activeStep === 'wallet' && (
             <StakeAmount
+              worldName={worldNameWithHash}
               amountValue={amountString}
               walletOptions={nftStore.walletOptions}
               walletSelectContent={walletSelectContent}
@@ -114,16 +121,18 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
               tokenSymbol={nftStore.tokenSymbol}
               isNextDisabled={!amountString || isBalanceTooLow || !isBlockchainReady}
               onSelectWalletId={nftStore.setSelectedWalletId}
-              onChangeAmountValue={onStakeAmountInput}
+              onChangeAmountValue={setAmountString}
               onNextClick={() => setActiveStep('authorize')}
             />
           )}
 
           {activeStep === 'authorize' && (
             <StakeAuthorize
+              worldName={worldNameWithHash}
               amountValue={amountString}
               tokenSymbol={nftStore.tokenSymbol}
-              onChangeAmountValue={onStakeAmountInput}
+              selectedWalletId={nftStore.selectedWalletId}
+              onChangeAmountValue={setAmountString}
               onStakeClick={onStake}
               onBackClick={() => setActiveStep('wallet')}
             />

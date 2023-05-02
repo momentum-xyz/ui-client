@@ -31,3 +31,7 @@ export const formatBigInt = (input: string | null | undefined, digits = 2): stri
 
   return balance.div(lookupItem.value).toNumber().toFixed(digits) + lookupItem.symbol;
 };
+
+export const convertUuidToNftId = (worldId: string | undefined | null) => {
+  return worldId ? '0x' + worldId.replace(/-/g, '') : '';
+};

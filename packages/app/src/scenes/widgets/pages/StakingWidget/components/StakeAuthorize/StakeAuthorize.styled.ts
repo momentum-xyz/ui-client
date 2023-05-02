@@ -1,108 +1,64 @@
-import {rgba} from 'polished';
 import styled from 'styled-components';
-import {Text} from '@momentum-xyz/ui-kit';
+import {rgba} from 'polished';
 
 export const Container = styled.div``;
 
-export const TabContent = styled.div`
-  height: 300px;
-  display: flex;
-  flex-direction: column;
+export const Title = styled.div`
+  padding: 10px 0;
+  font-weight: 600;
+  font-size: var(--font-size-m);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 `;
 
-export const Filters = styled.div`
-  padding: 12px 0 10px 0;
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  align-items: center;
-`;
-
-export const Buttons = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-top: 30px;
-`;
-
-export const NoWalletContainer = styled.div`
-  display: flex;
-  border-radius: 6px;
-  border: 1px solid ${(props) => props.theme.accentText};
-  background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.2)};
-  padding: 10px 10px;
-  margin: 20px 0 0;
-  gap: 8px;
-`;
-
-export const AlertMessage = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-export const BottomText = styled(Text)`
-  text-decoration-line: underline;
-  color: ${(props) => props.theme.accentText};
+export const Description = styled.div`
+  padding: 0 0 10px 0;
+  line-height: 22px;
 `;
 
 export const Section = styled.div`
-  margin-top: 20px;
+  padding: 0 0 20px 0;
+  border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
 `;
 
-export const SectionHeader = styled.div`
-  margin-bottom: 10px;
-  opacity: 80%;
-`;
-
-export const LabeledLineContainer = styled.div`
-  display: flex;
+export const SectionGrid = styled.div`
+  padding: 10px 0 0 0;
+  display: grid;
+  grid-template-columns: 1fr 210px;
   align-items: center;
-  height: 37px;
-  margin-bottom: 10px;
 `;
 
-export const LabeledLineLabelContainer = styled.div`
-  min-width: 120px;
-  margin-right: 20px;
-`;
-
-export const LabeledLineInputContainer = styled.div`
-  margin-top: -10px;
-  flex: 1;
-  & input {
-    font-size: var(--font-size-xxs);
-  }
-  &.view-only input:disabled {
-    opacity 100%;
-    background: transparent;
-  }
-`;
-
-export const BalanceContainer = styled.div`
+export const BorderedValue = styled.div`
+  padding: 0 20px;
   display: flex;
-  flex-direction: row;
+  height: 40px;
+  width: 100%;
+  border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
+  align-items: center;
+  border-radius: 4px;
+
+  > span {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+`;
+
+export const Comment = styled.div`
+  padding: 20px 0 16px 0;
+  border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
+`;
+
+export const Name = styled.div`
+  padding: 0 0 10px 0;
+  font-weight: 600;
+  font-size: var(--font-size-m);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+`;
+
+export const Buttons = styled.div`
+  padding: 20px 0 0 0;
+  display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-`;
-
-export const BalanceEntityContainer = styled.div`
-  padding: 6px;
-  background: ${rgba(0, 1, 1, 0.2)};
-  border-radius: 5px;
-  min-width: calc(20% - 10px);
-`;
-
-export const Separator = styled.hr`
-  border-width: 0.25px;
-  margin-top: -10px;
-  margin-bottom: 20px;
-  opacity: 20%;
-  border-color: ${(props) => props.theme.accentText};
-`;
-
-export const ConsentContainer = styled.div`
-  padding-left: 140px;
-  margin-bottom: 41px;
 `;

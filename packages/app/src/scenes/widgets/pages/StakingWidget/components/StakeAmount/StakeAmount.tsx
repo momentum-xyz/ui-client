@@ -1,11 +1,18 @@
 import {FC, ReactNode} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Button, Select, Input, SelectOptionInterface} from '@momentum-xyz/ui-kit-storybook';
+import {
+  Button,
+  Select,
+  Input,
+  SelectOptionInterface,
+  numberInputSuffixMask
+} from '@momentum-xyz/ui-kit-storybook';
 
 import * as styled from './StakeAmount.styled';
 
 interface PropsInterface {
+  worldName: string;
   amountValue: string;
   isNextDisabled: boolean;
   walletOptions: SelectOptionInterface<string>[];
@@ -18,7 +25,8 @@ interface PropsInterface {
   onNextClick: () => void;
 }
 
-const StakingAmount: FC<PropsInterface> = ({
+const StakeAmount: FC<PropsInterface> = ({
+  worldName,
   amountValue,
   isNextDisabled,
   walletOptions,
@@ -33,7 +41,7 @@ const StakingAmount: FC<PropsInterface> = ({
   const {t} = useI18n();
 
   return (
-    <styled.Container data-testid="StakingAmount-test">
+    <styled.Container data-testid="StakeAmount-test">
       <styled.Title>Start Staking</styled.Title>
       <styled.Description>
         By staking Momentum (${tokenSymbol}) in an Odyssey you invest in this creation and endorse
@@ -42,7 +50,7 @@ const StakingAmount: FC<PropsInterface> = ({
 
       {/* My wallet */}
       <styled.Section>
-        <div>My wallet</div>
+        <styled.Name>My wallet</styled.Name>
         <styled.SectionGrid>
           <div>{t('labels.account')}</div>
           <Select
@@ -58,26 +66,31 @@ const StakingAmount: FC<PropsInterface> = ({
 
       {/* Balance */}
       <styled.Section>
-        <div>{t('staking.balance')}</div>
+        <styled.Name>{t('staking.balance')}</styled.Name>
         <styled.SectionGrid>
           <div>{t('staking.balanceTypes.transferable')}</div>
-          <Input value={balanceTransferrable} disabled onChange={() => {}} wide />
+          <styled.BorderedValue>{`${balanceTransferrable} ${tokenSymbol}`}</styled.BorderedValue>
         </styled.SectionGrid>
       </styled.Section>
 
       {/* Start Staking */}
       <styled.Section>
-        <div>Start Staking</div>
+        <styled.Name>Start Staking</styled.Name>
         <styled.SectionGrid>
           <div>Set Amount</div>
-          <Input value={amountValue} onChange={onChangeAmountValue} wide />
+          <Input
+            wide
+            value={amountValue}
+            opts={numberInputSuffixMask(tokenSymbol, 5)}
+            onChange={onChangeAmountValue}
+          />
         </styled.SectionGrid>
 
         <styled.SectionGrid>
-          <div>Odyssey</div>
-          <styled.OdysseyName>
-            <span>Odyssey Name Odyssey Name</span>
-          </styled.OdysseyName>
+          <styled.Name>Odyssey</styled.Name>
+          <styled.BorderedValue>
+            <span>{worldName}</span>
+          </styled.BorderedValue>
         </styled.SectionGrid>
       </styled.Section>
 
@@ -88,4 +101,4 @@ const StakingAmount: FC<PropsInterface> = ({
   );
 };
 
-export default observer(StakingAmount);
+export default observer(StakeAmount);
