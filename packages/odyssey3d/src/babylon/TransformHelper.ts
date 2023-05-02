@@ -52,16 +52,23 @@ export function smoothCameraTransform(
   transformType: TransformTypesEnum,
   totalTime: number,
   scene: Scene,
-  spawnParticles = false
+  spawnParticles = false,
+  lerp = false
 ) {
   const slerpPos = Vector3.Zero();
-
+  let lerpedTarget = Vector3.Zero();
   let elapsedTime = 0;
+
+  if (lerp) {
+    lerpedTarget = Vector3.Lerp(startVec, targetUser.position, 0.98);
+  } else {
+    lerpedTarget = targetUser.position;
+  }
 
   const observable = scene.onBeforeRenderObservable.add(() => {
     elapsedTime += scene.getEngine().getDeltaTime();
 
-    Vector3.SmoothToRef(startVec, targetUser.position, elapsedTime, totalTime, slerpPos);
+    Vector3.SmoothToRef(startVec, lerpedTarget, elapsedTime, totalTime, slerpPos);
 
     switch (transformType) {
       case TransformTypesEnum.Position:
@@ -82,6 +89,44 @@ export function smoothCameraTransform(
         InteractionEffectHelper.startParticlesForPlayer();
       }
 
+      scene.onBeforeRenderObservable.remove(observable);
+    }
+  });
+}
+
+export function smoothCameraUniverse(
+  startVec: Vector3,
+  targetUserPos: Vector3,
+  transformType: TransformTypesEnum,
+  totalTime: number,
+  scene: Scene,
+  lerp = false
+) {
+  const slerpPos = Vector3.Zero();
+  let lerpedTarget = Vector3.Zero();
+  let elapsedTime = 0;
+
+  if (lerp) {
+    lerpedTarget = Vector3.Lerp(startVec, targetUserPos, 0.85);
+  } else {
+    lerpedTarget = targetUserPos;
+  }
+
+  const observable = scene.onBeforeRenderObservable.add(() => {
+    elapsedTime += scene.getEngine().getDeltaTime();
+
+    Vector3.SmoothToRef(startVec, lerpedTarget, elapsedTime, totalTime, slerpPos);
+
+    switch (transformType) {
+      case TransformTypesEnum.Position:
+        PlayerHelper.camera.position = slerpPos;
+        break;
+      case TransformTypesEnum.Rotation:
+        PlayerHelper.camera.target = slerpPos;
+        break;
+    }
+
+    if (elapsedTime > totalTime) {
       scene.onBeforeRenderObservable.remove(observable);
     }
   });

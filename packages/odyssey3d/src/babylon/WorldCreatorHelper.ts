@@ -284,7 +284,6 @@ export class WorldCreatorHelper {
         rotation: vec3ToPos(rotToSend),
         scale: vec3ToPos(scaleToSend)
       };
-
       this.onObjectTransform(objectId, myTransfrom);
     };
 
