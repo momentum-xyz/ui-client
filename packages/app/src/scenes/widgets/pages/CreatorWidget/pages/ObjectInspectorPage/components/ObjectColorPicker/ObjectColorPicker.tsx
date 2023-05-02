@@ -10,8 +10,8 @@ import * as styled from './ObjectColorPicker.styled';
 import 'react-color-palette/lib/css/styles.css';
 
 const COLOR_PICKER_DEFAULT_COLOR = '#FFFFFF';
-const COLOR_PICKER_HEIGHT_PX = 250;
-const COLOR_PICKER_WIDTH_PX = 300; // override with css
+const COLOR_PICKER_HEIGHT_PX = 180;
+const COLOR_PICKER_WIDTH_PX = 550;
 const DEBOUNCE_DELAY_MS = 300;
 
 const ObjectColorPage: FC = () => {

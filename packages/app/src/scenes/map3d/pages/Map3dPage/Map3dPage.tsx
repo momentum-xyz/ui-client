@@ -4,6 +4,7 @@ import {Universe3dEmitter} from '@momentum-xyz/core';
 import {UniverseScene} from '@momentum-xyz/odyssey3d';
 import {PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 
+import {appVariables} from 'api/constants';
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -32,7 +33,7 @@ const Map3dPage: FC = () => {
           id: `${world.id}_temp`,
           name: world.name,
           description: world.description || '',
-          image: getImageAbsoluteUrl(world.avatarHash) || '',
+          image: world.avatarHash || '',
           owner: ''
         }))
       );
@@ -54,6 +55,7 @@ const Map3dPage: FC = () => {
   return (
     <UniverseScene
       events={Universe3dEmitter}
+      renderURL={appVariables.RENDER_SERVICE_URL}
       onWorldClick={(id) => {
         console.log('Map3dPage: Select world: ', id);
         const real_id = id.split('_')[0];

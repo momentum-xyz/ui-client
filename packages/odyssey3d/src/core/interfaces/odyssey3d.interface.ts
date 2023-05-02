@@ -11,6 +11,9 @@ export interface Odyssey3dPropsInterface {
   // Input events
   events: Event3dEmitterType;
 
+  // URL to dynamic assets (uploaded textures/glbs)
+  renderURL: string;
+
   // Objects
   onObjectClick: (objectId: string, clickPosition: ClickPositionInterface) => void;
   onObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;

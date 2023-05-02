@@ -1,8 +1,11 @@
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useMemo} from 'react';
 import {Panel, IconNameType, SideMenuItemInterface, SideMenu} from '@momentum-xyz/ui-kit-storybook';
-import {i18n} from '@momentum-xyz/core';
+import {i18n, useI18n} from '@momentum-xyz/core';
+import {Dialog} from '@momentum-xyz/ui-kit';
+import {toast} from 'react-toastify';
 
+import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {CreatorTabsEnum} from 'core/enums';
 
@@ -55,7 +58,16 @@ const CreatorWidget: FC = () => {
   const world3dStore = universeStore.world3dStore!;
   const worldId = universeStore.worldId;
 
-  const {selectedTab, setSelectedTab, spawnAssetStore} = creatorStore;
+  const {
+    selectedTab,
+    setSelectedTab,
+    spawnAssetStore,
+    removeObjectDialog,
+    removeObject,
+    objectName
+  } = creatorStore;
+
+  const {t} = useI18n();
 
   console.log('CreatorWidget render', {selectedTab});
 
@@ -115,6 +127,38 @@ const CreatorWidget: FC = () => {
         >
           {content}
         </Panel>
+      )}
+
+      {removeObjectDialog.isOpen && (
+        <Dialog
+          title={
+            objectName ? t('messages.deleteNamedObject', {name: objectName}) : t('messages.delete')
+          }
+          approveInfo={{
+            title: t('actions.delete'),
+            onClick: () => {
+              removeObject()
+                .then(() => {
+                  toast.info(<ToastContent icon="bin" text={t('messages.objectDeleted')} />);
+                  removeObjectDialog.close();
+                })
+                .catch((error) => {
+                  console.log('Error removing object:', error);
+                  toast.error(
+                    <ToastContent icon="alert" text={t('messages.errorDeletingObject')} />
+                  );
+                });
+            },
+            variant: 'danger'
+          }}
+          declineInfo={{
+            title: t('actions.cancel'),
+            onClick: removeObjectDialog.close,
+            variant: 'primary'
+          }}
+          onClose={removeObjectDialog.close}
+          showCloseButton
+        />
       )}
     </styled.Container>
   );

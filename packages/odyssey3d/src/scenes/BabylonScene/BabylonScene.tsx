@@ -4,12 +4,11 @@ import SceneComponent from 'babylonjs-hook';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
 
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
-import {PlayerHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babylon';
+import {PlayerHelper, LightHelper, ObjectHelper} from '../../babylon';
 import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
-import skyboxWorld from '../../static/PANOSKYGB.jpeg';
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 
-const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
+const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callbacks}) => {
   const onObjectClick = useMutableCallback(callbacks.onObjectClick);
   const onUserClick = useMutableCallback(callbacks.onUserClick);
   const onMove = useMutableCallback(callbacks.onMove);
@@ -46,6 +45,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
       ObjectHelper.initialize(
         scene,
         engine,
+        renderURL,
         //  props.objects,
         view,
         onObjectClick,
@@ -55,12 +55,11 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
       );
 
       await WorldCreatorHelper.initialize(scene, onObjectTransform);
-      //SkyboxHelper.setCubemapSkybox(scene);
-      SkyboxHelper.set360Skybox(
+      /*SkyboxHelper.set360Skybox(
         scene,
         //'https://dev2.odyssey.ninja/api/v3/render/texture/s8/26485e74acb29223ba7a9fa600d36c7f'
         skyboxWorld
-      );
+      );*/
 
       if (window.sessionStorage.getItem('babylon_debug')) {
         Promise.all([
@@ -80,6 +79,10 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
 
       events.on('AddObject', async (object, attachToCamera = false) => {
         await ObjectHelper.spawnObjectAsync(scene, object, attachToCamera);
+      });
+
+      events.on('RemoveObject', (objectId) => {
+        ObjectHelper.removeObject(objectId);
       });
 
       events.on('ObjectTextureChanged', (object) => {
@@ -110,14 +113,10 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         ObjectHelper.detachFromCamera();
       });
 
-      // Received by user1 to spawn particles
-      events.on('SendHighFive', (userId) => {
-        // This gets triggered with a delay, so handling this directly from the animation.
-        //InteractionEffectHelper.startParticlesForPlayer();
-      });
+      events.on('SendHighFive', (userId) => {});
+
       // Received by user2 to spawn particles
       events.on('ReceiveHighFive', (userId) => {
-        // This also gets triggered with a delay, but it is only for the receiving client
         InteractionEffectHelper.startParticlesForPlayer();
       });
 

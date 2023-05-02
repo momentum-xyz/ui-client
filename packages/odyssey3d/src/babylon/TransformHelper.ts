@@ -41,9 +41,6 @@ export function smoothUserNodeTransform(
 
     // consider doing totalTime * 1.1 or something similar to further smoothen movement at the end
     if (elapsedTime > totalTime) {
-      if (PlayerHelper.onSpawnParticles) {
-        PlayerHelper.onSpawnParticles();
-      }
       scene.onBeforeRenderObservable.remove(observable);
     }
   });
@@ -77,8 +74,11 @@ export function smoothCameraTransform(
 
     if (elapsedTime > totalTime) {
       // Chase finished
+      if (PlayerHelper.onSpawnParticles) {
+        PlayerHelper.onSpawnParticles();
+      }
+
       if (spawnParticles) {
-        // This is so there is no-delay particle spawning on the client who started the high5
         InteractionEffectHelper.startParticlesForPlayer();
       }
 

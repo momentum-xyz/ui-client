@@ -1,3 +1,4 @@
+import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
@@ -22,7 +23,7 @@ export const Container = styled.div`
 
     &.rcp-light {
       background-color: transparent;
-      width: 100% !important;
+      padding: 0;
     }
   }
 
@@ -47,26 +48,30 @@ export const Container = styled.div`
 `;
 
 export const ColorContainer = styled.div`
-  padding: 0 15px 15px 15px;
-  display: grid;
+  display: flex;
   grid-template-columns: 40px 1fr 1fr 1fr;
   gap: 8px;
 `;
 
 export const SelectedColor = styled.div<{background: string}>`
-  height: 28px;
+  height: 40px;
+  width: 70px;
+  flex: 0 0 70px;
   border-radius: 4px;
   background-color: ${(props) => props.background};
+  border: 0.4px solid ${(props) => props.theme.accentText};
 `;
 
 export const SelectedHex = styled.div`
   display: flex;
-  height: 28px;
+  flex: 1;
+  height: 40px;
+  padding: 0 20px;
   align-items: center;
-  justify-content: center;
   border-radius: 4px;
-  background-color: var(--blue);
   color: ${(props) => props.theme.text};
   font-size: var(--font-size-s);
   text-transform: uppercase;
+  border: 0.4px solid ${(props) => props.theme.accentText};
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
 `;

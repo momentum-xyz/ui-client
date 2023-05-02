@@ -11,6 +11,7 @@ import {
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
 
+import {appVariables} from 'api/constants';
 import {WORLD_ROUTES} from 'scenes/App.routes';
 import {ROUTES} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';
@@ -207,6 +208,7 @@ const WorldPage: FC = () => {
   return (
     <BabylonScene
       events={Event3dEmitter}
+      renderURL={appVariables.RENDER_SERVICE_URL}
       onMove={handleUserMove}
       onObjectClick={handleObjectClick}
       onObjectTransform={handleObjectTransform}

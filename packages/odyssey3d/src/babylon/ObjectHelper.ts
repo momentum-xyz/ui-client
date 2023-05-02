@@ -7,16 +7,15 @@ import {
   AssetContainer,
   Matrix,
   InstantiatedEntries,
-  Texture,
   PBRMaterial,
   TransformNode,
   Color3,
   Nullable,
-  Vector3
+  Vector3,
+  Texture
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import {Object3dInterface, Texture3dInterface, ClickPositionInterface} from '@momentum-xyz/core';
-//import {GLTFFileLoader} from '@babylonjs/loaders';
 
 import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
@@ -32,21 +31,22 @@ interface BabylonObjectInterface {
 
 export class ObjectHelper {
   static light: HemisphericLight | null = null;
-  static assetRootUrl = 'https://dev2.odyssey.ninja/api/v3/render/asset/';
-  static textureRootUrl = 'https://dev2.odyssey.ninja/api/v3/render/texture/';
+  static assetRootUrl = '/asset/';
+  static textureRootUrl = '/texture/';
   static textureDefaultSize = 's3/';
-  static objectsMap = new Map<string, BabylonObjectInterface>();
-  static firstID: string;
+  static objectsMap = new Map<string, Nullable<BabylonObjectInterface>>();
   static scene: Scene;
   static attachedNode: TransformNode;
   static transformSubscription: {unsubscribe: () => void} | undefined;
   static selectedObjectFromSpawn = '';
   static spawningMaterial: PBRMaterial;
   static mySpawningClone: Nullable<TransformNode>;
+  static awaitingTexturesMap = new Map<string, Texture3dInterface>();
 
   static initialize(
     scene: Scene,
     engine: Engine,
+    assetBaseURL: string,
     view: HTMLCanvasElement,
     onObjectClick: (objectId: string, clickPosition: ClickPositionInterface) => void,
     onUserClick: (userId: string, clickPosition: ClickPositionInterface) => void,
@@ -55,7 +55,9 @@ export class ObjectHelper {
     this.scene = scene;
     scene.useRightHandedSystem = true;
 
-    this.firstID = '';
+    this.assetRootUrl = `${assetBaseURL}/asset/`;
+    this.textureRootUrl = `${assetBaseURL}/texture/`;
+
     // Mouse Click Listener
     scene.onPointerDown = function castRay() {
       const ray = scene.createPickingRay(
@@ -109,6 +111,8 @@ export class ObjectHelper {
   }
 
   static async spawnObjectAsync(scene: Scene, object: Object3dInterface, attachToCam: boolean) {
+    this.objectsMap.set(object.id, null);
+
     const assetUrl = getAssetFileName(object.asset_3d_id);
 
     await SceneLoader.LoadAssetContainerAsync(
@@ -126,35 +130,49 @@ export class ObjectHelper {
   }
 
   static setObjectTexture(scene: Scene, texture: Texture3dInterface): void {
-    console.log('setting texture for object: ', texture);
     if (texture.label === 'skybox_custom') {
       SkyboxHelper.set360Skybox(
         scene,
         this.textureRootUrl + SkyboxHelper.defaultSkyboxTextureSize + '/' + texture.hash
       );
       return;
-    } else if (texture.label === 'object_color') {
-      console.log('TODO setting object color', texture);
-      return;
     }
 
-    const meshes = this.objectsMap.get(this.firstID)?.objectInstance.rootNodes[0].getChildMeshes();
+    // Handle textures arriving before objects are spawned.
+    if (this.objectsMap.has(texture.objectId)) {
+      this.awaitingTexturesMap.set(texture.objectId, texture);
+    }
 
-    if (meshes) {
-      for (const mesh of meshes) {
-        const textureUrl = this.textureRootUrl + this.textureDefaultSize + '/' + texture.hash;
-        const newTexture = new Texture(textureUrl, scene);
-        // TODO: check if material can be casted as PBRMaterial
-        const meshMater = mesh.material as PBRMaterial;
-        meshMater.albedoTexture = newTexture;
+    // Handle object color
+    if (texture.label === 'object_color') {
+      const obj = this.objectsMap.get(texture.objectId);
+      if (obj) {
+        //TODO Parse color hash to actual Color3.
+        const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
+        const basicShapeMat = childMeshes[0].material as PBRMaterial;
+        basicShapeMat.albedoColor = Color3.FromHexString(texture.hash);
+        this.awaitingTexturesMap.delete(texture.objectId);
       }
-    } else {
-      console.log("unable to set object texture, as the id didn't return a value from the map");
+      return;
+    }
+    // TODO: Confirm this is how we are going to handle object texture and improve this a bit
+    else if (texture.label === 'object_texture') {
+      const obj = this.objectsMap.get(texture.objectId);
+      if (obj) {
+        const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
+        const textureUrl = this.textureRootUrl + this.textureDefaultSize + '/' + texture.hash;
+        const newTexture = new Texture(textureUrl);
+
+        const basicShapeMat = childMeshes[0].material as PBRMaterial;
+        basicShapeMat.albedoTexture = newTexture;
+        childMeshes[0].material = basicShapeMat;
+        this.awaitingTexturesMap.delete(texture.objectId);
+      }
+      return;
     }
   }
 
   static instantiateObject(container: AssetContainer, object: Object3dInterface, attach: boolean) {
-    console.log('attach never true: ' + attach);
     const instance = container.instantiateModelsToScene();
 
     if (instance.rootNodes.length === 0) {
@@ -164,12 +182,6 @@ export class ObjectHelper {
       return;
     }
 
-    if (instance.rootNodes.length > 1) {
-      console.log(
-        'instance.rootNodes.length > 1. Using only the first one from ' + object.asset_3d_id
-      );
-    }
-
     const node = instance.rootNodes[0];
     node.name = object.name;
 
@@ -177,8 +189,10 @@ export class ObjectHelper {
     node.rotation = posToVec3(object.transform.rotation);
     node.scaling = posToVec3(object.transform.scale);
     node.metadata = object.id;
-    if (this.firstID === '') {
-      this.firstID = object.id;
+
+    // Play animations
+    for (const group of instance.animationGroups) {
+      group.play(true);
     }
 
     const babylonObject = {
@@ -188,12 +202,11 @@ export class ObjectHelper {
     };
     this.objectsMap.set(object.id, babylonObject);
 
-    // Play animations
-    for (const group of instance.animationGroups) {
-      group.play(true);
+    const awaitingTexture = this.awaitingTexturesMap.get(object.id);
+    if (awaitingTexture) {
+      this.setObjectTexture(this.scene, awaitingTexture);
     }
 
-    //attach is never true so using this instead
     if (attach) {
       this.attachToCamera(object.id, node);
     }
@@ -266,9 +279,9 @@ export class ObjectHelper {
 
   static disposeAllObjects() {
     for (const mapObj of this.objectsMap) {
-      mapObj[1].objectInstance.dispose();
-      mapObj[1].container.removeFromScene();
-      mapObj[1].container.dispose();
+      mapObj[1]?.objectInstance.dispose();
+      mapObj[1]?.container.removeFromScene();
+      mapObj[1]?.container.dispose();
     }
     this.objectsMap.clear();
   }

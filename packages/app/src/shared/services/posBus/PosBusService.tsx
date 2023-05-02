@@ -125,7 +125,8 @@ class PosBusService {
               hash
             });
           });
-        } else if (entries?.string?.object_color) {
+        }
+        if (entries?.string?.object_color) {
           Event3dEmitter.emit('ObjectTextureChanged', {
             objectId: id,
             label: 'object_color',
@@ -152,20 +153,25 @@ class PosBusService {
             'Attach to camera',
             PosBusService.attachNextReceivedObjectToCamera
           );
-          // TODO we should equalise these
           Event3dEmitter.emit(
             'AddObject',
             {
               ...object,
-              asset_3d_id: object.asset_type,
-              transform: {
-                ...object.transform
-              }
+              asset_3d_id: object.asset_type
             },
             PosBusService.attachNextReceivedObjectToCamera
           );
 
           PosBusService.attachNextReceivedObjectToCamera = false;
+        }
+        break;
+      }
+
+      case MsgType.REMOVE_OBJECTS: {
+        console.log('Handle posbus message remove_object', message.data);
+        const {objects} = data;
+        for (const objectId of objects) {
+          Event3dEmitter.emit('RemoveObject', objectId);
         }
         break;
       }

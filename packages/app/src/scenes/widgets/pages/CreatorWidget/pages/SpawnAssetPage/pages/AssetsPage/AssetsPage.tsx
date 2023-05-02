@@ -28,10 +28,7 @@ const AssetsPage: FC<PropsInterface> = ({
 
   useEffect(() => {
     spawnAssetStore.fetchAssets3d(assetCategory);
-
-    return () => {
-      spawnAssetStore.clearAssets();
-    };
+    return () => spawnAssetStore.clearAssets();
   }, [spawnAssetStore, assetCategory]);
 
   return (
