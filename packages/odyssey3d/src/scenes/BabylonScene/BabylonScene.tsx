@@ -81,8 +81,9 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
       events.on('AddObject', async (object, attachToCamera = false) => {
         await ObjectHelper.spawnObjectAsync(scene, object, attachToCamera);
       });
-      events.on('RemoveObject', async (objectId) => {
-        console.log('TODO Babylon handle RemoveObject', objectId);
+
+      events.on('RemoveObject', (objectId) => {
+        ObjectHelper.removeObject(objectId);
       });
 
       events.on('ObjectTextureChanged', (object) => {
