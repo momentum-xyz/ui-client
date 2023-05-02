@@ -70,7 +70,6 @@ export class PlayerHelper {
   static playerId: string;
   static playerInterface: Odyssey3dUserInterface;
   static rightHanded = false;
-  static lastJoinedID = '';
   static onSpawnParticles: (() => void) | undefined;
 
   static initialize(
@@ -289,7 +288,6 @@ export class PlayerHelper {
       };
       this.userMap.set(user.id, babylonUser);
       this.updateUserAvatar(user, instance);
-      this.lastJoinedID = user.id;
     }
   }
 
@@ -328,7 +326,7 @@ export class PlayerHelper {
 
   static followPlayer(idToFollow: string) {
     // TODO: Replace lastJoinedID with idToFollow when FE is there
-    const userToFollow = this.userMap.get(this.lastJoinedID);
+    const userToFollow = this.userMap.get(idToFollow);
     if (userToFollow) {
       const userNodeToFollow = userToFollow.userInstance.rootNodes[0];
 

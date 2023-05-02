@@ -62,7 +62,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         skyboxWorld
       );
 
-      if (window.sessionStorage.getItem('babylon_debug')) {
+      if (!window.sessionStorage.getItem('babylon_debug')) {
         Promise.all([
           import('@babylonjs/core/Debug/debugLayer'),
           import('@babylonjs/inspector')
@@ -92,10 +92,12 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
       });
 
       events.on('UserAdded', async (user) => {
+        console.log('qqqqqq event UserAdded');
         await PlayerHelper.userEnteredAsync(user);
       });
 
       events.on('UserRemoved', (userId) => {
+        console.log('qq event UserRemoved');
         PlayerHelper.userRemove(userId);
       });
 
@@ -110,8 +112,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         ObjectHelper.detachFromCamera();
       });
 
-      events.on('SendHighFive', (userId) => {
-      });
+      events.on('SendHighFive', (userId) => {});
 
       // Received by user2 to spawn particles
       events.on('ReceiveHighFive', (userId) => {
