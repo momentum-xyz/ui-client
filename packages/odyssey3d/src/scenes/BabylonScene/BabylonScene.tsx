@@ -9,7 +9,7 @@ import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
 import skyboxWorld from '../../static/PANOSKYGB.jpeg';
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 
-const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
+const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callbacks}) => {
   const onObjectClick = useMutableCallback(callbacks.onObjectClick);
   const onUserClick = useMutableCallback(callbacks.onUserClick);
   const onMove = useMutableCallback(callbacks.onMove);
@@ -46,6 +46,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
       ObjectHelper.initialize(
         scene,
         engine,
+        renderURL,
         //  props.objects,
         view,
         onObjectClick,

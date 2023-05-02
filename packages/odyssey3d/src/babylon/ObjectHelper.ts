@@ -31,8 +31,8 @@ interface BabylonObjectInterface {
 
 export class ObjectHelper {
   static light: HemisphericLight | null = null;
-  static assetRootUrl = 'https://dev2.odyssey.ninja/api/v3/render/asset/';
-  static textureRootUrl = 'https://dev2.odyssey.ninja/api/v3/render/texture/';
+  static assetRootUrl = '/asset/';
+  static textureRootUrl = '/texture/';
   static textureDefaultSize = 's3/';
   static objectsMap = new Map<string, Nullable<BabylonObjectInterface>>();
   static scene: Scene;
@@ -46,6 +46,7 @@ export class ObjectHelper {
   static initialize(
     scene: Scene,
     engine: Engine,
+    assetBaseURL: string,
     view: HTMLCanvasElement,
     onObjectClick: (objectId: string, clickPosition: ClickPositionInterface) => void,
     onUserClick: (userId: string, clickPosition: ClickPositionInterface) => void,
@@ -53,6 +54,9 @@ export class ObjectHelper {
   ): void {
     this.scene = scene;
     scene.useRightHandedSystem = true;
+
+    this.assetRootUrl = `${assetBaseURL}/asset/`;
+    this.textureRootUrl = `${assetBaseURL}/texture/`;
 
     // Mouse Click Listener
     scene.onPointerDown = function castRay() {
