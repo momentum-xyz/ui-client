@@ -472,8 +472,7 @@ export class UniverseBuilderHelper {
           this.setOrbRotation(rootClone, rootChildren[0]);
 
           const downloadedTexture = new Texture(
-            (this.baseURL + '/texture/s3/' +
-             worlds[this.odysseyCounter].image) as Nullable<string>
+            (this.baseURL + '/texture/s3/' + worlds[this.odysseyCounter].image) as Nullable<string>
           );
           const thumbMatClone = this.thumbMat.clone('thumbMatCloneWorld' + i);
           thumbMatClone.albedoTexture = downloadedTexture;

@@ -33,7 +33,7 @@ const Map3dPage: FC = () => {
           id: `${world.id}_temp`,
           name: world.name,
           description: world.description || '',
-          image: getImageAbsoluteUrl(world.avatarHash) || '',
+          image: world.avatarHash || '',
           owner: ''
         }))
       );
