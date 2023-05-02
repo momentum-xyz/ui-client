@@ -108,7 +108,7 @@ const StakeList: FC<PropsInterface> = ({
                 <StakeCard
                   key={index}
                   worldName={stake.name}
-                  worldImageUrl={getImageAbsoluteUrl(stake.avatarHash)}
+                  worldImageUrl={getImageAbsoluteUrl(stake.avatarHash, ImageSizeEnum.S5)}
                   staked={formatBigInt(stake.stake_total)}
                   tokenSymbol="MOM"
                   onInfoClick={() => onSelectWorld(stake.id)}
