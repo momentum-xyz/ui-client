@@ -152,15 +152,11 @@ class PosBusService {
             'Attach to camera',
             PosBusService.attachNextReceivedObjectToCamera
           );
-          // TODO we should equalise these
           Event3dEmitter.emit(
             'AddObject',
             {
               ...object,
-              asset_3d_id: object.asset_type,
-              transform: {
-                ...object.transform
-              }
+              asset_3d_id: object.asset_type
             },
             PosBusService.attachNextReceivedObjectToCamera
           );
