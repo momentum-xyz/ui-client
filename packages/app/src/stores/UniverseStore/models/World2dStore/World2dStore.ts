@@ -46,6 +46,9 @@ const World2dStore = types.compose(
       get isCurrentUserWorldAdmin(): boolean {
         return this.isMyWorld;
       },
+      get image(): string | null {
+        return self.worldDetails?.world?.avatarHash || null;
+      },
       get imageSrc(): string | null {
         return self.worldDetails?.world?.imageSrc || null;
       }

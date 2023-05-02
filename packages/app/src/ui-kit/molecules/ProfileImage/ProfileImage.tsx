@@ -8,7 +8,7 @@ import {getImageAbsoluteUrl} from 'core/utils';
 import * as styled from './ProfileImage.styled';
 
 interface PropsInterface {
-  name: string;
+  name?: string;
   image?: string | null;
   imageHeight?: number;
   imageErrorIcon: IconNameType;
@@ -30,15 +30,17 @@ const ProfileImage: FC<PropsInterface> = (props) => {
             errorIcon={imageErrorIcon}
             height={imageHeight}
           />
-          <div>
-            <styled.Name>{name}</styled.Name>
-            {byName && (
-              <div>
-                <span>{`${t('labels.by')}: `}</span>
-                <styled.Link onClick={onByClick}>{byName}</styled.Link>
-              </div>
-            )}
-          </div>
+          {name && (
+            <div>
+              <styled.Name>{name}</styled.Name>
+              {byName && (
+                <div>
+                  <span>{`${t('labels.by')}: `}</span>
+                  <styled.Link onClick={onByClick}>{byName}</styled.Link>
+                </div>
+              )}
+            </div>
+          )}
         </styled.Wrapper>
       </Frame>
     </styled.Container>

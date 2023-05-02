@@ -5,7 +5,6 @@ import {Text} from '@momentum-xyz/ui-kit';
 export const Container = styled.div``;
 
 export const TabContent = styled.div`
-  height: 300px;
   display: flex;
   flex-direction: column;
 `;

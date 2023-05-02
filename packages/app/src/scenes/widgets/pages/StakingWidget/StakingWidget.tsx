@@ -5,7 +5,7 @@ import BN from 'bn.js';
 import {useI18n} from '@momentum-xyz/core';
 import {Panel, StepInterface, Steps} from '@momentum-xyz/ui-kit-storybook';
 
-import {ToastContent} from 'ui-kit';
+import {ProfileImage, ToastContent} from 'ui-kit';
 import {WidgetEnum} from 'core/enums';
 import {useBlockchain, useStore} from 'shared/hooks';
 import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
@@ -19,6 +19,7 @@ const DEFAULT_STAKING_AMOUNT = 1;
 const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {widgetManagerStore, nftStore, universeStore} = useStore();
   const {selectedWalletId, canBeStaked, addresses, chainDecimals} = nftStore;
+  const {world2dStore} = universeStore;
 
   const [activeStep, setActiveStep] = useState<StepsType>('wallet');
 
@@ -84,45 +85,52 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   );
 
   return (
-    <Panel
-      isFullHeight
-      size="normal"
-      icon="stake"
-      variant="primary"
-      title={t('staking.label')}
-      onClose={handleOnClose}
-    >
-      <styled.Steps>
-        <Steps stepList={stepList} />
-      </styled.Steps>
+    <styled.Container data-testid="StakingWidget-test">
+      <Panel
+        isFullHeight
+        size="normal"
+        icon="stake"
+        variant="primary"
+        title={t('staking.label')}
+        onClose={handleOnClose}
+      >
+        <styled.Steps>
+          <Steps stepList={stepList} />
+        </styled.Steps>
 
-      <styled.FullSizeWrapper>
-        {activeStep === 'wallet' && (
-          <StakeAmount
-            amountValue={amountString}
-            walletOptions={nftStore.walletOptions}
-            walletSelectContent={walletSelectContent}
-            selectedWalletId={nftStore.selectedWalletId}
-            balanceTransferrable={nftStore.balanceTransferrable}
-            tokenSymbol={nftStore.tokenSymbol}
-            isNextDisabled={!amountString || isBalanceTooLow || !isBlockchainReady}
-            onSelectWalletId={nftStore.setSelectedWalletId}
-            onChangeAmountValue={onStakeAmountInput}
-            onNextClick={() => setActiveStep('authorize')}
-          />
-        )}
+        <styled.WordContainer>
+          <ProfileImage image={world2dStore?.image} imageErrorIcon="rabbit_fill" />
+          <styled.WorldName>{world2dStore?.worldDetails?.world?.name}</styled.WorldName>
+        </styled.WordContainer>
 
-        {activeStep === 'authorize' && (
-          <StakeAuthorize
-            amountValue={amountString}
-            tokenSymbol={nftStore.tokenSymbol}
-            onChangeAmountValue={onStakeAmountInput}
-            onStakeClick={onStake}
-            onBackClick={() => setActiveStep('wallet')}
-          />
-        )}
-      </styled.FullSizeWrapper>
-    </Panel>
+        <styled.ScrollableContainer>
+          {activeStep === 'wallet' && (
+            <StakeAmount
+              amountValue={amountString}
+              walletOptions={nftStore.walletOptions}
+              walletSelectContent={walletSelectContent}
+              selectedWalletId={nftStore.selectedWalletId}
+              balanceTransferrable={nftStore.balanceTransferrable}
+              tokenSymbol={nftStore.tokenSymbol}
+              isNextDisabled={!amountString || isBalanceTooLow || !isBlockchainReady}
+              onSelectWalletId={nftStore.setSelectedWalletId}
+              onChangeAmountValue={onStakeAmountInput}
+              onNextClick={() => setActiveStep('authorize')}
+            />
+          )}
+
+          {activeStep === 'authorize' && (
+            <StakeAuthorize
+              amountValue={amountString}
+              tokenSymbol={nftStore.tokenSymbol}
+              onChangeAmountValue={onStakeAmountInput}
+              onStakeClick={onStake}
+              onBackClick={() => setActiveStep('wallet')}
+            />
+          )}
+        </styled.ScrollableContainer>
+      </Panel>
+    </styled.Container>
   );
 };
 
