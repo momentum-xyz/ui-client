@@ -2,6 +2,7 @@ import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {Text} from '@momentum-xyz/ui-kit';
 import Web3 from 'web3';
 import BN from 'bn.js';
+import {checkIfCanRequestAirdrop, getDateOfNextAllowedAirdrop} from '@momentum-xyz/core';
 
 import {appVariables} from 'api/constants';
 import {WalletSelector} from 'scenes/widgets/pages/LoginWidget/components';
@@ -152,10 +153,15 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
       />
     );
 
+  const canRequestAirdrop = account ? checkIfCanRequestAirdrop(account) : null;
+  const dateOfNextAllowedAirdrop = account ? getDateOfNextAllowedAirdrop(account) : null;
+
   return {
     isBlockchainReady: isWalletActive && isCorrectAccount && !isWrongNetwork,
     account,
     walletSelectContent,
+    canRequestAirdrop,
+    dateOfNextAllowedAirdrop,
     stake,
     unstake,
     claimRewards,
