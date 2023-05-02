@@ -110,14 +110,10 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, ...callbacks}) => {
         ObjectHelper.detachFromCamera();
       });
 
-      // Received by user1 to spawn particles
-      events.on('SendHighFive', (userId) => {
-        // This gets triggered with a delay, so handling this directly from the animation.
-        //InteractionEffectHelper.startParticlesForPlayer();
-      });
+      events.on('SendHighFive', (userId) => {});
+
       // Received by user2 to spawn particles
       events.on('ReceiveHighFive', (userId) => {
-        // This also gets triggered with a delay, but it is only for the receiving client
         InteractionEffectHelper.startParticlesForPlayer();
       });
 
