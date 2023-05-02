@@ -116,6 +116,7 @@ const UniverseEmulator = () => {
   return (
     <UniverseScene
       events={Universe3dEmitter}
+      renderURL="https://dev2.odyssey.ninja/api/v3/render"
       onWorldClick={(e) => console.log('onWorldClick', e)}
       onUserClick={(e) => console.log('onUserClick', e)}
       onClickOutside={() => console.log('onClickOutside')}

@@ -19,7 +19,6 @@ import hdrTexture from '../static/test.hdr';
 import circle from '../static/circle_02.png';
 import twirl from '../static/twirl_01.png';
 
-import {ObjectHelper} from './ObjectHelper';
 import {getAssetFileName} from './UtilityHelper';
 import {PlayerHelper} from './PlayerHelper';
 
@@ -257,13 +256,17 @@ export class UniverseBuilderHelper {
   static worldsMap = new Map<string, BabylonWorldInterface>();
   static totalAmount = 0;
 
+  static baseURL = '';
+
   static async initialize(
     scene: Scene,
+    assetBaseURL: string,
     onWorldClick: (objectId: string) => void,
     onUserClick: (userId: string) => void,
     onClickOutside: () => void
   ) {
     this.scene = scene;
+    this.baseURL = assetBaseURL;
     await this.loadModel();
 
     scene.onPointerDown = function castRay() {
@@ -300,7 +303,7 @@ export class UniverseBuilderHelper {
     const assetUrl = getAssetFileName('2dc7df8e-a34a-829c-e3ca-b73bfe99faf0');
     await SceneLoader.ImportMeshAsync(
       '',
-      ObjectHelper.assetRootUrl,
+      `${this.baseURL}/asset/`,
       assetUrl,
       this.scene,
       (event) => {},
@@ -469,9 +472,8 @@ export class UniverseBuilderHelper {
           this.setOrbRotation(rootClone, rootChildren[0]);
 
           const downloadedTexture = new Texture(
-            (ObjectHelper.textureRootUrl +
-              's3/' +
-              worlds[this.odysseyCounter].image) as Nullable<string>
+            (this.baseURL + '/texture/s3/' +
+             worlds[this.odysseyCounter].image) as Nullable<string>
           );
           const thumbMatClone = this.thumbMat.clone('thumbMatCloneWorld' + i);
           thumbMatClone.albedoTexture = downloadedTexture;

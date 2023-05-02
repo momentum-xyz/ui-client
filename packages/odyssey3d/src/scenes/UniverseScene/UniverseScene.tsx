@@ -10,12 +10,13 @@ import skyboxWorld from '../../static/mushjungledark.jpeg';
 
 export interface PropsInterface {
   events: Universe3dEmitterType;
+  renderURL: string;
   onWorldClick: (id: string) => void;
   onUserClick: (id: string) => void;
   onClickOutside: () => void;
 }
 
-export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
+export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbacks}) => {
   const onWorldClick = useMutableCallback(callbacks.onWorldClick);
   const onUserClick = useMutableCallback(callbacks.onUserClick);
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);
@@ -42,7 +43,13 @@ export const UniverseScene: FC<PropsInterface> = ({events, ...callbacks}) => {
     if (view?.id) {
       PlayerHelper.initialize(scene, view, false);
       LightHelper.initialize(scene);
-      await UniverseBuilderHelper.initialize(scene, onWorldClick, onUserClick, onClickOutside);
+      await UniverseBuilderHelper.initialize(
+        scene,
+        renderURL,
+        onWorldClick,
+        onUserClick,
+        onClickOutside
+      );
     }
 
     events.on('WorldsAdded', (worlds) => {
