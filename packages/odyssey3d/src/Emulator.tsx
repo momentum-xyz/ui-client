@@ -76,6 +76,7 @@ const WorldEmulator: FC = () => {
   return (
     <BabylonScene
       events={Event3dEmitter}
+      renderURL="https://dev2.odyssey.ninja/api/v3/render"
       onMove={(e) => console.log('onMove', e)}
       onObjectClick={(e) => console.log('onObjectClick', e)}
       onObjectTransform={(objectId, transform) =>
