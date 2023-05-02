@@ -98,6 +98,10 @@ export const Container = styled.div`
 
   .Select__value-container {
     padding: 2px 8px 2px 8px;
+
+    svg {
+      color: ${(props) => props.theme.text};
+    }
   }
 
   .Select__single-value {
@@ -179,8 +183,16 @@ export const Container = styled.div`
     overflow: hidden;
     white-space: nowrap;
 
+    svg {
+      color: ${(props) => props.theme.text};
+    }
+
     &:hover {
       color: ${(props) => props.theme.accentText};
+
+      svg {
+        color: ${(props) => props.theme.accentText};
+      }
     }
 
     &:active {

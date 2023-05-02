@@ -1,1 +1,2 @@
-export * from './StakingForm';
+export * from './StakeAmount';
+export * from './StakeAuthorize';

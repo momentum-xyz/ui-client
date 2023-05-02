@@ -266,6 +266,18 @@ class PosBusService {
     ]);
   }
 
+  static userStakedInOdyssey(tx_hash: string, object_id: string, amount: string, comment: string) {
+    this.main.port?.postMessage([
+      MsgType.USER_STAKED_TO_ODYSSEY,
+      {
+        transaction_hash: tx_hash,
+        object_id,
+        amount,
+        comment
+      }
+    ]);
+  }
+
   public get subscribedAttributeTypeTopics(): Set<string> {
     return this._subscribedAttributeTypeTopics;
   }

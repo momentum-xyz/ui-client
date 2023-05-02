@@ -694,6 +694,7 @@ export const enGb = {
       edit: 'Edit',
       editProfile: 'Edit profile',
       claimRewards: 'Claim Rewards',
+      nextStep: 'Next Step',
       requestAirdropTokens: 'Request Airdrop tokens',
       startAirdrop: 'Send tokens',
       selectWallet: 'Select wallet',

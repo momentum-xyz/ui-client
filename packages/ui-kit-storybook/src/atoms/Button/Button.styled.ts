@@ -30,7 +30,7 @@ export const Button = styled.button`
   --secondary-border-color-disabled: transparent;
   --secondary-bg-color: transparent;
   --secondary-bg-color-hover: transparent;
-  --secondary-bg-color-active: ${(props) => props.theme.accentText};
+  --secondary-bg-color-active: transparent;
   --secondary-bg-color-disabled: ${(props) =>
     props.theme.accentText && rgba(props.theme.accentText, 0.2)};
   --secondary-color: ${(props) => props.theme.text};
