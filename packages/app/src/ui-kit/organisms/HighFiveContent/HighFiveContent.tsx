@@ -23,7 +23,7 @@ const HighFiveContent: FC<PropsInterface> = ({message, sendBack, showCloseButton
 
   return (
     <ToastContent
-      icon="stake"
+      icon="high-five"
       text={`${t('messages.highFiveReceivedText')}. ${t('messages.highFiveReceivedTitle', {
         name: message
       })}`}
