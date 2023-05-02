@@ -45,21 +45,8 @@ const WelcomePage: FC = () => {
         <styled.CardHexContainer>
           <Hexagon type="primary-borderless" iconName="astronaut" />
         </styled.CardHexContainer>
-        <styled.CardTitle>
-          {t('labels.welcomePageJoinTitle')}
-          {/* Join Odyssey
-          <br />
-          as a<br />
-          member */}
-        </styled.CardTitle>
-        <styled.CardDescription>
-          {t('labels.welcomePageJoinDescription')}
-          {/* Connect your wallet
-          <br />
-          and join the
-          <br />
-          community */}
-        </styled.CardDescription>
+        <styled.CardTitle>{t('labels.welcomePageJoinTitle')}</styled.CardTitle>
+        <styled.CardDescription>{t('labels.welcomePageJoinDescription')}</styled.CardDescription>
         <Button
           label={t('actions.signUpNow')}
           icon="astronaut"
@@ -71,20 +58,9 @@ const WelcomePage: FC = () => {
         <styled.CardHexContainer className="light">
           <Hexagon type="primary-borderless" iconName="rocket" />
         </styled.CardHexContainer>
-        <styled.CardTitle className="light">
-          {t('labels.welcomePageGuestTitle')}
-          {/* Enter
-          <br />
-          Odyssey as a<br />
-          guest */}
-        </styled.CardTitle>
+        <styled.CardTitle className="light">{t('labels.welcomePageGuestTitle')}</styled.CardTitle>
         <styled.CardDescription className="light">
           {t('labels.welcomePageGuestDescription')}
-          {/* Fly around freely and
-          <br />
-          enjoy all the
-          <br />
-          creations */}
         </styled.CardDescription>
         <styled.CardButtonContainer className="light">
           <Button
