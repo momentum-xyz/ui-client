@@ -47,8 +47,8 @@ export class SkyboxHelper {
       if (this.currentSkybox !== null) {
         this.currentSkybox.mesh.dispose();
       }
-  
+
       this.currentSkybox = dome;
-    }
+    };
   }
 }
