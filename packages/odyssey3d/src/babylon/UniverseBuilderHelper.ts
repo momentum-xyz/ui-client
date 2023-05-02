@@ -286,31 +286,11 @@ export class UniverseBuilderHelper {
 
           // Currently worldIds === userIds, so every click on mesh will be userClick.
           if (UniverseBuilderHelper.accountsMap.has(pickedId)) {
+            UniverseBuilderHelper.goToOrb(pickedId, true);
             onUserClick(pickedId);
-            const target = UniverseBuilderHelper.accountsMap.get(pickedId);
-            if (target) {
-              // Rotation
-              smoothCameraUniverse(
-                PlayerHelper.camera.target,
-                target.rootClone.absolutePosition,
-                TransformTypesEnum.Rotation,
-                1000,
-                UniverseBuilderHelper.scene,
-                false
-              );
-
-              // Position
-              smoothCameraUniverse(
-                PlayerHelper.camera.position,
-                target.rootClone.absolutePosition,
-                TransformTypesEnum.Position,
-                2000,
-                UniverseBuilderHelper.scene,
-                true
-              );
-            }
             console.log('user');
           } else if (UniverseBuilderHelper.worldsMap.has(pickedId)) {
+            UniverseBuilderHelper.goToOrb(pickedId, false);
             onWorldClick(pickedId);
             console.log('world');
           }
@@ -319,6 +299,38 @@ export class UniverseBuilderHelper {
         }
       }
     };
+  }
+
+  static goToOrb(id: string, isAccount = true) {
+    let target = undefined;
+
+    if (isAccount) {
+      target = UniverseBuilderHelper.accountsMap.get(id);
+    } else {
+      target = UniverseBuilderHelper.worldsMap.get(id);
+    }
+
+    if (target) {
+      // Rotation
+      smoothCameraUniverse(
+        PlayerHelper.camera.target,
+        target.rootClone.absolutePosition,
+        TransformTypesEnum.Rotation,
+        1000,
+        UniverseBuilderHelper.scene,
+        false
+      );
+
+      // Position
+      smoothCameraUniverse(
+        PlayerHelper.camera.position,
+        target.rootClone.absolutePosition,
+        TransformTypesEnum.Position,
+        2000,
+        UniverseBuilderHelper.scene,
+        true
+      );
+    }
   }
 
   static async loadModel() {
