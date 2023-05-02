@@ -5,6 +5,7 @@ import * as styled from './WidgetManager.styled';
 
 interface PropsInterface {
   isWorld?: boolean;
+  isWelcomePage?: boolean;
 }
 
 const WidgetManager: FC<PropsInterface> = (props) => {

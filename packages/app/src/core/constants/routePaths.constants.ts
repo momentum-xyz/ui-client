@@ -24,7 +24,7 @@ export const ROUTES = {
       base: '/odyssey/:worldId/object/:objectId/:assetType'
     }
   },
-  welcome: '/welcome',
+  welcome: '/explore/welcome',
   system: {
     disconnected: '/system/disconnected',
     maintenance: '/system/maintenance',
