@@ -78,7 +78,8 @@ export function smoothCameraTransform(
     if (elapsedTime > totalTime) {
       // Chase finished
       if (spawnParticles) {
-        InteractionEffectHelper.startParticlesAtLocation(targetUser.position);
+        // This is so there is no-delay particle spawning on the client who started the high5
+        InteractionEffectHelper.startParticlesForPlayer();
       }
 
       scene.onBeforeRenderObservable.remove(observable);

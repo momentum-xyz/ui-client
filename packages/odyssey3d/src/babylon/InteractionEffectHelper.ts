@@ -10,7 +10,7 @@ import collisionCirclejson from '../static/Particles/collisionCircle.json';
 import collisionStayOrbJson from '../static/Particles/StayBehindOrb.json';
 import collisionSmokeJson from '../static/Particles/collisionSmoke.json';
 
-import {PLAYER_OFFSET_RH, PlayerHelper} from './PlayerHelper';
+import {PlayerHelper} from './PlayerHelper';
 
 export class InteractionEffectHelper {
   static scene: Scene;
@@ -20,7 +20,8 @@ export class InteractionEffectHelper {
   }
 
   static startParticlesForPlayer() {
-    this.startParticlesAtLocation(PlayerHelper.camera.position.add(PLAYER_OFFSET_RH));
+    const hi5Target = PlayerHelper.camera.getFrontPosition(5);
+    this.startParticlesAtLocation(hi5Target);
   }
 
   static startParticlesAtLocation(location: Vector3) {
