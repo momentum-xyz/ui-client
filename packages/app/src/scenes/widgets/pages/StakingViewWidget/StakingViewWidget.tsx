@@ -47,10 +47,6 @@ const StakingViewWidget: FC = () => {
     widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id: worldId});
   };
 
-  const onUnstake = (uuid: string) => {
-    console.log(uuid);
-  };
-
   const onStake = (worldId: string) => {
     navigate(generatePath(ROUTES.odyssey.base, {worldId}));
   };
@@ -81,8 +77,8 @@ const StakingViewWidget: FC = () => {
                 filterOptions={nftStore.walletOptions}
                 sortField={stakingViewStore.sortField}
                 sortOptions={sortOptions}
+                onReloadStakes={nftStore.loadMyStakes}
                 onSelectWorld={onSelectWorld}
-                onUnstake={onUnstake}
                 onStake={onStake}
               />
             )}
