@@ -404,6 +404,10 @@ export const enGb = {
       loadingPlugin: 'Loading Plugin...',
       loadingToken: 'Loading {{tokenSymbol}}...',
       loadingDynamicScript: 'Loading dynamic script: {{url}}',
+      unStakedSuccess:
+        'Your transaction has been processed. You have successfully unstaked from {{name}}!',
+      unStakedError:
+        'Your transaction has not been processed. You unable to successfully unstake from {{name}}!',
       signUp:
         'You need a wallet to create your own Odyssey. If you already have one, you will see a pop-up asking for the address you would like to use or create. If you do not have a wallet, please install a browser plugins and refresh the page',
       orSignIn: 'Or if you already have an account please sign in',
@@ -448,6 +452,8 @@ export const enGb = {
       removeEventSuccess: 'Removed event successfully.',
       avatarSuccess: 'Avatar saved successfully',
       avatarFailure: 'There was a problem saving the avatar',
+      askToUnstake:
+        'You are about to unstake all your MOM from this odyssey, it is currently not possible to unstake portions of your staked MOM. Are you sure you want to do this?',
       spaceEditSuccess: 'Successfully edited space',
       spaceSaveFailure: 'There was an error saving the space',
       spaceDeleteFailure: 'There was an error deleting the space',
@@ -685,6 +691,8 @@ export const enGb = {
       guest: 'Guest'
     },
     actions: {
+      yes: 'Yes',
+      no: 'No',
       ok: 'OK',
       add: 'Add',
       signIn: 'Sign In',

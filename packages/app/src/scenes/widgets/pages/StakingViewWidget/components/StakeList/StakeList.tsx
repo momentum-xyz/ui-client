@@ -1,14 +1,15 @@
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {
-  Input,
+  doThreeDotsInside,
   Frame,
-  stringInputMask,
+  ImageSizeEnum,
+  Input,
   Select,
-  StakeCard,
   SelectOptionInterface,
-  doThreeDotsInside
+  StakeCard,
+  stringInputMask
 } from '@momentum-xyz/ui-kit-storybook';
 
 import {StakeSortType} from 'core/types';
@@ -22,6 +23,7 @@ import {
 } from 'core/models';
 
 import * as styled from './StakeList.styled';
+import {UnstakeWorld} from './components';
 
 interface PropsInterface {
   searchQuery: SearchQueryModelModelType;
@@ -32,8 +34,8 @@ interface PropsInterface {
   filterOptions: SelectOptionInterface<string>[];
   sortField: SortFieldModelType;
   sortOptions: SelectOptionInterface<StakeSortType>[];
+  onReloadStakes: () => void;
   onSelectWorld: (worldId: string) => void;
-  onUnstake: (uuid: string) => void;
   onStake: (worldId: string) => void;
 }
 
@@ -46,10 +48,12 @@ const StakeList: FC<PropsInterface> = ({
   filterOptions,
   sortField,
   sortOptions,
+  onReloadStakes,
   onSelectWorld,
-  onUnstake,
   onStake
 }) => {
+  const [stakeForUnstake, setStakeForUnstake] = useState<StakeModelInterface>();
+
   const {t} = useI18n();
 
   return (
@@ -104,11 +108,11 @@ const StakeList: FC<PropsInterface> = ({
                 <StakeCard
                   key={index}
                   worldName={stake.name}
-                  worldImageUrl={getImageAbsoluteUrl(stake.avatarHash)}
+                  worldImageUrl={getImageAbsoluteUrl(stake.avatarHash, ImageSizeEnum.S5)}
                   staked={formatBigInt(stake.stake_total)}
                   tokenSymbol="MOM"
-                  onInfoClick={() => onSelectWorld(stake.owner_id)}
-                  onStakeClick={() => onStake(stake.owner_id)}
+                  onInfoClick={() => onSelectWorld(stake.id)}
+                  onStakeClick={() => onStake(stake.id)}
                 />
               ))}
             </>
@@ -119,15 +123,30 @@ const StakeList: FC<PropsInterface> = ({
                 <StakeCard
                   key={index}
                   worldName={stake.name}
-                  worldImageUrl={null} // ???
+                  worldImageUrl={getImageAbsoluteUrl(stake.avatarHash, ImageSizeEnum.S5)}
                   staked={formatBigInt(stake.amount)}
                   reward={formatBigInt(stake.reward)}
                   tokenSymbol="MOM"
                   onInfoClick={() => onSelectWorld(stake.object_id)}
                   onStakeClick={() => onStake(stake.object_id)}
-                  onUnstakeClick={() => onUnstake(stake.object_id)}
+                  onUnstakeClick={() => {
+                    setStakeForUnstake(stake);
+                  }}
                 />
               ))}
+
+              {stakeForUnstake && (
+                <UnstakeWorld
+                  targetStake={stakeForUnstake}
+                  onUnStaked={() => {
+                    setStakeForUnstake(undefined);
+                    onReloadStakes();
+                  }}
+                  onCanceled={() => {
+                    setStakeForUnstake(undefined);
+                  }}
+                />
+              )}
             </>
           )}
         </styled.SearchContainer>

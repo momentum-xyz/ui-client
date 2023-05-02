@@ -100,6 +100,7 @@ const Universe2dStore = types.compose(
       },
       get mostStakedWorlds(): WorldInfoModelInterface[] {
         return [...self.allWorlds]
+          .filter((item) => item.stake_total !== '0')
           .sort((a, b) => {
             const aBN = new BN(a.stake_total || '0');
             const bBN = new BN(b.stake_total || '0');
