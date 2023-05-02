@@ -83,12 +83,12 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
             />
           </styled.RewardsContainer>
 
-          <styled.Title>{t('actions.requestAirdropTokens')}</styled.Title>
+          <styled.Title>Use Faucet</styled.Title>
           <styled.AirdropContainer>
-            <span>Lorem ipsum dolor sit amet, ligula consectetuer adipiscing elit.</span>
+            <span>Get 10k MOM test tokens from the faucet. It can be requested once per day.</span>
             <Button
               icon="air"
-              label={t('actions.startAirdrop')}
+              label="Use Faucet"
               disabled={!isBlockchainReady}
               onClick={handleAirdrop}
             />
@@ -99,10 +99,7 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
           <styled.TokenBlock>
             <styled.TitleBlock>{t('labels.accountBalance')}</styled.TitleBlock>
             <styled.TokenBlockData>
-              <span>
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
-                dolor. Aenean commodo ligula eget dolor...
-              </span>
+              <span>Total amount of MOM token in your wallet.</span>
               <styled.Amount>
                 <SymbolAmount
                   tokenSymbol="MOM"
@@ -115,10 +112,7 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
           <styled.TokenBlock>
             <styled.TitleBlock>{t('labels.transferable')}</styled.TitleBlock>
             <styled.TokenBlockData>
-              <span>
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
-                dolor. Aenean commodo ligula eget dolor...
-              </span>
+              <span>Total amount of MOM tokens that can be transferred or used in staking.</span>
               <styled.Amount>
                 <SymbolAmount
                   tokenSymbol="MOM"
@@ -131,10 +125,7 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
           <styled.TokenBlock>
             <styled.TitleBlock>{t('labels.staked')}</styled.TitleBlock>
             <styled.TokenBlockData>
-              <span>
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
-                dolor. Aenean commodo ligula eget dolor...
-              </span>
+              <span>Total amount of MOM tokens that are being staked by you.</span>
               <styled.Amount>
                 <SymbolAmount
                   tokenSymbol="MOM"
@@ -148,8 +139,8 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
             <styled.TitleBlock>{t('labels.unbonding')}</styled.TitleBlock>
             <styled.TokenBlockData>
               <span>
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
-                dolor. Aenean commodo ligula eget dolor...
+                Total amount of MOM tokens that will be available to be redeemed from previous
+                unstakings
               </span>
               <styled.Amount>
                 <SymbolAmount

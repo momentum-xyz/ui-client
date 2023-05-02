@@ -35,6 +35,7 @@ export const RewardsContainer = styled.div`
 
 export const AirdropContainer = styled.div`
   padding: 12px 0 20px 0;
+  align-items: flex-start;
   display: grid;
   grid-template-columns: 1fr 200px;
   border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
