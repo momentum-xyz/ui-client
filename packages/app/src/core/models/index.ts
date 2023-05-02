@@ -30,3 +30,4 @@ export * from './FilterField';
 export * from './SortField';
 export * from './World';
 export * from './WorldStaker';
+export * from './BigStakerInfo';

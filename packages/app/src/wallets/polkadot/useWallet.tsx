@@ -1,6 +1,6 @@
-import {web3Enable, web3Accounts, web3FromSource} from '@polkadot/extension-dapp';
+import {web3Enable, web3Accounts, web3FromSource, isWeb3Injected} from '@polkadot/extension-dapp';
 import type {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {decodeAddress} from '@polkadot/util-crypto';
 import {stringToHex, u8aToHex} from '@polkadot/util';
 import {Select} from '@momentum-xyz/ui-kit-storybook';
@@ -15,23 +15,23 @@ export const useWallet: UseWalletType = ({appVariables}) => {
 
   const isInstalled = !!(window as any)?.injectedWeb3?.['polkadot-js'];
 
+  const activate = useCallback(async () => {
+    console.log('web3Enable start');
+    await web3Enable(appVariables.POLKADOT_CONNECTION_STRING);
+    console.log('web3Enable done');
+    const allAccounts = await web3Accounts();
+    console.log('allAccounts', allAccounts);
+    setAccounts(allAccounts.filter((account) => account.type === 'sr25519'));
+  }, [appVariables]);
+
   useEffect(() => {
     if (!isInstalled) {
       console.log('Polkadot.js Wallet is not installed');
       return;
     }
 
-    const enable = async () => {
-      console.log('web3Enable start');
-      await web3Enable(appVariables.POLKADOT_CONNECTION_STRING);
-      console.log('web3Enable done');
-      const allAccounts = await web3Accounts();
-      console.log('allAccounts', allAccounts);
-      setAccounts(allAccounts.filter((account) => account.type === 'sr25519'));
-    };
-
-    enable();
-  }, [appVariables, isInstalled]);
+    activate();
+  }, [activate, isInstalled]);
 
   const signChallenge = async (challenge: string): Promise<string> => {
     if (!selectedAccount) {
@@ -89,6 +89,8 @@ export const useWallet: UseWalletType = ({appVariables}) => {
     account,
     accountHex,
     isInstalled,
+    activate,
+    isActive: isWeb3Injected,
     content,
     signChallenge
   };

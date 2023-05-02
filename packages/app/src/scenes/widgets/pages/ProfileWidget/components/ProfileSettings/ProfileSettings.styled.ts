@@ -19,7 +19,7 @@ export const DeviceItem = styled.div`
 `;
 
 export const Actions = styled.div`
-  padding: 10px 0;
+  padding: 10px 4px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;

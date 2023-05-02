@@ -1,11 +1,13 @@
 import {WalletConfigInterface} from 'wallets';
-import icon from 'static/images/polkadot.svg';
+import logo from 'static/images/polkadot.svg';
 
 import {useWallet} from './useWallet';
 
 const config: WalletConfigInterface = {
+  id: 'polkadot',
   name: 'Polkadot', //'Polkadot{.js}',
-  icon,
+  logo,
+  icon: 'polkadotprofile',
   browserExtensionUrl: 'https://polkadot.js.org/extension/',
   useWallet
 };

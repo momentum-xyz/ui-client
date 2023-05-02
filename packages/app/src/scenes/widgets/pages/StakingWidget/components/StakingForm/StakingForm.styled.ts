@@ -11,6 +11,13 @@ export const TabContent = styled.div`
   flex-direction: column;
 `;
 
+export const Filters = styled.div`
+  padding: 12px 0 10px 0;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+`;
+
 export const Buttons = styled.div`
   display: flex;
   justify-content: space-between;

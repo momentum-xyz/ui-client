@@ -1,35 +1,33 @@
-import {FC, useEffect} from 'react';
+import {FC, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Text, IconSvg, SvgButton} from '@momentum-xyz/ui-kit';
+import {Frame, Button, Input} from '@momentum-xyz/ui-kit-storybook';
 import {toast} from 'react-toastify';
-import cn from 'classnames';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
+import {Asset3dInterface} from 'core/models';
 
-import {UploadSkyboxDialog, DeleteSkyboxDialog} from './components';
+import {UploadSkybox, SkyboxList, SkyboxPreview, DeleteSkyboxDialog} from './components';
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
   const {creatorStore, sessionStore, universeStore} = useStore();
   const {skyboxSelectorStore} = creatorStore;
   const {
-    currentItem,
     saveItem,
-    changePage,
-    prevPage,
-    nextPage,
-    currPageSkyboxes,
-    pages,
-    skyboxPageCnt,
-    allSkyboxes,
-    skyboxCurrentPage,
-    currentItemId
+
+    communitySkyboxesList,
+    userSkyboxesList
   } = skyboxSelectorStore;
   const {user} = sessionStore;
   const {worldId} = universeStore;
 
   const {t} = useI18n();
+
+  const [previewSkybox, setPreviewSkybox] = useState<Asset3dInterface | null>(null);
+  const [skyboxPreviewType, setSkyboxPreviewType] = useState<'COMMUNITY' | 'PRIVATE'>('COMMUNITY');
+  const [isUploadingSkybox, setIsUploadingSkybox] = useState(false);
+  const [searchInputValue, setSearchInputValue] = useState<string>('');
 
   useEffect(() => {
     if (!user) {
@@ -38,105 +36,111 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
     skyboxSelectorStore.fetchItems(worldId, user.id);
   }, [skyboxSelectorStore, user, worldId]);
 
-  const hasDialogOpen =
-    skyboxSelectorStore.uploadDialog.isOpen || skyboxSelectorStore.deleteDialog.isOpen;
+  const filteredSkyboxList = useMemo(() => {
+    const list = skyboxPreviewType === 'COMMUNITY' ? communitySkyboxesList : userSkyboxesList;
+    return list.filter((sb) => sb.name.toLowerCase().includes(searchInputValue.toLowerCase()));
+  }, [communitySkyboxesList, skyboxPreviewType, userSkyboxesList, searchInputValue]);
 
   return (
     <>
-      <styled.Container className={hasDialogOpen ? 'blur' : ''}>
-        <styled.ItemsGallery>
-          <styled.SkyboxCountContainer>
-            <styled.SkyboxCount>
-              <Text
-                text={t('counts.skyboxes', {count: allSkyboxes.length})}
-                size="l"
-                align="left"
+      <styled.Container>
+        <styled.ControlsContainer>
+          <Frame>
+            <styled.ControlsInnerContainer>
+              <styled.SkyboxTypeContainer>
+                <Button
+                  label={t('titles.communitySkyboxLibrary')}
+                  active={skyboxPreviewType === 'COMMUNITY'}
+                  onClick={() => {
+                    setPreviewSkybox(null);
+                    setIsUploadingSkybox(false);
+                    setSkyboxPreviewType('COMMUNITY');
+                    setSearchInputValue('');
+                  }}
+                />
+                <Button
+                  label={t('titles.privateSkyboxLibrary')}
+                  active={skyboxPreviewType === 'PRIVATE'}
+                  onClick={() => {
+                    setPreviewSkybox(null);
+                    setIsUploadingSkybox(false);
+                    setSkyboxPreviewType('PRIVATE');
+                    setSearchInputValue('');
+                  }}
+                />
+              </styled.SkyboxTypeContainer>
+              <styled.SkyboxSearchContainer>
+                <Input
+                  placeholder={t(
+                    `placeholders.${
+                      skyboxPreviewType === 'COMMUNITY'
+                        ? 'searchCommunityLibrary'
+                        : 'searchPrivateLibrary'
+                    }`
+                  )}
+                  value={searchInputValue}
+                  isSearch
+                  onChange={setSearchInputValue}
+                  wide
+                />
+              </styled.SkyboxSearchContainer>
+              <Button
+                label={t('actions.uploadCustomSkybox')}
+                wide
+                icon="astronaut"
+                onClick={() => {
+                  setIsUploadingSkybox(true);
+                  setPreviewSkybox(null);
+                }}
               />
-            </styled.SkyboxCount>
-          </styled.SkyboxCountContainer>
-          {!!currPageSkyboxes && (
-            // TODO: Move pager to component
-            <styled.SkyboxesContainer>
-              <styled.ItemsPage>
-                {currPageSkyboxes.map((item, idx) => {
-                  const active = item === currentItem;
-                  return (
-                    <styled.Item className={cn({active})} key={item.id + `-${idx}`}>
-                      {item.isUserAttribute && item.id !== currentItemId && (
-                        <styled.DeleteButtonHolder>
-                          <SvgButton
-                            iconName="bin"
-                            size="normal"
-                            isWhite
-                            onClick={() => {
-                              skyboxSelectorStore.openSkyboxDeletion(item.id);
-                            }}
-                          />
-                        </styled.DeleteButtonHolder>
-                      )}
-                      <styled.PreviewImg src={item.image} />
-                      <styled.ItemTitle>{item.name}</styled.ItemTitle>
-                      <styled.ItemCreatedBy>
-                        {t('titles.by')}{' '}
-                        <span>{item.isUserAttribute ? user?.name : 'Odyssey'}</span>
-                      </styled.ItemCreatedBy>
-                      <styled.ItemButtonHolder>
-                        <Button
-                          label={
-                            currentItem === item
-                              ? t('titles.selectedSkybox')
-                              : t('actions.selectSkybox')
-                          }
-                          // variant="inverted"
-                          disabled={currentItem === item}
-                          transform="uppercase"
-                          size="medium"
-                          onClick={() => {
-                            saveItem(item.id, worldId).catch((err) => {
-                              toast.error(err.message);
-                            });
-                          }}
-                        />
-                      </styled.ItemButtonHolder>
-                    </styled.Item>
-                  );
-                })}
-              </styled.ItemsPage>
-              {skyboxPageCnt > 1 && (
-                <styled.Pager>
-                  <styled.PagerArrowHolder
-                    style={{transform: 'scaleX(-1)'}}
-                    onClick={() => prevPage()}
-                  >
-                    <IconSvg name="arrow" size="large" />
-                  </styled.PagerArrowHolder>
-                  {pages.map((p) => {
-                    const activePage = p === skyboxCurrentPage;
-                    return (
-                      <styled.PageDot
-                        className={cn(activePage && 'active-page')}
-                        key={`page-dot-${p}`}
-                        onClick={() => changePage(p)}
-                      />
-                    );
-                  })}
-                  <styled.PagerArrowHolder onClick={() => nextPage()}>
-                    <IconSvg name="arrow" size="large" />
-                  </styled.PagerArrowHolder>
-                </styled.Pager>
-              )}
-            </styled.SkyboxesContainer>
-          )}
-        </styled.ItemsGallery>
-        <styled.ButtonsHolder>
-          <Button label="Add Skybox" onClick={skyboxSelectorStore.uploadDialog.toggle} />
-          {/* <Button
-            label={t('actions.closePanel')}
-            onClick={() => navigate(generatePath(ROUTES.odyssey.creator.base, {worldId}))}
-          /> */}
-        </styled.ButtonsHolder>
+            </styled.ControlsInnerContainer>
+          </Frame>
+          <styled.Separator />
+        </styled.ControlsContainer>
       </styled.Container>
-      {skyboxSelectorStore.uploadDialog.isOpen && <UploadSkyboxDialog />}
+
+      {isUploadingSkybox && <UploadSkybox onBack={() => setIsUploadingSkybox(false)} />}
+      {!isUploadingSkybox && !previewSkybox && (
+        <>
+          <styled.SkyboxListHeader>
+            <span>
+              {t(
+                `titles.${
+                  skyboxPreviewType === 'COMMUNITY'
+                    ? 'odysseySkyboxLibraryHeader'
+                    : 'privateSkyboxLibraryHeader'
+                }`
+              )}
+            </span>
+            <span>
+              {
+                (skyboxPreviewType === 'COMMUNITY' ? communitySkyboxesList : userSkyboxesList)
+                  .length
+              }
+            </span>
+          </styled.SkyboxListHeader>
+          <SkyboxList skyboxes={filteredSkyboxList} onSkyboxSelect={(sb) => setPreviewSkybox(sb)} />
+        </>
+      )}
+      {!isUploadingSkybox && previewSkybox && (
+        <SkyboxPreview
+          skybox={previewSkybox}
+          onSkyboxSelect={(sb) => {
+            saveItem(sb.id, worldId)
+              .then(() => {
+                setPreviewSkybox(null);
+              })
+              .catch((err) => {
+                toast.error(err.message);
+              });
+          }}
+          onSkyboxDelete={(sb) => {
+            skyboxSelectorStore.openSkyboxDeletion(sb.id);
+            setPreviewSkybox(null);
+          }}
+          onBack={() => setPreviewSkybox(null)}
+        />
+      )}
       {skyboxSelectorStore.deleteDialog.isOpen && <DeleteSkyboxDialog />}
     </>
   );

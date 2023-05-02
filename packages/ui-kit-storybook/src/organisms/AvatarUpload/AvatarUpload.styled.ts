@@ -13,6 +13,7 @@ export const Container = styled.div`
   border: 0.6px solid ${(props) => props.theme.accentText};
   border-radius: 4px;
   width: var(--width);
+  height: var(--height);
 
   & .image-upload-button {
     border: none;
@@ -28,6 +29,7 @@ export const Container = styled.div`
 export const FileUploaderContainer = styled.div`
   z-index: 2;
 `;
+
 export const ImagePreview = styled.img`
   position: absolute;
   width: var(--width);

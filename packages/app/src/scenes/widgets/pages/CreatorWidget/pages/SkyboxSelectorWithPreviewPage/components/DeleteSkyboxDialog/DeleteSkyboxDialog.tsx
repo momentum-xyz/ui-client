@@ -1,7 +1,5 @@
-import {FC, useEffect} from 'react';
-import {
-  Dialog // Input
-} from '@momentum-xyz/ui-kit';
+import {FC} from 'react';
+import {Dialog} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
@@ -15,20 +13,12 @@ const DeleteSkyboxDialog: FC = () => {
   const {skyboxSelectorStore} = creatorStore;
   const {deleteDialog, closeSkyboxDeletion, removeUserSkybox, skyboxToDelete, currentItemId} =
     skyboxSelectorStore;
-  const {world3dStore} = universeStore;
   const worldId = universeStore.worldId;
   const {user} = sessionStore;
 
   const deletingCurrentSkybox = skyboxToDelete?.id === currentItemId;
 
   const {t} = useI18n();
-
-  useEffect(() => {
-    world3dStore?.changeKeyboardControl(false);
-    return () => {
-      world3dStore?.changeKeyboardControl(true);
-    };
-  }, [world3dStore]);
 
   if (!skyboxToDelete || !user) {
     closeSkyboxDeletion();

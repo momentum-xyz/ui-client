@@ -8,7 +8,8 @@ const World = types
   .model('World', {
     id: types.string,
     name: types.string,
-    description: types.maybe(types.string),
+    description: types.maybeNull(types.string),
+    website_link: types.maybeNull(types.string),
     createdAt: types.maybe(types.string),
     avatarHash: types.maybeNull(types.string),
     last_staking_comment: types.maybeNull(types.string),

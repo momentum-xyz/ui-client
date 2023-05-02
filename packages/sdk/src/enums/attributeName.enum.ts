@@ -1,7 +1,10 @@
 export enum AttributeNameEnum {
   NAME = 'name',
+  DESCRIPTION = 'description',
   STATE = 'state',
   CONFIG = 'config',
+  WORLD_AVATAR = 'world_avatar',
+  WEBSITE_LINK = 'website_link',
   ACTIVE_SKYBOX = 'active_skybox',
   SKYBOX_LIST = 'skybox_list',
   MAGIC_LINKS = 'magic_links',

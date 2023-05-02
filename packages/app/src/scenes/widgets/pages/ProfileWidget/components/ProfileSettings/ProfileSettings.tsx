@@ -11,7 +11,6 @@ interface PropsInterface {
   outputAudioDeviceId?: string;
   inputAudioDeviceList: SelectOptionInterface<string>[];
   outputAudioDeviceList: SelectOptionInterface<string>[];
-  isUpdating: boolean;
   onChangeAudioDevices: (inputId: string | undefined, outputId: string | undefined) => void;
   onCancel: () => void;
 }
@@ -21,7 +20,6 @@ const ProfileSettings: FC<PropsInterface> = ({
   outputAudioDeviceId,
   inputAudioDeviceList,
   outputAudioDeviceList,
-  isUpdating,
   onChangeAudioDevices,
   onCancel
 }) => {
@@ -67,7 +65,6 @@ const ProfileSettings: FC<PropsInterface> = ({
           <Button variant="secondary" label={t('actions.cancel')} onClick={onCancel} />
           <Button
             label={t('actions.save')}
-            disabled={isUpdating}
             onClick={() => {
               onChangeAudioDevices(selectedInputAudioDeviceId, selectedOutputAudioDeviceId);
             }}

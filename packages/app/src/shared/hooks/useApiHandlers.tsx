@@ -27,10 +27,8 @@ export const useApiHandlers = () => {
           toast.error(
             <ToastContent
               isDanger
-              headerIconName="alert"
-              title={statusString}
-              text={t('systemMessages.underMaintenance')}
-              showCloseButton
+              icon="alert"
+              text={`${statusString}: ${t('systemMessages.underMaintenance')}`}
             />
           );
           break;
@@ -39,10 +37,8 @@ export const useApiHandlers = () => {
           toast.error(
             <ToastContent
               isDanger
-              headerIconName="alert"
-              title={statusString}
-              text={t('errors.somethingWentWrong')}
-              showCloseButton
+              icon="alert"
+              text={`${statusString}: ${t('errors.somethingWentWrong')}`}
             />
           );
           break;
@@ -51,10 +47,8 @@ export const useApiHandlers = () => {
           toast.error(
             <ToastContent
               isDanger
-              headerIconName="alert"
-              title={t('errors.permissionsMissing')}
-              text={t('errors.permissionsWrong')}
-              showCloseButton
+              icon="alert"
+              text={`${statusString}: ${t('errors.permissionsWrong')}`}
             />
           );
           break;

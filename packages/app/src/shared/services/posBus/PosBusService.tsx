@@ -211,9 +211,13 @@ class PosBusService {
 
       case MsgType.HIGH_FIVE: {
         console.log('Handle posbus message high_five', data);
-        const {sender_id, message} = data;
-        console.log('High five from', sender_id, message);
+        const {sender_id, receiver_id, message} = data;
+        if (receiver_id !== PosBusService.userId) {
+          console.log('High five not for me', receiver_id);
+          return;
+        }
 
+        console.log('High five from', sender_id, message);
         PosBusEventEmitter.emit('high-five', sender_id, message);
         break;
       }

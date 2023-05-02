@@ -35,12 +35,7 @@ const MagicLinkWidget: FC = () => {
       magicLinkStore.dialog.close();
 
       toast.info(
-        <ToastContent
-          headerIconName="alert"
-          title={t('titles.alert')}
-          text={t('messages.linkCopied')}
-          showCloseButton
-        />,
+        <ToastContent icon="alert" text={t('messages.linkCopied')} />,
         TOAST_COMMON_OPTIONS
       );
     }

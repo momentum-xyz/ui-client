@@ -1,7 +1,7 @@
 import React, {FC, useState} from 'react';
 import {useI18n} from '@momentum-xyz/core';
 
-import {ToastContent} from 'ui-kit/molecules';
+import {ToastContent} from 'ui-kit';
 
 interface PropsInterface {
   message: string;
@@ -23,13 +23,11 @@ const HighFiveContent: FC<PropsInterface> = ({message, sendBack, showCloseButton
 
   return (
     <ToastContent
-      headerIconName="hand"
-      text={t('messages.highFiveReceivedText')}
-      title={t('messages.highFiveReceivedTitle', {
+      icon="stake"
+      text={`${t('messages.highFiveReceivedText')}. ${t('messages.highFiveReceivedTitle', {
         name: message
-      })}
+      })}`}
       approveInfo={{title: t('titles.returnHighFive'), onClick: handleClick}}
-      showCloseButton={showCloseButton}
     />
   );
 };

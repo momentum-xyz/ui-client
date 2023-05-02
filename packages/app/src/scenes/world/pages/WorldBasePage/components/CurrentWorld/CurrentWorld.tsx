@@ -10,11 +10,11 @@ import * as styled from './CurrentWorld.styled';
 
 interface PropsInterface {
   world: WorldModelInterface;
-  onStakeWorld: (worldId: string) => void;
+  onStakeWorld: () => void;
 }
 
 const CurrentWorld: FC<PropsInterface> = ({world, onStakeWorld}) => {
-  const {id, name, imageSrc, createdAt, stakersCount, momStaked} = world;
+  const {name, imageSrc, createdAt, stakersCount, momStaked} = world;
   const {t} = useI18n();
 
   console.log('[WORLD] MOMs staked into world: ', momStaked);
@@ -22,7 +22,9 @@ const CurrentWorld: FC<PropsInterface> = ({world, onStakeWorld}) => {
   return (
     <styled.Container data-testid="CurrentWorld-test">
       <styled.Content>
-        <styled.Name>{name}</styled.Name>
+        <styled.Name>
+          <span>{name}</span>
+        </styled.Name>
         <styled.Information>
           <ProfileLine
             icon="stake"
@@ -52,12 +54,7 @@ const CurrentWorld: FC<PropsInterface> = ({world, onStakeWorld}) => {
             <Hexagon type="blank-small" />
           </styled.BlankHexagon3>
         </styled.BlankHexagons>
-        <Hexagon
-          type="menu"
-          iconName="stake"
-          imageSrc={imageSrc}
-          onClick={() => onStakeWorld(id)}
-        />
+        <Hexagon type="menu" iconName="stake" onClick={onStakeWorld} />
         <styled.BlankHexagonLast>
           <Hexagon type="blank-small" />
         </styled.BlankHexagonLast>

@@ -3,7 +3,7 @@ import BN from 'bn.js';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {ImageSizeEnum, SliderItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
-import {api, UserInfoInterface, WorldInfoInterface} from 'api';
+import {api, BigStakerInfoInterface, UserInfoInterface, WorldInfoInterface} from 'api';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {
   UserInfo,
@@ -11,6 +11,7 @@ import {
   WorldInfo,
   WorldDetails,
   SearchQuery,
+  BigStakerInfo,
   UserInfoModelInterface,
   WorldInfoModelInterface
 } from 'core/models';
@@ -22,18 +23,21 @@ const Universe2dStore = types.compose(
     .model('Universe2dStore', {
       allUsers: types.optional(types.array(UserInfo), []),
       allWorlds: types.optional(types.array(WorldInfo), []),
+      bigStakers: types.optional(types.array(BigStakerInfo), []),
       searchQuery: types.optional(SearchQuery, {}),
 
       selectedWorld: types.maybeNull(WorldDetails),
       selectedUser: types.maybeNull(UserDetails),
 
       worldsRequest: types.optional(RequestModel, {}),
-      usersRequest: types.optional(RequestModel, {})
+      usersRequest: types.optional(RequestModel, {}),
+      bigStakersRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
-      init(): void {
-        this.loadWorlds();
-        this.loadUsers();
+      async init() {
+        await this.loadUsers();
+        await this.loadWorlds();
+        await this.loadBigStakers();
       },
       loadWorlds: flow(function* () {
         const worldsResponse: WorldInfoInterface[] = yield self.worldsRequest.send(
@@ -42,7 +46,7 @@ const Universe2dStore = types.compose(
         );
 
         if (worldsResponse) {
-          console.log('WORLDS', worldsResponse);
+          console.log('[UNIVERSE] WORLDS', worldsResponse);
           self.allWorlds = cast(worldsResponse);
         }
       }),
@@ -53,8 +57,19 @@ const Universe2dStore = types.compose(
         );
 
         if (usersResponse) {
-          console.log('USERS', usersResponse);
+          console.log('[UNIVERSE] USERS', usersResponse);
           self.allUsers = cast(usersResponse.filter((u) => !!u.name));
+        }
+      }),
+      loadBigStakers: flow(function* () {
+        const usersResponse: BigStakerInfoInterface[] = yield self.bigStakersRequest.send(
+          api.userRepository.fetchBigStakersList,
+          {}
+        );
+
+        if (usersResponse) {
+          console.log('[UNIVERSE] BIG STAKERS', usersResponse);
+          self.bigStakers = cast(usersResponse);
         }
       }),
       selectWorld(worldId: string): void {
@@ -114,10 +129,10 @@ const Universe2dStore = types.compose(
         }));
       },
       get mostStakedUsers(): SliderItemInterface<string>[] {
-        return self.allUsers.slice(0, 6).map((item) => ({
-          id: item.id,
+        return self.bigStakers.map((item) => ({
+          id: item.user_id,
           name: item.name,
-          image: getImageAbsoluteUrl(item.profile.avatarHash, ImageSizeEnum.S5) || ''
+          image: getImageAbsoluteUrl(item.avatarHash, ImageSizeEnum.S5) || ''
         }));
       }
     }))
