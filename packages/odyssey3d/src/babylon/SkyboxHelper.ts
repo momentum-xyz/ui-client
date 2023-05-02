@@ -5,11 +5,13 @@ import {
   CubeTexture,
   PhotoDome,
   Texture,
-  Color3
+  Color3,
+  Nullable
 } from '@babylonjs/core';
 
 export class SkyboxHelper {
   static defaultSkyboxTextureSize = 's8';
+  static currentSkybox: Nullable<PhotoDome> = null;
 
   static setCubemapSkybox(scene: Scene, url: string): void {
     const skybox = MeshBuilder.CreateBox('skyBox', {size: 1000.0}, scene);
@@ -30,7 +32,7 @@ export class SkyboxHelper {
 
   static set360Skybox(scene: Scene, url: string): void {
     const dome = new PhotoDome(
-      'testdome',
+      'skybox',
       url,
       //medusas,
       {
@@ -40,5 +42,13 @@ export class SkyboxHelper {
       scene
     );
     dome.mesh.isPickable = false;
+
+    dome.onReady = () => {
+      if (this.currentSkybox !== null) {
+        this.currentSkybox.mesh.dispose();
+      }
+  
+      this.currentSkybox = dome;
+    }
   }
 }

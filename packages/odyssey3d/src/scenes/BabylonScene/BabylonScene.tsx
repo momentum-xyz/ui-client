@@ -4,9 +4,8 @@ import SceneComponent from 'babylonjs-hook';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
 
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
-import {PlayerHelper, LightHelper, ObjectHelper, SkyboxHelper} from '../../babylon';
+import {PlayerHelper, LightHelper, ObjectHelper} from '../../babylon';
 import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
-import skyboxWorld from '../../static/PANOSKYGB.jpeg';
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callbacks}) => {
@@ -56,12 +55,11 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       );
 
       await WorldCreatorHelper.initialize(scene, onObjectTransform);
-      //SkyboxHelper.setCubemapSkybox(scene);
-      SkyboxHelper.set360Skybox(
+      /*SkyboxHelper.set360Skybox(
         scene,
         //'https://dev2.odyssey.ninja/api/v3/render/texture/s8/26485e74acb29223ba7a9fa600d36c7f'
         skyboxWorld
-      );
+      );*/
 
       if (window.sessionStorage.getItem('babylon_debug')) {
         Promise.all([
