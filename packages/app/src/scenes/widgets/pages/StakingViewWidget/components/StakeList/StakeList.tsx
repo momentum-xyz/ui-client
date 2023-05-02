@@ -2,13 +2,14 @@ import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {
-  Input,
+  doThreeDotsInside,
   Frame,
-  stringInputMask,
+  ImageSizeEnum,
+  Input,
   Select,
-  StakeCard,
   SelectOptionInterface,
-  doThreeDotsInside
+  StakeCard,
+  stringInputMask
 } from '@momentum-xyz/ui-kit-storybook';
 
 import {StakeSortType} from 'core/types';
@@ -122,7 +123,7 @@ const StakeList: FC<PropsInterface> = ({
                 <StakeCard
                   key={index}
                   worldName={stake.name}
-                  worldImageUrl={stake.avatarHash}
+                  worldImageUrl={getImageAbsoluteUrl(stake.avatarHash, ImageSizeEnum.S5)}
                   staked={formatBigInt(stake.amount)}
                   reward={formatBigInt(stake.reward)}
                   tokenSymbol="MOM"
