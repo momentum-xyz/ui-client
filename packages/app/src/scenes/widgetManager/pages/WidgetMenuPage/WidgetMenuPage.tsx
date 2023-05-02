@@ -15,9 +15,10 @@ interface MenuItemExtendedInterface extends MenuItemInterface<WidgetEnum> {
 
 interface PropsInterface {
   isWorld?: boolean;
+  isWelcomePage?: boolean;
 }
 
-const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
+const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
   const {sessionStore, widgetManagerStore, universeStore, creatorStore, agoraStore} = useStore();
   const {toggle, activeWidgetList} = widgetManagerStore;
   const {isGuest, userImageUrl} = sessionStore;
@@ -130,12 +131,10 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld}) => {
     }
   ];
 
+  const items = isWelcomePage ? [] : MENU_ITEMS.filter((menuItem) => !menuItem.isHidden);
   return (
     <styled.Container data-testid="WidgetMenuPage-test">
-      <Menu
-        activeKeys={activeWidgetList}
-        items={MENU_ITEMS.filter((menuItem) => !menuItem.isHidden)}
-      />
+      <Menu activeKeys={activeWidgetList} items={items} />
     </styled.Container>
   );
 };

@@ -393,7 +393,11 @@ export const enGb = {
       createProfile: 'Create a profile',
       memberProfile: 'Member profile',
       odysseyOverview: 'Odyssey Overview',
-      connectYourWallet: 'Connect your wallet'
+      connectYourWallet: 'Connect your wallet',
+      welcomePageJoinTitle: 'Join Odyssey\nas a\nmember',
+      welcomePageGuestTitle: 'Enter\nOdyssey as a\nguest',
+      welcomePageJoinDescription: 'Connect your wallet\nand join the\ncommunity',
+      welcomePageGuestDescription: 'Fly around freely and\nenjoy all the\ncreations'
     },
     messages: {
       loading: 'Loading Odyssey',
@@ -684,6 +688,7 @@ export const enGb = {
       ok: 'OK',
       add: 'Add',
       signIn: 'Sign In',
+      signUpNow: 'Sign up now',
       signOut: 'Sign Out',
       sort: 'Sort',
       logOut: 'Log out',

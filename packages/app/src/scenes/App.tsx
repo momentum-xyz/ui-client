@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {FC, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useNavigate, useLocation} from 'react-router-dom';
@@ -12,12 +13,17 @@ import {SystemWideError, Toast} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
 import {WorldPage} from 'scenes/world';
 import {Map3dPage} from 'scenes/map3d';
+import {WelcomePage} from 'scenes/welcome';
 
 import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
 import {WidgetManager} from './widgetManager';
 import {GlobalStyles as GlobalStylesOriginal} from './App.styled';
 import {UNIVERSE_ROUTES, WORLD_ROUTES, SYSTEM_ROUTES} from './App.routes';
+import {
+  HAS_SEEN_WELCOME_PAGE_LS_KEY,
+  HAS_SEEN_WELCOME_PAGE_LS_VALUE
+} from './welcome/pages/Welcome/WelcomePage';
 
 const ThemeProvider = ThemeProviderOriginal as unknown as FC<ThemeProviderProps<any, any>>;
 const GlobalStyles = GlobalStylesOriginal as unknown as FC;
@@ -31,6 +37,10 @@ const App: FC = () => {
   const {pathname} = useLocation();
   const navigate = useNavigate();
   const {t} = useI18n();
+
+  const isWelcomePage = pathname === ROUTES.welcome;
+  const hasSeenWelcomePage =
+    localStorage.getItem(HAS_SEEN_WELCOME_PAGE_LS_KEY) === HAS_SEEN_WELCOME_PAGE_LS_VALUE;
 
   useApiHandlers();
 
@@ -50,6 +60,13 @@ const App: FC = () => {
       navigate({pathname: ROUTES.system.wrongBrowser});
     }
   }, [isBrowserUnsupported, navigate]);
+
+  useEffect(() => {
+    const shouldGoToWelcomePage = sessionStore.isGuest && !isWelcomePage && !hasSeenWelcomePage;
+    if (shouldGoToWelcomePage) {
+      navigate(ROUTES.welcome);
+    }
+  }, [hasSeenWelcomePage, isWelcomePage, navigate, sessionStore.isGuest]);
 
   useEffect(() => {
     if (sessionStore.errorFetchingProfile) {
@@ -122,7 +139,8 @@ const App: FC = () => {
           <>
             <Toast />
             <Map3dPage />
-            <WidgetManager />
+            {isWelcomePage && <WelcomePage />}
+            <WidgetManager isWelcomePage={isWelcomePage} />
             <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
               <AppLayers>{createSwitchByConfig(UNIVERSE_ROUTES)}</AppLayers>
             </Suspense>
