@@ -620,7 +620,10 @@ export const enGb = {
       privateSkyboxLibrary: 'Private Skybox Library',
       odysseySkyboxLibraryHeader: 'Odyssey Library',
       communitySkyboxLibraryHeader: 'Community',
-      privateSkyboxLibraryHeader: 'Private Library'
+      privateSkyboxLibraryHeader: 'Private Library',
+      scale: 'Scale',
+      rotation: 'Rotation',
+      position: 'Position'
     },
     textMessage: {
       you: 'you',
