@@ -1,8 +1,7 @@
 import {FC, ReactNode} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Heading, Input, Text} from '@momentum-xyz/ui-kit';
-import {Button, Select, SelectOptionInterface} from '@momentum-xyz/ui-kit-storybook';
+import {Button, Select, Input, SelectOptionInterface} from '@momentum-xyz/ui-kit-storybook';
 
 import * as styled from './StakeAmount.styled';
 
@@ -34,68 +33,57 @@ const StakingAmount: FC<PropsInterface> = ({
   const {t} = useI18n();
 
   return (
-    <styled.Container>
-      <styled.TabContent>
-        <div>
-          <styled.Section>
-            <styled.SectionHeader>
-              <Heading type="h2" align="left" label={t('staking.walletAccount')} />
-            </styled.SectionHeader>
-            <styled.LabeledLineContainer>
-              <styled.Filters>
-                <div>{t('labels.account')}</div>
-                <Select
-                  wide
-                  options={walletOptions}
-                  value={selectedWalletId}
-                  placeholder={t('actions.selectWallet')}
-                  onSingleChange={onSelectWalletId}
-                />
-              </styled.Filters>
-            </styled.LabeledLineContainer>
-            {walletSelectContent}
-          </styled.Section>
+    <styled.Container data-testid="StakingAmount-test">
+      <styled.Title>Start Staking</styled.Title>
+      <styled.Description>
+        By staking Momentum (${tokenSymbol}) in an Odyssey you invest in this creation and endorse
+        the journey. You’ll receive a reward, after-all their success is your success.
+      </styled.Description>
 
-          <styled.Section>
-            <styled.SectionHeader>
-              <Heading type="h2" align="left" label={t('staking.balance')} />
-            </styled.SectionHeader>
-            <styled.BalanceContainer>
-              <styled.BalanceEntityContainer>
-                <Heading type="h4" align="left" label={t('staking.balanceTypes.transferable')} />
-                <Text size="xxs" align="left" text={balanceTransferrable} />
-              </styled.BalanceEntityContainer>
-            </styled.BalanceContainer>
-          </styled.Section>
-          <styled.Separator />
-          <styled.Section>
-            <styled.SectionHeader>
-              <Heading type="h2" align="left" label={t('staking.startContributing')} />
-            </styled.SectionHeader>
-            <styled.LabeledLineContainer>
-              <styled.LabeledLineLabelContainer>
-                <Text
-                  size="xxs"
-                  align="right"
-                  text={t('staking.setAmountSymbol', {symbol: tokenSymbol})}
-                />
-              </styled.LabeledLineLabelContainer>
-              <styled.LabeledLineInputContainer>
-                <Input autoFocus value={amountValue} onChange={onChangeAmountValue} />
-              </styled.LabeledLineInputContainer>
-            </styled.LabeledLineContainer>
-            <styled.LabeledLineContainer>
-              <styled.LabeledLineLabelContainer>
-                <Text size="xxs" align="right" text={t('staking.destination')} />
-              </styled.LabeledLineLabelContainer>
-            </styled.LabeledLineContainer>
-          </styled.Section>
-        </div>
+      {/* My wallet */}
+      <styled.Section>
+        <div>My wallet</div>
+        <styled.SectionGrid>
+          <div>{t('labels.account')}</div>
+          <Select
+            wide
+            options={walletOptions}
+            value={selectedWalletId}
+            placeholder={t('actions.selectWallet')}
+            onSingleChange={onSelectWalletId}
+          />
+        </styled.SectionGrid>
+        {walletSelectContent}
+      </styled.Section>
 
-        <styled.Buttons>
-          <Button label={t('staking.next')} onClick={onNextClick} disabled={isNextDisabled} />
-        </styled.Buttons>
-      </styled.TabContent>
+      {/* Balance */}
+      <styled.Section>
+        <div>{t('staking.balance')}</div>
+        <styled.SectionGrid>
+          <div>{t('staking.balanceTypes.transferable')}</div>
+          <Input value={balanceTransferrable} disabled onChange={() => {}} wide />
+        </styled.SectionGrid>
+      </styled.Section>
+
+      {/* Start Staking */}
+      <styled.Section>
+        <div>Start Staking</div>
+        <styled.SectionGrid>
+          <div>Set Amount</div>
+          <Input value={amountValue} onChange={onChangeAmountValue} wide />
+        </styled.SectionGrid>
+
+        <styled.SectionGrid>
+          <div>Odyssey</div>
+          <styled.OdysseyName>
+            <span>Odyssey Name Odyssey Name</span>
+          </styled.OdysseyName>
+        </styled.SectionGrid>
+      </styled.Section>
+
+      <styled.Buttons>
+        <Button label={t('actions.nextStep')} onClick={onNextClick} disabled={isNextDisabled} />
+      </styled.Buttons>
     </styled.Container>
   );
 };

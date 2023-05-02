@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --scroll-offset: 400px;
+  --scroll-offset: 410px;
 
   position: relative;
 `;

@@ -22,6 +22,7 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {world2dStore} = universeStore;
 
   const [activeStep, setActiveStep] = useState<StepsType>('wallet');
+  const [amountString, setAmountString] = useState(DEFAULT_STAKING_AMOUNT.toString());
 
   const {t} = useI18n();
 
@@ -31,7 +32,6 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
 
   console.log('StakeForm useStaking', {isBlockchainReady, account, stake});
 
-  const [amountString, setAmountString] = useState(DEFAULT_STAKING_AMOUNT.toString());
   const amountStringValueCheckRegex = /^\d{1,12}((\.|,)\d{0,4})?$/;
 
   const nftId = data?.id || universeStore.worldId;
