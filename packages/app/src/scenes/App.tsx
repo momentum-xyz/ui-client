@@ -138,7 +138,8 @@ const App: FC = () => {
         ) : (
           <>
             <Toast />
-            {isWelcomePage ? <WelcomePage /> : <Map3dPage />}
+            <Map3dPage />
+            {isWelcomePage && <WelcomePage />}
             <WidgetManager isWelcomePage={isWelcomePage} />
             <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
               <AppLayers>{createSwitchByConfig(UNIVERSE_ROUTES)}</AppLayers>

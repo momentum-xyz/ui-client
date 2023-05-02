@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-import background from 'static/images/welcome-bg.svg';
-
 export const Container = styled.div`
-  background-image: url(${background});
+  position: fixed;
+  top: 0;
+
+  background: transparent;
   height: 100vh;
   width: 100vw;
   display: flex;
