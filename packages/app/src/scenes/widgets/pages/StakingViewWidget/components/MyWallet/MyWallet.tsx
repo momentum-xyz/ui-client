@@ -66,34 +66,34 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
           />
         </styled.Filters>
 
-        {walletSelectContent}
-
-        <styled.Title>{t('labels.rewards')}</styled.Title>
-        <styled.RewardsContainer>
-          <span>{t('labels.totalRewards')}</span>
-          <styled.Amount>
-            <SymbolAmount tokenSymbol="MOM" stringValue={formatBigInt(selectedWallet?.reward)} />
-          </styled.Amount>
-          <Button
-            icon="wallet"
-            label={t('actions.claimRewards')}
-            disabled={!isBlockchainReady}
-            onClick={handleClaimRewards}
-          />
-        </styled.RewardsContainer>
-
-        <styled.Title>{t('actions.requestAirdropTokens')}</styled.Title>
-        <styled.AirdropContainer>
-          <span>Lorem ipsum dolor sit amet, ligula consectetuer adipiscing elit.</span>
-          <Button
-            icon="air"
-            label={t('actions.startAirdrop')}
-            disabled={!isBlockchainReady}
-            onClick={handleAirdrop}
-          />
-        </styled.AirdropContainer>
-
         <styled.ScrollableContainer>
+          <div>{walletSelectContent}</div>
+
+          <styled.Title>{t('labels.rewards')}</styled.Title>
+          <styled.RewardsContainer>
+            <span>{t('labels.totalRewards')}</span>
+            <styled.Amount>
+              <SymbolAmount tokenSymbol="MOM" stringValue={formatBigInt(selectedWallet?.reward)} />
+            </styled.Amount>
+            <Button
+              icon="wallet"
+              label={t('actions.claimRewards')}
+              disabled={!isBlockchainReady}
+              onClick={handleClaimRewards}
+            />
+          </styled.RewardsContainer>
+
+          <styled.Title>{t('actions.requestAirdropTokens')}</styled.Title>
+          <styled.AirdropContainer>
+            <span>Lorem ipsum dolor sit amet, ligula consectetuer adipiscing elit.</span>
+            <Button
+              icon="air"
+              label={t('actions.startAirdrop')}
+              disabled={!isBlockchainReady}
+              onClick={handleAirdrop}
+            />
+          </styled.AirdropContainer>
+
           <styled.Title>{t('labels.balance')}</styled.Title>
 
           <styled.TokenBlock>
