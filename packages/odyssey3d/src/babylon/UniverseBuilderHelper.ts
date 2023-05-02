@@ -21,6 +21,7 @@ import twirl from '../static/twirl_01.png';
 
 import {getAssetFileName} from './UtilityHelper';
 import {PlayerHelper} from './PlayerHelper';
+import {TransformTypesEnum, smoothCameraUniverse} from './TransformHelper';
 
 // Accounts consts
 const ACC_PER_ROW = 20;
@@ -286,6 +287,28 @@ export class UniverseBuilderHelper {
           // Currently worldIds === userIds, so every click on mesh will be userClick.
           if (UniverseBuilderHelper.accountsMap.has(pickedId)) {
             onUserClick(pickedId);
+            const target = UniverseBuilderHelper.accountsMap.get(pickedId);
+            if (target) {
+              // Rotation
+              smoothCameraUniverse(
+                PlayerHelper.camera.target,
+                target.rootClone.absolutePosition,
+                TransformTypesEnum.Rotation,
+                1000,
+                UniverseBuilderHelper.scene,
+                false
+              );
+
+              // Position
+              smoothCameraUniverse(
+                PlayerHelper.camera.position,
+                target.rootClone.absolutePosition,
+                TransformTypesEnum.Position,
+                2000,
+                UniverseBuilderHelper.scene,
+                true
+              );
+            }
             console.log('user');
           } else if (UniverseBuilderHelper.worldsMap.has(pickedId)) {
             onWorldClick(pickedId);

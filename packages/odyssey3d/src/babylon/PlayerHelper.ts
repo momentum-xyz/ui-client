@@ -107,11 +107,6 @@ export class PlayerHelper {
         if (evt.sourceEvent.key === 'Shift') {
           PlayerHelper.camera.speed = FAST_SPEED;
         }
-
-        if (evt.sourceEvent.key === 'q') {
-          //InteractionEffectHelper.startParticles(new Vector3(0, 0, 0));
-          PlayerHelper.followPlayer('a');
-        }
       })
     );
 
@@ -325,7 +320,6 @@ export class PlayerHelper {
   }
 
   static followPlayer(idToFollow: string) {
-    // TODO: Replace lastJoinedID with idToFollow when FE is there
     const userToFollow = this.userMap.get(idToFollow);
     if (userToFollow) {
       const userNodeToFollow = userToFollow.userInstance.rootNodes[0];
@@ -334,7 +328,7 @@ export class PlayerHelper {
         this.camera.target,
         userNodeToFollow,
         TransformTypesEnum.Rotation,
-        500,
+        1000,
         this.scene
       );
 
@@ -344,6 +338,7 @@ export class PlayerHelper {
         TransformTypesEnum.Position,
         2000,
         this.scene,
+        true,
         true
       );
     }
