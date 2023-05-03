@@ -2,6 +2,11 @@ import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {Text} from '@momentum-xyz/ui-kit';
 import Web3 from 'web3';
 import BN from 'bn.js';
+import {
+  checkIfCanRequestAirdrop,
+  getDateOfNextAllowedAirdrop,
+  saveLastAirdropInfo as originalSaveLastAirdropInfo
+} from '@momentum-xyz/core';
 
 import {appVariables} from 'api/constants';
 import {WalletSelector} from 'scenes/widgets/pages/LoginWidget/components';
@@ -102,6 +107,13 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
     [account, stakingContract, isCorrectAccount, loadMyStakes]
   );
 
+  const saveLastAirdropInfo = useCallback(() => {
+    if (!account) {
+      return;
+    }
+    originalSaveLastAirdropInfo(account);
+  }, [account]);
+
   const getTokens = useCallback(
     async (tokenKind = TokenEnum.MOM_TOKEN) => {
       console.log('useBlockchain getTokens', {tokenKind});
@@ -112,10 +124,11 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
 
       const result = await faucetContract?.methods.get_tokens(tokenKind).send({from: account});
       console.log('useBlockchain getTokens result', result);
+      saveLastAirdropInfo();
 
       setTimeout(() => loadMyWallets().catch(console.error), DELAY_REFRESH_DATA_MS);
     },
-    [account, faucetContract, isCorrectAccount, loadMyWallets]
+    [account, faucetContract?.methods, isCorrectAccount, loadMyWallets, saveLastAirdropInfo]
   );
 
   const claimRewards = useCallback(async () => {
@@ -152,10 +165,15 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
       />
     );
 
+  const canRequestAirdrop = account ? checkIfCanRequestAirdrop(account) : null;
+  const dateOfNextAllowedAirdrop = account ? getDateOfNextAllowedAirdrop(account) : null;
+
   return {
     isBlockchainReady: isWalletActive && isCorrectAccount && !isWrongNetwork,
     account,
     walletSelectContent,
+    canRequestAirdrop,
+    dateOfNextAllowedAirdrop,
     stake,
     unstake,
     claimRewards,

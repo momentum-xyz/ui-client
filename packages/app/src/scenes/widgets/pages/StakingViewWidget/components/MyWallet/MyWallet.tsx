@@ -27,7 +27,14 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
   const requiredAccountAddress = selectedWallet?.wallet_id || 'n/a';
   console.log('MyWallet', {selectedWallet, requiredAccountAddress});
 
-  const {isBlockchainReady, walletSelectContent, claimRewards, getTokens} = useBlockchain({
+  const {
+    isBlockchainReady,
+    walletSelectContent,
+    canRequestAirdrop,
+    dateOfNextAllowedAirdrop,
+    claimRewards,
+    getTokens
+  } = useBlockchain({
     requiredAccountAddress
   });
 
@@ -85,13 +92,23 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
 
           <styled.Title>Use Faucet</styled.Title>
           <styled.AirdropContainer>
-            <span>Get 10k MOM test tokens from the faucet. It can be requested once per day.</span>
-            <Button
-              icon="air"
-              label="Use Faucet"
-              disabled={!isBlockchainReady}
-              onClick={handleAirdrop}
-            />
+            {canRequestAirdrop !== false ? (
+              <>
+                <span>
+                  Get 10k MOM test tokens from the faucet. It can be requested once per day.
+                </span>
+                <Button
+                  icon="air"
+                  label="Use Faucet"
+                  disabled={!isBlockchainReady}
+                  onClick={handleAirdrop}
+                />
+              </>
+            ) : (
+              <>
+                <span>You can make another request tomorrow at {dateOfNextAllowedAirdrop}</span>
+              </>
+            )}
           </styled.AirdropContainer>
 
           <styled.Title>{t('labels.balance')}</styled.Title>
