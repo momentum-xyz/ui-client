@@ -128,7 +128,7 @@ export class ObjectHelper {
     if (texture.label === 'skybox_custom') {
       SkyboxHelper.set360Skybox(
         scene,
-        this.textureRootUrl + SkyboxHelper.defaultSkyboxTextureSize + '/' + texture.hash
+        this.textureRootUrl + SkyboxHelper.defaultSkyboxTextureSize + texture.hash
       );
       return;
     }
@@ -154,7 +154,7 @@ export class ObjectHelper {
       const obj = this.objectsMap.get(texture.objectId);
       if (obj) {
         const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
-        const textureUrl = this.textureRootUrl + this.textureDefaultSize + '/' + texture.hash;
+        const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
         const newTexture = new Texture(textureUrl);
 
         const basicShapeMat = childMeshes[0].material as PBRMaterial;
