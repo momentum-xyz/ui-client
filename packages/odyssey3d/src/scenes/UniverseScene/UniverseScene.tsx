@@ -32,11 +32,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
   }, [events]);
 
   const onSceneReady = async (scene: Scene) => {
-    SkyboxHelper.set360Skybox(
-      scene,
-      //'https://dev2.odyssey.ninja/api/v3/render/texture/s8/27a7d8904d525b5d163754624ae46bc8'
-      skyboxWorld
-    );
+    SkyboxHelper.set360Skybox(scene, skyboxWorld);
 
     console.log('onSceneReady', scene);
     const view = scene.getEngine().getRenderingCanvas();

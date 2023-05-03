@@ -14,9 +14,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
   const onMove = useMutableCallback(callbacks.onMove);
   const onObjectTransform = useMutableCallback(callbacks.onObjectTransform);
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);
-  // Sent from user1 to BE to trigger sparkles
   const onBumpReady = useMutableCallback(callbacks.onBumpReady);
-  // TODO handle it
 
   useEffect(() => {
     return () => {
@@ -55,11 +53,6 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       );
 
       await WorldCreatorHelper.initialize(scene, onObjectTransform);
-      /*SkyboxHelper.set360Skybox(
-        scene,
-        //'https://dev2.odyssey.ninja/api/v3/render/texture/s8/26485e74acb29223ba7a9fa600d36c7f'
-        skyboxWorld
-      );*/
 
       if (window.sessionStorage.getItem('babylon_debug')) {
         Promise.all([
@@ -71,10 +64,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       }
 
       events.on('SetWorld', (world, userId) => {
-        // Commented out the actual line, as currently the assetID coming from BE is a Unity asset, so doesn't load
         //CameraHelper.spawnPlayer(scene, assetID);
         PlayerHelper.setWorld(world, userId);
-        //PlayerHelper.spawnPlayer(scene, 'd906e070-3d2e-b1a5-3e3f-703423225945');
       });
 
       events.on('AddObject', async (object, attachToCamera = false) => {
