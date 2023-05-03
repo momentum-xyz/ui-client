@@ -1,4 +1,4 @@
-import React, {FC, MutableRefObject, useMemo} from 'react';
+import {FC, MutableRefObject, useMemo} from 'react';
 import {Input, TextArea} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
@@ -11,17 +11,16 @@ import * as styled from './ChangeTextDialog.styled';
 
 interface PropsInterface {
   actionRef: MutableRefObject<{doSave: () => void}>;
+  objectId: string;
 }
 
-const ChangeTextDialog: FC<PropsInterface> = ({actionRef}) => {
-  const {universeStore, objectStore} = useStore();
-  const {world3dStore} = universeStore;
+const ChangeTextDialog: FC<PropsInterface> = ({actionRef, objectId}) => {
+  const {objectStore} = useStore();
+
   const {assetStore} = objectStore;
   const {changeTileDialog} = assetStore;
 
   const {t} = useI18n();
-
-  const objectId = world3dStore?.selectedObjectId || '';
 
   const {
     handleSubmit,
@@ -47,14 +46,6 @@ const ChangeTextDialog: FC<PropsInterface> = ({actionRef}) => {
     doSave: handleSubmit(formSubmitHandler)
   };
 
-  // const handleFocus = useCallback(() => {
-  //   world3dStore?.changeKeyboardControl(false);
-  // }, [world3dStore]);
-
-  // const handleBlur = useCallback(() => {
-  //   world3dStore?.changeKeyboardControl(true);
-  // }, [world3dStore]);
-
   const titleErrorMessage = useMemo(() => {
     switch (errors.title?.type) {
       case 'required':
@@ -74,21 +65,6 @@ const ChangeTextDialog: FC<PropsInterface> = ({actionRef}) => {
   }, [errors.content?.type, t]);
 
   return (
-    // <Dialog
-    //   title={t('labels.changeText')}
-    //   approveInfo={{
-    //     title: t('actions.change'),
-    //     onClick: handleSubmit(formSubmitHandler)
-    //   }}
-    //   declineInfo={{
-    //     title: t('actions.cancel'),
-    //     onClick: changeTileDialog.close
-    //   }}
-    //   onClose={changeTileDialog.close}
-    //   showCloseButton
-    //   showBackground
-    //   hasBorder
-    // >
     <styled.Container>
       <Controller
         control={control}
@@ -100,8 +76,6 @@ const ChangeTextDialog: FC<PropsInterface> = ({actionRef}) => {
             label={t('fields.title')}
             isError={!!titleErrorMessage}
             errorMessage={titleErrorMessage}
-            // onFocus={handleFocus}
-            // onBlur={handleBlur}
             onChange={onChange}
           />
         )}
@@ -117,15 +91,12 @@ const ChangeTextDialog: FC<PropsInterface> = ({actionRef}) => {
             isResizable
             isError={!!contentErrorMessage}
             errorMessage={contentErrorMessage}
-            // onFocus={handleFocus}
-            // onBlur={handleBlur}
             onChange={onChange}
             rows={10}
           />
         )}
       />
     </styled.Container>
-    // </Dialog>
   );
 };
 

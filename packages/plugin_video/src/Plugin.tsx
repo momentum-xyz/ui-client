@@ -1,10 +1,6 @@
 import {useState} from 'react';
-import {
-  UnityAutoTakeKeyboardControl,
-  UsePluginHookType,
-  useSharedObjectState
-} from '@momentum-xyz/sdk';
-import {Button, Input, Text} from '@momentum-xyz/ui-kit';
+import {UsePluginHookType, useSharedObjectState} from '@momentum-xyz/sdk';
+import {Input, Text} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import '@momentum-xyz/ui-kit/dist/themes/themes';
@@ -15,6 +11,7 @@ import '@momentum-xyz/ui-kit/dist/themes/themes';
 interface PluginStateInterface extends Record<string, unknown> {
   video_url?: string;
   youtube_url?: string; // for backward compatibility
+  title?: string;
   state?: {
     // for backward compatibility
     video_url: string;
@@ -78,7 +75,6 @@ const usePlugin: UsePluginHookType = (props) => {
   const {isAdmin} = props;
   console.log('PLUGIN VIDEO', props);
 
-  const [editMode, setEditMode] = useState(false);
   const [modifiedState, setModifiedState] = useState<PluginStateInterface | null>(null);
   const [error, setError] = useState<string>();
   const isModifiedStateError = modifiedState?.video_url ? !stateToQuery(modifiedState) : false;
@@ -88,63 +84,24 @@ const usePlugin: UsePluginHookType = (props) => {
 
   const {t} = useI18n();
 
-  const handleConfigSave = async () => {
+  const saveChanges = async () => {
     try {
       if (modifiedState) {
         await setSharedState(modifiedState);
         setModifiedState(null);
       }
-      setEditMode(false);
     } catch (e: any) {
       console.error(e);
       setError(`Unable to save. ${e.message}`);
     }
   };
-  const handleCancel = () => {
-    setModifiedState(null);
-    setEditMode(false);
-  };
 
-  const embedUrl = sharedState ? stateToQuery(sharedState) : null;
+  const state = modifiedState ?? sharedState;
+
+  const embedUrl = state ? stateToQuery(state) : null;
   console.log('embedUrl', embedUrl);
 
-  const actions = !isAdmin ? (
-    <span />
-  ) : editMode ? (
-    <>
-      <Button
-        onClick={handleConfigSave}
-        label={t('plugin_video.actions.save')}
-        disabled={isModifiedStateError}
-      />
-      &nbsp;
-      <Button onClick={handleCancel} label={t('plugin_video.actions.cancel')} />
-    </>
-  ) : (
-    <Button onClick={() => setEditMode(true)} label={t('plugin_video.actions.change')} />
-  );
-
-  const content = editMode ? (
-    <div style={{padding: '1em'}}>
-      <UnityAutoTakeKeyboardControl />
-      <Input
-        type="text"
-        label={t('plugin_video.labels.videoUrl')}
-        placeholder={t('plugin_video.messages.pasteUrl')}
-        autoFocus
-        value={
-          modifiedState?.video_url ??
-          (sharedState?.video_url ||
-            sharedState?.youtube_url ||
-            sharedState?.state?.video_url ||
-            '')
-        }
-        onChange={(value) => setModifiedState({video_url: value})}
-        isError={!!error || isModifiedStateError}
-        errorMessage={error || t('plugin_video.messages.invalidUrl') || ''}
-      />
-    </div>
-  ) : embedUrl ? (
+  const content = embedUrl ? (
     <iframe
       key={embedUrl}
       title={t('plugin_video.labels.video') || ''}
@@ -167,11 +124,73 @@ const usePlugin: UsePluginHookType = (props) => {
     </div>
   );
 
+  const editModeContent = !isAdmin ? (
+    <span />
+  ) : (
+    <div style={{padding: '1em', display: 'flex', flexDirection: 'column', gap: '20px'}}>
+      <Text text={t('plugin_video.labels.embed')} size="m" align="left" transform="uppercase" />
+      <Text
+        text="By embedding a video to this object; users will also be able to see this video played when they select the object; regardless of its asset type."
+        size="m"
+        align="left"
+      />
+      <br />
+      <Text
+        text="To embed a video; add the url to the video in the input field below."
+        size="m"
+        align="left"
+      />
+      <hr />
+      <Input
+        type="text"
+        label={t('plugin_video.labels.videoUrl')}
+        placeholder={t('plugin_video.messages.pasteUrl')}
+        autoFocus
+        value={
+          modifiedState?.video_url ??
+          (sharedState?.video_url ||
+            sharedState?.youtube_url ||
+            sharedState?.state?.video_url ||
+            '')
+        }
+        onChange={(value) =>
+          setModifiedState({
+            ...(modifiedState || sharedState),
+            video_url: value
+          })
+        }
+        isError={!!error || isModifiedStateError}
+        errorMessage={error || t('plugin_video.messages.invalidUrl') || ''}
+      />
+      <hr />
+      <Text
+        text={t('plugin_video.labels.videoPreview')}
+        size="m"
+        align="left"
+        transform="uppercase"
+      />
+      {content}
+      <Input
+        type="text"
+        // label={t('plugin_video.labels.title')}
+        placeholder={t('plugin_video.messages.name')}
+        value={modifiedState?.title ?? sharedState?.title ?? ''}
+        onChange={(value) =>
+          setModifiedState({
+            ...(modifiedState || sharedState),
+            title: value
+          })
+        }
+      />
+    </div>
+  );
+
   return {
     objectView: {
-      title: t('plugin_video.labels.video') || '',
-      actions,
-      content
+      title: sharedState?.title || '',
+      content,
+      editModeContent,
+      saveChanges
     }
   };
 };

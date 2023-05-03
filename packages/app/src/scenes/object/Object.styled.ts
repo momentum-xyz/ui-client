@@ -1,10 +1,15 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  position: absolute;
   display: flex;
-  width: 100%;
   gap: 10px;
-  margin: 0 20px;
+
+  pointer-events: all;
+
+  top: 10px;
+  right: 10px;
+  z-index: var(--dialog-z-index);
 `;
 
 export const BottomCenteredDock = styled.div`

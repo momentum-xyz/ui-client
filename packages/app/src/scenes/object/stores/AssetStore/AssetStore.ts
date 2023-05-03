@@ -67,6 +67,7 @@ const AssetStore = types
       object: Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface> | undefined,
       spaceId: string
     ) {
+      console.log('AssetStore setObject', object, spaceId);
       if (!object) {
         return;
       }
@@ -95,9 +96,9 @@ const AssetStore = types
       }
     },
     postNewImage: flow(function* (objectId: string, file: File) {
-      if (!self.pluginId) {
-        return;
-      }
+      // if (!self.pluginId) {
+      //   return;
+      // }
       const data = {file: file};
       const userResponse: UploadImageResponse = yield self.imageUpload.send(
         api.mediaRepository.uploadImage,
@@ -107,26 +108,26 @@ const AssetStore = types
 
       yield self.setTileRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
         spaceId: objectId,
-        plugin_id: self.pluginId,
+        plugin_id: PluginIdEnum.IMAGE,
         attribute_name: AttributeNameEnum.STATE,
         value: {render_hash: imageHash}
       });
 
-      yield self.getSpaceAttributeValue(self.pluginId, objectId);
+      yield self.getSpaceAttributeValue(PluginIdEnum.IMAGE, objectId);
     }),
     postNewContent: flow(function* (objectId: string, content: ObjectInterface) {
-      if (!self.pluginId) {
-        return;
-      }
+      // if (!self.pluginId) {
+      //   return;
+      // }
 
       yield self.setTileRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
         spaceId: objectId,
-        plugin_id: self.pluginId,
+        plugin_id: PluginIdEnum.TEXT,
         attribute_name: AttributeNameEnum.STATE,
         value: content
       });
 
-      yield self.getSpaceAttributeValue(self.pluginId, objectId);
+      yield self.getSpaceAttributeValue(PluginIdEnum.TEXT, objectId);
     })
   }))
   .views((self) => ({

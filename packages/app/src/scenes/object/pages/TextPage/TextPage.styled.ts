@@ -58,11 +58,12 @@ export const HeaderElement = styled.div`
 
 export const ContentWrapper = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  // justify-content: center;
+  // align-items: center;
 
   height: 100%;
-  width: 90%;
+  width: 100%;
 `;
 
 export const Title = styled.div`

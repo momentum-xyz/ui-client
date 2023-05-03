@@ -1,5 +1,9 @@
 import {PluginPropsInterface} from './pluginProps.interface';
 
+export interface EditObjectViewInterface {
+  onSave: () => void;
+}
+
 interface UsePluginHookReturnInterface {
   content?: JSX.Element | null;
   objectView?: {
@@ -7,6 +11,8 @@ interface UsePluginHookReturnInterface {
     subtitle?: string;
     actions?: JSX.Element | null;
     content: JSX.Element | null;
+    editModeContent?: JSX.Element | null;
+    saveChanges?: () => Promise<void>;
   };
 }
 

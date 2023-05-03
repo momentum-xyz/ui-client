@@ -1359,11 +1359,14 @@ export const enGb = {
     },
     plugin_video: {
       labels: {
+        embed: 'Embed a video',
         video: 'Video',
-        videoUrl: 'Video URL'
+        videoUrl: 'Video URL',
+        videoPreview: 'Video Preview'
       },
       messages: {
         pasteUrl: 'Paste a YouTube, Twitch, or Vimeo Share URL here.',
+        name: 'Name your video',
         invalidUrl: 'Invalid or unsupported URL',
         noUrl: 'Video not yet set'
       },
