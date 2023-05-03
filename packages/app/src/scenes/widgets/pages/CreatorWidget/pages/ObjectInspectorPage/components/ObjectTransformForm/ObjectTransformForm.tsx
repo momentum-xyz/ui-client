@@ -32,6 +32,11 @@ const ObjectInspector: FC<PropsInterface> = ({data, onTransformChange}) => {
     if (!value) {
       return;
     }
+
+    const numberValue = Number(value);
+    if (isNaN(numberValue)) {
+      return;
+    }
     onTransformChange({...data, [name]: Number(value)});
   };
 

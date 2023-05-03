@@ -14,7 +14,7 @@ import {TransformInterface} from './components/ObjectTransformForm/ObjectTransfo
 
 const ObjectInspector: FC = () => {
   const {creatorStore} = useStore();
-  const {objectName, objectInfo, spawnAssetStore} = creatorStore;
+  const {objectName, objectInfo, spawnAssetStore, selectedObjectId} = creatorStore;
   const {assets3dBasic, assets3dCustom} = spawnAssetStore;
 
   const {t} = useI18n();
@@ -42,7 +42,7 @@ const ObjectInspector: FC = () => {
   const actualObjectAsset = actualObject ? Asset3d.create({...actualObject}) : undefined;
 
   const handleTransformChange = (data: TransformInterface) => {
-    if (!objectInfo || !PosBusService.isConnected()) {
+    if (!selectedObjectId || !PosBusService.isConnected()) {
       console.log(`ObjectInspectorPage: PosBusService is not connected.`);
       return;
     }
@@ -63,7 +63,7 @@ const ObjectInspector: FC = () => {
         z: data.scaleZ
       }
     };
-    PosBusService.sendObjectTransform(objectInfo.asset_3d_id, transform);
+    PosBusService.sendObjectTransform(selectedObjectId, transform);
   };
 
   return (
