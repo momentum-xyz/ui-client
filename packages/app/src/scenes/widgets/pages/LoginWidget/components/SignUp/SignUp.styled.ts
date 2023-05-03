@@ -2,12 +2,11 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Container = styled.div`
-  --scroll-offset: 330px;
+  --scroll-offset: 260px;
 `;
 
 export const ScrollableContainer = styled.div`
-  margin: 0 10px;
-  padding: 10px 0 0 0;
+  margin: 10px 10px 0 10px;
   border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
   height: calc(100vh - var(--scroll-offset));
   overflow: auto;

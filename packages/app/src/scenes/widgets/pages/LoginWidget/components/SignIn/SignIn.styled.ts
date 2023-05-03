@@ -2,7 +2,7 @@ import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --scroll-offset: 320px;
+  --scroll-offset: 270px;
 
   display: flex;
   flex-direction: column;
@@ -18,7 +18,7 @@ export const Title = styled.div`
 `;
 
 export const Desc = styled.div`
-  padding: 12px 0 22px 0;
+  padding: 12px 0 12px 0;
   line-height: 22px;
 `;
 
