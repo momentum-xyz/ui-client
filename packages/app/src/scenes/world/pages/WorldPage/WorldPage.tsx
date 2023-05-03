@@ -1,4 +1,4 @@
-import {FC, useEffect, useMemo} from 'react';
+import {FC, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-dom';
@@ -21,6 +21,7 @@ import {HighFiveContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 const WorldPage: FC = () => {
   const {agoraStore, universeStore, widgetsStore, widgetManagerStore, sessionStore} = useStore();
   const {world3dStore} = universeStore;
+  const [readyToHandleEvents, setReadyToHandleEvents] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -52,7 +53,7 @@ const WorldPage: FC = () => {
   }, [worldId, agoraStore, widgetManagerStore]);
 
   useEffect(() => {
-    if (worldId) {
+    if (worldId && readyToHandleEvents) {
       const teleportToWorld = () => {
         if (!PosBusService.isConnected()) {
           console.log(`BabylonPage: PosBusService is not connected.`);
@@ -71,7 +72,7 @@ const WorldPage: FC = () => {
     return () => {
       universeStore.leaveWorld();
     };
-  }, [worldId, universeStore]);
+  }, [worldId, universeStore, readyToHandleEvents]);
 
   const handleObjectClick = (objectId: string, clickPos: ClickPositionInterface) => {
     if (universeStore.isCreatorMode) {
@@ -215,6 +216,9 @@ const WorldPage: FC = () => {
       onUserClick={handleUserClick}
       onClickOutside={handleClickOutside}
       onBumpReady={handleBumpReady}
+      onReadyToHandleEvents={() => {
+        setReadyToHandleEvents(true);
+      }}
     />
   );
 };

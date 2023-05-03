@@ -14,12 +14,14 @@ export interface PropsInterface {
   onWorldClick: (id: string) => void;
   onUserClick: (id: string) => void;
   onClickOutside: () => void;
+  onReadyToHandleEvents: () => void;
 }
 
 export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbacks}) => {
   const onWorldClick = useMutableCallback(callbacks.onWorldClick);
   const onUserClick = useMutableCallback(callbacks.onUserClick);
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);
+  const onReadyToHandleEvents = useMutableCallback(callbacks.onReadyToHandleEvents);
 
   useEffect(() => {
     return () => {
@@ -69,6 +71,8 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
     events.on('WorldSelected', (id) => {
       console.log('Babylon: WorldSelected ', id);
     });
+
+    onReadyToHandleEvents();
 
     PlayerHelper.spawnPlayer(scene);
 
