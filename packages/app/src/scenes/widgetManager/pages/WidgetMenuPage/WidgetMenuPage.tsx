@@ -94,6 +94,22 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       isHidden: !isWorld || !isMyWorld,
       onClick: toggle
     },
+
+    {
+      key: WidgetEnum.GO_TO,
+      position: PositionEnum.CENTER, // TODO 2nd floor
+      iconName: 'info',
+      onClick: () => creatorStore.setSelectedTab('inspector'),
+      isHidden: !creatorStore.selectedObjectId
+    },
+    {
+      key: WidgetEnum.GO_TO,
+      position: PositionEnum.CENTER, // TODO 2nd floor
+      iconName: 'cubicles',
+      onClick: () => creatorStore.setSelectedTab('functionality'),
+      isHidden: !creatorStore.selectedObjectId
+    },
+
     {
       key: WidgetEnum.GO_TO,
       position: PositionEnum.CENTER, // TODO 2nd floor
