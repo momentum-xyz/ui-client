@@ -7,6 +7,9 @@ export const Grid = styled.div`
   width: 100%;
   flex-grow: 1;
   gap: 5px;
+  @media (max-width: 1440px) {
+    grid-template-columns: 1fr 1fr;
+  }
 `;
 
 export const GridItem = styled.div`
