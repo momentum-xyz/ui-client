@@ -19,9 +19,17 @@ interface PropsInterface {
   walletOptions: SelectOptionInterface<string>[];
   onSelectWallet: (walletId: string | null) => void;
   selectedWallet?: WalletModelInterface;
+  selectedWalletTransferrable: string;
+  selectedWalletStaked: string;
 }
 
-const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWallet}) => {
+const MyWallet: FC<PropsInterface> = ({
+  walletOptions,
+  selectedWallet,
+  selectedWalletTransferrable,
+  selectedWalletStaked,
+  onSelectWallet
+}) => {
   const {t} = useI18n();
 
   const requiredAccountAddress = selectedWallet?.wallet_id || 'n/a';
@@ -131,10 +139,7 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
             <styled.TokenBlockData>
               <span>Total amount of MOM tokens that can be transferred or used in staking.</span>
               <styled.Amount>
-                <SymbolAmount
-                  tokenSymbol="MOM"
-                  stringValue={formatBigInt(selectedWallet?.transferable)}
-                />
+                <SymbolAmount tokenSymbol="MOM" stringValue={selectedWalletTransferrable} />
               </styled.Amount>
             </styled.TokenBlockData>
           </styled.TokenBlock>
@@ -144,10 +149,7 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
             <styled.TokenBlockData>
               <span>Total amount of MOM tokens that are being staked by you.</span>
               <styled.Amount>
-                <SymbolAmount
-                  tokenSymbol="MOM"
-                  stringValue={formatBigInt(selectedWallet?.staked)}
-                />
+                <SymbolAmount tokenSymbol="MOM" stringValue={selectedWalletStaked} />
               </styled.Amount>
             </styled.TokenBlockData>
           </styled.TokenBlock>

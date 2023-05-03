@@ -364,11 +364,26 @@ const NftStore = types
         console.error(err);
         return new BN(0);
       }
+    },
+    get balanceStakedBN(): BN {
+      const walletId = self._selectedWalletId || self.defaultWalletId || self.walletsAddresses[0];
+      const stakedAmount = new BN(0);
+
+      self.stakes
+        .filter((stake) => stake.wallet_id === walletId)
+        .forEach((stake) => {
+          stakedAmount.add(new BN(stake.amount));
+        });
+
+      return stakedAmount;
     }
   }))
   .views((self) => ({
     get balanceTransferrable(): string {
       return self.balanceFormat(self.balanceTransferrableBN);
+    },
+    get balanceStaked(): string {
+      return self.balanceFormat(self.balanceStakedBN);
     },
     canBeStaked(amount: BN): boolean {
       try {
