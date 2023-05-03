@@ -1,7 +1,10 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  max-height: calc(100vh - 230px);
+  overflow: scroll;
+`;
 
 export const InfoContainer = styled.div`
   padding-bottom: 30px;
@@ -33,8 +36,6 @@ export const ImageUploadContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   border-radius: 6px;
-  width: 490px;
-  height: 490px;
   padding-top: 0px;
   margin: 0px;
 
@@ -56,6 +57,13 @@ export const ImageUploadContainer = styled.div`
     font-size: 14px !important;
     padding: 20px !important;
     width: 100%;
+  }
+
+  width: 490px;
+  height: 490px;
+
+  @media (max-width: 1440px) {
+    width: 440px;
   }
 `;
 
