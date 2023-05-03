@@ -206,7 +206,14 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
     activate,
     isActive
   } = useWallet({appVariables: appVariables as any});
-  console.log('WalletSelectHelper', {library, account, activate, isActive, requiredAccountAddress});
+  console.log('WalletSelectHelper', {
+    library,
+    chainId,
+    account,
+    activate,
+    isActive,
+    requiredAccountAddress
+  });
 
   useEffect(() => {
     if (account) {
@@ -229,7 +236,7 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
       .finally(() => onActivationDone(true));
   }, [activate, onActivationDone]);
 
-  const isWrongNetwork = !!chainId && chainId !== appVariables.BLOCKCHAIN_ID;
+  const isWrongNetwork = !!chainId && chainId !== +appVariables.BLOCKCHAIN_ID;
 
   useEffect(() => {
     onNetworkStatusChanged(isWrongNetwork);
@@ -241,7 +248,11 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
   }
 
   if (isWrongNetwork) {
-    console.log('WalletSelectHelper current chainId', chainId, library);
+    console.log('WalletSelectHelper current chainId', {
+      chainId,
+      'appVariables.BLOCKCHAIN_ID': appVariables.BLOCKCHAIN_ID,
+      library
+    });
     return <Text text="Please switch to Arbitrum network in the wallet" size="m" />;
   }
 
