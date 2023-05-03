@@ -8,8 +8,9 @@ import {toast} from 'react-toastify';
 import {ToastContent} from 'ui-kit';
 import {BasicAsset2dIdEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
-import {ChangeImageDialog, ChangeTextDialog, ChangeVideoDialog} from 'scenes/object/components';
+import {ChangeImageDialog, ChangeVideoDialog} from 'scenes/object/components';
 
+import {AssignText} from './components';
 import * as styled from './ObjectFunctionalityPage.styled';
 
 const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
@@ -105,7 +106,7 @@ const ObjectFunctionalityPage: FC = () => {
           </>
         );
       case BasicAsset2dIdEnum.TEXT:
-        return <ChangeTextDialog actionRef={actionRef} objectId={selectedObjectId} />;
+        return <AssignText actionRef={actionRef} objectId={selectedObjectId} />;
       default:
         return null;
     }
