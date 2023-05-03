@@ -12,6 +12,12 @@ export const Container = styled.div`
   z-index: var(--dialog-z-index);
 `;
 
+export const Tabs = styled.div`
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
+`;
+
 export const BottomCenteredDock = styled.div`
   position: fixed;
   bottom: 50px;
