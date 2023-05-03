@@ -34,7 +34,6 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
   /* Will run one time. */
   const onSceneReady = async (scene: Scene) => {
     const view = scene.getEngine().getRenderingCanvas();
-    const engine = scene.getEngine();
     if (view?.id) {
       PlayerHelper.initialize(scene, view, true, onMove, onBumpReady);
       LightHelper.initialize(scene);
@@ -42,10 +41,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
 
       ObjectHelper.initialize(
         scene,
-        engine,
         renderURL,
         //  props.objects,
-        view,
         onObjectClick,
         onUserClick,
         onClickOutside
