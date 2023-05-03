@@ -30,6 +30,7 @@ import {
   smoothCameraTransform,
   TransformTypesEnum
 } from './TransformHelper';
+import {ObjectHelper} from './ObjectHelper';
 
 const NORMAL_SPEED = 0.5;
 const FAST_SPEED = 1.5;
@@ -210,8 +211,27 @@ export class PlayerHelper {
     const meshes = instance.rootNodes[0].getChildMeshes();
     const myNodeMat = meshes[0].material as NodeMaterial;
     const textureBlocks = myNodeMat.getTextureBlocks();
+    let textureUrl = '';
     if (user.avatar) {
-      const avatarTexture = new Texture(user.avatar);
+      if (user.avatar.startsWith('http')) {
+        textureUrl = user.avatar;
+      } else {
+        textureUrl = ObjectHelper.textureRootUrl + ObjectHelper.textureDefaultSize + user.avatar;
+      }
+
+      const avatarTexture = new Texture(
+        textureUrl,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        (message) => {
+          console.log(
+            'Error when loading a texture for user: ' + user.name + ', error: ' + message
+          );
+        }
+      );
       textureBlocks[2].texture = avatarTexture;
     }
   }
