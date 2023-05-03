@@ -32,6 +32,7 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
     walletSelectContent,
     canRequestAirdrop,
     dateOfNextAllowedAirdrop,
+    saveLastAirdropInfo,
     claimRewards,
     getTokens
   } = useBlockchain({
@@ -42,6 +43,7 @@ const MyWallet: FC<PropsInterface> = ({walletOptions, selectedWallet, onSelectWa
     try {
       await getTokens();
       console.log('Airdop success');
+      saveLastAirdropInfo();
     } catch (err) {
       console.log('Error requesting airdrop:', err);
     }
