@@ -265,20 +265,20 @@ export class WorldCreatorHelper {
   }
 
   static subscribeForTransformUpdates(objectId: string, node: TransformNode, spawn = false) {
-    let posToSend: Vector3;
-    let rotToSend: Vector3;
-    let scaleToSend: Vector3;
-
-    if (spawn) {
-      posToSend = node.absolutePosition;
-      rotToSend = new Vector3(0, 0, 0);
-      scaleToSend = new Vector3(1, 1, 1);
-    } else {
-      posToSend = node.position;
-      rotToSend = node.rotation;
-      scaleToSend = node.scaling;
-    }
     const updateTransformCallback = () => {
+      let posToSend: Vector3;
+      let rotToSend: Vector3;
+      let scaleToSend: Vector3;
+
+      if (spawn) {
+        posToSend = node.absolutePosition;
+        rotToSend = new Vector3(0, 0, 0);
+        scaleToSend = new Vector3(1, 1, 1);
+      } else {
+        posToSend = node.position;
+        rotToSend = node.rotation;
+        scaleToSend = node.scaling;
+      }
       const myTransfrom: ObjectTransformInterface = {
         position: vec3ToPos(posToSend),
         rotation: vec3ToPos(rotToSend),
