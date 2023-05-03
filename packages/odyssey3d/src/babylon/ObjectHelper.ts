@@ -149,18 +149,21 @@ export class ObjectHelper {
       }
       return;
     }
-    // TODO: Confirm this is how we are going to handle object texture and improve this a bit
+    // Handle object texture
     else if (texture.label === 'object_texture') {
       const obj = this.objectsMap.get(texture.objectId);
       if (obj) {
-        const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
-        const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
-        const newTexture = new Texture(textureUrl);
+        if (obj.objectDefinition.asset_format.toString() === '2') {
+          const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
+          const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
+          const newTexture = new Texture(textureUrl);
+          newTexture.uAng = Math.PI;
 
-        const basicShapeMat = childMeshes[0].material as PBRMaterial;
-        basicShapeMat.albedoTexture = newTexture;
-        childMeshes[0].material = basicShapeMat;
-        this.awaitingTexturesMap.delete(texture.objectId);
+          const basicShapeMat = childMeshes[0].material as PBRMaterial;
+          basicShapeMat.albedoTexture = newTexture;
+          childMeshes[0].material = basicShapeMat;
+          this.awaitingTexturesMap.delete(texture.objectId);
+        }
       }
       return;
     }
@@ -168,7 +171,6 @@ export class ObjectHelper {
 
   static instantiateObject(container: AssetContainer, object: Object3dInterface, attach: boolean) {
     const instance = container.instantiateModelsToScene();
-
     if (instance.rootNodes.length === 0) {
       console.log(
         'instance.rootNodes.length === 0. Something went wrong with loading ' + object.asset_3d_id
@@ -225,12 +227,15 @@ export class ObjectHelper {
   static detachFromCamera() {
     this.transformSubscription?.unsubscribe();
 
-    this.attachedNode.setParent(null, undefined, true);
-    const attachedNodeChildren = this.attachedNode.getChildMeshes();
-    attachedNodeChildren.forEach((element) => {
-      element.setEnabled(true);
-    });
-    this.attachedNode.setEnabled(true);
+    if (this.attachedNode) {
+      this.attachedNode.setParent(null, undefined, true);
+      const attachedNodeChildren = this.attachedNode.getChildMeshes();
+      attachedNodeChildren.forEach((element) => {
+        element.setEnabled(true);
+      });
+      this.attachedNode.setEnabled(true);
+    }
+
     this.mySpawningClone?.dispose();
     this.selectedObjectFromSpawn = '';
 

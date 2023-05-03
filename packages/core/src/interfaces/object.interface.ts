@@ -16,6 +16,7 @@ export interface Object3dInterface {
   name: string;
   parentId?: string;
   transform: ObjectTransformInterface;
+  asset_format: string;
   asset_3d_id: string;
   asset_2d_id?: string;
   showOnMiniMap?: boolean;
