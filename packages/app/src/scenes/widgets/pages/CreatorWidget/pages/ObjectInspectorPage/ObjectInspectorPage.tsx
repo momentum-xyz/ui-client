@@ -2,13 +2,15 @@ import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Model3dPreview} from '@momentum-xyz/map3d';
 import {useI18n} from '@momentum-xyz/core';
-import {Frame, Input} from '@momentum-xyz/ui-kit-storybook';
+import {Frame} from '@momentum-xyz/ui-kit-storybook';
 
 import {Asset3d} from 'core/models';
 import {useStore} from 'shared/hooks';
+import {PosBusService} from 'shared/services';
 
 import * as styled from './ObjectInspectorPage.styled';
-import {ObjectColorPicker} from './components';
+import {ObjectColorPicker, ObjectTransformForm} from './components';
+import {TransformInterface} from './components/ObjectTransformForm/ObjectTransformForm';
 
 const ObjectInspector: FC = () => {
   const {creatorStore} = useStore();
@@ -17,6 +19,20 @@ const ObjectInspector: FC = () => {
 
   const {t} = useI18n();
 
+  const transformFormData: TransformInterface | null = objectInfo?.transform
+    ? {
+        positionX: objectInfo.transform.position.x,
+        positionY: objectInfo.transform.position.y,
+        positionZ: objectInfo.transform.position.z,
+        rotationX: objectInfo.transform.rotation.x,
+        rotationY: objectInfo.transform.rotation.y,
+        rotationZ: objectInfo.transform.rotation.z,
+        scaleX: objectInfo.transform.scale.x,
+        scaleY: objectInfo.transform.scale.y,
+        scaleZ: objectInfo.transform.scale.z
+      }
+    : null;
+
   const canChangeColor = assets3dBasic.some((asset) => asset.id === objectInfo?.asset_3d_id);
 
   const actualObject =
@@ -24,6 +40,31 @@ const ObjectInspector: FC = () => {
     assets3dCustom.find((asset) => asset.id === objectInfo?.asset_3d_id);
 
   const actualObjectAsset = actualObject ? Asset3d.create({...actualObject}) : undefined;
+
+  const handleTransformChange = (data: TransformInterface) => {
+    if (!objectInfo || !PosBusService.isConnected()) {
+      console.log(`ObjectInspectorPage: PosBusService is not connected.`);
+      return;
+    }
+    const transform = {
+      position: {
+        x: data.positionX,
+        y: data.positionY,
+        z: data.positionZ
+      },
+      rotation: {
+        x: data.rotationX,
+        y: data.rotationY,
+        z: data.rotationZ
+      },
+      scale: {
+        x: data.scaleX,
+        y: data.scaleY,
+        z: data.scaleZ
+      }
+    };
+    PosBusService.sendObjectTransform(objectInfo.asset_3d_id, transform);
+  };
 
   return (
     <styled.Container>
@@ -42,67 +83,9 @@ const ObjectInspector: FC = () => {
         </Frame>
       </styled.Section>
       <styled.Separator />
-      <styled.Section className="large-gap">
-        <styled.ControlsRow>
-          <styled.ControlsRowTitle>{t('titles.scale')}</styled.ControlsRowTitle>
-          <styled.ControlsRowInputsContainer>
-            <styled.ControlsRowInputContainer>
-              <styled.ControlsRowInputTitle>W</styled.ControlsRowInputTitle>
-              <Input onChange={() => {}} />
-            </styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputContainer>
-              <styled.ControlsRowInputTitle>H</styled.ControlsRowInputTitle>
-              <Input onChange={() => {}} />
-            </styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputContainer>
-              <styled.ControlsRowInputTitle>D</styled.ControlsRowInputTitle>
-              <Input onChange={() => {}} />
-            </styled.ControlsRowInputContainer>
-          </styled.ControlsRowInputsContainer>
-        </styled.ControlsRow>
-        <styled.ControlsRow>
-          <styled.ControlsRowTitle>{t('titles.position')}</styled.ControlsRowTitle>
-          <styled.ControlsRowInputsContainer>
-            <styled.ControlsRowInputContainer>
-              <styled.ControlsRowInputTitle>X</styled.ControlsRowInputTitle>
-              <Input onChange={() => {}} />
-            </styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputContainer>
-              <styled.ControlsRowInputTitle>Y</styled.ControlsRowInputTitle>
-              <Input onChange={() => {}} />
-            </styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputContainer>
-              <styled.ControlsRowInputTitle>Z</styled.ControlsRowInputTitle>
-              <Input onChange={() => {}} />
-            </styled.ControlsRowInputContainer>
-          </styled.ControlsRowInputsContainer>
-        </styled.ControlsRow>
-        <styled.ControlsRow>
-          <styled.ControlsRowTitle>{t('titles.rotation')}</styled.ControlsRowTitle>
-          <styled.ControlsRowInputsContainer>
-            <styled.ControlsRowInputContainer>
-              <styled.ControlsRowInputTitle>X</styled.ControlsRowInputTitle>
-              <Input onChange={() => {}} />
-            </styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputContainer>
-              <styled.ControlsRowInputTitle>Y</styled.ControlsRowInputTitle>
-              <Input onChange={() => {}} />
-            </styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputContainer>
-              <styled.ControlsRowInputTitle>Z</styled.ControlsRowInputTitle>
-              <Input onChange={() => {}} />
-            </styled.ControlsRowInputContainer>
-          </styled.ControlsRowInputsContainer>
-        </styled.ControlsRow>
-        {/* <Input
-          placeholder={t('labels.search')}
-          isSearch
-          isClearable
-          wide
-          onChange={spawnAssetStore.searchQuery.setQuery}
-          value={spawnAssetStore.searchQuery.query}
-        /> */}
-      </styled.Section>
+      {transformFormData && (
+        <ObjectTransformForm data={transformFormData} onTransformChange={handleTransformChange} />
+      )}
       {canChangeColor && (
         <styled.Section className="margin-top">
           <styled.Title>{t('titles.colourPicker')}</styled.Title>
