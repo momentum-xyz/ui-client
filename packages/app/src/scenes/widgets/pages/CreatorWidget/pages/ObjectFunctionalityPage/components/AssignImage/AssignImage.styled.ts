@@ -1,27 +1,33 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  --scroll-offset: 455px;
+`;
 
 export const InfoContainer = styled.div`
-  padding-bottom: 30px;
-  margin-bottom: 50px;
-  border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.8)};
+  padding: 0 0 20px 0;
+  margin: 0 0 20px 0;
+  border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
 
-  & > h1 {
+  & > div {
     font-weight: 600;
-    font-size: 15px;
-    line-height: 22px;
+    font-size: var(--font-size-l);
     letter-spacing: 0.2em;
     text-transform: uppercase;
     margin: 0 0 12px;
   }
+
   & > span {
     letter-spacing: 0.02em;
     line-height: 22px;
   }
 `;
-export const UploadContainer = styled.div`
+
+export const ScrollableContainer = styled.div`
+  height: calc(100vh - var(--scroll-offset));
+  overflow: auto;
+
   & > div {
     padding: 20px;
   }
@@ -57,7 +63,7 @@ export const ImageUploadContainer = styled.div`
   }
 
   width: 490px;
-  height: 490px;
+  height: 260px;
 
   @media (max-width: 1440px) {
     width: 440px;
