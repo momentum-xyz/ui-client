@@ -1,9 +1,7 @@
 import {
   Scene,
-  HemisphericLight,
   AbstractMesh,
   SceneLoader,
-  Engine,
   AssetContainer,
   Matrix,
   InstantiatedEntries,
@@ -30,7 +28,6 @@ interface BabylonObjectInterface {
 }
 
 export class ObjectHelper {
-  static light: HemisphericLight | null = null;
   static assetRootUrl = '/asset/';
   static textureRootUrl = '/texture/';
   static textureDefaultSize = 's3/';
@@ -45,9 +42,7 @@ export class ObjectHelper {
 
   static initialize(
     scene: Scene,
-    engine: Engine,
     assetBaseURL: string,
-    view: HTMLCanvasElement,
     onObjectClick: (objectId: string, clickPosition: ClickPositionInterface) => void,
     onUserClick: (userId: string, clickPosition: ClickPositionInterface) => void,
     onClickOutside: () => void
@@ -147,7 +142,6 @@ export class ObjectHelper {
     if (texture.label === 'object_color') {
       const obj = this.objectsMap.get(texture.objectId);
       if (obj) {
-        //TODO Parse color hash to actual Color3.
         const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
         const basicShapeMat = childMeshes[0].material as PBRMaterial;
         basicShapeMat.albedoColor = Color3.FromHexString(texture.hash);

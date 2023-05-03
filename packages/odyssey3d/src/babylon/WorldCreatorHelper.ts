@@ -157,7 +157,6 @@ export class WorldCreatorHelper {
       const zScaleClone = entries[8][1].clone('zScale', customMesh);
       const uniformScaleClone = entries[9][1].clone('uniformScale', customMesh);
 
-      //this.yMesh._scene = this.gizmoManager.gizmos.positionGizmo.gizmoLayer.utilityLayerScene;
       if (
         xPosClone &&
         yPosClone &&
@@ -374,7 +373,6 @@ export class WorldCreatorHelper {
   }
 
   static setGizmoType(type: GizmoTypesEnum) {
-    //this.disableAllGizmos();
     switch (type) {
       case GizmoTypesEnum.Position:
         this.gizmoManager.positionGizmoEnabled = true;

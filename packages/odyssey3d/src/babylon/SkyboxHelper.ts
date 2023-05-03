@@ -17,12 +17,7 @@ export class SkyboxHelper {
     const skybox = MeshBuilder.CreateBox('skyBox', {size: 1000.0}, scene);
     const skyboxMaterial = new StandardMaterial('skyBox', scene);
     skyboxMaterial.backFaceCulling = false;
-    skyboxMaterial.reflectionTexture = new CubeTexture(
-      //'//www.babylonjs.com/assets/skybox/TropicalSunnyDay',
-      //26485e74acb29223ba7a9fa600d36c7f
-      url,
-      scene
-    );
+    skyboxMaterial.reflectionTexture = new CubeTexture(url, scene);
     skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
     skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
     skyboxMaterial.specularColor = new Color3(0, 0, 0);
@@ -34,12 +29,14 @@ export class SkyboxHelper {
     const dome = new PhotoDome(
       'skybox',
       url,
-      //medusas,
       {
         resolution: 32,
         size: 10000
       },
-      scene
+      scene,
+      (errorMsg) => {
+        console.log('Loading skybox error: ' + errorMsg);
+      }
     );
     dome.mesh.isPickable = false;
 
