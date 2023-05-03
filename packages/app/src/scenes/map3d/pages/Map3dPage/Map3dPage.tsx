@@ -1,4 +1,4 @@
-import {FC, useEffect, useRef} from 'react';
+import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Universe3dEmitter} from '@momentum-xyz/core';
 import {UniverseScene} from '@momentum-xyz/odyssey3d';
@@ -13,6 +13,8 @@ const Map3dPage: FC = () => {
   const {widgetManagerStore, universeStore} = useStore();
   const {allWorlds, allUsers} = universeStore.universe2dStore;
 
+  const [readyToHandleEvents, setReadyToHandleEvents] = useState<boolean>(false);
+
   // FIXME: Workaround to prevent sending twice lists
   const usersWereInitialised = useRef<boolean>(false);
   const worldsWereInitialised = useRef<boolean>(false);
@@ -24,7 +26,18 @@ const Map3dPage: FC = () => {
   }, [widgetManagerStore]);
 
   useEffect(() => {
-    console.log('Map3dPage: useEffect', allWorlds, allUsers);
+    console.log(
+      'Map3dPage: useEffect',
+      allWorlds,
+      allUsers,
+      usersWereInitialised.current,
+      worldsWereInitialised.current,
+      readyToHandleEvents
+    );
+    if (!readyToHandleEvents) {
+      return;
+    }
+
     if (allWorlds.length > 0 && !usersWereInitialised.current) {
       usersWereInitialised.current = true;
       Universe3dEmitter.emit(
@@ -50,7 +63,7 @@ const Map3dPage: FC = () => {
         }))
       );
     }
-  }, [allWorlds, allUsers, allUsers.length, allWorlds.length]);
+  }, [allWorlds, allUsers, allUsers.length, allWorlds.length, readyToHandleEvents]);
 
   return (
     <UniverseScene
@@ -67,6 +80,10 @@ const Map3dPage: FC = () => {
       }}
       onClickOutside={() => {
         //widgetManagerStore.closeAll();
+      }}
+      onReadyToHandleEvents={() => {
+        console.log('Map3dPage: onReadyToHandleEvents');
+        setReadyToHandleEvents(true);
       }}
     />
   );

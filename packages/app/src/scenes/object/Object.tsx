@@ -1,29 +1,35 @@
 import React, {FC, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
+import {Panel, TabInterface, Tabs} from '@momentum-xyz/ui-kit-storybook';
 
-import {useStore} from 'shared/hooks';
-import {AssetTypeEnum, PosBusEventEnum} from 'core/enums';
+import {useNavigation, useStore} from 'shared/hooks';
+import {AssetTypeEnum, BasicAsset2dIdEnum} from 'core/enums';
 
 import {ImagePage, ObjectPluginPage, TextPage} from './pages';
 import {EmojiAnimationDock} from './components';
 import * as styled from './Object.styled';
 
+const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
+  {id: BasicAsset2dIdEnum.IMAGE, icon: 'picture_upload', label: 'Picture'},
+  {id: BasicAsset2dIdEnum.VIDEO, icon: 'video_upload', label: 'Video'},
+  {id: BasicAsset2dIdEnum.TEXT, icon: 'upload', label: 'Text'}
+];
+
 const Object: FC = () => {
   const {objectStore, universeStore, nftStore, widgetsStore} = useStore();
   const {world3dStore} = universeStore;
-  const {asset, assetStore} = objectStore;
+  const {pluginLoader, assetStore, currentAssetId} = objectStore;
   const {assetType} = assetStore;
   const {odysseyInfoStore} = widgetsStore;
 
   const {objectId} = useParams<{objectId: string}>();
+  const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {
-    objectStore.init(objectId!);
-    world3dStore?.triggerInteractionMessage(PosBusEventEnum.EnteredSpace, objectId!, 0, '');
+    objectStore.init(objectId);
 
     return () => {
-      world3dStore?.triggerInteractionMessage(PosBusEventEnum.LeftSpace, objectId!, 0, '');
       objectStore.resetModel();
     };
   }, [objectId, objectStore, world3dStore]);
@@ -45,8 +51,12 @@ const Object: FC = () => {
       case AssetTypeEnum.PLUGIN:
         return (
           <>
-            {asset?.plugin && (
-              <ObjectPluginPage plugin={asset.plugin} pluginLoader={asset} objectId={objectId!} />
+            {pluginLoader?.plugin && (
+              <ObjectPluginPage
+                plugin={pluginLoader.plugin}
+                pluginLoader={pluginLoader}
+                objectId={objectId}
+              />
             )}
           </>
         );
@@ -55,9 +65,28 @@ const Object: FC = () => {
     }
   };
 
+  console.log('objectStore.objectName', objectStore.objectName, {
+    assetType,
+    currentAssetId
+  });
+
+  if (!currentAssetId) {
+    return null;
+  }
+
   return (
     <styled.Container>
-      {renderObject(assetType)}
+      <Panel
+        isFullHeight
+        size="large"
+        icon="document"
+        variant="primary"
+        title={objectStore.objectName || ''}
+        onClose={() => goToOdysseyHome()}
+      >
+        <Tabs tabList={TABS_LIST} activeId={currentAssetId} />
+        {renderObject(assetType)}
+      </Panel>
       <styled.BottomCenteredDock>
         <EmojiAnimationDock />
       </styled.BottomCenteredDock>

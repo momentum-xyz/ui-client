@@ -14,6 +14,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
   const onMove = useMutableCallback(callbacks.onMove);
   const onObjectTransform = useMutableCallback(callbacks.onObjectTransform);
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);
+  const onReadyToHandleEvents = useMutableCallback(callbacks.onReadyToHandleEvents);
+  // Sent from user1 to BE to trigger sparkles
   const onBumpReady = useMutableCallback(callbacks.onBumpReady);
 
   useEffect(() => {
@@ -112,6 +114,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       events.on('TriggerBump', (userId) => {
         PlayerHelper.followPlayer(userId);
       });
+
+      onReadyToHandleEvents();
     } else {
       console.error('There is no canvas for Babylon.');
     }

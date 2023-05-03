@@ -28,4 +28,6 @@ export interface Odyssey3dPropsInterface {
   onMove: (transform: TransformNoScaleInterface) => void;
 
   onBumpReady: () => void;
+
+  onReadyToHandleEvents: () => void;
 }

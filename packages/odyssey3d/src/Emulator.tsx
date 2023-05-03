@@ -85,6 +85,7 @@ const WorldEmulator: FC = () => {
       onUserClick={(e) => console.log('onUserClick', e)}
       onClickOutside={() => console.log('onClickOutside')}
       onBumpReady={() => console.log('onBumpReady')}
+      onReadyToHandleEvents={() => console.log('onReadyToHandleEvents')}
     />
   );
 };
@@ -120,6 +121,7 @@ const UniverseEmulator = () => {
       onWorldClick={(e) => console.log('onWorldClick', e)}
       onUserClick={(e) => console.log('onUserClick', e)}
       onClickOutside={() => console.log('onClickOutside')}
+      onReadyToHandleEvents={() => console.log('onReadyToHandleEvents')}
     />
   );
 };
