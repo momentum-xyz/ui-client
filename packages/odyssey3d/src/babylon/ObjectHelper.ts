@@ -149,18 +149,20 @@ export class ObjectHelper {
       }
       return;
     }
-    // TODO: Confirm this is how we are going to handle object texture and improve this a bit
+    // Handle object texture
     else if (texture.label === 'object_texture') {
       const obj = this.objectsMap.get(texture.objectId);
-      if (obj && obj.objectDefinition.asset_format === '2') {
-        const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
-        const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
-        const newTexture = new Texture(textureUrl);
-
-        const basicShapeMat = childMeshes[0].material as PBRMaterial;
-        basicShapeMat.albedoTexture = newTexture;
-        childMeshes[0].material = basicShapeMat;
-        this.awaitingTexturesMap.delete(texture.objectId);
+      if (obj) {
+        if (obj.objectDefinition.asset_format.toString() === '2') {
+          const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
+          const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
+          const newTexture = new Texture(textureUrl);
+          
+          const basicShapeMat = childMeshes[0].material as PBRMaterial;
+          basicShapeMat.albedoTexture = newTexture;
+          childMeshes[0].material = basicShapeMat;
+          this.awaitingTexturesMap.delete(texture.objectId);
+        }
       }
       return;
     }
@@ -196,8 +198,7 @@ export class ObjectHelper {
     this.objectsMap.set(object.id, babylonObject);
 
     const awaitingTexture = this.awaitingTexturesMap.get(object.id);
-    // object.asset_format === '2' are assets from basic asset pack
-    if (awaitingTexture && object.asset_format === '2') {
+    if (awaitingTexture) {
       this.setObjectTexture(this.scene, awaitingTexture);
     }
 
