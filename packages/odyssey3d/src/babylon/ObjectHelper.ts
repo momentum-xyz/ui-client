@@ -157,7 +157,7 @@ export class ObjectHelper {
           const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
           const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
           const newTexture = new Texture(textureUrl);
-          
+
           const basicShapeMat = childMeshes[0].material as PBRMaterial;
           basicShapeMat.albedoTexture = newTexture;
           childMeshes[0].material = basicShapeMat;
