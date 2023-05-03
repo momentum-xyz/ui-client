@@ -1,13 +1,18 @@
 import React, {FC, MutableRefObject} from 'react';
 import {FileUploader} from '@momentum-xyz/ui-kit';
+import {Frame} from '@momentum-xyz/ui-kit-storybook';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
+import cn from 'classnames';
 
 import {ImageObjectInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './ChangeImageDialog.styled';
+
+const MAX_ASSET_SIZE_MB = 8;
+const MAX_ASSET_SIZE_B = MAX_ASSET_SIZE_MB * Math.pow(1024, 2);
 
 interface PropsInterface {
   actionRef: MutableRefObject<{doSave: () => void}>;
@@ -21,7 +26,11 @@ const ChangeVideoDialog: FC<PropsInterface> = ({actionRef, objectId}) => {
 
   const {t} = useI18n();
 
-  const {handleSubmit, control} = useForm<ImageObjectInterface>();
+  const {
+    handleSubmit,
+    control,
+    formState: {errors}
+  } = useForm<ImageObjectInterface>();
 
   const formSubmitHandler: SubmitHandler<ImageObjectInterface> = async (
     data: ImageObjectInterface
@@ -42,28 +51,47 @@ const ChangeVideoDialog: FC<PropsInterface> = ({actionRef, objectId}) => {
 
   return (
     <styled.Container>
-      <Controller
-        control={control}
-        name="image"
-        rules={{required: true}}
-        render={({field: {value, onChange}}) => (
-          <>
-            {value ? (
-              <styled.imagePreview src={URL.createObjectURL(value)} />
-            ) : (
-              assetStore.imageSrc && <styled.imagePreview src={assetStore.imageSrc ?? undefined} />
+      <styled.InfoContainer>
+        <h1>{t('labels.embedPicture')}</h1>
+        <span>{t('labels.embedPictureInfo')}</span>
+      </styled.InfoContainer>
+      <styled.UploadContainer>
+        <Frame>
+          <Controller
+            control={control}
+            name="image"
+            rules={{required: true}}
+            render={({field: {value, onChange}}) => (
+              <styled.ImageUploadContainer
+                className={cn(
+                  !!errors.image && 'error',
+                  (value || assetStore.imageSrc) && 'has-image'
+                )}
+              >
+                {value ? (
+                  <styled.PreviewImageHolder
+                    style={{backgroundImage: `url(${URL.createObjectURL(value)})`}}
+                  />
+                ) : (
+                  assetStore.imageSrc && (
+                    <styled.PreviewImageHolder
+                      style={{backgroundImage: `url(${assetStore.imageSrc ?? undefined})`}}
+                    />
+                  )
+                )}
+                <FileUploader
+                  label={t('actions.selectImage')}
+                  dragActiveLabel={t('actions.dropItHere')}
+                  maxSize={MAX_ASSET_SIZE_B}
+                  fileType="image"
+                  onFilesUpload={onChange}
+                  enableDragAndDrop={false}
+                />
+              </styled.ImageUploadContainer>
             )}
-            <FileUploader
-              label={t('actions.selectImage')}
-              dragActiveLabel={t('actions.dropItHere')}
-              fileType="image"
-              buttonSize="normal"
-              onFilesUpload={onChange}
-              enableDragAndDrop={false}
-            />
-          </>
-        )}
-      />
+          />
+        </Frame>
+      </styled.UploadContainer>
     </styled.Container>
   );
 };

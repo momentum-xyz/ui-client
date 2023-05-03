@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {Heading} from '@momentum-xyz/ui-kit';
+import {Frame} from '@momentum-xyz/ui-kit-storybook';
 import {observer} from 'mobx-react-lite';
 
 import {useStore} from 'shared/hooks';
@@ -10,10 +11,16 @@ const ImagePage: FC = () => {
   const {content, imageSrc} = useStore().objectStore.assetStore;
 
   return (
-    <styled.ContentWrapper>
+    <styled.Container>
       <Heading type="h2" label={content?.title || ''} transform="uppercase" />
-      {imageSrc && <styled.ImageWrapper src={imageSrc} alt="" />}
-    </styled.ContentWrapper>
+      {imageSrc && (
+        <styled.ImageContainer>
+          <Frame>
+            <styled.PreviewImageHolder style={{backgroundImage: `url(${imageSrc})`}} />
+          </Frame>
+        </styled.ImageContainer>
+      )}
+    </styled.Container>
   );
 };
 
