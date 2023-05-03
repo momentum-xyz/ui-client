@@ -24,6 +24,9 @@ const LoginWidget: FC = () => {
       console.log('handleAccountConnected');
       try {
         await sessionStore.loadUserProfile();
+        await sessionStore.loadOwnWorlds();
+        await sessionStore.loadStakedWorlds();
+
         if (close) {
           widgetManagerStore.closeAll();
         }

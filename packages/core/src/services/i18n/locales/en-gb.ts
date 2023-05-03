@@ -198,16 +198,14 @@ export const enGb = {
       enableStaking: 'Login with a polkadot.js account to enable on chain activities',
       connectAsMember: 'Connect as member',
       howToConnectAsAMemberTitle: 'How to connect as a member',
-      howToConnectAsAMemberDescription:
-        'Lorem ipsum dolor sit amet, consectetuer adipicing elit. Aenean commodo ligula.',
+      howToConnectAsAMemberDescription: '',
       installWalletOrConnect: 'Install wallet or connect',
       installBrowserExtension: 'Install browser extension',
       connectWallet: 'Connect  wallet',
       connectYourWallet: 'Connect your wallet',
       connectWith: 'Connect with {{wallet}}',
       createYourProfileTitle: 'Create your profile',
-      createYourProfileDescription:
-        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor',
+      createYourProfileDescription: '',
       nameInputLabel: 'Enter a name*',
       nameInputPlaceholder: 'Enter a name',
       chooseAnImageLabel: 'Choose an Image',
