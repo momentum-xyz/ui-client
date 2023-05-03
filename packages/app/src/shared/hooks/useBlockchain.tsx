@@ -29,8 +29,8 @@ export interface UseBlockchainPropsInterface {
 }
 
 export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterface) => {
-  const {selectedWalletConf, setWalletIdByAddress, loadMyWallets, loadMyStakes} =
-    useStore().nftStore;
+  const {nftStore, refreshStakeRelatedData} = useStore();
+  const {selectedWalletConf, setWalletIdByAddress, loadMyWallets} = nftStore;
 
   const [account, setAccount] = useState<string>();
   const [library, setLibrary] = useState<any>();
@@ -81,11 +81,11 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
         .send({from: account});
       console.log('useBlockchain stake result', result);
 
-      setTimeout(() => loadMyStakes().catch(console.error), DELAY_REFRESH_DATA_MS);
+      setTimeout(() => refreshStakeRelatedData().catch(console.error), DELAY_REFRESH_DATA_MS);
 
       return result;
     },
-    [momContract, account, stakingContract, isCorrectAccount, loadMyStakes]
+    [momContract, account, stakingContract, isCorrectAccount, refreshStakeRelatedData]
   );
 
   const unstake = useCallback(
@@ -102,9 +102,9 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
       const result = await stakingContract?.methods.unstake(nftId, tokenKind).send({from: account});
       console.log('useBlockchain unstake result', result);
 
-      setTimeout(() => loadMyStakes().catch(console.error), DELAY_REFRESH_DATA_MS);
+      setTimeout(() => refreshStakeRelatedData().catch(console.error), DELAY_REFRESH_DATA_MS);
     },
-    [account, stakingContract, isCorrectAccount, loadMyStakes]
+    [account, stakingContract, isCorrectAccount, refreshStakeRelatedData]
   );
 
   const saveLastAirdropInfo = useCallback(() => {

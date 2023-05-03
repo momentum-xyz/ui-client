@@ -10,8 +10,10 @@ const World2dStore = types.compose(
     .model('World2dStore', {
       worldId: types.optional(types.string, ''),
       worldDetails: types.maybeNull(WorldDetails),
-      worldInfo: types.maybeNull(WorldInfo),
-      onlineUsersList: types.optional(types.array(UserDetails), [])
+      onlineUsersList: types.optional(types.array(UserDetails), []),
+
+      // FIXME: Removal
+      worldInfo: types.maybeNull(WorldInfo)
     })
     .actions((self) => ({
       init(worldId: string) {
