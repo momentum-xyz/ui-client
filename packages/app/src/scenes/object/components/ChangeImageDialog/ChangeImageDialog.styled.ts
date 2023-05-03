@@ -1,10 +1,7 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  max-height: calc(100vh - 230px);
-  overflow: scroll;
-`;
+export const Container = styled.div``;
 
 export const InfoContainer = styled.div`
   padding-bottom: 30px;
