@@ -367,12 +367,13 @@ const NftStore = types
     },
     get balanceStakedBN(): BN {
       const walletId = self._selectedWalletId || self.defaultWalletId || self.walletsAddresses[0];
+
       const stakedAmount = new BN(0);
 
       self.stakes
         .filter((stake) => stake.wallet_id === walletId)
         .forEach((stake) => {
-          stakedAmount.add(new BN(stake.amount));
+          stakedAmount.iadd(new BN(stake.amount));
         });
 
       return stakedAmount;

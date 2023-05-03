@@ -123,7 +123,7 @@ const StakeList: FC<PropsInterface> = ({
                 <StakeCard
                   key={index}
                   worldName={stake.name}
-                  worldImageUrl={getImageAbsoluteUrl(stake.avatarHash, ImageSizeEnum.S5)}
+                  worldImageUrl={getImageAbsoluteUrl(stake.avatar_hash, ImageSizeEnum.S5)}
                   staked={formatBigInt(stake.amount)}
                   reward={formatBigInt(stake.reward)}
                   tokenSymbol="MOM"
