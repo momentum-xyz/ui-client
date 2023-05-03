@@ -144,6 +144,8 @@ export class UniverseBuilderHelper {
   }
 
   static buildAccountLayer(accounts: Odyssey3dUserInterface[]) {
+    this.rootMesh.setEnabled(true);
+
     let counter = 0;
     let row = 0;
     // Transform node for grouping all account objects.
@@ -202,11 +204,14 @@ export class UniverseBuilderHelper {
     accountLayer.position.z = 200;
 
     // After all of the orbs are done cloning, disable the initial one
-    this.rootMesh.setEnabled(false);
+
     PlayerHelper.camera.setTarget(accountLayer.position);
+    this.rootMesh.setEnabled(false);
   }
 
   static buildRingLayers(worlds: WorldInfoInterface[]) {
+    this.rootMesh.setEnabled(true);
+
     this.odysseyCounter = 0;
     // Base variables.
     const AllOdysseyRings = new Array<TransformNode>();
@@ -260,9 +265,11 @@ export class UniverseBuilderHelper {
 
     // Create one transform for all Rings.
     const allRingsTransformNode = new TransformNode('GlobalUniverseTransform', this.scene);
-    AllOdysseyRings.forEach((ring) => (ring.parent = allRingsTransformNode));
     allRingsTransformNode.position.z = 200;
     allRingsTransformNode.position.y = 50;
+    AllOdysseyRings.forEach((ring) => (ring.parent = allRingsTransformNode));
+
+    this.rootMesh.setEnabled(false);
   }
 
   static buildRing(
@@ -293,7 +300,7 @@ export class UniverseBuilderHelper {
         offset = offset + spaceBetweenOddyseys;
 
         // Metadata
-        rootChildren[1].metadata = worlds[i].id;
+        rootChildren[1].metadata = worlds[this.odysseyCounter].id;
         rootChildren[1].material = this.orbMat;
 
         if (worlds[this.odysseyCounter].image !== '') {
