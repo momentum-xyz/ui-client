@@ -247,7 +247,7 @@ const NftStore = types
         {}
       );
       if (response) {
-        self.stakes = cast(response.filter((stake) => stake.amount !== '0'));
+        self.stakes = cast(response.filter((stake) => !!stake.amount && stake.amount !== '0'));
       }
     }),
     loadDefaultWalletId(): void {
