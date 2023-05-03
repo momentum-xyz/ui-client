@@ -26,7 +26,7 @@ const ExploreWidget: FC = () => {
   const [activeTab, setActiveTab] = useState<ExploreTabType>('worlds');
 
   const {t} = useI18n();
-  const {goToOdysseyHome} = useNavigation();
+  const {goToOdysseyHome, goToOdysseyAndStake} = useNavigation();
 
   useEffect(() => {
     universe2dStore.searchQuery.resetModel();
@@ -48,6 +48,10 @@ const ExploreWidget: FC = () => {
 
   const onVisitWorld = (worldId: string) => {
     goToOdysseyHome(worldId);
+  };
+
+  const onStakeWorld = (worldId: string) => {
+    goToOdysseyAndStake(worldId);
   };
 
   return (
@@ -79,7 +83,7 @@ const ExploreWidget: FC = () => {
                   onSelectWorld={onSelectWorld}
                   onSelectUser={onSelectUser}
                   onVisitWorld={onVisitWorld}
-                  onStakeWorld={onVisitWorld}
+                  onStakeWorld={onStakeWorld}
                 />
               )}
 
@@ -104,7 +108,7 @@ const ExploreWidget: FC = () => {
             world={universe2dStore.selectedWorld.world}
             onSelectUser={onSelectUser}
             onVisitWorld={onVisitWorld}
-            onStakeWorld={onVisitWorld}
+            onStakeWorld={onStakeWorld}
             onClose={universe2dStore.resetUnits}
           />
         </styled.Details>
