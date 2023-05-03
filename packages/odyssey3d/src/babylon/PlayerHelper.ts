@@ -30,7 +30,6 @@ import {
   smoothCameraTransform,
   TransformTypesEnum
 } from './TransformHelper';
-//import {InteractionEffectHelper} from './InteractionEffectHelper';
 
 const NORMAL_SPEED = 0.5;
 const FAST_SPEED = 1.5;
@@ -142,10 +141,7 @@ export class PlayerHelper {
 
   // TODO: Consider merging the different spawning functions
   static spawnPlayer(scene: Scene) {
-    // TODO: Commented out the actual line, as currently the assetID coming from BE is a Unity asset, so doesn't load
     //const assetUrl = getAssetFileName(PlayerHelper.playerAvatar3D);
-    //const assetUrl = getAssetFileName('d906e070-3d2e-b1a5-3e3f-703423225945');
-
     SceneLoader.LoadAssetContainer(
       wisp, //ObjectHelper.assetRootUrl,
       '', //assetUrl,
@@ -221,24 +217,17 @@ export class PlayerHelper {
   }
 
   static async userEnteredAsync(user: Odyssey3dUserInterface) {
-    //console.log('user avatar: ' + user.avatar);
     await this.spawnUserAsync(this.scene, user);
   }
 
   // TODO: Consider merging the different spawning functions
   static async spawnUserAsync(scene: Scene, user: Odyssey3dUserInterface) {
-    // TODO: Commented out the actual line, as currently the assetID coming from BE is a Unity asset, so doesn't load
     //const assetUrl = getAssetFileName(this.playerAvatar3D);
-    //const assetUrl = getAssetFileName('d906e070-3d2e-b1a5-3e3f-703423225945');
-
     await SceneLoader.LoadAssetContainerAsync(
       wisp, //ObjectHelper.assetRootUrl,
       '', //assetUrl,
       scene,
-      (event) => {
-        // On progress callback
-        //console.log(`Loading progress ${event.loaded}/${event.total}`);
-      },
+      (event) => {},
       '.glb'
     ).then((container) => {
       this.userInstantiate(container, user);

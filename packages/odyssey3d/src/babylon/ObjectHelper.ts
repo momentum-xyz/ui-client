@@ -147,7 +147,6 @@ export class ObjectHelper {
     if (texture.label === 'object_color') {
       const obj = this.objectsMap.get(texture.objectId);
       if (obj) {
-        //TODO Parse color hash to actual Color3.
         const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
         const basicShapeMat = childMeshes[0].material as PBRMaterial;
         basicShapeMat.albedoColor = Color3.FromHexString(texture.hash);
