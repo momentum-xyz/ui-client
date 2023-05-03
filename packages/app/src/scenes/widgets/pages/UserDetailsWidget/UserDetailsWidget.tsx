@@ -1,12 +1,10 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useNavigate} from 'react-router-dom';
 import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
 import {Panel, PositionEnum, ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
 
-import {useStore} from 'shared/hooks';
+import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
-import {ROUTES} from 'core/constants';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ProfileImage, ProfileInfo, WorldsOwnedList, WorldsStakedList} from 'ui-kit';
 import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
@@ -19,7 +17,7 @@ const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {userDetails} = userDetailsStore;
 
   const {t} = useI18n();
-  const navigate = useNavigate();
+  const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {
     if (data?.id) {
@@ -36,7 +34,7 @@ const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   };
 
   const onVisitWorld = (worldId: string) => {
-    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+    goToOdysseyHome(worldId);
   };
 
   if (!userDetails?.user) {

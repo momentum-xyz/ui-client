@@ -1,12 +1,10 @@
 import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useNavigate} from 'react-router-dom';
 import cn from 'classnames';
 import {useI18n, i18n} from '@momentum-xyz/core';
 import {TabInterface, Tabs, Panel} from '@momentum-xyz/ui-kit-storybook';
 
-import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
+import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 
 import {WorldList, UserList, WorldDetails, UserDetails} from './components';
@@ -28,7 +26,7 @@ const ExploreWidget: FC = () => {
   const [activeTab, setActiveTab] = useState<ExploreTabType>('worlds');
 
   const {t} = useI18n();
-  const navigate = useNavigate();
+  const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {
     universe2dStore.searchQuery.resetModel();
@@ -49,7 +47,7 @@ const ExploreWidget: FC = () => {
   };
 
   const onVisitWorld = (worldId: string) => {
-    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+    goToOdysseyHome(worldId);
   };
 
   return (

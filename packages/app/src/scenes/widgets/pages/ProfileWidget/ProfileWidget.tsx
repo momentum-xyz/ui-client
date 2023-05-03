@@ -1,11 +1,9 @@
 import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n} from '@momentum-xyz/core';
 import {Panel, PositionEnum, SideMenu, SideMenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
-import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
+import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {ProfileFormInterface} from 'core/interfaces';
 
@@ -21,8 +19,8 @@ const ProfileWidget: FC = () => {
 
   const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewProfile');
 
-  const navigate = useNavigate();
   const {t} = useI18n();
+  const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {
     return () => {
@@ -85,12 +83,9 @@ const ProfileWidget: FC = () => {
     [widgetManagerStore]
   );
 
-  const onVisitWorld = useCallback(
-    (worldId: string) => {
-      navigate(generatePath(ROUTES.odyssey.base, {worldId}));
-    },
-    [navigate]
-  );
+  const onVisitWorld = (worldId: string) => {
+    goToOdysseyHome(worldId);
+  };
 
   return (
     <styled.Container data-testid="ProfileWidget-test">
