@@ -88,7 +88,9 @@ const Universe2dStore = types.compose(
     .views((self) => ({
       get filteredWorlds(): WorldInfoModelInterface[] {
         return self.searchQuery.isQueryValid
-          ? self.allWorlds.filter((world) => world.name.includes(self.searchQuery.queryLowerCased))
+          ? self.allWorlds.filter((world) =>
+              world.name.toLowerCase().includes(self.searchQuery.queryLowerCased)
+            )
           : [];
       },
       get lastCreatedSliderWorlds(): SliderItemInterface<string>[] {
@@ -119,7 +121,9 @@ const Universe2dStore = types.compose(
     .views((self) => ({
       get filteredUsers(): UserInfoModelInterface[] {
         return self.searchQuery.isQueryValid
-          ? self.allUsers.filter((user) => user.name.includes(self.searchQuery.queryLowerCased))
+          ? self.allUsers.filter((user) =>
+              user.name.toLowerCase().includes(self.searchQuery.queryLowerCased)
+            )
           : [];
       },
       get lastCreatedSliderUsers(): SliderItemInterface<string>[] {
