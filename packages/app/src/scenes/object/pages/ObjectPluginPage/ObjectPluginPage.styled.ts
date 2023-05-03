@@ -3,9 +3,11 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`
   flex: 1 0 auto;
   display: flex;
+  width: 100%;
+  height: 100%;
   flex-direction: column;
-  align-items: flex-end;
-  justify-content: end;
+  align-items: stretch;
+  // justify-content: end;
 `;
 
 export const Container = styled.div`
@@ -26,4 +28,12 @@ export const Container = styled.div`
   }
 
   transition: all 0.2s ease-in-out;
+`;
+
+export const HeadingWrapper = styled.div`
+  padding: 20px 0;
+`;
+
+export const ContentWrapper = styled.div`
+  flex: 1 0 auto;
 `;

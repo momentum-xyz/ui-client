@@ -75,7 +75,7 @@ const Object: FC = () => {
   }
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="Object-test">
       <Panel
         isFullHeight
         size="large"
@@ -84,7 +84,10 @@ const Object: FC = () => {
         title={objectStore.objectName || ''}
         onClose={() => goToOdysseyHome()}
       >
-        <Tabs tabList={TABS_LIST} activeId={currentAssetId} />
+        <styled.Tabs>
+          <Tabs tabList={TABS_LIST} activeId={currentAssetId} />
+        </styled.Tabs>
+
         {renderObject(assetType)}
       </Panel>
       <styled.BottomCenteredDock>

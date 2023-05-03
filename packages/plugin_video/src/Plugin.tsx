@@ -127,14 +127,13 @@ const usePlugin: UsePluginHookType = (props) => {
   const editModeContent = !isAdmin ? (
     <span />
   ) : (
-    <div style={{padding: '1em', display: 'flex', flexDirection: 'column', gap: '20px'}}>
-      <Text text={t('plugin_video.labels.embed')} size="m" align="left" transform="uppercase" />
+    <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+      <Text text={t('plugin_video.labels.embed')} size="l" align="left" transform="uppercase" />
       <Text
         text="By embedding a video to this object; users will also be able to see this video played when they select the object; regardless of its asset type."
         size="m"
         align="left"
       />
-      <br />
       <Text
         text="To embed a video; add the url to the video in the input field below."
         size="m"
@@ -143,7 +142,7 @@ const usePlugin: UsePluginHookType = (props) => {
       <hr />
       <Input
         type="text"
-        label={t('plugin_video.labels.videoUrl')}
+        // label={t('plugin_video.labels.videoUrl')}
         placeholder={t('plugin_video.messages.pasteUrl')}
         autoFocus
         value={
@@ -162,7 +161,7 @@ const usePlugin: UsePluginHookType = (props) => {
         isError={!!error || isModifiedStateError}
         errorMessage={error || t('plugin_video.messages.invalidUrl') || ''}
       />
-      <hr />
+      <br />
       <Text
         text={t('plugin_video.labels.videoPreview')}
         size="m"
@@ -170,6 +169,7 @@ const usePlugin: UsePluginHookType = (props) => {
         transform="uppercase"
       />
       {content}
+      <hr />
       <Input
         type="text"
         // label={t('plugin_video.labels.title')}

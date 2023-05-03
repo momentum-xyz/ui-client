@@ -30,8 +30,15 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     id: 'skybox',
     iconName: 'skybox',
     label: i18n.t('labels.skyboxes')
+  }
+];
+const allPanels: SideMenuItemInterface<MenuItemType>[] = [
+  ...sideMenuItems,
+  {
+    id: 'inspector',
+    iconName: 'info',
+    label: i18n.t('labels.inspector')
   },
-  // TODO move to all panels
   {
     id: 'functionality',
     iconName: 'cubicles',
@@ -41,14 +48,6 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     id: 'customise',
     iconName: 'group',
     label: i18n.t('labels.assetCustomising')
-  }
-];
-const allPanels: SideMenuItemInterface<MenuItemType>[] = [
-  ...sideMenuItems,
-  {
-    id: 'inspector',
-    iconName: 'info',
-    label: i18n.t('labels.inspector')
   }
 ];
 
@@ -112,8 +111,7 @@ const CreatorWidget: FC = () => {
       <SideMenu
         activeId={menuItem?.id}
         orientation="left"
-        // sideMenuItems={sideMenuItems}
-        sideMenuItems={allPanels} // TEMP
+        sideMenuItems={sideMenuItems}
         onSelect={setSelectedTab}
       />
 
