@@ -107,6 +107,13 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
     [account, stakingContract, isCorrectAccount, loadMyStakes]
   );
 
+  const saveLastAirdropInfo = useCallback(() => {
+    if (!account) {
+      return;
+    }
+    originalSaveLastAirdropInfo(account);
+  }, [account]);
+
   const getTokens = useCallback(
     async (tokenKind = TokenEnum.MOM_TOKEN) => {
       console.log('useBlockchain getTokens', {tokenKind});
@@ -117,10 +124,11 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
 
       const result = await faucetContract?.methods.get_tokens(tokenKind).send({from: account});
       console.log('useBlockchain getTokens result', result);
+      saveLastAirdropInfo();
 
       setTimeout(() => loadMyWallets().catch(console.error), DELAY_REFRESH_DATA_MS);
     },
-    [account, faucetContract, isCorrectAccount, loadMyWallets]
+    [account, faucetContract?.methods, isCorrectAccount, loadMyWallets, saveLastAirdropInfo]
   );
 
   const claimRewards = useCallback(async () => {
@@ -160,20 +168,12 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
   const canRequestAirdrop = account ? checkIfCanRequestAirdrop(account) : null;
   const dateOfNextAllowedAirdrop = account ? getDateOfNextAllowedAirdrop(account) : null;
 
-  const saveLastAirdropInfo = () => {
-    if (!account) {
-      return;
-    }
-    originalSaveLastAirdropInfo(account);
-  };
-
   return {
     isBlockchainReady: isWalletActive && isCorrectAccount && !isWrongNetwork,
     account,
     walletSelectContent,
     canRequestAirdrop,
     dateOfNextAllowedAirdrop,
-    saveLastAirdropInfo,
     stake,
     unstake,
     claimRewards,
