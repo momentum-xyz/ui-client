@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {ErrorBoundary, Heading, Text} from '@momentum-xyz/ui-kit';
+import {ErrorBoundary, Text} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
 import {
@@ -103,10 +103,18 @@ const PluginInnerWrapper = ({
           {content}
         </styled.Container>
       ) : objectView ? (
-        <>
-          <Heading type="h3" label={objectView.title || ''} align="left" transform="uppercase" />
-          {objectView.content}
-        </>
+        <styled.Wrapper>
+          <styled.HeadingWrapper>
+            <Text
+              text={objectView.title || ''}
+              align="left"
+              size="l"
+              weight="bold"
+              transform="uppercase"
+            />
+          </styled.HeadingWrapper>
+          <styled.ContentWrapper>{objectView.content}</styled.ContentWrapper>
+        </styled.Wrapper>
       ) : (
         <Text text={t('errors.errorPluginContactDev')} size="l" />
       )}

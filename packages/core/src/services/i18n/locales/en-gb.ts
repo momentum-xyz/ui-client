@@ -1360,7 +1360,7 @@ export const enGb = {
         embed: 'Embed a video',
         video: 'Video',
         videoUrl: 'Video URL',
-        videoPreview: 'Video Preview'
+        videoPreview: 'Video Preview:'
       },
       messages: {
         pasteUrl: 'Paste a YouTube, Twitch, or Vimeo Share URL here.',
