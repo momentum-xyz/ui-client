@@ -36,7 +36,7 @@ export interface StakeInterface {
   amount: string;
   reward: string;
   blockchain_id: string;
-  avatarHash: string | null;
+  avatar_hash: string | null;
   last_comment: string | null;
   name: string;
   object_id: string;
