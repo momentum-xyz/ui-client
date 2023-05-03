@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 
 export const Container = styled.div``;
+
 export const ImageContainer = styled.div`
   position: relative;
-  width: 550px;
-  height: 550px;
+  width: 100%;
+  height: 500px;
   border-radius: 8px;
-  margin-top: 20px;
+  margin-top: 10px;
 
   & > div {
     height: 100%;
