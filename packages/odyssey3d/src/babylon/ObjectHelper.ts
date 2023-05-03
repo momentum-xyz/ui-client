@@ -152,7 +152,7 @@ export class ObjectHelper {
     // TODO: Confirm this is how we are going to handle object texture and improve this a bit
     else if (texture.label === 'object_texture') {
       const obj = this.objectsMap.get(texture.objectId);
-      if (obj) {
+      if (obj && obj.objectDefinition.asset_format === '2') {
         const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
         const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
         const newTexture = new Texture(textureUrl);
