@@ -48,7 +48,12 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       position: PositionEnum.LEFT,
       iconName: 'explore',
       isHidden: !isWorld,
-      onClick: () => navigate(ROUTES.explore)
+      onClick: () => {
+        // TEMP we have problems when teleporting to world, then universe, then teleport again to any world
+        // no messages from posbus
+        window.location.href = ROUTES.explore;
+      }
+      // onClick: () => navigate(ROUTES.explore)
     },
     {
       key: WidgetEnum.MY_PROFILE,
