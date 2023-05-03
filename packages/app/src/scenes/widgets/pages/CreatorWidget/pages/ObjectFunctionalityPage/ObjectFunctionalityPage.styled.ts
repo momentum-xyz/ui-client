@@ -4,8 +4,6 @@ export const Container = styled.div`
   padding: 20px 10px 10px 10px;
   width: 100%;
   pointer-events: all;
-  max-height: calc(100vh - var(--height-offset));
-  overflow: scroll;
 `;
 
 export const HeadingWrapper = styled.div`

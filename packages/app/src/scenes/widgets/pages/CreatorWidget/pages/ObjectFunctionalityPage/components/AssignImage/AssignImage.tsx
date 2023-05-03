@@ -9,7 +9,7 @@ import cn from 'classnames';
 import {ImageObjectInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
 
-import * as styled from './ChangeImageDialog.styled';
+import * as styled from './AssignImage.styled';
 
 const MAX_ASSET_SIZE_MB = 8;
 const MAX_ASSET_SIZE_B = MAX_ASSET_SIZE_MB * Math.pow(1024, 2);
@@ -19,7 +19,7 @@ interface PropsInterface {
   objectId: string;
 }
 
-const ChangeImageDialog: FC<PropsInterface> = ({actionRef, objectId}) => {
+const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
   const {objectStore} = useStore();
   const {assetStore} = objectStore;
   const {changeTileDialog} = assetStore;
@@ -50,12 +50,12 @@ const ChangeImageDialog: FC<PropsInterface> = ({actionRef, objectId}) => {
   };
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="AssignImage-test">
       <styled.InfoContainer>
-        <h1>{t('labels.embedPicture')}</h1>
+        <div>{t('labels.embedPicture')}</div>
         <span>{t('labels.embedPictureInfo')}</span>
       </styled.InfoContainer>
-      <styled.UploadContainer>
+      <styled.ScrollableContainer>
         <Frame>
           <Controller
             control={control}
@@ -91,9 +91,9 @@ const ChangeImageDialog: FC<PropsInterface> = ({actionRef, objectId}) => {
             )}
           />
         </Frame>
-      </styled.UploadContainer>
+      </styled.ScrollableContainer>
     </styled.Container>
   );
 };
 
-export default observer(ChangeImageDialog);
+export default observer(AssignImage);
