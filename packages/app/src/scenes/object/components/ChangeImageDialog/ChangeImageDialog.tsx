@@ -19,7 +19,7 @@ interface PropsInterface {
   objectId: string;
 }
 
-const ChangeVideoDialog: FC<PropsInterface> = ({actionRef, objectId}) => {
+const ChangeImageDialog: FC<PropsInterface> = ({actionRef, objectId}) => {
   const {objectStore} = useStore();
   const {assetStore} = objectStore;
   const {changeTileDialog} = assetStore;
@@ -96,4 +96,4 @@ const ChangeVideoDialog: FC<PropsInterface> = ({actionRef, objectId}) => {
   );
 };
 
-export default observer(ChangeVideoDialog);
+export default observer(ChangeImageDialog);
