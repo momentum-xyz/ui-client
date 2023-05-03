@@ -3,6 +3,7 @@ import {useWeb3React} from '@web3-react/core';
 import {WalletLinkConnector} from '@web3-react/walletlink-connector';
 
 import {UseWalletType} from 'wallets';
+import {SUPPORTED_CHAIN_IDS} from 'wallets/supportedChainIds';
 
 export const useWallet: UseWalletType = ({appVariables}) => {
   const {library, chainId, account, activate, deactivate, active} = useWeb3React();
@@ -19,7 +20,7 @@ export const useWallet: UseWalletType = ({appVariables}) => {
       // url: `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
       url: appVariables.WEB3_PUBLIC_RPC_URL_MAINNET,
       appName: 'Odyssey App',
-      supportedChainIds: [1, 3, 4, 5, 42]
+      supportedChainIds: SUPPORTED_CHAIN_IDS
     });
 
     return activate(connector)
