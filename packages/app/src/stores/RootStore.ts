@@ -47,6 +47,12 @@ const RootStore = types
 
       self.agoraStore.userDevicesStore.init();
       self.themeStore.init();
+    },
+    async refreshStakeRelatedData() {
+      await self.nftStore.loadMyStakes();
+      await self.nftStore.loadMyWallets();
+      await self.sessionStore.loadStakedWorlds();
+      await self.universeStore.world2dStore?.worldDetails?.fetchWorld();
     }
   }));
 
