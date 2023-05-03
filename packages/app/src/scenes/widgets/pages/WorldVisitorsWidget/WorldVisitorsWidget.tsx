@@ -1,12 +1,10 @@
 import {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n} from '@momentum-xyz/core';
 import {Panel} from '@momentum-xyz/ui-kit-storybook';
 
-import {useStore} from 'shared/hooks';
+import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
-import {ROUTES} from 'core/constants';
 
 import {Visitor} from './components';
 import * as styled from './WorldVisitorsWidget.styled';
@@ -16,14 +14,11 @@ const WorldVisitorsWidget: FC = () => {
   const {world2dStore, world3dStore} = universeStore;
 
   const {t} = useI18n();
-  const navigate = useNavigate();
+  const {goToOdysseyHome} = useNavigation();
 
-  const onVisitWorld = useCallback(
-    (worldId: string) => {
-      navigate(generatePath(ROUTES.odyssey.base, {worldId}));
-    },
-    [navigate]
-  );
+  const onVisitWorld = (worldId: string) => {
+    goToOdysseyHome(worldId);
+  };
 
   const onInviteToVoiceChat = useCallback((userId: string) => {
     console.log('Invite to the Voice chat: ', userId);

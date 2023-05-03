@@ -4,7 +4,7 @@ import {generatePath, useNavigate} from 'react-router-dom';
 import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
 import {Panel, ImageSizeEnum, PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 
-import {useStore} from 'shared/hooks';
+import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -20,6 +20,7 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
 
   const {t} = useI18n();
   const navigate = useNavigate();
+  const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {
     if (data?.id) {
@@ -37,7 +38,7 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   };
 
   const onVisitWorld = (worldId: string) => {
-    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+    goToOdysseyHome(worldId);
   };
 
   const onStakeWorld = (worldId: string) => {
