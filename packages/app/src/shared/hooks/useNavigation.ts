@@ -1,12 +1,14 @@
 import {useCallback} from 'react';
 import {generatePath, useNavigate} from 'react-router-dom';
+import {PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {ROUTES} from 'core/constants';
+import {WidgetEnum} from 'core/enums';
 
 import {useStore} from './useStore';
 
 export const useNavigation = () => {
-  const {universeStore} = useStore();
+  const {universeStore, widgetManagerStore} = useStore();
   const baseWorldId = universeStore.worldId;
 
   const navigate = useNavigate();
@@ -29,5 +31,17 @@ export const useNavigation = () => {
     [navigate, baseWorldId]
   );
 
-  return {goToOdysseyHome};
+  const goToOdysseyAndStake = useCallback(
+    (worldId: string) => {
+      goToOdysseyHome(worldId);
+
+      /* Try to open the Stake Widget if it was not a hard redirect */
+      setTimeout(() => {
+        widgetManagerStore.open(WidgetEnum.STAKING, PositionEnum.RIGHT);
+      }, 300);
+    },
+    [goToOdysseyHome, widgetManagerStore]
+  );
+
+  return {goToOdysseyHome, goToOdysseyAndStake};
 };

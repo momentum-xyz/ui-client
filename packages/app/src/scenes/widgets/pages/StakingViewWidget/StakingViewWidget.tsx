@@ -1,6 +1,5 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {generatePath, useNavigate} from 'react-router-dom';
 import {useI18n, i18n} from '@momentum-xyz/core';
 import {
   TabInterface,
@@ -10,8 +9,7 @@ import {
   PositionEnum
 } from '@momentum-xyz/ui-kit-storybook';
 
-import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
+import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {StakeSortType} from 'core/types';
 
@@ -34,7 +32,7 @@ const StakingViewWidget: FC = () => {
   const [activeTab, setActiveTab] = useState<StakingTabType>('stakes');
 
   const {t} = useI18n();
-  const navigate = useNavigate();
+  const {goToOdysseyAndStake} = useNavigation();
 
   const sortOptions: SelectOptionInterface<StakeSortType>[] = [
     {
@@ -47,8 +45,8 @@ const StakingViewWidget: FC = () => {
     widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id: worldId});
   };
 
-  const onStake = (worldId: string) => {
-    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+  const onStakeWorld = (worldId: string) => {
+    goToOdysseyAndStake(worldId);
   };
 
   return (
@@ -79,7 +77,7 @@ const StakingViewWidget: FC = () => {
                 sortOptions={sortOptions}
                 onReloadStakes={nftStore.loadMyStakes}
                 onSelectWorld={onSelectWorld}
-                onStake={onStake}
+                onStake={onStakeWorld}
               />
             )}
 
