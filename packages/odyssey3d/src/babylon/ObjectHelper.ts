@@ -106,6 +106,11 @@ export class ObjectHelper {
   }
 
   static async spawnObjectAsync(scene: Scene, object: Object3dInterface, attachToCam: boolean) {
+    const existingObj = this.objectsMap.get(object.id);
+    if (existingObj) {
+      // TODO: compare/check for changes?
+      this.removeObject(object.id);
+    }
     this.objectsMap.set(object.id, null);
 
     const assetUrl = getAssetFileName(object.asset_3d_id);
