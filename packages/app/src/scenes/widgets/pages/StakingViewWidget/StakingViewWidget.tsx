@@ -87,6 +87,8 @@ const StakingViewWidget: FC = () => {
               <MyWallet
                 walletOptions={nftStore.walletOptions}
                 selectedWallet={nftStore.selectedWallet}
+                selectedWalletTransferrable={nftStore.balanceTransferrable}
+                selectedWalletStaked={nftStore.balanceStaked}
                 onSelectWallet={nftStore.setSelectedWalletId}
               />
             )}
