@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  padding: 20px 10px 10px 10px;
   width: 100%;
   pointer-events: all;
-
-  padding: 35px 10px;
 `;
 
 export const HeadingWrapper = styled.div`
@@ -13,15 +12,15 @@ export const HeadingWrapper = styled.div`
 `;
 
 export const PanelBody = styled.div`
+  padding: 10px 0 0 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-top: 20px;
 `;
 
 export const ActionBar = styled.div`
+  padding: 10px 0 0 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding-top: 20px;
 `;
