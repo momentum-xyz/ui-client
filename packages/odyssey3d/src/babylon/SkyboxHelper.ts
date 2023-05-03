@@ -10,7 +10,7 @@ import {
 } from '@babylonjs/core';
 
 export class SkyboxHelper {
-  static defaultSkyboxTextureSize = 's8';
+  static defaultSkyboxTextureSize = 's8/';
   static currentSkybox: Nullable<PhotoDome> = null;
 
   static setCubemapSkybox(scene: Scene, url: string): void {
