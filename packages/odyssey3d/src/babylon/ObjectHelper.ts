@@ -168,7 +168,6 @@ export class ObjectHelper {
 
   static instantiateObject(container: AssetContainer, object: Object3dInterface, attach: boolean) {
     const instance = container.instantiateModelsToScene();
-
     if (instance.rootNodes.length === 0) {
       console.log(
         'instance.rootNodes.length === 0. Something went wrong with loading ' + object.asset_3d_id
@@ -197,7 +196,8 @@ export class ObjectHelper {
     this.objectsMap.set(object.id, babylonObject);
 
     const awaitingTexture = this.awaitingTexturesMap.get(object.id);
-    if (awaitingTexture) {
+    // object.asset_format === '2' are assets from basic asset pack
+    if (awaitingTexture && object.asset_format === '2') {
       this.setObjectTexture(this.scene, awaitingTexture);
     }
 
@@ -225,12 +225,15 @@ export class ObjectHelper {
   static detachFromCamera() {
     this.transformSubscription?.unsubscribe();
 
-    this.attachedNode.setParent(null, undefined, true);
-    const attachedNodeChildren = this.attachedNode.getChildMeshes();
-    attachedNodeChildren.forEach((element) => {
-      element.setEnabled(true);
-    });
-    this.attachedNode.setEnabled(true);
+    if (this.attachedNode) {
+      this.attachedNode.setParent(null, undefined, true);
+      const attachedNodeChildren = this.attachedNode.getChildMeshes();
+      attachedNodeChildren.forEach((element) => {
+        element.setEnabled(true);
+      });
+      this.attachedNode.setEnabled(true);
+    }
+
     this.mySpawningClone?.dispose();
     this.selectedObjectFromSpawn = '';
 

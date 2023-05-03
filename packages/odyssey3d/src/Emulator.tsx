@@ -57,7 +57,7 @@ const WorldEmulator: FC = () => {
           //hypno: 3093e1f9-fa4c-da4d-4df6-73fa22a60ad1     //ERR 400
           //phone: df60d077-608a-3992-bbac-8357466c8646
           //pillman: 0d5b35b9-33c0-d917-c095-7ba3670755da
-
+          asset_format: '1',
           asset_3d_id: assetIDs[randomIndex]
         });
       }
