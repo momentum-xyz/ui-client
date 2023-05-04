@@ -40,11 +40,6 @@ const allPanels: SideMenuItemInterface<MenuItemType>[] = [
     label: i18n.t('labels.inspector')
   },
   {
-    id: 'gizmo',
-    iconName: 'direction-arrows',
-    label: i18n.t('labels.gizmo')
-  },
-  {
     id: 'functionality',
     iconName: 'cubicles',
     label: i18n.t('labels.selectFunction')
@@ -88,25 +83,24 @@ const CreatorWidget: FC = () => {
     };
   }, [creatorStore, world3dStore, spawnAssetStore, worldId, goToOdysseyHome]);
 
-  const content =
-    useMemo(() => {
-      switch (selectedTab) {
-        case 'addObject':
-          return <SpawnAssetPage />;
-        case 'skybox':
-          return <SkyboxSelectorWithPreviewPage />;
-        case 'inspector':
-          return <ObjectInspectorPage />;
-        case 'functionality':
-          return <ObjectFunctionalityPage />;
-        case 'customise':
-          return <AssetCustomisingPage />;
-        // case 'spawnPoint':
-        //   return <SpawnPointPage />;
-        default:
-      }
-      return null;
-    }, [selectedTab]) || [];
+  const content = useMemo(() => {
+    switch (selectedTab) {
+      case 'addObject':
+        return <SpawnAssetPage />;
+      case 'skybox':
+        return <SkyboxSelectorWithPreviewPage />;
+      case 'inspector':
+        return <ObjectInspectorPage />;
+      case 'functionality':
+        return <ObjectFunctionalityPage />;
+      case 'customise':
+        return <AssetCustomisingPage />;
+      // case 'spawnPoint':
+      //   return <SpawnPointPage />;
+      default:
+    }
+    return null;
+  }, [selectedTab]);
 
   const panel = allPanels.find((panel) => panel.id === selectedTab);
   const menuItem = sideMenuItems.find((item) => item.id === selectedTab);
@@ -120,7 +114,7 @@ const CreatorWidget: FC = () => {
         onSelect={setSelectedTab}
       />
 
-      {!!selectedTab && (
+      {!!selectedTab && !!content && (
         <Panel
           isFullHeight
           size="large"

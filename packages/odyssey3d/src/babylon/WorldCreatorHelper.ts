@@ -332,9 +332,9 @@ export class WorldCreatorHelper {
         this.transformSubscription = this.subscribeForTransformUpdates(objectId, node);
       }
     } else {
-      this.selectedObjectFromGizmo = '';
       this.disableAllGizmos();
       this.transformSubscription?.unsubscribe();
+      this.selectedObjectFromGizmo = '';
     }
   }
 
