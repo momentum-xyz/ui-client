@@ -4,10 +4,13 @@ export const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
+
+  max-height: calc(100vh - var(--height-offset) - 235px);
+  overflow: scroll;
 `;
 
 export const SkyboxContainer = styled.button`
-  width: 180px;
+  width: 178px;
 `;
 export const SkyboxInnerContainer = styled.button`
   display: flex;
