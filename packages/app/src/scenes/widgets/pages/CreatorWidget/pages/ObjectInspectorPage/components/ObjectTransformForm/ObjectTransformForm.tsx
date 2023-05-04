@@ -23,7 +23,7 @@ interface PropsInterface {
   onTransformChange: (data: TransformInterface) => void;
 }
 
-const ObjectInspector: FC<PropsInterface> = ({data, onTransformChange}) => {
+const ObjectTransformForm: FC<PropsInterface> = ({data, onTransformChange}) => {
   const {t} = useI18n();
 
   const {control, handleSubmit} = useForm<TransformInterface>({defaultValues: data});
@@ -88,4 +88,4 @@ const ObjectInspector: FC<PropsInterface> = ({data, onTransformChange}) => {
   );
 };
 
-export default observer(ObjectInspector);
+export default observer(ObjectTransformForm);
