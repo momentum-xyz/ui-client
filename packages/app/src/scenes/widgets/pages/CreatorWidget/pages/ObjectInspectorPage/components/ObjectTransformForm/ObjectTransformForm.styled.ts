@@ -13,7 +13,7 @@ export const ControlsRow = styled.div`
   height: 42px;
 `;
 export const ControlsRowTitle = styled.span`
-  flex: 0 0 150px;
+  flex: 0 0 100px;
 `;
 export const ControlsRowInputsContainer = styled.div`
   flex: 1;
@@ -25,7 +25,7 @@ export const ControlsRowInputContainer = styled.div`
   align-items: center;
   & input,
   & div {
-    width: 100px;
+    width: 120px;
   }
 `;
 export const ControlsRowInputTitle = styled.h1`
