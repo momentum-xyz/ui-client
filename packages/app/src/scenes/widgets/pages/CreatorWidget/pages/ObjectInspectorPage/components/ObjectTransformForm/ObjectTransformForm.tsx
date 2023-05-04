@@ -19,21 +19,21 @@ export interface TransformInterface {
 }
 
 interface PropsInterface {
-  data: TransformInterface;
+  initialData: TransformInterface;
   onTransformChange: (data: TransformInterface) => void;
 }
 
-const ObjectTransformForm: FC<PropsInterface> = ({data, onTransformChange}) => {
+const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange}) => {
   const {t} = useI18n();
 
-  const {control, handleSubmit} = useForm<TransformInterface>({defaultValues: data});
+  const {control, handleSubmit} = useForm<TransformInterface>({defaultValues: initialData});
 
   const handleChange: SubmitHandler<TransformInterface> = (data) => {
     console.log('ObjectInspector handleChange', data);
 
     const dataWithNumbers = Object.keys(data).reduce((acc, key) => {
       // @ts-ignore
-      acc[key] = Number(data[key]) || 0;
+      acc[key] = parseFloat(data[key]);
       return acc;
     }, {} as TransformInterface);
 
@@ -51,15 +51,20 @@ const ObjectTransformForm: FC<PropsInterface> = ({data, onTransformChange}) => {
               control={control}
               name={name}
               rules={{required: true}}
-              render={({field: {value, onChange}}) => (
-                <Input
-                  value={value}
-                  onChange={(d) => {
-                    onChange(d);
-                    handleSubmit(handleChange)();
-                  }}
-                />
-              )}
+              render={({field: {value, onChange}}) => {
+                const valStr = String(value);
+                return (
+                  <Input
+                    value={valStr}
+                    onChange={(d) => {
+                      onChange(d);
+                      if (d !== valStr) {
+                        handleSubmit(handleChange)();
+                      }
+                    }}
+                  />
+                );
+              }}
             />
           </styled.ControlsRowInputContainer>
         ))}

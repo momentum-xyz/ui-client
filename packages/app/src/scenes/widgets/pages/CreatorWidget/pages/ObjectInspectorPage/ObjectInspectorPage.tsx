@@ -85,7 +85,12 @@ const ObjectInspector: FC = () => {
       </styled.Section>
       <styled.Separator />
       {transformFormData && (
-        <ObjectTransformForm data={transformFormData} onTransformChange={handleTransformChange} />
+        <ObjectTransformForm
+          // key={selectedObjectId}
+          key={JSON.stringify(transformFormData)} // there's slight delay between selectedObjectId change and objectInfo change, so we need to use transformFormData as key
+          initialData={transformFormData}
+          onTransformChange={handleTransformChange}
+        />
       )}
       {canChangeColor && (
         <styled.Section className="margin-top">
