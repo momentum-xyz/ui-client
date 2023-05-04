@@ -40,176 +40,50 @@ const ObjectInspector: FC<PropsInterface> = ({data, onTransformChange}) => {
     onTransformChange(dataWithNumbers);
   };
 
+  const row = (title: string, inputNames: [string, keyof TransformInterface][]) => (
+    <styled.ControlsRow>
+      <styled.ControlsRowTitle>{title}</styled.ControlsRowTitle>
+      <styled.ControlsRowInputsContainer>
+        {inputNames.map(([label, name]) => (
+          <styled.ControlsRowInputContainer key={name}>
+            <styled.ControlsRowInputTitle>{label}</styled.ControlsRowInputTitle>
+            <Controller
+              control={control}
+              name={name}
+              rules={{required: true}}
+              render={({field: {value, onChange}}) => (
+                <Input
+                  value={value}
+                  onChange={(d) => {
+                    onChange(d);
+                    handleSubmit(handleChange)();
+                  }}
+                />
+              )}
+            />
+          </styled.ControlsRowInputContainer>
+        ))}
+      </styled.ControlsRowInputsContainer>
+    </styled.ControlsRow>
+  );
+
   return (
     <styled.Container className="ObjectTransformFormContainer">
-      <styled.ControlsRow>
-        <styled.ControlsRowTitle>{t('titles.scale')}</styled.ControlsRowTitle>
-        <styled.ControlsRowInputsContainer>
-          <styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputTitle>W</styled.ControlsRowInputTitle>
-            <Controller
-              control={control}
-              name="scaleX"
-              rules={{required: true}}
-              render={({field: {value, onChange}}) => (
-                <Input
-                  value={value}
-                  onChange={(d) => {
-                    onChange(d);
-                    handleSubmit(handleChange)();
-                  }}
-                />
-              )}
-            />
-          </styled.ControlsRowInputContainer>
-          <styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputTitle>H</styled.ControlsRowInputTitle>
-            <Controller
-              control={control}
-              name="scaleY"
-              rules={{required: true}}
-              render={({field: {value, onChange}}) => (
-                <Input
-                  value={value}
-                  onChange={(d) => {
-                    onChange(d);
-                    handleSubmit(handleChange)();
-                  }}
-                />
-              )}
-            />
-          </styled.ControlsRowInputContainer>
-          <styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputTitle>D</styled.ControlsRowInputTitle>
-            <Controller
-              control={control}
-              name="scaleZ"
-              rules={{required: true}}
-              render={({field: {value, onChange}}) => (
-                <Input
-                  value={value}
-                  onChange={(d) => {
-                    onChange(d);
-                    handleSubmit(handleChange)();
-                  }}
-                />
-              )}
-            />
-          </styled.ControlsRowInputContainer>
-        </styled.ControlsRowInputsContainer>
-      </styled.ControlsRow>
-      <styled.ControlsRow>
-        <styled.ControlsRowTitle>{t('titles.position')}</styled.ControlsRowTitle>
-        <styled.ControlsRowInputsContainer>
-          <styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputTitle>X</styled.ControlsRowInputTitle>
-            <Controller
-              control={control}
-              name="positionX"
-              rules={{required: true}}
-              render={({field: {value, onChange}}) => (
-                <Input
-                  value={value}
-                  onChange={(d) => {
-                    onChange(d);
-                    handleSubmit(handleChange)();
-                  }}
-                />
-              )}
-            />
-          </styled.ControlsRowInputContainer>
-          <styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputTitle>Y</styled.ControlsRowInputTitle>
-            <Controller
-              control={control}
-              name="positionY"
-              rules={{required: true}}
-              render={({field: {value, onChange}}) => (
-                <Input
-                  value={value}
-                  onChange={(d) => {
-                    onChange(d);
-                    handleSubmit(handleChange)();
-                  }}
-                />
-              )}
-            />
-          </styled.ControlsRowInputContainer>
-          <styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputTitle>Z</styled.ControlsRowInputTitle>
-            <Controller
-              control={control}
-              name="positionZ"
-              rules={{required: true}}
-              render={({field: {value, onChange}}) => (
-                <Input
-                  value={value}
-                  onChange={(d) => {
-                    onChange(d);
-                    handleSubmit(handleChange)();
-                  }}
-                />
-              )}
-            />
-          </styled.ControlsRowInputContainer>
-        </styled.ControlsRowInputsContainer>
-      </styled.ControlsRow>
-      <styled.ControlsRow>
-        <styled.ControlsRowTitle>{t('titles.rotation')}</styled.ControlsRowTitle>
-        <styled.ControlsRowInputsContainer>
-          <styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputTitle>X</styled.ControlsRowInputTitle>
-            <Controller
-              control={control}
-              name="rotationX"
-              rules={{required: true}}
-              render={({field: {value, onChange}}) => (
-                <Input
-                  value={value}
-                  onChange={(d) => {
-                    onChange(d);
-                    handleSubmit(handleChange)();
-                  }}
-                />
-              )}
-            />
-          </styled.ControlsRowInputContainer>
-          <styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputTitle>Y</styled.ControlsRowInputTitle>
-            <Controller
-              control={control}
-              name="rotationY"
-              rules={{required: true}}
-              render={({field: {value, onChange}}) => (
-                <Input
-                  value={value}
-                  onChange={(d) => {
-                    onChange(d);
-                    handleSubmit(handleChange)();
-                  }}
-                />
-              )}
-            />
-          </styled.ControlsRowInputContainer>
-          <styled.ControlsRowInputContainer>
-            <styled.ControlsRowInputTitle>Z</styled.ControlsRowInputTitle>
-            <Controller
-              control={control}
-              name="rotationZ"
-              rules={{required: true}}
-              render={({field: {value, onChange}}) => (
-                <Input
-                  value={value}
-                  onChange={(d) => {
-                    onChange(d);
-                    handleSubmit(handleChange)();
-                  }}
-                />
-              )}
-            />
-          </styled.ControlsRowInputContainer>
-        </styled.ControlsRowInputsContainer>
-      </styled.ControlsRow>
+      {row(t('titles.scale'), [
+        ['W', 'scaleX'],
+        ['H', 'scaleY'],
+        ['D', 'scaleZ']
+      ])}
+      {row(t('titles.position'), [
+        ['X', 'positionX'],
+        ['Y', 'positionY'],
+        ['Z', 'positionZ']
+      ])}
+      {row(t('titles.rotation'), [
+        ['X', 'rotationX'],
+        ['Y', 'rotationY'],
+        ['Z', 'rotationZ']
+      ])}
     </styled.Container>
   );
 };
