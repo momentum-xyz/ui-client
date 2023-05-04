@@ -347,6 +347,7 @@ export const enGb = {
       micOn: 'Mic On',
       micOff: 'Mic Off',
       inspector: 'Inspector',
+      gizmo: 'Gizmo',
       assetCustomising: 'Asset Customising',
       selectFunction: 'Assign Function',
       visibleInNavigation: 'Visible in Navigation',

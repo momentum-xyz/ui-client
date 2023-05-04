@@ -78,7 +78,7 @@ export class ObjectHelper {
           console.log('clicked on object with id: ' + parent.metadata);
           if (ObjectHelper.objectsMap.has(parent.metadata)) {
             onObjectClick(parent.metadata, lastClick);
-            WorldCreatorHelper.selectedObjectFromGizmo = parent.metadata;
+            // WorldCreatorHelper.selectedObjectFromGizmo = parent.metadata;
           } else if (
             PlayerHelper.playerId === parent.metadata ||
             PlayerHelper.userMap.has(parent.metadata)
@@ -92,7 +92,7 @@ export class ObjectHelper {
           }*/
         } else {
           // WorldCreatorHelper.unlockLastObject();
-          WorldCreatorHelper.selectedObjectFromGizmo = '';
+          // WorldCreatorHelper.selectedObjectFromGizmo = '';
           onClickOutside();
         }
       }

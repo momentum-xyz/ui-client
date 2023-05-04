@@ -40,6 +40,11 @@ const allPanels: SideMenuItemInterface<MenuItemType>[] = [
     label: i18n.t('labels.inspector')
   },
   {
+    id: 'gizmo',
+    iconName: 'direction-arrows',
+    label: i18n.t('labels.gizmo')
+  },
+  {
     id: 'functionality',
     iconName: 'cubicles',
     label: i18n.t('labels.selectFunction')

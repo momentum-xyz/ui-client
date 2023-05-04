@@ -98,6 +98,13 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
     {
       key: WidgetEnum.GO_TO,
       position: PositionEnum.CENTER, // TODO 2nd floor
+      iconName: 'direction-arrows',
+      onClick: () => creatorStore.setSelectedTab('gizmo'),
+      isHidden: !creatorStore.selectedObjectId
+    },
+    {
+      key: WidgetEnum.GO_TO,
+      position: PositionEnum.CENTER, // TODO 2nd floor
       iconName: 'info',
       onClick: () => creatorStore.setSelectedTab('inspector'),
       isHidden: !creatorStore.selectedObjectId

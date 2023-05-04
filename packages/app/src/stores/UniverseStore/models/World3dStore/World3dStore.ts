@@ -230,7 +230,9 @@ const World3dStore = types
       // TODO move it as child store here??
       const {creatorStore} = getRootStore(self);
       creatorStore.setSelectedObjectId(objectId);
-      creatorStore.setSelectedTab('inspector');
+      if (creatorStore.selectedTab === null) {
+        creatorStore.setSelectedTab('gizmo');
+      }
     },
     setAttachedToCamera(objectId: string | null) {
       if (!objectId && self.attachedToCameraObjectId) {
