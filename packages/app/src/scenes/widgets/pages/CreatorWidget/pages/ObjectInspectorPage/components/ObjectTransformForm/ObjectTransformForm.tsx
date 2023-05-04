@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {Input} from '@momentum-xyz/ui-kit-storybook';
-import {Controller, useForm} from 'react-hook-form';
+import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 
 import * as styled from './ObjectTransformForm.styled';
 
@@ -26,18 +26,18 @@ interface PropsInterface {
 const ObjectInspector: FC<PropsInterface> = ({data, onTransformChange}) => {
   const {t} = useI18n();
 
-  const {control} = useForm<TransformInterface>({defaultValues: data});
+  const {control, handleSubmit} = useForm<TransformInterface>({defaultValues: data});
 
-  const handleChange = (value: string | undefined, name: string) => {
-    if (!value) {
-      return;
-    }
+  const handleChange: SubmitHandler<TransformInterface> = (data) => {
+    console.log('ObjectInspector handleChange', data);
 
-    const numberValue = Number(value);
-    if (isNaN(numberValue)) {
-      return;
-    }
-    onTransformChange({...data, [name]: Number(value)});
+    const dataWithNumbers = Object.keys(data).reduce((acc, key) => {
+      // @ts-ignore
+      acc[key] = Number(data[key]) || 0;
+      return acc;
+    }, {} as TransformInterface);
+
+    onTransformChange(dataWithNumbers);
   };
 
   return (
@@ -56,7 +56,7 @@ const ObjectInspector: FC<PropsInterface> = ({data, onTransformChange}) => {
                   value={value}
                   onChange={(d) => {
                     onChange(d);
-                    handleChange(d[0], 'scaleX');
+                    handleSubmit(handleChange)();
                   }}
                 />
               )}
@@ -73,7 +73,7 @@ const ObjectInspector: FC<PropsInterface> = ({data, onTransformChange}) => {
                   value={value}
                   onChange={(d) => {
                     onChange(d);
-                    handleChange(d[0], 'scaleY');
+                    handleSubmit(handleChange)();
                   }}
                 />
               )}
@@ -90,7 +90,7 @@ const ObjectInspector: FC<PropsInterface> = ({data, onTransformChange}) => {
                   value={value}
                   onChange={(d) => {
                     onChange(d);
-                    handleChange(d[0], 'scaleZ');
+                    handleSubmit(handleChange)();
                   }}
                 />
               )}
@@ -112,7 +112,7 @@ const ObjectInspector: FC<PropsInterface> = ({data, onTransformChange}) => {
                   value={value}
                   onChange={(d) => {
                     onChange(d);
-                    handleChange(d[0], 'positionX');
+                    handleSubmit(handleChange)();
                   }}
                 />
               )}
@@ -129,7 +129,7 @@ const ObjectInspector: FC<PropsInterface> = ({data, onTransformChange}) => {
                   value={value}
                   onChange={(d) => {
                     onChange(d);
-                    handleChange(d[0], 'positionY');
+                    handleSubmit(handleChange)();
                   }}
                 />
               )}
@@ -146,7 +146,7 @@ const ObjectInspector: FC<PropsInterface> = ({data, onTransformChange}) => {
                   value={value}
                   onChange={(d) => {
                     onChange(d);
-                    handleChange(d[0], 'positionZ');
+                    handleSubmit(handleChange)();
                   }}
                 />
               )}
@@ -168,7 +168,7 @@ const ObjectInspector: FC<PropsInterface> = ({data, onTransformChange}) => {
                   value={value}
                   onChange={(d) => {
                     onChange(d);
-                    handleChange(d[0], 'rotationX');
+                    handleSubmit(handleChange)();
                   }}
                 />
               )}
@@ -185,7 +185,7 @@ const ObjectInspector: FC<PropsInterface> = ({data, onTransformChange}) => {
                   value={value}
                   onChange={(d) => {
                     onChange(d);
-                    handleChange(d[0], 'rotationY');
+                    handleSubmit(handleChange)();
                   }}
                 />
               )}
@@ -202,7 +202,7 @@ const ObjectInspector: FC<PropsInterface> = ({data, onTransformChange}) => {
                   value={value}
                   onChange={(d) => {
                     onChange(d);
-                    handleChange(d[0], 'rotationZ');
+                    handleSubmit(handleChange)();
                   }}
                 />
               )}
