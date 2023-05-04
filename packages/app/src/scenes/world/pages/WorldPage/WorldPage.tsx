@@ -114,7 +114,10 @@ const WorldPage: FC = () => {
 
   const handleClickOutside = () => {
     console.log('BabylonPage: handleClickOutside');
-    world3dStore?.closeAndResetObjectMenu();
+    if (creatorStore.selectedTab === 'gizmo') {
+      // deselect only with gizmo - other tabs have closing button
+      world3dStore?.closeAndResetObjectMenu();
+    }
   };
 
   const handleUserClick = (id: string, clickPosition: ClickPositionInterface) => {
