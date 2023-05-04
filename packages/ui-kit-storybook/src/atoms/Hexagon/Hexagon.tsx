@@ -114,7 +114,9 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
   const isBlank = blankHexagonTypes.includes(type);
   const isMenu = type === 'menu';
   const shouldHaveButton =
-    type !== 'blank' && type !== 'blank-borderless' && !(type === 'primary' && skipOuterBorder);
+    type !== 'blank' &&
+    type !== 'blank-borderless' &&
+    !((type === 'primary' || isMenu) && skipOuterBorder);
 
   const iconSize = hexagonSizeIconSizeMap[size];
   const element = imageSrc ? (
