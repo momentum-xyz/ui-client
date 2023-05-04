@@ -149,6 +149,8 @@ const ObjectStore = types
     init: flow(function* (objectId: string) {
       yield self.loadAsset2D(objectId);
       yield self.fetchObjectName(objectId);
+
+      return self.currentAssetId;
     })
   }))
   .views((self) => ({
