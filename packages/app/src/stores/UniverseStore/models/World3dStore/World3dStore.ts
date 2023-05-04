@@ -47,11 +47,11 @@ const World3dStore = types
   .actions((self) => ({
     _selectObject(objectId: string): void {
       self.selectedObjectId = objectId;
-      Event3dEmitter.emit('ObjectEditModeChanged', objectId, true);
+      // Event3dEmitter.emit('ObjectEditModeChanged', objectId, true);
     },
     _deselectObject(): void {
       if (self.selectedObjectId) {
-        Event3dEmitter.emit('ObjectEditModeChanged', self.selectedObjectId, false);
+        // Event3dEmitter.emit('ObjectEditModeChanged', self.selectedObjectId, false);
         self.selectedObjectId = null;
       }
     }
