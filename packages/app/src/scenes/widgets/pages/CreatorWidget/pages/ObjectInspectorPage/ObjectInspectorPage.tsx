@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Model3dPreview} from '@momentum-xyz/map3d';
 import {useI18n} from '@momentum-xyz/core';
-import {Frame, useDebouncedCallback} from '@momentum-xyz/ui-kit-storybook';
+import {Frame} from '@momentum-xyz/ui-kit-storybook';
 
 import {Asset3d} from 'core/models';
 import {useStore} from 'shared/hooks';
@@ -41,7 +41,8 @@ const ObjectInspector: FC = () => {
 
   const actualObjectAsset = actualObject ? Asset3d.create({...actualObject}) : undefined;
 
-  const handleTransformChange = useDebouncedCallback((data: TransformInterface) => {
+  // don't use debounce here, if different object is selected, it gets assigned prev object transform...
+  const handleTransformChange = (data: TransformInterface) => {
     if (!selectedObjectId || !PosBusService.isConnected()) {
       console.log(`ObjectInspectorPage: PosBusService is not connected.`);
       return;
@@ -64,7 +65,7 @@ const ObjectInspector: FC = () => {
       }
     };
     PosBusService.sendObjectTransform(selectedObjectId, transform);
-  }, 250);
+  };
 
   return (
     <styled.Container>
