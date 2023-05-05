@@ -36,6 +36,10 @@ export const SectionGrid = styled.div`
   align-items: center;
 `;
 
+export const WalletContent = styled.div`
+  padding: 10px 0 0 0;
+`;
+
 export const BorderedValue = styled.div`
   padding: 0 20px;
   display: flex;

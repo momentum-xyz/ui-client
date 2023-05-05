@@ -5,4 +5,5 @@ export interface ThemeInterface {
   bg: string;
   danger: string;
   success: string;
+  warning: string;
 }

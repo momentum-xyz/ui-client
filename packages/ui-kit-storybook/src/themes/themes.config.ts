@@ -18,11 +18,14 @@ export const DangerColorList: string[] = ['#EA0000'];
 
 export const SuccessColorList: string[] = ['#00CC50'];
 
+export const WarningColorList: string[] = ['#DD3915'];
+
 export const DefaultThemeConfig: ThemeInterface = {
   accentBg: AccentColorList[0],
   accentText: AccentTextColorList[0],
   bg: BackgroundColorList[0],
   text: TextColorList[0],
   danger: DangerColorList[0],
-  success: SuccessColorList[0]
+  success: SuccessColorList[0],
+  warning: WarningColorList[0]
 };

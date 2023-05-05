@@ -217,6 +217,9 @@ export const enGb = {
       trustInfo: 'Trusted by {{count}} customers'
     },
     errors: {
+      wrongAccount: 'This account cannot be used',
+      switchToArbitrum: 'Please switch to Arbitrum network in the wallet',
+      switchAccount: 'Please switch to selected account in the wallet',
       oidcSession: 'Something wrong with session',
       sessionExpired: 'The login session has expired. Please try again.',
       unknownError: 'Could not login please try again.',
