@@ -127,17 +127,32 @@ const Menu = <T,>({
           subMenuSource
         )
       : null;
-  const subMenuLeftOffset = calculateSubMenuLeftOffset(
-    subMenuItems,
-    leftItems,
-    centerItems,
-    rightItems,
-    leftBlankCount,
-    rightBlankCount,
-    subMenuSourcePosition,
-    subMenuSourceIdx,
-    sidePadding,
-    windowWidth
+  const subMenuLeftOffset = useMemo(
+    () =>
+      calculateSubMenuLeftOffset(
+        subMenuItems,
+        leftItems,
+        centerItems,
+        rightItems,
+        leftBlankCount,
+        rightBlankCount,
+        subMenuSourcePosition,
+        subMenuSourceIdx,
+        sidePadding,
+        windowWidth
+      ),
+    [
+      centerItems,
+      leftBlankCount,
+      leftItems,
+      rightBlankCount,
+      rightItems,
+      sidePadding,
+      subMenuItems,
+      subMenuSourceIdx,
+      subMenuSourcePosition,
+      windowWidth
+    ]
   );
 
   const visualizeSection = (items: MenuItemInterface<T>[]) => (
