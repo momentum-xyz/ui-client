@@ -5,6 +5,7 @@ import Sparkle from '../../static/images/sparkle.svg';
 import {IconSvg} from '../IconSvg';
 import {IconNameType} from '../../types';
 import {IconSizeType} from '../IconSvg/IconSvg';
+import {Image} from '../Image';
 
 import * as styled from './Hexagon.styled';
 
@@ -120,7 +121,8 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
 
   const iconSize = hexagonSizeIconSizeMap[size];
   const element = imageSrc ? (
-    <img src={imageSrc} alt="" style={{height: '100%'}} />
+    // <img src={imageSrc} alt="" style={{height: '100%'}} />
+    <Image src={imageSrc} />
   ) : iconName ? (
     <IconSvg name={iconName} size={iconSize} isWhite />
   ) : (
