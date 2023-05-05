@@ -18,16 +18,59 @@ export interface MenuItemInterface<T> {
   tooltip?: string;
   position: PositionEnum;
   viewPosition?: PositionEnum;
-  subMenuItems?: MenuItemInterface<T>[];
   onClick?: (key: T, position: PositionEnum) => void;
 }
 
 export interface MenuPropsInterface<T> {
   activeKeys?: T[];
   items?: MenuItemInterface<T>[];
+  subMenuItems?: MenuItemInterface<T>[];
+  subMenuSource?: T;
 }
 
-const Menu = <T,>({activeKeys = [], items = []}: MenuPropsInterface<T>) => {
+const calculateSubMenuLeftOffset = (
+  subMenu: MenuItemInterface<T>[] | undefined,
+  leftActions: MenuItemInterface<T>[],
+  centerItems: MenuItemInterface<T>[],
+  rightActions: MenuItemInterface<T>[],
+  leftBlankCount: number,
+  rightBlankCount: number,
+  subMenuSourcePosition: PositionEnum | null,
+  subMenuSourceIdx: number | null,
+  sidePadding: number,
+  windowWidth: number
+): number => {
+  if (!subMenu?.length || !subMenuSourcePosition || subMenuSourceIdx === null) {
+    return 0;
+  }
+  const offsetsToAddFromPreviousSections =
+    subMenuSourcePosition === PositionEnum.LEFT
+      ? 0
+      : subMenuSourcePosition === PositionEnum.CENTER
+      ? leftActions.length + leftBlankCount
+      : leftActions.length + leftBlankCount + centerItems.length + rightBlankCount;
+  const offsetsToAdd = offsetsToAddFromPreviousSections + subMenuSourceIdx;
+  const offsetsToSubtract = Math.floor(subMenu?.length / 2);
+  const offsetCnt = offsetsToAdd - offsetsToSubtract;
+
+  const minSideOffset = sidePadding / 2 + MENU_ITEM_WIDTH / 2;
+  const offset = offsetCnt * MENU_ITEM_WIDTH + minSideOffset;
+
+  const offsetOverflows = offset < 0 || offset + subMenu.length * MENU_ITEM_WIDTH > windowWidth;
+  if (offsetOverflows) {
+    return offset <= 0
+      ? minSideOffset
+      : windowWidth - subMenu?.length * MENU_ITEM_WIDTH - minSideOffset;
+  }
+  return offset;
+};
+
+const Menu = <T,>({
+  activeKeys = [],
+  items = [],
+  subMenuItems = [],
+  subMenuSource
+}: MenuPropsInterface<T>) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth - 20);
@@ -40,22 +83,6 @@ const Menu = <T,>({activeKeys = [], items = []}: MenuPropsInterface<T>) => {
   const centerItems: MenuItemInterface<T>[] = items.filter(
     (i) => i.position === PositionEnum.CENTER
   );
-
-  const calculateSubMenuLeftOffset = (
-    subMenu: MenuItemInterface<T>[] | undefined,
-    leftActions: MenuItemInterface<T>[],
-    leftBlankCount: number,
-    activeCenterActionIdx: number,
-    sidePadding: number
-  ): number => {
-    if (!subMenu?.length) {
-      return 0;
-    }
-    const offsetsToAdd = leftActions.length + leftBlankCount + activeCenterActionIdx;
-    const offsetsToSubtract = Math.floor(subMenu?.length / 2);
-    const offsetCnt = offsetsToAdd - offsetsToSubtract;
-    return offsetCnt * MENU_ITEM_WIDTH + sidePadding / 2 + MENU_ITEM_WIDTH / 2;
-  };
 
   const [sidePadding, leftBlankCount, rightBlankCount] = useMemo(() => {
     const totalPossibleHexagons = Math.floor(windowWidth / MENU_ITEM_WIDTH);
@@ -84,16 +111,33 @@ const Menu = <T,>({activeKeys = [], items = []}: MenuPropsInterface<T>) => {
     return [tmp_sidePadding, tmp_leftBlankCount, tmp_rightBlankCount];
   }, [leftItems, centerItems, rightItems, windowWidth]);
 
-  const activeCenterActionIdx = centerItems.findIndex(({key}) => activeKeys.includes(key));
-  const subMenu: MenuItemInterface<T>[] | undefined = activeCenterActionIdx
-    ? centerItems[activeCenterActionIdx]?.subMenuItems
-    : undefined;
+  const subMenuSourcePosition =
+    [...leftItems, ...rightItems, ...centerItems].find(({key}) => key === subMenuSource)
+      ?.position || null;
+  const findFn = (items: MenuItemInterface<T>[], searchKey: T) =>
+    items.findIndex(({key}) => key === searchKey);
+  const subMenuSourceIdx =
+    subMenuSource && subMenuSourcePosition
+      ? findFn(
+          subMenuSourcePosition === PositionEnum.LEFT
+            ? leftItems
+            : subMenuSourcePosition === PositionEnum.RIGHT
+            ? rightItems
+            : centerItems,
+          subMenuSource
+        )
+      : null;
   const subMenuLeftOffset = calculateSubMenuLeftOffset(
-    subMenu,
+    subMenuItems,
     leftItems,
+    centerItems,
+    rightItems,
     leftBlankCount,
-    activeCenterActionIdx,
-    sidePadding
+    rightBlankCount,
+    subMenuSourcePosition,
+    subMenuSourceIdx,
+    sidePadding,
+    windowWidth
   );
 
   const visualizeSection = (items: MenuItemInterface<T>[]) => (
@@ -138,9 +182,9 @@ const Menu = <T,>({activeKeys = [], items = []}: MenuPropsInterface<T>) => {
 
       {visualizeSection(rightItems)}
 
-      {subMenu?.length && (
+      {subMenuSource && subMenuItems?.length && (
         <styled.SubMenuItemsContainer style={{left: `${subMenuLeftOffset}px`}}>
-          {visualizeSection(subMenu)}
+          {visualizeSection(subMenuItems)}
         </styled.SubMenuItemsContainer>
       )}
     </styled.Container>
