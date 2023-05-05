@@ -1,5 +1,4 @@
-import {FC, useCallback, useEffect, useMemo, useState} from 'react';
-import {Text} from '@momentum-xyz/ui-kit';
+import {useCallback, useMemo, useState} from 'react';
 import Web3 from 'web3';
 import BN from 'bn.js';
 import {
@@ -8,14 +7,14 @@ import {
   saveLastAirdropInfo as originalSaveLastAirdropInfo
 } from '@momentum-xyz/core';
 
+import {useStore} from 'shared/hooks';
+import {dummyWalletConf} from 'wallets';
 import {appVariables} from 'api/constants';
-import {WalletSelector} from 'scenes/widgets/pages/LoginWidget/components';
-import {WalletConfigInterface, dummyWalletConf} from 'wallets';
+import {WalletSelectHelper, WalletSelector} from 'ui-kit';
 
 import stackingABI from './contract_staking.ABI.json';
 import momABI from './contract_MOM.ABI.json';
 import faucetABI from './contract_faucet.ABI.json';
-import {useStore} from './useStore';
 
 enum TokenEnum {
   MOM_TOKEN = 0,
@@ -179,86 +178,4 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
     claimRewards,
     getTokens
   };
-};
-
-interface WalletSelectHelperPropsInterface {
-  walletConf: WalletConfigInterface;
-  requiredAccountAddress: string;
-  onActivationDone: (isSuccess: boolean) => void;
-  onSelectedAccountChanged: (account: string) => void;
-  onLibraryLoaded: (library: any) => void;
-  onNetworkStatusChanged: (isWrongNetwork: boolean) => void;
-}
-
-const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
-  walletConf,
-  requiredAccountAddress,
-  onActivationDone,
-  onSelectedAccountChanged,
-  onLibraryLoaded,
-  onNetworkStatusChanged
-}) => {
-  const {useWallet} = walletConf;
-  const {
-    web3Library: library,
-    chainId,
-    account,
-    activate,
-    isActive
-  } = useWallet({appVariables: appVariables as any});
-  console.log('WalletSelectHelper', {
-    library,
-    chainId,
-    account,
-    activate,
-    isActive,
-    requiredAccountAddress
-  });
-
-  useEffect(() => {
-    if (account) {
-      onSelectedAccountChanged(account);
-    }
-  }, [account, onSelectedAccountChanged]);
-
-  useEffect(() => {
-    if (library) {
-      onLibraryLoaded(library);
-    }
-  }, [library, onLibraryLoaded]);
-
-  useEffect(() => {
-    activate()
-      .catch((err) => {
-        console.log('WalletSelectHelper activate err', err);
-        onActivationDone(false);
-      })
-      .finally(() => onActivationDone(true));
-  }, [activate, onActivationDone]);
-
-  const isWrongNetwork = !!chainId && chainId !== +appVariables.BLOCKCHAIN_ID;
-
-  useEffect(() => {
-    onNetworkStatusChanged(isWrongNetwork);
-    // TODO switch automatically
-  }, [isWrongNetwork, onNetworkStatusChanged]);
-
-  if (isActive && !library) {
-    return <Text text="This account cannot be used" size="m" />;
-  }
-
-  if (isWrongNetwork) {
-    console.log('WalletSelectHelper current chainId', {
-      chainId,
-      'appVariables.BLOCKCHAIN_ID': appVariables.BLOCKCHAIN_ID,
-      library
-    });
-    return <Text text="Please switch to Arbitrum network in the wallet" size="m" />;
-  }
-
-  if (account && account !== requiredAccountAddress) {
-    return <Text text="Please switch to selected account in the wallet" size="m" />;
-  }
-
-  return null;
 };

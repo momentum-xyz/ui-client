@@ -2,15 +2,19 @@ import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Methods = styled.div`
-  padding: 20px 1px 30px 1px;
+  padding: 20px 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px 40px;
+  gap: 20px 20px;
+
+  &.four {
+    grid-template-columns: repeat(4, 1fr);
+  }
 `;
 
 export const MethodItem = styled.button`
   width: 100%;
-  height: 102px;
+  height: 100px;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
@@ -28,7 +32,7 @@ export const MethodItem = styled.button`
   }
 
   & > span {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-xxs);
     font-weight: 500;
     line-height: 18px;
     letter-spacing: 0.08em;
@@ -37,8 +41,7 @@ export const MethodItem = styled.button`
   }
 
   & > img {
-    max-width: 64px;
-    height: 64px;
-    margin-bottom: 4px;
+    margin: 0 0 10px 0;
+    width: 50%;
   }
 `;

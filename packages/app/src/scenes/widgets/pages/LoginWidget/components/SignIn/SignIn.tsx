@@ -3,10 +3,8 @@ import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {Button, Frame} from '@momentum-xyz/ui-kit-storybook';
 
-import {TrustPoints, WalletLogin} from 'ui-kit';
+import {TrustPoints, WalletLogin, WalletSelector} from 'ui-kit';
 import {WalletConfigInterface} from 'wallets';
-
-import {WalletSelector} from '../WalletSelector';
 
 import * as styled from './SignIn.styled';
 
