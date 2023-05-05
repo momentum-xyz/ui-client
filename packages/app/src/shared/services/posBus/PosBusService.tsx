@@ -31,24 +31,32 @@ class PosBusService {
 
   public static init(token: string, userId: string) {
     console.log('PosBusService init', token, userId);
-    const workerUrl = new URL('@momentum-xyz/posbus-client/worker.mjs', import.meta.url);
-    const wasmUrl = new URL('@momentum-xyz/posbus-client/pbc.wasm', import.meta.url);
     this.userId = userId;
-    loadClientWorker(workerUrl, wasmUrl)
-      .then((client) => {
-        console.log('PosBus client loaded', client);
-        this.main.client = client;
-        return client.connect(`${appVariables.BE_URL}/posbus`, token, userId).then((port) => {
-          this.main.port = port;
-          port.onmessage = PosBusService.handleIncomingMessage;
-          // port.onmessage = (event) => {
-          //   console.log('PosBus message', event.data);
-          // };
-        });
-      })
-      .catch((err) => {
+    if (this.main.client) {
+      this.main.client.disconnect();
+      this.connect(this.main.client, token, userId).catch((err) => {
         console.error(err);
       });
+    } else {
+      const workerUrl = new URL('@momentum-xyz/posbus-client/worker.mjs', import.meta.url);
+      const wasmUrl = new URL('@momentum-xyz/posbus-client/pbc.wasm', import.meta.url);
+      loadClientWorker(workerUrl, wasmUrl)
+        .then((client) => {
+          console.log('PosBus client loaded', client);
+          this.main.client = client;
+          return this.connect(client, token, userId);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }
+
+  static connect(client: Client, token: string, userId: string) {
+    return client.connect(`${appVariables.BE_URL}/posbus`, token, userId).then((port) => {
+      this.main.port = port;
+      port.onmessage = PosBusService.handleIncomingMessage;
+    });
   }
 
   static isConnected() {
