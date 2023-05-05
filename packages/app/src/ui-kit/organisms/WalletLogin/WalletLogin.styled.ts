@@ -29,10 +29,3 @@ export const InputContainer = styled.div`
   gap: 12px;
   margin-bottom: 16px;
 `;
-
-export const WalletHash = styled.div`
-  width: 350px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-`;
