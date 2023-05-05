@@ -121,7 +121,6 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
 
   const iconSize = hexagonSizeIconSizeMap[size];
   const element = imageSrc ? (
-    // <img src={imageSrc} alt="" style={{height: '100%'}} />
     <Image src={imageSrc} />
   ) : iconName ? (
     <IconSvg name={iconName} size={iconSize} isWhite />
