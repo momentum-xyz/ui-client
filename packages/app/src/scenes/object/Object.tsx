@@ -27,12 +27,21 @@ const Object: FC = () => {
   const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {
-    objectStore.init(objectId);
+    objectStore
+      .init(objectId)
+      .then((assetId) => {
+        if (!assetId) {
+          goToOdysseyHome();
+        }
+      })
+      .catch(() => {
+        goToOdysseyHome();
+      });
 
     return () => {
       objectStore.resetModel();
     };
-  }, [objectId, objectStore, world3dStore]);
+  }, [objectId, objectStore, world3dStore, goToOdysseyHome]);
 
   useEffect(() => {
     if (assetType === AssetTypeEnum.DOCK) {
