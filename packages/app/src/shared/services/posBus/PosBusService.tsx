@@ -237,6 +237,7 @@ class PosBusService {
   }
 
   static sendObjectTransform(objectId: string, transform: ObjectTransformInterface) {
+    console.log('PosBus sendObjectTransform', objectId, transform);
     this.main.port?.postMessage([
       MsgType.OBJECT_TRANSFORM,
       {id: objectId, object_transform: transform}

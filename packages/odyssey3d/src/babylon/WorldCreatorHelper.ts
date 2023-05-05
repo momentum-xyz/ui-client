@@ -319,6 +319,8 @@ export class WorldCreatorHelper {
 
   static toggleGizmo(objectId: string, on: boolean) {
     if (on) {
+      this.selectedObjectFromGizmo = objectId;
+
       this.setGizmoType(GizmoTypesEnum.Position);
       this.setGizmoType(GizmoTypesEnum.Rotation);
       this.setGizmoType(GizmoTypesEnum.Scale);
@@ -332,6 +334,7 @@ export class WorldCreatorHelper {
     } else {
       this.disableAllGizmos();
       this.transformSubscription?.unsubscribe();
+      this.selectedObjectFromGizmo = '';
     }
   }
 

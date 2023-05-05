@@ -1,3 +1,5 @@
+import {ObjectTransformInterface} from '@momentum-xyz/core';
+
 export interface PositionInterface {
   x: number;
   y: number;
@@ -15,6 +17,7 @@ export interface GetSpaceInfoResponse {
   asset_2d_id: string;
   asset_3d_id: string;
   position: PositionInterface;
+  transform: ObjectTransformInterface;
 }
 
 export interface PatchSpaceInfoRequest {

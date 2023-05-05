@@ -19,7 +19,8 @@ import {PosBusService} from 'shared/services';
 import {HighFiveContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 
 const WorldPage: FC = () => {
-  const {agoraStore, universeStore, widgetsStore, widgetManagerStore, sessionStore} = useStore();
+  const {agoraStore, universeStore, widgetsStore, widgetManagerStore, sessionStore, creatorStore} =
+    useStore();
   const {world3dStore} = universeStore;
   const [readyToHandleEvents, setReadyToHandleEvents] = useState<boolean>(false);
 
@@ -73,6 +74,18 @@ const WorldPage: FC = () => {
       universeStore.leaveWorld();
     };
   }, [worldId, universeStore, readyToHandleEvents]);
+
+  useEffect(() => {
+    if (
+      creatorStore.selectedObjectId &&
+      universeStore.isCreatorMode &&
+      creatorStore.selectedTab === 'gizmo'
+    ) {
+      Event3dEmitter.emit('ObjectEditModeChanged', creatorStore.selectedObjectId, true);
+    } else {
+      Event3dEmitter.emit('ObjectEditModeChanged', 'n/a', false);
+    }
+  }, [creatorStore.selectedObjectId, creatorStore.selectedTab, universeStore.isCreatorMode]);
 
   const handleObjectClick = (objectId: string, clickPos: ClickPositionInterface) => {
     if (universeStore.isCreatorMode) {

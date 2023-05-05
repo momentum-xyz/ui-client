@@ -47,11 +47,11 @@ const World3dStore = types
   .actions((self) => ({
     _selectObject(objectId: string): void {
       self.selectedObjectId = objectId;
-      Event3dEmitter.emit('ObjectEditModeChanged', objectId, true);
+      // Event3dEmitter.emit('ObjectEditModeChanged', objectId, true);
     },
     _deselectObject(): void {
       if (self.selectedObjectId) {
-        Event3dEmitter.emit('ObjectEditModeChanged', self.selectedObjectId, false);
+        // Event3dEmitter.emit('ObjectEditModeChanged', self.selectedObjectId, false);
         self.selectedObjectId = null;
       }
     }
@@ -230,7 +230,9 @@ const World3dStore = types
       // TODO move it as child store here??
       const {creatorStore} = getRootStore(self);
       creatorStore.setSelectedObjectId(objectId);
-      creatorStore.setSelectedTab('inspector');
+      if (creatorStore.selectedTab === null) {
+        creatorStore.setSelectedTab('gizmo');
+      }
     },
     setAttachedToCamera(objectId: string | null) {
       if (!objectId && self.attachedToCameraObjectId) {
