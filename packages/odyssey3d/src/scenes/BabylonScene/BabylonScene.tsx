@@ -65,6 +65,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       events.on('SetWorld', (world, userId) => {
         //CameraHelper.spawnPlayer(scene, assetID);
         PlayerHelper.setWorld(world, userId);
+        ObjectHelper.setWorld(world);
       });
 
       events.on('AddObject', async (object, attachToCamera = false) => {

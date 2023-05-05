@@ -66,6 +66,7 @@ export class PlayerHelper {
   static userMap = new Map<string, BabylonUserInterface>();
 
   static playerInstance: InstantiatedEntries;
+  static playerContainer: AssetContainer;
   static playerAvatar3D: string;
   static playerId: string;
   static playerInterface: Odyssey3dUserInterface;
@@ -133,6 +134,11 @@ export class PlayerHelper {
   }
 
   static setWorld(world: SetWorldInterface, userId: string) {
+    this.disposeAllUsers();
+    this.playerInstance?.dispose();
+    this.playerContainer?.removeAllFromScene();
+    this.playerContainer?.dispose();
+
     this.playerAvatar3D = world.avatar_3d_asset_id;
     this.playerId = userId;
     this.spawnPlayer(PlayerHelper.scene);
@@ -196,6 +202,7 @@ export class PlayerHelper {
     instance.animationGroups[4].play();
 
     this.playerInstance = instance;
+    this.playerContainer = container;
   }
 
   static setUserAvatar(node: TransformNode) {

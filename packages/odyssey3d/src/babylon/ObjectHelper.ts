@@ -13,7 +13,12 @@ import {
   Texture
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
-import {Object3dInterface, Texture3dInterface, ClickPositionInterface} from '@momentum-xyz/core';
+import {
+  Object3dInterface,
+  Texture3dInterface,
+  ClickPositionInterface,
+  SetWorldInterface
+} from '@momentum-xyz/core';
 
 import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
@@ -99,10 +104,8 @@ export class ObjectHelper {
     };
   }
 
-  static setWorld(assetID: string) {
-    // TODO: Add logic with this assetid
-    const assetUrl = getAssetFileName(assetID);
-    console.log('assetID is: ' + assetUrl);
+  static setWorld(world: SetWorldInterface) {
+    this.disposeAllObjects();
   }
 
   static async spawnObjectAsync(scene: Scene, object: Object3dInterface, attachToCam: boolean) {
