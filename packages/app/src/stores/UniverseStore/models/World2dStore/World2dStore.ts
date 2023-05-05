@@ -28,6 +28,9 @@ const World2dStore = types.compose(
         Event3dEmitter.on('UserRemoved', (userId) => {
           this.removeOnlineUser(userId);
         });
+        Event3dEmitter.on('SetWorld', (world, userId) => {
+          this.removeAllOnlineUsers();
+        });
       },
       addOnlineUser(userId: string) {
         if (!self.onlineUsersList.find((u) => u.userId === userId)) {
@@ -39,6 +42,9 @@ const World2dStore = types.compose(
         self.onlineUsersList = cast([
           ...self.onlineUsersList.filter((user) => user.userId !== userId)
         ]);
+      },
+      removeAllOnlineUsers() {
+        self.onlineUsersList = cast([]);
       }
     }))
     .views((self) => ({
