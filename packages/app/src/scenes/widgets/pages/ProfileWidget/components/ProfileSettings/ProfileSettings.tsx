@@ -33,7 +33,7 @@ const ProfileSettings: FC<PropsInterface> = ({
       <Frame>
         <styled.Title>{t('labels.sound')}</styled.Title>
         <styled.DeviceItem>
-          <ButtonRound variant="primary" isLabel icon="microphoneOn" />
+          <ButtonRound variant="primary" size="large" isLabel icon="microphoneOn" />
           <Select
             placeholder={`${t('devices.selectInputSource')}`}
             value={selectedInputAudioDeviceId}
@@ -47,7 +47,7 @@ const ProfileSettings: FC<PropsInterface> = ({
           />
         </styled.DeviceItem>
         <styled.DeviceItem>
-          <ButtonRound variant="primary" isLabel icon="sound_louder" />
+          <ButtonRound variant="primary" size="large" isLabel icon="sound_louder" />
           <Select
             placeholder={`${t('devices.selectOutputSource')}`}
             value={selectedOutputAudioDeviceId}

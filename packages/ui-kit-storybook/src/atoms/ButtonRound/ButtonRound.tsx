@@ -1,20 +1,25 @@
 import {memo, forwardRef} from 'react';
 import cn from 'classnames';
 
-import {IconSvg} from '../../atoms';
+import {IconSvg, IconSizeType} from '../../atoms';
 import {IconNameType} from '../../types';
 
 import * as styled from './ButtonRound.styled';
 
 export interface ButtonRoundPropsInterface {
   icon: IconNameType;
-  size?: 'normal';
+  size?: 'normal' | 'large';
   variant?: 'primary';
   disabled?: boolean;
   isLabel?: boolean;
   isActive?: boolean;
   onClick?: () => void;
 }
+
+const IconSizeMap = {
+  normal: 'xs',
+  large: 'xl'
+};
 
 const ButtonRound = forwardRef<HTMLButtonElement, ButtonRoundPropsInterface>(
   ({icon, variant = 'primary', size = 'normal', isLabel, disabled, isActive, onClick}, ref) => {
@@ -27,7 +32,7 @@ const ButtonRound = forwardRef<HTMLButtonElement, ButtonRoundPropsInterface>(
         onClick={onClick}
         className={cn(variant, size, isLabel && 'label', isActive && 'isActive')}
       >
-        <IconSvg name={icon} size="xs" />
+        <IconSvg name={icon} size={IconSizeMap[size] as IconSizeType} />
       </styled.Button>
     );
   }
