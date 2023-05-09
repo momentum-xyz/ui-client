@@ -76,6 +76,10 @@ const AgoraVoiceChatStore = types
     subscribeToPosBusUsers() {
       Event3dEmitter.on('UserJoinedVoiceChat', this.handleAddUser);
       Event3dEmitter.on('UserLeftVoiceChat', this.handleRemoveUser);
+    },
+    beforeDestroy() {
+      Event3dEmitter.off('UserJoinedVoiceChat', this.handleAddUser);
+      Event3dEmitter.off('UserLeftVoiceChat', this.handleRemoveUser);
     }
   }))
   .actions((self) => ({
