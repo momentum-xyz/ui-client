@@ -40,6 +40,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       PlayerHelper.initialize(scene, view, true, onMove, onBumpReady);
       LightHelper.initialize(scene);
       InteractionEffectHelper.initialize(scene);
+      InteractionEffectHelper.initializeHi5Particles();
 
       ObjectHelper.initialize(
         scene,

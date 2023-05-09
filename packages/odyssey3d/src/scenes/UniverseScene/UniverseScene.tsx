@@ -7,6 +7,7 @@ import {Universe3dEmitterType} from '@momentum-xyz/core';
 import {PlayerHelper, LightHelper, SkyboxHelper} from '../../babylon';
 import {UniverseBuilderHelper} from '../../babylon/UniverseBuilderHelper';
 import skyboxWorld from '../../static/mushjungledark.jpeg';
+import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 
 export interface PropsInterface {
   events: Universe3dEmitterType;
@@ -41,6 +42,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
     if (view?.id) {
       PlayerHelper.initialize(scene, view, false);
       LightHelper.initialize(scene);
+      InteractionEffectHelper.initialize(scene);
       await UniverseBuilderHelper.initialize(
         scene,
         renderURL,

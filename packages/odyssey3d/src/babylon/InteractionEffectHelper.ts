@@ -1,5 +1,4 @@
 import {
-  AbstractMesh,
   GPUParticleSystem,
   MeshBuilder,
   ParticleHelper,
@@ -32,7 +31,6 @@ export class InteractionEffectHelper {
 
   static initialize(scene: Scene): void {
     this.scene = scene;
-    this.initializeHi5Particles();
   }
 
   static initializeHi5Particles() {
@@ -87,14 +85,13 @@ export class InteractionEffectHelper {
       this.scene
     );
     customEmitter.visibility = 0;
-
-    const particleSet = this.initializeWispIdleParticle(customEmitter);
+    const particleSet = this.initializeWispIdleParticle();
     particleSet.emitterNode = customEmitter;
-
+    customEmitter.setParent(PlayerHelper.playerInstance.rootNodes[0]);
     customEmitter.position = new Vector3(0, 0.2, -0); // Emitter at center of parent.
 
     this.scene.registerBeforeRender(() => {
-      customEmitter.rotation.z = Math.sin(performance.now() * WISP_ANIM_SPEED);
+      customEmitter.rotation.y = Math.sin(performance.now() * WISP_ANIM_SPEED);
     });
   }
 
@@ -106,9 +103,7 @@ export class InteractionEffectHelper {
    * @returns a particle set.
    */
 
-  static initializeWispIdleParticle(emitter: AbstractMesh) {
-    console.log('createWispIdleParticle after');
-
+  static initializeWispIdleParticle() {
     // Create trail particle
     const trailJson = wispTrailParticleJson;
     const trail = ParticleSystem.Parse(trailJson, this.scene, '');
@@ -148,7 +143,6 @@ export class InteractionEffectHelper {
     CenterCircle.preWarmStepOffset = 20;
     CenterCircle.renderingGroupId = 1;
 
-    emitter.setParent(PlayerHelper.playerInstance.rootNodes[0]);
     return ParticleHelper.ExportSet([trail, trail2, trail3, CenterCircle]);
   }
 }
