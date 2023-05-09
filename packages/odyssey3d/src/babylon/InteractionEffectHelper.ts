@@ -1,4 +1,7 @@
 import {
+  AbstractMesh,
+  GPUParticleSystem,
+  MeshBuilder,
   ParticleHelper,
   ParticleSystem,
   ParticleSystemSet,
@@ -16,28 +19,24 @@ import flyingSparksJson from '../static/Particles/FlyingSparks.json';
 import collisionCirclejson from '../static/Particles/collisionCircle.json';
 import collisionStayOrbJson from '../static/Particles/StayBehindOrb.json';
 import collisionSmokeJson from '../static/Particles/collisionSmoke.json';
+import wispTrailParticleJson from '../static/Particles/wispTrailParticle.json';
+import wispCenterParticleJson from '../static/Particles/wispCenterParticle.json';
+
 
 import {PlayerHelper} from './PlayerHelper';
 
+const WISP_ANIM_SPEED = 0.001;
+
 export class InteractionEffectHelper {
   static scene: Scene;
-  static particlesSet: ParticleSystemSet;
+  static hi5particlesSet: ParticleSystemSet;
 
   static initialize(scene: Scene): void {
     this.scene = scene;
-    this.initializeParticles();
+    this.initializeHi5Particles();
   }
 
-  static startParticlesForPlayer() {
-    const hi5Target = PlayerHelper.camera.getFrontPosition(5);
-    this.startParticlesAtLocation(hi5Target);
-  }
-
-  static startParticlesAtLocation(location: Vector3) {
-    this.startParticlesAt(location);
-  }
-
-  static initializeParticles() {
+  static initializeHi5Particles() {
     // Uses texture: Merge07.png
     const collisionParticle = ParticleSystem.Parse(collisionJson, this.scene, '');
     collisionParticle.particleTexture = new Texture(merge07); // LINK THIS TO Merge07.png
@@ -59,7 +58,7 @@ export class InteractionEffectHelper {
     const collisionSmoke = ParticleSystem.Parse(collisionSmokeJson, this.scene, '');
     collisionSmoke.particleTexture = new Texture(smoke); // LINK THIS TO: smoke_07.png
 
-    this.particlesSet = ParticleHelper.ExportSet([
+    this.hi5particlesSet = ParticleHelper.ExportSet([
       collisionParticle,
       collisionSmoke,
       collisionStayOrb,
@@ -68,11 +67,89 @@ export class InteractionEffectHelper {
     ]);
   }
 
-  static startParticlesAt(spawnLocation: Vector3) {
-    this.particlesSet.systems.forEach((element) => {
+  static startHi5ParticlesForPlayer() {
+    const hi5Target = PlayerHelper.camera.getFrontPosition(5);
+    this.startHi5ParticlesAtLocation(hi5Target);
+  }
+
+  static startHi5ParticlesAtLocation(spawnLocation: Vector3) {
+    this.hi5particlesSet.systems.forEach((element) => {
       element.emitter = spawnLocation;
     });
 
-    this.particlesSet.start();
+    this.hi5particlesSet.start();
+  }
+
+  static setupWispTail() {
+    // Create cube as emitter to rotate it later.
+    const customEmitter = MeshBuilder.CreateBox(
+      'TailEmitter',
+      {width: 0.2, height: 0.2, depth: 0.2},
+      this.scene
+    );
+    customEmitter.visibility = 0;
+
+    const particleSet = this.initializeWispIdleParticle(customEmitter);
+    particleSet.emitterNode = customEmitter;
+
+    customEmitter.position = new Vector3(0, 0.2, -0); // Emitter at center of parent.
+
+    this.scene.registerBeforeRender(() => {
+      customEmitter.rotation.z  = Math.sin(performance.now() * WISP_ANIM_SPEED);
+    })
+  }
+
+  /**
+   * This function creates 4 particle system all using the circle_05.png image.
+   * It return a set containing the 4 particle system. Activate it by calling .start(EmitterMesh) on the set.
+   * EmitterMesh is an invisible box or sphere placed on the wisp. The partitcles will orginiate on that spot.
+   *
+   * @returns a particle set.
+   */
+
+  static initializeWispIdleParticle(emitter: AbstractMesh) {
+    console.log('createWispIdleParticle after');
+
+    // Create trail particle
+    const trailJson = wispTrailParticleJson;
+    const trail = ParticleSystem.Parse(trailJson, this.scene, '');
+    trail.particleTexture = new Texture(dotTexture);
+    trail.direction1 = new Vector3(0, 0.2, 0);
+    trail.direction2 = new Vector3(0, 0.2, 0);
+    trail.gravity = new Vector3(0, -1, 0);
+    trail.preWarmCycles = 100;
+    trail.preWarmStepOffset = 20;
+    trail.renderingGroupId = 1; // Place particle render after NodeMaterial of the Wisp.
+
+    // Create trail2 particle
+    const trail2 = ParticleSystem.Parse(trailJson, this.scene, '');
+    trail2.particleTexture = new Texture(dotTexture);
+    trail2.direction1 = new Vector3(0.1, 0, 0);
+    trail2.direction2 = new Vector3(0.1, 0, 0);
+    trail2.gravity = new Vector3(0, -1, 0);
+    trail2.preWarmCycles = 100;
+    trail2.preWarmStepOffset = 20;
+    trail2.renderingGroupId = 1; // Place particle render after NodeMaterial of the Wisp.
+
+    //// Create trail3 particle
+    const trail3 = ParticleSystem.Parse(trailJson, this.scene, '');
+    trail3.particleTexture = new Texture(dotTexture);
+    trail3.direction1 = new Vector3(-0.2, 0, 0);
+    trail3.direction2 = new Vector3(-0.2, 0, 0);
+    trail3.gravity = new Vector3(0, -1, 0);
+    trail3.preWarmCycles = 100;
+    trail2.preWarmStepOffset = 20;
+    trail3.renderingGroupId = 1; // Place particle render after NodeMaterial of the Wisp.
+
+    // Create tail source
+    const CenterJson = wispCenterParticleJson;
+    const CenterCircle = GPUParticleSystem.Parse(CenterJson, this.scene, '');
+    CenterCircle.particleTexture = new Texture(dotTexture);
+    CenterCircle.preWarmCycles = 100;
+    CenterCircle.preWarmStepOffset = 20;
+    CenterCircle.renderingGroupId = 1;
+
+    emitter.setParent(PlayerHelper.playerInstance.rootNodes[0]);
+    return ParticleHelper.ExportSet([trail, trail2, trail3, CenterCircle]);
   }
 }

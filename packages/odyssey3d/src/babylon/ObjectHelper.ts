@@ -183,6 +183,7 @@ export class ObjectHelper {
           newTexture.uAng = Math.PI;
 
           const basicShapeMat = childMeshes[0].material as PBRMaterial;
+          basicShapeMat.albedoColor = Color3.White();
           basicShapeMat.albedoTexture = newTexture;
           childMeshes[0].material = basicShapeMat;
           this.awaitingTexturesMap.delete(texture.objectId);

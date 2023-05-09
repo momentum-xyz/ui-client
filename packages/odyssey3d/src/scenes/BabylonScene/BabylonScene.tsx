@@ -108,7 +108,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
 
       // Received by user2 to spawn particles
       events.on('ReceiveHighFive', (userId) => {
-        InteractionEffectHelper.startParticlesForPlayer();
+        InteractionEffectHelper.startHi5ParticlesForPlayer();
       });
 
       // Received by user1 to start chasing
