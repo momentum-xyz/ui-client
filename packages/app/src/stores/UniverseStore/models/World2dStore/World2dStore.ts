@@ -19,18 +19,6 @@ const World2dStore = types.compose(
       init(worldId: string) {
         self.worldId = worldId;
         self.worldDetails = WorldDetails.create({worldId});
-        this.subscribeToUsers();
-      },
-      subscribeToUsers(): void {
-        Event3dEmitter.on('UserAdded', (onlineUser) => {
-          this.addOnlineUser(onlineUser.id);
-        });
-        Event3dEmitter.on('UserRemoved', (userId) => {
-          this.removeOnlineUser(userId);
-        });
-        Event3dEmitter.on('SetWorld', (world, userId) => {
-          this.removeAllOnlineUsers();
-        });
       },
       addOnlineUser(userId: string) {
         if (!self.onlineUsersList.find((u) => u.userId === userId)) {
@@ -47,6 +35,23 @@ const World2dStore = types.compose(
         self.onlineUsersList = cast([]);
       }
     }))
+    .actions((self) => {
+      const onUserAdded = (user: {id: string}) => self.addOnlineUser(user.id);
+      const onUserRemoved = (user: string) => self.removeOnlineUser(user);
+      const onSetWorld = (/*world,userId*/) => self.removeAllOnlineUsers();
+      return {
+        afterCreate: () => {
+          Event3dEmitter.on('UserAdded', onUserAdded);
+          Event3dEmitter.on('UserRemoved', onUserRemoved);
+          Event3dEmitter.on('SetWorld', onSetWorld);
+        },
+        beforeDestroy: () => {
+          Event3dEmitter.off('UserAdded', onUserAdded);
+          Event3dEmitter.off('UserRemoved', onUserRemoved);
+          Event3dEmitter.off('SetWorld', onSetWorld);
+        }
+      };
+    })
     .views((self) => ({
       get isMyWorld(): boolean {
         return self.worldDetails?.world?.owner_id === getRootStore(self).sessionStore.userId;

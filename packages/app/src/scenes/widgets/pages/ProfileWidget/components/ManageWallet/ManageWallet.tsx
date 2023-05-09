@@ -1,12 +1,11 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import cn from 'classnames';
 import {useI18n} from '@momentum-xyz/core';
 import {ButtonEllipse, Frame, WalletHash} from '@momentum-xyz/ui-kit-storybook';
 
-import {WalletLogin, TrustPoints} from 'ui-kit';
+import {WalletLogin, TrustPoints, WalletSelector} from 'ui-kit';
 import {WalletModelInterface} from 'core/models';
-import {availableWallets, WalletConfigInterface} from 'wallets';
+import {WalletConfigInterface} from 'wallets';
 
 import * as styled from './ManageWallet.styled';
 
@@ -60,23 +59,7 @@ const ManageWallet: FC<PropsInterface> = ({
 
           <styled.ConnectContainer>
             <styled.Title>{t('titles.connectAnotherWallet')}</styled.Title>
-            <styled.Methods>
-              {availableWallets
-                .filter((m) => m.name !== 'Polkadot')
-                .map((wallet) => (
-                  <styled.MethodItem
-                    key={wallet.name}
-                    className={cn(selectedWallet?.name === wallet.name && 'active')}
-                    onClick={() => {
-                      setSelectedWallet(wallet);
-                    }}
-                  >
-                    <img src={wallet.logo} alt={`${wallet.name}-icon`} />
-                    <span>{wallet.name}</span>
-                  </styled.MethodItem>
-                ))}
-            </styled.Methods>
-
+            <WalletSelector onSelect={setSelectedWallet} />
             {!selectedWallet && <TrustPoints />}
           </styled.ConnectContainer>
 

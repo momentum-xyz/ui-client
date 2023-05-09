@@ -22,6 +22,7 @@ export const Button = styled.button`
   --primary-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
 
   --normal-size: 26px;
+  --large-size: 36px;
 
   display: flex;
   width: var(--size);
@@ -92,5 +93,9 @@ export const Button = styled.button`
 
   &.normal {
     --size: var(--normal-size);
+  }
+
+  &.large {
+    --size: var(--large-size);
   }
 `;

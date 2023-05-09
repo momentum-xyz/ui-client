@@ -11,6 +11,11 @@ export const WalletContainer = styled.div`
   font-size: var(--font-size-m);
   border-radius: 4px;
   gap: 8px;
+
+  &.noIcon {
+    padding: 8px 12px;
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const Wallet = styled.div`

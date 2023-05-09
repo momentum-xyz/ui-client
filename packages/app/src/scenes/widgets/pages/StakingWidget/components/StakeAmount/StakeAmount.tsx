@@ -61,7 +61,8 @@ const StakeAmount: FC<PropsInterface> = ({
             onSingleChange={onSelectWalletId}
           />
         </styled.SectionGrid>
-        {walletSelectContent}
+
+        <styled.WalletContent>{walletSelectContent}</styled.WalletContent>
       </styled.Section>
 
       {/* Balance */}

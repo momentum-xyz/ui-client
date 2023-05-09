@@ -22,6 +22,12 @@ PrimaryDisabled.args = {
   disabled: true
 };
 
+export const Lange = Template.bind({});
+Lange.args = {
+  variant: 'primary',
+  size: 'large'
+};
+
 export const IsLabel = Template.bind({});
 IsLabel.args = {
   variant: 'primary',
