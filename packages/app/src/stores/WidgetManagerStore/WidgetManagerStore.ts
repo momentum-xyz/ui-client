@@ -46,7 +46,11 @@ const WidgetManagerStore = types
       self.leftActiveWidget = null;
       self.rightActiveWidget = null;
     },
-    openSubMenu(key: string, items: MenuItemInterface<string>[], position: PositionEnum): void {
+    openSubMenu(
+      key: WidgetEnum,
+      items: MenuItemInterface<WidgetEnum>[],
+      position: PositionEnum
+    ): void {
       self.subMenuInfo = cast({
         position,
         sourceItemKey: key,
@@ -54,7 +58,7 @@ const WidgetManagerStore = types
         activeKeys: []
       });
     },
-    setActiveSubMenuKeys(keys: string[]): void {
+    setActiveSubMenuKeys(keys: WidgetEnum[]): void {
       self.subMenuInfo?.activeKeys.replace(keys);
     }
   }))
