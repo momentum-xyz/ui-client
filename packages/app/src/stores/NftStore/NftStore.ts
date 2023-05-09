@@ -1,26 +1,16 @@
 import {cast, flow, getSnapshot, types} from 'mobx-state-tree';
 import BN from 'bn.js';
-import {ResetModel, Dialog, RequestModel} from '@momentum-xyz/core';
+import {ResetModel, RequestModel} from '@momentum-xyz/core';
 import {IconNameType} from '@momentum-xyz/ui-kit-storybook';
 
-import {
-  PolkadotAddress,
-  SearchQuery,
-  NftItem,
-  NftItemModelInterface,
-  Wallet,
-  Stake
-} from 'core/models';
+import {Wallet, Stake} from 'core/models';
 import {BN_ZERO} from 'core/constants';
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
 import {formatBigInt, getRootStore} from 'core/utils';
 import {PluginIdEnum} from 'api/enums';
 import {api, StakeInterface, WalletInterface} from 'api';
-import {WalletConnectionsInterface} from 'core/interfaces';
 import {availableWallets, dummyWalletConf, WalletConfigInterface} from 'wallets';
-
-import {StakeDetail} from './models';
 
 interface AccountBalanceInterface {
   free: BN;
@@ -40,39 +30,14 @@ const NftStore = types
       defaultWalletId: '',
       _selectedWalletId: types.maybeNull(types.string),
 
-      addresses: types.optional(types.array(PolkadotAddress), []),
       chainDecimals: types.optional(types.number, 18),
       tokenSymbol: 'MOM',
 
-      // NFT list + searching
-      nftItems: types.optional(types.array(NftItem), []),
-      searchedNftItems: types.optional(types.array(types.reference(NftItem)), []),
-      searchQuery: types.optional(SearchQuery, {}),
-
-      mintNftRequest: types.optional(RequestModel, {}),
-      mintNftCheckJobRequest: types.optional(RequestModel, {}),
-
-      connectToNftItemId: types.maybeNull(types.number),
-      initialStakingInfoLoaded: false,
-      stakingAtMe: types.map(StakeDetail),
-      stakingAtOthers: types.map(StakeDetail),
-      stakingDashorboardDialog: types.optional(Dialog, {}),
       accumulatedRewards: types.frozen(new BN(0)),
-      // balance: types.optional(types.frozen<AccountBalanceInterface>(), {
-      //   free: new BN(0),
-      //   reserved: new BN(0)
-      //   // miscFrozen: 0,
-      //   // feeFrozen: 0
-      // }),
 
       walletsRequest: types.optional(RequestModel, {}),
       stakesRequest: types.optional(RequestModel, {}),
-      postPendingStakeRequest: types.optional(RequestModel, {}),
-      requestingFundsStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
-      mintingNftStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
-
-      isLoading: false,
-      isBalanceLoading: false
+      postPendingStakeRequest: types.optional(RequestModel, {})
     })
   )
   .views((self) => ({
@@ -217,36 +182,8 @@ const NftStore = types
       self._selectedWalletId = walletId;
     }
   }))
-  .views((self) => {
-    // remove widgets?
-    return {
-      get mutualStakingAddresses(): string[] {
-        const mutualStakingAddresses: string[] = [];
-        self.stakingAtMe.forEach((stakingDetail) => {
-          if (self.stakingAtOthers.get(stakingDetail.sourceAddr)) {
-            mutualStakingAddresses.push(stakingDetail.sourceAddr);
-          }
-        });
-        return mutualStakingAddresses;
-      },
-      get mutualConnections(): NftItemModelInterface[] {
-        const mutualConnections: NftItemModelInterface[] = [];
-        self.stakingAtMe.forEach((stakingDetail) => {
-          if (self.stakingAtOthers.get(stakingDetail.sourceAddr)) {
-            mutualConnections.push(self.getNftByWallet(stakingDetail.sourceAddr));
-          }
-        });
-        return mutualConnections;
-      },
-      isAlreadyConnected(address: string): boolean {
-        return self.stakingAtOthers.has(address);
-      }
-    };
-  })
   .views((self) => ({
     get balanceTransferrableBN(): BN {
-      // TODO remove
-      // return self.balance.free.clone();
       try {
         const transferrable = self.balance.free
           .clone()
@@ -290,25 +227,6 @@ const NftStore = types
     }
   }))
   .actions((self) => ({
-    // TODO remove old widgets?
-    getStatisticsByWallet: flow(function* (wallet: string) {
-      const walletConnections: WalletConnectionsInterface = yield self.getStakesInfo(wallet);
-      const {stakedAtWallet, stakedAtOthers} = walletConnections;
-
-      const mutualConnectionsCount = stakedAtWallet.reduce((count, address) => {
-        return stakedAtOthers.includes(address) ? count + 1 : count;
-      }, 0);
-
-      return {
-        connectionsCount: walletConnections.stakedAtOthers.length,
-        mutualConnectionsCount: mutualConnectionsCount
-      };
-    })
-  }))
-  .actions((self) => ({
-    init: flow(function* () {
-      yield Promise.resolve();
-    }),
     initMyWalletsAndStakes: flow(function* () {
       yield self.loadMyWallets();
       yield self.loadMyStakes();

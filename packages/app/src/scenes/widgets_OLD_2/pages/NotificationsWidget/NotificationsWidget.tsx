@@ -12,7 +12,7 @@ const DIALOG_OFFSET_RIGHT = 10;
 const DIALOG_OFFSET_BOTTOM = 60;
 
 const NotificationsWidget: FC = () => {
-  const {widgetsStore, nftStore, sessionStore} = useStore();
+  const {widgetsStore, sessionStore} = useStore();
   const {notificationsStore} = widgetsStore;
   const {dialog, notifications} = notificationsStore;
 
@@ -56,13 +56,14 @@ const NotificationsWidget: FC = () => {
               <NewsfeedItem
                 key={index}
                 item={item}
-                nftItems={nftStore.nftItems}
+                nftItems={[]}
+                // nftItems={nftStore.nftItems}
                 currentUser={sessionStore.user}
                 onTeleport={() => goToOdysseyHome(item.uuid)}
                 onConnect={() => {}}
                 onAttend={() => {}}
                 onOpenOdyssey={(uuid) => {
-                  widgetsStore.odysseyInfoStore.open(uuid);
+                  // widgetsStore.odysseyInfoStore.open(uuid);
                 }}
               />
             ))}
