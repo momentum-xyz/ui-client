@@ -6,7 +6,6 @@ import {useI18n} from '@momentum-xyz/core';
 import {Panel, StepInterface, Steps} from '@momentum-xyz/ui-kit-storybook';
 
 import {WidgetEnum} from 'core/enums';
-import {PosBusService} from 'shared/services';
 import {convertUuidToNftId} from 'core/utils';
 import {ProfileImage, ToastContent} from 'ui-kit';
 import {useBlockchain, useStore} from 'shared/hooks';
@@ -54,12 +53,21 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
       console.log('stake success');
 
       if (result?.transactionHash && !!comment) {
-        PosBusService.userStakedInOdyssey(
-          result.transactionHash,
-          worldId,
-          amountAtoms.toString(),
-          comment
-        );
+        // TODO use when supported by the controller, not implemented yet
+        // PosBusService.userStakedInOdyssey(
+        //   result.transactionHash,
+        //   worldId,
+        //   amountAtoms.toString(),
+        //   comment
+        // );
+        nftStore.postPendingStake({
+          transaction_id: result.transactionHash,
+          odyssey_id: worldId,
+          amount: amountAtoms.toString(),
+          wallet: selectedWalletId,
+          comment,
+          kind: '1' // temp
+        });
       }
 
       toast.info(

@@ -119,6 +119,7 @@ const NftStore = types
 
       walletsRequest: types.optional(RequestModel, {}),
       stakesRequest: types.optional(RequestModel, {}),
+      postPendingStakeRequest: types.optional(RequestModel, {}),
       requestingFundsStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
       mintingNftStatus: types.maybeNull(types.enumeration(['pending', 'success', 'error'])),
 
@@ -249,6 +250,16 @@ const NftStore = types
       if (response) {
         self.stakes = cast(response.filter((stake) => !!stake.amount && stake.amount !== '0'));
       }
+    }),
+    postPendingStake: flow(function* (options: {
+      transaction_id: string;
+      odyssey_id: string;
+      wallet: string;
+      comment: string;
+      amount: string;
+      kind: string;
+    }) {
+      yield self.postPendingStakeRequest.send(api.userRepository.postPendingStake, options);
     }),
     loadDefaultWalletId(): void {
       const storedAccount = storage.get<string>(StorageKeyEnum.DefaultAccount);

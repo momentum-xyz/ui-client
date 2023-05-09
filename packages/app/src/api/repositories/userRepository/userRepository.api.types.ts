@@ -73,6 +73,19 @@ export interface FetchMyStakesRequest {}
 
 export interface FetchMyStakesResponse extends Array<StakeInterface> {}
 
+/** POST PENDING STAKE **/
+
+export interface PostPendingStakeRequest {
+  transaction_id: string;
+  odyssey_id: string;
+  wallet: string;
+  comment: string;
+  amount: string;
+  kind: string;
+}
+
+export interface PostPendingStakeResponse {}
+
 /** FETCH User **/
 
 export interface FetchUserRequest {
