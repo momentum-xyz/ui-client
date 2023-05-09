@@ -22,7 +22,6 @@ import collisionSmokeJson from '../static/Particles/collisionSmoke.json';
 import wispTrailParticleJson from '../static/Particles/wispTrailParticle.json';
 import wispCenterParticleJson from '../static/Particles/wispCenterParticle.json';
 
-
 import {PlayerHelper} from './PlayerHelper';
 
 const WISP_ANIM_SPEED = 0.001;
@@ -95,8 +94,8 @@ export class InteractionEffectHelper {
     customEmitter.position = new Vector3(0, 0.2, -0); // Emitter at center of parent.
 
     this.scene.registerBeforeRender(() => {
-      customEmitter.rotation.z  = Math.sin(performance.now() * WISP_ANIM_SPEED);
-    })
+      customEmitter.rotation.z = Math.sin(performance.now() * WISP_ANIM_SPEED);
+    });
   }
 
   /**

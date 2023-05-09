@@ -31,7 +31,7 @@ import {
   TransformTypesEnum
 } from './TransformHelper';
 import {ObjectHelper} from './ObjectHelper';
-import { InteractionEffectHelper } from './InteractionEffectHelper';
+import {InteractionEffectHelper} from './InteractionEffectHelper';
 
 const NORMAL_SPEED = 0.5;
 const FAST_SPEED = 1.5;
