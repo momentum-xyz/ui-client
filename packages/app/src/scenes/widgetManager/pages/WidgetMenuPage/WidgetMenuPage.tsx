@@ -20,7 +20,7 @@ interface PropsInterface {
 
 const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
   const {sessionStore, widgetManagerStore, universeStore, creatorStore, agoraStore} = useStore();
-  const {toggle, activeWidgetList} = widgetManagerStore;
+  const {toggle, activeWidgetList, subMenuInfo} = widgetManagerStore;
   const {isGuest, userImageUrl} = sessionStore;
   const {isMyWorld, world3dStore, world2dStore} = universeStore;
 
@@ -162,7 +162,12 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
   const items = isWelcomePage ? [] : MENU_ITEMS.filter((menuItem) => !menuItem.isHidden);
   return (
     <styled.Container data-testid="WidgetMenuPage-test">
-      <Menu activeKeys={activeWidgetList} items={items} />
+      <Menu
+        activeKeys={[...activeWidgetList, ...(subMenuInfo?.activeKeys || [])]}
+        items={items}
+        subMenuItems={subMenuInfo?.items || []}
+        subMenuSource={subMenuInfo?.sourceItemKey}
+      />
     </styled.Container>
   );
 };

@@ -28,7 +28,7 @@ export interface MenuPropsInterface<T> {
   subMenuSource?: T;
 }
 
-const calculateSubMenuLeftOffset = (
+const calculateSubMenuLeftOffset = <T,>(
   subMenu: MenuItemInterface<T>[] | undefined,
   leftActions: MenuItemInterface<T>[],
   centerItems: MenuItemInterface<T>[],
