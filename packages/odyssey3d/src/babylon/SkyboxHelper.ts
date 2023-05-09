@@ -39,7 +39,7 @@ export class SkyboxHelper {
       }
     );
     dome.mesh.isPickable = false;
-
+    dome.fovMultiplier = 2;
     dome.onReady = () => {
       if (this.currentSkybox !== null) {
         this.currentSkybox.mesh.dispose();
