@@ -20,6 +20,7 @@ import {
   Wallet,
   Stake
 } from 'core/models';
+import {BN_ZERO} from 'core/constants';
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
 import SubstrateProvider from 'shared/services/web3/SubstrateProvider';
@@ -399,7 +400,7 @@ const NftStore = types
     },
     canBeStaked(amount: BN): boolean {
       try {
-        return self.balanceTransferrableBN.gte(amount);
+        return amount.gt(BN_ZERO) && self.balanceTransferrableBN.gte(amount);
       } catch (err) {
         console.error(err);
         return false;
