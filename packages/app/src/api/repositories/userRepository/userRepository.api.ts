@@ -19,7 +19,9 @@ import {
   FetchUserStakedWorldListRequest,
   FetchUserStakedWorldListResponse,
   FetchUserWorldListRequest,
-  FetchUserWorldListResponse
+  FetchUserWorldListResponse,
+  PostPendingStakeRequest,
+  PostPendingStakeResponse
 } from './userRepository.api.types';
 import {userRepositoryEndpoints} from './userRepository.api.endpoints';
 
@@ -37,6 +39,22 @@ export const fetchMyStakes: RequestInterface<FetchMyStakesRequest, FetchMyStakes
   options
 ) => {
   return request.get(userRepositoryEndpoints().myStakes, options);
+};
+
+export const postPendingStake: RequestInterface<
+  PostPendingStakeRequest,
+  PostPendingStakeResponse
+> = (options) => {
+  const {transaction_id, odyssey_id, wallet, comment, amount, kind, ...restOptions} = options;
+  const data: PostPendingStakeRequest = {
+    transaction_id,
+    odyssey_id,
+    wallet,
+    comment,
+    amount,
+    kind
+  };
+  return request.post(userRepositoryEndpoints().myStakes, data, restOptions);
 };
 
 export const fetchUser: RequestInterface<FetchUserRequest, FetchUserResponse> = (options) => {
