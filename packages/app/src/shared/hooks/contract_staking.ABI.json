@@ -74,21 +74,40 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "odyssey_id",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "total_rewards_claimed",
+        "type": "uint256"
+      }
+    ],
+    "name": "OdysseyRewardsClaimed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "user",
         "type": "address"
       },
       {
         "indexed": false,
-        "internalType": "bytes16",
+        "internalType": "uint256",
         "name": "odyssey_from",
-        "type": "bytes16"
+        "type": "uint256"
       },
       {
         "indexed": false,
-        "internalType": "bytes16",
+        "internalType": "uint256",
         "name": "odyssey_to",
-        "type": "bytes16"
+        "type": "uint256"
       },
       {
         "indexed": false,
@@ -135,6 +154,25 @@
       }
     ],
     "name": "RewardsClaimed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "blocknumber",
+        "type": "uint256"
+      }
+    ],
+    "name": "RewardsUpdated",
     "type": "event"
   },
   {
@@ -223,9 +261,9 @@
       },
       {
         "indexed": false,
-        "internalType": "bytes16",
+        "internalType": "uint256",
         "name": "odyssey",
-        "type": "bytes16"
+        "type": "uint256"
       },
       {
         "indexed": false,
@@ -260,9 +298,9 @@
       },
       {
         "indexed": false,
-        "internalType": "bytes16",
+        "internalType": "uint256",
         "name": "odyssey",
-        "type": "bytes16"
+        "type": "uint256"
       },
       {
         "indexed": false,
@@ -326,6 +364,19 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "odyssey_id",
+        "type": "uint256"
+      }
+    ],
+    "name": "claim_rewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "claim_rewards",
     "outputs": [],
@@ -366,6 +417,70 @@
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "odyssey",
+        "type": "uint256"
+      }
+    ],
+    "name": "get_staked_by",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "user",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "total_amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "dad_amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "mom_amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "effective_timestamp",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Staking.StakedBy[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "get_staked_odysseys",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",
@@ -424,6 +539,11 @@
         "internalType": "address",
         "name": "_dad_token",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_odyssey_nfts",
+        "type": "address"
       }
     ],
     "name": "initialize",
@@ -471,19 +591,32 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "odyssey_nfts",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
-        "internalType": "bytes16",
+        "internalType": "uint256",
         "name": "",
-        "type": "bytes16"
+        "type": "uint256"
       }
     ],
     "name": "odysseys",
     "outputs": [
       {
-        "internalType": "bytes16",
+        "internalType": "uint256",
         "name": "odyssey_id",
-        "type": "bytes16"
+        "type": "uint256"
       },
       {
         "internalType": "uint256",
@@ -493,6 +626,11 @@
       {
         "internalType": "uint256",
         "name": "total_stakers",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "total_rewards",
         "type": "uint256"
       }
     ],
@@ -533,14 +671,14 @@
   {
     "inputs": [
       {
-        "internalType": "bytes16",
+        "internalType": "uint256",
         "name": "from_odyssey_id",
-        "type": "bytes16"
+        "type": "uint256"
       },
       {
-        "internalType": "bytes16",
+        "internalType": "uint256",
         "name": "to_odyssey_id",
-        "type": "bytes16"
+        "type": "uint256"
       },
       {
         "internalType": "uint256",
@@ -592,9 +730,9 @@
   {
     "inputs": [
       {
-        "internalType": "bytes16",
+        "internalType": "uint256",
         "name": "odyssey_id",
-        "type": "bytes16"
+        "type": "uint256"
       },
       {
         "internalType": "uint256",
@@ -610,6 +748,98 @@
     "name": "stake",
     "outputs": [],
     "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "staked_by",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "total_amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "dad_amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "mom_amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "effective_timestamp",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "staked_by_indexes",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "staked_odysseys",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -686,9 +916,9 @@
   {
     "inputs": [
       {
-        "internalType": "bytes16",
+        "internalType": "uint256",
         "name": "odyssey_id",
-        "type": "bytes16"
+        "type": "uint256"
       },
       {
         "internalType": "enum Staking.Token",
@@ -777,13 +1007,36 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_odyssey_nfts",
+        "type": "address"
+      }
+    ],
+    "name": "update_odyssey_nfts_contract",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address[]",
         "name": "addresses",
         "type": "address[]"
       },
       {
         "internalType": "uint256[]",
-        "name": "amounts",
+        "name": "stakers_amounts",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "odysseys_ids",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "odysseys_amounts",
         "type": "uint256[]"
       },
       {
