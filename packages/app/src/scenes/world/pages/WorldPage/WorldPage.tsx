@@ -19,8 +19,14 @@ import {PosBusService} from 'shared/services';
 import {HighFiveContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 
 const WorldPage: FC = () => {
-  const {agoraStore, universeStore, widgetsStore, widgetManagerStore, sessionStore, creatorStore} =
-    useStore();
+  const {
+    agoraStore,
+    universeStore,
+    // widgetsStore,
+    widgetManagerStore,
+    sessionStore,
+    creatorStore
+  } = useStore();
   const {world3dStore} = universeStore;
   const [readyToHandleEvents, setReadyToHandleEvents] = useState<boolean>(false);
 
@@ -121,8 +127,8 @@ const WorldPage: FC = () => {
   };
 
   const handleUserClick = (id: string, clickPosition: ClickPositionInterface) => {
-    console.log('BabylonPage: onUserClick', id);
-    widgetsStore.odysseyInfoStore.open(id);
+    console.log('TODO BabylonPage: onUserClick', id);
+    // widgetsStore.odysseyInfoStore.open(id);
   };
 
   const handleUserMove = useDebouncedCallback(

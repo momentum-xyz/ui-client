@@ -42,8 +42,7 @@ const RootStore = types
   .actions((self) => ({
     async initApplication() {
       await self.configStore.init();
-      await self.nftStore.init();
-      await self.nftStore.initWeb3ExtensionIfNeeded();
+      // await self.nftStore.init();
 
       self.agoraStore.userDevicesStore.init();
       self.themeStore.init();
