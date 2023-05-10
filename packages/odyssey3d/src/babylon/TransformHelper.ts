@@ -86,7 +86,7 @@ export function smoothCameraTransform(
       }
 
       if (spawnParticles) {
-        InteractionEffectHelper.startParticlesForPlayer();
+        InteractionEffectHelper.startHi5ParticlesForPlayer();
       }
 
       scene.onBeforeRenderObservable.remove(observable);
