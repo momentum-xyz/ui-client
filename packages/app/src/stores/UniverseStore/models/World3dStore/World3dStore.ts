@@ -304,6 +304,9 @@ const World3dStore = types
       creatorStore.setSelectedObjectId(null);
       creatorStore.setSelectedTab(null);
 
+      const {widgetManagerStore} = getRootStore(self);
+      widgetManagerStore.closeSubMenu();
+
       self._deselectObject();
       self.gizmoMode = GizmoTypeEnum.POSITION;
     },

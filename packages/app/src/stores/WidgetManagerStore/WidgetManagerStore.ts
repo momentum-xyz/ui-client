@@ -58,6 +58,9 @@ const WidgetManagerStore = types
         activeKeys: []
       });
     },
+    closeSubMenu(): void {
+      self.subMenuInfo = null;
+    },
     setActiveSubMenuKeys(keys: WidgetEnum[]): void {
       self.subMenuInfo?.activeKeys.replace(keys);
     }
