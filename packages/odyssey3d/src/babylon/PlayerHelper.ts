@@ -31,6 +31,7 @@ import {
   TransformTypesEnum
 } from './TransformHelper';
 import {ObjectHelper} from './ObjectHelper';
+import {InteractionEffectHelper} from './InteractionEffectHelper';
 
 const NORMAL_SPEED = 0.5;
 const FAST_SPEED = 1.5;
@@ -193,16 +194,10 @@ export class PlayerHelper {
       playerNode.position = PLAYER_OFFSET;
       playerNode.rotation = new Vector3(-Math.PI / 16, Math.PI, Math.PI);
     }
-    // Animations
-    for (const group of instance.animationGroups) {
-      console.log('animation group name: ' + group.name);
-      //group.play(true);
-    }
-    instance.animationGroups[4].loopAnimation = true;
-    instance.animationGroups[4].play();
-
+    // TODO: Animations
     this.playerInstance = instance;
     this.playerContainer = container;
+    InteractionEffectHelper.setupWispTail();
   }
 
   static setUserAvatar(node: TransformNode) {
