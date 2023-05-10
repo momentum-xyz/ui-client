@@ -16,7 +16,7 @@ export const Container = styled.div<{height: number}>`
     cursor: pointer;
   }
   &.bordered {
-    border: 0.4px solid ${(props) => props.theme.text};
+    border: 1px solid ${(props) => props.theme.text};
   }
 `;
 

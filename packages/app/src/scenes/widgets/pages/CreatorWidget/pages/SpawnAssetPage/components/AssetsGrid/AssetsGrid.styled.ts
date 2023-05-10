@@ -33,7 +33,7 @@ export const GridItemPreview = styled.div`
   width: 100%;
   height: 160px;
   border-radius: 10px;
-  border: 0.4px solid ${(props) => props.theme.text};
+  border: 1px solid ${(props) => props.theme.text};
   border-radius: 4px;
 `;
 

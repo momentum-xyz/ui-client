@@ -17,15 +17,16 @@ export const ControlsInnerContainer = styled.div`
 `;
 export const SkyboxTypeContainer = styled.div`
   display: flex;
-  border: 0.2px solid ${(props) => props.theme.text && rgba(props.theme.text, 0.5)};
+  border: 1px solid ${(props) => props.theme.text && rgba(props.theme.text, 0.5)};
   border-radius: 4px;
+  height: 40px;
   & > button {
     flex: 1;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: -0.2px;
+    margin: -1px;
     &:not(.active) {
       box-shadow: none;
       border-color: transparent;
