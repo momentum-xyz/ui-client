@@ -58,6 +58,26 @@ const World3dStore = types
     }
   }))
   .actions((self) => ({
+    changeGizmoType(mode: GizmoTypeEnum) {
+      self.gizmoMode = cast(mode);
+      // TODO notify babylon
+      // UnityService.changeGizmoType(mode);
+    },
+    closeAndResetObjectMenu() {
+      console.log('closeAndResetObjectMenu', self.selectedObjectId);
+
+      const {creatorStore} = getRootStore(self);
+      creatorStore.setSelectedObjectId(null);
+      creatorStore.setSelectedTab(null);
+
+      const {widgetManagerStore} = getRootStore(self);
+      widgetManagerStore.closeSubMenu();
+
+      self._deselectObject();
+      self.gizmoMode = GizmoTypeEnum.POSITION;
+    }
+  }))
+  .actions((self) => ({
     // triggerTeleport(url?: string, worldId?: string): void {
     //   UnityService.triggerTeleport(url, worldId);
     // },
@@ -220,7 +240,15 @@ const World3dStore = types
         return;
       }
 
-      self._deselectObject();
+      // TODO move it as child store here??
+      const {creatorStore, widgetManagerStore} = getRootStore(self);
+
+      // TODO we allow this for gizmo because cannot prevent it from changing, TEMP
+      if (self.selectedObjectId && creatorStore.selectedTab !== 'gizmo') {
+        console.log('World3dStore : handleClick : already selected', self.selectedObjectId);
+        return;
+      }
+      // self._deselectObject();
 
       // self.objectMenuPosition = clickPos || defaultClickPosition;
 
@@ -228,11 +256,15 @@ const World3dStore = types
       // self.objectMenu.open();
       // self.setSelectedTab('inspector');
 
-      // TODO move it as child store here??
-      const {creatorStore, widgetManagerStore} = getRootStore(self);
       creatorStore.setSelectedObjectId(objectId);
 
       const submenuItems: MenuItemInterface<WidgetEnum>[] = [
+        {
+          key: WidgetEnum.GO_TO,
+          position: PositionEnum.CENTER,
+          iconName: 'close_large',
+          onClick: () => self.closeAndResetObjectMenu()
+        },
         {
           key: WidgetEnum.GO_TO,
           position: PositionEnum.CENTER,
@@ -291,24 +323,6 @@ const World3dStore = types
     },
     redo() {
       // UnityService.redo();
-    },
-    changeGizmoType(mode: GizmoTypeEnum) {
-      self.gizmoMode = cast(mode);
-      // TODO notify babylon
-      // UnityService.changeGizmoType(mode);
-    },
-    closeAndResetObjectMenu() {
-      console.log('closeAndResetObjectMenu', self.selectedObjectId);
-
-      const {creatorStore} = getRootStore(self);
-      creatorStore.setSelectedObjectId(null);
-      creatorStore.setSelectedTab(null);
-
-      const {widgetManagerStore} = getRootStore(self);
-      widgetManagerStore.closeSubMenu();
-
-      self._deselectObject();
-      self.gizmoMode = GizmoTypeEnum.POSITION;
     },
     colorPickedPreview(objectId: string, colorHex: string) {
       // TODO notify babylon

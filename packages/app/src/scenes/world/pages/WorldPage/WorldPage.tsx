@@ -119,11 +119,11 @@ const WorldPage: FC = () => {
   };
 
   const handleClickOutside = () => {
-    console.log('BabylonPage: handleClickOutside');
-    if (creatorStore.selectedTab === 'gizmo') {
-      // deselect only with gizmo - other tabs have closing button
-      world3dStore?.closeAndResetObjectMenu();
-    }
+    console.log('BabylonPage: handleClickOutside - ignore');
+    // if (creatorStore.selectedTab === 'gizmo') {
+    //   // deselect only with gizmo - other tabs have closing button
+    //   world3dStore?.closeAndResetObjectMenu();
+    // }
   };
 
   const handleUserClick = (id: string, clickPosition: ClickPositionInterface) => {
