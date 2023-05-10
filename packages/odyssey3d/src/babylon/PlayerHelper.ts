@@ -33,8 +33,8 @@ import {
 import {ObjectHelper} from './ObjectHelper';
 import {InteractionEffectHelper} from './InteractionEffectHelper';
 
-const NORMAL_SPEED = 0.5;
-const FAST_SPEED = 1.5;
+//const NORMAL_SPEED = 0.5;
+//const FAST_SPEED = 1.5;
 const PLAYER_OFFSET = new Vector3(0, -0.5, 3);
 export const PLAYER_OFFSET_RH = new Vector3(0, -0.5, -3);
 
@@ -72,6 +72,7 @@ export class PlayerHelper {
   static playerId: string;
   static playerInterface: Odyssey3dUserInterface;
   static rightHanded = false;
+  static selectedSpeed = 0.5;
   static onSpawnParticles: (() => void) | undefined;
 
   static initialize(
@@ -87,7 +88,8 @@ export class PlayerHelper {
     // This creates and positions a UniversalCamera camera (non-mesh)
     const camera = new UniversalCamera('UniversalCamera', CAMERA_POS, scene);
     camera.rotationQuaternion = new Quaternion();
-    camera.speed = NORMAL_SPEED;
+    //camera.speed = NORMAL_SPEED;
+    camera.speed = this.selectedSpeed;
     // This attaches the camera to the canvas
     camera.attachControl(canvas, true);
 
@@ -107,7 +109,38 @@ export class PlayerHelper {
     scene.actionManager.registerAction(
       new ExecuteCodeAction(ActionManager.OnKeyDownTrigger, function (evt) {
         if (evt.sourceEvent.key === 'Shift') {
-          PlayerHelper.camera.speed = FAST_SPEED;
+          //PlayerHelper.camera.speed = FAST_SPEED;
+          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed * 2;
+        } else if (evt.sourceEvent.key === '1') {
+          PlayerHelper.selectedSpeed = 1;
+          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
+        } else if (evt.sourceEvent.key === '2') {
+          PlayerHelper.selectedSpeed = 2;
+          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
+        } else if (evt.sourceEvent.key === '3') {
+          PlayerHelper.selectedSpeed = 3;
+          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
+        } else if (evt.sourceEvent.key === '4') {
+          PlayerHelper.selectedSpeed = 4;
+          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
+        } else if (evt.sourceEvent.key === '5') {
+          PlayerHelper.selectedSpeed = 5;
+          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
+        } else if (evt.sourceEvent.key === '6') {
+          PlayerHelper.selectedSpeed = 6;
+          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
+        } else if (evt.sourceEvent.key === '7') {
+          PlayerHelper.selectedSpeed = 7;
+          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
+        } else if (evt.sourceEvent.key === '8') {
+          PlayerHelper.selectedSpeed = 8;
+          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
+        } else if (evt.sourceEvent.key === '9') {
+          PlayerHelper.selectedSpeed = 9;
+          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
+        } else if (evt.sourceEvent.key === '0') {
+          PlayerHelper.selectedSpeed = 0.5;
+          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
         }
       })
     );
@@ -115,7 +148,8 @@ export class PlayerHelper {
     scene.actionManager.registerAction(
       new ExecuteCodeAction(ActionManager.OnKeyUpTrigger, function (evt) {
         if (evt.sourceEvent.key === 'Shift') {
-          PlayerHelper.camera.speed = NORMAL_SPEED;
+          //PlayerHelper.camera.speed = NORMAL_SPEED;
+          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
         }
       })
     );
