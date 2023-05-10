@@ -4,7 +4,7 @@ import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
 import {GetSpaceInfoResponse, api} from 'api';
 import {PluginIdEnum} from 'api/enums';
-import {CreatorTabsEnum} from 'core/enums';
+import {CreatorTabsEnum, WidgetEnum} from 'core/enums';
 import {getRootStore} from 'core/utils';
 
 import {
@@ -16,6 +16,12 @@ import {
 } from './models';
 
 type CreatorTabsType = keyof typeof CreatorTabsEnum;
+
+const subMenuKeyWidgetEnumMap: {[key: string]: WidgetEnum} = {
+  gizmo: WidgetEnum.MOVE_ITEM,
+  inspector: WidgetEnum.INSPECTOR,
+  functionality: WidgetEnum.ASSIGN_FUNCTIONALITY
+};
 
 const CreatorStore = types
   .compose(
@@ -77,6 +83,16 @@ const CreatorStore = types
       }
     },
     setSelectedTab(tab: CreatorTabsType | null) {
+      const currentTabIsOnSubMenu = self.selectedTab && subMenuKeyWidgetEnumMap[self.selectedTab];
+      const correspondingSubMenuWidget = tab && subMenuKeyWidgetEnumMap[tab];
+
+      const {widgetManagerStore} = getRootStore(self);
+      if (correspondingSubMenuWidget) {
+        widgetManagerStore.setSubMenuActiveKeys([correspondingSubMenuWidget]);
+      } else if (currentTabIsOnSubMenu) {
+        widgetManagerStore.setSubMenuActiveKeys([]);
+      }
+
       self.selectedTab = tab;
     }
   }))
