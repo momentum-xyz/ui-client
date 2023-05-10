@@ -23,11 +23,7 @@ import {
   ScreenShareWidget,
   TextChatWidget,
   CalendarWidget,
-  OnlineUsersWidget,
   NotificationsWidget,
-  OdysseyBioWidget,
-  SearchUsersWidget,
-  MutualConnectionsWidget,
   MagicLinkWidget
 } from './pages';
 import * as styled from './Widgets.styled';
@@ -39,8 +35,8 @@ interface PropsInterface {
 const Widgets: FC<PropsInterface> = (props) => {
   const {isExplorePage} = props;
 
-  const {sessionStore, widgetsStore, universeStore, agoraStore, nftStore} = useStore();
-  const {onlineUsersStore, odysseyBioStore, mutualConnectionsStore} = widgetsStore;
+  const {sessionStore, widgetsStore, universeStore, agoraStore} = useStore();
+  // const {onlineUsersStore} = widgetsStore;
   const {
     world2dStore
     // world3dStore
@@ -52,10 +48,10 @@ const Widgets: FC<PropsInterface> = (props) => {
   const navigate = useNavigate();
   // const {pathname} = useLocation();
 
-  useEffect(() => {
-    onlineUsersStore.init(universeStore.worldId, sessionStore.userId);
-    onlineUsersStore.fetchUser(sessionStore.userId);
-  }, [odysseyBioStore, onlineUsersStore, sessionStore.userId, universeStore.worldId]);
+  // useEffect(() => {
+  //   onlineUsersStore.init(universeStore.worldId, sessionStore.userId);
+  //   onlineUsersStore.fetchUser(sessionStore.userId);
+  // }, [onlineUsersStore, sessionStore.userId, universeStore.worldId]);
 
   useEffect(() => {
     agoraScreenShareStore.init(
@@ -100,21 +96,12 @@ const Widgets: FC<PropsInterface> = (props) => {
             )}
 
             <ToolbarIcon
-              title={t('labels.connections')}
-              icon="user-network"
-              size="medium"
-              disabled={sessionStore.isGuest}
-              onClick={mutualConnectionsStore.dialog.open}
-              state={{canGoBack: true}}
-            />
-
-            <ToolbarIcon
               title={t('labels.staking')}
               icon="wallet"
               size="medium"
               disabled={sessionStore.isGuest}
-              onClick={nftStore.stakingDashorboardDialog.toggle}
-              isSelected={nftStore.stakingDashorboardDialog.isOpen}
+              // onClick={nftStore.stakingDashorboardDialog.toggle}
+              // isSelected={nftStore.stakingDashorboardDialog.isOpen}
               state={{canGoBack: true}}
             />
           </ToolbarIconList>
@@ -135,15 +122,19 @@ const Widgets: FC<PropsInterface> = (props) => {
         {!isExplorePage && (
           <styled.RightToolbars>
             <styled.OnlineUsers>
-              <OnlineUsersWidget
+              {/* <OnlineUsersWidget
                 currentUser={sessionStore.user}
                 worldId={universeStore.worldId}
                 onClick={onlineUsersStore.dialog.toggle}
-              />
+              /> */}
             </styled.OnlineUsers>
             <ToolbarIconList>
               <Tooltip label={t('labels.bio')} placement="top">
-                <styled.CurrentOdyssey onClick={() => odysseyBioStore.open(universeStore.worldId)}>
+                <styled.CurrentOdyssey
+                  onClick={() => {
+                    // odysseyBioStore.open(universeStore.worldId)
+                  }}
+                >
                   <Text
                     className="odyssey-name"
                     size="m"
@@ -228,9 +219,7 @@ const Widgets: FC<PropsInterface> = (props) => {
         <SignInWidget />
       )}
 
-      {mutualConnectionsStore.dialog.isOpen && <MutualConnectionsWidget />}
-      {onlineUsersStore.dialog.isOpen && <SearchUsersWidget />}
-      {widgetsStore.odysseyBioStore.dialog.isOpen && <OdysseyBioWidget />}
+      {/* {onlineUsersStore.dialog.isOpen && <SearchUsersWidget />} */}
       {widgetsStore.notificationsStore.dialog.isOpen && <NotificationsWidget />}
       {widgetsStore.minimapStore.dialog.isOpen && <MinimapWidget />}
       {widgetsStore.flyToMeStore.dialog.isOpen && <FlyToMeWidget />}

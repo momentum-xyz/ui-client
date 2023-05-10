@@ -7,9 +7,6 @@ import {ScreenShareStore} from './ScreenShareStore';
 import {TextChatStore} from './TextChatStore';
 import {CalendarStore} from './CalendarStore';
 import {MinimapStore} from './MinimapStore';
-import {OnlineUsersStore} from './OnlineUsersStore';
-import {OdysseyBioStore} from './OdysseyBioStore';
-import {MutualConnectionsStore} from './MutualConnectionsStore';
 import {MagicLinkStore} from './MagicLinkStore';
 
 const RootWidgetsStore = types
@@ -21,20 +18,11 @@ const RootWidgetsStore = types
     screenShareStore: types.optional(ScreenShareStore, {}),
     textChatStore: types.optional(TextChatStore, {}),
     calendarStore: types.optional(CalendarStore, {}),
-    onlineUsersStore: types.optional(OnlineUsersStore, {}),
-    magicLinkStore: types.optional(MagicLinkStore, {}),
-    odysseyBioStore: types.optional(OdysseyBioStore, {}),
-    odysseyInfoStore: types.optional(OdysseyBioStore, {}),
-    mutualConnectionsStore: types.optional(MutualConnectionsStore, {})
+    magicLinkStore: types.optional(MagicLinkStore, {})
   })
   .views((self) => ({
     get signInDialogAvailable(): boolean {
-      return (
-        !self.odysseyInfoStore.dialog.isOpen &&
-        !self.odysseyBioStore.dialog.isOpen &&
-        !self.calendarStore.dialog.isOpen &&
-        !self.minimapStore.dialog.isOpen
-      );
+      return !self.calendarStore.dialog.isOpen && !self.minimapStore.dialog.isOpen;
     }
   }));
 

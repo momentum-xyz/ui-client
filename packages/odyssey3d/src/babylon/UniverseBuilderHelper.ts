@@ -337,7 +337,7 @@ export class UniverseBuilderHelper {
 
     customOrbGlassMat.reflectionTexture = new Texture(hdrTexture);
     customOrbGlassMat.indexOfRefraction = 0.52;
-    customOrbGlassMat.alpha = 0.5;
+    customOrbGlassMat.alpha = 0.2;
     customOrbGlassMat.directIntensity = 0.0;
     customOrbGlassMat.environmentIntensity = 0.7;
     customOrbGlassMat.cameraExposure = 0.66;

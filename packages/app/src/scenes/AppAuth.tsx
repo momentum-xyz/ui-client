@@ -56,12 +56,6 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
   }, [sessionStore.profileJobId, sessionStore, nftStore, t]);*/
 
   useEffect(() => {
-    if (sessionStore.wallet && !nftStore.isLoading) {
-      nftStore.activateWallet(sessionStore.wallet);
-    }
-  }, [nftStore, nftStore.isLoading, sessionStore.wallet]);
-
-  useEffect(() => {
     if (sessionStore.token && sessionStore.user) {
       PosBusService.init(sessionStore.token, sessionStore.user.id);
     }

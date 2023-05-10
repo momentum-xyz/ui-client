@@ -14,6 +14,7 @@ import * as styled from './StakeAmount.styled';
 interface PropsInterface {
   worldName: string;
   amountValue: string;
+  amountPrecisionDigits: number;
   isNextDisabled: boolean;
   walletOptions: SelectOptionInterface<string>[];
   walletSelectContent: ReactNode;
@@ -28,6 +29,7 @@ interface PropsInterface {
 const StakeAmount: FC<PropsInterface> = ({
   worldName,
   amountValue,
+  amountPrecisionDigits,
   isNextDisabled,
   walletOptions,
   walletSelectContent,
@@ -82,7 +84,7 @@ const StakeAmount: FC<PropsInterface> = ({
           <Input
             wide
             value={amountValue}
-            opts={numberInputSuffixMask(tokenSymbol, 5)}
+            opts={numberInputSuffixMask(tokenSymbol, amountPrecisionDigits)}
             onChange={onChangeAmountValue}
           />
         </styled.SectionGrid>

@@ -17,11 +17,10 @@ const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
 ];
 
 const Object: FC = () => {
-  const {objectStore, universeStore, nftStore, widgetsStore} = useStore();
+  const {objectStore, universeStore} = useStore();
   const {world3dStore} = universeStore;
   const {pluginLoader, assetStore, currentAssetId} = objectStore;
   const {assetType} = assetStore;
-  const {odysseyInfoStore} = widgetsStore;
 
   const {objectId} = useParams<{objectId: string}>();
   const {goToOdysseyHome} = useNavigation();
@@ -42,14 +41,6 @@ const Object: FC = () => {
       objectStore.resetModel();
     };
   }, [objectId, objectStore, world3dStore, goToOdysseyHome]);
-
-  useEffect(() => {
-    if (assetType === AssetTypeEnum.DOCK) {
-      if (assetStore.dockWorldId) {
-        odysseyInfoStore.open(assetStore.dockWorldId);
-      }
-    }
-  }, [assetStore.dockWorldId, assetType, nftStore, odysseyInfoStore]);
 
   const renderObject = (assetType?: string) => {
     switch (assetType) {

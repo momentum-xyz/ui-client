@@ -16,6 +16,8 @@ import * as styled from './StakingWidget.styled';
 
 type StepsType = 'wallet' | 'authorize';
 const DEFAULT_STAKING_AMOUNT = 1;
+const AMOUNT_PRECISION_DIGITS = 5;
+const PRECISION_MULTIPLIER = Math.pow(10, AMOUNT_PRECISION_DIGITS);
 
 const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {widgetManagerStore, nftStore, universeStore} = useStore();
@@ -36,7 +38,9 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const worldNameWithHash = `${worldName} - ${convertUuidToNftId(world2dStore?.worldId)}`;
 
   // this allows us to use decimals while also validating with BN
-  const amountAtoms = new BN(+amountString * 1_000).mul(new BN(Math.pow(10, chainDecimals - 3)));
+  const amountAtoms = new BN(+amountString * PRECISION_MULTIPLIER).mul(
+    new BN(Math.pow(10, chainDecimals) / PRECISION_MULTIPLIER)
+  );
   const isBalanceTooLow = !canBeStaked(amountAtoms);
 
   console.log('StakeForm useStaking', {isBlockchainReady, account, stake});
@@ -122,6 +126,7 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
             <StakeAmount
               worldName={worldNameWithHash}
               amountValue={amountString}
+              amountPrecisionDigits={AMOUNT_PRECISION_DIGITS}
               walletOptions={nftStore.walletOptions}
               walletSelectContent={walletSelectContent}
               selectedWalletId={nftStore.selectedWalletId}
