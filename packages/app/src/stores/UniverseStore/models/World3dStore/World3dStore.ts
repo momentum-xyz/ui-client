@@ -5,11 +5,12 @@ import {
   ClickPositionInterface,
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
+import {MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 import {UnityControlInterface} from '@momentum-xyz/sdk';
 
 // import {api, ResolveNodeResponse} from 'api';
 // import {appVariables} from 'api/constants';
-import {GizmoTypeEnum, PosBusEventEnum} from 'core/enums';
+import {GizmoTypeEnum, PosBusEventEnum, WidgetEnum} from 'core/enums';
 import {UnityPositionInterface} from 'core/interfaces';
 import {getRootStore} from 'core/utils';
 
@@ -228,8 +229,38 @@ const World3dStore = types
       // self.setSelectedTab('inspector');
 
       // TODO move it as child store here??
-      const {creatorStore} = getRootStore(self);
+      const {creatorStore, widgetManagerStore} = getRootStore(self);
       creatorStore.setSelectedObjectId(objectId);
+
+      const submenuItems: MenuItemInterface<WidgetEnum>[] = [
+        {
+          key: WidgetEnum.GO_TO,
+          position: PositionEnum.CENTER,
+          iconName: 'direction-arrows',
+          onClick: () => creatorStore.setSelectedTab('gizmo')
+        },
+        {
+          key: WidgetEnum.GO_TO,
+          position: PositionEnum.CENTER,
+          iconName: 'info',
+          onClick: () => creatorStore.setSelectedTab('inspector')
+        },
+        {
+          key: WidgetEnum.GO_TO,
+          position: PositionEnum.CENTER,
+          iconName: 'cubicles',
+          onClick: () => creatorStore.setSelectedTab('functionality')
+        },
+        {
+          key: WidgetEnum.GO_TO,
+          position: PositionEnum.CENTER,
+          iconName: 'bin',
+          onClick: creatorStore.removeObjectDialog.open
+        }
+      ];
+
+      widgetManagerStore.openSubMenu(WidgetEnum.CREATOR, submenuItems, PositionEnum.CENTER);
+
       if (creatorStore.selectedTab === null) {
         creatorStore.setSelectedTab('gizmo');
       }
@@ -238,6 +269,18 @@ const World3dStore = types
       if (!objectId && self.attachedToCameraObjectId) {
         Event3dEmitter.emit('DetachObjectFromCamera', self.attachedToCameraObjectId);
       }
+
+      const {widgetManagerStore} = getRootStore(self);
+      const submenuItems: MenuItemInterface<WidgetEnum>[] = [
+        {
+          key: WidgetEnum.GO_TO,
+          position: PositionEnum.CENTER, // TODO 2nd floor
+          iconName: 'checked',
+          onClick: () => this.setAttachedToCamera(null)
+        }
+      ];
+
+      widgetManagerStore.openSubMenu(WidgetEnum.CREATOR, submenuItems, PositionEnum.CENTER);
       self.attachedToCameraObjectId = objectId;
     },
     setWaitingForBumpEffectReadyUserId(userId: string | null) {
@@ -260,6 +303,9 @@ const World3dStore = types
       const {creatorStore} = getRootStore(self);
       creatorStore.setSelectedObjectId(null);
       creatorStore.setSelectedTab(null);
+
+      const {widgetManagerStore} = getRootStore(self);
+      widgetManagerStore.closeSubMenu();
 
       self._deselectObject();
       self.gizmoMode = GizmoTypeEnum.POSITION;

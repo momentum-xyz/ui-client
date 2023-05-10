@@ -96,8 +96,12 @@ const RIGHT_ITEMS: MenuItemInterface<string>[] = [
   }
 ];
 
+const SUB_MENU_ITEMS = LEFT_ITEMS.map((a) => ({...a, key: `sub_${a.key}`}));
+
 const Template: Story<MenuPropsInterface<string>> = (args) => {
-  const [activeKeys /*, setActiveKeys*/] = useState<string[]>([CENTER_ITEMS[0].key]);
+  const [activeKeys /*, setActiveKeys*/] = useState<string[]>(
+    args.activeKeys || [CENTER_ITEMS[0].key]
+  );
 
   /*const onChangeActiveKey = (key?: string) => {
     if (key && key.startsWith('sub_')) {
@@ -119,17 +123,56 @@ SingleCentralAction.args = {
   items: [...LEFT_ITEMS, CENTER_ITEMS[0], ...RIGHT_ITEMS]
 };
 
-export const WithSubMenu = Template.bind({});
-WithSubMenu.args = {
-  items: [
-    ...LEFT_ITEMS,
-    ...[
-      CENTER_ITEMS[0],
-      {
-        ...CENTER_ITEMS[1],
-        subMenuItems: LEFT_ITEMS.map((a) => ({...a, key: `sub_${a.key}`}))
-      }
-    ],
-    ...RIGHT_ITEMS
-  ]
+export const WithCentralSubMenu = Template.bind({});
+WithCentralSubMenu.args = {
+  items: [...LEFT_ITEMS, ...CENTER_ITEMS, ...RIGHT_ITEMS],
+  subMenuItems: SUB_MENU_ITEMS,
+  subMenuSource: CENTER_ITEMS[0].key,
+  activeKeys: [CENTER_ITEMS[0].key]
+};
+export const WithCentralSubMenu2 = Template.bind({});
+WithCentralSubMenu2.args = {
+  items: [...LEFT_ITEMS, ...CENTER_ITEMS, ...RIGHT_ITEMS],
+  subMenuItems: SUB_MENU_ITEMS,
+  subMenuSource: CENTER_ITEMS[CENTER_ITEMS.length - 1].key,
+  activeKeys: [CENTER_ITEMS[CENTER_ITEMS.length - 1].key]
+};
+
+export const WithLeftSubMenu = Template.bind({});
+WithLeftSubMenu.args = {
+  items: [...LEFT_ITEMS, ...CENTER_ITEMS, ...RIGHT_ITEMS],
+  subMenuItems: SUB_MENU_ITEMS,
+  subMenuSource: LEFT_ITEMS[LEFT_ITEMS.length - 1].key,
+  activeKeys: [LEFT_ITEMS[LEFT_ITEMS.length - 1].key]
+};
+export const WithLeftSubMenu2 = Template.bind({});
+WithLeftSubMenu2.args = {
+  items: [...LEFT_ITEMS, ...CENTER_ITEMS, ...RIGHT_ITEMS],
+  subMenuItems: SUB_MENU_ITEMS,
+  subMenuSource: LEFT_ITEMS[0].key,
+  activeKeys: [LEFT_ITEMS[0].key]
+};
+
+export const WithRightSubMenu1 = Template.bind({});
+WithRightSubMenu1.args = {
+  items: [...LEFT_ITEMS, ...CENTER_ITEMS, ...RIGHT_ITEMS],
+  subMenuItems: SUB_MENU_ITEMS,
+  subMenuSource: RIGHT_ITEMS[RIGHT_ITEMS.length - 1].key,
+  activeKeys: [RIGHT_ITEMS[RIGHT_ITEMS.length - 1].key]
+};
+
+export const WithRightSubMenu2 = Template.bind({});
+WithRightSubMenu2.args = {
+  items: [...LEFT_ITEMS, ...CENTER_ITEMS, ...RIGHT_ITEMS],
+  subMenuItems: SUB_MENU_ITEMS,
+  subMenuSource: RIGHT_ITEMS[0].key,
+  activeKeys: [RIGHT_ITEMS[0].key]
+};
+
+export const WithActiveSubMenuItem = Template.bind({});
+WithActiveSubMenuItem.args = {
+  items: [...LEFT_ITEMS, ...CENTER_ITEMS, ...RIGHT_ITEMS],
+  subMenuItems: SUB_MENU_ITEMS,
+  subMenuSource: CENTER_ITEMS[0].key,
+  activeKeys: [CENTER_ITEMS[0].key, SUB_MENU_ITEMS[0].key]
 };
