@@ -11,7 +11,7 @@ const IMAGE_SRC = 'https://picsum.photos/300';
 
 const Template: Story<HexagonPropsInterface> = (args) => {
   const allArgs = {...args};
-  if (!allArgs.iconName) {
+  if (!allArgs.iconName && !allArgs.imageSrc) {
     allArgs.imageSrc = IMAGE_SRC;
   }
   return <Hexagon {...allArgs} />;
@@ -33,7 +33,6 @@ MenuActive.args = {
 export const MenuIndicator = Template.bind({});
 MenuIndicator.args = {
   type: 'menu',
-  imageSrc: 'https://picsum.photos/300',
   indicator: 'voice'
 };
 
@@ -70,6 +69,11 @@ PrimaryBorderless.args = {
 export const Secondary = Template.bind({});
 Secondary.args = {
   type: 'secondary'
+};
+export const SecondaryWithWrongImageUrl = Template.bind({});
+SecondaryWithWrongImageUrl.args = {
+  type: 'secondary',
+  imageSrc: 'https://some.wrong.url'
 };
 export const SecondaryWithIcon = Template.bind({});
 SecondaryWithIcon.args = {type: 'secondary', iconName: 'fly-portal'};
