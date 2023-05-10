@@ -6,8 +6,8 @@ import {Universe3dEmitterType} from '@momentum-xyz/core';
 
 import {PlayerHelper, LightHelper, SkyboxHelper} from '../../babylon';
 import {UniverseBuilderHelper} from '../../babylon/UniverseBuilderHelper';
-import skyboxWorld from '../../static/mushjungledark.jpeg';
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
+import skyboxWorld from '../../static/BlueLotusGalaxy.jpg';
 
 export interface PropsInterface {
   events: Universe3dEmitterType;
