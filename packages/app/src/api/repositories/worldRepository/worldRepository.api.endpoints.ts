@@ -3,7 +3,6 @@ export const worldRepositoryEndpoints = () => {
 
   return {
     worldList: `${BASE_URL}`,
-    world: `${BASE_URL}/:worldId`,
-    onlineUsers: `${BASE_URL}/:worldId/online-users`
+    world: `${BASE_URL}/:worldId`
   };
 };

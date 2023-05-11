@@ -1,2 +1,2 @@
-export * from './WorldPage';
-export * from './WorldBasePage';
+export * from './World3dPage';
+export * from './World2dPage';
