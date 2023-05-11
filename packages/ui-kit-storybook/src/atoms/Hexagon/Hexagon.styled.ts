@@ -301,7 +301,7 @@ export const Sparkle = styled.img`
   width: 32px;
   height: 50px;
   pointer-events: none;
-  z-index: 10;
+  z-index: 200;
 
   &.menu {
     top: -12.5px;
