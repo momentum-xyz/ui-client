@@ -42,6 +42,7 @@ export class WorldCreatorHelper {
   static transformSubscription: {unsubscribe: () => void} | undefined;
   static onObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
   static selectedObjectFromGizmo = '';
+  static selectedObjectId = '';
   static scene: Scene;
 
   static placeholder: AbstractMesh;
@@ -55,6 +56,7 @@ export class WorldCreatorHelper {
     this.isCreatorMode = false;
     this.lastLockedID = '';
     this.selectedObjectFromGizmo = '';
+    this.selectedObjectId = '';
     this.scene = scene;
 
     // Custom gizmo
@@ -320,6 +322,7 @@ export class WorldCreatorHelper {
   }
 
   static toggleGizmo(objectId: string, on: boolean) {
+    console.log('toggleGizmo', objectId, on);
     if (on) {
       this.selectedObjectFromGizmo = objectId;
 
@@ -338,6 +341,17 @@ export class WorldCreatorHelper {
       this.transformSubscription?.unsubscribe();
       this.selectedObjectFromGizmo = '';
     }
+  }
+
+  static toggleHightlightObject(objectId: string, on: boolean) {
+    if (this.selectedObjectId === objectId) {
+      return;
+    }
+
+    // TODO Add/drop highlight layer
+    console.log('TODO toggleHightlightObject', objectId, on);
+
+    this.selectedObjectId = on ? objectId : '';
   }
 
   static tryLockObject(id: string) {
