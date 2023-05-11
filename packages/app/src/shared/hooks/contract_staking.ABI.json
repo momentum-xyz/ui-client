@@ -117,7 +117,7 @@
       },
       {
         "indexed": false,
-        "internalType": "enum StakingV2.Token",
+        "internalType": "enum StakingV3.Token",
         "name": "token",
         "type": "uint8"
       },
@@ -273,7 +273,7 @@
       },
       {
         "indexed": false,
-        "internalType": "enum StakingV2.Token",
+        "internalType": "enum StakingV3.Token",
         "name": "token",
         "type": "uint8"
       },
@@ -310,7 +310,7 @@
       },
       {
         "indexed": false,
-        "internalType": "enum StakingV2.Token",
+        "internalType": "enum StakingV3.Token",
         "name": "token",
         "type": "uint8"
       },
@@ -465,7 +465,7 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct StakingV2.StakedBy[]",
+        "internalType": "struct StakingV3.StakedBy[]",
         "name": "",
         "type": "tuple[]"
       }
@@ -632,6 +632,11 @@
         "internalType": "uint256",
         "name": "total_rewards",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "staked_odysseys_index",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -686,7 +691,7 @@
         "type": "uint256"
       },
       {
-        "internalType": "enum StakingV2.Token",
+        "internalType": "enum StakingV3.Token",
         "name": "token",
         "type": "uint8"
       }
@@ -740,7 +745,7 @@
         "type": "uint256"
       },
       {
-        "internalType": "enum StakingV2.Token",
+        "internalType": "enum StakingV3.Token",
         "name": "token",
         "type": "uint8"
       }
@@ -921,7 +926,7 @@
         "type": "uint256"
       },
       {
-        "internalType": "enum StakingV2.Token",
+        "internalType": "enum StakingV3.Token",
         "name": "token",
         "type": "uint8"
       }
