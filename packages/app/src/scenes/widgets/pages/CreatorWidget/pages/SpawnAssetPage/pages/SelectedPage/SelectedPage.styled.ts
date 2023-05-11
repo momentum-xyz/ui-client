@@ -14,9 +14,9 @@ export const Container = styled.div`
 `;
 
 export const PreviewContainer = styled.div`
-  width: 360px;
-  height: 360px;
-  border: 0.4px solid ${(props) => props.theme.text};
+  width: 362px;
+  height: 362px;
+  border: 1px solid ${(props) => props.theme.text};
   border-radius: 4px;
 `;
 
