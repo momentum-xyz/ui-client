@@ -9,7 +9,7 @@ import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {getImageAbsoluteUrl} from 'core/utils';
 
-const Map3dPage: FC = () => {
+const Universe3dPage: FC = () => {
   const {widgetManagerStore, universeStore} = useStore();
   const {allWorlds, allUsers} = universeStore.universe2dStore;
 
@@ -89,4 +89,4 @@ const Map3dPage: FC = () => {
   );
 };
 
-export default observer(Map3dPage);
+export default observer(Universe3dPage);

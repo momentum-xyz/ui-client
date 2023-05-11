@@ -6,9 +6,9 @@ import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 
 import {OnlineUsersList, CurrentWorld} from './components';
-import * as styled from './WorldBasePage.styled';
+import * as styled from './World2dPage.styled';
 
-const WorldBasePage: FC = () => {
+const World2dPage: FC = () => {
   const {universeStore, widgetManagerStore, agoraStore} = useStore();
   const {isLeftWidgetShown, isRightWidgetShown} = widgetManagerStore;
   const {agoraVoiceChatStore} = agoraStore;
@@ -39,7 +39,7 @@ const WorldBasePage: FC = () => {
   );
 
   return (
-    <styled.Container data-testid="WorldBasePage-test">
+    <styled.Container data-testid="World2dPage-test">
       <styled.OnlineUsers>
         {!isLeftWidgetShown && (
           <OnlineUsersList
@@ -65,4 +65,4 @@ const WorldBasePage: FC = () => {
   );
 };
 
-export default observer(WorldBasePage);
+export default observer(World2dPage);

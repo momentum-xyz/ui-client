@@ -10,8 +10,8 @@ import {useApiHandlers, useStore} from 'shared/hooks';
 import {httpErrorCodes} from 'api/constants';
 import {SystemWideError, Toast} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
-import {WorldPage} from 'scenes/world';
-import {Map3dPage} from 'scenes/map3d';
+import {World3dPage} from 'scenes/world';
+import {Universe3dPage} from 'scenes/universe';
 import {WelcomePage} from 'scenes/welcome';
 
 import AppAuth from './AppAuth';
@@ -128,7 +128,7 @@ const App: FC = () => {
         {isTargetRoute(pathname, WORLD_ROUTES) ? (
           <>
             <Toast />
-            <WorldPage />
+            <World3dPage />
             <WidgetManager isWorld />
             <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
               <AppLayers>{createSwitchByConfig(WORLD_ROUTES)}</AppLayers>
@@ -137,7 +137,7 @@ const App: FC = () => {
         ) : (
           <>
             <Toast />
-            <Map3dPage />
+            <Universe3dPage />
             {isWelcomePage && <WelcomePage />}
             <WidgetManager isWelcomePage={isWelcomePage} />
             <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>

@@ -18,7 +18,7 @@ import {usePosBusEvent, useStore} from 'shared/hooks';
 import {PosBusService} from 'shared/services';
 import {HighFiveContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 
-const WorldPage: FC = () => {
+const World3dPage: FC = () => {
   const {
     agoraStore,
     universeStore,
@@ -245,4 +245,4 @@ const WorldPage: FC = () => {
   );
 };
 
-export default observer(WorldPage);
+export default observer(World3dPage);
