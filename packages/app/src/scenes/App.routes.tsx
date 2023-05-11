@@ -42,10 +42,6 @@ export const WORLD_ROUTES: RouteConfigInterface[] = [
     main: () => <WorldBasePage />,
     exact: true
   },
-  // {
-  //   path: ROUTES.odyssey.creator.base,
-  //   main: () => <OdysseyCreator />
-  // },
   {
     path: ROUTES.odyssey.object.root,
     main: () => <Object />

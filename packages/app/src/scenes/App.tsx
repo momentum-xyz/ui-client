@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {FC, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useNavigate, useLocation} from 'react-router-dom';
