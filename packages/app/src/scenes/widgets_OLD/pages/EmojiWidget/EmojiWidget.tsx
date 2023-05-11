@@ -1,19 +1,8 @@
-import {FC, useCallback, useEffect} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useI18n} from '@momentum-xyz/core';
-import {PanelLayout, Emoji} from '@momentum-xyz/ui-kit';
 
-import {useStore} from 'shared/hooks';
-// import {UnityService} from 'shared/services';
-
-import * as styled from './EmojiWidget.styled';
-
-interface PropsInterface {
-  onClose: () => void;
-}
-
-const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
-  const {widgetStore_OLD, sessionStore} = useStore();
+const EmojiWidget: FC = () => {
+  /*const {widgetStore_OLD, sessionStore} = useStore();
   const {emojiDetailsList, fetchAll} = widgetStore_OLD.emojiStore;
   const {user} = sessionStore;
 
@@ -53,7 +42,9 @@ const EmojiWidget: FC<PropsInterface> = ({onClose}) => {
         </styled.EmojiList>
       </styled.Container>
     </PanelLayout>
-  );
+  );*/
+
+  return <></>;
 };
 
 export default observer(EmojiWidget);
