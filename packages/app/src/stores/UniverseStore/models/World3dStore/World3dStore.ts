@@ -243,8 +243,7 @@ const World3dStore = types
       // TODO move it as child store here??
       const {creatorStore, widgetManagerStore} = getRootStore(self);
 
-      // TODO we allow this for gizmo because cannot prevent it from changing, TEMP
-      if (self.selectedObjectId && creatorStore.selectedTab !== 'gizmo') {
+      if (self.selectedObjectId) {
         console.log('World3dStore : handleClick : already selected', self.selectedObjectId);
         return;
       }
