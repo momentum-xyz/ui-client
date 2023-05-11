@@ -243,11 +243,11 @@ const World3dStore = types
       // TODO move it as child store here??
       const {creatorStore, widgetManagerStore} = getRootStore(self);
 
-      if (self.selectedObjectId) {
-        console.log('World3dStore : handleClick : already selected', self.selectedObjectId);
-        return;
-      }
-      // self._deselectObject();
+      // if (self.selectedObjectId) {
+      //   console.log('World3dStore : handleClick : already selected', self.selectedObjectId);
+      //   return;
+      // }
+      self._deselectObject();
 
       // self.objectMenuPosition = clickPos || defaultClickPosition;
 
