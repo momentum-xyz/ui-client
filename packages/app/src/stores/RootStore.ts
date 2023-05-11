@@ -4,7 +4,6 @@ import {UniverseStore} from 'stores/UniverseStore';
 import {WidgetsStore} from 'scenes/widgets/stores/WidgetsStore';
 import {RootWidgetsStore} from 'scenes/widgets_OLD_2/stores/RootWidgetsStore';
 import {RootWidgetStore_OLD} from 'scenes/widgets_OLD/stores/RootWidgetStore_OLD';
-import {MagicStore} from 'scenes/magic/stores/MagicStore/MagicStore';
 import {CreatorStore} from 'scenes/widgets/stores/CreatorStore';
 import {ObjectStore} from 'scenes/object/stores';
 
@@ -32,7 +31,6 @@ const RootStore = types
     widgetStore: types.optional(WidgetsStore, {}),
     objectStore: types.optional(ObjectStore, {}),
     widgetsStore: types.optional(RootWidgetsStore, {}), // OLD
-    magicStore: types.optional(MagicStore, {}),
 
     creatorStore: types.optional(CreatorStore, {}),
 

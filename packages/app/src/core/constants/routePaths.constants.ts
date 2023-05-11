@@ -29,8 +29,5 @@ export const ROUTES = {
     disconnected: '/system/disconnected',
     maintenance: '/system/maintenance',
     wrongBrowser: '/system/wrongBrowser'
-  },
-  magic: '/magic/:id',
-  video: '/video/:spaceId',
-  help: '/help'
+  }
 };

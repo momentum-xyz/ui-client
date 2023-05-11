@@ -8,10 +8,8 @@ import * as worldRepository from './repositories/worldRepository';
 import * as userProfileRepository from './repositories/userProfileRepository';
 import * as pluginsRepository from './repositories/pluginsRepository';
 import * as spaceAttributeRepository from './repositories/spaceAttributeRepository';
-import * as spaceOptionRepository from './repositories/spaceOptionRepository';
 import * as spaceRepository from './repositories/spaceRepository';
 import * as userAttributeRepository from './repositories/userAttributeRepository';
-import * as magicLinkRepository from './repositories/magicLinkRepository';
 import * as mediaRepository from './repositories/mediaRepository';
 import * as emojiRepository from './repositories/emojiRepository';
 import * as eventsRepository from './repositories/eventsRepository';
@@ -47,14 +45,12 @@ export const api = {
   newsfeedRepository,
   spaceRepository,
   flightRepository,
-  magicLinkRepository,
   playlistRepository,
   agoraRepository,
   streamChatRepository,
   spaceEmojiRepository,
   pluginsRepository,
   spaceAttributeRepository,
-  spaceOptionRepository,
   userAttributeRepository,
   spaceUserAttributeRepository,
   mediaRepository,
@@ -82,10 +78,8 @@ export * from './repositories/userProfileRepository/userProfileRepository.api.ty
 export * from './repositories/worldRepository/worldRepository.api.types';
 export * from './repositories/pluginsRepository/pluginsRepository.api.types';
 export * from './repositories/spaceAttributeRepository/spaceAttribute.api.types';
-export * from './repositories/spaceOptionRepository/spaceOptionRepository.api.types';
 export * from './repositories/spaceRepository/spaceRepository.api.types';
 export * from './repositories/userAttributeRepository/userAttributeRepository.api.types';
-export * from './repositories/magicLinkRepository/magicLinkRepository.api.types';
 export * from './repositories/mediaRepository/mediaRepository.api.types';
 export * from './repositories/emojiRepository/emojiRepository.api.types';
 export * from './repositories/eventsRepository/eventsRepository.api.types';

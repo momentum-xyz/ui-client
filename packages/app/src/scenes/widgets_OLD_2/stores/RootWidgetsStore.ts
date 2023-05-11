@@ -7,7 +7,6 @@ import {ScreenShareStore} from './ScreenShareStore';
 import {TextChatStore} from './TextChatStore';
 import {CalendarStore} from './CalendarStore';
 import {MinimapStore} from './MinimapStore';
-import {MagicLinkStore} from './MagicLinkStore';
 
 const RootWidgetsStore = types
   .model('RootWidgetsStore', {
@@ -17,8 +16,7 @@ const RootWidgetsStore = types
     flyToMeStore: types.optional(FlyToMeStore, {}),
     screenShareStore: types.optional(ScreenShareStore, {}),
     textChatStore: types.optional(TextChatStore, {}),
-    calendarStore: types.optional(CalendarStore, {}),
-    magicLinkStore: types.optional(MagicLinkStore, {})
+    calendarStore: types.optional(CalendarStore, {})
   })
   .views((self) => ({
     get signInDialogAvailable(): boolean {

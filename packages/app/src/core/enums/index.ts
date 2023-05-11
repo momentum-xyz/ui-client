@@ -1,7 +1,6 @@
 export * from './storage.enum';
 export * from './participantStatus.enum';
 export * from './participantRole.enum';
-export * from './magicType.enum';
 export * from './tokenRules.enum';
 export * from './scanner.enum';
 export * from './payee.enum';

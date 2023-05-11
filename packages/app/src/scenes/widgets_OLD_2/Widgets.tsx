@@ -23,8 +23,7 @@ import {
   ScreenShareWidget,
   TextChatWidget,
   CalendarWidget,
-  NotificationsWidget,
-  MagicLinkWidget
+  NotificationsWidget
 } from './pages';
 import * as styled from './Widgets.styled';
 
@@ -173,15 +172,6 @@ const Widgets: FC<PropsInterface> = (props) => {
                 state={{canGoBack: true}}
               />
 
-              <ToolbarIcon
-                title={t('labels.shareLink')}
-                icon="link"
-                size="medium"
-                onClick={widgetsStore.magicLinkStore.dialog.open}
-                isSelected={widgetsStore.magicLinkStore.dialog.isOpen}
-                state={{canGoBack: true}}
-              />
-
               <ToolbarIconSeparator />
 
               <ToolbarIcon
@@ -223,7 +213,6 @@ const Widgets: FC<PropsInterface> = (props) => {
       {widgetsStore.notificationsStore.dialog.isOpen && <NotificationsWidget />}
       {widgetsStore.minimapStore.dialog.isOpen && <MinimapWidget />}
       {widgetsStore.flyToMeStore.dialog.isOpen && <FlyToMeWidget />}
-      {widgetsStore.magicLinkStore.dialog.isOpen && <MagicLinkWidget />}
       {widgetsStore.screenShareStore.dialog.isOpen && <ScreenShareWidget />}
       {widgetsStore.calendarStore.dialog.isOpen && <CalendarWidget />}
       {widgetsStore.textChatStore.dialog.isOpen && <TextChatWidget />}

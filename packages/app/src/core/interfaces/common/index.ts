@@ -1,5 +1,4 @@
 export * from './route.interface';
-export * from './magicLink.interface';
 export * from './scanner.interface';
 export * from './unityPosition.interface';
 export * from './unityApi.interface';

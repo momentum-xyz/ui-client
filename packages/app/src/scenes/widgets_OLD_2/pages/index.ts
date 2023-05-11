@@ -6,5 +6,4 @@ export * from './TextChatWidget';
 export * from './NotificationsWidget';
 export * from './CalendarWidget';
 export * from './PreviewOdysseyWidget';
-export * from './MagicLinkWidget';
 export * from './TestnetMarkWidget';
