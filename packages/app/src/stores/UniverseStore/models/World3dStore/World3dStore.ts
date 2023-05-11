@@ -256,51 +256,9 @@ const World3dStore = types
       // self.objectMenu.open();
       // self.setSelectedTab('inspector');
 
+      // TODO move it as child store here??
+      const {creatorStore} = getRootStore(self);
       creatorStore.setSelectedObjectId(objectId);
-
-      const submenuItems: MenuItemInterface<WidgetEnum>[] = [
-        {
-          key: WidgetEnum.MOVE_ITEM,
-          position: PositionEnum.CENTER,
-          iconName: 'close_large',
-          onClick: () => self.closeAndResetObjectMenu()
-        },
-        {
-          key: WidgetEnum.GO_TO,
-          position: PositionEnum.CENTER,
-          iconName: 'direction-arrows',
-          onClick: () => creatorStore.setSelectedTab('gizmo')
-        },
-        {
-          key: WidgetEnum.INSPECTOR,
-          position: PositionEnum.CENTER,
-          iconName: 'info',
-          onClick: () => creatorStore.setSelectedTab('inspector')
-        },
-        {
-          key: WidgetEnum.ASSIGN_FUNCTIONALITY,
-          position: PositionEnum.CENTER,
-          iconName: 'cubicles',
-          onClick: () => creatorStore.setSelectedTab('functionality')
-        },
-        {
-          key: WidgetEnum.REMOVE,
-          position: PositionEnum.CENTER,
-          iconName: 'bin',
-          onClick: creatorStore.removeObjectDialog.open
-        }
-      ];
-
-      const currentSubMenuInfo = widgetManagerStore.subMenuInfo;
-      const isSameSubMenu = currentSubMenuInfo?.sourceItemKey === WidgetEnum.CREATOR;
-
-      const activeSubMenuKeys = isSameSubMenu ? currentSubMenuInfo?.activeKeys : [];
-      widgetManagerStore.openSubMenu(
-        WidgetEnum.CREATOR,
-        submenuItems,
-        PositionEnum.CENTER,
-        activeSubMenuKeys
-      );
 
       if (creatorStore.selectedTab === null) {
         creatorStore.setSelectedTab('gizmo');
