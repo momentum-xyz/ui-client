@@ -1,5 +1,3 @@
-import {UserInterface} from 'api';
-
 export interface WorldInfoInterface {
   id: string;
   name: string;
@@ -60,11 +58,3 @@ export interface PatchWorldRequest {
 }
 
 export interface PatchWorldResponse {}
-
-/** Online Users **/
-
-export interface GetOnlineUsersRequest {
-  worldId: string;
-}
-
-export interface OdysseyOnlineUsersResponse extends Array<UserInterface> {}

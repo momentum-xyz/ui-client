@@ -1,6 +1,6 @@
 import BN from 'bn.js';
 
-const lookup = [
+const LOOKUP = [
   {value: new BN('1000'), symbol: 'k'}, // kilo
   {value: new BN('1000000'), symbol: 'M'}, // mega
   {value: new BN('1000000000'), symbol: 'G'}, // giga
@@ -21,7 +21,7 @@ export const formatBigInt = (input: string | null | undefined, digits = 2): stri
   const inputSliced = input.slice(0, -18);
   const balance = new BN(inputSliced);
 
-  const lookupItem = lookup.find((i) => {
+  const lookupItem = LOOKUP.find((i) => {
     return balance.gte(i.value);
   });
 

@@ -1,9 +1,7 @@
 export * from './UserProfile';
 export * from './User';
 export * from './Object';
-export * from './SpaceInfo';
 export * from './TrackModel';
-export * from './Content';
 export * from './AgoraRemoteUser';
 export * from './EmojiDetail';
 export * from './PluginLoader';
@@ -13,7 +11,6 @@ export * from './SearchQuery';
 export * from './PluginAttributesManager';
 export * from './PluginQueryResult';
 export * from './NftItem';
-export * from './NftItemStats';
 export * from './PolkadotAddressMeta';
 export * from './PolkadotAddress';
 export * from './Asset3d';
