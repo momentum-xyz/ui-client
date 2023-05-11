@@ -7,19 +7,22 @@ export const Grid = styled.div`
   width: 100%;
   flex-grow: 1;
   gap: 5px;
-  @media (max-width: 1440px) {
-    grid-template-columns: 1fr 1fr;
-  }
+  overflow: hidden;
 `;
 
 export const GridItem = styled.div`
   width: 180px;
+
+  @media (max-width: 1440px) {
+    width: 160px;
+  }
 `;
 
 export const GridItemInnerContainer = styled.button`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
 `;
 
 export const GridItemImage = styled.img`
@@ -27,6 +30,11 @@ export const GridItemImage = styled.img`
   height: 130px;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   object-fit: cover;
+
+  @media (max-width: 1440px) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 export const GridItemPreview = styled.div`
@@ -35,6 +43,9 @@ export const GridItemPreview = styled.div`
   border-radius: 10px;
   border: 0.4px solid ${(props) => props.theme.text};
   border-radius: 4px;
+  @media (max-width: 1440px) {
+    height: 140px;
+  }
 `;
 
 export const EmptyResult = styled.div`
