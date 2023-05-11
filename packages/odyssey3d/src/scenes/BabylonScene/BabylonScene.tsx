@@ -98,8 +98,10 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
         PlayerHelper.setUserTransforms(users);
       });
 
-      events.on('ObjectEditModeChanged', (objectId, isOn) => {
-        WorldCreatorHelper.toggleGizmo(objectId, isOn);
+      events.on('ObjectEditModeChanged', (objectId, isOn, showGizmo) => {
+        console.log('Babylon: handle ObjectEditModeChanged', objectId, {isOn, showGizmo});
+        WorldCreatorHelper.toggleGizmo(objectId, showGizmo);
+        WorldCreatorHelper.toggleHightlightObject(objectId, isOn);
       });
       events.on('DetachObjectFromCamera', (objectId) => {
         ObjectHelper.detachFromCamera();
