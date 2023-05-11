@@ -1,3 +1,3 @@
 export * from './HighFiveContent';
-export * from './EventItem';
+export * from './SystemWideError';
 export * from './WalletLogin';

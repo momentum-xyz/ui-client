@@ -56,7 +56,6 @@
     "polished": "^4.1.4",
     "rc-tooltip": "^5.1.1",
     "react": "^18.2.0",
-    "react-add-to-calendar-hoc": "^1.0.10",
     "react-beautiful-dnd": "^13.1.1",
     "react-color-palette": "^6.2.0",
     "react-datepicker": "^4.8.0",
