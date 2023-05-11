@@ -280,7 +280,12 @@ const World3dStore = types
         }
       ];
 
-      widgetManagerStore.openSubMenu(WidgetEnum.CREATOR, submenuItems, PositionEnum.CENTER);
+      if (objectId) {
+        widgetManagerStore.openSubMenu(WidgetEnum.CREATOR, submenuItems, PositionEnum.CENTER);
+      } else {
+        widgetManagerStore.closeSubMenu();
+      }
+
       self.attachedToCameraObjectId = objectId;
     },
     setWaitingForBumpEffectReadyUserId(userId: string | null) {
