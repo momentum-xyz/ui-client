@@ -72,7 +72,6 @@
 "beginAnimationFrom":0,
 "beginAnimationTo":60,
 "beginAnimationLoop":false,
-"startDelay":0,
 "renderingGroupId":0,
 "isBillboardBased":true,
 "billboardMode":7,

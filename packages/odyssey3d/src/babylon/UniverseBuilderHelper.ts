@@ -40,7 +40,7 @@ interface BabylonWorldInterface {
 
 export class UniverseBuilderHelper {
   static scene: Scene;
-  static odysseyCounter = 0;
+  static baseURL = '';
 
   static rootMesh: AbstractMesh;
   static thumbMat: PBRMaterial;
@@ -49,8 +49,10 @@ export class UniverseBuilderHelper {
   static accountsMap = new Map<string, BabylonAccountInterface>();
   static worldsMap = new Map<string, BabylonWorldInterface>();
   static totalAmount = 0;
+  static odysseyCounter = 0;
 
-  static baseURL = '';
+  static odysseyPS: ParticleSystem;
+  static sparksPS: ParticleSystem;
 
   static async initialize(
     scene: Scene,
@@ -61,6 +63,7 @@ export class UniverseBuilderHelper {
   ) {
     this.scene = scene;
     this.baseURL = assetBaseURL;
+    this.initializeExplorerParticles();
     await this.loadModel();
 
     scene.onPointerDown = function castRay() {
@@ -184,7 +187,7 @@ export class UniverseBuilderHelper {
         }
 
         rootClone.billboardMode = Mesh.BILLBOARDMODE_ALL;
-        this.generateParticleEffect(rootChildren[1]);
+        this.setParticleEffects(rootChildren[1]);
 
         const babylonAccount = {
           accountDefinition: accounts[i],
@@ -314,7 +317,7 @@ export class UniverseBuilderHelper {
           rootChildren[0].material = thumbMatClone;
         }
         rootClone.billboardMode = Mesh.BILLBOARDMODE_ALL;
-        this.generateParticleEffect(rootChildren[1]);
+        this.setParticleEffects(rootChildren[1]);
 
         const babylonWorld = {
           worldDefinition: worlds[this.odysseyCounter],
@@ -359,17 +362,27 @@ export class UniverseBuilderHelper {
     thumb.rotate(Axis.Y, betaRot);
   }
 
-  static generateParticleEffect(orbMesh: AbstractMesh) {
+  static initializeExplorerParticles() {
     const particleOdyssey = ParticleSystem.Parse(odysseyParticle, this.scene, '');
-    particleOdyssey.particleTexture = new Texture(circle);
     particleOdyssey.preWarmCycles = 10;
-    particleOdyssey.emitter = orbMesh;
-    particleOdyssey.start();
+    particleOdyssey.particleTexture = new Texture(circle);
+    this.odysseyPS = particleOdyssey;
 
-    const sparks = ParticleSystem.Parse(sparksParticle, this.scene, '');
-    sparks.emitter = orbMesh;
-    sparks.preWarmCycles = 10;
-    sparks.particleTexture = new Texture(twirl);
-    sparks.start();
+    const particleSparks = ParticleSystem.Parse(sparksParticle, this.scene, '');
+    particleSparks.preWarmCycles = 10;
+    particleSparks.particleTexture = new Texture(twirl);
+    this.sparksPS = particleSparks;
+  }
+
+  static setParticleEffects(orbMesh: AbstractMesh) {
+    const delay = Math.floor(Math.random() * 3000);
+    this.odysseyPS.startDelay = delay;
+
+    const odysseyPSClone = this.odysseyPS.clone('odysseyPSClone', orbMesh);
+    odysseyPSClone.start(delay);
+
+    const sparksPSClone = this.sparksPS.clone('sparksPSClone', orbMesh);
+    sparksPSClone.startDelay = delay;
+    sparksPSClone.start();
   }
 }

@@ -1,7 +1,7 @@
 import {FC, ReactElement} from 'react';
 import {matchPath, Navigate, Route, Routes, RoutesProps, useLocation} from 'react-router-dom';
 
-import {createProtectedRouteElement} from 'ui-kit/utils/create-protected-route-element';
+import {protectedRoute} from 'ui-kit/utils/ProtectedRoute';
 import {ProtectedRouteListInterface, RouteConfigInterface} from 'core/interfaces';
 import {ROUTES} from 'core/constants';
 
@@ -18,11 +18,7 @@ export const createRoutesByConfig = (
   const {routes, defaultRedirect, hasRights} = config;
 
   return routes.map((route, idx) => {
-    const protectedRouteElement = createProtectedRouteElement(
-      route.main,
-      hasRights,
-      defaultRedirect
-    );
+    const protectedRouteElement = protectedRoute(route.main, hasRights, defaultRedirect);
     return (
       <Route
         key={idx}
