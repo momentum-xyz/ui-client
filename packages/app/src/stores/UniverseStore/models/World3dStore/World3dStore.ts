@@ -229,7 +229,8 @@ const World3dStore = types
       // self.setSelectedTab('inspector');
 
       // TODO move it as child store here??
-      const {creatorStore, widgetManagerStore} = getRootStore(self);
+      const {widgetStore, widgetManagerStore} = getRootStore(self);
+      const {creatorStore} = widgetStore;
       creatorStore.setSelectedObjectId(objectId);
 
       const submenuItems: MenuItemInterface<WidgetEnum>[] = [
@@ -305,7 +306,7 @@ const World3dStore = types
     closeAndResetObjectMenu() {
       console.log('closeAndResetObjectMenu', self.selectedObjectId);
 
-      const {creatorStore} = getRootStore(self);
+      const {creatorStore} = getRootStore(self).widgetStore;
       creatorStore.setSelectedObjectId(null);
       creatorStore.setSelectedTab(null);
 

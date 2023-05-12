@@ -17,14 +17,12 @@ const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
 ];
 
 const ObjectFunctionalityPage: FC = () => {
-  const {creatorStore, objectStore} = useStore();
+  const {objectStore, widgetStore} = useStore();
+  const {creatorStore} = widgetStore;
   const {objectFunctionalityStore, selectedObjectId} = creatorStore;
   const {pluginLoader} = objectStore;
 
   const [modifiedOptionValue, setModifiedOptionValue] = useState<string | null>(null);
-
-  const isModified =
-    !!modifiedOptionValue && modifiedOptionValue !== objectFunctionalityStore.currentAssetId;
 
   const activeId = modifiedOptionValue || objectFunctionalityStore.currentAssetId;
 
@@ -32,12 +30,9 @@ const ObjectFunctionalityPage: FC = () => {
 
   console.log('ObjectFunctionalityPage', {
     selectedObjectId,
-    isModified,
     modifiedOptionValue,
     currentAssetId: objectFunctionalityStore.currentAssetId
   });
-
-  // const {t} = useI18n();
 
   // TODO remove this and simplify the store
   useEffect(() => {
@@ -72,11 +67,10 @@ const ObjectFunctionalityPage: FC = () => {
   const handleTypeChange = (value: string) => {
     console.log('handleTypeChange', value);
     setModifiedOptionValue(value);
-    // assetStore.setAssetType(value);
   };
 
   const renderBody = () => {
-    if (!selectedObjectId || objectStore.isPending) {
+    if (!selectedObjectId) {
       return null;
     }
 
@@ -117,11 +111,7 @@ const ObjectFunctionalityPage: FC = () => {
       <styled.PanelBody>{renderBody()}</styled.PanelBody>
 
       <styled.ActionBar>
-        <Button
-          // disabled={!isModified}
-          label="Embed"
-          onClick={handleSave}
-        />
+        <Button label="Embed" onClick={handleSave} />
       </styled.ActionBar>
     </styled.Container>
   );

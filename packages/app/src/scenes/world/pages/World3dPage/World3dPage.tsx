@@ -19,8 +19,9 @@ import {usePosBusEvent, useStore} from 'shared/hooks';
 import {HighFiveContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 
 const World3dPage: FC = () => {
-  const {agoraStore, universeStore, widgetManagerStore, sessionStore, creatorStore} = useStore();
+  const {agoraStore, universeStore, widgetManagerStore, sessionStore, widgetStore} = useStore();
   const {world3dStore} = universeStore;
+  const {creatorStore} = widgetStore;
 
   const [readyToHandleEvents, setReadyToHandleEvents] = useState<boolean>(false);
 

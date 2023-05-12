@@ -2,7 +2,6 @@ import {Instance, types} from 'mobx-state-tree';
 
 import {UniverseStore} from 'stores/UniverseStore';
 import {WidgetsStore} from 'scenes/widgets/stores/WidgetsStore';
-import {CreatorStore} from 'scenes/widgets/stores/CreatorStore';
 import {ObjectStore} from 'stores/UniverseStore/models/World2dStore/models';
 
 import {NftStore} from './NftStore';
@@ -26,7 +25,6 @@ const RootStore = types
     widgetManagerStore: types.optional(WidgetManagerStore, {}),
 
     /* Connect independent stores */
-    creatorStore: types.optional(CreatorStore, {}),
     widgetStore: types.optional(WidgetsStore, {}),
     objectStore: types.optional(ObjectStore, {})
   })

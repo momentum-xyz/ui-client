@@ -9,7 +9,8 @@ import {useStore} from 'shared/hooks';
 import * as styled from './SelectedPage.styled';
 
 export const SelectedPage: FC = () => {
-  const {creatorStore, universeStore} = useStore();
+  const {widgetStore, universeStore} = useStore();
+  const {creatorStore} = widgetStore;
   const {spawnAssetStore} = creatorStore;
   const {worldId} = universeStore;
 

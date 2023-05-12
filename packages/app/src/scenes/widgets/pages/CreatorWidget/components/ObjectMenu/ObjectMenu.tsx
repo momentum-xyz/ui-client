@@ -16,7 +16,8 @@ import * as styled from './ObjectMenu.styled';
 // const OBJECT_MENU_OFFSET_Y = 100;
 
 const ObjectMenu: FC = () => {
-  const {creatorStore, universeStore} = useStore();
+  const {universeStore, widgetStore} = useStore();
+  const {creatorStore} = widgetStore;
   const {objectFunctionalityStore, objectColorStore} = creatorStore;
   const {worldId, world3dStore} = universeStore;
 

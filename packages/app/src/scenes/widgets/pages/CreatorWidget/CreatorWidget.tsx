@@ -52,7 +52,8 @@ const allPanels: SideMenuItemInterface<MenuItemType>[] = [
 ];
 
 const CreatorWidget: FC = () => {
-  const {universeStore, creatorStore} = useStore();
+  const {universeStore, widgetStore} = useStore();
+  const {creatorStore} = widgetStore;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const world3dStore = universeStore.world3dStore!;
   const worldId = universeStore.worldId;
