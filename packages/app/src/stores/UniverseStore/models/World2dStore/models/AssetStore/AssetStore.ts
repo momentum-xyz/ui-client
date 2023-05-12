@@ -1,21 +1,20 @@
 import {flow, types} from 'mobx-state-tree';
-import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
+import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
-import {appVariables} from 'api/constants';
+import {PluginIdEnum} from 'api/enums';
 import {AssetTypeEnum} from 'core/enums';
+import {getImageAbsoluteUrl} from 'core/utils';
 import {
   api,
   Asset2dResponse,
   GetObjectResponse,
-  GetSpaceAttributeResponse,
   ObjectInterface,
   ObjectMetadataInterface,
   ObjectOptionsInterface,
   UploadImageResponse
 } from 'api';
-import {PluginIdEnum} from 'api/enums';
 
 const AssetStore = types
   .compose(
@@ -24,9 +23,6 @@ const AssetStore = types
       assetType: types.maybe(types.string),
       content: types.maybe(types.frozen<ObjectInterface>()),
       pluginId: types.maybe(types.string),
-      dockWorldId: types.maybe(types.string),
-
-      changeTileDialog: types.optional(Dialog, {}),
 
       request: types.optional(RequestModel, {}),
       imageUpload: types.optional(RequestModel, {}),
@@ -46,8 +42,8 @@ const AssetStore = types
       if (response) {
         self.content = response;
       }
-    }),
-    getDockInfo: flow(function* (spaceId: string) {
+    })
+    /*getDockInfo: flow(function* (spaceId: string) {
       const worldResponse: GetSpaceAttributeResponse | undefined = yield self.request.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
@@ -60,7 +56,7 @@ const AssetStore = types
       if (worldResponse) {
         self.dockWorldId = worldResponse['DestinationWorldID'] as string | undefined;
       }
-    })
+    })*/
   }))
   .actions((self) => ({
     setObject(
@@ -83,22 +79,15 @@ const AssetStore = types
           self.assetType = AssetTypeEnum.IMAGE;
           self.getSpaceAttributeValue(meta.pluginId, spaceId);
           break;
-        // case AssetTypeEnum.VIDEO:
-        //   self.assetType = AssetTypeEnum.VIDEO;
-        //   self.getSpaceAttributeValue(meta.pluginId, spaceId);
-        // break;
-        case AssetTypeEnum.DOCK:
+        /*case AssetTypeEnum.DOCK:
           self.assetType = AssetTypeEnum.DOCK;
           self.getDockInfo(spaceId);
-          break;
+          break;*/
         default:
           break;
       }
     },
     postNewImage: flow(function* (objectId: string, file: File) {
-      // if (!self.pluginId) {
-      //   return;
-      // }
       const data = {file: file};
       const userResponse: UploadImageResponse = yield self.imageUpload.send(
         api.mediaRepository.uploadImage,
@@ -116,10 +105,6 @@ const AssetStore = types
       yield self.getSpaceAttributeValue(PluginIdEnum.IMAGE, objectId);
     }),
     postNewContent: flow(function* (objectId: string, content: ObjectInterface) {
-      // if (!self.pluginId) {
-      //   return;
-      // }
-
       yield self.setTileRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
         spaceId: objectId,
         plugin_id: PluginIdEnum.TEXT,
@@ -132,10 +117,7 @@ const AssetStore = types
   }))
   .views((self) => ({
     get imageSrc(): string | null {
-      if (!self.content?.render_hash) {
-        return null;
-      }
-      return `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S5}/${self.content?.render_hash}`;
+      return getImageAbsoluteUrl(self.content?.render_hash, ImageSizeEnum.S5);
     }
   }));
 

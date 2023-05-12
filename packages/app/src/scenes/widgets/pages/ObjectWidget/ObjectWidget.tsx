@@ -1,4 +1,4 @@
-import {FC, useEffect} from 'react';
+import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Panel, TabInterface, Tabs} from '@momentum-xyz/ui-kit-storybook';
 
@@ -17,23 +17,27 @@ const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
 
 const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {universeStore, objectStore, widgetManagerStore} = useStore();
-  const {pluginLoader, assetStore, currentAssetId} = objectStore;
+  const {pluginLoader, assetStore, asset2dId} = objectStore;
   const {assetType} = assetStore;
+
+  const onClose = useCallback(() => {
+    widgetManagerStore.close(WidgetEnum.OBJECT);
+  }, [widgetManagerStore]);
 
   useEffect(() => {
     if (data?.id) {
       objectStore.init(data.id.toString()).then((assetId) => {
         if (!assetId) {
-          widgetManagerStore.close(WidgetEnum.OBJECT);
+          onClose();
         }
       });
     }
     return () => {
       objectStore.resetModel();
     };
-  }, [data?.id, objectStore, widgetManagerStore]);
+  }, [data?.id, objectStore, onClose]);
 
-  if (!currentAssetId) {
+  if (!asset2dId) {
     return null;
   }
 
@@ -45,10 +49,10 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         icon="document"
         variant="primary"
         title={objectStore.objectName || ''}
-        onClose={() => widgetManagerStore.close(WidgetEnum.OBJECT)}
+        onClose={onClose}
       >
         <styled.Tabs>
-          <Tabs tabList={TABS_LIST} activeId={currentAssetId} />
+          <Tabs tabList={TABS_LIST} activeId={asset2dId} />
         </styled.Tabs>
 
         {assetType === AssetTypeEnum.TEXT && (
@@ -68,7 +72,7 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
             pluginLoader={pluginLoader}
             objectId={data?.id.toString() || ''}
             isAdmin={universeStore.isCurrentUserWorldAdmin}
-            onClose={() => widgetManagerStore.close(WidgetEnum.OBJECT)}
+            onClose={onClose}
           />
         )}
       </Panel>

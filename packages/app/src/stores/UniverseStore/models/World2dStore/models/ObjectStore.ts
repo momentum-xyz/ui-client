@@ -2,18 +2,10 @@ import {types, flow} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
+import {PluginIdEnum} from 'api/enums';
+import {api, GetSpaceInfoResponse} from 'api';
 import {BasicAsset2dIdEnum} from 'core/enums';
 import {PluginAttributesManager, PluginLoader, DynamicScriptList} from 'core/models';
-import {
-  api,
-  Asset2dResponse,
-  GetSpaceInfoResponse,
-  PluginMetadataInterface,
-  PluginOptionsInterface,
-  ObjectMetadataInterface,
-  ObjectOptionsInterface
-} from 'api';
-import {PluginIdEnum} from 'api/enums';
 
 import {AssetStore} from './AssetStore';
 
@@ -25,7 +17,7 @@ const ObjectStore = types
     ResetModel,
     types.model('ObjectStore', {
       objectName: types.maybe(types.string),
-      currentAssetId: types.maybe(types.string),
+      asset2dId: types.maybe(types.string),
 
       getSpaceInfoRequest: types.optional(RequestModel, {}),
       getAssetRequest: types.optional(RequestModel, {}),
@@ -39,8 +31,8 @@ const ObjectStore = types
   )
   .actions((self) => ({
     initPluginLoader: flow(function* (asset2dId: string, objectId: string) {
-      let assetData: Asset2dResponse<PluginMetadataInterface, PluginOptionsInterface> | undefined =
-        localPlugins[objectId];
+      let assetData = localPlugins[objectId];
+
       console.log('initPluginLoader', asset2dId, objectId, assetData);
 
       if (!assetData) {
@@ -54,6 +46,7 @@ const ObjectStore = types
       if (!assetData) {
         return;
       }
+
       const {options, meta} = assetData;
 
       if (!self.dynamicScriptList.containsLoaderWithName(meta.scopeName)) {
@@ -80,31 +73,26 @@ const ObjectStore = types
         {spaceId: objectId}
       );
 
-      self.currentAssetId = spaceInfo?.asset_2d_id;
-
       if (!spaceInfo) {
         return;
       }
 
-      switch (spaceInfo.asset_2d_id) {
-        // case BasicAsset2dIdEnum.VIDEO:
+      self.asset2dId = spaceInfo.asset_2d_id;
+
+      switch (self.asset2dId) {
         case BasicAsset2dIdEnum.TEXT:
         case BasicAsset2dIdEnum.IMAGE: {
-          console.info('Its a tile!');
-          const objectResponse:
-            | Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface>
-            | undefined = yield self.getAssetRequest.send(api.assets2dRepository.get2dAsset, {
-            assetId: spaceInfo.asset_2d_id
-          });
-          // FIXME: It is incorrect (by Nikita).
-          // FIXME: It should be objectResponse?.pluginId
+          const objectResponse = yield self.getAssetRequest.send(
+            api.assets2dRepository.get2dAsset,
+            {assetId: self.asset2dId}
+          );
           if (objectResponse?.meta.pluginId) {
             self.assetStore.setObject(objectResponse, objectId);
           }
           break;
         }
         default: {
-          yield self.initPluginLoader(spaceInfo.asset_2d_id, objectId);
+          yield self.initPluginLoader(self.asset2dId, objectId);
           self.assetStore.assetType = 'plugin';
           break;
         }
@@ -115,38 +103,29 @@ const ObjectStore = types
       }
     }),
     fetchObjectName: flow(function* (spaceId: string) {
-      const attributeName = AttributeNameEnum.NAME;
       const response = yield self.getObjectNameRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
           spaceId: spaceId,
           plugin_id: PluginIdEnum.CORE,
-          attribute_name: attributeName
+          attribute_name: AttributeNameEnum.NAME
         }
       );
 
-      if (response === undefined || !(attributeName in response)) {
+      if (response === undefined || !(AttributeNameEnum.NAME in response)) {
         return;
       }
 
-      self.objectName = response[attributeName];
+      self.objectName = response[AttributeNameEnum.NAME];
     })
   }))
   .actions((self) => ({
     init: flow(function* (objectId: string) {
       yield self.loadAsset2D(objectId);
       yield self.fetchObjectName(objectId);
-      return self.currentAssetId;
+
+      return self.asset2dId;
     })
-  }))
-  .views((self) => ({
-    get isPending() {
-      return (
-        self.getSpaceInfoRequest.isPending ||
-        self.getAssetRequest.isPending ||
-        self.getObjectNameRequest.isPending
-      );
-    }
   }));
 
 export {ObjectStore};
