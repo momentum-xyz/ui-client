@@ -3,14 +3,17 @@ import {rgba} from 'polished';
 
 export const GlobalStyles = createGlobalStyle`
   ::-webkit-scrollbar {
-    width: 5px;
+    width: 12px;
     height: 0;
+    border: 2px solid transparent;
+    background-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
    }
 
   ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    border: 5px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
+    border: 4px solid transparent;
     background-clip: content-box;
+    background-color: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
     max-height: 40px;
   }
 
@@ -23,7 +26,7 @@ export const GlobalStyles = createGlobalStyle`
   }
  
   ::-webkit-scrollbar-track-piece:end {
-    margin-bottom: 2px;
+    margin-bottom: 5px;
   }
   
   a {
