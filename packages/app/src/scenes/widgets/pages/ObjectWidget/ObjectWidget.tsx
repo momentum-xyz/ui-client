@@ -9,12 +9,6 @@ import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 import {ImageViewer, PluginViewer, TextViewer} from './components';
 import * as styled from './ObjectWidget.styled';
 
-const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
-  {id: BasicAsset2dIdEnum.IMAGE, icon: 'picture_upload', label: 'Picture'},
-  {id: BasicAsset2dIdEnum.VIDEO, icon: 'video_upload', label: 'Video'},
-  {id: BasicAsset2dIdEnum.TEXT, icon: 'upload', label: 'Text'}
-];
-
 const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {universeStore, widgetManagerStore} = useStore();
   const {objectStore, isCurrentUserWorldAdmin} = universeStore;
@@ -41,6 +35,27 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   if (!asset2dId) {
     return null;
   }
+
+  const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
+    {
+      id: BasicAsset2dIdEnum.IMAGE,
+      icon: 'picture_upload',
+      label: 'Picture',
+      disabled: asset2dId !== BasicAsset2dIdEnum.IMAGE.toString()
+    },
+    {
+      id: BasicAsset2dIdEnum.VIDEO,
+      icon: 'video_upload',
+      label: 'Video',
+      disabled: asset2dId !== BasicAsset2dIdEnum.VIDEO.toString()
+    },
+    {
+      id: BasicAsset2dIdEnum.TEXT,
+      icon: 'upload',
+      label: 'Text',
+      disabled: asset2dId !== BasicAsset2dIdEnum.TEXT.toString()
+    }
+  ];
 
   return (
     <styled.Container data-testid="ObjectWidget-test">
