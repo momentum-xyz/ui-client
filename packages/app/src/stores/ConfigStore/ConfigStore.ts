@@ -46,9 +46,6 @@ const ConfigStore = types
     },
     get configLoadingErrorCode(): number | null {
       return self.versionRequest.errorCode || self.configRequest.errorCode;
-    },
-    get isBlockchainUrlReady(): boolean {
-      return !!appVariables.BLOCKCHAIN_WS_SERVER;
     }
   }));
 
