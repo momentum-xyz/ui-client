@@ -12,7 +12,7 @@ import {useTheme} from 'styled-components';
 import {PluginLoaderModelType} from 'core/models';
 import {useStore} from 'shared/hooks';
 
-import * as styled from './ChangeVideoDialog.styled';
+import * as styled from './AssignVideoDialog.styled';
 
 interface PropsInterface {
   actionRef: MutableRefObject<{doSave: () => void}>;
@@ -21,7 +21,7 @@ interface PropsInterface {
   pluginLoader: PluginLoaderModelType;
 }
 
-const ChangeVideoDialog: FC<PropsInterface> = ({actionRef, objectId, plugin, pluginLoader}) => {
+const AssignVideoDialog: FC<PropsInterface> = ({actionRef, objectId, plugin, pluginLoader}) => {
   const {universeStore} = useStore();
   const {attributesManager} = pluginLoader;
 
@@ -92,4 +92,4 @@ const PluginInnerWrapper = ({
   );
 };
 
-export default observer(ChangeVideoDialog);
+export default observer(AssignVideoDialog);

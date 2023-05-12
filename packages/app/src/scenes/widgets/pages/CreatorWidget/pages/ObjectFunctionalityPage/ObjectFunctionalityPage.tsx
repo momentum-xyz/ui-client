@@ -1,16 +1,13 @@
-// import {Dropdown, Heading, Text} from '@momentum-xyz/ui-kit';
-import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useRef, useState} from 'react';
-// import {useI18n} from '@momentum-xyz/core';
-import {Button, TabInterface, Tabs} from '@momentum-xyz/ui-kit-storybook';
+import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
+import {Button, TabInterface, Tabs} from '@momentum-xyz/ui-kit-storybook';
 
 import {ToastContent} from 'ui-kit';
 import {BasicAsset2dIdEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
-import {ChangeVideoDialog} from 'scenes/object/components';
 
-import {AssignText, AssignImage} from './components';
+import {AssignText, AssignImage, AssignVideoDialog} from './components';
 import * as styled from './ObjectFunctionalityPage.styled';
 
 const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
@@ -93,7 +90,7 @@ const ObjectFunctionalityPage: FC = () => {
         return (
           <>
             {pluginLoader?.plugin ? (
-              <ChangeVideoDialog
+              <AssignVideoDialog
                 actionRef={actionRef}
                 plugin={pluginLoader.plugin}
                 pluginLoader={pluginLoader}

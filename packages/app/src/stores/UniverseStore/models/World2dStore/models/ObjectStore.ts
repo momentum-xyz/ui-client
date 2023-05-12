@@ -103,21 +103,8 @@ const ObjectStore = types
           }
           break;
         }
-        case BasicAsset2dIdEnum.DOCK: {
-          console.info('Its a dock!');
-          const objectResponse:
-            | Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface>
-            | undefined = yield self.getAssetRequest.send(api.assets2dRepository.get2dAsset, {
-            assetId: spaceInfo.asset_2d_id
-          });
-          if (objectResponse) {
-            self.assetStore.setObject(objectResponse, objectId);
-          }
-          break;
-        }
         default: {
           yield self.initPluginLoader(spaceInfo.asset_2d_id, objectId);
-
           self.assetStore.assetType = 'plugin';
           break;
         }
@@ -149,7 +136,6 @@ const ObjectStore = types
     init: flow(function* (objectId: string) {
       yield self.loadAsset2D(objectId);
       yield self.fetchObjectName(objectId);
-
       return self.currentAssetId;
     })
   }))
