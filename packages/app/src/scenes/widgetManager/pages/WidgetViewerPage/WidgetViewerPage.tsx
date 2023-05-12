@@ -36,6 +36,8 @@ const WidgetViewerPage: FC = () => {
         return <widgets.WorldProfileWidget />;
       case WidgetEnum.WORLD_VISITORS:
         return <widgets.WorldVisitorsWidget />;
+      case WidgetEnum.OBJECT:
+        return <widgets.ObjectWidget {...widgetInfo} />;
       default:
         return <></>;
     }
@@ -46,11 +48,6 @@ const WidgetViewerPage: FC = () => {
       <styled.LeftSection>
         <styled.Widget>{leftActiveWidget && visualizeSection(leftActiveWidget)}</styled.Widget>
       </styled.LeftSection>
-
-      {/* TEST */}
-      {/* <styled.Widget>
-        <widgets.StakingContractsTestWidget />
-      </styled.Widget> */}
 
       <styled.RightSection>
         <styled.Widget>{rightActiveWidget && visualizeSection(rightActiveWidget)}</styled.Widget>

@@ -21,7 +21,8 @@ const AssetsPage: FC<PropsInterface> = ({
   showPreview,
   assetPageHeader
 }) => {
-  const {creatorStore} = useStore();
+  const {widgetStore} = useStore();
+  const {creatorStore} = widgetStore;
   const {spawnAssetStore} = creatorStore;
 
   const assetList = spawnAssetStore.filteredAsset3dList(assetCategory);

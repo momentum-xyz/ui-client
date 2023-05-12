@@ -11,7 +11,8 @@ import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 import * as styled from './SpawnPointPage.styled';
 
 const SpawnPointPage: FC = () => {
-  const {creatorStore, universeStore} = useStore();
+  const {widgetStore, universeStore} = useStore();
+  const {creatorStore} = widgetStore;
   const {spawnPointStore} = creatorStore;
   const {worldId, world3dStore} = universeStore;
   const {setSpawnPoint} = spawnPointStore;

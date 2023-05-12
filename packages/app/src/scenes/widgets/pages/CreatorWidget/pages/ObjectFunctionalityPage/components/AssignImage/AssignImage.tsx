@@ -20,9 +20,9 @@ interface PropsInterface {
 }
 
 const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
-  const {objectStore} = useStore();
+  const {universeStore} = useStore();
+  const {objectStore} = universeStore;
   const {assetStore} = objectStore;
-  const {changeTileDialog} = assetStore;
 
   const {t} = useI18n();
 
@@ -40,8 +40,6 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
     }
 
     await assetStore.postNewImage(objectId, data.image);
-
-    changeTileDialog.close();
   };
 
   // TEMP

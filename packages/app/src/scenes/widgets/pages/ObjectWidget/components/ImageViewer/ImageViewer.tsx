@@ -1,18 +1,16 @@
 import {FC} from 'react';
-import {Heading} from '@momentum-xyz/ui-kit';
 import {Frame} from '@momentum-xyz/ui-kit-storybook';
 import {observer} from 'mobx-react-lite';
 
-import {useStore} from 'shared/hooks';
+import * as styled from './ImageViewer.styled';
 
-import * as styled from './ImagePage.styled';
+interface PropsInterface {
+  imageSrc: string | null;
+}
 
-const ImagePage: FC = () => {
-  const {content, imageSrc} = useStore().objectStore.assetStore;
-
+const ImageViewer: FC<PropsInterface> = ({imageSrc}) => {
   return (
-    <styled.Container>
-      <Heading type="h2" label={content?.title || ''} transform="uppercase" />
+    <styled.Container data-testid="ImageViewer-test">
       {imageSrc && (
         <styled.ImageContainer>
           <Frame>
@@ -24,4 +22,4 @@ const ImagePage: FC = () => {
   );
 };
 
-export default observer(ImagePage);
+export default observer(ImageViewer);

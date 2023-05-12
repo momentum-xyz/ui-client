@@ -1,42 +1,33 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
-import {ErrorBoundary, Text} from '@momentum-xyz/ui-kit';
-import {useI18n} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
+import cn from 'classnames';
+import {ErrorBoundary} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 import {
   PluginInterface,
   PluginPropsInterface,
   ObjectGlobalPropsContextProvider
 } from '@momentum-xyz/sdk';
-import {generatePath, useNavigate, useParams} from 'react-router-dom';
-import cn from 'classnames';
 
 import {ToastContent} from 'ui-kit';
 import {PluginLoaderModelType} from 'core/models';
 import {PosBusService} from 'shared/services';
-import {ROUTES} from 'core/constants';
-import {useStore} from 'shared/hooks';
 
-import * as styled from './ObjectPluginPage.styled';
+import * as styled from './PluginViewer.styled';
 
 interface PropsInterface {
   objectId: string;
   plugin: PluginInterface;
   pluginLoader: PluginLoaderModelType;
+  isAdmin: boolean;
+  onClose: () => void;
 }
 
-const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) => {
-  const {universeStore} = useStore();
-  const {attributesManager} = pluginLoader;
-
+const PluginViewer: FC<PropsInterface> = ({plugin, pluginLoader, isAdmin, onClose, objectId}) => {
   const theme = useTheme();
   const {t} = useI18n();
-  const navigate = useNavigate();
-
-  const {worldId} = useParams<{worldId: string}>();
-
-  const isAdmin = universeStore.isCurrentUserWorldAdmin;
 
   useEffect(() => {
     PosBusService.subscribe(pluginLoader.pluginId);
@@ -58,19 +49,15 @@ const ObjectPluginPage: FC<PropsInterface> = ({plugin, pluginLoader, objectId}) 
     }
   }, [pluginLoader.isErrorWhileLoadingDynamicScript, pluginLoader.scriptUrl, t]);
 
-  const onClose = () => {
-    navigate(generatePath(ROUTES.odyssey.base, {worldId}));
-  };
-
   const pluginProps: PluginPropsInterface = {
     // @ts-ignore: FIXME
     theme,
     isAdmin,
+    objectId,
     isExpanded: pluginLoader.isExpanded,
     onToggleExpand: pluginLoader.toggleIsExpanded,
-    objectId,
-    pluginApi: attributesManager.pluginApi,
-    api: attributesManager.api,
+    pluginApi: pluginLoader.attributesManager.pluginApi,
+    api: pluginLoader.attributesManager.api,
     onClose
   };
 
@@ -105,23 +92,17 @@ const PluginInnerWrapper = ({
       ) : objectView ? (
         <styled.Wrapper>
           <styled.HeadingWrapper>
-            <Text
-              text={objectView.title || ''}
-              align="left"
-              size="l"
-              weight="bold"
-              transform="uppercase"
-            />
+            <div>{objectView.title}</div>
           </styled.HeadingWrapper>
           <styled.ContentWrapper>{objectView.content}</styled.ContentWrapper>
         </styled.Wrapper>
       ) : (
-        <Text text={t('errors.errorPluginContactDev')} size="l" />
+        <div>{t('errors.errorPluginContactDev')}</div>
       )}
     </>
   ) : (
-    <Text text={t('errors.errorWhileLoadingPlugin')} size="l" />
+    <div>{t('errors.errorWhileLoadingPlugin')}</div>
   );
 };
 
-export default observer(ObjectPluginPage);
+export default observer(PluginViewer);

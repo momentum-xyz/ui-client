@@ -6,6 +6,7 @@ import {WorldDetailsStore} from './WorldDetailsStore';
 import {UserDetailsStore} from './UserDetailsStore';
 import {StakingViewStore} from './StakingViewStore';
 import {WorldProfileStore} from './WorldProfileStore';
+import {CreatorStore} from './CreatorStore';
 
 const WidgetsStore = types.model('WidgetsStore', {
   signInStore: types.optional(SignInStore, {}),
@@ -13,7 +14,8 @@ const WidgetsStore = types.model('WidgetsStore', {
   worldProfileStore: types.optional(WorldProfileStore, {}),
   worldDetailsStore: types.optional(WorldDetailsStore, {}),
   userDetailsStore: types.optional(UserDetailsStore, {}),
-  stakingViewStore: types.optional(StakingViewStore, {})
+  stakingViewStore: types.optional(StakingViewStore, {}),
+  creatorStore: types.optional(CreatorStore, {})
 });
 
 export {WidgetsStore};

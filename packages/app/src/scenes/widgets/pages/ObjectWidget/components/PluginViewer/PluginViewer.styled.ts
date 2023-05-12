@@ -4,10 +4,9 @@ export const Wrapper = styled.div`
   flex: 1 0 auto;
   display: flex;
   width: 100%;
-  height: 100%;
+  height: 320px;
   flex-direction: column;
   align-items: stretch;
-  // justify-content: end;
 `;
 
 export const Container = styled.div`

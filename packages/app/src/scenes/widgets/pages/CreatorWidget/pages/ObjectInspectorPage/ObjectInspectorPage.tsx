@@ -13,7 +13,8 @@ import {ObjectColorPicker, ObjectTransformForm} from './components';
 import {TransformInterface} from './components/ObjectTransformForm/ObjectTransformForm';
 
 const ObjectInspector: FC = () => {
-  const {creatorStore} = useStore();
+  const {widgetStore} = useStore();
+  const {creatorStore} = widgetStore;
   const {objectName, objectInfo, spawnAssetStore, selectedObjectId} = creatorStore;
   const {assets3dBasic, assets3dCustom} = spawnAssetStore;
 

@@ -61,6 +61,12 @@ const World2dPage: FC = () => {
           </>
         )}
       </styled.World>
+
+      {/*
+      <styled.BottomCenteredDock>
+        <EmojiAnimationDock />
+      </styled.BottomCenteredDock>
+      */}
     </styled.Container>
   );
 };

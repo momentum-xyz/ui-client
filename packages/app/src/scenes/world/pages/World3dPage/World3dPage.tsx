@@ -1,8 +1,8 @@
 import {FC, useEffect, useMemo, useState} from 'react';
+import {matchPath, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {generatePath, matchPath, useNavigate, useLocation} from 'react-router-dom';
-import {useDebouncedCallback} from '@momentum-xyz/ui-kit-storybook';
+import {PositionEnum, useDebouncedCallback} from '@momentum-xyz/ui-kit-storybook';
 import {BabylonScene} from '@momentum-xyz/odyssey3d';
 import {
   Event3dEmitter,
@@ -11,26 +11,20 @@ import {
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
 
+import {WidgetEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
-import {WORLD_ROUTES} from 'scenes/App.routes';
-import {ROUTES} from 'core/constants';
-import {usePosBusEvent, useStore} from 'shared/hooks';
 import {PosBusService} from 'shared/services';
+import {WORLD_ROUTES} from 'scenes/App.routes';
+import {usePosBusEvent, useStore} from 'shared/hooks';
 import {HighFiveContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 
 const World3dPage: FC = () => {
-  const {
-    agoraStore,
-    universeStore,
-    // widgetsStore,
-    widgetManagerStore,
-    sessionStore,
-    creatorStore
-  } = useStore();
+  const {agoraStore, universeStore, widgetManagerStore, sessionStore, widgetStore} = useStore();
   const {world3dStore} = universeStore;
+  const {creatorStore} = widgetStore;
+
   const [readyToHandleEvents, setReadyToHandleEvents] = useState<boolean>(false);
 
-  const navigate = useNavigate();
   const location = useLocation();
 
   // TODO: FIXME
@@ -105,16 +99,7 @@ const World3dPage: FC = () => {
       world3dStore?.handleClick(objectId, clickPos);
     } else {
       console.log('BabylonPage: handle object click, NOT creator mode', objectId);
-      // if (label === 'portal_odyssey') {
-      //   widgetsStore.odysseyInfoStore.open(appVariables.ODYSSEY_WORLD_ID);
-      //   return;
-      // }
-      navigate({
-        pathname: generatePath(ROUTES.odyssey.object.root, {
-          worldId: universeStore.worldId,
-          objectId
-        })
-      });
+      widgetManagerStore.open(WidgetEnum.OBJECT, PositionEnum.RIGHT, {id: objectId});
     }
   };
 
@@ -180,51 +165,6 @@ const World3dPage: FC = () => {
     );
     Event3dEmitter.emit('ReceiveHighFive', senderId);
   });
-
-  /*usePosBusEvent('high-five-sent', (message) => {
-    console.info('[POSBUS EVENT] high-five-sent', message);
-    toast.info(
-      <ToastContent
-        headerIconName="check"
-        title={t('messages.highFiveSentTitle', {name: message})}
-        text={t('messages.highFiveSentText')}
-        showCloseButton
-      />
-    );
-  });*/
-
-  // usePosBusEvent('notify-gathering-start', (message) => {
-  //   console.info('[POSBUS EVENT] notify-gathering-start', message);
-
-  //   toast.info(
-  //     <ToastContent
-  //       headerIconName="calendar"
-  //       title={t('titles.joinGathering')}
-  //       text={t('messages.joinGathering', {title: message.title})}
-  //       approveInfo={{
-  //         title: t('actions.dismiss')
-  //       }}
-  //       showCloseButton
-  //     />,
-  //     TOAST_NOT_AUTO_CLOSE_OPTIONS
-  //   );
-  // });
-
-  // usePosBusEvent('simple-notification', (message) => {
-  //   console.info('[POSBUS EVENT] simple-notification', message);
-  //   toast.info(
-  //     <ToastContent
-  //       headerIconName="check"
-  //       title={t('titles.alert')}
-  //       text={message}
-  //       showCloseButton
-  //     />
-  //   );
-  // });
-
-  // if (!instance3DStore.unityContext) {
-  //   return <></>;
-  // }
 
   console.log('WorldPage render', {worldId, world3dStore});
 
