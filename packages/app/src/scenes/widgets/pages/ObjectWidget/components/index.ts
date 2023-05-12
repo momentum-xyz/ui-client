@@ -1,3 +1,3 @@
-export * from './TextPage';
-export * from './ImagePage';
-export * from './ObjectPluginPage';
+export * from './TextViewer';
+export * from './ImageViewer';
+export * from './PluginViewer';

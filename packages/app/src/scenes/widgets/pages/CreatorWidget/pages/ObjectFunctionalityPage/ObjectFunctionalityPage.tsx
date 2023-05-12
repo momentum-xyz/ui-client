@@ -44,7 +44,6 @@ const ObjectFunctionalityPage: FC = () => {
     if (selectedObjectId) {
       objectFunctionalityStore.init(selectedObjectId);
       objectStore.init(selectedObjectId);
-      // objectStore.initPluginVideoLoader(selectedObjectId);
     }
 
     return () => {

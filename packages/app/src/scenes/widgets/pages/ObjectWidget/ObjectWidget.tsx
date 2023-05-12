@@ -6,7 +6,7 @@ import {useStore} from 'shared/hooks';
 import {AssetTypeEnum, BasicAsset2dIdEnum, WidgetEnum} from 'core/enums';
 import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 
-import {ImagePage, ObjectPluginPage, TextPage} from './components';
+import {ImageViewer, PluginViewer, TextViewer} from './components';
 import * as styled from './ObjectWidget.styled';
 
 const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
@@ -16,24 +16,18 @@ const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
 ];
 
 const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
-  const {objectStore, widgetManagerStore} = useStore();
+  const {universeStore, objectStore, widgetManagerStore} = useStore();
   const {pluginLoader, assetStore, currentAssetId} = objectStore;
   const {assetType} = assetStore;
 
   useEffect(() => {
     if (data?.id) {
-      objectStore
-        .init(data.id.toString())
-        .then((assetId) => {
-          if (!assetId) {
-            widgetManagerStore.close(WidgetEnum.OBJECT);
-          }
-        })
-        .catch(() => {
+      objectStore.init(data.id.toString()).then((assetId) => {
+        if (!assetId) {
           widgetManagerStore.close(WidgetEnum.OBJECT);
-        });
+        }
+      });
     }
-
     return () => {
       objectStore.resetModel();
     };
@@ -57,13 +51,24 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
           <Tabs tabList={TABS_LIST} activeId={currentAssetId} />
         </styled.Tabs>
 
-        {assetType === AssetTypeEnum.TEXT && <TextPage />}
-        {assetType === AssetTypeEnum.IMAGE && <ImagePage />}
+        {assetType === AssetTypeEnum.TEXT && (
+          <TextViewer
+            title={objectStore.assetStore.content?.title}
+            text={objectStore.assetStore.content?.content}
+          />
+        )}
+
+        {assetType === AssetTypeEnum.IMAGE && (
+          <ImageViewer imageSrc={objectStore.assetStore.imageSrc} />
+        )}
+
         {assetType === AssetTypeEnum.PLUGIN && pluginLoader?.plugin && (
-          <ObjectPluginPage
+          <PluginViewer
             plugin={pluginLoader.plugin}
             pluginLoader={pluginLoader}
             objectId={data?.id.toString() || ''}
+            isAdmin={universeStore.isCurrentUserWorldAdmin}
+            onClose={() => widgetManagerStore.close(WidgetEnum.OBJECT)}
           />
         )}
       </Panel>
