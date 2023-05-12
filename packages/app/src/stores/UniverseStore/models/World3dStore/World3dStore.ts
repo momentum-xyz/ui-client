@@ -66,7 +66,7 @@ const World3dStore = types
     closeAndResetObjectMenu() {
       console.log('closeAndResetObjectMenu', self.selectedObjectId);
 
-      const {creatorStore} = getRootStore(self);
+      const {creatorStore} = getRootStore(self).widgetStore;
       creatorStore.setSelectedObjectId(null);
       creatorStore.setSelectedTab(null);
 
@@ -241,7 +241,8 @@ const World3dStore = types
       }
 
       // TODO move it as child store here??
-      const {creatorStore, widgetManagerStore} = getRootStore(self);
+      const {widgetStore, widgetManagerStore} = getRootStore(self);
+      const {creatorStore} = widgetStore;
 
       if (self.selectedObjectId) {
         console.log('World3dStore : handleClick : already selected', self.selectedObjectId);
