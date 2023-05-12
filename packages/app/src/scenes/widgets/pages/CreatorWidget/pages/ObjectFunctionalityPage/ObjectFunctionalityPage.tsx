@@ -17,9 +17,10 @@ const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
 ];
 
 const ObjectFunctionalityPage: FC = () => {
-  const {objectStore, widgetStore} = useStore();
+  const {universeStore, widgetStore} = useStore();
   const {creatorStore} = widgetStore;
   const {objectFunctionalityStore, selectedObjectId} = creatorStore;
+  const {objectStore} = universeStore;
   const {pluginLoader} = objectStore;
 
   const [modifiedOptionValue, setModifiedOptionValue] = useState<string | null>(null);

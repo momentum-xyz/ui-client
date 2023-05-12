@@ -7,7 +7,7 @@ import {api, GetSpaceInfoResponse} from 'api';
 import {BasicAsset2dIdEnum} from 'core/enums';
 import {PluginAttributesManager, PluginLoader, DynamicScriptList} from 'core/models';
 
-import {AssetStore} from './AssetStore';
+import {AssetStore} from './models';
 
 const {REACT_APP_LOCAL_PLUGINS = '{}'} = process.env;
 const localPlugins = JSON.parse(REACT_APP_LOCAL_PLUGINS);
@@ -19,9 +19,9 @@ const ObjectStore = types
       objectName: types.maybe(types.string),
       asset2dId: types.maybe(types.string),
 
-      getSpaceInfoRequest: types.optional(RequestModel, {}),
-      getAssetRequest: types.optional(RequestModel, {}),
-      getObjectNameRequest: types.optional(RequestModel, {}),
+      objectRequest: types.optional(RequestModel, {}),
+      assetRequest: types.optional(RequestModel, {}),
+      nameRequest: types.optional(RequestModel, {}),
 
       dynamicScriptList: types.optional(DynamicScriptList, {}),
       pluginLoader: types.maybe(PluginLoader),
@@ -36,7 +36,7 @@ const ObjectStore = types
       console.log('initPluginLoader', asset2dId, objectId, assetData);
 
       if (!assetData) {
-        assetData = yield self.getAssetRequest.send(api.assets2dRepository.get2dAsset, {
+        assetData = yield self.assetRequest.send(api.assets2dRepository.get2dAsset, {
           assetId: asset2dId
         });
       } else {
@@ -68,7 +68,7 @@ const ObjectStore = types
   }))
   .actions((self) => ({
     loadAsset2D: flow(function* (objectId: string) {
-      const spaceInfo: GetSpaceInfoResponse | undefined = yield self.getSpaceInfoRequest.send(
+      const spaceInfo: GetSpaceInfoResponse | undefined = yield self.objectRequest.send(
         api.spaceInfoRepository.getSpaceInfo,
         {spaceId: objectId}
       );
@@ -82,10 +82,9 @@ const ObjectStore = types
       switch (self.asset2dId) {
         case BasicAsset2dIdEnum.TEXT:
         case BasicAsset2dIdEnum.IMAGE: {
-          const objectResponse = yield self.getAssetRequest.send(
-            api.assets2dRepository.get2dAsset,
-            {assetId: self.asset2dId}
-          );
+          const objectResponse = yield self.assetRequest.send(api.assets2dRepository.get2dAsset, {
+            assetId: self.asset2dId
+          });
           if (objectResponse?.meta.pluginId) {
             self.assetStore.setObject(objectResponse, objectId);
           }
@@ -103,14 +102,11 @@ const ObjectStore = types
       }
     }),
     fetchObjectName: flow(function* (spaceId: string) {
-      const response = yield self.getObjectNameRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
-        {
-          spaceId: spaceId,
-          plugin_id: PluginIdEnum.CORE,
-          attribute_name: AttributeNameEnum.NAME
-        }
-      );
+      const response = yield self.nameRequest.send(api.spaceAttributeRepository.getSpaceAttribute, {
+        spaceId: spaceId,
+        plugin_id: PluginIdEnum.CORE,
+        attribute_name: AttributeNameEnum.NAME
+      });
 
       if (response === undefined || !(AttributeNameEnum.NAME in response)) {
         return;

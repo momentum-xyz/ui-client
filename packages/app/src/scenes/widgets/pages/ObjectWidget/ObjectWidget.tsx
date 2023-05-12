@@ -16,7 +16,8 @@ const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
 ];
 
 const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
-  const {universeStore, objectStore, widgetManagerStore} = useStore();
+  const {universeStore, widgetManagerStore} = useStore();
+  const {objectStore, isCurrentUserWorldAdmin} = universeStore;
   const {pluginLoader, assetStore, asset2dId} = objectStore;
   const {assetType} = assetStore;
 
@@ -71,7 +72,7 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
             plugin={pluginLoader.plugin}
             pluginLoader={pluginLoader}
             objectId={data?.id.toString() || ''}
-            isAdmin={universeStore.isCurrentUserWorldAdmin}
+            isAdmin={isCurrentUserWorldAdmin}
             onClose={onClose}
           />
         )}

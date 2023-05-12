@@ -15,7 +15,8 @@ interface PropsInterface {
 }
 
 const AssignText: FC<PropsInterface> = ({actionRef, objectId}) => {
-  const {objectStore} = useStore();
+  const {universeStore} = useStore();
+  const {objectStore} = universeStore;
   const {assetStore} = objectStore;
 
   const {t} = useI18n();
