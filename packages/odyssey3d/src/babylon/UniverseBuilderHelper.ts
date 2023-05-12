@@ -2,13 +2,16 @@ import {
   AbstractMesh,
   Axis,
   Color3,
+  Color4,
   Matrix,
   Mesh,
+  MeshBuilder,
   Nullable,
   PBRMaterial,
   ParticleSystem,
   Scene,
   SceneLoader,
+  StandardMaterial,
   Texture,
   TransformNode,
   Vector3
@@ -16,10 +19,17 @@ import {
 import {Odyssey3dUserInterface, WorldInfoInterface} from '@momentum-xyz/core';
 
 import hdrTexture from '../static/test.hdr';
-import circle from '../static/circle_02.png';
-import twirl from '../static/twirl_01.png';
+import circle from '../static/Particles/circle_02.png';
+import twirl from '../static/Particles/twirl_01.png';
 import odysseyParticle from '../static/Particles/odysseyParticle.json';
 import sparksParticle from '../static/Particles/sparksParticle.json';
+// Star
+import surface from '../static/Particles/surface.png';
+import starlight from '../static/Particles/dot.png';
+import starSparksTexture from '../static/Particles/spark_03.png';
+import starCenterParticle from '../static/Particles/starCenterParticle.json';
+import starGlowParticle from '../static/Particles/starGlowParticle.json';
+import starSparksParticle from '../static/Particles/starSparksParticle.json';
 
 import {getAssetFileName} from './UtilityHelper';
 import {PlayerHelper} from './PlayerHelper';
@@ -54,6 +64,10 @@ export class UniverseBuilderHelper {
   static odysseyPS: ParticleSystem;
   static sparksPS: ParticleSystem;
 
+  // Star
+  static starSphere: AbstractMesh;
+  static starMaterial: StandardMaterial;
+
   static async initialize(
     scene: Scene,
     assetBaseURL: string,
@@ -63,9 +77,12 @@ export class UniverseBuilderHelper {
   ) {
     this.scene = scene;
     this.baseURL = assetBaseURL;
-    this.initializeExplorerParticles();
+    this.initializeOrbParticles();
     await this.loadModel();
 
+    const sunColor1 = new Color4(1, 1, 1, 1);
+    const SunColor2 = new Color4(0.286, 0.635, 0.8671);
+    this.buildStar(sunColor1, SunColor2);
     scene.onPointerDown = function castRay() {
       const ray = scene.createPickingRay(
         scene.pointerX,
@@ -97,38 +114,6 @@ export class UniverseBuilderHelper {
     };
   }
 
-  static goToOrb(id: string, isAccount = true) {
-    let target = undefined;
-
-    if (isAccount) {
-      target = UniverseBuilderHelper.accountsMap.get(id);
-    } else {
-      target = UniverseBuilderHelper.worldsMap.get(id);
-    }
-
-    if (target) {
-      // Rotation
-      smoothCameraUniverse(
-        PlayerHelper.camera.target,
-        target.rootClone.absolutePosition,
-        TransformTypesEnum.Rotation,
-        1000,
-        UniverseBuilderHelper.scene,
-        false
-      );
-
-      // Position
-      smoothCameraUniverse(
-        PlayerHelper.camera.position,
-        target.rootClone.absolutePosition,
-        TransformTypesEnum.Position,
-        2000,
-        UniverseBuilderHelper.scene,
-        true
-      );
-    }
-  }
-
   static async loadModel() {
     // custom odyssey glb
     const assetUrl = getAssetFileName('2dc7df8e-a34a-829c-e3ca-b73bfe99faf0');
@@ -140,7 +125,7 @@ export class UniverseBuilderHelper {
       (event) => {},
       '.glb'
     ).then((result) => {
-      this.defineCustomMaterial();
+      this.defineOrbMaterial();
       this.rootMesh = result.meshes[0];
       this.thumbMat = result.meshes[1].material as PBRMaterial;
     });
@@ -187,7 +172,7 @@ export class UniverseBuilderHelper {
         }
 
         rootClone.billboardMode = Mesh.BILLBOARDMODE_ALL;
-        this.setParticleEffects(rootChildren[1]);
+        this.setOrbPatricles(rootChildren[1]);
 
         const babylonAccount = {
           accountDefinition: accounts[i],
@@ -207,12 +192,11 @@ export class UniverseBuilderHelper {
     accountLayer.position.z = 200;
 
     // After all of the orbs are done cloning, disable the initial one
-
     PlayerHelper.camera.setTarget(accountLayer.position);
     this.rootMesh.setEnabled(false);
   }
 
-  static buildRingLayers(worlds: WorldInfoInterface[]) {
+  static buildOdysseyLayers(worlds: WorldInfoInterface[]) {
     this.rootMesh.setEnabled(true);
 
     this.odysseyCounter = 0;
@@ -317,7 +301,7 @@ export class UniverseBuilderHelper {
           rootChildren[0].material = thumbMatClone;
         }
         rootClone.billboardMode = Mesh.BILLBOARDMODE_ALL;
-        this.setParticleEffects(rootChildren[1]);
+        this.setOrbPatricles(rootChildren[1]);
 
         const babylonWorld = {
           worldDefinition: worlds[this.odysseyCounter],
@@ -335,7 +319,22 @@ export class UniverseBuilderHelper {
     return ringLayer;
   }
 
-  static defineCustomMaterial() {
+  static buildStar(color1: Color4, color2: Color4) {
+    this.starSphere = MeshBuilder.CreateSphere('centerStar', {diameter: 6}, this.scene);
+    this.starSphere.visibility = 1;
+    this.defineStarMaterial();
+    this.initializeStarParticles(color1, color2);
+  }
+
+  static defineStarMaterial() {
+    const starMat = new StandardMaterial('StarMaterial', this.scene);
+    starMat.diffuseColor = new Color3(0, 0, 0);
+    starMat.emissiveColor = new Color3(0.3773, 0.093, 0.0266);
+    this.starMaterial = starMat;
+    this.starSphere.material = starMat;
+  }
+
+  static defineOrbMaterial() {
     const customOrbGlassMat = new PBRMaterial('orbGlass', this.scene);
 
     customOrbGlassMat.reflectionTexture = new Texture(hdrTexture);
@@ -362,7 +361,40 @@ export class UniverseBuilderHelper {
     thumb.rotate(Axis.Y, betaRot);
   }
 
-  static initializeExplorerParticles() {
+  static initializeStarParticles(color1: Color4, color2: Color4) {
+    // Create the surface
+    const centerStarSurface = ParticleSystem.Parse(starCenterParticle, this.scene, '');
+    centerStarSurface.particleTexture = new Texture(surface);
+    centerStarSurface.emitter = this.starSphere;
+    centerStarSurface.preWarmCycles = 100;
+    centerStarSurface.preWarmStepOffset = 20;
+    centerStarSurface.renderingGroupId = 1;
+
+    //Apply colors from constructor:
+    centerStarSurface.color1 = color1;
+    centerStarSurface.color2 = color2;
+    centerStarSurface.start();
+
+    // Create the glow
+    const starGlow = ParticleSystem.Parse(starGlowParticle, this.scene, '');
+    starGlow.particleTexture = new Texture(starlight);
+    starGlow.emitter = this.starSphere;
+    starGlow.preWarmCycles = 100;
+    starGlow.preWarmStepOffset = 20;
+    starGlow.color1 = color1;
+    starGlow.color2 = color2;
+    starGlow.start();
+
+    // Sparks
+    const starSparks = ParticleSystem.Parse(starSparksParticle, this.scene, '');
+    starSparks.particleTexture = new Texture(starSparksTexture);
+    starSparks.emitter = this.starSphere;
+    starSparks.preWarmCycles = 100;
+    starSparks.preWarmStepOffset = 20;
+    starSparks.start();
+  }
+
+  static initializeOrbParticles() {
     const particleOdyssey = ParticleSystem.Parse(odysseyParticle, this.scene, '');
     particleOdyssey.preWarmCycles = 10;
     particleOdyssey.particleTexture = new Texture(circle);
@@ -374,7 +406,7 @@ export class UniverseBuilderHelper {
     this.sparksPS = particleSparks;
   }
 
-  static setParticleEffects(orbMesh: AbstractMesh) {
+  static setOrbPatricles(orbMesh: AbstractMesh) {
     const delay = Math.floor(Math.random() * 3000);
     this.odysseyPS.startDelay = delay;
 
@@ -384,5 +416,37 @@ export class UniverseBuilderHelper {
     const sparksPSClone = this.sparksPS.clone('sparksPSClone', orbMesh);
     sparksPSClone.startDelay = delay;
     sparksPSClone.start();
+  }
+
+  static goToOrb(id: string, isAccount = true) {
+    let target = undefined;
+
+    if (isAccount) {
+      target = UniverseBuilderHelper.accountsMap.get(id);
+    } else {
+      target = UniverseBuilderHelper.worldsMap.get(id);
+    }
+
+    if (target) {
+      // Rotation
+      smoothCameraUniverse(
+        PlayerHelper.camera.target,
+        target.rootClone.absolutePosition,
+        TransformTypesEnum.Rotation,
+        1000,
+        UniverseBuilderHelper.scene,
+        false
+      );
+
+      // Position
+      smoothCameraUniverse(
+        PlayerHelper.camera.position,
+        target.rootClone.absolutePosition,
+        TransformTypesEnum.Position,
+        2000,
+        UniverseBuilderHelper.scene,
+        true
+      );
+    }
   }
 }
