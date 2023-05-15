@@ -82,6 +82,8 @@ const usePlugin: UsePluginHookType = (props) => {
   const [sharedState, setSharedState] = useSharedObjectState<PluginStateInterface>();
   console.log('sharedState', sharedState);
 
+  const isLoading = sharedState === undefined;
+
   const {t} = useI18n();
 
   const saveChanges = async () => {
@@ -110,6 +112,8 @@ const usePlugin: UsePluginHookType = (props) => {
       width="100%"
       allowFullScreen
     ></iframe>
+  ) : isLoading ? (
+    <span />
   ) : (
     <div
       style={{
