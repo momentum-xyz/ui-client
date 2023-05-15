@@ -36,6 +36,22 @@ MenuIndicator.args = {
   indicator: 'voice'
 };
 
+export const MenuTooltip = Template.bind({});
+MenuTooltip.args = {
+  type: 'menu',
+  tooltip: 'Lorem ipsum',
+  iconName: 'fly-portal'
+};
+MenuTooltip.decorators = [
+  () => {
+    return (
+      <div style={{marginTop: '100px'}}>
+        <Hexagon {...(MenuTooltip.args as HexagonPropsInterface)} />
+      </div>
+    );
+  }
+];
+
 export const MenuBlank = Template.bind({});
 MenuBlank.args = {type: 'blank-small'};
 
