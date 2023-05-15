@@ -6,6 +6,7 @@ import {IconSvg} from '../IconSvg';
 import {IconNameType} from '../../types';
 import {IconSizeType} from '../IconSvg/IconSvg';
 import {Image} from '../Image';
+import {Tooltip} from '../Tooltip';
 
 import * as styled from './Hexagon.styled';
 
@@ -79,6 +80,7 @@ export interface HexagonPropsInterface {
   skipOuterBorder?: boolean;
   transparentBackground?: boolean;
   margin?: number;
+  tooltip?: string | null;
   imageSrc?: string | null;
   iconName?: IconNameType | null;
   onClick?: () => void;
@@ -97,8 +99,11 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
     imageSrc,
     onClick,
     margin,
+    tooltip,
     ...rest
   } = props;
+
+  console.log(tooltip);
 
   const isBorderless = borderlessHexagonTypes.includes(type);
 
@@ -188,8 +193,20 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
     </styled.Wrapper>
   );
 
+  const hexElementWithTooltip = tooltip ? (
+    <Tooltip text={tooltip}>{hexElement}</Tooltip>
+  ) : (
+    hexElement
+  );
+
   return (
-    <>{shouldHaveButton ? <styled.WrapperButton>{hexElement}</styled.WrapperButton> : hexElement}</>
+    <>
+      {shouldHaveButton ? (
+        <styled.WrapperButton>{hexElementWithTooltip}</styled.WrapperButton>
+      ) : (
+        hexElementWithTooltip
+      )}
+    </>
   );
 };
 

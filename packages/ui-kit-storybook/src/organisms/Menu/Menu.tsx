@@ -79,6 +79,7 @@ const Menu = <T,>({
   const leftItems: MenuItemInterface<T>[] = items.filter((i) => i.position === PositionEnum.LEFT);
 
   const rightItems: MenuItemInterface<T>[] = items.filter((i) => i.position === PositionEnum.RIGHT);
+  console.log(rightItems);
 
   const centerItems: MenuItemInterface<T>[] = items.filter(
     (i) => i.position === PositionEnum.CENTER
@@ -164,6 +165,7 @@ const Menu = <T,>({
           iconName={action.iconName}
           imageSrc={action.imageSrc}
           indicator={action.iconIndicator}
+          tooltip={action.tooltip || null}
           isActive={activeKeys.includes(action.key)}
           onClick={() => {
             action.onClick?.(action.key, action.viewPosition || action.position);
