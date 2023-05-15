@@ -18,7 +18,8 @@ const TABS_LIST: TabInterface<TabType>[] = [
 ];
 
 const SpawnAssetPage: FC = () => {
-  const {creatorStore, universeStore} = useStore();
+  const {widgetStore, universeStore} = useStore();
+  const {creatorStore} = widgetStore;
   const {spawnAssetStore} = creatorStore;
   const {setActiveTab, activeTab, selectedAsset, selectAsset} = spawnAssetStore;
   const worldId = universeStore.worldId;

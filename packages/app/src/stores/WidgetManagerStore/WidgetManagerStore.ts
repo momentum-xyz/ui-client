@@ -1,15 +1,18 @@
 import {cast, types} from 'mobx-state-tree';
 import {PositionEnum} from '@momentum-xyz/ui-kit-storybook';
+import {MenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
 
 import {WidgetEnum} from 'core/enums';
 
-import {WidgetInfo, WidgetInfoDataInterface} from './models';
+import {SubMenuInfo, WidgetInfo, WidgetInfoDataInterface} from './models';
 
 // TODO: Not final implementation. It depends on flow/design
 const WidgetManagerStore = types
   .model('WidgetManagerStore', {
     leftActiveWidget: types.maybeNull(WidgetInfo),
-    rightActiveWidget: types.maybeNull(WidgetInfo)
+    rightActiveWidget: types.maybeNull(WidgetInfo),
+
+    subMenuInfo: types.maybeNull(SubMenuInfo)
   })
   .actions((self) => ({
     toggle(type: WidgetEnum, position: PositionEnum): void {
@@ -42,6 +45,28 @@ const WidgetManagerStore = types
     closeAll(): void {
       self.leftActiveWidget = null;
       self.rightActiveWidget = null;
+    },
+    openSubMenu(
+      key: WidgetEnum,
+      items: MenuItemInterface<WidgetEnum>[],
+      position: PositionEnum,
+      activeKeys: WidgetEnum[] = []
+    ): void {
+      self.subMenuInfo = cast({
+        position,
+        sourceItemKey: key,
+        items,
+        activeKeys
+      });
+    },
+    setSubMenuActiveKeys(keys: WidgetEnum[]): void {
+      self.subMenuInfo?.activeKeys.replace(keys);
+    },
+    closeSubMenu(): void {
+      self.subMenuInfo = null;
+    },
+    setActiveSubMenuKeys(keys: WidgetEnum[]): void {
+      self.subMenuInfo?.activeKeys.replace(keys);
     }
   }))
   .views((self) => ({

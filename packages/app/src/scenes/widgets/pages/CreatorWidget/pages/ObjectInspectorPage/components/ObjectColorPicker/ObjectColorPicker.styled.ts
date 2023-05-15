@@ -59,7 +59,7 @@ export const SelectedColor = styled.div<{background: string}>`
   flex: 0 0 70px;
   border-radius: 4px;
   background-color: ${(props) => props.background};
-  border: 0.4px solid ${(props) => props.theme.accentText};
+  border: 1px solid ${(props) => props.theme.accentText};
 `;
 
 export const SelectedHex = styled.div`
@@ -72,6 +72,6 @@ export const SelectedHex = styled.div`
   color: ${(props) => props.theme.text};
   font-size: var(--font-size-s);
   text-transform: uppercase;
-  border: 0.4px solid ${(props) => props.theme.accentText};
+  border: 1px solid ${(props) => props.theme.accentText};
   background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
 `;

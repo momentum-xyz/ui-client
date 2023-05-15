@@ -1,22 +1,8 @@
-import React, {FC, useEffect} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Dialog} from '@momentum-xyz/ui-kit';
-
-import {useStore} from 'shared/hooks';
-
-import * as styled from './MusicPlayerWidget.styled';
-import {
-  MusicVolumeController,
-  PlayerController,
-  SeekBarController,
-  UnityVolumeController
-} from './components';
-
-const DIALOG_OFFSET_RIGHT = 10;
-const DIALOG_OFFSET_BOTTOM = 60;
 
 const MusicPlayerWidget: FC = () => {
-  const {universeStore, widgetStore_OLD} = useStore();
+  /*const {universeStore, widgetStore_OLD} = useStore();
   const {musicPlayerStore} = widgetStore_OLD;
   const {musicPlayerWidget, playlist} = musicPlayerStore;
 
@@ -49,7 +35,9 @@ const MusicPlayerWidget: FC = () => {
         <UnityVolumeController />
       </styled.Div>
     </Dialog>
-  );
+  );*/
+
+  return <></>;
 };
 
 export default observer(MusicPlayerWidget);

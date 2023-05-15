@@ -11,7 +11,8 @@ import {UploadSkybox, SkyboxList, SkyboxPreview, DeleteSkyboxDialog} from './com
 import * as styled from './SkyboxSelectorWithPreviewPage.styled';
 
 const SkyboxSelectorWithPreviewPage: FC = () => {
-  const {creatorStore, sessionStore, universeStore} = useStore();
+  const {widgetStore, sessionStore, universeStore} = useStore();
+  const {creatorStore} = widgetStore;
   const {skyboxSelectorStore} = creatorStore;
   const {
     saveItem,

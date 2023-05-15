@@ -252,9 +252,7 @@ export const enGb = {
       loadedInAnotherTab: 'Odyssey has been loaded in another browser tab',
       switchToThatTab:
         'To continue the experience, please switch to that window/tab and close this one',
-      underMaintenance: 'The server is undergoing maintenance, please try again later',
-      noBlockchainUrlAvailable:
-        'Ooops, the blockchain server is not available at the moment. Please try again later!'
+      underMaintenance: 'The server is undergoing maintenance, please try again later'
     },
     counts: {
       people_one: '{{count}} Person',
@@ -444,8 +442,6 @@ export const enGb = {
         'The {{name}} extension will now open and ask you to authenticate and sign a message.',
       extensionWindow:
         'If this window is not opened then click on the extension in the browser to authenticate and sign.',
-      magicLink:
-        'Here is the magic link that you can copy and send to anyone you want to invite to this location.',
       tokenRuleSuccess: 'Token rule was {{action}} successfully',
       tokenRuleFailure: 'An error did occur while {{action}} token rule',
       requestFailure: 'An error has occurred while {{action}}.',
@@ -874,10 +870,6 @@ export const enGb = {
         live: 'Live',
         websiteLink: 'Learn More',
         moreAttendees: 'More attendees',
-        magicLinkDialog: {
-          title: 'Magic Link',
-          copyLabel: 'Copy Link'
-        },
         websiteLinkDialog: {
           title: 'Website Link',
           copyLabel: 'Copy Link'

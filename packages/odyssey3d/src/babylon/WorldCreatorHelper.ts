@@ -59,6 +59,8 @@ export class WorldCreatorHelper {
 
     // Custom gizmo
     this.gizmoManager = new GizmoManager(scene);
+    this.gizmoManager.enableAutoPicking = false;
+
     this.setGizmoType(GizmoTypesEnum.Position);
     this.setGizmoType(GizmoTypesEnum.Rotation);
     this.setGizmoType(GizmoTypesEnum.Scale);

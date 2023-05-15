@@ -19,10 +19,10 @@ interface PropsInterface {
 }
 
 const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
-  const {sessionStore, widgetManagerStore, universeStore, creatorStore, agoraStore} = useStore();
-  const {toggle, activeWidgetList} = widgetManagerStore;
+  const {sessionStore, widgetManagerStore, universeStore, agoraStore} = useStore();
+  const {toggle, activeWidgetList, subMenuInfo} = widgetManagerStore;
   const {isGuest, userImageUrl} = sessionStore;
-  const {isMyWorld, world3dStore, world2dStore} = universeStore;
+  const {isMyWorld, world2dStore} = universeStore;
 
   const navigate = useNavigate();
 
@@ -95,42 +95,42 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       onClick: toggle
     },
 
-    {
-      key: WidgetEnum.GO_TO,
-      position: PositionEnum.CENTER, // TODO 2nd floor
-      iconName: 'direction-arrows',
-      onClick: () => creatorStore.setSelectedTab('gizmo'),
-      isHidden: !creatorStore.selectedObjectId
-    },
-    {
-      key: WidgetEnum.GO_TO,
-      position: PositionEnum.CENTER, // TODO 2nd floor
-      iconName: 'info',
-      onClick: () => creatorStore.setSelectedTab('inspector'),
-      isHidden: !creatorStore.selectedObjectId
-    },
-    {
-      key: WidgetEnum.GO_TO,
-      position: PositionEnum.CENTER, // TODO 2nd floor
-      iconName: 'cubicles',
-      onClick: () => creatorStore.setSelectedTab('functionality'),
-      isHidden: !creatorStore.selectedObjectId
-    },
+    // {
+    //   key: WidgetEnum.GO_TO,
+    //   position: PositionEnum.CENTER, // TODO 2nd floor
+    //   iconName: 'direction-arrows',
+    //   onClick: () => creatorStore.setSelectedTab('gizmo'),
+    //   isHidden: !creatorStore.selectedObjectId
+    // },
+    // {
+    //   key: WidgetEnum.GO_TO,
+    //   position: PositionEnum.CENTER, // TODO 2nd floor
+    //   iconName: 'info',
+    //   onClick: () => creatorStore.setSelectedTab('inspector'),
+    //   isHidden: !creatorStore.selectedObjectId
+    // },
+    // {
+    //   key: WidgetEnum.GO_TO,
+    //   position: PositionEnum.CENTER, // TODO 2nd floor
+    //   iconName: 'cubicles',
+    //   onClick: () => creatorStore.setSelectedTab('functionality'),
+    //   isHidden: !creatorStore.selectedObjectId
+    // },
 
-    {
-      key: WidgetEnum.GO_TO,
-      position: PositionEnum.CENTER, // TODO 2nd floor
-      iconName: 'checked',
-      onClick: () => world3dStore?.setAttachedToCamera(null),
-      isHidden: !world3dStore?.attachedToCameraObjectId
-    },
-    {
-      key: WidgetEnum.GO_TO,
-      position: PositionEnum.CENTER, // TODO 2nd floor
-      iconName: 'bin',
-      onClick: creatorStore.removeObjectDialog.open,
-      isHidden: !creatorStore.selectedObjectId
-    },
+    // {
+    //   key: WidgetEnum.GO_TO,
+    //   position: PositionEnum.CENTER, // TODO 2nd floor
+    //   iconName: 'checked',
+    //   onClick: () => world3dStore?.setAttachedToCamera(null),
+    //   isHidden: !world3dStore?.attachedToCameraObjectId
+    // },
+    // {
+    //   key: WidgetEnum.GO_TO,
+    //   position: PositionEnum.CENTER, // TODO 2nd floor
+    //   iconName: 'bin',
+    //   onClick: creatorStore.removeObjectDialog.open,
+    //   isHidden: !creatorStore.selectedObjectId
+    // },
     {
       key: WidgetEnum.VOICE_CHAT,
       position: PositionEnum.RIGHT,
@@ -162,7 +162,12 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
   const items = isWelcomePage ? [] : MENU_ITEMS.filter((menuItem) => !menuItem.isHidden);
   return (
     <styled.Container data-testid="WidgetMenuPage-test">
-      <Menu activeKeys={activeWidgetList} items={items} />
+      <Menu
+        activeKeys={[...activeWidgetList, ...(subMenuInfo?.activeKeys || [])]}
+        items={items}
+        subMenuItems={subMenuInfo?.items || []}
+        subMenuSource={subMenuInfo?.sourceItemKey}
+      />
     </styled.Container>
   );
 };

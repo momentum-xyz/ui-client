@@ -5,11 +5,12 @@ import {
   ClickPositionInterface,
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
+import {MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit-storybook';
 import {UnityControlInterface} from '@momentum-xyz/sdk';
 
 // import {api, ResolveNodeResponse} from 'api';
 // import {appVariables} from 'api/constants';
-import {GizmoTypeEnum, PosBusEventEnum} from 'core/enums';
+import {GizmoTypeEnum, PosBusEventEnum, WidgetEnum} from 'core/enums';
 import {UnityPositionInterface} from 'core/interfaces';
 import {getRootStore} from 'core/utils';
 
@@ -54,6 +55,26 @@ const World3dStore = types
         // Event3dEmitter.emit('ObjectEditModeChanged', self.selectedObjectId, false);
         self.selectedObjectId = null;
       }
+    }
+  }))
+  .actions((self) => ({
+    changeGizmoType(mode: GizmoTypeEnum) {
+      self.gizmoMode = cast(mode);
+      // TODO notify babylon
+      // UnityService.changeGizmoType(mode);
+    },
+    closeAndResetObjectMenu() {
+      console.log('closeAndResetObjectMenu', self.selectedObjectId);
+
+      const {creatorStore} = getRootStore(self).widgetStore;
+      creatorStore.setSelectedObjectId(null);
+      creatorStore.setSelectedTab(null);
+
+      const {widgetManagerStore} = getRootStore(self);
+      widgetManagerStore.closeSubMenu();
+
+      self._deselectObject();
+      self.gizmoMode = GizmoTypeEnum.POSITION;
     }
   }))
   .actions((self) => ({
@@ -219,7 +240,15 @@ const World3dStore = types
         return;
       }
 
-      self._deselectObject();
+      // TODO move it as child store here??
+      const {widgetStore} = getRootStore(self);
+      const {creatorStore} = widgetStore;
+
+      if (self.selectedObjectId) {
+        console.log('World3dStore : handleClick : already selected', self.selectedObjectId);
+        return;
+      }
+      // self._deselectObject();
 
       // self.objectMenuPosition = clickPos || defaultClickPosition;
 
@@ -228,8 +257,8 @@ const World3dStore = types
       // self.setSelectedTab('inspector');
 
       // TODO move it as child store here??
-      const {creatorStore} = getRootStore(self);
       creatorStore.setSelectedObjectId(objectId);
+
       if (creatorStore.selectedTab === null) {
         creatorStore.setSelectedTab('gizmo');
       }
@@ -238,6 +267,23 @@ const World3dStore = types
       if (!objectId && self.attachedToCameraObjectId) {
         Event3dEmitter.emit('DetachObjectFromCamera', self.attachedToCameraObjectId);
       }
+
+      const {widgetManagerStore} = getRootStore(self);
+      const submenuItems: MenuItemInterface<WidgetEnum>[] = [
+        {
+          key: WidgetEnum.GO_TO,
+          position: PositionEnum.CENTER, // TODO 2nd floor
+          iconName: 'checked',
+          onClick: () => this.setAttachedToCamera(null)
+        }
+      ];
+
+      if (objectId) {
+        widgetManagerStore.openSubMenu(WidgetEnum.CREATOR, submenuItems, PositionEnum.CENTER);
+      } else {
+        widgetManagerStore.closeSubMenu();
+      }
+
       self.attachedToCameraObjectId = objectId;
     },
     setWaitingForBumpEffectReadyUserId(userId: string | null) {
@@ -248,21 +294,6 @@ const World3dStore = types
     },
     redo() {
       // UnityService.redo();
-    },
-    changeGizmoType(mode: GizmoTypeEnum) {
-      self.gizmoMode = cast(mode);
-      // TODO notify babylon
-      // UnityService.changeGizmoType(mode);
-    },
-    closeAndResetObjectMenu() {
-      console.log('closeAndResetObjectMenu', self.selectedObjectId);
-
-      const {creatorStore} = getRootStore(self);
-      creatorStore.setSelectedObjectId(null);
-      creatorStore.setSelectedTab(null);
-
-      self._deselectObject();
-      self.gizmoMode = GizmoTypeEnum.POSITION;
     },
     colorPickedPreview(objectId: string, colorHex: string) {
       // TODO notify babylon

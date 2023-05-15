@@ -1,16 +1,13 @@
-import React, {lazy} from 'react';
+import {lazy} from 'react';
 
 import {ROUTES} from 'core/constants';
 import {RouteConfigInterface} from 'core/interfaces';
 
-const ExplorePage = lazy(() => import('./explore/pages/ExplorePage/ExplorePage'));
-const MagicPage = lazy(() => import('./magic/pages/MagicPage/MagicPage'));
-const WorldBasePage = lazy(() => import('./world/pages/WorldBasePage/WorldBasePage'));
-const Object = lazy(() => import('./object/Object'));
+const Universe2dPage = lazy(() => import('./universe/pages/Universe2dPage/Universe2dPage'));
+const World2dPage = lazy(() => import('./world/pages/World2dPage/World2dPage'));
 const DisconnectedPage = lazy(() => import('./system/pages/DisconnectedPage/DisconnectedPage'));
 const WrongBrowserPage = lazy(() => import('./system/pages/WrongBrowserPage/WrongBrowserPage'));
 const MaintenancePage = lazy(() => import('./system/pages/MaintenancePage/MaintenancePage'));
-// const OdysseyCreator = lazy(() => import('./widgets/pages/CreatorWidget/OdysseyCreator'));
 
 export const SYSTEM_ROUTES: RouteConfigInterface[] = [
   {
@@ -33,11 +30,7 @@ export const SYSTEM_ROUTES: RouteConfigInterface[] = [
 export const UNIVERSE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.explore,
-    main: () => <ExplorePage />
-  },
-  {
-    path: ROUTES.magic,
-    main: () => <MagicPage />
+    main: () => <Universe2dPage />
   }
 ];
 
@@ -45,15 +38,7 @@ export const UNIVERSE_ROUTES: RouteConfigInterface[] = [
 export const WORLD_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.odyssey.base,
-    main: () => <WorldBasePage />,
+    main: () => <World2dPage />,
     exact: true
-  },
-  // {
-  //   path: ROUTES.odyssey.creator.base,
-  //   main: () => <OdysseyCreator />
-  // },
-  {
-    path: ROUTES.odyssey.object.root,
-    main: () => <Object />
   }
 ];
