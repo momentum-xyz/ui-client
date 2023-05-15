@@ -79,7 +79,6 @@ const Menu = <T,>({
   const leftItems: MenuItemInterface<T>[] = items.filter((i) => i.position === PositionEnum.LEFT);
 
   const rightItems: MenuItemInterface<T>[] = items.filter((i) => i.position === PositionEnum.RIGHT);
-  console.log(rightItems);
 
   const centerItems: MenuItemInterface<T>[] = items.filter(
     (i) => i.position === PositionEnum.CENTER
