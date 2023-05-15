@@ -18,7 +18,7 @@ export const ScrollableContainer = styled.div`
   margin: 10px 0 0 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 4px;
   height: calc(100vh - var(--scroll-offset));
   overflow: auto;
 `;
