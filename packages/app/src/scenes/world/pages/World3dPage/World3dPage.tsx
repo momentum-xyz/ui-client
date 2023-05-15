@@ -131,6 +131,12 @@ const World3dPage: FC = () => {
   const handleLevel2MenuOpen = () => {
     const submenuItems: MenuItemInterface<WidgetEnum>[] = [
       {
+        key: WidgetEnum.ACTION,
+        position: PositionEnum.CENTER,
+        iconName: 'close_large',
+        onClick: () => world3dStore?.closeAndResetObjectMenu()
+      },
+      {
         key: WidgetEnum.MOVE_ITEM,
         position: PositionEnum.CENTER,
         iconName: 'direction-arrows',
