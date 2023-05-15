@@ -10,6 +10,7 @@ export const Wrapper = styled.div`
   background: ${(props) => props.theme.bg && rgba(props.theme.accentBg, 0.2)};
   border: 1px solid transparent;
   box-shadow: -1px -1px 2px ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.1)};
+  transition: background var(--tr-150-ei), border var(--tr-150-ei);
 
   &.normal {
     grid-template-columns: 35% 1fr;

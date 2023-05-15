@@ -42,6 +42,7 @@ const StakersList: FC<PropsInterface> = ({stakers, onSelectUser}) => {
                   type="fourth-borderless"
                   skipOuterBorder
                   imageSrc={getImageAbsoluteUrl(user.avatarHash)}
+                  iconName="astronaut"
                 />
                 <styled.Link>
                   {index < USERS_MAX ? `${t('labels.topConnector')}: ${username}` : username}
