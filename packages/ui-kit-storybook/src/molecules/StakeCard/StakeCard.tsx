@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {useI18n} from '@momentum-xyz/core';
 
-import {ButtonEllipse, ButtonRound, Image} from '../../atoms';
+import {ButtonEllipse, Image} from '../../atoms';
 
 import * as styled from './StakeCard.styled';
 
@@ -53,11 +53,21 @@ const StakeCard: FC<StakeCardPropsInterface> = ({
         </styled.Totals>
 
         <styled.Actions>
-          <ButtonRound icon="info_2" onClick={onInfoClick} />
+          <ButtonEllipse icon="info_2" variant="secondary" onClick={onInfoClick} />
           {!!onUnstakeClick && (
-            <ButtonEllipse label={t('actions.unstake')} icon="fly-to" onClick={onUnstakeClick} />
+            <ButtonEllipse
+              variant="secondary"
+              label={t('actions.unstake')}
+              icon="fly-to"
+              onClick={onUnstakeClick}
+            />
           )}
-          <ButtonEllipse label={t('actions.addStake')} icon="stake" onClick={onStakeClick} />
+          <ButtonEllipse
+            variant="secondary"
+            label={t('actions.addStake')}
+            icon="stake"
+            onClick={onStakeClick}
+          />
         </styled.Actions>
       </styled.Content>
     </styled.Wrapper>

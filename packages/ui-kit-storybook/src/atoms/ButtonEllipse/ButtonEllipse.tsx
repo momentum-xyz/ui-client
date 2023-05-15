@@ -12,7 +12,7 @@ export interface ButtonEllipsePropsInterface {
   size?: 'normal';
   isActive?: boolean;
   isLabel?: boolean;
-  variant?: 'primary';
+  variant?: 'primary' | 'secondary';
   disabled?: boolean;
   wide?: boolean;
   onClick?: () => void;

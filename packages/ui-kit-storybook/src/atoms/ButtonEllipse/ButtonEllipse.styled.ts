@@ -26,6 +26,22 @@ export const Button = styled.button`
   --primary-color-active: ${(props) => props.theme.accentBg};
   --primary-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
 
+  --secondary-border-color: transparent;
+  --secondary-border-color-hover: transparent;
+  --secondary-border-color-active: ${(props) => props.theme.accentText};
+  --primary-border-color-disabled: transparent;
+
+  --secondary-bg-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
+  --secondary-bg-color-hover: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+  --secondary-bg-color-active: ${(props) => props.theme.accentText};
+  --secondary-bg-color-disabled: ${(props) =>
+    props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
+
+  --secondary-color: ${(props) => props.theme.text};
+  --secondary-color-hover: ${(props) => props.theme.accentText};
+  --secondary-color-active: ${(props) => props.theme.accentBg};
+  --secondary-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
+
   --normal-height: 26px;
   --normal-radius: 14px;
   --normal-padding: 0 9px;
@@ -84,6 +100,47 @@ export const Button = styled.button`
 
       svg {
         color: var(--primary-color-disabled);
+      }
+    }
+  }
+
+  &.secondary {
+    --border-color: var(--secondary-border-color);
+    --bg-color: var(--secondary-bg-color);
+    --color: var(--secondary-color);
+
+    svg {
+      color: var(--secondary-color);
+    }
+
+    &:hover {
+      --border-color: var(--secondary-border-color-hover);
+      --bg-color: var(--secondary-bg-color-hover);
+      --color: var(--secondary-color-hover);
+
+      svg {
+        color: var(--secondary-color-hover);
+      }
+    }
+
+    &.active,
+    &:active {
+      --border-color: var(--secondary-border-color-active);
+      --bg-color: var(--secondary-bg-color-active);
+      --color: var(--secondary-color-active);
+
+      svg {
+        color: var(--secondary-color-active);
+      }
+    }
+
+    &:disabled {
+      --border-color: var(--secondary-border-color-disabled);
+      --bg-color: var(--secondary-bg-color-disabled);
+      --color: var(--secondary-color-disabled);
+
+      svg {
+        color: var(--secondary-color-disabled);
       }
     }
   }

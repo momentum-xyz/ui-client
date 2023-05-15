@@ -18,6 +18,13 @@ Primary.args = {
   label: 'Close'
 };
 
+export const Secondary = Template.bind({});
+Secondary.args = {
+  variant: 'secondary',
+  icon: 'close_large',
+  label: 'Close'
+};
+
 export const IsActive = Template.bind({});
 IsActive.args = {
   variant: 'primary',

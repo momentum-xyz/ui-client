@@ -52,7 +52,11 @@ const StakersList: FC<PropsInterface> = ({stakers, onSelectUser}) => {
 
           {isButtonShown && (
             <styled.ShowAllButtonContainer>
-              <ButtonEllipse label={t('actions.seeAll')} onClick={() => setIsButtonShown(false)} />
+              <ButtonEllipse
+                variant="secondary"
+                label={t('actions.seeAll')}
+                onClick={() => setIsButtonShown(false)}
+              />
             </styled.ShowAllButtonContainer>
           )}
         </styled.Container>

@@ -93,6 +93,7 @@ const OnlineUsersList: FC<PropsInterface> = ({
                 />*/}
                 <ButtonEllipse
                   icon="high-five"
+                  variant="secondary"
                   label={t('labels.highFive')}
                   wide
                   onClick={() => onSendHighFive(activeUser.userId)}
