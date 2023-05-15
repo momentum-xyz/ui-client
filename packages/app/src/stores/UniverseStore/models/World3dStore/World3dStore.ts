@@ -241,7 +241,7 @@ const World3dStore = types
       }
 
       // TODO move it as child store here??
-      const {widgetStore, widgetManagerStore} = getRootStore(self);
+      const {widgetStore} = getRootStore(self);
       const {creatorStore} = widgetStore;
 
       if (self.selectedObjectId) {
@@ -257,7 +257,6 @@ const World3dStore = types
       // self.setSelectedTab('inspector');
 
       // TODO move it as child store here??
-      const {creatorStore} = getRootStore(self);
       creatorStore.setSelectedObjectId(objectId);
 
       if (creatorStore.selectedTab === null) {
