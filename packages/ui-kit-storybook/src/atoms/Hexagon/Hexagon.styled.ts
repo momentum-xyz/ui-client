@@ -292,6 +292,10 @@ export const Hexagon = styled.div`
       }
     }
   }
+
+  img {
+    height: 45px;
+  }
 `;
 
 export const Sparkle = styled.img`
