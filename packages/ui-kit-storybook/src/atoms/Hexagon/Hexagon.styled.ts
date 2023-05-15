@@ -1,35 +1,37 @@
 import {rgba} from 'polished';
 import styled from 'styled-components';
 
+import {HexagonSizesInterface} from './Hexagon';
+
 export const WrapperButton = styled.button``;
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<HexagonSizesInterface>`
   --hexagon-border-color: ${(props) => props.theme.text};
   --hexagon-accent-color: ${(props) => props.theme.accentBg};
 
-  --hexagon-large-width: 48px;
-  --hexagon-large-height: 56px;
+  --hexagon-large-width: ${(props) => `${props.large.w}px`};
+  --hexagon-large-height: ${(props) => `${props.large.h}px`};
 
-  --hexagon-width: 42px;
-  --hexagon-height: 49px;
+  --hexagon-width: ${(props) => `${props.normal.w}px`};
+  --hexagon-height: ${(props) => `${props.normal.h}px`};
 
-  --hexagon-medium-width: 36px;
-  --hexagon-medium-height: 42px;
+  --hexagon-medium-large-width: ${(props) => `${props.mediumLarge.w}px`};
+  --hexagon-medium-large-height: ${(props) => `${props.mediumLarge.h}px`};
 
-  --hexagon-small-width: 30px;
-  --hexagon-small-height: 35px;
+  --hexagon-medium-width: ${(props) => `${props.medium.w}px`};
+  --hexagon-medium-height: ${(props) => `${props.medium.h}px`};
 
-  --border-hexagon-large-width: 60px;
-  --border-hexagon-large-height: 70px;
+  --hexagon-small-width: ${(props) => `${props.small.w}px`};
+  --hexagon-small-height: ${(props) => `${props.small.h}px`};
 
-  --hexagon-medium-large-width: 38px; // this one
-  --hexagon-medium-large-height: 44px; // this one
+  --hexagon-small-blank-width: ${(props) => `${props.smallBlank.w}px`};
+  --hexagon-small-blank-height: ${(props) => `${props.smallBlank.h}px`};
 
-  --hexagon-small-blank-width: 28px; // small blank
-  --hexagon-small-blank-height: 33px; // small blank
+  --border-hexagon-large-width: ${(props) => `${props.borderLarge.w}px`};
+  --border-hexagon-large-height: ${(props) => `${props.borderLarge.h}px`};
 
-  --border-hexagon-small-width: 48px; // smaller bordered
-  --border-hexagon-small-height: 56px; // smaller bordered
+  --border-hexagon-small-width: ${(props) => `${props.borderSmall.w}px`};
+  --border-hexagon-small-height: ${(props) => `${props.borderSmall.h}px`};
 
   position: relative;
 
