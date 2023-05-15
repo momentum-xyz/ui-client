@@ -828,6 +828,7 @@ export const enGb = {
       undo: 'Undo',
       redo: 'Redo',
       copy: 'Copy',
+      clearSelection: 'Clear Selection',
       inspector: 'Inspector',
       functionality: 'Functionality',
       colour: 'Colour',

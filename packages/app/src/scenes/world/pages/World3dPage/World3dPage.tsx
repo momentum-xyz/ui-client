@@ -134,6 +134,7 @@ const World3dPage: FC = () => {
         key: WidgetEnum.ACTION,
         position: PositionEnum.CENTER,
         iconName: 'close_large',
+        tooltip: t('actions.clearSelection'),
         onClick: () => world3dStore?.closeAndResetObjectMenu()
       },
       {
