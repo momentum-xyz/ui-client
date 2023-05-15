@@ -42,6 +42,7 @@ const StakersList: FC<PropsInterface> = ({stakers, onSelectUser}) => {
                   type="fourth-borderless"
                   skipOuterBorder
                   imageSrc={getImageAbsoluteUrl(user.avatarHash)}
+                  iconName="astronaut"
                 />
                 <styled.Link>
                   {index < USERS_MAX ? `${t('labels.topConnector')}: ${username}` : username}
@@ -52,7 +53,11 @@ const StakersList: FC<PropsInterface> = ({stakers, onSelectUser}) => {
 
           {isButtonShown && (
             <styled.ShowAllButtonContainer>
-              <ButtonEllipse label={t('actions.seeAll')} onClick={() => setIsButtonShown(false)} />
+              <ButtonEllipse
+                variant="secondary"
+                label={t('actions.seeAll')}
+                onClick={() => setIsButtonShown(false)}
+              />
             </styled.ShowAllButtonContainer>
           )}
         </styled.Container>

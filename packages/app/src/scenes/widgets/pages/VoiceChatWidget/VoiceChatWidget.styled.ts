@@ -23,7 +23,7 @@ export const ScrollableContainer = styled.div`
 export const VoiceChatUsers = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 4px;
 `;
 
 export const Footer = styled.div`

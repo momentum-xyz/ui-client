@@ -6,8 +6,30 @@ import {IconSvg} from '../IconSvg';
 import {IconNameType} from '../../types';
 import {IconSizeType} from '../IconSvg/IconSvg';
 import {Image} from '../Image';
+import {Tooltip} from '../Tooltip';
 
 import * as styled from './Hexagon.styled';
+
+export interface HexagonSizesInterface {
+  large: {w: number; h: number};
+  normal: {w: number; h: number};
+  mediumLarge: {w: number; h: number};
+  medium: {w: number; h: number};
+  small: {w: number; h: number};
+  smallBlank: {w: number; h: number};
+  borderLarge: {w: number; h: number};
+  borderSmall: {w: number; h: number};
+}
+const hexagonSizes: HexagonSizesInterface = {
+  large: {w: 48, h: 56},
+  normal: {w: 42, h: 49},
+  mediumLarge: {w: 38, h: 44},
+  medium: {w: 36, h: 42},
+  small: {w: 30, h: 35},
+  smallBlank: {w: 28, h: 33},
+  borderLarge: {w: 60, h: 68},
+  borderSmall: {w: 48, h: 56}
+};
 
 type HexagonSizeType = 'small' | 'normal' | 'medium' | 'large';
 type HexagonType =
@@ -79,6 +101,7 @@ export interface HexagonPropsInterface {
   skipOuterBorder?: boolean;
   transparentBackground?: boolean;
   margin?: number;
+  tooltip?: string | null;
   imageSrc?: string | null;
   iconName?: IconNameType | null;
   onClick?: () => void;
@@ -97,6 +120,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
     imageSrc,
     onClick,
     margin,
+    tooltip,
     ...rest
   } = props;
 
@@ -119,9 +143,21 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
     type !== 'blank-borderless' &&
     !((type === 'primary' || isMenu) && skipOuterBorder);
 
+  const hexElementHeight = isBlank
+    ? size === 'small'
+      ? hexagonSizes.smallBlank.h
+      : hexagonSizes.medium.h
+    : isOuterBorder
+    ? isMenu
+      ? hexagonSizes.borderSmall.h
+      : hexagonSizes.borderLarge.h
+    : isMenu
+    ? hexagonSizes.mediumLarge.h
+    : hexagonSizes[size].h;
+
   const iconSize = hexagonSizeIconSizeMap[size];
   const element = imageSrc ? (
-    <Image src={imageSrc} />
+    <Image src={imageSrc} height={hexElementHeight} />
   ) : iconName ? (
     <IconSvg name={iconName} size={iconSize} isWhite />
   ) : (
@@ -131,6 +167,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
   const hexElement = (
     <styled.Wrapper
       data-testid="Hexagon-test"
+      {...hexagonSizes}
       className={cn(
         'hexagon-wrapper',
         size,
@@ -188,8 +225,20 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
     </styled.Wrapper>
   );
 
+  const hexElementWithTooltip = tooltip ? (
+    <Tooltip text={tooltip}>{hexElement}</Tooltip>
+  ) : (
+    hexElement
+  );
+
   return (
-    <>{shouldHaveButton ? <styled.WrapperButton>{hexElement}</styled.WrapperButton> : hexElement}</>
+    <>
+      {shouldHaveButton ? (
+        <styled.WrapperButton>{hexElementWithTooltip}</styled.WrapperButton>
+      ) : (
+        hexElementWithTooltip
+      )}
+    </>
   );
 };
 

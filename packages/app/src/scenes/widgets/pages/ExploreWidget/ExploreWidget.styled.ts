@@ -7,7 +7,7 @@ export const ExplorePanel = styled.div`
 
   &.collapsed {
     position: absolute;
-    transform: translateX(calc((570px - 30px) * -1));
+    transform: translateX(calc((520px - 30px) * -1));
     top: 10px;
 
     @media (max-width: 1440px) {

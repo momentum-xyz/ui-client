@@ -46,11 +46,17 @@ const ManageWallet: FC<PropsInterface> = ({
                   <styled.WalletActions>
                     <ButtonEllipse
                       isLabel={isDefault}
+                      variant="secondary"
                       icon={isDefault ? 'starOn' : 'star'}
                       label={isDefault ? t('actions.default') : t('actions.setAsDefault')}
                       onClick={() => onChangeDefaultWallet(wallet_id)}
                     />
-                    <ButtonEllipse icon="bin" label={t('actions.remove')} disabled={isDefault} />
+                    <ButtonEllipse
+                      icon="bin"
+                      variant="secondary"
+                      label={t('actions.remove')}
+                      disabled={isDefault}
+                    />
                   </styled.WalletActions>
                 </styled.Wallet>
               );

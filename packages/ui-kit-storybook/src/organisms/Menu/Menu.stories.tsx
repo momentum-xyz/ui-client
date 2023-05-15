@@ -26,22 +26,26 @@ const LEFT_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_1',
     iconName: 'menu_info',
-    position: PositionEnum.LEFT
+    position: PositionEnum.LEFT,
+    tooltip: 'Lorem ipsum'
   },
   {
     key: 'key_2',
     iconName: 'leave',
-    position: PositionEnum.LEFT
+    position: PositionEnum.LEFT,
+    tooltip: 'Lorem ipsum'
   },
   {
     key: 'key_3',
     imageSrc: IMAGE_SRC,
-    position: PositionEnum.LEFT
+    position: PositionEnum.LEFT,
+    tooltip: 'Lorem ipsum'
   },
   {
     key: 'key_4',
     iconName: 'smiley-face',
-    position: PositionEnum.LEFT
+    position: PositionEnum.LEFT,
+    tooltip: 'Lorem ipsum'
   }
 ];
 
@@ -49,12 +53,14 @@ const CENTER_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_5',
     iconName: 'star_small',
-    position: PositionEnum.CENTER
+    position: PositionEnum.CENTER,
+    tooltip: 'Lorem ipsum'
   },
   {
     key: 'key_6',
     iconName: 'edit',
-    position: PositionEnum.CENTER
+    position: PositionEnum.CENTER,
+    tooltip: 'Lorem ipsum'
   }
 ];
 
@@ -62,37 +68,44 @@ const RIGHT_ITEMS: MenuItemInterface<string>[] = [
   {
     key: 'key_7',
     iconName: 'voice_chat',
-    position: PositionEnum.RIGHT
+    position: PositionEnum.RIGHT,
+    tooltip: 'Lorem ipsum'
   },
   {
     key: 'key_8',
     iconName: 'chat',
-    position: PositionEnum.RIGHT
+    position: PositionEnum.RIGHT,
+    tooltip: 'Lorem ipsum'
   },
   {
     key: 'key_9',
     iconName: 'search',
-    position: PositionEnum.RIGHT
+    position: PositionEnum.RIGHT,
+    tooltip: 'Lorem ipsum'
   },
   {
     key: 'key_10',
     iconName: 'meeting',
-    position: PositionEnum.RIGHT
+    position: PositionEnum.RIGHT,
+    tooltip: 'Lorem ipsum'
   },
   {
     key: 'key_11',
     iconName: 'calendar',
-    position: PositionEnum.RIGHT
+    position: PositionEnum.RIGHT,
+    tooltip: 'Lorem ipsum'
   },
   {
     key: 'key_12',
     iconName: 'clock',
-    position: PositionEnum.RIGHT
+    position: PositionEnum.RIGHT,
+    tooltip: 'Lorem ipsum'
   },
   {
     key: 'key_13',
     imageSrc: IMAGE_SRC,
-    position: PositionEnum.RIGHT
+    position: PositionEnum.RIGHT,
+    tooltip: 'Lorem ipsum'
   }
 ];
 

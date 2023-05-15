@@ -7,13 +7,6 @@ const IMAGE_SRC = 'https://picsum.photos/300';
 export default {
   title: 'Molecules/VoiceUser',
   component: VoiceUser,
-  argTypes: {
-    hexagon: {
-      table: {
-        disable: true
-      }
-    }
-  },
   decorators: [
     (Story) => (
       <div className="storybook-block">
@@ -29,11 +22,21 @@ const Template: Story<VoiceUserPropsInterface> = (args) => {
 
 export const General = Template.bind({});
 General.args = {
-  imageSrc: IMAGE_SRC
+  username: 'Username',
+  imageSrc: IMAGE_SRC,
+  isMicrophoneOff: false
 };
 
-export const IsActive = Template.bind({});
-IsActive.args = {
+export const IsSpeaking = Template.bind({});
+IsSpeaking.args = {
+  username: 'Username',
   imageSrc: IMAGE_SRC,
-  isActive: true
+  isSpeaking: true
+};
+
+export const IsMuted = Template.bind({});
+IsMuted.args = {
+  username: 'Username',
+  imageSrc: IMAGE_SRC,
+  isMicrophoneOff: true
 };
