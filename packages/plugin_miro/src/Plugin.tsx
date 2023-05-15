@@ -4,8 +4,6 @@ import {configDescription} from 'api/constants';
 
 import {usePlugin} from './shared/hooks';
 
-// import '@momentum-xyz/ui-kit/dist/themes/themes';
-
 import 'core/utils/boardsPicker.1.0.js';
 
 const Plugin: PluginInterface<AppConfigInterface> = {
