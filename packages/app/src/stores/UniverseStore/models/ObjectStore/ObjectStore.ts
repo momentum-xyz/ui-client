@@ -11,6 +11,18 @@ import {AssetStore} from './models';
 
 const {REACT_APP_LOCAL_PLUGINS = '{}'} = process.env;
 const localPlugins = JSON.parse(REACT_APP_LOCAL_PLUGINS);
+// It's: {[object_id: string]: {meta: {id, name, pluginId, scopeName, scriptUrl}}}
+// const localPlugins = {
+//   '01880ae4-3ddb-7cb5-bef4-e70a36365a36': {
+//     meta: {
+//       id: '308fdacc-8c2d-40dc-bd5f-d1549e3e03ba',
+//       name: 'plugin_video',
+//       pluginId: '308fdacc-8c2d-40dc-bd5f-d1549e3e03ba',
+//       scopeName: 'plugin_video',
+//       scriptUrl: 'http://localhost:3001/remoteEntry.js'
+//     }
+//   }
+// } as any;
 
 const ObjectStore = types
   .compose(
