@@ -46,7 +46,7 @@ export const Container = styled.div`
   }
 
   &.size-large {
-    width: 570px;
+    width: 520px;
 
     @media (max-width: 1440px) {
       width: 520px;

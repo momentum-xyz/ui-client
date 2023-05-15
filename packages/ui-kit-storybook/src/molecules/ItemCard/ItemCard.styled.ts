@@ -5,10 +5,12 @@ export const Wrapper = styled.div`
   margin: 0 1px;
   padding: 10px;
   display: grid;
+  border-radius: 4px;
   font-size: var(--font-size-m);
   background: ${(props) => props.theme.bg && rgba(props.theme.accentBg, 0.2)};
+  border: 1px solid transparent;
   box-shadow: -1px -1px 2px ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.1)};
-  border-radius: 4px;
+  transition: background var(--tr-150-ei), border var(--tr-150-ei);
 
   &.normal {
     grid-template-columns: 35% 1fr;
@@ -18,6 +20,11 @@ export const Wrapper = styled.div`
   &.small {
     grid-template-columns: 40% 1fr;
     gap: 10px;
+  }
+
+  &:hover {
+    background: ${(props) => props.theme.bg && rgba(props.theme.accentBg, 0.6)};
+    border: 1px solid ${(props) => props.theme.accentText};
   }
 `;
 

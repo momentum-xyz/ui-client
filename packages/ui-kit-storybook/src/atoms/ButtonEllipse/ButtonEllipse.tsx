@@ -12,7 +12,7 @@ export interface ButtonEllipsePropsInterface {
   size?: 'normal';
   isActive?: boolean;
   isLabel?: boolean;
-  variant?: 'primary';
+  variant?: 'primary' | 'secondary';
   disabled?: boolean;
   wide?: boolean;
   onClick?: () => void;
@@ -39,7 +39,7 @@ const ButtonEllipse = forwardRef<HTMLButtonElement, ButtonEllipsePropsInterface>
           wide && 'wide'
         )}
       >
-        {icon && <IconSvg name={icon} size="xs" />}
+        {icon && <IconSvg name={icon} size="xxs" />}
         {label && <styled.Label>{label}</styled.Label>}
       </styled.Button>
     );
