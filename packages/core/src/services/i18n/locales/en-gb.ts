@@ -706,6 +706,7 @@ export const enGb = {
       default: 'Default',
       setAsDefault: 'Set as default',
       edit: 'Edit',
+      deleteObject: 'Delete object',
       editProfile: 'Edit profile',
       claimRewards: 'Claim Rewards',
       nextStep: 'Next Step',

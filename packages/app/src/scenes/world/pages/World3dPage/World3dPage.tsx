@@ -12,7 +12,8 @@ import {
   Event3dEmitter,
   ClickPositionInterface,
   ObjectTransformInterface,
-  TransformNoScaleInterface
+  TransformNoScaleInterface,
+  useI18n
 } from '@momentum-xyz/core';
 
 import {CreatorTabsEnum, WidgetEnum} from 'core/enums';
@@ -31,6 +32,7 @@ const World3dPage: FC = () => {
   const [readyToHandleEvents, setReadyToHandleEvents] = useState<boolean>(false);
   const {selectedTab} = creatorStore;
 
+  const {t} = useI18n();
   const location = useLocation();
 
   // TODO: FIXME
@@ -132,24 +134,28 @@ const World3dPage: FC = () => {
         key: WidgetEnum.MOVE_ITEM,
         position: PositionEnum.CENTER,
         iconName: 'direction-arrows',
+        tooltip: t('actions.move'),
         onClick: () => handleTabSelection('gizmo')
       },
       {
         key: WidgetEnum.INSPECTOR,
         position: PositionEnum.CENTER,
         iconName: 'info',
+        tooltip: t('actions.inspector'),
         onClick: () => handleTabSelection('inspector')
       },
       {
         key: WidgetEnum.ASSIGN_FUNCTIONALITY,
         position: PositionEnum.CENTER,
         iconName: 'cubicles',
+        tooltip: t('labels.selectFunction'),
         onClick: () => handleTabSelection('functionality')
       },
       {
         key: WidgetEnum.REMOVE,
         position: PositionEnum.CENTER,
         iconName: 'bin',
+        tooltip: t('actions.deleteObject'),
         onClick: creatorStore.removeObjectDialog.open
       }
     ];
