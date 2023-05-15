@@ -1,12 +1,12 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, PropsWithThemeInterface} from '@momentum-xyz/ui-kit';
+import {Button} from '@momentum-xyz/ui-kit-storybook';
 import {GoogleDocumentInterface} from 'core/interfaces';
 import {useI18n} from '@momentum-xyz/core';
 
 import * as styled from './GoogleDriveActions.styled';
 
-interface PropsInterface extends PropsWithThemeInterface {
+interface PropsInterface {
   objectId?: string;
   isAdmin: boolean;
   googleDocument: GoogleDocumentInterface | null;
@@ -15,7 +15,7 @@ interface PropsInterface extends PropsWithThemeInterface {
 }
 
 const GoogleDriveActions: FC<PropsInterface> = ({
-  theme,
+  // theme,
   objectId,
   isAdmin,
   googleDocument,
@@ -29,13 +29,17 @@ const GoogleDriveActions: FC<PropsInterface> = ({
   }
 
   return (
-    <styled.Container theme={theme}>
+    <styled.Container>
       <Button
         label={t('plugin_gd.actions.changeDocument')}
         variant="primary"
         onClick={pickDocument}
       />
-      <Button label={t('plugin_gd.actions.close')} variant="danger" onClick={closeDocument} />
+      <Button
+        label={t('plugin_gd.actions.close')}
+        // variant="danger"
+        onClick={closeDocument}
+      />
     </styled.Container>
   );
 };
