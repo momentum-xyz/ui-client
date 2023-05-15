@@ -3,11 +3,7 @@ export const ROUTES = {
   explore: '/explore',
   welcome: '/explore/welcome',
   odyssey: {
-    base: '/odyssey/:worldId',
-    object: {
-      root: '/odyssey/:worldId/object/:objectId',
-      base: '/odyssey/:worldId/object/:objectId/:assetType'
-    }
+    base: '/odyssey/:worldId'
   },
   system: {
     disconnected: '/system/disconnected',

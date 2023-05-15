@@ -5,7 +5,6 @@ import {RouteConfigInterface} from 'core/interfaces';
 
 const Universe2dPage = lazy(() => import('./universe/pages/Universe2dPage/Universe2dPage'));
 const World2dPage = lazy(() => import('./world/pages/World2dPage/World2dPage'));
-const Object = lazy(() => import('./object/Object'));
 const DisconnectedPage = lazy(() => import('./system/pages/DisconnectedPage/DisconnectedPage'));
 const WrongBrowserPage = lazy(() => import('./system/pages/WrongBrowserPage/WrongBrowserPage'));
 const MaintenancePage = lazy(() => import('./system/pages/MaintenancePage/MaintenancePage'));
@@ -41,9 +40,5 @@ export const WORLD_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.odyssey.base,
     main: () => <World2dPage />,
     exact: true
-  },
-  {
-    path: ROUTES.odyssey.object.root,
-    main: () => <Object />
   }
 ];

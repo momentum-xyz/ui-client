@@ -6,7 +6,7 @@ import {Dialog} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 
 import {ToastContent} from 'ui-kit';
-import {useNavigation, useStore} from 'shared/hooks';
+import {useStore} from 'shared/hooks';
 import {CreatorTabsEnum} from 'core/enums';
 
 import * as styled from './CreatorWidget.styled';
@@ -52,7 +52,8 @@ const allPanels: SideMenuItemInterface<MenuItemType>[] = [
 ];
 
 const CreatorWidget: FC = () => {
-  const {universeStore, creatorStore} = useStore();
+  const {universeStore, widgetStore} = useStore();
+  const {creatorStore} = widgetStore;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const world3dStore = universeStore.world3dStore!;
   const worldId = universeStore.worldId;
@@ -68,12 +69,9 @@ const CreatorWidget: FC = () => {
 
   const {t} = useI18n();
 
-  const {goToOdysseyHome} = useNavigation();
-
   console.log('CreatorWidget render', {selectedTab});
 
   useEffect(() => {
-    goToOdysseyHome(); // we don't want to have selected objects or smt
     world3dStore.enableCreatorMode();
     spawnAssetStore.init(worldId); // TEMP
     spawnAssetStore.fetchAllAssets3d(); // TEMP
@@ -81,7 +79,7 @@ const CreatorWidget: FC = () => {
       world3dStore.disableCreatorMode();
       creatorStore.resetModel();
     };
-  }, [creatorStore, world3dStore, spawnAssetStore, worldId, goToOdysseyHome]);
+  }, [creatorStore, world3dStore, spawnAssetStore, worldId]);
 
   const content = useMemo(() => {
     switch (selectedTab) {

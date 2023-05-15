@@ -24,7 +24,8 @@ interface ObjectInfoInterface {
 }
 
 const UploadCustomAssetPage: FC = () => {
-  const {creatorStore} = useStore();
+  const {widgetStore} = useStore();
+  const {creatorStore} = widgetStore;
   const {spawnAssetStore} = creatorStore;
 
   const {t} = useI18n();

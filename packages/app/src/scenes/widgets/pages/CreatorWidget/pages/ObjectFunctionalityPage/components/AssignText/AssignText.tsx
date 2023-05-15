@@ -15,9 +15,9 @@ interface PropsInterface {
 }
 
 const AssignText: FC<PropsInterface> = ({actionRef, objectId}) => {
-  const {objectStore} = useStore();
+  const {universeStore} = useStore();
+  const {objectStore} = universeStore;
   const {assetStore} = objectStore;
-  const {changeTileDialog} = assetStore;
 
   const {t} = useI18n();
 
@@ -36,7 +36,6 @@ const AssignText: FC<PropsInterface> = ({actionRef, objectId}) => {
     data: TextObjectInterface
   ) => {
     await assetStore.postNewContent(objectId, data);
-    changeTileDialog.close();
   };
 
   // TEMP

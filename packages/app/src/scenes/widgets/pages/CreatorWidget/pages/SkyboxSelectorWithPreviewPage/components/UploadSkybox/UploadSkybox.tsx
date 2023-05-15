@@ -27,7 +27,8 @@ interface PropsInterface {
 }
 
 const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
-  const {creatorStore, universeStore, sessionStore} = useStore();
+  const {widgetStore, universeStore, sessionStore} = useStore();
+  const {creatorStore} = widgetStore;
   const {skyboxSelectorStore} = creatorStore;
   const {uploadSkybox, isUploadPending} = skyboxSelectorStore;
   const {user} = sessionStore;
