@@ -124,8 +124,6 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
     ...rest
   } = props;
 
-  console.log(tooltip);
-
   const isBorderless = borderlessHexagonTypes.includes(type);
 
   const size: HexagonSizeType = largeSizeHexagonTypes.includes(type)
