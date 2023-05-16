@@ -1,24 +1,21 @@
-import React, {FC, useCallback} from 'react';
+import {FC, useCallback} from 'react';
 import {useDropzone} from 'react-dropzone';
 
-import {PropsWithThemeInterface} from '../../interfaces';
-import {FileType} from '../../types';
 import {Button} from '../../atoms';
 import {ErrorsEnum} from '../../enums';
 
 import * as styled from './FileUploader.styled';
-interface PropsInterface extends PropsWithThemeInterface {
+
+interface PropsInterface {
   label: string;
   buttonSize?: 'small' | 'normal' | 'medium';
   dragActiveLabel: string;
   onFilesUpload: (file: File | undefined) => void;
   onError?: (error: Error) => void;
-  fileType: FileType;
+  fileType: 'image' | 'video';
   maxSize?: number;
   enableDragAndDrop?: boolean;
   disabled?: boolean;
-  className?: string;
-  buttonClassName?: string;
 }
 
 /*
@@ -33,13 +30,10 @@ const FileUploader: FC<PropsInterface> = ({
   buttonSize = 'normal',
   onFilesUpload,
   onError,
-  theme,
   fileType,
   maxSize = 3 * Math.pow(1024, 2),
   enableDragAndDrop = true,
-  disabled,
-  className,
-  buttonClassName
+  disabled
 }) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -66,20 +60,14 @@ const FileUploader: FC<PropsInterface> = ({
   const {onClick, ...restRootProps} = getRootProps();
 
   return (
-    <styled.Container data-testid="FileUploader-test" className={className}>
+    <styled.Container data-testid="FileUploader-test">
       {enableDragAndDrop && <styled.DropZone {...restRootProps} />}
       <input {...getInputProps()} disabled={disabled} data-testid="FileUploader-input-test" />
       {isDragActive ? (
         <styled.Text>{dragActiveLabel}</styled.Text>
       ) : (
-        <Button
-          theme={theme}
-          label={label}
-          size={buttonSize}
-          onClick={onClick}
-          disabled={disabled}
-          className={buttonClassName}
-        />
+        // @ts-ignore: FIXME
+        <Button label={label} onClick={onClick} disabled={disabled} />
       )}
     </styled.Container>
   );

@@ -1,8 +1,13 @@
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useMemo} from 'react';
-import {Panel, IconNameType, SideMenuItemInterface, SideMenu} from '@momentum-xyz/ui-kit-storybook';
+import {
+  Panel,
+  IconNameType,
+  SideMenuItemInterface,
+  SideMenu,
+  Dialog
+} from '@momentum-xyz/ui-kit-storybook';
 import {i18n, useI18n} from '@momentum-xyz/core';
-import {Dialog} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 
 import {ToastContent} from 'ui-kit';

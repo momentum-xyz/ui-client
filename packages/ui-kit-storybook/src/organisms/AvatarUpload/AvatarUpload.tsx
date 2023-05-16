@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {FileUploader} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {IconSvg} from '../../atoms';
+import {FileUploader} from '../../molecules';
 
 import * as styled from './AvatarUpload.styled';
 
@@ -31,7 +31,6 @@ const AvatarUpload: FC<AvatarUploadPropsInterface> = ({value, onChange}) => {
           onFilesUpload={onChange}
           onError={(error) => console.error(error)}
           enableDragAndDrop={false}
-          buttonClassName="image-upload-button"
         />
       </styled.FileUploaderContainer>
     </styled.Container>

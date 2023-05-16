@@ -12,3 +12,5 @@ export * from './ProfileLine';
 export * from './StakingAmount';
 export * from './StakeCard';
 export * from './ItemCard';
+export * from './Dialog';
+export * from './FileUploader';

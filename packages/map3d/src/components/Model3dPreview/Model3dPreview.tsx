@@ -10,7 +10,7 @@ import {
 } from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {GLTF, GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
-import {ProgressBar} from '@momentum-xyz/ui-kit';
+import {ProgressBar} from '@momentum-xyz/ui-kit-storybook';
 import cn from 'classnames';
 
 import * as styled from './Model3dPreview.styled';

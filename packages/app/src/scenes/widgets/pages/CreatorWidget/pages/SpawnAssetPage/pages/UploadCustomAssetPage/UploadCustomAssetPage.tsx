@@ -4,8 +4,7 @@ import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {Model3dPreview} from '@momentum-xyz/map3d';
-import {ErrorsEnum, FileType, FileUploader} from '@momentum-xyz/ui-kit';
-import {Button, Input, Radio} from '@momentum-xyz/ui-kit-storybook';
+import {Button, Input, Radio, ErrorsEnum, FileUploader} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
@@ -138,7 +137,6 @@ const UploadCustomAssetPage: FC = () => {
                       }}
                       label={t('actions.uploadYourAssset')}
                       dragActiveLabel={t('actions.dropItHere')}
-                      fileType={'' as FileType}
                       maxSize={MAX_ASSET_SIZE}
                     />
                     {errors.file && <styled.Error>{errors.file.message}</styled.Error>}

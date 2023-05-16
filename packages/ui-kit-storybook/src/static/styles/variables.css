@@ -22,4 +22,7 @@
   --tr-100-ei: 100ms ease-in;
   --tr-150-ei: 150ms ease-in;
   --tr-200-ei: 200ms ease-in;
+
+  /* Z INDEXES */
+  --dialog-z-index: 100;
 }

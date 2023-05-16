@@ -19,3 +19,6 @@ export * from './MenuLabel';
 export * from './SymbolAmount';
 export * from './WalletHash';
 export * from './ErrorBoundary';
+export * from './LoaderFallback';
+export * from './Portal';
+export * from './ProgressBar';
