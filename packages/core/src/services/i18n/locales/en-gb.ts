@@ -252,9 +252,7 @@ export const enGb = {
       loadedInAnotherTab: 'Odyssey has been loaded in another browser tab',
       switchToThatTab:
         'To continue the experience, please switch to that window/tab and close this one',
-      underMaintenance: 'The server is undergoing maintenance, please try again later',
-      noBlockchainUrlAvailable:
-        'Ooops, the blockchain server is not available at the moment. Please try again later!'
+      underMaintenance: 'The server is undergoing maintenance, please try again later'
     },
     counts: {
       people_one: '{{count}} Person',
@@ -708,6 +706,7 @@ export const enGb = {
       default: 'Default',
       setAsDefault: 'Set as default',
       edit: 'Edit',
+      deleteObject: 'Delete object',
       editProfile: 'Edit profile',
       claimRewards: 'Claim Rewards',
       nextStep: 'Next Step',
@@ -829,6 +828,7 @@ export const enGb = {
       undo: 'Undo',
       redo: 'Redo',
       copy: 'Copy',
+      clearSelection: 'Clear Selection',
       inspector: 'Inspector',
       functionality: 'Functionality',
       colour: 'Colour',

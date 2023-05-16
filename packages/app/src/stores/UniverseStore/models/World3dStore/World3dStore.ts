@@ -66,7 +66,7 @@ const World3dStore = types
     closeAndResetObjectMenu() {
       console.log('closeAndResetObjectMenu', self.selectedObjectId);
 
-      const {creatorStore} = getRootStore(self);
+      const {creatorStore} = getRootStore(self).widgetStore;
       creatorStore.setSelectedObjectId(null);
       creatorStore.setSelectedTab(null);
 
@@ -241,7 +241,8 @@ const World3dStore = types
       }
 
       // TODO move it as child store here??
-      const {creatorStore, widgetManagerStore} = getRootStore(self);
+      const {widgetStore} = getRootStore(self);
+      const {creatorStore} = widgetStore;
 
       // if (self.selectedObjectId) {
       //   console.log('World3dStore : handleClick : already selected', self.selectedObjectId);
@@ -255,42 +256,8 @@ const World3dStore = types
       // self.objectMenu.open();
       // self.setSelectedTab('inspector');
 
+      // TODO move it as child store here??
       creatorStore.setSelectedObjectId(objectId);
-
-      const submenuItems: MenuItemInterface<WidgetEnum>[] = [
-        {
-          key: WidgetEnum.GO_TO,
-          position: PositionEnum.CENTER,
-          iconName: 'close_large',
-          onClick: () => self.closeAndResetObjectMenu()
-        },
-        {
-          key: WidgetEnum.GO_TO,
-          position: PositionEnum.CENTER,
-          iconName: 'direction-arrows',
-          onClick: () => creatorStore.setSelectedTab('gizmo')
-        },
-        {
-          key: WidgetEnum.GO_TO,
-          position: PositionEnum.CENTER,
-          iconName: 'info',
-          onClick: () => creatorStore.setSelectedTab('inspector')
-        },
-        {
-          key: WidgetEnum.GO_TO,
-          position: PositionEnum.CENTER,
-          iconName: 'cubicles',
-          onClick: () => creatorStore.setSelectedTab('functionality')
-        },
-        {
-          key: WidgetEnum.GO_TO,
-          position: PositionEnum.CENTER,
-          iconName: 'bin',
-          onClick: creatorStore.removeObjectDialog.open
-        }
-      ];
-
-      widgetManagerStore.openSubMenu(WidgetEnum.CREATOR, submenuItems, PositionEnum.CENTER);
 
       if (creatorStore.selectedTab === null) {
         creatorStore.setSelectedTab('gizmo');

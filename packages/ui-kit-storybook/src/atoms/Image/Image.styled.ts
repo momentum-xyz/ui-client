@@ -7,7 +7,7 @@ export const Container = styled.div<{height: number}>`
   display: flex;
   width: 100%;
   height: ${(props) => props.height}px;
-  background-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+  background-color: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.8)};
   align-items: center;
   justify-content: center;
   border-radius: var(--border-radius);

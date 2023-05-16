@@ -7,7 +7,6 @@ export * from './TimelineReaction';
 export * from './CalendarCap';
 export * from './CalendarButtons';
 export * from './VoiceUser';
-export * from './VoiceUserLine';
 export * from './ProfileInfo';
 export * from './ProfileLine';
 export * from './StakingAmount';

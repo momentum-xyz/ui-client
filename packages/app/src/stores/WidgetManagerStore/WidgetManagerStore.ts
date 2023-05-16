@@ -6,7 +6,6 @@ import {WidgetEnum} from 'core/enums';
 
 import {SubMenuInfo, WidgetInfo, WidgetInfoDataInterface} from './models';
 
-// TODO: Not final implementation. It depends on flow/design
 const WidgetManagerStore = types
   .model('WidgetManagerStore', {
     leftActiveWidget: types.maybeNull(WidgetInfo),
@@ -49,14 +48,18 @@ const WidgetManagerStore = types
     openSubMenu(
       key: WidgetEnum,
       items: MenuItemInterface<WidgetEnum>[],
-      position: PositionEnum
+      position: PositionEnum,
+      activeKeys: WidgetEnum[] = []
     ): void {
       self.subMenuInfo = cast({
         position,
         sourceItemKey: key,
         items,
-        activeKeys: []
+        activeKeys
       });
+    },
+    setSubMenuActiveKeys(keys: WidgetEnum[]): void {
+      self.subMenuInfo?.activeKeys.replace(keys);
     },
     closeSubMenu(): void {
       self.subMenuInfo = null;

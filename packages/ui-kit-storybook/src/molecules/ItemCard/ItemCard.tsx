@@ -55,13 +55,28 @@ const ItemCard: FC<ItemCardPropsInterface> = ({
 
         <styled.Actions>
           {!!onInfoClick && (
-            <ButtonEllipse label={t('actions.info')} icon="info_2" onClick={onInfoClick} />
+            <ButtonEllipse
+              variant="secondary"
+              label={t('actions.info')}
+              icon="info_2"
+              onClick={onInfoClick}
+            />
           )}
           {!!onVisitClick && (
-            <ButtonEllipse label={t('actions.visit')} icon="fly-to" onClick={onVisitClick} />
+            <ButtonEllipse
+              variant="secondary"
+              label={t('actions.visit')}
+              icon="fly-to"
+              onClick={onVisitClick}
+            />
           )}
           {!!onStakeClick && (
-            <ButtonEllipse label={t('actions.stake')} icon="stake" onClick={onStakeClick} />
+            <ButtonEllipse
+              variant="secondary"
+              label={t('actions.stake')}
+              icon="stake"
+              onClick={onStakeClick}
+            />
           )}
         </styled.Actions>
       </styled.ItemContent>

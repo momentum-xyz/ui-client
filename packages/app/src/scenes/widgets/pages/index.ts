@@ -9,3 +9,4 @@ export * from './StakingWidget';
 export * from './VoiceChatWidget';
 export * from './WorldVisitorsWidget';
 export * from './CreatorWidget';
+export * from './ObjectWidget';

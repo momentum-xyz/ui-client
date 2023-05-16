@@ -43,6 +43,7 @@ const OnlineUsersList: FC<PropsInterface> = ({
           isActive={userDetails.userId === activeUser?.userId}
           indicator={voiceChatUsers.includes(userDetails.userId) ? 'voice' : undefined}
           imageSrc={getImageAbsoluteUrl(userDetails.user?.profile.avatarHash)}
+          iconName="astronaut"
           onClick={() =>
             setActiveUser(userDetails.userId !== activeUser?.userId ? userDetails : null)
           }
@@ -93,6 +94,7 @@ const OnlineUsersList: FC<PropsInterface> = ({
                 />*/}
                 <ButtonEllipse
                   icon="high-five"
+                  variant="secondary"
                   label={t('labels.highFive')}
                   wide
                   onClick={() => onSendHighFive(activeUser.userId)}

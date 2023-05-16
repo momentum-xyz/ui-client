@@ -15,7 +15,8 @@ const COLOR_PICKER_WIDTH_PX = 550;
 const DEBOUNCE_DELAY_MS = 300;
 
 const ObjectColorPage: FC = () => {
-  const {creatorStore, universeStore} = useStore();
+  const {widgetStore, universeStore} = useStore();
+  const {creatorStore} = widgetStore;
   const {objectColorStore} = creatorStore;
   const {world3dStore} = universeStore;
 

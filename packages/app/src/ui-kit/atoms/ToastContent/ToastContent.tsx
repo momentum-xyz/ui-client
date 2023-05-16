@@ -36,6 +36,7 @@ const ToastContent: FC<PropsInterface> = ({
         <styled.Buttons>
           {approveInfo && (
             <ButtonEllipse
+              variant="secondary"
               label={approveInfo.title}
               icon={approveInfo.icon || 'check_large'}
               onClick={approveInfo.onClick}
@@ -43,6 +44,7 @@ const ToastContent: FC<PropsInterface> = ({
           )}
           {declineInfo && (
             <ButtonEllipse
+              variant="secondary"
               label={declineInfo.title}
               icon={declineInfo.icon || 'close_large'}
               onClick={declineInfo.onClick}

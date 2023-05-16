@@ -7,6 +7,7 @@ export interface TabInterface<T> {
   id: T;
   icon: IconNameType;
   label: string;
+  disabled?: boolean;
 }
 
 export interface TabsPropsInterface<T> {
@@ -24,6 +25,7 @@ const Tabs = <T,>({tabList, activeId, onSelect}: TabsPropsInterface<T>) => {
           icon={tab.icon}
           label={tab.label}
           isActive={tab.id === activeId}
+          disabled={tab.disabled}
           onClick={() => onSelect?.(tab.id)}
         />
       ))}
