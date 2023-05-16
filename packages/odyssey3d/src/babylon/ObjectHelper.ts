@@ -11,7 +11,8 @@ import {
   Nullable,
   Vector3,
   Texture,
-  DracoCompression
+  DracoCompression,
+  MeshoptCompression
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF/2.0/glTFLoader';
 import '@babylonjs/loaders/glTF/2.0/Extensions/index';
@@ -34,6 +35,9 @@ DracoCompression.Configuration.decoder = {
   wasmUrl: DRACO_CDN + 'draco_wasm_wrapper_gltf.js',
   wasmBinaryUrl: DRACO_CDN + 'draco_decoder_gltf.wasm',
   fallbackUrl: DRACO_CDN + 'draco_decoder_gltf.js'
+};
+MeshoptCompression.Configuration.decoder = {
+  url: new URL('meshoptimizer/meshopt_decoder.js', import.meta.url).toString()
 };
 
 interface BabylonObjectInterface {
