@@ -11,7 +11,7 @@ const IMAGE_SRC = 'https://picsum.photos/300';
 
 const Template: Story<HexagonPropsInterface> = (args) => {
   const allArgs = {...args};
-  if (!allArgs.iconName && !allArgs.imageSrc) {
+  if (!allArgs.iconName && !allArgs.imageSrc && !allArgs.label) {
     allArgs.imageSrc = IMAGE_SRC;
   }
   return <Hexagon {...allArgs} />;
@@ -51,6 +51,9 @@ MenuTooltip.decorators = [
     );
   }
 ];
+
+export const MenuWithText = Template.bind({});
+MenuWithText.args = {type: 'menu', label: '+90'};
 
 export const MenuBlank = Template.bind({});
 MenuBlank.args = {type: 'blank-small'};
