@@ -1,4 +1,4 @@
-import {IconNameType} from '@momentum-xyz/ui-kit';
+import {IconNameType} from '@momentum-xyz/ui-kit-storybook';
 
 export interface PluginInterface {
   id: string;

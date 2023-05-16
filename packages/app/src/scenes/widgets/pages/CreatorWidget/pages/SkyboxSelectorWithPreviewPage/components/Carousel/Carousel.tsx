@@ -1,4 +1,4 @@
-import {IconSvg} from '@momentum-xyz/ui-kit';
+import {IconSvg} from '@momentum-xyz/ui-kit-storybook';
 
 import * as styled from './Carousel.styled';
 
@@ -31,11 +31,11 @@ export const Carousel = <T extends object>({
         style={{transform: 'scaleX(-1)'}}
         onClick={() => onChange(longItems[activeIdx - 1])}
       >
-        <IconSvg name="arrow" size="extra-large" />
+        <IconSvg name="arrow" size="xxl" />
       </styled.ButtonHolder>
       {windowItems.map(renderItem)}
       <styled.ButtonHolder onClick={() => onChange(longItems[activeIdx + 1])}>
-        <IconSvg name="arrow" size="extra-large" />
+        <IconSvg name="arrow" size="xxl" />
       </styled.ButtonHolder>
     </styled.Container>
   );

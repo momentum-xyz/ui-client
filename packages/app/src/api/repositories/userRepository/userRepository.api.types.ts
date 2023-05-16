@@ -1,4 +1,4 @@
-import {UserStatusEnum} from '@momentum-xyz/ui-kit';
+import {UserStatusEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {UserProfileInterface, WorldInfoInterface} from 'api';
 

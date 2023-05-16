@@ -1,5 +1,5 @@
 import {PluginTypeEnum} from '@momentum-xyz/sdk';
-import {IconNameType} from '@momentum-xyz/ui-kit';
+import {IconNameType} from '@momentum-xyz/ui-kit-storybook';
 
 import {OptionsInterface} from 'api/interfaces';
 import {MetadataInterface} from 'api/interfaces/metadata.interface';

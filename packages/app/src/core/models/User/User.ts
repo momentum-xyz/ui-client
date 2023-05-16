@@ -1,6 +1,5 @@
 import {Instance, types} from 'mobx-state-tree';
-import {UserStatusEnum} from '@momentum-xyz/ui-kit';
-import {ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
+import {ImageSizeEnum, UserStatusEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {UserProfile} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';

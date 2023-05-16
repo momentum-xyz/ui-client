@@ -1,6 +1,6 @@
 import {flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
-import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
+import {ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
 import {PluginIdEnum} from 'api/enums';

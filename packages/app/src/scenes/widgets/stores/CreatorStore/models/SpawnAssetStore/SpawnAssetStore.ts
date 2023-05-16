@@ -1,6 +1,6 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
-import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
+import {ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
 
 import {api, FetchAssets3dResponse, PostSpaceResponse, UploadAsset3dRequest} from 'api';
 import {Asset3dCategoryEnum} from 'api/enums';

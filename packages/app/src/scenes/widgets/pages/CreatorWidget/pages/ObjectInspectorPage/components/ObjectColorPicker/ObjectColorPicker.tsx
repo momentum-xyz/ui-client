@@ -1,4 +1,4 @@
-import {useDebouncedCallback} from '@momentum-xyz/ui-kit';
+import {useDebouncedCallback} from '@momentum-xyz/ui-kit-storybook';
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect} from 'react';
 import {ColorPicker, useColor, toColor} from 'react-color-palette';
