@@ -18,3 +18,4 @@ export * from './Image';
 export * from './MenuLabel';
 export * from './SymbolAmount';
 export * from './WalletHash';
+export * from './ErrorBoundary';

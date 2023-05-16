@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
-import {ErrorBoundary} from '@momentum-xyz/ui-kit';
+import {ErrorBoundary} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 import {
   PluginInterface,

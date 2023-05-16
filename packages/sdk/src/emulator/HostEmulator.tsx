@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {BrowserRouter} from 'react-router-dom';
 import {ThemeProvider} from 'styled-components';
-import {DefaultThemeConfig} from '@momentum-xyz/ui-kit';
+import {DefaultThemeConfig} from '@momentum-xyz/ui-kit-storybook';
 
 import {PluginInterface} from '../interfaces';
 import {UnityControlContextProvider} from '../contexts';

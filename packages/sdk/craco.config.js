@@ -79,6 +79,10 @@ module.exports = {
                 singleton: true,
                 requiredVersion: '^0.1.3'
               },
+              '@momentum-xyz/ui-kit-storybook': {
+                singleton: true,
+                requiredVersion: '^0.1.0'
+              },
               'mobx-react-lite': {
                 requiredVersion: '^3.3.0'
               },

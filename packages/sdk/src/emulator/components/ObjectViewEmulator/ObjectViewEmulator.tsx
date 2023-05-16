@@ -1,6 +1,6 @@
-import React, {FC, useMemo} from 'react';
+import {FC, useMemo} from 'react';
 import {useParams} from 'react-router-dom';
-import {ErrorBoundary, ThemeInterface, WindowPanel} from '@momentum-xyz/ui-kit';
+import {Panel, ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit-storybook';
 
 import {useAttributesEmulator} from '../../hooks';
 import {useTheme} from '../../../contexts/ThemeContext';
@@ -233,14 +233,16 @@ const PluginInnerWrapper = ({
   return (
     content ||
     (objectView && (
-      <WindowPanel
+      <Panel
+        variant="primary"
+        size="normal"
         title={objectView.title || ''}
-        subtitle={objectView.subtitle}
-        actions={objectView.actions}
+        // subtitle={objectView.subtitle}
+        // actions={objectView.actions}
         onClose={pluginProps.onClose}
       >
         {objectView.content}
-      </WindowPanel>
+      </Panel>
     )) || <div>usePlugin doesn't return the expected values. Please check the docs</div>
   );
 };
