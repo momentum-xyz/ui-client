@@ -32,7 +32,7 @@ export type Event3dType = {
   UserJoinedVoiceChat: (userId: string) => void;
   UserLeftVoiceChat: (userId: string) => void;
 
-  ObjectEditModeChanged: (objectId: string, isEditOn: boolean) => void;
+  ObjectEditModeChanged: (objectId: string, isEditOn: boolean, showGizmo: boolean) => void;
   DetachObjectFromCamera: (objectId: string) => void;
 
   SendHighFive: (userId: string) => void;

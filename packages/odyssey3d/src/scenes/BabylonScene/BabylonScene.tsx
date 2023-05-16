@@ -35,6 +35,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
 
   /* Will run one time. */
   const onSceneReady = async (scene: Scene) => {
+    scene.setRenderingAutoClearDepthStencil(1, false, false);
+
     const view = scene.getEngine().getRenderingCanvas();
     if (view?.id) {
       PlayerHelper.initialize(scene, view, true, onMove, onBumpReady);
@@ -98,8 +100,10 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
         PlayerHelper.setUserTransforms(users);
       });
 
-      events.on('ObjectEditModeChanged', (objectId, isOn) => {
-        WorldCreatorHelper.toggleGizmo(objectId, isOn);
+      events.on('ObjectEditModeChanged', (objectId, isOn, showGizmo) => {
+        console.log('Babylon: handle ObjectEditModeChanged', objectId, {isOn, showGizmo});
+        WorldCreatorHelper.toggleGizmo(objectId, showGizmo);
+        WorldCreatorHelper.toggleHightlightObject(objectId, isOn);
       });
       events.on('DetachObjectFromCamera', (objectId) => {
         ObjectHelper.detachFromCamera();
@@ -133,6 +137,9 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       <SceneComponent
         id="babylon-canvas"
         antialias
+        engineOptions={{
+          stencil: true
+        }}
         onSceneReady={onSceneReady}
         onRender={onRender}
         style={{width: '100vw', height: '100vh'}}

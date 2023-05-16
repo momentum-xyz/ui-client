@@ -84,15 +84,21 @@ const World3dPage: FC = () => {
   }, [worldId, universeStore, readyToHandleEvents]);
 
   useEffect(() => {
-    if (
-      creatorStore.selectedObjectId &&
-      universeStore.isCreatorMode &&
-      creatorStore.selectedTab === 'gizmo'
-    ) {
-      Event3dEmitter.emit('ObjectEditModeChanged', creatorStore.selectedObjectId, true);
-    } else {
-      Event3dEmitter.emit('ObjectEditModeChanged', 'n/a', false);
+    if (!creatorStore.selectedObjectId || !universeStore.isCreatorMode) {
+      Event3dEmitter.emit('ObjectEditModeChanged', 'n/a', false, false);
+      return;
     }
+
+    const highlightObject = !!creatorStore.selectedObjectId;
+
+    const showGizmo = creatorStore.selectedTab === 'gizmo';
+
+    Event3dEmitter.emit(
+      'ObjectEditModeChanged',
+      creatorStore.selectedObjectId || 'n/a',
+      highlightObject,
+      highlightObject && showGizmo
+    );
   }, [creatorStore.selectedObjectId, creatorStore.selectedTab, universeStore.isCreatorMode]);
 
   const handleObjectClick = (objectId: string, clickPos: ClickPositionInterface) => {
