@@ -1,5 +1,5 @@
-import {Button, Heading, Input, PanelLayout, Text, Toggle} from '@momentum-xyz/ui-kit';
 import React from 'react';
+import {Button, Input, Panel, Checkbox} from '@momentum-xyz/ui-kit-storybook';
 import {useForm, Controller} from 'react-hook-form';
 
 import {PluginConfigDescriptionInterface} from '../../interfaces';
@@ -46,59 +46,53 @@ export const PluginConfigRenderer: React.FC<PropsInterface> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <PanelLayout title="Plugin config" onClose={onCancel}>
-        <styled.PluginConfigRendererContainer>
-          {Object.keys(config).map((key) => {
-            const item = config[key];
-            const error = errors[key];
-            return (
-              <div key={key}>
-                <Controller
-                  control={control}
-                  name={key}
-                  rules={{required: item.required}}
-                  render={({field: {value, onChange}}) => {
-                    return (
-                      <styled.ItemContainer>
-                        <Heading
-                          type="h4"
-                          label={item.displayName || key}
-                          align="left"
-                          transform="uppercase"
-                        />
+    <Panel variant="primary" size="normal" title="Plugin config" onClose={onCancel}>
+      <styled.PluginConfigRendererContainer>
+        {Object.keys(config).map((key) => {
+          const item = config[key];
+          const error = errors[key];
+          return (
+            <div key={key}>
+              <Controller
+                control={control}
+                name={key}
+                rules={{required: item.required}}
+                render={({field: {value, onChange}}) => {
+                  return (
+                    <styled.ItemContainer>
+                      <h4>{item.displayName || key}</h4>
 
-                        {item.type === 'boolean' ? (
-                          <Toggle checked={value || false} onChange={onChange} />
-                        ) : (
+                      {item.type === 'boolean' ? (
+                        <Checkbox name={key} value={value || false} onChange={onChange} />
+                      ) : (
+                        <>
                           <Input
                             value={value || ''}
-                            type={item.type === 'number' ? 'number' : 'text'}
-                            isError={!!error}
-                            errorMessage={error?.message as any}
+                            // type={item.type === 'number' ? 'number' : 'text'}
+                            danger={!!error}
+                            // errorMessage={error?.message as any}
                             onChange={onChange}
                           />
-                        )}
+                          {error?.message}
+                        </>
+                      )}
 
-                        {item.description && (
-                          <styled.Description>
-                            <Text text={item.description} size="s" align="left" />
-                          </styled.Description>
-                        )}
-                      </styled.ItemContainer>
-                    );
-                  }}
-                />
-              </div>
-            );
-          })}
-          <styled.ButtonsContainer>
-            <Button submit label="Save" />
-            <Button submit={false} label="Cancel" onClick={onCancel} />
-          </styled.ButtonsContainer>
-        </styled.PluginConfigRendererContainer>
-      </PanelLayout>
-    </form>
+                      {item.description && (
+                        <styled.Description>{item.description}</styled.Description>
+                      )}
+                    </styled.ItemContainer>
+                  );
+                }}
+              />
+            </div>
+          );
+        })}
+        <styled.ButtonsContainer>
+          <Button onClick={handleSubmit(onSubmit)} label="Save" />
+          <Button label="Cancel" onClick={onCancel} />
+        </styled.ButtonsContainer>
+      </styled.PluginConfigRendererContainer>
+    </Panel>
   );
 };
 
