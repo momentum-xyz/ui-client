@@ -2,8 +2,6 @@ import {
   AbstractMesh,
   Color3,
   GizmoManager,
-  GlowLayer,
-  HighlightLayer,
   Mesh,
   MeshBuilder,
   Scene,
@@ -44,7 +42,6 @@ export class WorldCreatorHelper {
   static transformSubscription: {unsubscribe: () => void} | undefined;
   static onObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
   static selectedObjectFromGizmo = '';
-  static selectedObjectId = '';
   static scene: Scene;
 
   static placeholder: AbstractMesh;
@@ -58,7 +55,6 @@ export class WorldCreatorHelper {
     this.isCreatorMode = false;
     this.lastLockedID = '';
     this.selectedObjectFromGizmo = '';
-    this.selectedObjectId = '';
     this.scene = scene;
 
     // Custom gizmo
@@ -324,7 +320,6 @@ export class WorldCreatorHelper {
   }
 
   static toggleGizmo(objectId: string, on: boolean) {
-    console.log('toggleGizmo', objectId, on);
     if (on) {
       this.selectedObjectFromGizmo = objectId;
 
@@ -343,95 +338,6 @@ export class WorldCreatorHelper {
       this.transformSubscription?.unsubscribe();
       this.selectedObjectFromGizmo = '';
     }
-  }
-
-  static highlightLayer: HighlightLayer | undefined;
-  static glowLayer: GlowLayer | undefined;
-
-  static toggleHightlightObject(objectId: string, on: boolean) {
-    if (this.selectedObjectId === objectId) {
-      return;
-    }
-
-    const id = on ? objectId : this.selectedObjectId;
-    this.selectedObjectId = id;
-
-    // TODO Add/drop highlight layer
-    console.log('TODO toggleHightlightObject', objectId, on);
-    const node = getNodeFromId(id);
-    console.log('toggleHightlightObject node', node);
-    const container = ObjectHelper.objectsMap.get(id)?.container;
-    const meshes = container?.meshes;
-    console.log('toggleHightlightObject meshes', meshes);
-    if (on) {
-      if (container && meshes && node) {
-        if (!this.glowLayer) {
-          this.glowLayer = new GlowLayer('glow', ObjectHelper.scene);
-          this.glowLayer.intensity = 0.5;
-          this.glowLayer.customEmissiveColorSelector = (mesh, subMesh, material, result) => {
-            // console.log('glow', mesh.name, mesh, subMesh, material, result);
-            // console.log('glow', mesh.parent?.metadata, mesh.parent?.parent?.metadata);
-            if (this.selectedObjectId === mesh.parent?.metadata) {
-              // the parent with metadata can be many layers higher
-              console.log('glow', mesh.parent?.metadata);
-              result.set(1, 1, 1, 0.4);
-            } else {
-              result.set(0, 0, 0, 0);
-            }
-          };
-        }
-
-        // doesn't work
-        if (!this.highlightLayer) {
-          this.highlightLayer = new HighlightLayer('hl1', ObjectHelper.scene, {
-            // mainTextureFixedSize: 512,
-            // camera: PlayerHelper.camera,
-            // mainTextureRatio: 0.5
-          });
-        }
-
-        for (const mesh of meshes || []) {
-          if (mesh.name !== '__root__') {
-            this.highlightLayer?.addMesh(mesh as any, Color3.Green());
-            console.log('Added mesh to highlight layer: ', mesh.name); // Log the name of the mesh being added to the highlight layer
-          }
-        }
-        // hl.addMesh(node as any, Color3.Green());
-
-        // // Calculate the bounding info of the entire model
-        // let boundingInfo = container.meshes[0].getBoundingInfo();
-        // for (let i = 1; i < container.meshes.length; i++) {
-        //   // boundingInfo = boundingInfo.merge(container.meshes[i].getBoundingInfo());
-        //   boundingInfo = container.meshes[i].getBoundingInfo();
-        // }
-
-        // // Create a bounding box mesh around the model
-        // const boundingBox = MeshBuilder.CreateBox('boundingBox', {size: 1}, ObjectHelper.scene);
-        // // boundingBox.scaling = boundingInfo.boundingBox.extendSize.scale(2); // extendSize is half the size of the bounding box
-        // boundingBox.parent = node;
-        // // ObjectHelper.scene.addMesh(boundingBox);
-        // // boundingBox.position = boundingInfo.boundingBox.center;
-        // console.log('toggleHightlightObject boundingBox', boundingBox, boundingInfo.boundingBox);
-
-        // // Make the bounding box invisible
-        // // boundingBox.isVisible = false;
-
-        // // Add the bounding box to the highlight layer
-        // this.highlightLayer.addMesh(boundingBox, Color3.White());
-      }
-    } else {
-      // this.highlightLayer?.removeMesh(node as any);
-      console.log('toggleHightlightObject dispose hl', this.highlightLayer);
-      this.glowLayer?.dispose();
-      this.glowLayer = undefined;
-      // for (const mesh of meshes || []) {
-      //   this.highlightLayer?.removeMesh(mesh as any);
-      // }
-      // this.highlightLayer?.dispose();
-      // this.highlightLayer = undefined;
-    }
-
-    this.selectedObjectId = on ? objectId : '';
   }
 
   static tryLockObject(id: string) {
