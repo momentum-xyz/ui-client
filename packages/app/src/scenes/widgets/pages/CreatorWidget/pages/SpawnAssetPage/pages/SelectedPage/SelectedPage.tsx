@@ -19,10 +19,11 @@ export const SelectedPage: FC = () => {
   const {t} = useI18n();
 
   useEffect(() => {
+    spawnAssetStore.setNavigationObjectName(asset?.name || '');
     return () => {
       spawnAssetStore.resetSelectedObjectFields();
     };
-  }, [spawnAssetStore]);
+  }, [asset, spawnAssetStore]);
 
   const handleSpawn = useCallback(() => {
     spawnAssetStore.spawnObject(worldId).then((objectId) => {
@@ -126,6 +127,7 @@ export const SelectedPage: FC = () => {
             {/* <styled.PropValue>test</styled.PropValue> */}
             <Input
               placeholder={t('placeholders.defaultAssetName')}
+              value={spawnAssetStore.navigationObjectName}
               onChange={spawnAssetStore.setNavigationObjectName}
             />
           </styled.Prop>
