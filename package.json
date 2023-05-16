@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "husky install",
     "build": "yarn build:app",
-    "build:deps": "yarn workspace @momentum-xyz/core build && yarn workspace @momentum-xyz/ui-kit && yarn workspace @momentum-xyz/ui-kit-storybook && yarn workspace @momentum-xyz/sdk build build && yarn workspace @momentum-xyz/map3d build && yarn workspace @momentum-xyz/odyssey3d build",
+    "build:deps": "yarn workspace @momentum-xyz/core build && yarn workspace @momentum-xyz/ui-kit build && yarn workspace @momentum-xyz/ui-kit-storybook build && yarn workspace @momentum-xyz/sdk build build && yarn workspace @momentum-xyz/map3d build && yarn workspace @momentum-xyz/odyssey3d build",
     "build:app": "yarn build:deps && yarn workspace @momentum-xyz/ui-client build",
     "build:plugin_miro": "yarn build:deps && yarn workspace plugin_miro build",
     "build:plugin_google_drive": "yarn build:deps && yarn workspace plugin_google_drive build",
