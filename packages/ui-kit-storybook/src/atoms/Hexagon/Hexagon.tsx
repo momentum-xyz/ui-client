@@ -218,6 +218,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
               isActive={isActive}
               iconName={iconName}
               imageSrc={imageSrc}
+              label={label}
             />
           </>
         ) : (
