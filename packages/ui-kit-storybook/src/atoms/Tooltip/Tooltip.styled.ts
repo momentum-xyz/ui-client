@@ -13,6 +13,7 @@ export const Tooltip = styled.span`
   padding: 4px 10px;
   text-transform: uppercase;
   width: max-content;
+  letter-spacing: 0.3em;
 
   visibility: hidden;
   &.visible {
