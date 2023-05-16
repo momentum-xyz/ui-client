@@ -1,6 +1,6 @@
 {
   "name": "@momentum-xyz/ui-kit-storybook",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "license": "GPL-3.0",
   "repository": "https://github.com/momentum-xyz/ui-client",
   "publishConfig": {
