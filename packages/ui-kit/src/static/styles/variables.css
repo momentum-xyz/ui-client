@@ -46,13 +46,18 @@
   --default-progress-bar: rgba(240, 145, 2, 1);
 
   /** Typography **/
-  --font-size-xxxl: 25px;
+  /* --font-size-xxxl: 25px;
   --font-size-xxl: 22px;
   --font-size-xl: 18px;
   --font-size-l: 16px;
   --font-size-m: 14px;
   --font-size-s: 13px;
   --font-size-xs: 12px;
+  --font-size-xxs: 11px; */
+  --font-size-xxxl: 20px;
+  --font-size-xxl: 18px;
+  --font-size-xl: 16px;
+  --font-size-l: 15px;
   --font-size-xxs: 11px;
   --font-size-xxxs: 10px;
   --font-size-xxxxs: 9px;
