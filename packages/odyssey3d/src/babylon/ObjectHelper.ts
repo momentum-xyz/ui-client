@@ -12,7 +12,7 @@ import {
   Vector3,
   Texture
 } from '@babylonjs/core';
-import '@babylonjs/loaders/glTF';
+import '@babylonjs/loaders/glTF/2.0/glTFLoader';
 import {
   Object3dInterface,
   Texture3dInterface,
