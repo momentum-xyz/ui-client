@@ -1,5 +1,5 @@
 const CompressionPlugin = require('compression-webpack-plugin');
-const {ModuleFederationPlugin} = require("webpack").container;
+const {ModuleFederationPlugin} = require('webpack').container;
 
 module.exports = {
   style: {
@@ -14,64 +14,64 @@ module.exports = {
         algorithm: 'gzip'
       }),
       new ModuleFederationPlugin({
-        name: "app",
+        name: 'app',
         remotes: {},
         shared: {
           react: {
-            singleton: true, 
-            eager: true,
-            requiredVersion: ">=16.14.0",
-          },
-          "react-dom": {
-            singleton: true, 
-            eager: true,
-            requiredVersion: ">=16.14.0"
-          },
-          mobx: { 
-            singleton: true, 
-            eager: true,
-            requiredVersion: "^6.4.2"
-          },
-          "mobx-react-lite": { 
-            singleton: true, 
-            eager: true,
-            requiredVersion: "^3.3.0"
-          },
-          "mobx-state-tree": { 
-            singleton: true, 
-            eager: true,
-            requiredVersion: "^5.1.3"
-          },
-          "styled-components": { 
-            singleton: true, 
-            eager: true,
-            requiredVersion: "^5.3.5"
-          },
-          "axios": {
             singleton: true,
             eager: true,
-            requiredVersion: "^0.22.0"
+            requiredVersion: '>=16.14.0'
           },
-          "axios-auth-refresh": {
+          'react-dom': {
             singleton: true,
             eager: true,
-            requiredVersion: "^3.2.2"
+            requiredVersion: '>=16.14.0'
           },
-          "@momentum-xyz/sdk": {
+          mobx: {
             singleton: true,
             eager: true,
-            requiredVersion: "latest"
+            requiredVersion: '^6.4.2'
           },
-          "@momentum-xyz/ui-kit": {
+          'mobx-react-lite': {
             singleton: true,
             eager: true,
-            requiredVersion: "^0.1.3"
+            requiredVersion: '^3.3.0'
+          },
+          'mobx-state-tree': {
+            singleton: true,
+            eager: true,
+            requiredVersion: '^5.1.3'
+          },
+          'styled-components': {
+            singleton: true,
+            eager: true,
+            requiredVersion: '^5.3.5'
+          },
+          axios: {
+            singleton: true,
+            eager: true,
+            requiredVersion: '^0.22.0'
+          },
+          'axios-auth-refresh': {
+            singleton: true,
+            eager: true,
+            requiredVersion: '^3.2.2'
+          },
+          '@momentum-xyz/sdk': {
+            singleton: true,
+            eager: true,
+            requiredVersion: 'latest'
+          },
+          '@momentum-xyz/ui-kit': {
+            singleton: true,
+            eager: true,
+            requiredVersion: '^0.1.3'
           },
           '@momentum-xyz/ui-kit-storybook': {
             singleton: true,
             eager: true,
-            requiredVersion: '^0.1.0'
-          },
+            requiredVersion: '^0.1.4'
+          }
         }
       })
     ],

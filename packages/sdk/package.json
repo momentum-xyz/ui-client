@@ -12,13 +12,12 @@
   "scripts": {
     "copy-files": "copyfiles -u 1 bin/*.js dist/bin && copyfiles craco.config.js dist/ && copyfiles public/* dist/",
     "clean": "rimraf dist/",
-    "build": "yarn workspace @momentum-xyz/ui-kit build && yarn clean && yarn copy-files && tsc --listEmittedFiles",
+    "build": "yarn clean && yarn copy-files && tsc --listEmittedFiles",
     "start": "yarn copy-files && tsc -w"
   },
   "dependencies": {
     "@craco/craco": "^6.1.1",
-    "@momentum-xyz/ui-kit": "^0.1.3",
-    "@momentum-xyz/ui-kit-storybook": "^0.1.0",
+    "@momentum-xyz/ui-kit-storybook": "^0.1.3",
     "react-router-dom": "^6.6.2"
   },
   "devDependencies": {
