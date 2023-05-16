@@ -4,14 +4,14 @@ import {rgba} from 'polished';
 export const Container = styled.div`
   margin: 1px;
   border-radius: 4px;
-  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
   box-shadow: -1px -1px 2px rgba(158, 238, 255, 0.1);
 `;
 
 export const Inner = styled.div`
   padding: 0 10px;
   display: grid;
-  height: 65px;
+  height: 58px;
   text-transform: uppercase;
   color: ${(props) => props.theme.text};
   grid-template-columns: 42px 1fr auto;

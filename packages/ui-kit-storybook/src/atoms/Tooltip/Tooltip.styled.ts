@@ -21,6 +21,7 @@ export const Tooltip = styled.span`
 
   position: absolute;
   bottom: calc(100% + 7px);
+  z-index: 999;
 
   &.right {
     left: 50%;

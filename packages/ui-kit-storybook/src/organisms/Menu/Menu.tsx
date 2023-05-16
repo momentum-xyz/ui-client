@@ -164,6 +164,7 @@ const Menu = <T,>({
           iconName={action.iconName}
           imageSrc={action.imageSrc}
           indicator={action.iconIndicator}
+          tooltip={action.tooltip || null}
           isActive={activeKeys.includes(action.key)}
           onClick={() => {
             action.onClick?.(action.key, action.viewPosition || action.position);

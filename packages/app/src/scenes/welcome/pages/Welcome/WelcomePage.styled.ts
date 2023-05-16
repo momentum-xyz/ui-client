@@ -85,6 +85,13 @@ export const CardButtonContainer = styled.h2`
     & button {
       color: ${(props) => props.theme.accentBg};
       border-color: ${(props) => props.theme.accentBg};
+
+      & svg {
+        color: ${(props) => props.theme.accentBg};
+      }
+    }
+
+    &:hover {
       & svg {
         color: ${(props) => props.theme.accentBg};
       }
