@@ -324,3 +324,9 @@ export const IndicatorVoice = styled.div`
   right: 4px;
   z-index: 10;
 `;
+
+export const Label = styled.div`
+  color: ${(props) => props.theme.text};
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+`;

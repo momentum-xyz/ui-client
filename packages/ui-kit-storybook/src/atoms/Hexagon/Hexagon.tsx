@@ -104,6 +104,7 @@ export interface HexagonPropsInterface {
   tooltip?: string | null;
   imageSrc?: string | null;
   iconName?: IconNameType | null;
+  label?: string;
   onClick?: () => void;
 }
 
@@ -118,6 +119,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
     transparentBackground = false,
     iconName,
     imageSrc,
+    label,
     onClick,
     margin,
     tooltip,
@@ -161,7 +163,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
   ) : iconName ? (
     <IconSvg name={iconName} size={iconSize} isWhite />
   ) : (
-    <></>
+    <styled.Label>{label}</styled.Label>
   );
 
   const hexElement = (
@@ -216,6 +218,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
               isActive={isActive}
               iconName={iconName}
               imageSrc={imageSrc}
+              label={label}
             />
           </>
         ) : (
