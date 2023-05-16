@@ -126,8 +126,6 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
     ...rest
   } = props;
 
-  alert(label);
-
   const isBorderless = borderlessHexagonTypes.includes(type);
 
   const size: HexagonSizeType = largeSizeHexagonTypes.includes(type)
