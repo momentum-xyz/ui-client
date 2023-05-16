@@ -163,7 +163,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
   ) : iconName ? (
     <IconSvg name={iconName} size={iconSize} isWhite />
   ) : (
-    <styled.Label className="text">{label}</styled.Label>
+    <styled.Label>{label}</styled.Label>
   );
 
   const hexElement = (
