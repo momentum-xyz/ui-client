@@ -10,16 +10,16 @@ export const Container = styled.div`
 `;
 
 export const SkyboxContainer = styled.button`
-  width: 178px;
+  width: 160px;
 `;
-export const SkyboxInnerContainer = styled.button`
+export const SkyboxInnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
 `;
 
 export const SkyboxName = styled.span`
-  width: 160px;
+  width: 140px;
   text-align: center;
   color: ${(props) => props.theme.text};
   letter-spacing: 0.08em;
