@@ -13,23 +13,38 @@ const Template: Story<ButtonRoundPropsInterface> = (args) => {
 
 export const Primary = Template.bind({});
 Primary.args = {
-  variant: 'primary'
+  variant: 'primary',
+  size: 'normal'
 };
 
 export const PrimaryDisabled = Template.bind({});
 PrimaryDisabled.args = {
   variant: 'primary',
+  size: 'normal',
   disabled: true
-};
-
-export const Lange = Template.bind({});
-Lange.args = {
-  variant: 'primary',
-  size: 'large'
 };
 
 export const IsLabel = Template.bind({});
 IsLabel.args = {
   variant: 'primary',
+  size: 'normal',
   isLabel: true
+};
+
+export const Small = Template.bind({});
+Small.args = {
+  variant: 'primary',
+  size: 'small'
+};
+
+export const Normal = Template.bind({});
+Normal.args = {
+  variant: 'primary',
+  size: 'normal'
+};
+
+export const Large = Template.bind({});
+Large.args = {
+  variant: 'primary',
+  size: 'large'
 };

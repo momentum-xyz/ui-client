@@ -36,7 +36,7 @@ const Visitor: FC<PropsInterface> = ({
           <Hexagon
             type="third-borderless"
             imageSrc={getImageAbsoluteUrl(user.profile.avatarHash)}
-            onClick={() => setIsDetailsShown(!isDetailsShown)}
+            iconName="rocket"
           />
         </styled.Hexagon>
 
@@ -44,28 +44,33 @@ const Visitor: FC<PropsInterface> = ({
           <styled.Title>{user.name}</styled.Title>
         </styled.TitleContainer>
 
-        <styled.Actions>
-          {!isDetailsShown && (
-            <>
-              {/*<ButtonRound
+        {!user.isGuest && (
+          <styled.Actions>
+            {!isDetailsShown && (
+              <>
+                {/*<ButtonRound
+                size="normal"
                 icon="voice_chat"
                 variant="primary"
                 onClick={() => onInviteToVoiceChat(userDetails.userId)}
               />*/}
-              <ButtonRound
-                icon="high-five"
-                variant="primary"
-                onClick={() => onSendHighFive(userDetails.userId)}
-              />
-            </>
-          )}
-          <ButtonRound
-            icon="info_2"
-            variant="primary"
-            isActive={isDetailsShown}
-            onClick={() => setIsDetailsShown(!isDetailsShown)}
-          />
-        </styled.Actions>
+                <ButtonRound
+                  size="normal"
+                  icon="high-five"
+                  variant="primary"
+                  onClick={() => onSendHighFive(userDetails.userId)}
+                />
+              </>
+            )}
+            <ButtonRound
+              size="normal"
+              icon="info_2"
+              variant="primary"
+              isActive={isDetailsShown}
+              onClick={() => setIsDetailsShown(!isDetailsShown)}
+            />
+          </styled.Actions>
+        )}
       </styled.Inner>
 
       {isDetailsShown && (

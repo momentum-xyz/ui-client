@@ -1,16 +1,15 @@
-// import {Dropdown, Heading, Text} from '@momentum-xyz/ui-kit';
-import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useRef, useState} from 'react';
-// import {useI18n} from '@momentum-xyz/core';
-import {Button, TabInterface, Tabs} from '@momentum-xyz/ui-kit-storybook';
+import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
+import {Button, TabInterface, Tabs} from '@momentum-xyz/ui-kit-storybook';
+// import {ChangeVideoDialog} from 'scenes/object/components';
 
 import {ToastContent} from 'ui-kit';
 import {BasicAsset2dIdEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
-import {ChangeVideoDialog} from 'scenes/object/components';
+import {subMenuKeyWidgetEnumMap} from 'core/constants';
 
-import {AssignText, AssignImage} from './components';
+import {AssignText, AssignImage, AssignVideoDialog} from './components';
 import * as styled from './ObjectFunctionalityPage.styled';
 
 const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
@@ -20,14 +19,13 @@ const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
 ];
 
 const ObjectFunctionalityPage: FC = () => {
-  const {creatorStore, objectStore} = useStore();
-  const {objectFunctionalityStore, selectedObjectId} = creatorStore;
+  const {universeStore, widgetStore, widgetManagerStore} = useStore();
+  const {creatorStore} = widgetStore;
+  const {selectedTab, objectFunctionalityStore, selectedObjectId} = creatorStore;
+  const {objectStore} = universeStore;
   const {pluginLoader} = objectStore;
 
   const [modifiedOptionValue, setModifiedOptionValue] = useState<string | null>(null);
-
-  const isModified =
-    !!modifiedOptionValue && modifiedOptionValue !== objectFunctionalityStore.currentAssetId;
 
   const activeId = modifiedOptionValue || objectFunctionalityStore.currentAssetId;
 
@@ -35,25 +33,28 @@ const ObjectFunctionalityPage: FC = () => {
 
   console.log('ObjectFunctionalityPage', {
     selectedObjectId,
-    isModified,
     modifiedOptionValue,
     currentAssetId: objectFunctionalityStore.currentAssetId
   });
-
-  // const {t} = useI18n();
 
   // TODO remove this and simplify the store
   useEffect(() => {
     if (selectedObjectId) {
       objectFunctionalityStore.init(selectedObjectId);
       objectStore.init(selectedObjectId);
-      // objectStore.initPluginVideoLoader(selectedObjectId);
     }
 
     return () => {
       objectFunctionalityStore.resetModel();
     };
   }, [selectedObjectId, objectFunctionalityStore, objectStore]);
+
+  const handleSubMenuActiveChange = (): void => {
+    const currentTabIsOnSubMenu = selectedTab && subMenuKeyWidgetEnumMap[selectedTab];
+    if (currentTabIsOnSubMenu) {
+      widgetManagerStore.setSubMenuActiveKeys([]);
+    }
+  };
 
   const handleSave = async () => {
     try {
@@ -65,6 +66,7 @@ const ObjectFunctionalityPage: FC = () => {
       }
 
       creatorStore.setSelectedTab(null);
+      handleSubMenuActiveChange();
 
       toast.info(<ToastContent icon="check" text="Saved" />);
     } catch (e) {
@@ -76,11 +78,10 @@ const ObjectFunctionalityPage: FC = () => {
   const handleTypeChange = (value: string) => {
     console.log('handleTypeChange', value);
     setModifiedOptionValue(value);
-    // assetStore.setAssetType(value);
   };
 
   const renderBody = () => {
-    if (!selectedObjectId || objectStore.isPending) {
+    if (!selectedObjectId) {
       return null;
     }
 
@@ -93,7 +94,7 @@ const ObjectFunctionalityPage: FC = () => {
         return (
           <>
             {pluginLoader?.plugin ? (
-              <ChangeVideoDialog
+              <AssignVideoDialog
                 actionRef={actionRef}
                 plugin={pluginLoader.plugin}
                 pluginLoader={pluginLoader}
@@ -121,11 +122,7 @@ const ObjectFunctionalityPage: FC = () => {
       <styled.PanelBody>{renderBody()}</styled.PanelBody>
 
       <styled.ActionBar>
-        <Button
-          // disabled={!isModified}
-          label="Embed"
-          onClick={handleSave}
-        />
+        <Button label="Embed" onClick={handleSave} />
       </styled.ActionBar>
     </styled.Container>
   );

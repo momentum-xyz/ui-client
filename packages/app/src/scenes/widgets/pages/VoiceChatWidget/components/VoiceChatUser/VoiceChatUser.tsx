@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {VoiceUserLine} from '@momentum-xyz/ui-kit-storybook';
+import {VoiceUser} from '@momentum-xyz/ui-kit-storybook';
 
 import * as styled from './VoiceChatUser.styled';
 
@@ -13,7 +13,7 @@ interface PropsInterface {
 const VoiceChatUser: FC<PropsInterface> = ({avatarSrc, soundLevel, name, isMuted}) => {
   return (
     <styled.Container>
-      <VoiceUserLine
+      <VoiceUser
         imageSrc={avatarSrc || ''}
         username={name || ''}
         isMicrophoneOff={isMuted}

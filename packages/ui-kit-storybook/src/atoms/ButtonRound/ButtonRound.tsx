@@ -8,7 +8,7 @@ import * as styled from './ButtonRound.styled';
 
 export interface ButtonRoundPropsInterface {
   icon: IconNameType;
-  size?: 'normal' | 'large';
+  size?: 'small' | 'normal' | 'large';
   variant?: 'primary';
   disabled?: boolean;
   isLabel?: boolean;
@@ -17,12 +17,13 @@ export interface ButtonRoundPropsInterface {
 }
 
 const IconSizeMap = {
-  normal: 'xs',
+  small: 'xs',
+  normal: 'm',
   large: 'xl'
 };
 
 const ButtonRound = forwardRef<HTMLButtonElement, ButtonRoundPropsInterface>(
-  ({icon, variant = 'primary', size = 'normal', isLabel, disabled, isActive, onClick}, ref) => {
+  ({icon, variant = 'primary', size = 'small', isLabel, disabled, isActive, onClick}, ref) => {
     return (
       <styled.Button
         data-testid="ButtonRound-test"

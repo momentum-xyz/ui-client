@@ -9,7 +9,8 @@ import {useStore} from 'shared/hooks';
 import * as styled from './DeleteSkyboxDialog.styled';
 
 const DeleteSkyboxDialog: FC = () => {
-  const {creatorStore, universeStore, sessionStore} = useStore();
+  const {widgetStore, universeStore, sessionStore} = useStore();
+  const {creatorStore} = widgetStore;
   const {skyboxSelectorStore} = creatorStore;
   const {deleteDialog, closeSkyboxDeletion, removeUserSkybox, skyboxToDelete, currentItemId} =
     skyboxSelectorStore;
