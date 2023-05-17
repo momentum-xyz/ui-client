@@ -3,6 +3,7 @@ import {FC, useCallback, useEffect, useState} from 'react';
 import {Button, Frame, Input} from '@momentum-xyz/ui-kit-storybook';
 import {useI18n} from '@momentum-xyz/core';
 import {Model3dPreview} from '@momentum-xyz/map3d';
+import {Model3dPreview as Model3dPreviewNew} from '@momentum-xyz/odyssey3d';
 import {GLTF} from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 import {useStore} from 'shared/hooks';
@@ -79,14 +80,24 @@ export const SelectedPage: FC = () => {
     <styled.Container className="just-to-be-sure">
       <styled.ObjectInfoContainer>
         <Frame>
-          <styled.PreviewContainer>
-            <Model3dPreview
-              filename={asset.thumbnailAssetDownloadUrl}
-              previewUrl={asset.previewUrl}
-              onSnapshot={asset.category === 'custom' ? handleSnapshot : undefined}
-              onAssetInfoLoaded={onAssetInfoLoad}
-            />
-          </styled.PreviewContainer>
+          <>
+            <styled.PreviewContainer>
+              <Model3dPreview
+                filename={asset.thumbnailAssetDownloadUrl}
+                previewUrl={asset.previewUrl}
+                onSnapshot={asset.category === 'custom' ? handleSnapshot : undefined}
+                onAssetInfoLoaded={onAssetInfoLoad}
+              />
+            </styled.PreviewContainer>
+            <styled.PreviewContainer>
+              <Model3dPreviewNew
+                filename={asset.thumbnailAssetDownloadUrl}
+                previewUrl={asset.previewUrl}
+                onSnapshot={asset.category === 'custom' ? handleSnapshot : undefined}
+                onAssetInfoLoaded={onAssetInfoLoad}
+              />
+            </styled.PreviewContainer>
+          </>
         </Frame>
 
         <styled.ObjectTitle>{asset.name}</styled.ObjectTitle>
