@@ -25,12 +25,17 @@ export const InfoContainer = styled.div`
 `;
 
 export const ScrollableContainer = styled.div`
-  height: calc(100vh - var(--scroll-offset));
   overflow: auto;
 
   & > div {
     padding: 20px;
   }
+`;
+
+export const InputContainer = styled.div`
+  border-top: 1px solid ${(props) => props.theme.accentText};
+  margin-top: 20px;
+  padding: 30px 0 20px !important;
 `;
 
 export const ImageUploadContainer = styled.div`

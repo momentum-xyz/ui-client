@@ -87,7 +87,7 @@ const AssetStore = types
           break;
       }
     },
-    postNewImage: flow(function* (objectId: string, file: File) {
+    postNewImage: flow(function* (objectId: string, file: File, title?: string) {
       const userResponse: UploadImageResponse = yield self.imageUpload.send(
         api.mediaRepository.uploadImage,
         {file}
@@ -98,7 +98,7 @@ const AssetStore = types
         spaceId: objectId,
         plugin_id: PluginIdEnum.IMAGE,
         attribute_name: AttributeNameEnum.STATE,
-        value: {render_hash: imageHash}
+        value: {render_hash: imageHash, title}
       });
 
       yield self.getSpaceAttributeValue(PluginIdEnum.IMAGE, objectId);
@@ -117,6 +117,9 @@ const AssetStore = types
   .views((self) => ({
     get imageSrc(): string | null {
       return getImageAbsoluteUrl(self.content?.render_hash, ImageSizeEnum.S5);
+    },
+    get title(): string | null {
+      return self.content?.title || null;
     }
   }));
 
