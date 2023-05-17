@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {UsePluginHookType, useSharedObjectState} from '@momentum-xyz/sdk';
-import {Input} from '@momentum-xyz/ui-kit-storybook';
+import {Input} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import '@momentum-xyz/ui-kit/dist/themes/themes';

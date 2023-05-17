@@ -9,7 +9,7 @@ import {
   stringInputMask,
   SliderItemInterface,
   ImageSizeEnum
-} from '@momentum-xyz/ui-kit-storybook';
+} from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {WorldInfoModelInterface, SearchQueryModelModelType} from 'core/models';

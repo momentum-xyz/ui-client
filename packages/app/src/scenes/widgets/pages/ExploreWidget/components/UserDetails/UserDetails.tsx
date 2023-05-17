@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
-import {Panel, ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ProfileInfo, ProfileImage, WorldsOwnedList, WorldsStakedList} from 'ui-kit';

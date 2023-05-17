@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {useI18n} from '@momentum-xyz/core';
-import {ProfileLine} from '@momentum-xyz/ui-kit-storybook';
+import {ProfileLine} from '@momentum-xyz/ui-kit';
 
 import * as styled from './TrustPoints.styled';
 

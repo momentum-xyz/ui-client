@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {VoiceUser} from '@momentum-xyz/ui-kit-storybook';
+import {VoiceUser} from '@momentum-xyz/ui-kit';
 
 import * as styled from './VoiceChatUser.styled';
 

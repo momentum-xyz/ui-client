@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Frame} from '@momentum-xyz/ui-kit-storybook';
+import {Frame} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 
 import * as styled from './ImageViewer.styled';

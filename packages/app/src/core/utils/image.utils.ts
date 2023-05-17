@@ -1,4 +1,4 @@
-import {ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
+import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {appVariables} from 'api/constants';
 

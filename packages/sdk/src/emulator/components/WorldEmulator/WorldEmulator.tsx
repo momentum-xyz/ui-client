@@ -1,6 +1,6 @@
 import {FC, useCallback, useState} from 'react';
 import {generatePath, Navigate, Route, Routes, useNavigate} from 'react-router-dom';
-import {Button, Checkbox} from '@momentum-xyz/ui-kit-storybook';
+import {Button, Checkbox} from '@momentum-xyz/ui-kit';
 
 import {PluginInterface} from '../../../interfaces';
 import {ObjectViewEmulator} from '../ObjectViewEmulator';

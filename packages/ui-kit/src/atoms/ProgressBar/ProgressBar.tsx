@@ -1,14 +1,12 @@
-import React, {FC, memo} from 'react';
-
-import {PropsWithThemeInterface} from '../../interfaces';
+import {FC, memo} from 'react';
 
 import * as styled from './ProgressBar.styled';
 
-interface PropsInterface extends PropsWithThemeInterface {
+export interface ProgressBarPropsInterface {
   percent: number;
 }
 
-const ProgressBar: FC<PropsInterface> = (props) => {
+const ProgressBar: FC<ProgressBarPropsInterface> = (props) => {
   const {percent} = props;
   return (
     <styled.ProgressBar data-testid="ProgressBar-test">

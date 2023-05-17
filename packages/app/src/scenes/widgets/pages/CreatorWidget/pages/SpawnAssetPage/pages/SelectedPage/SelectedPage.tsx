@@ -1,6 +1,6 @@
 import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useEffect, useState} from 'react';
-import {Button, Frame, Input} from '@momentum-xyz/ui-kit-storybook';
+import {Button, Frame, Input} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 import {Model3dPreview} from '@momentum-xyz/odyssey3d';
 import {GLTF} from 'three/examples/jsm/loaders/GLTFLoader.js';

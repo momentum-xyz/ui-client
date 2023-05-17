@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Model3dPreview} from '@momentum-xyz/odyssey3d';
 import {useI18n} from '@momentum-xyz/core';
-import {Frame} from '@momentum-xyz/ui-kit-storybook';
+import {Frame} from '@momentum-xyz/ui-kit';
 
 import {Asset3d} from 'core/models';
 import {useStore} from 'shared/hooks';

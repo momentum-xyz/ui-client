@@ -1,6 +1,6 @@
 import {FC, memo} from 'react';
 import {useI18n} from '@momentum-xyz/core';
-import {IconSvg, SymbolAmount} from '@momentum-xyz/ui-kit-storybook';
+import {IconSvg, SymbolAmount} from '@momentum-xyz/ui-kit';
 
 import {formatBigInt} from 'core/utils';
 

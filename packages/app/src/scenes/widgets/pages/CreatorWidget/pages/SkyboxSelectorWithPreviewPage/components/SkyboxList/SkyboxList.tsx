@@ -1,4 +1,4 @@
-import {Frame, Loader, Image} from '@momentum-xyz/ui-kit-storybook';
+import {Frame, Loader, Image} from '@momentum-xyz/ui-kit';
 
 import {Asset3dInterface} from 'core/models';
 

@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import BN from 'bn.js';
 import {useI18n} from '@momentum-xyz/core';
-import {Panel, StepInterface, Steps} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, StepInterface, Steps} from '@momentum-xyz/ui-kit';
 
 import {WidgetEnum} from 'core/enums';
 import {convertUuidToNftId} from 'core/utils';

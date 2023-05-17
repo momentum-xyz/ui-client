@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Image, Frame, ProfileLine, WalletHash} from '@momentum-xyz/ui-kit-storybook';
+import {Image, Frame, ProfileLine, WalletHash} from '@momentum-xyz/ui-kit';
 import {absoluteLink, withoutProtocol, useI18n, signUpDateString} from '@momentum-xyz/core';
 
 import {WorldsOwnedList, WorldsStakedList} from 'ui-kit';
