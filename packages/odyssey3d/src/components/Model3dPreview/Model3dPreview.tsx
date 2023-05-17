@@ -9,9 +9,10 @@ import {
   InstantiatedEntries,
   ArcRotateCamera
 } from '@babylonjs/core';
-import '@babylonjs/loaders/glTF';
 import SceneComponent from 'babylonjs-hook';
 import cn from 'classnames';
+
+import '../../babylon/initLoaderGLTF';
 
 import * as styled from './Model3dPreview.styled';
 
