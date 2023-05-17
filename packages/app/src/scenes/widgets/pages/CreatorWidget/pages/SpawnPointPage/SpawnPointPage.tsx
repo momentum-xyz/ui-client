@@ -1,8 +1,8 @@
-import React, {FC, useCallback} from 'react';
+import {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Button, Text} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
+import {Button} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
 import {UnityPositionInterface} from 'core/interfaces';
@@ -38,7 +38,7 @@ const SpawnPointPage: FC = () => {
 
   return (
     <styled.Container data-testid="SpawnPointPage-test">
-      <Text size="xs" text={t('textMessage.setSpawnPoint')} align="left" />
+      <div>{t('textMessage.setSpawnPoint')}</div>
 
       <styled.ButtonContainer>
         <Button label={t('titles.setSpawnPoint')} onClick={onSetHandler} />
