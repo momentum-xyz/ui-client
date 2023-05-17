@@ -109,14 +109,11 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
         const size = max.subtract(min).length();
         console.log('Loaded object sizes', {min, max, center, size});
 
-        if (scene.activeCamera) {
-          scene.activeCamera.position = center.add(new Vector3(0, 0, size * 1.5));
-          // scene.activeCamera.position = center.add(new Vector3(size / 2.0, size / 2.0, size * 1.5));
+        if (scene.activeCamera instanceof ArcRotateCamera) {
+          scene.activeCamera.position = center.add(new Vector3(0, size / 2.0, size * 1.5));
+          console.log('Camera:', scene.activeCamera.alpha);
+          scene.activeCamera.alpha += Math.PI / 4;
         }
-        // Adding all cameras to the scene
-        // container.cameras.forEach((camera) => {
-        //   scene.addCamera(camera);
-        // });
 
         for (const group of instance.animationGroups) {
           group.play(true);
