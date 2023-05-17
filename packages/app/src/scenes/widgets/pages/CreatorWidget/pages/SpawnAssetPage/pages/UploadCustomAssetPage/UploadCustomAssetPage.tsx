@@ -136,7 +136,7 @@ const UploadCustomAssetPage: FC = () => {
                         }
                         setError('file', {message: t('assetsUploader.errorSave')});
                       }}
-                      label={t('actions.uploadYourAssset')}
+                      label={t('actions.uploadYourAsset')}
                       dragActiveLabel={t('actions.dropItHere')}
                       fileType={'' as FileType}
                       maxSize={MAX_ASSET_SIZE}
