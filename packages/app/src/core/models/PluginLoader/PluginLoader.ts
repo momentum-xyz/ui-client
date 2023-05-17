@@ -1,5 +1,5 @@
 import {flow, Instance, types} from 'mobx-state-tree';
-import {IconNameType} from '@momentum-xyz/ui-kit-storybook';
+import {IconNameType} from '@momentum-xyz/ui-kit';
 import {PluginInterface} from '@momentum-xyz/sdk';
 import {ResetModel} from '@momentum-xyz/core';
 

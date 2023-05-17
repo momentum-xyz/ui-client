@@ -1,4 +1,4 @@
-import {ThemeInterface} from '@momentum-xyz/ui-kit-storybook';
+import {ThemeInterface} from '@momentum-xyz/ui-kit';
 
 import {PluginApiInterface} from './pluginApi.interface';
 import {ApiInterface} from './api.interface';

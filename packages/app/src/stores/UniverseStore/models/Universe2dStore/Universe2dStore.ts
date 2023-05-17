@@ -1,7 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import BN from 'bn.js';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
-import {ImageSizeEnum, SliderItemInterface} from '@momentum-xyz/ui-kit-storybook';
+import {ImageSizeEnum, SliderItemInterface} from '@momentum-xyz/ui-kit';
 
 import {api, BigStakerInfoInterface, UserInfoInterface, WorldInfoInterface} from 'api';
 import {getImageAbsoluteUrl} from 'core/utils';

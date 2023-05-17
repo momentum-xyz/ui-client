@@ -7,7 +7,7 @@ import {
   PositionEnum,
   SideMenu,
   SideMenuItemInterface
-} from '@momentum-xyz/ui-kit-storybook';
+} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';

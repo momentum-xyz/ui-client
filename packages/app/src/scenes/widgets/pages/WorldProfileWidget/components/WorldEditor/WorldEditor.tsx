@@ -2,7 +2,7 @@ import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Controller, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
-import {AvatarUpload, Button, ButtonRound, Input, Textarea} from '@momentum-xyz/ui-kit-storybook';
+import {AvatarUpload, Button, ButtonRound, Input, Textarea} from '@momentum-xyz/ui-kit';
 
 import {WorldModelInterface} from 'core/models';
 import {FieldErrorInterface} from 'api/interfaces';

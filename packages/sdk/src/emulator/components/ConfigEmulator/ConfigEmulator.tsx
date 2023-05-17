@@ -1,4 +1,4 @@
-import {Panel} from '@momentum-xyz/ui-kit-storybook';
+import {Panel} from '@momentum-xyz/ui-kit';
 import {FC} from 'react';
 
 import {PluginConfigRenderer} from '../../../components';

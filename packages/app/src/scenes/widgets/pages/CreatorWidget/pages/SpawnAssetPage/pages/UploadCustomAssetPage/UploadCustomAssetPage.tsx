@@ -4,7 +4,7 @@ import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {Model3dPreview} from '@momentum-xyz/map3d';
-import {Button, Input, Radio, ErrorsEnum, FileUploader} from '@momentum-xyz/ui-kit-storybook';
+import {Button, Input, Radio, ErrorsEnum, FileUploader} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';

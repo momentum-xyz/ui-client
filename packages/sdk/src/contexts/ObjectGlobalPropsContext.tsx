@@ -1,6 +1,6 @@
 import {FC, useContext, PropsWithChildren} from 'react';
 import {createContext} from 'react';
-import {DefaultThemeConfig} from '@momentum-xyz/ui-kit-storybook';
+import {DefaultThemeConfig} from '@momentum-xyz/ui-kit';
 
 import {PluginPropsInterface} from '../interfaces';
 

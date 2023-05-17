@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Button} from '@momentum-xyz/ui-kit-storybook';
+import {Button} from '@momentum-xyz/ui-kit';
 
 import * as styled from './MiroChoice.styled';
 

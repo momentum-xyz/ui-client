@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {useI18n} from '@momentum-xyz/core';
-import {SystemWideError} from '@momentum-xyz/ui-kit-storybook';
+import {SystemWideError} from '@momentum-xyz/ui-kit';
 
 const MaintenancePage: FC = () => {
   const {t} = useI18n();

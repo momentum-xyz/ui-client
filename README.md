@@ -31,7 +31,7 @@ It is a monorepo that contains the main application and several common libraries
     │   ├── map3d                   # 3D Worlds Explorer based on three.js
     │   ├── odyssey3d               # 3D World Interface based on babylon.js
     │   ├── sdk                     # Plugins SDK
-    │   ├── ui-kit-storybook        # ui-kit with Storybook
+    │   ├── ui-kit                  # ui-kit with Storybook
     │   │
     │   ├── plugin_google_drive     # Google Drive plugin
     │   ├── plugin_miro             # Miro plugin
@@ -148,12 +148,12 @@ yarn build
 
 ### How to add an icon
 
-- Copy an icon to `ui-kit-storybook/src/assets/icons` folder
+- Copy an icon to `ui-kit/src/assets/icons` folder
 - Change value of `fill` tag to `currentColor`
 - Run following scripts:
 
 ```
-cd packages/ui-kit-storybook
+cd packages/ui-kit
 yarn svg-sprite:build
 yarn svg-sprite:type
 yarn build

@@ -1,4 +1,4 @@
-import {IconSvg} from '@momentum-xyz/ui-kit-storybook';
+import {IconSvg} from '@momentum-xyz/ui-kit';
 
 import * as styled from './Carousel.styled';
 

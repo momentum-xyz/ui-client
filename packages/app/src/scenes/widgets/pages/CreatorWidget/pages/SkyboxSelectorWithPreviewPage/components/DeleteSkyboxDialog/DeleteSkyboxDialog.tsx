@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {useI18n} from '@momentum-xyz/core';
-import {Dialog} from '@momentum-xyz/ui-kit-storybook';
+import {Dialog} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 

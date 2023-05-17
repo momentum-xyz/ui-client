@@ -1,6 +1,6 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Input, numberInputSuffixMask, Textarea} from '@momentum-xyz/ui-kit-storybook';
+import {Button, Input, numberInputSuffixMask, Textarea} from '@momentum-xyz/ui-kit';
 
 import * as styled from './StakeAuthorize.styled';
 

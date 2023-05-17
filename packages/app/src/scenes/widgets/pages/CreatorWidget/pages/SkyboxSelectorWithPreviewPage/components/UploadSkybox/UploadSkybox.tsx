@@ -1,12 +1,5 @@
 import {FC} from 'react';
-import {
-  Button,
-  Input,
-  Radio,
-  FileUploader,
-  ErrorsEnum,
-  Loader
-} from '@momentum-xyz/ui-kit-storybook';
+import {Button, Input, Radio, FileUploader, ErrorsEnum, Loader} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import cn from 'classnames';

@@ -1,8 +1,7 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Select, Button, ButtonRound, SelectOptionInterface} from '@momentum-xyz/ui-kit-storybook';
-import {Frame} from '@momentum-xyz/ui-kit-storybook';
+import {Select, Button, ButtonRound, SelectOptionInterface, Frame} from '@momentum-xyz/ui-kit';
 
 import * as styled from './ProfileSettings.styled';
 

@@ -5,7 +5,7 @@ import {
   ClickPositionInterface,
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
-import {MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit-storybook';
+import {MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
 import {UnityControlInterface} from '@momentum-xyz/sdk';
 
 // import {api, ResolveNodeResponse} from 'api';

@@ -21,7 +21,7 @@
   "dependencies": {
     "@momentum-xyz/core": "^0.1.2",
     "@momentum-xyz/sdk": "^0.1.5",
-    "@momentum-xyz/ui-kit-storybook": "^0.1.4",
+    "@momentum-xyz/ui-kit": "^0.1.4",
     "history": "^5.3.0",
     "mobx": "^6.4.2",
     "mobx-react-lite": "^3.3.0",

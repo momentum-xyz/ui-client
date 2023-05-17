@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from 'react';
 import {v4 as uuidv4} from 'uuid';
-import {Switch} from '@momentum-xyz/ui-kit-storybook';
+import {Switch} from '@momentum-xyz/ui-kit';
 import {Event3dEmitter, Universe3dEmitter} from '@momentum-xyz/core';
 
 import '@babylonjs/core/Debug/debugLayer';

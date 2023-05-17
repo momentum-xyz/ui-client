@@ -2,7 +2,7 @@ import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
-import {Panel, ImageSizeEnum, PositionEnum} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, ImageSizeEnum, PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';

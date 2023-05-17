@@ -9,7 +9,6 @@ import {
 // import {stringToHex, u8aToHex} from '@polkadot/util';
 // import {hexlify} from '@ethersproject/bytes';
 // import {toUtf8Bytes} from '@ethersproject/strings';
-// import {Select} from '@momentum-xyz/ui-kit-storybook';
 import {useWeb3React} from '@web3-react/core';
 
 import {UseWalletType} from 'wallets';

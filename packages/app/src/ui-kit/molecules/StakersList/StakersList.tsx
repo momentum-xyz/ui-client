@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Hexagon, IconSvg, ButtonEllipse} from '@momentum-xyz/ui-kit-storybook';
+import {Hexagon, IconSvg, ButtonEllipse} from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {WorldStakerModelInterface} from 'core/models';

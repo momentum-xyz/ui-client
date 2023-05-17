@@ -1,7 +1,7 @@
 import {FC, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n, i18n} from '@momentum-xyz/core';
-import {Frame, Button, Input, TabInterface} from '@momentum-xyz/ui-kit-storybook';
+import {Frame, Button, Input, TabInterface} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {Asset3dCategoryEnum} from 'api/enums';
