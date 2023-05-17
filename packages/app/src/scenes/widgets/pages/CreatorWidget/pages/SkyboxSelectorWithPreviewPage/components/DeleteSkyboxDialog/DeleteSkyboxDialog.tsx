@@ -1,8 +1,8 @@
 import {FC} from 'react';
-import {Dialog} from '@momentum-xyz/ui-kit-storybook';
 import {observer} from 'mobx-react-lite';
-import {useI18n} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
+import {useI18n} from '@momentum-xyz/core';
+import {Dialog} from '@momentum-xyz/ui-kit-storybook';
 
 import {useStore} from 'shared/hooks';
 
@@ -36,17 +36,13 @@ const DeleteSkyboxDialog: FC = () => {
     <Dialog
       title={t('labels.removeCustomSkybox')}
       icon="bin"
-      hasBorder
-      showCloseButton
       onClose={deleteDialog.close}
       approveInfo={{
         title: t('actions.removeSkybox'),
-        onClick: confirmDeletion,
-        variant: 'danger'
+        onClick: confirmDeletion
       }}
       declineInfo={{
         title: t('actions.cancel'),
-        variant: 'primary',
         onClick: closeSkyboxDeletion
       }}
     >

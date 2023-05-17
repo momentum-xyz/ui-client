@@ -167,16 +167,13 @@ const CreatorWidget: FC = () => {
                     <ToastContent icon="alert" text={t('messages.errorDeletingObject')} />
                   );
                 });
-            },
-            variant: 'danger'
+            }
           }}
           declineInfo={{
             title: t('actions.cancel'),
-            onClick: removeObjectDialog.close,
-            variant: 'primary'
+            onClick: removeObjectDialog.close
           }}
           onClose={removeObjectDialog.close}
-          showCloseButton
         />
       )}
     </styled.Container>

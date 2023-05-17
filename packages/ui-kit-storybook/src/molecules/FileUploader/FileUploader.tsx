@@ -12,7 +12,7 @@ interface PropsInterface {
   dragActiveLabel: string;
   onFilesUpload: (file: File | undefined) => void;
   onError?: (error: Error) => void;
-  fileType: 'image' | 'video';
+  fileType?: 'image' | 'video';
   maxSize?: number;
   enableDragAndDrop?: boolean;
   disabled?: boolean;
