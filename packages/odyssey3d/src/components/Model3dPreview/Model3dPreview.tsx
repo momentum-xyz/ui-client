@@ -40,6 +40,7 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
 
   const [progress, setProgress] = useState<number | null>(null);
   const [isModelLoaded, setIsModelLoaded] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [isDelayingLoading, setIsDelayingLoading] = useState(!!delayLoadingMsec);
 
   useEffect(() => {
@@ -111,10 +112,13 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
         }
 
         setIsModelLoaded(true);
-        setProgress(null);
       })
       .catch((err) => {
         console.log('Model3dPreview: Error loading model asset', err);
+        setIsError(true);
+      })
+      .finally(() => {
+        setProgress(null);
       });
   };
 
@@ -137,6 +141,7 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
           <ProgressBar percent={progress} />
         </styled.ProgressBarHolder>
       )}
+      {isError && <styled.Error>;-(</styled.Error>}
       {!isModelLoaded && (
         <styled.NestedContainer style={{zIndex: 2}}>
           <styled.Canvas
@@ -152,6 +157,7 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
         <styled.NestedContainer style={{zIndex: 1}}>
           <SceneComponent
             id="babylon-canvas"
+            key={filename}
             antialias
             onSceneReady={onSceneReady}
             onRender={onRender}
