@@ -267,6 +267,7 @@ export const enGb = {
     labels: {
       home: 'Home',
       by: 'By',
+      or: 'Or',
       screenShare: 'Screenshare',
       stageMode: 'Stage Mode',
       stakingOverview: 'Staking Overview',
@@ -563,6 +564,7 @@ export const enGb = {
         'This Skybox is your Current skybox; removing this will change your skybox to the default one.',
       removeSkyboxFinalConfirmation: 'Are you sure you want to do this?',
       uploadAssetInfoTitle: 'Drag and drop your asset here',
+      uploadAssetPictureDescription: 'Drag and drop YOUR CUSTOM image here',
       uploadAssetInfoDescription: 'We support GLB Models & the max file size cannot exceed 50mb',
       uploadCustomSkyboxInfoTitle: 'Drag and drop your custom skybox here',
       uploadCustomSkyboxInfoDescription:

@@ -88,10 +88,9 @@ const AssetStore = types
       }
     },
     postNewImage: flow(function* (objectId: string, file: File) {
-      const data = {file: file};
       const userResponse: UploadImageResponse = yield self.imageUpload.send(
         api.mediaRepository.uploadImage,
-        data
+        {file}
       );
       const imageHash = userResponse?.hash;
 

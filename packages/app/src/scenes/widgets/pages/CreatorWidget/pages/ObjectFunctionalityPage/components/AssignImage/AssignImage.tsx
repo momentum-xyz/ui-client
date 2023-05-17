@@ -1,5 +1,6 @@
-import React, {FC, MutableRefObject} from 'react';
+import {FC, MutableRefObject} from 'react';
 import {FileUploader} from '@momentum-xyz/ui-kit';
+import {Frame} from '@momentum-xyz/ui-kit-storybook';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
@@ -53,40 +54,48 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
         <span>{t('labels.embedPictureInfo')}</span>
       </styled.InfoContainer>
       <styled.ScrollableContainer>
-        <Controller
-          control={control}
-          name="image"
-          rules={{required: true}}
-          render={({field: {value, onChange}}) => (
-            <styled.ImageUploadContainer
-              className={cn(
-                'test',
-                !!errors.image && 'error',
-                (value || assetStore.imageSrc) && 'has-image'
-              )}
-            >
-              {value ? (
-                <styled.PreviewImageHolder
-                  style={{backgroundImage: `url(${URL.createObjectURL(value)})`}}
-                />
-              ) : (
-                assetStore.imageSrc && (
+        <Frame>
+          <Controller
+            control={control}
+            name="image"
+            rules={{required: true}}
+            render={({field: {value, onChange}}) => (
+              <styled.ImageUploadContainer
+                className={cn(
+                  'test',
+                  !!errors.image && 'error',
+                  (value || assetStore.imageSrc) && 'has-image'
+                )}
+              >
+                {value ? (
                   <styled.PreviewImageHolder
-                    style={{backgroundImage: `url(${assetStore.imageSrc ?? undefined})`}}
+                    style={{backgroundImage: `url(${URL.createObjectURL(value)})`}}
                   />
-                )
-              )}
-              <FileUploader
-                label={t('actions.uploadYourAssset')}
-                dragActiveLabel={t('actions.dropItHere')}
-                maxSize={MAX_ASSET_SIZE_B}
-                fileType="image"
-                onFilesUpload={onChange}
-                enableDragAndDrop={true}
-              />
-            </styled.ImageUploadContainer>
-          )}
-        />
+                ) : (
+                  assetStore.imageSrc && (
+                    <styled.PreviewImageHolder
+                      style={{backgroundImage: `url(${assetStore.imageSrc ?? undefined})`}}
+                    />
+                  )
+                )}
+                {!(value || assetStore.imageSrc) && (
+                  <styled.DragAndDropPrompt>
+                    <span>{t('messages.uploadAssetPictureDescription')}</span>
+                    <span>{t('labels.or')}</span>
+                  </styled.DragAndDropPrompt>
+                )}
+                <FileUploader
+                  label={t('actions.uploadYourAssset')}
+                  dragActiveLabel={t('actions.dropItHere')}
+                  maxSize={MAX_ASSET_SIZE_B}
+                  fileType="image"
+                  onFilesUpload={onChange}
+                  enableDragAndDrop={true}
+                />
+              </styled.ImageUploadContainer>
+            )}
+          />
+        </Frame>
       </styled.ScrollableContainer>
     </styled.Container>
   );
