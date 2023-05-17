@@ -1,5 +1,5 @@
-// ignore all typescript error in this file
 import {FC, useEffect, useRef, useState} from 'react';
+import {ProgressBar} from '@momentum-xyz/ui-kit';
 import {
   AssetContainer,
   Scene,
@@ -68,9 +68,9 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
 
   useEffect(() => {
     return () => {
-      console.log('Model3dPreview unmounting');
       const scene = refScene.current;
       if (scene) {
+        console.log('Model3dPreview unmounting');
         scene.dispose();
       }
     };
@@ -140,8 +140,7 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
     <styled.Container>
       {progress !== null && (
         <styled.ProgressBarHolder style={{zIndex: 3}}>
-          {/* <ProgressBar percent={progress} /> */}
-          <div>...{progress}%</div>
+          <ProgressBar percent={progress} />
         </styled.ProgressBarHolder>
       )}
       {!isModelLoaded && (
