@@ -1,7 +1,6 @@
 import {FC, useEffect, useRef, useState} from 'react';
 import {ProgressBar} from '@momentum-xyz/ui-kit';
 import {
-  AssetContainer,
   Scene,
   SceneLoader,
   Vector3,
@@ -33,9 +32,7 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
   previewUrl,
   onSnapshot
 }) => {
-  const refCanvas = useRef<HTMLCanvasElement | null>(null);
   const refScene = useRef<Scene>();
-  const refAssetContainer = useRef<AssetContainer>();
   const refInstance = useRef<InstantiatedEntries>();
 
   const [progress, setProgress] = useState<number | null>(null);
@@ -84,7 +81,6 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
     )
       .then((container) => {
         console.log('Model3dPreview container', container);
-        refAssetContainer.current = container;
         // container.addAllToScene();
         const instance = container.instantiateModelsToScene();
         console.log('Model3dPreview instance', instance);
@@ -145,7 +141,6 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
       {!isModelLoaded && (
         <styled.NestedContainer style={{zIndex: 2}}>
           <styled.Canvas
-            ref={refCanvas}
             className={cn({background})}
             previewUrl={!isModelLoaded ? previewUrl : undefined}
             style={{width: '100%', height: '100%'}}
