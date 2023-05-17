@@ -34,14 +34,14 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
   onSnapshot,
   onAssetInfoLoaded
 }) => {
-  console.log('Model3dPreview', {
-    filename,
-    background,
-    delayLoadingMsec,
-    previewUrl,
-    onSnapshot,
-    onAssetInfoLoaded
-  });
+  // console.log('Model3dPreview', {
+  //   filename,
+  //   background,
+  //   delayLoadingMsec,
+  //   previewUrl,
+  //   onSnapshot,
+  //   onAssetInfoLoaded
+  // });
 
   const refCanvas = useRef<HTMLCanvasElement | null>(null);
   const refScene = useRef<Scene>();
@@ -77,7 +77,7 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
   }, []);
 
   const onSceneReady = (scene: Scene) => {
-    console.log('onSceneReady', scene, scene.getEngine());
+    // console.log('onSceneReady', scene, scene.getEngine());
     refScene.current = scene;
 
     scene.clearColor = new Color4(0, 0, 0, 0); // Set to transparent background
@@ -89,18 +89,16 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
       '',
       scene,
       (progress) => {
-        // On progress callback
-        console.log(`Loading progress ${progress.loaded}/${progress.total}`);
         setProgress(Math.ceil((progress.loaded / progress.total) * 100));
       },
       '.glb'
     )
       .then((container) => {
-        console.log('container', container);
+        console.log('Model3dPreview container', container);
         refAssetContainer.current = container;
         // container.addAllToScene();
         const instance = container.instantiateModelsToScene();
-        console.log('instance', instance);
+        console.log('Model3dPreview instance', instance);
         refInstance.current = instance;
 
         scene.createDefaultCameraOrLight(true, true, true);
@@ -108,11 +106,9 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
         const {min, max} = scene.getWorldExtends();
         const center = min.add(max).scale(0.5);
         const size = max.subtract(min).length();
-        console.log('Loaded object sizes', {min, max, center, size});
 
         if (scene.activeCamera instanceof ArcRotateCamera) {
           scene.activeCamera.position = center.add(new Vector3(0, size / 2.0, size * 1.5));
-          console.log('Camera:', scene.activeCamera.alpha);
           scene.activeCamera.alpha += Math.PI / 4;
         }
 
@@ -124,7 +120,7 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
         setProgress(null);
       })
       .catch((err) => {
-        console.log('Error loading model asset', err);
+        console.log('Model3dPreview: Error loading model asset', err);
       });
   };
 
