@@ -140,7 +140,7 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
       {isError && <styled.Error>;-(</styled.Error>}
       {!isModelLoaded && (
         <styled.NestedContainer style={{zIndex: 2}}>
-          <styled.Canvas
+          <styled.Preview
             className={cn({background})}
             previewUrl={!isModelLoaded ? previewUrl : undefined}
             style={{width: '100%', height: '100%'}}
