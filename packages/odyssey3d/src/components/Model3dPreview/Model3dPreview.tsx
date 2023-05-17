@@ -41,8 +41,6 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
   const [progress, setProgress] = useState<number | null>(null);
   const [isModelLoaded, setIsModelLoaded] = useState(false);
   const [isDelayingLoading, setIsDelayingLoading] = useState(!!delayLoadingMsec);
-  const onSnapshotRef = useRef(onSnapshot);
-  onSnapshotRef.current = onSnapshot;
 
   useEffect(() => {
     if (!delayLoadingMsec) {
@@ -101,6 +99,12 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
           scene.activeCamera.position = center.add(new Vector3(0, size / 2.0, size * 1.5));
           scene.activeCamera.alpha += Math.PI / 4;
         }
+
+        setTimeout(() => {
+          if (onSnapshot) {
+            onSnapshot(scene.getEngine().getRenderingCanvas()?.toDataURL('image/png') || '', true);
+          }
+        }, 100);
 
         for (const group of instance.animationGroups) {
           group.play(true);
