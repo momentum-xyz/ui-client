@@ -105,11 +105,11 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
           if (onSnapshot) {
             onSnapshot(scene.getEngine().getRenderingCanvas()?.toDataURL('image/png') || '', true);
           }
-        }, 100);
 
-        for (const group of instance.animationGroups) {
-          group.play(true);
-        }
+          for (const group of instance.animationGroups) {
+            group.play(true);
+          }
+        }, 100);
 
         setIsModelLoaded(true);
       })
