@@ -1,5 +1,5 @@
-import React, {FC, MutableRefObject} from 'react';
-import {Frame, FileUploader} from '@momentum-xyz/ui-kit-storybook';
+import {FC, MutableRefObject, useEffect, useState} from 'react';
+import {Frame, Input, FileUploader} from '@momentum-xyz/ui-kit-storybook';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
@@ -23,13 +23,30 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
   const {objectStore} = universeStore;
   const {assetStore} = objectStore;
 
+  const [hasImage, setHasImage] = useState<boolean>(!!assetStore.imageSrc);
+
   const {t} = useI18n();
 
   const {
     handleSubmit,
     control,
-    formState: {errors}
-  } = useForm<ImageObjectInterface>();
+    formState: {errors},
+    setValue
+  } = useForm<ImageObjectInterface>({});
+
+  useEffect(() => {
+    const sameValues = hasImage && !!assetStore.imageSrc;
+    if (sameValues) {
+      return;
+    }
+    setHasImage(!!assetStore.imageSrc);
+  }, [assetStore.imageSrc, setHasImage]);
+
+  useEffect(() => {
+    if (assetStore.title) {
+      setValue('title', assetStore.title);
+    }
+  }, [assetStore.title]);
 
   const formSubmitHandler: SubmitHandler<ImageObjectInterface> = async (
     data: ImageObjectInterface
@@ -38,7 +55,7 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
       return;
     }
 
-    await assetStore.postNewImage(objectId, data.image);
+    await assetStore.postNewImage(objectId, data.image, data.title);
   };
 
   // TEMP
@@ -61,6 +78,7 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
             render={({field: {value, onChange}}) => (
               <styled.ImageUploadContainer
                 className={cn(
+                  'test',
                   !!errors.image && 'error',
                   (value || assetStore.imageSrc) && 'has-image'
                 )}
@@ -76,18 +94,45 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
                     />
                   )
                 )}
+                {!(value || assetStore.imageSrc) && (
+                  <styled.DragAndDropPrompt>
+                    <span>{t('messages.uploadAssetPictureDescription')}</span>
+                    <span>{t('labels.or')}</span>
+                  </styled.DragAndDropPrompt>
+                )}
                 <FileUploader
-                  label={t('actions.selectImage')}
+                  label={t('actions.uploadYourAsset')}
                   dragActiveLabel={t('actions.dropItHere')}
                   maxSize={MAX_ASSET_SIZE_B}
                   fileType="image"
-                  onFilesUpload={onChange}
-                  enableDragAndDrop={false}
+                  onFilesUpload={(d) => {
+                    setHasImage(true);
+                    onChange(d);
+                  }}
+                  enableDragAndDrop={true}
                 />
               </styled.ImageUploadContainer>
             )}
           />
         </Frame>
+
+        <styled.InputContainer>
+          <Controller
+            control={control}
+            name="title"
+            rules={{required: true}}
+            render={({field: {value, onChange}}) => (
+              <Input
+                placeholder={t('placeholders.nameYourImage')}
+                value={value}
+                onChange={(value: string) => {
+                  onChange(value);
+                }}
+                disabled={!hasImage}
+              />
+            )}
+          />
+        </styled.InputContainer>
       </styled.ScrollableContainer>
     </styled.Container>
   );
