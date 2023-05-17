@@ -92,6 +92,7 @@ export interface PropsInterface {
   background?: boolean;
   previewUrl?: string;
   onSnapshot?: (dataUrl: string, initial: boolean) => void;
+  onAssetInfoLoaded?: (data: GLTF['asset']) => void;
 }
 
 export const Model3dPreview: FC<PropsInterface> = ({
@@ -99,7 +100,8 @@ export const Model3dPreview: FC<PropsInterface> = ({
   background = true,
   delayLoadingMsec,
   previewUrl,
-  onSnapshot
+  onSnapshot,
+  onAssetInfoLoaded
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -169,6 +171,10 @@ export const Model3dPreview: FC<PropsInterface> = ({
       filename,
       (gltf) => {
         console.log('Loaded 3D model', gltf);
+
+        if (onAssetInfoLoaded) {
+          onAssetInfoLoaded(gltf.asset);
+        }
 
         loadedGltfRef.current = gltf;
 

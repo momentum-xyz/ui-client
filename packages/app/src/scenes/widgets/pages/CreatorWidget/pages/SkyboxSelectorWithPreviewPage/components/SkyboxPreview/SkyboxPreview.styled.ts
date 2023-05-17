@@ -17,6 +17,7 @@ export const SkyboxInfoContainer = styled.div`
 `;
 
 export const SkyboxTitle = styled.div`
+  width: 100%;
   font-weight: 700;
   font-size: 16px;
   margin: 10px 0 42px;
@@ -33,4 +34,29 @@ export const ControlsRow = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+`;
+
+export const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+  height: 40px;
+  gap: 20px;
+`;
+export const Prop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  letter-spacing: 0.02em;
+  line-height: 22px;
+
+  & > div {
+    max-width: 254px;
+  }
+`;
+export const PropName = styled.span`
+  margin-right: 5px;
+`;
+export const PropValue = styled.span`
+  font-weight: 700;
 `;
