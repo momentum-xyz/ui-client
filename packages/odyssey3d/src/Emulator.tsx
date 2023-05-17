@@ -1,11 +1,8 @@
 import {FC, useEffect, useState} from 'react';
-import {
-  Event3dEmitter,
-  Universe3dEmitter
-  // Object3dInterface
-} from '@momentum-xyz/core';
-import {Toggle, Text} from '@momentum-xyz/ui-kit';
 import {v4 as uuidv4} from 'uuid';
+import {Switch} from '@momentum-xyz/ui-kit-storybook';
+import {Event3dEmitter, Universe3dEmitter} from '@momentum-xyz/core';
+
 import '@babylonjs/core/Debug/debugLayer';
 import '@babylonjs/inspector';
 
@@ -132,8 +129,8 @@ const Emulator = () => {
   return (
     <div>
       <styled.ControlPanel>
-        <Toggle size="normal" variant="normal" checked={isUniverse} onChange={setIsUniverse} />
-        <Text text="Is Universe" size="m" />
+        <Switch name="switcher" value={isUniverse} onChange={setIsUniverse} />
+        <div>Is Universe</div>
       </styled.ControlPanel>
       {isUniverse ? <UniverseEmulator /> : <WorldEmulator />}
     </div>
