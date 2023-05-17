@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {Scene} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
-import {useMutableCallback} from '@momentum-xyz/ui-kit';
+import {useMutableCallback} from '@momentum-xyz/ui-kit-storybook';
 
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
 import {PlayerHelper, LightHelper, ObjectHelper} from '../../babylon';

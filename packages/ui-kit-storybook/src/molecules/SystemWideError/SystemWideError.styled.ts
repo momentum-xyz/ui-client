@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {rgba} from 'polished';
 
 export const Background = styled.div<{background: string}>`
   display: flex;
@@ -15,6 +16,10 @@ export const Background = styled.div<{background: string}>`
 export const PanelContent = styled.div`
   display: flex;
   align-items: center;
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
+  color: ${(props) => props.theme.text};
+  font-size: var(--font-size-m);
+  border-radius: 4px;
 `;
 
 export const IconContainer = styled.div`

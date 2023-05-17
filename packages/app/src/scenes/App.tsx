@@ -3,12 +3,12 @@ import {observer} from 'mobx-react-lite';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {ThemeProvider as ThemeProviderOriginal, ThemeProviderProps} from 'styled-components';
 import {isBrowserSupported, useI18n} from '@momentum-xyz/core';
-import {LoaderFallback} from '@momentum-xyz/ui-kit-storybook';
+import {LoaderFallback, SystemWideError} from '@momentum-xyz/ui-kit-storybook';
 
 import {ROUTES} from 'core/constants';
 import {useApiHandlers, useStore} from 'shared/hooks';
 import {httpErrorCodes} from 'api/constants';
-import {SystemWideError, Toast} from 'ui-kit';
+import {Toast} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
 import {World3dPage} from 'scenes/world';
 import {Universe3dPage} from 'scenes/universe';

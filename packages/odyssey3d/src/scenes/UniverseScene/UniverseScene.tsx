@@ -1,8 +1,8 @@
 import {FC, useEffect} from 'react';
 import {Scene} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
-import {useMutableCallback} from '@momentum-xyz/ui-kit';
 import {Universe3dEmitterType} from '@momentum-xyz/core';
+import {useMutableCallback} from '@momentum-xyz/ui-kit-storybook';
 
 import {PlayerHelper, LightHelper, SkyboxHelper, CAMERA_POS_EXPLORER} from '../../babylon';
 import {UniverseBuilderHelper} from '../../babylon/UniverseBuilderHelper';
