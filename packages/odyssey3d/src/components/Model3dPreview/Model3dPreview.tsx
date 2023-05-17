@@ -6,7 +6,8 @@ import {
   SceneLoader,
   Vector3,
   Color4,
-  InstantiatedEntries
+  InstantiatedEntries,
+  ArcRotateCamera
 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import SceneComponent from 'babylonjs-hook';
@@ -133,7 +134,11 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
     const node = refInstance.current?.rootNodes[0];
     if (node) {
       // console.log('onRender', node);
-      node.rotation.y += 0.1;
+      // node.rotation.y += 0.1;
+    }
+    if (scene.activeCamera instanceof ArcRotateCamera) {
+      scene.activeCamera.alpha -= 0.001;
+      // TODO rotate object, not camera
     }
   };
 
