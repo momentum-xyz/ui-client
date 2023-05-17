@@ -22,8 +22,8 @@ export interface Model3dPreviewPropsInterface {
   background?: boolean;
   previewUrl?: string;
   onSnapshot?: (dataUrl: string, initial: boolean) => void;
-  onAssetInfoLoaded?: (data: any) => void;
-  // onAssetInfoLoaded?: (data: GLTF['asset']) => void;
+  // eslint-disable-next-line react/no-unused-prop-types
+  onAssetInfoLoaded?: (data: any) => void; // it seems not greatly supported in babylon
 }
 
 export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
@@ -31,18 +31,8 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
   background = true,
   delayLoadingMsec,
   previewUrl,
-  onSnapshot,
-  onAssetInfoLoaded
+  onSnapshot
 }) => {
-  // console.log('Model3dPreview', {
-  //   filename,
-  //   background,
-  //   delayLoadingMsec,
-  //   previewUrl,
-  //   onSnapshot,
-  //   onAssetInfoLoaded
-  // });
-
   const refCanvas = useRef<HTMLCanvasElement | null>(null);
   const refScene = useRef<Scene>();
   const refAssetContainer = useRef<AssetContainer>();
