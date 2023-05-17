@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {ButtonEllipse, Frame, WalletHash} from '@momentum-xyz/ui-kit-storybook';
+import {ButtonEllipse, Frame, WalletHash} from '@momentum-xyz/ui-kit';
 
 import {WalletLogin, TrustPoints, WalletSelector} from 'ui-kit';
 import {WalletModelInterface} from 'core/models';

@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useObject} from '@momentum-xyz/sdk';
-import {Panel} from '@momentum-xyz/ui-kit-storybook';
+import {Panel} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 import {useStore, useGooglePicker} from 'shared/hooks';
 

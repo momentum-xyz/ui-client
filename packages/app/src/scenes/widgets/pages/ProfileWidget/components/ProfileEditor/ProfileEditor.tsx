@@ -11,7 +11,7 @@ import {
   Textarea,
   ProfileLine,
   WalletHash
-} from '@momentum-xyz/ui-kit-storybook';
+} from '@momentum-xyz/ui-kit';
 
 import {UserModelInterface} from 'core/models';
 import {FieldErrorInterface} from 'api/interfaces';

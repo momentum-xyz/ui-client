@@ -1,13 +1,7 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {
-  Frame,
-  Select,
-  SymbolAmount,
-  Button,
-  SelectOptionInterface
-} from '@momentum-xyz/ui-kit-storybook';
+import {Frame, Select, SymbolAmount, Button, SelectOptionInterface} from '@momentum-xyz/ui-kit';
 
 import {formatBigInt} from 'core/utils';
 import {WalletModelInterface} from 'core/models';

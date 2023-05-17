@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button} from '@momentum-xyz/ui-kit-storybook';
+import {Button} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import * as styled from './GoogleChoice.styled';

@@ -1,6 +1,7 @@
 import {Instance, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
-import {SEARCH_MINIMAL_CHARACTER_COUNT} from '@momentum-xyz/ui-kit';
+
+const SEARCH_MINIMAL_CHARACTER_COUNT = 1;
 
 const SearchQuery = types
   .compose(

@@ -1,6 +1,6 @@
 import {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
-import {PositionEnum} from '@momentum-xyz/ui-kit-storybook';
+import {PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';

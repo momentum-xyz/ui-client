@@ -1,6 +1,6 @@
 import {FC, memo} from 'react';
 import cn from 'classnames';
-import {Hexagon, IconNameType, ButtonEllipse, IconButton} from '@momentum-xyz/ui-kit-storybook';
+import {Hexagon, IconNameType, ButtonEllipse, IconButton} from '@momentum-xyz/ui-kit';
 
 import {ToastButtonInfoInterface} from 'ui-kit/interfaces';
 

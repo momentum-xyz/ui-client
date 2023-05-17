@@ -7,7 +7,7 @@ import {
   Input,
   SelectOptionInterface,
   numberInputSuffixMask
-} from '@momentum-xyz/ui-kit-storybook';
+} from '@momentum-xyz/ui-kit';
 
 import * as styled from './StakeAmount.styled';
 

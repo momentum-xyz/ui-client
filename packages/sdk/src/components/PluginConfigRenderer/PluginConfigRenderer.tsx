@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Input, Panel, Checkbox} from '@momentum-xyz/ui-kit-storybook';
+import {Button, Input, Panel, Checkbox} from '@momentum-xyz/ui-kit';
 import {useForm, Controller} from 'react-hook-form';
 
 import {PluginConfigDescriptionInterface} from '../../interfaces';

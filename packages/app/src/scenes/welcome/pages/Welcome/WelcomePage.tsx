@@ -1,7 +1,7 @@
 import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useNavigate} from 'react-router-dom';
-import {Hexagon, PositionEnum, Button} from '@momentum-xyz/ui-kit-storybook';
+import {Hexagon, PositionEnum, Button} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';

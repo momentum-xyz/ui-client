@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
-import {Menu, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit-storybook';
+import {Menu, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';

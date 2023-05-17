@@ -1,13 +1,7 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {
-  ButtonEllipse,
-  Hexagon,
-  ImageSizeEnum,
-  Panel,
-  ProfileLine
-} from '@momentum-xyz/ui-kit-storybook';
+import {ButtonEllipse, Hexagon, ImageSizeEnum, Panel, ProfileLine} from '@momentum-xyz/ui-kit';
 
 import {UserDetailsModelType} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';

@@ -1,4 +1,4 @@
-import {DefaultThemeConfig, ThemeInterface} from '@momentum-xyz/ui-kit-storybook';
+import {DefaultThemeConfig, ThemeInterface} from '@momentum-xyz/ui-kit';
 import {createContext, ReactNode, useContext} from 'react';
 
 export const ThemeContext = createContext<ThemeInterface>(DefaultThemeConfig);

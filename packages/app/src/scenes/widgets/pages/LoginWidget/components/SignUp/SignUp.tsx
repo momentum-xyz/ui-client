@@ -1,13 +1,6 @@
 import {FC, useEffect} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {
-  Frame,
-  Image,
-  Input,
-  Button,
-  AvatarUpload,
-  ImageSizeEnum
-} from '@momentum-xyz/ui-kit-storybook';
+import {Frame, Image, Input, Button, AvatarUpload, ImageSizeEnum} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {getImageAbsoluteUrl} from 'core/utils';

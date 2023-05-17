@@ -1,6 +1,5 @@
 import {FC, MutableRefObject, useEffect, useState} from 'react';
-import {FileUploader} from '@momentum-xyz/ui-kit';
-import {Frame, Input} from '@momentum-xyz/ui-kit-storybook';
+import {Frame, Input, FileUploader} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';

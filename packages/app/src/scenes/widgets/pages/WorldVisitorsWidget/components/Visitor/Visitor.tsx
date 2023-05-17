@@ -1,6 +1,6 @@
 import {FC, memo, useState} from 'react';
 import {signUpDateString, useI18n} from '@momentum-xyz/core';
-import {ButtonEllipse, ButtonRound, Hexagon, ProfileLine} from '@momentum-xyz/ui-kit-storybook';
+import {ButtonEllipse, ButtonRound, Hexagon, ProfileLine} from '@momentum-xyz/ui-kit';
 
 import {UserDetailsModelType} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';

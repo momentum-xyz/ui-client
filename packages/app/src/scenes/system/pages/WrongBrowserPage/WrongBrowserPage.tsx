@@ -1,7 +1,6 @@
-import React, {FC} from 'react';
+import {FC} from 'react';
 import {useI18n} from '@momentum-xyz/core';
-
-import {SystemWideError} from 'ui-kit';
+import {SystemWideError} from '@momentum-xyz/ui-kit';
 
 const WrongBrowserPage: FC = () => {
   const {t} = useI18n();

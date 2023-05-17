@@ -8,4 +8,5 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   color: ${(props) => props.theme.text};
+  font-size: var(--font-size-m);
 `;

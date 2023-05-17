@@ -1,6 +1,6 @@
 import {FC, useMemo} from 'react';
 import {useParams} from 'react-router-dom';
-import {Panel, ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit';
 
 import {useAttributesEmulator} from '../../hooks';
 import {useTheme} from '../../../contexts/ThemeContext';

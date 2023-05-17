@@ -10,7 +10,7 @@ import {
   SelectOptionInterface,
   StakeCard,
   stringInputMask
-} from '@momentum-xyz/ui-kit-storybook';
+} from '@momentum-xyz/ui-kit';
 
 import {StakeSortType} from 'core/types';
 import {formatBigInt, getImageAbsoluteUrl} from 'core/utils';

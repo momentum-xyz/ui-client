@@ -1,5 +1,5 @@
 import React, {FC, MutableRefObject} from 'react';
-import {ErrorBoundary} from '@momentum-xyz/ui-kit-storybook';
+import {ErrorBoundary} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 import {
   PluginInterface,

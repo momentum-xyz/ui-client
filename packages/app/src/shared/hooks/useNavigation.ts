@@ -1,6 +1,6 @@
 import {useCallback} from 'react';
 import {generatePath, useNavigate} from 'react-router-dom';
-import {PositionEnum} from '@momentum-xyz/ui-kit-storybook';
+import {PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {WidgetEnum} from 'core/enums';

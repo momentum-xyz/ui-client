@@ -1,1 +1,1 @@
-export * from './text.utils';
+export * from './string.utils';
