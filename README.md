@@ -31,8 +31,7 @@ It is a monorepo that contains the main application and several common libraries
     │   ├── map3d                   # 3D Worlds Explorer based on three.js
     │   ├── odyssey3d               # 3D World Interface based on babylon.js
     │   ├── sdk                     # Plugins SDK
-    │   ├── ui-kit                  # Framework of base components
-    │   ├── ui-kit-storybook        # Upcoming version of UI-Kit with Storybook
+    │   ├── ui-kit-storybook        # ui-kit with Storybook
     │   │
     │   ├── plugin_google_drive     # Google Drive plugin
     │   ├── plugin_miro             # Miro plugin

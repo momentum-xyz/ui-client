@@ -10,8 +10,6 @@ import {MomentumRequiredPage, WorldEmulator} from './components/';
 import {dummyUnityControl} from './dummyUnityControl';
 import * as styled from './HostEmulator.styled';
 
-// import '@momentum-xyz/ui-kit/dist/static/styles/main.css';
-
 const isDevEnv = process.env.NODE_ENV === 'development';
 
 interface PropsInterface {

@@ -10,7 +10,6 @@ WORKDIR /src
 COPY package.json yarn.lock ./
 
 COPY packages/core/package.json ./packages/core/
-COPY packages/ui-kit/package.json ./packages/ui-kit/
 COPY packages/ui-kit-storybook/package.json ./packages/ui-kit-storybook/
 COPY packages/sdk/package.json ./packages/sdk/
 COPY packages/map3d/package.json ./packages/map3d/

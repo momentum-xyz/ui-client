@@ -104,7 +104,6 @@
         "moduleDirectory": [
           "node_modules",
           "packages/app/src",
-          "packages/ui-kit/src",
           "packages/ui-kit-storybook/src",
           "packages/core/src",
           "packages/sdk/src",
