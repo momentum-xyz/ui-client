@@ -62,12 +62,8 @@ export const ImageUploadContainer = styled.div`
     width: 100%;
   }
 
-  width: 490px;
+  width: 440px;
   height: 260px;
-
-  @media (max-width: 1440px) {
-    width: 440px;
-  }
 `;
 
 export const PreviewImageHolder = styled.div`
