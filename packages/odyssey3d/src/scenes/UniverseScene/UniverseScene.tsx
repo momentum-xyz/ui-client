@@ -1,10 +1,10 @@
 import {FC, useEffect} from 'react';
-import {Scene} from '@babylonjs/core';
+import {Scene, Vector3} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
 import {Universe3dEmitterType} from '@momentum-xyz/core';
 
-import {PlayerHelper, LightHelper, SkyboxHelper, CAMERA_POS_EXPLORER} from '../../babylon';
+import {PlayerHelper, LightHelper, SkyboxHelper /*, CAMERA_POS_EXPLORER*/} from '../../babylon';
 import {UniverseBuilderHelper} from '../../babylon/UniverseBuilderHelper';
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 import skyboxWorld from '../../static/CLOUDSCAPE.jpg';
@@ -54,12 +54,12 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
 
     events.on('WorldsAdded', (worlds) => {
       console.log('WorldsAdded', worlds);
-      UniverseBuilderHelper.buildOdysseyLayers(worlds);
+      UniverseBuilderHelper.buildNewRingOdysseys(worlds);
     });
 
     events.on('UsersAdded', (users) => {
       console.log('UsersAdded', users);
-      UniverseBuilderHelper.buildAccountLayer(users);
+      UniverseBuilderHelper.buildNewRingAccounts(users);
     });
 
     events.on('UserSelected', (id) => {
@@ -72,7 +72,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
 
     onReadyToHandleEvents();
 
-    PlayerHelper.spawnPlayer(scene, CAMERA_POS_EXPLORER);
+    PlayerHelper.spawnPlayer(scene, new Vector3(0, 20, 0));
 
     if (window.sessionStorage.getItem('babylon_debug')) {
       Promise.all([

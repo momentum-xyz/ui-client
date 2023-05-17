@@ -85,13 +85,13 @@ export class UniverseBuilderHelper {
     const SunColor2 = new Color4(0.286, 0.635, 0.8671);
     this.buildStar(sunColor1, SunColor2);
 
-    const ring1 = this.buildNewRing(15, 25, false);
-    const ring2 = this.buildNewRing(15, 30, false);
-    const ring3 = this.buildNewRing(20, 35, false);
+    /*const ring1 = this.buildNewRingOdysseys(15, 25);
+    const ring2 = this.buildNewRingOdysseys(20, 30);
+    const ring3 = this.buildNewRingOdysseys(25, 35);
 
-    const ring4 = this.buildNewRing(20, 7, true);
-    const ring5 = this.buildNewRing(20, 9, true);
-    const ring6 = this.buildNewRing(20, 11, true);
+    const ring4 = this.buildNewRingAccounts(20, 7);
+    const ring5 = this.buildNewRingAccounts(20, 9);
+    const ring6 = this.buildNewRingAccounts(20, 11);
 
     this.scene.onBeforeRenderObservable.add(() => {
       ring1.rotation.y += 0.00005 * scene.getEngine().getDeltaTime();
@@ -104,7 +104,7 @@ export class UniverseBuilderHelper {
       ring4.rotation.y += 0.00002 * scene.getEngine().getDeltaTime();
       ring5.rotation.y += 0.00004 * scene.getEngine().getDeltaTime();
       ring6.rotation.y += 0.00006 * scene.getEngine().getDeltaTime();
-    });
+    });*/
 
     scene.onPointerDown = function castRay() {
       const ray = scene.createPickingRay(
@@ -149,7 +149,8 @@ export class UniverseBuilderHelper {
       '.glb'
     ).then((result) => {
       this.defineOrbMaterial();
-      this.rootMesh = result.meshes[0];
+      
+      this.rootMesh = result.meshes[2];
       this.thumbMat = result.meshes[1].material as PBRMaterial;
     });
   }
@@ -342,12 +343,20 @@ export class UniverseBuilderHelper {
     return ringLayer;
   }
 
-  static buildNewRing(amount: number, ringRadius: number, ring2: boolean) {
-    const ring = new TransformNode('Odyssey Ring', this.scene);
-    const spaceBetweenOdyssey = 360 / amount;
+  static buildNewRingOdysseys(worlds: WorldInfoInterface[]) {
+    console.log('buildNewRingOdysseys');
+    const rings: TransformNode[] = new Array<TransformNode>();
+    let ring = new TransformNode('Odyssey Ring', this.scene);
+    rings.push(ring);
+
+    let currentAmount = 15;
+    let currentRadius = 7;
+    let orbCounter = 0;
+    let spaceBetweenOdyssey = 360 / currentAmount;
     let _offset = 0;
 
-    for (let i = 0; i < amount; i++) {
+    for (let i = 0; i < worlds.length; i++) {
+      orbCounter++;
       const radian = _offset * (Math.PI / 180);
       _offset = _offset + spaceBetweenOdyssey;
 
@@ -355,14 +364,12 @@ export class UniverseBuilderHelper {
       //const rootChildren = rootClone.getChildMeshes();
 
       if (rootClone) {
-        rootClone.position.x = Math.cos(radian) * ringRadius;
+        rootClone.position.x = Math.cos(radian) * currentRadius;
         rootClone.position.y = 0;
-        rootClone.position.z = Math.sin(radian) * ringRadius;
-        if (ring2) {
-          rootClone.position.y = Math.random() * 4;
-        }
+        rootClone.position.z = Math.sin(radian) * currentRadius;
 
         rootClone.rotation = new Vector3(0, 0, 0);
+        this.setOrbPatricles(rootClone);
 
         // Metadata
         /*rootChildren[1].metadata = worlds[this.odysseyCounter].id;
@@ -379,8 +386,95 @@ export class UniverseBuilderHelper {
             rootChildren[0].material = thumbMatClone;
           }*/
       }
+      if (orbCounter > currentAmount) {
+        orbCounter = 0;
+        currentAmount += 5;
+        currentRadius += 2;
+        _offset = 0;
+        spaceBetweenOdyssey = 360 / currentAmount;
+
+        ring = new TransformNode('Odyssey Ring', this.scene);
+        rings.push(ring);
+      }
     }
-    return ring;
+    const ringRotation = 0.00002;
+    for (let i = 0; i < rings.length; i++) {
+      this.scene.onBeforeRenderObservable.add(() => {
+        rings[i].rotation.y += ringRotation * (i + 1) * this.scene.getEngine().getDeltaTime();
+      });
+    }
+  }
+
+  static buildNewRingAccounts(accounts: Odyssey3dUserInterface[]) {
+    const rings: TransformNode[] = new Array<TransformNode>();
+    let ring = new TransformNode('Account Ring', this.scene);
+    rings.push(ring);
+
+    const amount = 20;
+    let currentRadius = 30;
+    let orbCounter = 0;
+    const spaceBetweenOdyssey = 360 / amount;
+    let _offset = 0;
+
+    for (let i = 0; i < accounts.length; i++) {
+      orbCounter++;
+
+      const radian = _offset * (Math.PI / 180);
+      _offset = _offset + spaceBetweenOdyssey;
+
+      const rootClone = this.rootMesh.clone('ring_root' + i, ring) as Mesh;
+      //const rootChildren = rootClone.getChildMeshes();
+
+      if (rootClone) {
+        rootClone.position.x = Math.cos(radian) * currentRadius;
+        rootClone.position.y = 0;
+        rootClone.position.z = Math.sin(radian) * currentRadius;
+        rootClone.position.y = Math.random() * 4;
+
+        rootClone.rotation = new Vector3(0, 0, 0);
+        this.setOrbPatricles(rootClone);
+
+        // Metadata
+        /*rootChildren[1].metadata = worlds[this.odysseyCounter].id;
+          rootChildren[1].material = this.orbMat;
+  
+          if (worlds[this.odysseyCounter].image !== '') {
+            this.setOrbRotation(rootClone, rootChildren[0]);
+  
+            const downloadedTexture = new Texture(
+              (this.baseURL + '/texture/s3/' + worlds[this.odysseyCounter].image) as Nullable<string>
+            );
+            const thumbMatClone = this.thumbMat.clone('thumbMatCloneWorld' + i);
+            thumbMatClone.albedoTexture = downloadedTexture;
+            rootChildren[0].material = thumbMatClone;
+          }*/
+      }
+
+      if (orbCounter > amount) {
+        orbCounter = 0;
+        currentRadius += 5;
+
+        ring = new TransformNode('Odyssey Ring', this.scene);
+        rings.push(ring);
+      }
+    }
+
+    // Fix for unsafe references
+    const ringRotations: {rotationX: number; rotationY: number}[] = [];
+    for (let i = 0; i < rings.length; i++) {
+      if (i % 3 === 0) {
+        ringRotations[i] = {rotationX: 0.00005, rotationY: -0.00005};
+      } else if (i % 2 === 0) {
+        ringRotations[i] = {rotationX: -0.00005, rotationY: -0.00005};
+      } else {
+        ringRotations[i] = {rotationX: 0.00005, rotationY: 0.00005};
+      }
+
+      this.scene.onBeforeRenderObservable.add(() => {
+        rings[i].rotation.x += ringRotations[i].rotationX * this.scene.getEngine().getDeltaTime();
+        rings[i].rotation.y += ringRotations[i].rotationY * this.scene.getEngine().getDeltaTime();
+      });
+    }
   }
 
   static buildStar(color1: Color4, color2: Color4) {
@@ -462,11 +556,13 @@ export class UniverseBuilderHelper {
     const particleOdyssey = ParticleSystem.Parse(odysseyParticle, this.scene, '');
     particleOdyssey.preWarmCycles = 10;
     particleOdyssey.particleTexture = new Texture(circle);
+    particleOdyssey.isLocal = true;
     this.odysseyPS = particleOdyssey;
 
     const particleSparks = ParticleSystem.Parse(sparksParticle, this.scene, '');
     particleSparks.preWarmCycles = 10;
     particleSparks.particleTexture = new Texture(twirl);
+    particleSparks.isLocal = true;
     this.sparksPS = particleSparks;
   }
 
