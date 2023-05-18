@@ -307,6 +307,8 @@ export const enGb = {
         'by embedding a picture on this object; users can see this image wrapped around the object if it is a basic shape. users will also be able to see this image when they select the object; regardless of its asset type.',
       someonesBio: "{{name}}'s Bio",
       myBio: 'My Bio',
+      myConnections: 'My connections',
+      universal: 'Universal',
       logout: 'Logout',
       worldStats: 'World stats',
       tokenRules: 'Token Rules',

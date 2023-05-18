@@ -86,6 +86,14 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       tooltip: t('labels.stakingOverview'),
       onClick: toggle
     },
+    {
+      key: WidgetEnum.NEWSFEED,
+      position: PositionEnum.LEFT,
+      iconName: 'no_fire',
+      isHidden: isGuest,
+      tooltip: t('labels.newsfeed'),
+      onClick: toggle
+    },
     ...ODYSSEY_ITEMS,
     {
       key: WidgetEnum.STAKING,
