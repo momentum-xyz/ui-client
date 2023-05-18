@@ -142,9 +142,13 @@ export const Actions = styled.div`
   }
 `;
 
-export const TopComponent = styled.div``;
+export const TopComponent = styled.div`
+  position: relative;
+`;
 
-export const BottomComponent = styled.div``;
+export const BottomComponent = styled.div`
+  position: relative;
+`;
 
 export const ScrollableContainer = styled.div<{offset: number}>`
   padding: 10px;

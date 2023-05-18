@@ -3,7 +3,7 @@ import {rgba} from 'polished';
 
 export const GlobalStyles = createGlobalStyle`
   ::-webkit-scrollbar {
-    width: 12px;
+    width: 10px;
     height: 0;
     border: 2px solid transparent;
     background-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
@@ -11,7 +11,7 @@ export const GlobalStyles = createGlobalStyle`
 
   ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    border: 4px solid transparent;
+    border: 3px solid transparent;
     background-clip: content-box;
     background-color: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
     max-height: 40px;

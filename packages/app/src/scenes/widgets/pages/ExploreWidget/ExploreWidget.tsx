@@ -2,15 +2,15 @@ import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 import {useI18n, i18n} from '@momentum-xyz/core';
-import {TabInterface, Tabs, Panel} from '@momentum-xyz/ui-kit';
+import {TabInterface, Panel} from '@momentum-xyz/ui-kit';
 
 import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 
-import {WorldList, UserList, WorldDetails, UserDetails} from './components';
+import {WorldList, UserList, WorldDetails, UserDetails, TabsFrame} from './components';
 import * as styled from './ExploreWidget.styled';
 
-type ExploreTabType = 'worlds' | 'users';
+export type ExploreTabType = 'worlds' | 'users';
 
 const TABS_LIST: TabInterface<ExploreTabType>[] = [
   {id: 'worlds', icon: 'rabbit_fill', label: i18n.t('labels.odysseys')},
@@ -67,12 +67,16 @@ const ExploreWidget: FC = () => {
           onClose={() => {
             hasSelectedUnit ? universe2dStore.resetUnits() : close(WidgetEnum.EXPLORE);
           }}
+          topComponent={
+            <TabsFrame
+              tabs={TABS_LIST}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              searchQuery={universe2dStore.searchQuery}
+            />
+          }
         >
           <styled.Wrapper className={cn(hasSelectedUnit && 'collapsed')}>
-            <styled.Tabs>
-              <Tabs tabList={TABS_LIST} activeId={activeTab} onSelect={setActiveTab} />
-            </styled.Tabs>
-
             <styled.Content>
               {activeTab === 'worlds' && (
                 <WorldList

@@ -1,3 +1,4 @@
+export * from './TabsFrame';
 export * from './UserList';
 export * from './WorldList';
 export * from './WorldDetails';
