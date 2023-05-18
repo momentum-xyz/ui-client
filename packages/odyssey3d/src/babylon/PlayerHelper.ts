@@ -169,6 +169,27 @@ export class PlayerHelper {
     });
   }
 
+  static getPlayerNode(): TransformNode | null {
+    const myNode = this.playerInstance.rootNodes[0];
+    if (myNode instanceof TransformNode) {
+      return myNode;
+    }
+    console.log('PlayerHelper getPlayerNode: node is null or wrong type');
+    return null;
+  }
+
+  static getUserNode(userId: string): TransformNode | null {
+    const userObj = this.userMap.get(userId);
+    if (userObj) {
+      const userNode = userObj.userInstance.rootNodes[0];
+      if (userNode instanceof TransformNode) {
+        return userNode;
+      }
+    }
+    console.log('PlayerHelper getUserNode: node is null or wrong type');
+    return null;
+  }
+
   static setWorld(world: SetWorldInterface, userId: string) {
     this.disposeAllUsers();
     this.playerInstance?.dispose();
@@ -180,7 +201,13 @@ export class PlayerHelper {
     this.spawnPlayer(PlayerHelper.scene);
   }
 
-  static setSelfPos(pos: Vector3) {}
+  static setSelfPos(pos: Vector3) {
+    const node = this.getPlayerNode();
+    if (!node) {
+      return;
+    }
+    node.position = pos;
+  }
 
   // TODO: Consider merging the different spawning functions
   static spawnPlayer(scene: Scene, position?: Vector3) {
@@ -206,13 +233,13 @@ export class PlayerHelper {
   static playerInstantiate(container: AssetContainer, position?: Vector3) {
     const instance = container.instantiateModelsToScene();
 
-    if (instance.rootNodes.length === 0) {
-      console.log('instance.rootNodes.length === 0 when spawning player');
+    const playerNode = this.getPlayerNode();
+    if (!playerNode) {
+      console.log('Unable to load player model');
       return;
     }
 
     // TODO: Set camera pos
-    const playerNode = instance.rootNodes[0];
     this.setUserAvatar(playerNode);
 
     playerNode.name = 'Player';
@@ -303,12 +330,12 @@ export class PlayerHelper {
       return;
     } else {
       const instance = container.instantiateModelsToScene();
-      if (instance.rootNodes.length === 0) {
-        console.log('instance.rootNodes.length === 0 when spawning player');
+      const userNode = instance.rootNodes[0];
+      if (!(userNode instanceof TransformNode)) {
+        console.log('Unable to instantiate user');
         return;
       }
 
-      const userNode = instance.rootNodes[0];
       this.setUserAvatar(userNode);
 
       userNode.scaling = new Vector3(0.5, 0.5, -0.5);
@@ -340,57 +367,54 @@ export class PlayerHelper {
       if (user.id === this.playerId) {
         continue;
       }
-      const userObj = this.userMap.get(user.id);
+      const transformNode = this.getUserNode(user.id);
 
-      if (userObj) {
-        if (userObj.userInstance.rootNodes.length === 0) {
-          console.log('Cant set position, because the instance of user has no rootnode.');
-          continue;
-        }
-        const transformNode = userObj.userInstance.rootNodes[0];
-
-        smoothUserNodeTransform(
-          transformNode,
-          transformNode.position,
-          user.transform.position,
-          TransformTypesEnum.Position,
-          this.scene
-        );
-
-        smoothUserNodeTransform(
-          transformNode,
-          transformNode.rotation,
-          user.transform.rotation,
-          TransformTypesEnum.Rotation,
-          this.scene
-        );
+      if (!transformNode) {
+        console.log('Cant set position, because the instance of user has no rootnode.');
+        continue;
       }
+
+      smoothUserNodeTransform(
+        transformNode,
+        transformNode.position,
+        user.transform.position,
+        TransformTypesEnum.Position,
+        this.scene
+      );
+
+      smoothUserNodeTransform(
+        transformNode,
+        transformNode.rotation,
+        user.transform.rotation,
+        TransformTypesEnum.Rotation,
+        this.scene
+      );
     }
   }
 
   static followPlayer(idToFollow: string) {
-    const userToFollow = this.userMap.get(idToFollow);
-    if (userToFollow) {
-      const userNodeToFollow = userToFollow.userInstance.rootNodes[0];
-
-      smoothCameraTransform(
-        this.camera.target,
-        userNodeToFollow,
-        TransformTypesEnum.Rotation,
-        1000,
-        this.scene
-      );
-
-      smoothCameraTransform(
-        this.camera.position,
-        userNodeToFollow,
-        TransformTypesEnum.Position,
-        2000,
-        this.scene,
-        true,
-        true
-      );
+    const userNodeToFollow = this.getUserNode(idToFollow);
+    if (!userNodeToFollow) {
+      console.log('Cant follow player, because the instance of user has no rootnode.');
+      return;
     }
+    smoothCameraTransform(
+      this.camera.target,
+      userNodeToFollow,
+      TransformTypesEnum.Rotation,
+      1000,
+      this.scene
+    );
+
+    smoothCameraTransform(
+      this.camera.position,
+      userNodeToFollow,
+      TransformTypesEnum.Position,
+      2000,
+      this.scene,
+      true,
+      true
+    );
   }
 
   static userRemove(id: string) {

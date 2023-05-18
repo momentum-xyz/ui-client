@@ -195,14 +195,14 @@ export class ObjectHelper {
 
   static instantiateObject(container: AssetContainer, object: Object3dInterface, attach: boolean) {
     const instance = container.instantiateModelsToScene();
-    if (instance.rootNodes.length === 0) {
+    const node = instance.rootNodes[0];
+    if (!(node instanceof TransformNode)) {
       console.log(
         'instance.rootNodes.length === 0. Something went wrong with loading ' + object.asset_3d_id
       );
       return;
     }
 
-    const node = instance.rootNodes[0];
     node.name = object.name;
 
     node.position = posToVec3(object.transform.position);
@@ -263,7 +263,7 @@ export class ObjectHelper {
     this.mySpawningClone?.dispose();
     this.selectedObjectFromSpawn = '';
 
-    PlayerHelper.playerInstance.rootNodes[0].position = new Vector3(0, -0.5, -3);
+    PlayerHelper.setSelfPos(new Vector3(0, -0.5, -3));
   }
 
   static setSpawningMaterial(node: TransformNode) {

@@ -1200,44 +1200,44 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@babylonjs/core@^5.48.0":
-  version "5.48.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/core/-/core-5.48.0.tgz#79e7b7595620ffde86e0d064ccbc1ca50d93f656"
-  integrity sha512-97d+stKdMGGXmmCuYEo9xhz0v0q5DbWSg2GI6mfa+P1qH9YPmWN+YNxwBs0A2H3HrhBrC/PQOTHUibfA867CoQ==
+"@babylonjs/core@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/core/-/core-6.3.1.tgz#9d9d78a17583fb5b1071eab62e0bfc0376f329d2"
+  integrity sha512-VShcryUF+H55cJ556Ki9yBQJCIMMALsin1dFHFmdG4VUKlDf9AVj5WbvSmAtr0dRNJZop+RNRrteKHHqVEOYyA==
 
-"@babylonjs/gui-editor@^5.49.0":
-  version "5.49.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/gui-editor/-/gui-editor-5.49.0.tgz#aa6e578d5d2dbc58a8c4a3e8ccdbcdbbfd0c6577"
-  integrity sha512-z++Rlx2ncUtPhfjjP6J0eD7vPV6pMIG2+kgqjuKii92HxItXL6xdXGx5TP0P+mamHkJcZcK/zNzmegIKmSHZDQ==
+"@babylonjs/gui-editor@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/gui-editor/-/gui-editor-6.3.1.tgz#c427879bc1cb8c0c5dbbca3febaa42ffb94d9379"
+  integrity sha512-XmliRouLRrXp8X9K/TRIDbk10bZoU3pgJag5m96YBGsxxXoR0vdkSe86KFjwMqko2ArHRXkBbhvdCg8RwrkRxg==
 
-"@babylonjs/gui@^5.48.0":
-  version "5.48.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/gui/-/gui-5.48.0.tgz#b6fab49d4afd0f10c9205a6f288795bc90fa1827"
-  integrity sha512-1LiUQpGXNA3nPHH3vezZY9bdZpALTxAgxvQig2aDts2N7m4QB71U0piqzxn6dTIzhDFSLwQWpJHSSczbxWNgzQ==
+"@babylonjs/gui@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/gui/-/gui-6.3.1.tgz#e3644144d8dc4e301b5a0be0ae7cc07031be9345"
+  integrity sha512-HwzkFj3Fid7sUYICXV0WtYHIh/2dpsyHguK5Vs6mtzjZ0h3YyH5ai/CPwnJX/5mJSULHxtZxWI5VXq3x65nciA==
 
-"@babylonjs/inspector@^5.49.0":
-  version "5.49.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/inspector/-/inspector-5.49.0.tgz#3f90cfecc00c7aa997030e2f569f132ccb59e244"
-  integrity sha512-xSI7BxAiSl8fNWqHuUAHU/5wetQRDt1kV2v9fe6LCfqloGO/n5rzACvBpqdBGAPO8c43WdWQOlA5/tF5qnsm7g==
+"@babylonjs/inspector@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/inspector/-/inspector-6.3.1.tgz#2233a8746cce0dd0bf9446e866387685cf67e285"
+  integrity sha512-L4FjJKnMKH/q/9SLBStDXc1ukvdn1qRUjJI5dtPicAm8QEK4YKAb1ql3bWqseEmxoBI6kynUm9Xlx2C+vli5Jg==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.1.0"
     "@fortawesome/free-regular-svg-icons" "^6.0.0"
     "@fortawesome/free-solid-svg-icons" "^6.0.0"
 
-"@babylonjs/loaders@^5.48.0":
-  version "5.48.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/loaders/-/loaders-5.48.0.tgz#a16f69d03770fa8132b5df1dea51667072ad5e0e"
-  integrity sha512-BbZoceGDsUYis86OeAkFq9CQN1yJ59IOL0O0AtogOt8KQ5E8b0sH4MVdOwuV6h07yLVjo9Ir5RZsWKdGyuWHOw==
+"@babylonjs/loaders@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/loaders/-/loaders-6.3.1.tgz#cfb63dc407845a1b8103119edd1e2fcf719958d9"
+  integrity sha512-YeosnXHd/h4HewAiCokJ3O5y9XZIpQG4WieriK3xcMtIagw1nx8w31iXv9eXSiZTMFHWcAsvCiEl7GcmppjydQ==
 
-"@babylonjs/materials@^5.49.0":
-  version "5.49.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/materials/-/materials-5.49.0.tgz#f4e813c32971864c1849187a2747d29192ea9fa5"
-  integrity sha512-L00v6tw1KSqDSf5Uh2Ijsk1dU+ptLIbXFLXh2sdFulPG3OAlEwUHlEd9hV8x4qIQpYz4D5NuEW7PG82NH0cZgA==
+"@babylonjs/materials@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/materials/-/materials-6.3.1.tgz#245e8ee7dcb1bb6ce23936e48f837e32d03ee0f0"
+  integrity sha512-vHh4lr6yw0q2X9P2bPA7EQVFlGXW67qPckIUgM1ofK3XgT/n4bdgIZlGg8chYr0IanRM+WLQf682nO1UCv1yLA==
 
-"@babylonjs/serializers@^5.49.0":
-  version "5.49.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/serializers/-/serializers-5.49.0.tgz#b28a56ff3feacda468dcd724dbdc2f7889a0e03b"
-  integrity sha512-eGHCdtS04dB6QwYbIYGzO0o+tQ3llWMq3XIZQIFZQNRwFvAHOJkU3Nv8iJ8hKbizQu7urGdhKbK1RP04ciFttQ==
+"@babylonjs/serializers@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/serializers/-/serializers-6.3.1.tgz#6edf18e4f39dcd13d819434fd0ff1d31672b3f21"
+  integrity sha512-X4xJcaWr5LonEsbC+fubqnKpUprHKLkOr7niuT8i9kc2xM+zhv68dw1KSuIdKQmj+/PYXRLBaB92oyfIL2t9RQ==
 
 "@base2/pretty-print-object@1.0.1":
   version "1.0.1"
