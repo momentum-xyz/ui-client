@@ -3,11 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {ThemeProvider as ThemeProviderOriginal, ThemeProviderProps} from 'styled-components';
 import {isBrowserSupported, useI18n} from '@momentum-xyz/core';
-import {
-  LoaderFallback,
-  SystemWideError,
-  GlobalStyles as GlobalStylesOriginal
-} from '@momentum-xyz/ui-kit';
+import {LoaderFallback, SystemWideError, GlobalStyles} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useApiHandlers, useStore} from 'shared/hooks';
@@ -28,7 +24,6 @@ import {
 } from './welcome/pages/Welcome/WelcomePage';
 
 const ThemeProvider = ThemeProviderOriginal as unknown as FC<ThemeProviderProps<any, any>>;
-const GlobalStyles = GlobalStylesOriginal as unknown as FC;
 
 const App: FC = () => {
   const rootStore = useStore();
@@ -112,7 +107,6 @@ const App: FC = () => {
   return (
     <ThemeProvider theme={themeStore.theme}>
       <AppAuth>
-        {/* FIXME: Import from storybook */}
         <GlobalStyles />
         {isTargetRoute(pathname, WORLD_ROUTES) ? (
           <>
