@@ -33,38 +33,36 @@ const ProfileView: FC<PropsInterface> = ({
         <Image src={user.avatarLargeSrc} height={200} />
         <styled.NameContainer>{user.name}</styled.NameContainer>
 
-        <styled.ScrollableContainer>
-          <styled.GeneralInfo>
-            {user.profile?.bio && <div>{user.profile?.bio}</div>}
-            {user.profile.profileLink && (
-              <ProfileLine
-                icon="link"
-                label={
-                  <styled.LinkAccent target="_blank" href={absoluteLink(user.profile.profileLink)}>
-                    {withoutProtocol(user.profile.profileLink)}
-                  </styled.LinkAccent>
-                }
-              />
-            )}
+        <styled.GeneralInfo>
+          {user.profile?.bio && <div>{user.profile?.bio}</div>}
+          {user.profile.profileLink && (
             <ProfileLine
-              icon="astro"
-              label={`${t('actions.joined')} ${signUpDateString(user.createdAt)}`}
+              icon="link"
+              label={
+                <styled.LinkAccent target="_blank" href={absoluteLink(user.profile.profileLink)}>
+                  {withoutProtocol(user.profile.profileLink)}
+                </styled.LinkAccent>
+              }
             />
-            <WalletHash icon="talisman" hash={defaultWalletId || ''} />
-          </styled.GeneralInfo>
-
-          <WorldsOwnedList
-            worldsOwned={worldsOwnedList}
-            onSelectWorld={onInfoWorld}
-            onVisitWorld={onVisitWorld}
+          )}
+          <ProfileLine
+            icon="astro"
+            label={`${t('actions.joined')} ${signUpDateString(user.createdAt)}`}
           />
+          <WalletHash icon="talisman" hash={defaultWalletId || ''} />
+        </styled.GeneralInfo>
 
-          <WorldsStakedList
-            worldsStakedIn={worldsStakedList}
-            onSelectWorld={onInfoWorld}
-            onVisitWorld={onVisitWorld}
-          />
-        </styled.ScrollableContainer>
+        <WorldsOwnedList
+          worldsOwned={worldsOwnedList}
+          onSelectWorld={onInfoWorld}
+          onVisitWorld={onVisitWorld}
+        />
+
+        <WorldsStakedList
+          worldsStakedIn={worldsStakedList}
+          onSelectWorld={onInfoWorld}
+          onVisitWorld={onVisitWorld}
+        />
       </Frame>
     </styled.Container>
   );

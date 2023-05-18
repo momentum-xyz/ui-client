@@ -147,7 +147,7 @@ export const TopComponent = styled.div``;
 export const BottomComponent = styled.div``;
 
 export const ScrollableContainer = styled.div<{offset: number}>`
-  padding: 10px 12px;
+  padding: 10px;
   color: ${(props) => props.theme.text};
 
   &.fullHeight {

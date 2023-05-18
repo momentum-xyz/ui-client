@@ -1,13 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  --scroll-offset: 435px;
-`;
-
-export const ScrollableContainer = styled.div`
-  height: calc(100vh - var(--scroll-offset));
-  overflow: auto;
-`;
+export const Container = styled.div``;
 
 export const GeneralInfo = styled.div`
   display: flex;

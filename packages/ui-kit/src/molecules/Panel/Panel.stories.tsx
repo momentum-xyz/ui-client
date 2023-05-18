@@ -98,9 +98,9 @@ WithText.args = {
 export const WithTopComponent = Template.bind({});
 WithTopComponent.args = {
   isFullHeight: true,
-  children: <div style={{padding: '0 10px 12px 10px'}}>{TEXT_COMPONENT}</div>,
+  children: <div style={{padding: '0 10px 10px 10px'}}>{TEXT_COMPONENT}</div>,
   topComponent: (
-    <div style={{padding: '12px 12px 0 12px'}}>
+    <div style={{padding: '10px 10px 0 10px'}}>
       <Frame>
         <Image height={160} src={IMAGE_SRC} />
       </Frame>
@@ -113,7 +113,7 @@ WithBottomComponent.args = {
   isFullHeight: true,
   children: <div style={{padding: '0 10px'}}>{TEXT_COMPONENT}</div>,
   bottomComponent: (
-    <div style={{padding: '12px'}}>
+    <div style={{padding: '10px'}}>
       <Frame>
         <Image height={160} src={IMAGE_SRC} />
       </Frame>
