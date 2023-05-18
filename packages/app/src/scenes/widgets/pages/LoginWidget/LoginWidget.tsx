@@ -23,9 +23,8 @@ const LoginWidget: FC = () => {
     async (close = false) => {
       console.log('handleAccountConnected');
       try {
-        await sessionStore.loadUserProfile();
-        await sessionStore.loadOwnWorlds();
-        await sessionStore.loadStakedWorlds();
+        // TODO combine them with sessionStore.saveTokenAfterSignIn?
+        await sessionStore.loadUserData();
 
         if (close) {
           widgetManagerStore.closeAll();
