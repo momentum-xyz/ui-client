@@ -1,6 +1,5 @@
 import {FC} from 'react';
-import {FileUploader, ErrorsEnum} from '@momentum-xyz/ui-kit';
-import {Button, Input, Radio} from '@momentum-xyz/ui-kit-storybook';
+import {Button, Input, Radio, FileUploader, ErrorsEnum, Loader} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import cn from 'classnames';
@@ -171,10 +170,17 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
           />
         </styled.InputsContainer>
       </styled.FormContainer>
+      {isUploadPending && <Loader />}
       <styled.ControlsRow>
-        <Button label={t('actions.goBack')} variant="secondary" onClick={onBack} />
+        <Button
+          label={t('actions.goBack')}
+          disabled={isUploadPending}
+          variant="secondary"
+          onClick={onBack}
+        />
         <Button
           label="Publish"
+          disabled={isUploadPending}
           onClick={() => {
             handleSubmit(formSubmitHandler)();
           }}

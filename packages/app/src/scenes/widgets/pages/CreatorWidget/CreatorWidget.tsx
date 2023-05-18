@@ -1,13 +1,13 @@
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useMemo} from 'react';
-import {Panel, IconNameType, SideMenuItemInterface, SideMenu} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, IconNameType, SideMenuItemInterface, SideMenu, Dialog} from '@momentum-xyz/ui-kit';
 import {i18n, useI18n} from '@momentum-xyz/core';
-import {Dialog} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 
 import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {CreatorTabsEnum} from 'core/enums';
+import {subMenuKeyWidgetEnumMap} from 'core/constants';
 
 import * as styled from './CreatorWidget.styled';
 import {
@@ -52,7 +52,7 @@ const allPanels: SideMenuItemInterface<MenuItemType>[] = [
 ];
 
 const CreatorWidget: FC = () => {
-  const {universeStore, widgetStore} = useStore();
+  const {universeStore, widgetStore, widgetManagerStore} = useStore();
   const {creatorStore} = widgetStore;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const world3dStore = universeStore.world3dStore!;
@@ -103,13 +103,29 @@ const CreatorWidget: FC = () => {
   const panel = allPanels.find((panel) => panel.id === selectedTab);
   const menuItem = sideMenuItems.find((item) => item.id === selectedTab);
 
+  const handleSubMenuActiveChange = (tab: keyof typeof CreatorTabsEnum | null): void => {
+    const currentTabIsOnSubMenu = selectedTab && subMenuKeyWidgetEnumMap[selectedTab];
+    const correspondingSubMenuWidget = tab && subMenuKeyWidgetEnumMap[tab];
+
+    if (correspondingSubMenuWidget) {
+      widgetManagerStore.setSubMenuActiveKeys([correspondingSubMenuWidget]);
+    } else if (currentTabIsOnSubMenu) {
+      widgetManagerStore.setSubMenuActiveKeys([]);
+    }
+  };
+
+  const handleTabChange = (tab?: keyof typeof CreatorTabsEnum): void => {
+    setSelectedTab(tab || null);
+    handleSubMenuActiveChange(tab || null);
+  };
+
   return (
     <styled.Container>
       <SideMenu
         activeId={menuItem?.id}
         orientation="left"
         sideMenuItems={sideMenuItems}
-        onSelect={setSelectedTab}
+        onSelect={handleTabChange}
       />
 
       {!!selectedTab && !!content && (
@@ -119,9 +135,7 @@ const CreatorWidget: FC = () => {
           variant="primary"
           title={panel?.label || ''}
           icon={panel?.iconName as IconNameType}
-          onClose={() => {
-            setSelectedTab(null);
-          }}
+          onClose={() => handleTabChange()}
         >
           {content}
         </Panel>
@@ -139,6 +153,7 @@ const CreatorWidget: FC = () => {
                 .then(() => {
                   toast.info(<ToastContent icon="bin" text={t('messages.objectDeleted')} />);
                   removeObjectDialog.close();
+                  widgetManagerStore.closeSubMenu();
                 })
                 .catch((error) => {
                   console.log('Error removing object:', error);
@@ -146,16 +161,13 @@ const CreatorWidget: FC = () => {
                     <ToastContent icon="alert" text={t('messages.errorDeletingObject')} />
                   );
                 });
-            },
-            variant: 'danger'
+            }
           }}
           declineInfo={{
             title: t('actions.cancel'),
-            onClick: removeObjectDialog.close,
-            variant: 'primary'
+            onClick: removeObjectDialog.close
           }}
           onClose={removeObjectDialog.close}
-          showCloseButton
         />
       )}
     </styled.Container>

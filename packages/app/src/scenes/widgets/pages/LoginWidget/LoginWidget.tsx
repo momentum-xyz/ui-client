@@ -1,6 +1,6 @@
 import {FC, useCallback, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Panel, Steps, StepInterface} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, Steps, StepInterface} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';

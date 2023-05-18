@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {ButtonEllipse, Frame, WalletHash} from '@momentum-xyz/ui-kit-storybook';
+import {ButtonEllipse, Frame, WalletHash} from '@momentum-xyz/ui-kit';
 
 import {WalletLogin, TrustPoints, WalletSelector} from 'ui-kit';
 import {WalletModelInterface} from 'core/models';
@@ -46,11 +46,17 @@ const ManageWallet: FC<PropsInterface> = ({
                   <styled.WalletActions>
                     <ButtonEllipse
                       isLabel={isDefault}
+                      variant="secondary"
                       icon={isDefault ? 'starOn' : 'star'}
                       label={isDefault ? t('actions.default') : t('actions.setAsDefault')}
                       onClick={() => onChangeDefaultWallet(wallet_id)}
                     />
-                    <ButtonEllipse icon="bin" label={t('actions.remove')} disabled={isDefault} />
+                    <ButtonEllipse
+                      icon="bin"
+                      variant="secondary"
+                      label={t('actions.remove')}
+                      disabled={isDefault}
+                    />
                   </styled.WalletActions>
                 </styled.Wallet>
               );

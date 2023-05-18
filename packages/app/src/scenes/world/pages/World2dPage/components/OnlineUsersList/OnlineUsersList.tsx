@@ -1,13 +1,7 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {
-  ButtonEllipse,
-  Hexagon,
-  ImageSizeEnum,
-  Panel,
-  ProfileLine
-} from '@momentum-xyz/ui-kit-storybook';
+import {ButtonEllipse, Hexagon, ImageSizeEnum, Panel, ProfileLine} from '@momentum-xyz/ui-kit';
 
 import {UserDetailsModelType} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -15,12 +9,15 @@ import {ProfileImage, ProfileInfo} from 'ui-kit';
 
 import * as styled from './OnlineUsersList.styled';
 
+const MAX_USERS_COUNT = 9;
+
 interface PropsInterface {
   onlineUsers: UserDetailsModelType[];
   voiceChatUsers: string[];
   onVisitWorld: (worldId: string) => void;
   onInviteToVoiceChat: (userId: string) => void;
   onSendHighFive: (userId: string) => void;
+  onOpenVisitors: () => void;
 }
 
 const OnlineUsersList: FC<PropsInterface> = ({
@@ -28,7 +25,8 @@ const OnlineUsersList: FC<PropsInterface> = ({
   voiceChatUsers,
   onVisitWorld,
   //onInviteToVoiceChat,
-  onSendHighFive
+  onSendHighFive,
+  onOpenVisitors
 }) => {
   const [activeUser, setActiveUser] = useState<UserDetailsModelType | null>(null);
 
@@ -36,18 +34,27 @@ const OnlineUsersList: FC<PropsInterface> = ({
 
   return (
     <styled.Container data-testid="OnlineUsersList-test">
-      {onlineUsers.map((userDetails) => (
+      {onlineUsers.slice(0, MAX_USERS_COUNT).map((userDetails) => (
         <Hexagon
           key={userDetails.userId}
           type="menu"
           isActive={userDetails.userId === activeUser?.userId}
           indicator={voiceChatUsers.includes(userDetails.userId) ? 'voice' : undefined}
           imageSrc={getImageAbsoluteUrl(userDetails.user?.profile.avatarHash)}
+          iconName="astronaut"
           onClick={() =>
             setActiveUser(userDetails.userId !== activeUser?.userId ? userDetails : null)
           }
         />
       ))}
+
+      {onlineUsers.length > MAX_USERS_COUNT && (
+        <Hexagon
+          type="menu"
+          label={`+${onlineUsers.length - MAX_USERS_COUNT}`}
+          onClick={onOpenVisitors}
+        />
+      )}
 
       {!!activeUser && (
         <styled.ActiveUserContainer>
@@ -93,6 +100,7 @@ const OnlineUsersList: FC<PropsInterface> = ({
                 />*/}
                 <ButtonEllipse
                   icon="high-five"
+                  variant="secondary"
                   label={t('labels.highFive')}
                   wide
                   onClick={() => onSendHighFive(activeUser.userId)}

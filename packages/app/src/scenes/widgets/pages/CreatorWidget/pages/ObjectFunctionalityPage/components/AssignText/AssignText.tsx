@@ -1,7 +1,7 @@
 import {FC, MutableRefObject, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import {Input, Textarea} from '@momentum-xyz/ui-kit-storybook';
+import {Input, Textarea} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';

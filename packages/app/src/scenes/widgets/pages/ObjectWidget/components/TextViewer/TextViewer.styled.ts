@@ -24,4 +24,5 @@ export const Title = styled.div`
 export const Text = styled.div`
   line-height: 22px;
   letter-spacing: 0.02em;
+  white-space: pre-line;
 `;

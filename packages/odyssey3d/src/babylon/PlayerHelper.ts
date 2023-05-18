@@ -73,7 +73,7 @@ export class PlayerHelper {
   static playerId: string;
   static playerInterface: Odyssey3dUserInterface;
   static rightHanded = false;
-  static selectedSpeed = 0.5;
+  static selectedSpeed = 1;
   static onSpawnParticles: (() => void) | undefined;
 
   static initialize(

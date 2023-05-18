@@ -1,14 +1,12 @@
 import {FC, memo} from 'react';
 
-import {PropsWithThemeInterface} from '../../interfaces';
-
 import * as styled from './LoaderFallback.styled';
 
-interface PropsInterface extends PropsWithThemeInterface {
+export interface LoaderFallbackPropsInterface {
   text: string;
 }
 
-const LoaderFallback: FC<PropsInterface> = ({text}) => {
+const LoaderFallback: FC<LoaderFallbackPropsInterface> = ({text}) => {
   return <styled.Container data-testid="LoaderFallback-test">{text}</styled.Container>;
 };
 

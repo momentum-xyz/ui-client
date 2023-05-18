@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Input} from '@momentum-xyz/ui-kit-storybook';
+import {Input} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 
 import * as styled from './ObjectTransformForm.styled';

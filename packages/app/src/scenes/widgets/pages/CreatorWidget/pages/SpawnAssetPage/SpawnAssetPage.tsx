@@ -1,8 +1,7 @@
 import {FC, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n, i18n} from '@momentum-xyz/core';
-import {Frame, Button, Input, TabInterface} from '@momentum-xyz/ui-kit-storybook';
-import {Text} from '@momentum-xyz/ui-kit';
+import {Frame, Button, Input, TabInterface} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {Asset3dCategoryEnum} from 'api/enums';
@@ -115,7 +114,7 @@ const SpawnAssetPage: FC = () => {
                 />
               </styled.AssetsGroupList>
             )}
-            {activeTab === 'private' && <Text text="Coming soon!" size="l" />}
+            {activeTab === 'private' && <div>Coming soon!</div>}
             {activeTab === 'upload' && <UploadCustomAssetPage />}
           </>
         )}

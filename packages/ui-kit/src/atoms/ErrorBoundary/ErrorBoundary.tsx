@@ -1,12 +1,12 @@
 import React, {FC, PropsWithChildren} from 'react';
 import {useErrorBoundary, withErrorBoundary} from 'react-use-error-boundary';
 
-interface PropsInterface {
+export interface ErrorBoundaryPropsInterface {
   errorMessage: string;
 }
 
-const ErrorBoundary: FC<PropsWithChildren<PropsInterface>> = withErrorBoundary<
-  PropsWithChildren<PropsInterface>
+const ErrorBoundary: FC<PropsWithChildren<ErrorBoundaryPropsInterface>> = withErrorBoundary<
+  PropsWithChildren<ErrorBoundaryPropsInterface>
 >(({children, errorMessage}) => {
   const [error] = useErrorBoundary(console.error);
 

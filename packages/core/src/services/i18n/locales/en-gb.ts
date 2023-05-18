@@ -252,9 +252,7 @@ export const enGb = {
       loadedInAnotherTab: 'Odyssey has been loaded in another browser tab',
       switchToThatTab:
         'To continue the experience, please switch to that window/tab and close this one',
-      underMaintenance: 'The server is undergoing maintenance, please try again later',
-      noBlockchainUrlAvailable:
-        'Ooops, the blockchain server is not available at the moment. Please try again later!'
+      underMaintenance: 'The server is undergoing maintenance, please try again later'
     },
     counts: {
       people_one: '{{count}} Person',
@@ -269,6 +267,7 @@ export const enGb = {
     labels: {
       home: 'Home',
       by: 'By',
+      or: 'Or',
       screenShare: 'Screenshare',
       stageMode: 'Stage Mode',
       stakingOverview: 'Staking Overview',
@@ -565,6 +564,7 @@ export const enGb = {
         'This Skybox is your Current skybox; removing this will change your skybox to the default one.',
       removeSkyboxFinalConfirmation: 'Are you sure you want to do this?',
       uploadAssetInfoTitle: 'Drag and drop your asset here',
+      uploadAssetPictureDescription: 'Drag and drop YOUR CUSTOM image here',
       uploadAssetInfoDescription: 'We support GLB Models & the max file size cannot exceed 50mb',
       uploadCustomSkyboxInfoTitle: 'Drag and drop your custom skybox here',
       uploadCustomSkyboxInfoDescription:
@@ -662,6 +662,7 @@ export const enGb = {
       searchForAssets: 'Search for assets...',
       searchForAttendees: 'Search for attendees...',
       nameYourWorld: 'Name your world',
+      nameYourImage: 'Name your image',
       worldname: 'worldname',
       selectPlugin: 'Select Plugin',
       nameYourAssetForYourLibrary: 'Name your Asset for your library',
@@ -708,6 +709,7 @@ export const enGb = {
       default: 'Default',
       setAsDefault: 'Set as default',
       edit: 'Edit',
+      deleteObject: 'Delete object',
       editProfile: 'Edit profile',
       claimRewards: 'Claim Rewards',
       nextStep: 'Next Step',
@@ -807,7 +809,7 @@ export const enGb = {
       joinVoiceChat: 'Join the voice channel',
       leaveVoiceChat: 'Leave the voice channel',
       select: 'Select',
-      uploadYourAssset: 'Upload your asset',
+      uploadYourAsset: 'Upload your asset',
       addToLibrary: 'Add to library',
       dropItHere: 'Drop it here',
       closePanel: 'Close Panel',
@@ -821,7 +823,6 @@ export const enGb = {
       changeText: 'Change Text',
       changeImage: 'Change Image',
       selectImage: 'Select Image',
-      uploadYourAsset: 'UPLOAD YOUR ASSET',
       uploadCustomSkybox: 'Upload Custom Skybox',
       move: 'Move',
       rotate: 'Rotate',
@@ -829,6 +830,7 @@ export const enGb = {
       undo: 'Undo',
       redo: 'Redo',
       copy: 'Copy',
+      clearSelection: 'Clear Selection',
       inspector: 'Inspector',
       functionality: 'Functionality',
       colour: 'Colour',

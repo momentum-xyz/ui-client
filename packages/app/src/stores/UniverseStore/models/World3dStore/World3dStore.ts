@@ -5,7 +5,7 @@ import {
   ClickPositionInterface,
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
-import {MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit-storybook';
+import {MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
 import {UnityControlInterface} from '@momentum-xyz/sdk';
 
 // import {api, ResolveNodeResponse} from 'api';
@@ -241,7 +241,7 @@ const World3dStore = types
       }
 
       // TODO move it as child store here??
-      const {widgetStore, widgetManagerStore} = getRootStore(self);
+      const {widgetStore} = getRootStore(self);
       const {creatorStore} = widgetStore;
 
       if (self.selectedObjectId) {
@@ -256,42 +256,8 @@ const World3dStore = types
       // self.objectMenu.open();
       // self.setSelectedTab('inspector');
 
+      // TODO move it as child store here??
       creatorStore.setSelectedObjectId(objectId);
-
-      const submenuItems: MenuItemInterface<WidgetEnum>[] = [
-        {
-          key: WidgetEnum.GO_TO,
-          position: PositionEnum.CENTER,
-          iconName: 'close_large',
-          onClick: () => self.closeAndResetObjectMenu()
-        },
-        {
-          key: WidgetEnum.GO_TO,
-          position: PositionEnum.CENTER,
-          iconName: 'direction-arrows',
-          onClick: () => creatorStore.setSelectedTab('gizmo')
-        },
-        {
-          key: WidgetEnum.GO_TO,
-          position: PositionEnum.CENTER,
-          iconName: 'info',
-          onClick: () => creatorStore.setSelectedTab('inspector')
-        },
-        {
-          key: WidgetEnum.GO_TO,
-          position: PositionEnum.CENTER,
-          iconName: 'cubicles',
-          onClick: () => creatorStore.setSelectedTab('functionality')
-        },
-        {
-          key: WidgetEnum.GO_TO,
-          position: PositionEnum.CENTER,
-          iconName: 'bin',
-          onClick: creatorStore.removeObjectDialog.open
-        }
-      ];
-
-      widgetManagerStore.openSubMenu(WidgetEnum.CREATOR, submenuItems, PositionEnum.CENTER);
 
       if (creatorStore.selectedTab === null) {
         creatorStore.setSelectedTab('gizmo');

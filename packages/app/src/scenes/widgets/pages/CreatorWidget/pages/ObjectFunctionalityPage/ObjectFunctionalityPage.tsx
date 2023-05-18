@@ -1,11 +1,12 @@
 import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Button, TabInterface, Tabs} from '@momentum-xyz/ui-kit-storybook';
+import {Button, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
 
 import {ToastContent} from 'ui-kit';
 import {BasicAsset2dIdEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
+import {subMenuKeyWidgetEnumMap} from 'core/constants';
 
 import {AssignText, AssignImage, AssignVideoDialog} from './components';
 import * as styled from './ObjectFunctionalityPage.styled';
@@ -17,9 +18,9 @@ const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
 ];
 
 const ObjectFunctionalityPage: FC = () => {
-  const {universeStore, widgetStore} = useStore();
+  const {universeStore, widgetStore, widgetManagerStore} = useStore();
   const {creatorStore} = widgetStore;
-  const {objectFunctionalityStore, selectedObjectId} = creatorStore;
+  const {selectedTab, objectFunctionalityStore, selectedObjectId} = creatorStore;
   const {objectStore} = universeStore;
   const {pluginLoader} = objectStore;
 
@@ -47,6 +48,13 @@ const ObjectFunctionalityPage: FC = () => {
     };
   }, [selectedObjectId, objectFunctionalityStore, objectStore]);
 
+  const handleSubMenuActiveChange = (): void => {
+    const currentTabIsOnSubMenu = selectedTab && subMenuKeyWidgetEnumMap[selectedTab];
+    if (currentTabIsOnSubMenu) {
+      widgetManagerStore.setSubMenuActiveKeys([]);
+    }
+  };
+
   const handleSave = async () => {
     try {
       actionRef.current?.doSave();
@@ -57,6 +65,7 @@ const ObjectFunctionalityPage: FC = () => {
       }
 
       creatorStore.setSelectedTab(null);
+      handleSubMenuActiveChange();
 
       toast.info(<ToastContent icon="check" text="Saved" />);
     } catch (e) {

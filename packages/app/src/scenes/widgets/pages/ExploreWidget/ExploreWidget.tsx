@@ -2,7 +2,7 @@ import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 import {useI18n, i18n} from '@momentum-xyz/core';
-import {TabInterface, Tabs, Panel} from '@momentum-xyz/ui-kit-storybook';
+import {TabInterface, Tabs, Panel} from '@momentum-xyz/ui-kit';
 
 import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';

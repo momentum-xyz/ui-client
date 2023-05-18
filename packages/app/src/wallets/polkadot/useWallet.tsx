@@ -3,7 +3,7 @@ import type {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {useCallback, useEffect, useState} from 'react';
 import {decodeAddress} from '@polkadot/util-crypto';
 import {stringToHex, u8aToHex} from '@polkadot/util';
-import {Select} from '@momentum-xyz/ui-kit-storybook';
+import {Select} from '@momentum-xyz/ui-kit';
 
 import {UseWalletType} from 'wallets';
 

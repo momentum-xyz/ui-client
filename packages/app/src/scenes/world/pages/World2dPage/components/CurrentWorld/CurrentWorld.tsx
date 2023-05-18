@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {signUpDateString, useI18n} from '@momentum-xyz/core';
-import {Hexagon, MenuLabel, ProfileLine} from '@momentum-xyz/ui-kit-storybook';
+import {Hexagon, MenuLabel, ProfileLine} from '@momentum-xyz/ui-kit';
 
 import {formatBigInt} from 'core/utils';
 import {WorldModelInterface} from 'core/models';

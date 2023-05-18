@@ -1,8 +1,8 @@
 import {observer} from 'mobx-react-lite';
-import {FC, useCallback, useEffect} from 'react';
-import {Button, Frame, Input} from '@momentum-xyz/ui-kit-storybook';
+import {FC, useCallback, useEffect, useState} from 'react';
+import {Button, Frame, Input} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
-import {Model3dPreview} from '@momentum-xyz/map3d';
+import {Model3dPreview} from '@momentum-xyz/odyssey3d';
 
 import {useStore} from 'shared/hooks';
 
@@ -18,11 +18,14 @@ export const SelectedPage: FC = () => {
 
   const {t} = useI18n();
 
+  const [assetInfo, setAssetInfo] = useState<any | null>(null);
+
   useEffect(() => {
+    spawnAssetStore.setNavigationObjectName(asset?.name || '');
     return () => {
       spawnAssetStore.resetSelectedObjectFields();
     };
-  }, [spawnAssetStore]);
+  }, [asset, spawnAssetStore]);
 
   const handleSpawn = useCallback(() => {
     spawnAssetStore.spawnObject(worldId).then((objectId) => {
@@ -74,13 +77,16 @@ export const SelectedPage: FC = () => {
     <styled.Container className="just-to-be-sure">
       <styled.ObjectInfoContainer>
         <Frame>
-          <styled.PreviewContainer>
-            <Model3dPreview
-              filename={asset.thumbnailAssetDownloadUrl}
-              previewUrl={asset.previewUrl}
-              onSnapshot={asset.category === 'custom' ? handleSnapshot : undefined}
-            />
-          </styled.PreviewContainer>
+          <>
+            <styled.PreviewContainer>
+              <Model3dPreview
+                filename={asset.thumbnailAssetDownloadUrl}
+                previewUrl={asset.previewUrl}
+                onSnapshot={asset.category === 'custom' ? handleSnapshot : undefined}
+                onAssetInfoLoaded={setAssetInfo}
+              />
+            </styled.PreviewContainer>
+          </>
         </Frame>
 
         <styled.ObjectTitle>{asset.name}</styled.ObjectTitle>
@@ -101,24 +107,26 @@ export const SelectedPage: FC = () => {
           </styled.Prop>
         </styled.Row> */}
 
-        <styled.Row>
+        {/* <styled.Row>
           <styled.Prop>
             <styled.PropName>Added by:</styled.PropName>
             <styled.PropValue>test</styled.PropValue>
           </styled.Prop>
-        </styled.Row>
-        <styled.Row>
+        </styled.Row> */}
+        {/* <styled.Row>
           <styled.Prop>
             <styled.PropName>Added on:</styled.PropName>
             <styled.PropValue>test</styled.PropValue>
           </styled.Prop>
-        </styled.Row>
-        <styled.Row>
-          <styled.Prop>
-            <styled.PropName>Created by:</styled.PropName>
-            <styled.PropValue>test</styled.PropValue>
-          </styled.Prop>
-        </styled.Row>
+        </styled.Row> */}
+        {assetInfo?.extras?.author && (
+          <styled.Row>
+            <styled.Prop>
+              <styled.PropName>Created by:</styled.PropName>
+              <styled.PropValue>{assetInfo?.extras?.author}</styled.PropValue>
+            </styled.Prop>
+          </styled.Row>
+        )}
 
         <styled.Row>
           <styled.Prop>
@@ -126,6 +134,7 @@ export const SelectedPage: FC = () => {
             {/* <styled.PropValue>test</styled.PropValue> */}
             <Input
               placeholder={t('placeholders.defaultAssetName')}
+              value={spawnAssetStore.navigationObjectName}
               onChange={spawnAssetStore.setNavigationObjectName}
             />
           </styled.Prop>

@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {IconSvg, ItemCard, ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
+import {IconSvg, ItemCard, ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {WorldInfoModelInterface} from 'core/models';

@@ -12,7 +12,6 @@ import {
   Vector3,
   Texture
 } from '@babylonjs/core';
-import '@babylonjs/loaders/glTF';
 import {
   Object3dInterface,
   Texture3dInterface,
@@ -25,6 +24,7 @@ import {SkyboxHelper} from './SkyboxHelper';
 import {getAssetFileName} from './UtilityHelper';
 import {posToVec3} from './TransformHelper';
 import {WorldCreatorHelper} from './WorldCreatorHelper';
+import './initLoaderGLTF';
 
 interface BabylonObjectInterface {
   container: AssetContainer;

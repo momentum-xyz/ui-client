@@ -2,19 +2,21 @@ import {FC, useEffect, useMemo, useState} from 'react';
 import {matchPath, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {PositionEnum, useDebouncedCallback} from '@momentum-xyz/ui-kit-storybook';
+import {useDebouncedCallback, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
 import {BabylonScene} from '@momentum-xyz/odyssey3d';
 import {
   Event3dEmitter,
   ClickPositionInterface,
   ObjectTransformInterface,
-  TransformNoScaleInterface
+  TransformNoScaleInterface,
+  useI18n
 } from '@momentum-xyz/core';
 
-import {WidgetEnum} from 'core/enums';
+import {CreatorTabsEnum, WidgetEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 import {PosBusService} from 'shared/services';
 import {WORLD_ROUTES} from 'scenes/App.routes';
+import {subMenuKeyWidgetEnumMap} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {HighFiveContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 
@@ -24,7 +26,9 @@ const World3dPage: FC = () => {
   const {creatorStore} = widgetStore;
 
   const [readyToHandleEvents, setReadyToHandleEvents] = useState<boolean>(false);
+  const {selectedTab} = creatorStore;
 
+  const {t} = useI18n();
   const location = useLocation();
 
   // TODO: FIXME
@@ -97,10 +101,82 @@ const World3dPage: FC = () => {
       // navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
 
       world3dStore?.handleClick(objectId, clickPos);
+      handleLevel2MenuOpen();
     } else {
       console.log('BabylonPage: handle object click, NOT creator mode', objectId);
       widgetManagerStore.open(WidgetEnum.OBJECT, PositionEnum.RIGHT, {id: objectId});
     }
+  };
+
+  const handleSubMenuActiveChange = (tab: keyof typeof CreatorTabsEnum): void => {
+    const currentTabIsOnSubMenu = selectedTab && subMenuKeyWidgetEnumMap[selectedTab];
+    const correspondingSubMenuWidget = subMenuKeyWidgetEnumMap[tab];
+
+    if (correspondingSubMenuWidget) {
+      widgetManagerStore.setSubMenuActiveKeys([correspondingSubMenuWidget]);
+    } else if (currentTabIsOnSubMenu) {
+      widgetManagerStore.setSubMenuActiveKeys([]);
+    }
+  };
+
+  const handleTabSelection = (tab: keyof typeof CreatorTabsEnum): void => {
+    creatorStore.setSelectedTab(tab);
+    handleSubMenuActiveChange(tab);
+  };
+
+  const handleLevel2MenuOpen = () => {
+    const submenuItems: MenuItemInterface<WidgetEnum>[] = [
+      {
+        key: WidgetEnum.ACTION,
+        position: PositionEnum.CENTER,
+        iconName: 'close_large',
+        tooltip: t('actions.clearSelection'),
+        onClick: () => world3dStore?.closeAndResetObjectMenu()
+      },
+      {
+        key: WidgetEnum.MOVE_ITEM,
+        position: PositionEnum.CENTER,
+        iconName: 'direction-arrows',
+        tooltip: t('actions.move'),
+        onClick: () => handleTabSelection('gizmo')
+      },
+      {
+        key: WidgetEnum.INSPECTOR,
+        position: PositionEnum.CENTER,
+        iconName: 'info',
+        tooltip: t('actions.inspector'),
+        onClick: () => handleTabSelection('inspector')
+      },
+      {
+        key: WidgetEnum.ASSIGN_FUNCTIONALITY,
+        position: PositionEnum.CENTER,
+        iconName: 'cubicles',
+        tooltip: t('labels.selectFunction'),
+        onClick: () => handleTabSelection('functionality')
+      },
+      {
+        key: WidgetEnum.REMOVE,
+        position: PositionEnum.CENTER,
+        iconName: 'bin',
+        tooltip: t('actions.deleteObject'),
+        onClick: creatorStore.removeObjectDialog.open
+      }
+    ];
+
+    const currentSubMenuInfo = widgetManagerStore.subMenuInfo;
+    const isSameSubMenu = currentSubMenuInfo?.sourceItemKey === WidgetEnum.CREATOR;
+
+    const activeSubMenuKeys = !currentSubMenuInfo
+      ? [WidgetEnum.MOVE_ITEM]
+      : isSameSubMenu
+      ? currentSubMenuInfo?.activeKeys
+      : [];
+    widgetManagerStore.openSubMenu(
+      WidgetEnum.CREATOR,
+      submenuItems,
+      PositionEnum.CENTER,
+      activeSubMenuKeys
+    );
   };
 
   const handleClickOutside = () => {
@@ -108,6 +184,7 @@ const World3dPage: FC = () => {
     // if (creatorStore.selectedTab === 'gizmo') {
     //   // deselect only with gizmo - other tabs have closing button
     //   world3dStore?.closeAndResetObjectMenu();
+    //   widgetManagerStore.closeSubMenu();
     // }
   };
 

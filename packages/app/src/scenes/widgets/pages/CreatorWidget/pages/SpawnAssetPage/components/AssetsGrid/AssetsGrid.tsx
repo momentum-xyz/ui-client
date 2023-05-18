@@ -1,7 +1,7 @@
 import {FC, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Model3dPreview} from '@momentum-xyz/map3d';
-import {Frame, Image, useResize} from '@momentum-xyz/ui-kit-storybook';
+import {Model3dPreview} from '@momentum-xyz/odyssey3d';
+import {Frame, Image} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {Asset3dInterface} from 'core/models';
@@ -20,9 +20,6 @@ const AssetGrid: FC<PropsInterface> = ({assets, showPreview, onSelected}) => {
   const {t} = useI18n();
 
   const ref = useRef<HTMLDivElement>(null);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth - 20);
-  useResize(ref, () => setWindowWidth(window.innerWidth - 20));
-  const imageHeight = windowWidth >= 1440 ? 160 : 140;
 
   if (assets.length === 0) {
     return (
@@ -47,7 +44,7 @@ const AssetGrid: FC<PropsInterface> = ({assets, showPreview, onSelected}) => {
           <Frame>
             <styled.GridItemInnerContainer onClick={() => onSelected(asset)}>
               {hoveringAsset !== asset || !showPreview ? (
-                <Image src={asset.previewUrl} height={imageHeight} bordered />
+                <Image src={asset.previewUrl} height={140} bordered />
               ) : (
                 <styled.GridItemPreview>
                   <Model3dPreview

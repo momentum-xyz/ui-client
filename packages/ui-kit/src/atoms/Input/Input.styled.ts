@@ -1,94 +1,102 @@
-import styled from 'styled-components';
 import {rgba} from 'polished';
-
-import {Heading} from '../Heading';
-
-export const InputContainer = styled.div`
-  --input-padding: 0 10px;
-  --input-radius: 6px;
-  --input-height: 37px;
-
-  background: ${rgba(0, 1, 1, 0.2)};
-  border-radius: var(--input-radius);
-
-  position: relative;
-
-  input {
-    display: block;
-    border-radius: var(--input-radius);
-    outline: none;
-    width: 100%;
-    height: var(--input-height);
-    border: 1px solid transparent;
-    font-size: var(--font-size-s);
-    background: transparent;
-    padding: var(--input-padding);
-    color: ${(props) => props.theme.text};
-
-    &:hover,
-    &:active {
-      color: var(--white);
-      background: var(--hover-background);
-      opacity: 0.7;
-      border: 1px solid ${(props) => props.theme.accent};
-    }
-    &:focus {
-      outline-style: none;
-      box-shadow: none;
-      border: 1px solid ${(props) => props.theme.accent};
-      opacity: 1;
-    }
-    &:disabled {
-      background: var(--hover-background);
-      opacity: 0.7;
-      &:hover {
-        border: 1px solid transparent;
-      }
-    }
-    &::placeholder {
-      font-size: var(--font-size-s);
-      margin: auto;
-    }
-    &.error {
-      border: 1px solid ${(props) => props.theme.accentDanger};
-    }
-  }
-  &.highlighted {
-    border: 1px solid ${(props) => props.theme.accent};
-    background: ${(props) => props.theme.accent && rgba(props.theme.accent, 0.2)};
-  }
-`;
+import styled from 'styled-components';
 
 export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-top: 5px;
-`;
+  --width-default: 320px;
 
-export const Label = styled(Heading)`
-  margin-left: 10px;
-`;
+  --height: initial;
+  --height-normal: 40px;
+  --height-small: 30px;
 
-export const ErrorMessage = styled.div`
-  position: absolute;
-  bottom: -20px;
-  &.none {
-    display: none;
+  position: relative;
+  width: var(--width-default);
+
+  input {
+    padding: 0 20px;
+    width: 100%;
+    height: var(--height);
+    background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
+    border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
+    color: ${(props) => props.theme.text};
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    transition: background var(--tr-150-ei), color var(--tr-150-ei);
+    font-size: var(--font-size-m);
+
+    &::placeholder {
+      color: ${(props) => props.theme.text && rgba(props.theme.text, 0.8)};
+    }
+
+    /* STATES */
+
+    &:hover {
+      background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+      color: ${(props) => props.theme.accentText};
+    }
+
+    &:focus {
+      background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+    }
+
+    &.danger {
+      background: ${(props) => props.theme.danger && rgba(props.theme.danger, 0.4)};
+    }
+
+    &.search {
+      padding: 0 40px 0 20px;
+    }
+
+    &:disabled {
+      background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
+      color: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
+
+      &:hover {
+        cursor: not-allowed;
+      }
+    }
+
+    /* SIZES */
+
+    &.normal {
+      --height: var(--height-normal);
+    }
+
+    &.small {
+      --height: var(--height-small);
+    }
   }
-  color: ${(props) => props.theme.accentDanger};
-  opacity: 1;
-  margin-left: 10px;
-  font-size: var(--font-size-xs);
-  pointer-events: none;
+
+  &.wide {
+    width: 100%;
+  }
 `;
 
-export const RequiredIndicator = styled.div`
-  color: ${(props) => props.theme.accentDanger};
-`;
-
-export const LabelContainer = styled.div`
+export const IconSearch = styled.div`
+  position: absolute;
   display: flex;
-  gap: 1px;
-  padding-bottom: 5px;
+  align-items: center;
+  right: 15px;
+  bottom: 0;
+  top: 0;
+`;
+
+export const IconClear = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  right: 15px;
+  bottom: 0;
+  top: 0;
+
+  svg {
+    color: ${(props) => props.theme.text};
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    svg {
+      color: ${(props) => props.theme.accentText};
+    }
+  }
 `;

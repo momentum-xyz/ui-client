@@ -1,6 +1,6 @@
 import {FC, useCallback, useState} from 'react';
 import {generatePath, Navigate, Route, Routes, useNavigate} from 'react-router-dom';
-import {Toggle, Text, Button} from '@momentum-xyz/ui-kit';
+import {Button, Checkbox} from '@momentum-xyz/ui-kit';
 
 import {PluginInterface} from '../../../interfaces';
 import {ObjectViewEmulator} from '../ObjectViewEmulator';
@@ -45,8 +45,7 @@ export const WorldEmulator: FC<PropsInterface> = ({plugin}) => {
   return (
     <styled.Container>
       <styled.ControlPanel>
-        <Toggle size="normal" variant="normal" checked={isAdmin} onChange={setIsAdmin} />
-        <Text text="Is User Admin" size="m" />
+        <Checkbox value={isAdmin} onChange={setIsAdmin} label="Is User Admin" name="is_admin" />
       </styled.ControlPanel>
       <Routes>
         <Route

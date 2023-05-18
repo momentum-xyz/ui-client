@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Button, Text} from '@momentum-xyz/ui-kit';
+import {Button} from '@momentum-xyz/ui-kit';
 
 import * as styled from './MiroChoice.styled';
 
@@ -17,18 +17,16 @@ const MiroChoice: FC<PropsInterface> = ({isAdmin, pickBoard}) => {
     <styled.Wrapper data-testid="MiroChoice-test">
       {isAdmin ? (
         <styled.Actions>
-          <Text text={t('plugin_miro.messages.noTeamMiroBoard')} size="s" />
+          {t('plugin_miro.messages.noTeamMiroBoard')}
           <Button
             label={t('plugin_miro.actions.chooseBoard')}
             onClick={pickBoard}
-            transform="uppercase"
+            // transform="uppercase"
             variant="primary"
           />
         </styled.Actions>
       ) : (
-        <styled.Actions>
-          <Text text={t('plugin_miro.messages.noMiroBoard')} size="s" />
-        </styled.Actions>
+        <styled.Actions>{t('plugin_miro.messages.noMiroBoard')}</styled.Actions>
       )}
     </styled.Wrapper>
   );

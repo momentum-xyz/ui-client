@@ -1,6 +1,6 @@
 import {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
-import {PositionEnum} from '@momentum-xyz/ui-kit-storybook';
+import {PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
@@ -31,6 +31,10 @@ const World2dPage: FC = () => {
     widgetManagerStore.open(WidgetEnum.STAKING, PositionEnum.RIGHT);
   };
 
+  const onOpenVisitors = () => {
+    widgetManagerStore.open(WidgetEnum.WORLD_VISITORS, PositionEnum.RIGHT);
+  };
+
   const onSendHighFive = useCallback(
     (userId: string) => {
       world3dStore?.sendHighFive(userId);
@@ -48,6 +52,7 @@ const World2dPage: FC = () => {
             onVisitWorld={onVisitWorld}
             onInviteToVoiceChat={onInviteToVoiceChat}
             onSendHighFive={onSendHighFive}
+            onOpenVisitors={onOpenVisitors}
           />
         )}
       </styled.OnlineUsers>

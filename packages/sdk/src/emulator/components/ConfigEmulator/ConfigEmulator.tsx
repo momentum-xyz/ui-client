@@ -1,4 +1,4 @@
-import {PanelLayout} from '@momentum-xyz/ui-kit';
+import {Panel} from '@momentum-xyz/ui-kit';
 import {FC} from 'react';
 
 import {PluginConfigRenderer} from '../../../components';
@@ -14,7 +14,11 @@ interface PropsInterface {
 export const ConfigEmulator: FC<PropsInterface> = ({plugin, config, onSave, onClose}) => {
   const {configuration} = plugin;
 
-  let content = <PanelLayout onClose={onClose} title="Plugin has no configuration" />;
+  let content = (
+    <Panel variant="primary" size="normal" onClose={onClose} title="">
+      Plugin has no configuration
+    </Panel>
+  );
 
   if (configuration) {
     if (typeof configuration === 'function') {

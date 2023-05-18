@@ -1,14 +1,13 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --scroll-offset: 215px;
+  --scroll-offset: 205px;
 
   position: relative;
   display: flex;
 `;
 
 export const Content = styled.div`
-  margin: -10px 0 0 0;
   display: flex;
   height: 100%;
   flex-direction: column;
@@ -16,10 +15,10 @@ export const Content = styled.div`
 `;
 
 export const ScrollableContainer = styled.div`
-  margin: 20px 0 0 0;
+  margin: 10px 0 0 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 4px;
   height: calc(100vh - var(--scroll-offset));
   overflow: auto;
 `;

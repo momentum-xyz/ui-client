@@ -1,13 +1,13 @@
 import {FC, useEffect} from 'react';
 import {Scene} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
-import {useMutableCallback} from '@momentum-xyz/ui-kit';
 import {Universe3dEmitterType} from '@momentum-xyz/core';
+import {useMutableCallback} from '@momentum-xyz/ui-kit';
 
 import {PlayerHelper, LightHelper, SkyboxHelper, CAMERA_POS_EXPLORER} from '../../babylon';
 import {UniverseBuilderHelper} from '../../babylon/UniverseBuilderHelper';
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
-import skyboxWorld from '../../static/FINALFalkor.jpg';
+import skyboxWorld from '../../static/CLOUDSCAPE.jpg';
 
 export interface PropsInterface {
   events: Universe3dEmitterType;

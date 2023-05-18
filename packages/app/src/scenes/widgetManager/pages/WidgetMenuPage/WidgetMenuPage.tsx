@@ -1,7 +1,8 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
-import {Menu, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit-storybook';
+import {Menu, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
@@ -24,6 +25,8 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
   const {isGuest, userImageUrl} = sessionStore;
   const {isMyWorld, world2dStore} = universeStore;
 
+  const {t} = useI18n();
+
   const navigate = useNavigate();
 
   const ODYSSEY_ITEMS: MenuItemExtendedInterface[] = sessionStore.worldsOwnedList.map((world) => ({
@@ -32,6 +35,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
     iconName: 'rabbit_fill',
     imageSrc: world.imageSrc,
     isHidden: isWorld,
+    tooltip: t('actions.visitOdyssey'),
     onClick: () => navigate(generatePath(ROUTES.odyssey.base, {worldId: world.id}))
   }));
 
@@ -41,6 +45,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       position: PositionEnum.LEFT,
       iconName: 'explore',
       isHidden: isWorld,
+      tooltip: t('labels.explore'),
       onClick: toggle
     },
     {
@@ -48,6 +53,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       position: PositionEnum.LEFT,
       iconName: 'explore',
       isHidden: !isWorld,
+      tooltip: t('labels.explore'),
       onClick: () => {
         // TEMP we have problems when teleporting to world, then universe, then teleport again to any world
         // no messages from posbus
@@ -61,6 +67,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       imageSrc: userImageUrl,
       iconIndicator: agoraStore.hasJoined ? 'voice' : undefined,
       isHidden: isGuest,
+      tooltip: t('titles.myProfile'),
       onClick: toggle
     },
     {
@@ -68,6 +75,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       position: PositionEnum.LEFT,
       iconName: 'astronaut',
       isHidden: !isGuest,
+      tooltip: t('login.connectAsMember'),
       onClick: toggle
     },
     {
@@ -75,6 +83,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       position: PositionEnum.LEFT,
       iconName: 'status-2',
       isHidden: isGuest,
+      tooltip: t('labels.stakingOverview'),
       onClick: toggle
     },
     ...ODYSSEY_ITEMS,
@@ -83,6 +92,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       position: PositionEnum.CENTER,
       viewPosition: PositionEnum.RIGHT,
       iconName: 'stake',
+      tooltip: t('actions.stakeInOdyssey'),
       onClick: toggle,
       isHidden: !isWorld || isGuest
     },
@@ -92,45 +102,9 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       viewPosition: PositionEnum.RIGHT,
       iconName: 'pencil',
       isHidden: !isWorld || !isMyWorld,
+      tooltip: t('actions.creatorOpen'),
       onClick: toggle
     },
-
-    // {
-    //   key: WidgetEnum.GO_TO,
-    //   position: PositionEnum.CENTER, // TODO 2nd floor
-    //   iconName: 'direction-arrows',
-    //   onClick: () => creatorStore.setSelectedTab('gizmo'),
-    //   isHidden: !creatorStore.selectedObjectId
-    // },
-    // {
-    //   key: WidgetEnum.GO_TO,
-    //   position: PositionEnum.CENTER, // TODO 2nd floor
-    //   iconName: 'info',
-    //   onClick: () => creatorStore.setSelectedTab('inspector'),
-    //   isHidden: !creatorStore.selectedObjectId
-    // },
-    // {
-    //   key: WidgetEnum.GO_TO,
-    //   position: PositionEnum.CENTER, // TODO 2nd floor
-    //   iconName: 'cubicles',
-    //   onClick: () => creatorStore.setSelectedTab('functionality'),
-    //   isHidden: !creatorStore.selectedObjectId
-    // },
-
-    // {
-    //   key: WidgetEnum.GO_TO,
-    //   position: PositionEnum.CENTER, // TODO 2nd floor
-    //   iconName: 'checked',
-    //   onClick: () => world3dStore?.setAttachedToCamera(null),
-    //   isHidden: !world3dStore?.attachedToCameraObjectId
-    // },
-    // {
-    //   key: WidgetEnum.GO_TO,
-    //   position: PositionEnum.CENTER, // TODO 2nd floor
-    //   iconName: 'bin',
-    //   onClick: creatorStore.removeObjectDialog.open,
-    //   isHidden: !creatorStore.selectedObjectId
-    // },
     {
       key: WidgetEnum.VOICE_CHAT,
       position: PositionEnum.RIGHT,
@@ -139,6 +113,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
         agoraStore.hasJoined && !activeWidgetList.includes(WidgetEnum.VOICE_CHAT)
           ? 'voice'
           : undefined,
+      tooltip: t('labels.voiceChat'),
       onClick: toggle,
       isHidden: !isWorld
     },
@@ -147,6 +122,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       position: PositionEnum.RIGHT,
       iconName: 'group',
       onClick: toggle,
+      tooltip: t('labels.visitors'),
       isHidden: !isWorld
     },
     {
@@ -154,6 +130,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       position: PositionEnum.RIGHT,
       iconName: 'rabbit_fill',
       imageSrc: world2dStore?.imageSrc,
+      tooltip: t('labels.odysseyOverview'),
       onClick: toggle,
       isHidden: !isWorld
     }
