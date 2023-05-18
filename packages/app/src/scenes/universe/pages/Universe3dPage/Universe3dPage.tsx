@@ -27,7 +27,7 @@ const Universe3dPage: FC = () => {
 
   useEffect(() => {
     console.log(
-      'Map3dPage: useEffect',
+      'Universe3dPage: useEffect',
       allWorlds,
       allUsers,
       usersWereInitialised.current,
@@ -70,19 +70,19 @@ const Universe3dPage: FC = () => {
       events={Universe3dEmitter}
       renderURL={appVariables.RENDER_SERVICE_URL}
       onWorldClick={(id) => {
-        console.log('Map3dPage: Select world: ', id);
+        console.log('Universe3dPage: Select world: ', id);
         const real_id = id.split('_')[0];
         widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id: real_id});
       }}
       onUserClick={(id) => {
-        console.log('Map3dPage: Select user: ', id);
+        console.log('Universe3dPage: Select user: ', id);
         widgetManagerStore.open(WidgetEnum.USER_DETAILS, PositionEnum.LEFT, {id});
       }}
       onClickOutside={() => {
         //widgetManagerStore.closeAll();
       }}
       onReadyToHandleEvents={() => {
-        console.log('Map3dPage: onReadyToHandleEvents');
+        console.log('Universe3dPage: onReadyToHandleEvents');
         setReadyToHandleEvents(true);
       }}
     />

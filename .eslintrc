@@ -107,7 +107,6 @@
           "packages/ui-kit/src",
           "packages/core/src",
           "packages/sdk/src",
-          "packages/map3d/src",
           "packages/odyssey3d/src",
           "packages/plugin_google_drive/src",
           "packages/plugin_miro/src",

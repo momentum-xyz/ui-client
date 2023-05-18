@@ -3,7 +3,6 @@ import {FC, useCallback, useEffect, useState} from 'react';
 import {Button, Frame, Input} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 import {Model3dPreview} from '@momentum-xyz/odyssey3d';
-import {GLTF} from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 import {useStore} from 'shared/hooks';
 
@@ -19,8 +18,7 @@ export const SelectedPage: FC = () => {
 
   const {t} = useI18n();
 
-  const [assetInfo, setAssetInfo] = useState<GLTF['asset'] | null>(null);
-  const onAssetInfoLoad = useCallback((info: GLTF['asset']) => setAssetInfo(info), [assetInfo]);
+  const [assetInfo, setAssetInfo] = useState<any | null>(null);
 
   useEffect(() => {
     spawnAssetStore.setNavigationObjectName(asset?.name || '');
@@ -85,7 +83,7 @@ export const SelectedPage: FC = () => {
                 filename={asset.thumbnailAssetDownloadUrl}
                 previewUrl={asset.previewUrl}
                 onSnapshot={asset.category === 'custom' ? handleSnapshot : undefined}
-                onAssetInfoLoaded={onAssetInfoLoad}
+                onAssetInfoLoaded={setAssetInfo}
               />
             </styled.PreviewContainer>
           </>

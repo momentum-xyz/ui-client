@@ -28,7 +28,6 @@ It is a monorepo that contains the main application and several common libraries
     ├── packages
     │   ├── app                     # Main application
     │   ├── core                    # Common reusable logic
-    │   ├── map3d                   # 3D Worlds Explorer based on three.js
     │   ├── odyssey3d               # 3D World Interface based on babylon.js
     │   ├── sdk                     # Plugins SDK
     │   ├── ui-kit                  # ui-kit with Storybook
@@ -42,7 +41,6 @@ It is a monorepo that contains the main application and several common libraries
 
 ```mermaid
 flowchart TD
-    A --> MAP(map3d)
     MAP --> B
     MAP --> C
     A --> 3D(odyssey3d)
