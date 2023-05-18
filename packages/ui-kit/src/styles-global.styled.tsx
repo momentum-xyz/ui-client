@@ -22,11 +22,11 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   ::-webkit-scrollbar-track-piece:start {
-    margin-top: 5px;
+    margin-top: 4px;
   }
  
   ::-webkit-scrollbar-track-piece:end {
-    margin-bottom: 5px;
+    margin-bottom: 4px;
   }
   
   a {

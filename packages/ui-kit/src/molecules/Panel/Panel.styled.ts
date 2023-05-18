@@ -142,11 +142,16 @@ export const Actions = styled.div`
   }
 `;
 
-export const Content = styled.div`
-  padding: 0px 10px 30px 10px;
+export const TopComponent = styled.div``;
+
+export const BottomComponent = styled.div``;
+
+export const ScrollableContainer = styled.div<{offset: number}>`
+  padding: 10px 12px;
   color: ${(props) => props.theme.text};
 
   &.fullHeight {
-    height: calc(100vh - var(--height-offset));
+    height: calc(100vh - var(--height-offset) - ${(props) => props.offset}px);
+    overflow: auto;
   }
 `;
