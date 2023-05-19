@@ -1,10 +1,13 @@
 import styled from 'styled-components';
+import {rgba} from 'polished';
 
 export const Container = styled.div``;
 
 export const GeneralInfo = styled.div`
+  padding: 0 0 20px 0;
   display: flex;
   flex-direction: column;
+  border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
   gap: 10px;
 `;
 
@@ -25,4 +28,8 @@ export const NameContainer = styled.div`
 
 export const LinkAccent = styled.a`
   color: ${(props) => props.theme.accentText};
+`;
+
+export const Worlds = styled.div`
+  padding: 0 10px 10px 10px;
 `;

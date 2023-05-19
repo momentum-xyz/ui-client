@@ -67,17 +67,16 @@ const ExploreWidget: FC = () => {
           onClose={() => {
             hasSelectedUnit ? universe2dStore.resetUnits() : close(WidgetEnum.EXPLORE);
           }}
-          topComponent={
-            <TabsFrame
-              tabs={TABS_LIST}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-              searchQuery={universe2dStore.searchQuery}
-            />
-          }
         >
           <styled.Wrapper className={cn(hasSelectedUnit && 'collapsed')}>
             <styled.Content>
+              <TabsFrame
+                tabs={TABS_LIST}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                searchQuery={universe2dStore.searchQuery}
+              />
+
               {activeTab === 'worlds' && (
                 <WorldList
                   searchQuery={universe2dStore.searchQuery}

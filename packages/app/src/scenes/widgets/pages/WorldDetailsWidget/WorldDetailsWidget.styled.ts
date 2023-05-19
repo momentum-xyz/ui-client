@@ -7,5 +7,5 @@ export const Wrapper = styled.div`
 `;
 
 export const Info = styled.div`
-  padding: 0 10px;
+  padding: 0 10px 10px 10px;
 `;

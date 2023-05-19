@@ -24,7 +24,9 @@ export const Wrapper = styled.div`
   }
 `;
 
-export const Content = styled.div``;
+export const Content = styled.div`
+  padding: 0 0 10px 0;
+`;
 
 export const Details = styled.div`
   padding: 0 0 0 40px;

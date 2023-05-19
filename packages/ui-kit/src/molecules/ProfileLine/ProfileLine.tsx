@@ -13,7 +13,7 @@ export interface ProfileLinePropsInterface {
 const ProfileLine: FC<ProfileLinePropsInterface> = ({icon, label}) => {
   return (
     <styled.Container data-testid="ProfileLine-test">
-      <ButtonRound icon={icon} size="normal" isLabel />
+      <ButtonRound icon={icon} size="small" isLabel />
       <styled.Label>{label}</styled.Label>
     </styled.Container>
   );

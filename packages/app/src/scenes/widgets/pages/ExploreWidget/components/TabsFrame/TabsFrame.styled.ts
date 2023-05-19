@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding: 16px 10px 0 10px;
+  padding: 10px 0 16px 0;
 `;
 
 export const Tabs = styled.div`
@@ -9,7 +9,7 @@ export const Tabs = styled.div`
   display: flex;
   justify-content: end;
   left 0;
-  top: 4px;
+  top: -2px;
   right: 20px;
   z-index: 1;
 `;

@@ -51,7 +51,9 @@ const ProfileView: FC<PropsInterface> = ({
           />
           <WalletHash icon="talisman" hash={defaultWalletId || ''} />
         </styled.GeneralInfo>
+      </Frame>
 
+      <styled.Worlds>
         <WorldsOwnedList
           worldsOwned={worldsOwnedList}
           onSelectWorld={onInfoWorld}
@@ -63,7 +65,7 @@ const ProfileView: FC<PropsInterface> = ({
           onSelectWorld={onInfoWorld}
           onVisitWorld={onVisitWorld}
         />
-      </Frame>
+      </styled.Worlds>
     </styled.Container>
   );
 };

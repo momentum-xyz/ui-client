@@ -142,20 +142,12 @@ export const Actions = styled.div`
   }
 `;
 
-export const TopComponent = styled.div`
-  position: relative;
-`;
-
-export const BottomComponent = styled.div`
-  position: relative;
-`;
-
-export const ScrollableContainer = styled.div<{offset: number}>`
+export const ScrollableContainer = styled.div`
   padding: 10px;
   color: ${(props) => props.theme.text};
 
   &.fullHeight {
-    height: calc(100vh - var(--height-offset) - ${(props) => props.offset}px);
-    overflow: auto;
+    height: calc(100vh - var(--height-offset));
+    overflow: scroll;
   }
 `;

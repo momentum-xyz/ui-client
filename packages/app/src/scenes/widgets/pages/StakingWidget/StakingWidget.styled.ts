@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --scroll-offset: 410px;
-
   position: relative;
 `;
 
@@ -30,10 +28,4 @@ export const WorldName = styled.div`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-`;
-
-export const ScrollableContainer = styled.div`
-  margin: 0 10px;
-  height: calc(100vh - var(--scroll-offset));
-  overflow: auto;
 `;

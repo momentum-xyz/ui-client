@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import {rgba} from 'polished';
 
 export const Container = styled.div``;
 
@@ -32,9 +31,8 @@ export const Actions = styled.div`
 `;
 
 export const Info = styled.div`
-  padding: 8px 0 20px 0;
+  padding: 8px 0 0 0;
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
   gap: 10px;
 `;
