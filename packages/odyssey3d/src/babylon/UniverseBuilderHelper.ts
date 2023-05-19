@@ -111,6 +111,8 @@ export class UniverseBuilderHelper {
         }
       }
     };
+    this.odysseyPS.stop();
+    this.sparksPS.stop();
   }
 
   static async loadModel() {
