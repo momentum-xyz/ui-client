@@ -125,11 +125,13 @@ export class UniverseBuilderHelper {
       '.glb'
     ).then((result) => {
       this.defineOrbMaterial();
+      result.meshes[1].setEnabled(false);
       this.rootMesh = result.meshes[2];
     });
   }
 
   static buildNewRingOdysseys(worlds: WorldInfoInterface[]) {
+    this.rootMesh.setEnabled(true);
     console.log('buildNewRingOdysseys');
     const rings: TransformNode[] = new Array<TransformNode>();
     let ring = new TransformNode('Odyssey Ring', this.scene);
@@ -196,9 +198,11 @@ export class UniverseBuilderHelper {
         rings[i].rotation.y += ringRotation * (i + 1) * this.scene.getEngine().getDeltaTime();
       });
     }
+    this.rootMesh.setEnabled(false);
   }
 
   static buildNewRingAccounts(accounts: Odyssey3dUserInterface[]) {
+    this.rootMesh.setEnabled(true);
     const rings: TransformNode[] = new Array<TransformNode>();
     let ring = new TransformNode('Account Ring', this.scene);
     rings.push(ring);
@@ -206,7 +210,7 @@ export class UniverseBuilderHelper {
     const amount = 20;
     let currentRadius = 30;
     let orbCounter = 0;
-    const spaceBetweenOdyssey = 360 / amount;
+    const spaceBetweenOdyssey = (360 / amount) * 1.5;
     let _offset = 0;
 
     for (let i = 0; i < accounts.length; i++) {
@@ -270,6 +274,7 @@ export class UniverseBuilderHelper {
         rings[i].rotation.y += ringRotations[i].rotationY * this.scene.getEngine().getDeltaTime();
       });
     }
+    this.rootMesh.setEnabled(false);
   }
 
   static setOrbThumb(url: string, rootClone: AbstractMesh, placeHolder?: boolean) {
@@ -309,7 +314,7 @@ export class UniverseBuilderHelper {
 
     customOrbGlassMat.reflectionTexture = new Texture(hdrTexture);
     customOrbGlassMat.indexOfRefraction = 0.52;
-    customOrbGlassMat.alpha = 0.2;
+    customOrbGlassMat.alpha = 0.1;
     customOrbGlassMat.directIntensity = 0.0;
     customOrbGlassMat.environmentIntensity = 0.7;
     customOrbGlassMat.cameraExposure = 0.66;
