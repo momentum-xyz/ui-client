@@ -2,6 +2,10 @@ import {createGlobalStyle} from 'styled-components';
 import {rgba} from 'polished';
 
 export const GlobalStyles = createGlobalStyle`
+  body {
+    color: ${(props) => props.theme.text};
+  }
+
   ::-webkit-scrollbar {
     width: 10px;
     height: 0;

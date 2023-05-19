@@ -1,4 +1,4 @@
-import {FC, PropsWithChildren} from 'react';
+import {FC, PropsWithChildren, ReactNode, useLayoutEffect, useRef, useState} from 'react';
 import cn from 'classnames';
 
 import {IconNameType} from '../../types';
@@ -16,6 +16,8 @@ export interface PanelPropsInterface extends PropsWithChildren {
   isFullHeight?: boolean;
   icon?: IconNameType;
   closeIcon?: IconNameType;
+  topComponent?: ReactNode;
+  bottomComponent?: ReactNode;
   onClose?: () => void;
 }
 
@@ -28,9 +30,23 @@ const Panel: FC<PanelPropsInterface> = ({
   icon,
   isFullHeight,
   closeIcon = 'close_large',
+  topComponent,
+  bottomComponent,
   children,
   onClose
 }) => {
+  const [topComponentHeight, setTopComponentHeight] = useState(0);
+  const [bottomComponentHeight, setBottomComponentHeight] = useState(0);
+
+  const topComponentRef = useRef<HTMLDivElement>(null);
+  const bottomComponentRef = useRef<HTMLDivElement>(null);
+
+  // It must be called on each render. Don't add deps.
+  useLayoutEffect(() => {
+    setTopComponentHeight(topComponentRef.current?.clientHeight || 0);
+    setBottomComponentHeight(bottomComponentRef.current?.clientHeight || 0);
+  });
+
   return (
     <styled.Container data-testid="Widget-test" className={cn(variant, `size-${size}`)}>
       <styled.Header className={cn(variant)}>
@@ -51,9 +67,20 @@ const Panel: FC<PanelPropsInterface> = ({
         </styled.Actions>
       </styled.Header>
 
-      <styled.ScrollableContainer className={cn(isFullHeight && 'fullHeight')}>
+      {topComponent && (
+        <styled.TopComponent ref={topComponentRef}>{topComponent}</styled.TopComponent>
+      )}
+
+      <styled.ScrollableContainer
+        offset={topComponentHeight + bottomComponentHeight}
+        className={cn(isFullHeight && 'fullHeight')}
+      >
         {children}
       </styled.ScrollableContainer>
+
+      {bottomComponent && (
+        <styled.BottomComponent ref={bottomComponentRef}>{bottomComponent}</styled.BottomComponent>
+      )}
     </styled.Container>
   );
 };

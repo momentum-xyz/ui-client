@@ -40,34 +40,7 @@ const VoiceChatWidget: FC = () => {
         variant="primary"
         title={t('labels.voiceChat')}
         onClose={() => widgetManagerStore.close(WidgetEnum.VOICE_CHAT)}
-      >
-        <styled.Content>
-          <styled.ScrollableContainer>
-            {/* VOICE USERS */}
-            <styled.VoiceChatUsers>
-              {agoraVoiceChatStore.hasJoined && user && (
-                <VoiceChatUser
-                  key={user.id}
-                  name={user.name}
-                  avatarSrc={getImageAbsoluteUrl(user.profile.avatarHash)}
-                  soundLevel={agoraVoiceChatStore.localSoundLevel}
-                  isMuted={userDevicesStore.muted}
-                />
-              )}
-
-              {agoraVoiceChatStore.joinedUsers.map((user) => (
-                <VoiceChatUser
-                  key={user.id}
-                  name={user.name}
-                  avatarSrc={getImageAbsoluteUrl(user.image)}
-                  soundLevel={user.soundLevel}
-                  isMuted={user.isMuted}
-                />
-              ))}
-            </styled.VoiceChatUsers>
-          </styled.ScrollableContainer>
-
-          {/* MY ACTIONS */}
+        bottomComponent={
           <styled.Footer>
             {!agoraVoiceChatStore.hasJoined && (
               <styled.JoinTitle>{t('actions.joinVoiceChat')}</styled.JoinTitle>
@@ -117,6 +90,31 @@ const VoiceChatWidget: FC = () => {
               )}
             </styled.VoiceChatActions>
           </styled.Footer>
+        }
+      >
+        <styled.Content>
+          {/* VOICE USERS */}
+          <styled.VoiceChatUsers>
+            {agoraVoiceChatStore.hasJoined && user && (
+              <VoiceChatUser
+                key={user.id}
+                name={user.name}
+                avatarSrc={getImageAbsoluteUrl(user.profile.avatarHash)}
+                soundLevel={agoraVoiceChatStore.localSoundLevel}
+                isMuted={userDevicesStore.muted}
+              />
+            )}
+
+            {agoraVoiceChatStore.joinedUsers.map((user) => (
+              <VoiceChatUser
+                key={user.id}
+                name={user.name}
+                avatarSrc={getImageAbsoluteUrl(user.image)}
+                soundLevel={user.soundLevel}
+                isMuted={user.isMuted}
+              />
+            ))}
+          </styled.VoiceChatUsers>
         </styled.Content>
       </Panel>
     </styled.Container>

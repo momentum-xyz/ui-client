@@ -1,8 +1,11 @@
 import {ComponentMeta, Story} from '@storybook/react';
 
+import {Frame, Image} from '../../atoms';
 import {GlobalStyles} from '../../styles-global.styled';
 
 import Panel, {PanelPropsInterface} from './Panel';
+
+const IMAGE_SRC = 'https://picsum.photos/500';
 
 const TEXT_COMPONENT = (
   <div>
@@ -90,4 +93,30 @@ export const WithText = Template.bind({});
 WithText.args = {
   isFullHeight: true,
   children: TEXT_COMPONENT
+};
+
+export const WithTopComponent = Template.bind({});
+WithTopComponent.args = {
+  isFullHeight: true,
+  children: <div style={{padding: '0 10px 10px 10px'}}>{TEXT_COMPONENT}</div>,
+  topComponent: (
+    <div style={{padding: '10px 10px 0 10px'}}>
+      <Frame>
+        <Image height={160} src={IMAGE_SRC} />
+      </Frame>
+    </div>
+  )
+};
+
+export const WithBottomComponent = Template.bind({});
+WithBottomComponent.args = {
+  isFullHeight: true,
+  children: <div style={{padding: '0 10px'}}>{TEXT_COMPONENT}</div>,
+  bottomComponent: (
+    <div style={{padding: '10px'}}>
+      <Frame>
+        <Image height={160} src={IMAGE_SRC} />
+      </Frame>
+    </div>
+  )
 };
