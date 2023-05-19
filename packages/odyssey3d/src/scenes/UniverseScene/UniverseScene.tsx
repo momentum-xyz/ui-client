@@ -1,10 +1,10 @@
 import {FC, useEffect} from 'react';
-import {Scene, Vector3} from '@babylonjs/core';
+import {Scene} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
 import {Universe3dEmitterType} from '@momentum-xyz/core';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
 
-import {PlayerHelper, LightHelper, SkyboxHelper /*, CAMERA_POS_EXPLORER*/} from '../../babylon';
+import {PlayerHelper, LightHelper, SkyboxHelper, CAMERA_POS_EXPLORER} from '../../babylon';
 import {UniverseBuilderHelper} from '../../babylon/UniverseBuilderHelper';
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 import skyboxWorld from '../../static/CLOUDSCAPE.jpg';
@@ -72,7 +72,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
 
     onReadyToHandleEvents();
 
-    PlayerHelper.spawnPlayer(scene, new Vector3(0, 20, 0));
+    PlayerHelper.spawnPlayer(scene, CAMERA_POS_EXPLORER);
 
     if (window.sessionStorage.getItem('babylon_debug')) {
       Promise.all([
