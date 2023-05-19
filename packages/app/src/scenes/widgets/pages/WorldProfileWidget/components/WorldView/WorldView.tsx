@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import {Frame} from '@momentum-xyz/ui-kit';
 
 import {WorldModelInterface} from 'core/models';
 import {ProfileImage, ProfileInfo, StakersList, StakingAmount, StakingComment} from 'ui-kit';
@@ -15,28 +16,30 @@ interface PropsInterface {
 const WorldView: FC<PropsInterface> = ({world, onStakeWorld, onSelectUser}) => {
   return (
     <styled.Container data-testid="WorldProfileWidget-test">
-      <ProfileImage
-        name={world.name || world.id}
-        image={world.avatarHash}
-        imageErrorIcon="rabbit_fill"
-        byName={world.owner_name || world.owner_id}
-        onByClick={() => onSelectUser(world.owner_id)}
-      />
+      <Frame>
+        <ProfileImage
+          name={world.name || world.id}
+          image={world.avatarHash}
+          imageErrorIcon="rabbit_fill"
+          byName={world.owner_name || world.owner_id}
+          onByClick={() => onSelectUser(world.owner_id)}
+        />
 
-      <styled.GeneralScrollable>
         <ProfileInfo
           description={world.description}
           weblink={world.website_link}
           createDate={world.createdAt}
           onStake={onStakeWorld}
         />
+      </Frame>
 
+      <styled.Wrapper>
         <StakingAmount stakedAmount={world.momStaked} tokenSymbol="MOM" />
 
         {!!world.last_staking_comment && <StakingComment comment={world.last_staking_comment} />}
 
         <StakersList stakers={world.stakers} onSelectUser={onSelectUser} />
-      </styled.GeneralScrollable>
+      </styled.Wrapper>
     </styled.Container>
   );
 };

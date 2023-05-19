@@ -1,19 +1,9 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  --scroll-offset: 390px;
-`;
-
-export const GeneralScrollable = styled.div`
-  margin: 0 10px;
-  display: flex;
-  height: calc(100vh - var(--scroll-offset));
-  flex-direction: column;
-  overflow: auto;
-`;
+export const Container = styled.div``;
 
 export const AvatarContainer = styled.div`
-  margin: 10px;
+  margin: 0 0 10px 0;
   border-radius: 4px;
   background-position: center;
   background-repeat: no-repeat;
@@ -35,8 +25,12 @@ export const InputIconRow = styled.div`
 `;
 
 export const Actions = styled.div`
-  padding: 20px 0 10px 0;
+  padding: 20px 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
+`;
+
+export const StakeInfo = styled.div`
+  padding: 4px 10px 10px 10px;
 `;

@@ -4,10 +4,15 @@ export const Container = styled.div`
   position: relative;
 `;
 
+export const Wrapper = styled.div`
+  padding: 12px 0 0 0;
+  position: relative;
+`;
+
 export const Steps = styled.div`
   position: absolute;
-  right: 20px;
-  top: 42px;
+  right: 0;
+  top: -8px;
   z-index: 1;
 `;
 
