@@ -383,12 +383,12 @@ export class UniverseBuilderHelper {
             thumbMatClone.albedoTexture = downloadedTexture;
             rootChildren[0].material = thumbMatClone;
           }*/
-          const babylonWorld = {
-            worldDefinition: worlds[i],
-            rootClone: rootClone
-          };
-  
-          this.worldsMap.set(worlds[i].id, babylonWorld);
+        const babylonWorld = {
+          worldDefinition: worlds[i],
+          rootClone: rootClone
+        };
+
+        this.worldsMap.set(worlds[i].id, babylonWorld);
       }
       if (orbCounter > currentAmount) {
         orbCounter = 0;
@@ -463,12 +463,12 @@ export class UniverseBuilderHelper {
             thumbMatClone.albedoTexture = downloadedTexture;
             rootChildren[0].material = thumbMatClone;
           }*/
-          const babylonAccount = {
-            accountDefinition: accounts[i],
-            rootClone: rootClone
-          };
-  
-          this.accountsMap.set(accounts[i].id, babylonAccount);
+        const babylonAccount = {
+          accountDefinition: accounts[i],
+          rootClone: rootClone
+        };
+
+        this.accountsMap.set(accounts[i].id, babylonAccount);
       }
 
       if (orbCounter > amount) {
