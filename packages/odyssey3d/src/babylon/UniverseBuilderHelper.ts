@@ -343,8 +343,6 @@ export class UniverseBuilderHelper {
       _offset = _offset + spaceBetweenOdyssey;
 
       const rootClone = this.rootMesh.clone('ring_root' + i, ring) as Mesh;
-      //const rootChildren = rootClone.getChildMeshes();
-
       if (rootClone) {
         // Set position and Rotation
         rootClone.position.x = Math.cos(radian) * currentRadius;
@@ -370,19 +368,6 @@ export class UniverseBuilderHelper {
         rootClone.metadata = worlds[i].id;
         rootClone.material = this.orbMat;
 
-        /*rootChildren[1].metadata = worlds[this.odysseyCounter].id;
-          rootChildren[1].material = this.orbMat;
-  
-          if (worlds[this.odysseyCounter].image !== '') {
-            this.setOrbRotation(rootClone, rootChildren[0]);
-  
-            const downloadedTexture = new Texture(
-              (this.baseURL + '/texture/s3/' + worlds[this.odysseyCounter].image) as Nullable<string>
-            );
-            const thumbMatClone = this.thumbMat.clone('thumbMatCloneWorld' + i);
-            thumbMatClone.albedoTexture = downloadedTexture;
-            rootChildren[0].material = thumbMatClone;
-          }*/
         const babylonWorld = {
           worldDefinition: worlds[i],
           rootClone: rootClone
@@ -427,8 +412,6 @@ export class UniverseBuilderHelper {
       _offset = _offset + spaceBetweenOdyssey;
 
       const rootClone = this.rootMesh.clone('ring_root' + i, ring) as Mesh;
-      //const rootChildren = rootClone.getChildMeshes();
-
       if (rootClone) {
         rootClone.position.x = Math.cos(radian) * currentRadius;
         rootClone.position.y = 0;
@@ -449,20 +432,7 @@ export class UniverseBuilderHelper {
         }
         rootClone.metadata = accounts[i].id;
         rootClone.material = this.orbMat;
-        // Metadata
-        /*rootChildren[1].metadata = worlds[this.odysseyCounter].id;
-          rootChildren[1].material = this.orbMat;
-  
-          if (worlds[this.odysseyCounter].image !== '') {
-            this.setOrbRotation(rootClone, rootChildren[0]);
-  
-            const downloadedTexture = new Texture(
-              (this.baseURL + '/texture/s3/' + worlds[this.odysseyCounter].image) as Nullable<string>
-            );
-            const thumbMatClone = this.thumbMat.clone('thumbMatCloneWorld' + i);
-            thumbMatClone.albedoTexture = downloadedTexture;
-            rootChildren[0].material = thumbMatClone;
-          }*/
+
         const babylonAccount = {
           accountDefinition: accounts[i],
           rootClone: rootClone
