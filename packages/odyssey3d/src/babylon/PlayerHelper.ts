@@ -170,7 +170,8 @@ export class PlayerHelper {
   }
 
   static getPlayerNode(): TransformNode | null {
-    const myNode = this.playerInstance.rootNodes[0];
+    const myNode = this.playerInstance?.rootNodes[0];
+    console.log('PlayerHelper getPlayerNode', myNode);
     if (myNode instanceof TransformNode) {
       return myNode;
     }
@@ -231,7 +232,12 @@ export class PlayerHelper {
 
   // TODO: Consider merging the different instantiating functions
   static playerInstantiate(container: AssetContainer, position?: Vector3) {
+    console.log('PlayerHelper playerInstantiate');
     const instance = container.instantiateModelsToScene();
+
+    console.log('PlayerHelper store instance', instance, container);
+    this.playerInstance = instance;
+    this.playerContainer = container;
 
     const playerNode = this.getPlayerNode();
     if (!playerNode) {
@@ -260,8 +266,7 @@ export class PlayerHelper {
       playerNode.rotation = new Vector3(-Math.PI / 16, Math.PI, Math.PI);
     }
     // TODO: Animations
-    this.playerInstance = instance;
-    this.playerContainer = container;
+
     InteractionEffectHelper.setupWispTail();
   }
 
