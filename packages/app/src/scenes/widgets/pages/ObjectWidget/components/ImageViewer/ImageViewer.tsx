@@ -1,5 +1,4 @@
 import {FC} from 'react';
-import {Frame} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 
 import * as styled from './ImageViewer.styled';
@@ -13,9 +12,7 @@ const ImageViewer: FC<PropsInterface> = ({imageSrc}) => {
     <styled.Container data-testid="ImageViewer-test">
       {imageSrc && (
         <styled.ImageContainer>
-          <Frame>
-            <styled.PreviewImageHolder style={{backgroundImage: `url(${imageSrc})`}} />
-          </Frame>
+          <styled.PreviewImageHolder style={{backgroundImage: `url(${imageSrc})`}} />
         </styled.ImageContainer>
       )}
     </styled.Container>

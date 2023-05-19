@@ -3,11 +3,11 @@ import styled from 'styled-components';
 export const Container = styled.div``;
 
 export const ImageContainer = styled.div`
+  margin: 10px 0 0 0;
   position: relative;
   width: 100%;
   height: 500px;
   border-radius: 8px;
-  margin-top: 10px;
 
   & > div {
     height: 100%;
