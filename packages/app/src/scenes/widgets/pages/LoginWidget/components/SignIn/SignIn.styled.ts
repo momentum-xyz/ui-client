@@ -2,8 +2,6 @@ import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --scroll-offset: 270px;
-
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -22,14 +20,10 @@ export const Desc = styled.div`
   line-height: 22px;
 `;
 
-export const ScrollableContainer = styled.div`
+export const SignInMethodsContainer = styled.div`
   padding: 10px 0 0 0;
   border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
-  height: calc(100vh - var(--scroll-offset));
-  overflow: auto;
 `;
-
-export const SignInMethodsContainer = styled.div``;
 
 export const ConnectWithWalletRow = styled.div`
   display: flex;
