@@ -28,6 +28,8 @@ const WidgetViewerPage: FC = () => {
         return <widgets.WorldDetailsWidget {...widgetInfo} />;
       case WidgetEnum.STAKING_VIEW:
         return <widgets.StakingViewWidget />;
+      case WidgetEnum.NEWSFEED:
+        return <widgets.NewsfeedWidget />;
       case WidgetEnum.STAKING:
         return <widgets.StakingWidget {...widgetInfo} />;
       case WidgetEnum.VOICE_CHAT:

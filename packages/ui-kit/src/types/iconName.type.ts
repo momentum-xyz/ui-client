@@ -130,6 +130,7 @@ export type IconNameType =
   | 'my_location'
   | 'navigate'
   | 'navigate_2'
+  | 'newsfeed'
   | 'no_fire'
   | 'non_visible'
   | 'notes'
