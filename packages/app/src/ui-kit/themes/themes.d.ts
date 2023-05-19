@@ -1,4 +1,4 @@
-import {ThemeInterface} from '@momentum-xyz/ui-kit-storybook';
+import {ThemeInterface} from '@momentum-xyz/ui-kit';
 
 // extends the global DefaultTheme with our ThemeInterface
 declare module 'styled-components' {

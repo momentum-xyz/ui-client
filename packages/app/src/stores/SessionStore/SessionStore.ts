@@ -1,5 +1,5 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {LAST_AIRDROP_KEY, Map3dUserInterface, RequestModel} from '@momentum-xyz/core';
+import {LAST_AIRDROP_KEY, RequestModel} from '@momentum-xyz/core';
 
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
@@ -35,7 +35,8 @@ const SessionStore = types
     worldsRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
-    updateAxiosAndUnityTokens(token: string): void {
+    updateAxiosAndPosbusTokens(token: string): void {
+      console.log('SessionStore: updateAxiosAndPosbusTokens', token);
       self.token = token;
       // TODO: Uncomment. Check Unity is ready.
       // const {universeStore} = getRootStore(self).mainStore;
@@ -61,11 +62,11 @@ const SessionStore = types
   .actions((self) => ({
     fetchGuestToken: flow(function* () {
       const response = yield self.guestTokenRequest.send(api.authRepository.getGuestToken, {});
-      self.updateAxiosAndUnityTokens(response?.token || '');
+      self.updateAxiosAndPosbusTokens(response?.token || '');
 
       return !!response?.token;
     }),
-    fetchTokenByWallet: flow(function* (account: PolkadotAddressInterface) {
+    fetchTokenByWalletPolkadot: flow(function* (account: PolkadotAddressInterface) {
       const publicKey = PolkadotImplementation.getPublicKeyFromAddress(account.address);
       const hexPublicKey = PolkadotImplementation.convertU8AToHex(publicKey);
 
@@ -82,15 +83,16 @@ const SessionStore = types
         if (result?.signature) {
           const data = {wallet: hexPublicKey, signedChallenge: result.signature};
           const response = yield self.tokenRequest.send(api.authRepository.getToken, data);
-          self.updateAxiosAndUnityTokens(response?.token || '');
+          // don't update here, return
+          // self.updateAxiosAndUnityTokens(response?.token || '');
 
-          return !!response?.token;
+          return response?.token;
         }
       }
 
       return false;
     }),
-    fetchTokenByWallet2: flow(function* (
+    fetchTokenByWallet: flow(function* (
       account: string,
       signChallenge: (challenge: string) => Promise<string>
     ) {
@@ -108,9 +110,12 @@ const SessionStore = types
           };
           const response = yield self.tokenRequest.send(api.authRepository.getToken, data);
 
-          self.updateAxiosAndUnityTokens(response?.token || '');
+          // there's a race condition between the token and the stored user profile
+          // self.updateAxiosAndUnityTokens(response?.token || '');
 
-          return !!response?.token;
+          if (response?.token) {
+            return response.token;
+          }
         }
       }
       throw new Error('Error fetching token');
@@ -206,7 +211,7 @@ const SessionStore = types
     }),
     signOutRedirect(): void {
       self.clearJobId();
-      self.updateAxiosAndUnityTokens('');
+      self.updateAxiosAndPosbusTokens('');
 
       // FIXME: To use the storage instance and the StorageKeyEnum
       localStorage.removeItem(LAST_AIRDROP_KEY);
@@ -218,23 +223,38 @@ const SessionStore = types
     }
   }))
   .actions((self) => ({
-    init: flow(function* () {
-      const token = getAccessToken();
-      if (token) {
-        self.updateAxiosAndUnityTokens(token);
-      } else {
-        yield self.fetchGuestToken();
-      }
-
+    loadUserData: flow(function* () {
       yield self.loadUserProfile();
       if (self.user && !self.user.isGuest) {
         yield self.loadOwnWorlds();
         yield self.loadStakedWorlds();
       }
-
-      self.initJobId();
       self.isAuthenticating = false;
     })
+  }))
+  .actions((self) => ({
+    init: flow(function* () {
+      const token = getAccessToken();
+      if (token) {
+        self.updateAxiosAndPosbusTokens(token);
+      } else {
+        yield self.fetchGuestToken();
+      }
+
+      self.initJobId();
+
+      yield self.loadUserData();
+    }),
+    saveTokenAndClearUser(token: string): void {
+      console.log('SessionStore: saveTokenAfterSignIn', token);
+      if (self.user) {
+        console.log('SessionStore: saveTokenAfterSignIn: clear previous user', self.user.id);
+        self.isAuthenticating = true;
+        self.user = null;
+      }
+      // user will be fetched additionally
+      self.updateAxiosAndPosbusTokens(token);
+    }
   }))
   .views((self) => ({
     get hasToken(): boolean {
@@ -272,16 +292,6 @@ const SessionStore = types
     },
     get wallet(): string {
       return self.user?.wallet || '';
-    },
-    get map3dUser(): Map3dUserInterface | null {
-      return self.user
-        ? {
-            uuid: self.user.id,
-            name: self.user.name,
-            owner: self.user.wallet,
-            image: self.user.profile.avatarHash
-          }
-        : null;
     }
   }));
 

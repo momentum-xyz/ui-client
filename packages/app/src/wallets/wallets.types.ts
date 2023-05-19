@@ -1,4 +1,4 @@
-import {IconNameType} from '@momentum-xyz/ui-kit-storybook';
+import {IconNameType} from '@momentum-xyz/ui-kit';
 import {ReactNode} from 'react';
 
 export interface UseWalletHookReturnInterface {

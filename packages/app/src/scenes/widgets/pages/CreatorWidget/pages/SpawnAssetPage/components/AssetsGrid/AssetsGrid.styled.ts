@@ -11,11 +11,7 @@ export const Grid = styled.div`
 `;
 
 export const GridItem = styled.div`
-  width: 180px;
-
-  @media (max-width: 1440px) {
-    width: 160px;
-  }
+  width: 160px;
 `;
 
 export const GridItemInnerContainer = styled.button`
@@ -26,26 +22,18 @@ export const GridItemInnerContainer = styled.button`
 `;
 
 export const GridItemImage = styled.img`
-  width: 130px;
-  height: 130px;
+  width: 100px;
+  height: 100px;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   object-fit: cover;
-
-  @media (max-width: 1440px) {
-    width: 100px;
-    height: 100px;
-  }
 `;
 
 export const GridItemPreview = styled.div`
   width: 100%;
-  height: 160px;
+  height: 140px;
   border-radius: 10px;
   border: 1px solid ${(props) => props.theme.text};
   border-radius: 4px;
-  @media (max-width: 1440px) {
-    height: 140px;
-  }
 `;
 
 export const EmptyResult = styled.div`
@@ -57,7 +45,7 @@ export const EmptyResult = styled.div`
 `;
 
 export const ObjectName = styled.span`
-  width: 160px;
+  width: 140px;
   text-align: center;
   color: ${(props) => props.theme.text};
   letter-spacing: 0.08em;

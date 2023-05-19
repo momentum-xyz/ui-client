@@ -1,55 +1,58 @@
 import styled from 'styled-components';
+import {rgba} from 'polished';
 
-export const Div = styled.div`
-  .rc-tooltip {
+export const Wrapper = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+export const Tooltip = styled.span`
+  background-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
+  color: ${(props) => props.theme.text};
+  font-family: 'Poppins';
+  padding: 4px 10px;
+  text-transform: uppercase;
+  width: max-content;
+  letter-spacing: 0.3em;
+
+  visibility: hidden;
+  &.visible {
     visibility: visible;
-    font-size: var(--font-size-s);
-    line-height: 16.9px;
-    opacity: 0.9;
   }
 
-  &.darkBackground {
-    opacity: 1 !important;
+  position: absolute;
+  bottom: calc(100% + 7px);
+  z-index: 999;
 
-    * {
-      opacity: 1 !important;
+  &.right {
+    left: 50%;
+    :after {
+      content: '';
+      display: block;
+      left: 0;
+      bottom: -7px;
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 0px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 7px solid ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
     }
   }
-
-  .rc-tooltip-inner {
-    color: var(--white);
-    text-align: center;
-    background-color: var(--blue-dark);
-    border-radius: 4px;
-    box-shadow: 0 0 0 transparent;
-    opacity: 0.9;
-  }
-
-  .rc-tooltip-placement-top .rc-tooltip-arrow,
-  .rc-tooltip-placement-topLeft .rc-tooltip-arrow,
-  .rc-tooltip-placement-topRight .rc-tooltip-arrow {
-    border-top-color: var(--blue-dark);
-    opacity: 0.9;
-  }
-
-  .rc-tooltip-placement-right .rc-tooltip-arrow,
-  .rc-tooltip-placement-rightTop .rc-tooltip-arrow,
-  .rc-tooltip-placement-rightBottom .rc-tooltip-arrow {
-    border-right-color: var(--blue-dark);
-    opacity: 0.9;
-  }
-
-  .rc-tooltip-placement-left .rc-tooltip-arrow,
-  .rc-tooltip-placement-leftTop .rc-tooltip-arrow,
-  .rc-tooltip-placement-leftBottom .rc-tooltip-arrow {
-    border-left-color: var(--blue-dark);
-    opacity: 0.9;
-  }
-
-  .rc-tooltip-placement-bottom .rc-tooltip-arrow,
-  .rc-tooltip-placement-bottomLeft .rc-tooltip-arrow,
-  .rc-tooltip-placement-bottomRight .rc-tooltip-arrow {
-    border-bottom-color: var(--blue-dark);
-    opacity: 0.9;
+  &.left {
+    right: 50%;
+    :after {
+      content: '';
+      display: block;
+      right: 0;
+      bottom: -7px;
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 0px solid transparent;
+      border-top: 7px solid ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
+    }
   }
 `;
+export const TooltipTrigger = styled.div``;

@@ -1,75 +1,38 @@
-import React, {memo, MouseEventHandler, forwardRef} from 'react';
+import {memo, forwardRef} from 'react';
 import cn from 'classnames';
 
-import {PropsWithThemeInterface} from '../../interfaces';
-import {SizeType, VariantType, TextTransformType, IconNameType, HeightType} from '../../types';
+import {IconSvg} from '../../atoms';
+import {IconNameType} from '../../types';
 
 import * as styled from './Button.styled';
 
-interface PropsInterface extends PropsWithThemeInterface {
+export interface ButtonPropsInterface {
   label: string;
-  icon?: IconNameType | null;
-  size?: SizeType;
-  variant?: VariantType;
-  transform?: TextTransformType;
+  icon?: IconNameType;
+  size?: 'normal';
+  variant?: 'primary' | 'secondary';
   wide?: boolean;
+  active?: boolean;
   disabled?: boolean;
-  onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
-  submit?: boolean;
-  noWhitespaceWrap?: boolean;
-  className?: string;
-  preserveSpaces?: boolean;
-  height?: HeightType;
+  onClick?: () => void;
 }
 
-const Button = forwardRef<HTMLButtonElement, PropsInterface>((props, ref) => {
-  const {
-    variant = 'primary',
-    size = 'normal',
-    wide,
-    label,
-    submit = false,
-    theme,
-    transform = 'uppercase',
-    disabled,
-    onClick,
-    icon,
-    noWhitespaceWrap = false,
-    preserveSpaces = false,
-    height,
-    className
-  } = props;
-
-  return (
-    <styled.Button
-      ref={ref}
-      data-testid="Button-test"
-      theme={theme}
-      disabled={disabled}
-      onClick={onClick}
-      className={cn(
-        variant,
-        size,
-        height,
-        `transform-${transform}`,
-        wide && 'wide',
-        noWhitespaceWrap && 'noWhitespaceWrap',
-        preserveSpaces && 'preservesSpaces',
-        className
-      )}
-      type={submit ? 'submit' : 'button'}
-    >
-      {icon && (
-        <styled.Icon
-          name={icon}
-          size="normal"
-          isDanger={variant === 'danger'}
-          isDisabled={disabled}
-        />
-      )}
-      {label}
-    </styled.Button>
-  );
-});
+const Button = forwardRef<HTMLButtonElement, ButtonPropsInterface>(
+  ({icon, label, variant = 'primary', size = 'normal', wide, disabled, active, onClick}, ref) => {
+    return (
+      <styled.Button
+        data-testid="Button-test"
+        ref={ref}
+        type="button"
+        disabled={disabled}
+        onClick={onClick}
+        className={cn(variant, size, wide && 'wide', active && 'active')}
+      >
+        {icon && <IconSvg name={icon} size="m" />}
+        {label}
+      </styled.Button>
+    );
+  }
+);
 
 export default memo(Button);

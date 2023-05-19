@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import cn from 'classnames';
 import {signUpDateString, useI18n} from '@momentum-xyz/core';
-import {ProfileLine, ButtonEllipse, WalletHash} from '@momentum-xyz/ui-kit-storybook';
+import {ProfileLine, ButtonEllipse, WalletHash} from '@momentum-xyz/ui-kit';
 
 import * as styled from './ProfileInfo.styled';
 

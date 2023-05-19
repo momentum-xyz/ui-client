@@ -56,6 +56,12 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
   }, [sessionStore.profileJobId, sessionStore, nftStore, t]);*/
 
   useEffect(() => {
+    console.log(
+      'AppAuth useEffect sessionStore.token:',
+      sessionStore.token,
+      'user:',
+      sessionStore.user
+    );
     if (sessionStore.token && sessionStore.user) {
       PosBusService.init(sessionStore.token, sessionStore.user.id);
     }

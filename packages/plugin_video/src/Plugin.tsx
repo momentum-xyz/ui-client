@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {UsePluginHookType, useSharedObjectState} from '@momentum-xyz/sdk';
-import {Input, Text} from '@momentum-xyz/ui-kit';
+import {Input} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import '@momentum-xyz/ui-kit/dist/themes/themes';
@@ -72,8 +72,8 @@ const assert = (value: string | null) => {
 };
 
 const usePlugin: UsePluginHookType = (props) => {
-  const {isAdmin} = props;
-  console.log('PLUGIN VIDEO', props);
+  const {isAdmin, theme} = props;
+  console.log('PLUGIN VIDEO', props, theme);
 
   const [modifiedState, setModifiedState] = useState<PluginStateInterface | null>(null);
   const [error, setError] = useState<string>();
@@ -81,6 +81,8 @@ const usePlugin: UsePluginHookType = (props) => {
 
   const [sharedState, setSharedState] = useSharedObjectState<PluginStateInterface>();
   console.log('sharedState', sharedState);
+
+  const isLoading = sharedState === undefined;
 
   const {t} = useI18n();
 
@@ -110,6 +112,8 @@ const usePlugin: UsePluginHookType = (props) => {
       width="100%"
       allowFullScreen
     ></iframe>
+  ) : isLoading ? (
+    <span />
   ) : (
     <div
       style={{
@@ -120,31 +124,37 @@ const usePlugin: UsePluginHookType = (props) => {
         justifyContent: 'center'
       }}
     >
-      <Text text={t('plugin_video.messages.noUrl')} size="m" />
+      {t('plugin_video.messages.noUrl')}
     </div>
   );
+
+  const isError = !!error || isModifiedStateError;
 
   const editModeContent = !isAdmin ? (
     <span />
   ) : (
     <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
-      <Text text={t('plugin_video.labels.embed')} size="l" align="left" transform="uppercase" />
-      <Text
-        text="By embedding a video to this object; users will also be able to see this video played when they select the object; regardless of its asset type."
-        size="m"
-        align="left"
-      />
-      <Text
-        text="To embed a video; add the url to the video in the input field below."
-        size="m"
-        align="left"
-      />
-      <hr />
+      <div
+        style={{
+          textTransform: 'uppercase',
+          fontSize: 'var(--font-size-l)',
+          fontWeight: 600,
+          letterSpacing: '0.2em'
+        }}
+      >
+        {t('plugin_video.labels.embed')}
+      </div>
+      <p>
+        By embedding a video to this object; users will also be able to see this video played when
+        they select the object; regardless of its asset type.
+      </p>
+      <p>To embed a video; add the url to the video in the input field below.</p>
+      <div style={{backgroundColor: theme.accentText, height: 1}} />
       <Input
-        type="text"
+        // type="text"
         // label={t('plugin_video.labels.videoUrl')}
         placeholder={t('plugin_video.messages.pasteUrl')}
-        autoFocus
+        // autoFocus
         value={
           modifiedState?.video_url ??
           (sharedState?.video_url ||
@@ -158,20 +168,20 @@ const usePlugin: UsePluginHookType = (props) => {
             video_url: value
           })
         }
-        isError={!!error || isModifiedStateError}
-        errorMessage={error || t('plugin_video.messages.invalidUrl') || ''}
+        danger={isError}
+        // errorMessage={error || t('plugin_video.messages.invalidUrl') || ''}
       />
-      <br />
-      <Text
-        text={t('plugin_video.labels.videoPreview')}
-        size="m"
-        align="left"
-        transform="uppercase"
-      />
-      {content}
-      <hr />
+      <div>{isError && (error || t('plugin_video.messages.invalidUrl') || '')}</div>
+      {!!embedUrl && (
+        <>
+          <br />
+          <h3 style={{textTransform: 'uppercase'}}>{t('plugin_video.labels.videoPreview')}</h3>
+          {content}
+        </>
+      )}
+      <div style={{backgroundColor: theme.accentText, height: 1}} />
       <Input
-        type="text"
+        // type="text"
         // label={t('plugin_video.labels.title')}
         placeholder={t('plugin_video.messages.name')}
         value={modifiedState?.title ?? sharedState?.title ?? ''}

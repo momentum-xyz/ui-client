@@ -1,5 +1,5 @@
 import {Instance, types} from 'mobx-state-tree';
-import {PositionEnum, MenuItemInterface} from '@momentum-xyz/ui-kit-storybook';
+import {PositionEnum, MenuItemInterface} from '@momentum-xyz/ui-kit';
 
 import {WidgetEnum} from 'core/enums';
 

@@ -1,6 +1,6 @@
 import {FC, useCallback, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Panel, Steps, StepInterface} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, Steps, StepInterface} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
@@ -23,9 +23,8 @@ const LoginWidget: FC = () => {
     async (close = false) => {
       console.log('handleAccountConnected');
       try {
-        await sessionStore.loadUserProfile();
-        await sessionStore.loadOwnWorlds();
-        await sessionStore.loadStakedWorlds();
+        // TODO combine them with sessionStore.saveTokenAfterSignIn?
+        await sessionStore.loadUserData();
 
         if (close) {
           widgetManagerStore.closeAll();

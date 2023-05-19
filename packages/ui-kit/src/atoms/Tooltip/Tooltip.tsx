@@ -1,59 +1,66 @@
-import RcTooltip from 'rc-tooltip';
-import 'rc-tooltip/assets/bootstrap.css';
-import React, {FC, PropsWithChildren, ReactNode} from 'react';
+import {createRef, FC, memo, PropsWithChildren, useState} from 'react';
 import cn from 'classnames';
-
-import {PropsWithThemeInterface, ComponentSizeInterface} from '../../interfaces';
-import {PlacementType} from '../../types';
 
 import * as styled from './Tooltip.styled';
 
-interface PropsInterface extends PropsWithThemeInterface {
-  label: string | ReactNode;
-  placement?: PlacementType;
-  visible?: boolean;
-  darkBackground?: boolean;
-  size?: ComponentSizeInterface;
+type TooltipPlacementType = 'left' | 'right';
+
+export interface TooltipPropsInterface {
+  text?: string;
 }
 
-const ENTER_DELAY_DEFAULT = 0.1;
-const LEAVE_DELAY_DEFAULT = 0.1;
+const Tooltip: FC<PropsWithChildren<TooltipPropsInterface>> = ({text, children}) => {
+  const [isShown, setIsShown] = useState(false);
+  const [innerPlacement, setInnerPlacement] = useState<TooltipPlacementType>('right');
 
-const Tooltip: FC<PropsWithChildren<PropsInterface>> = ({
-  label,
-  placement,
-  visible = true,
-  children,
-  darkBackground = false,
-  size
-}) => {
-  const divRef = React.createRef<any>();
+  const divRef = createRef<HTMLDivElement>();
+  const tooltipRef = createRef<HTMLDivElement>();
 
-  const getTooltipContainer = () => divRef.current;
+  const show = () => {
+    const div = divRef.current;
+    const tooltip = tooltipRef.current;
+    if (!div || !tooltip) {
+      return;
+    }
+
+    const divBoundingRect = div.getBoundingClientRect();
+
+    const tooltipStartX = div.clientWidth + divBoundingRect.x;
+    const tooltipLength = tooltip.clientWidth;
+
+    if (innerPlacement === 'right') {
+      const tooltipEnd = tooltipStartX + tooltipLength;
+      const overflows = tooltipEnd > window.innerWidth;
+      if (overflows) {
+        setInnerPlacement('left');
+      }
+    } else {
+      const tooltipEnd = tooltipStartX - tooltipLength;
+      const overflows = tooltipEnd < 0;
+      if (overflows) {
+        setInnerPlacement('right');
+      }
+    }
+
+    setIsShown(true);
+  };
+
   return (
-    <>
-      {label && visible ? (
-        <styled.Div
-          data-testid="Tooltip-test"
-          ref={divRef}
-          className={cn(darkBackground && 'darkBackground')}
-        >
-          <RcTooltip
-            overlay={<span>{label}</span>}
-            overlayStyle={{...size}}
-            placement={placement}
-            mouseEnterDelay={ENTER_DELAY_DEFAULT}
-            mouseLeaveDelay={LEAVE_DELAY_DEFAULT}
-            getTooltipContainer={getTooltipContainer}
-          >
-            <div>{children}</div>
-          </RcTooltip>
-        </styled.Div>
-      ) : (
-        <div>{children}</div>
-      )}
-    </>
+    <styled.Wrapper>
+      <styled.Tooltip ref={tooltipRef} className={cn(text && isShown && 'visible', innerPlacement)}>
+        {text}
+      </styled.Tooltip>
+      <div
+        ref={divRef}
+        onMouseEnter={() => show()}
+        onMouseLeave={() => {
+          setIsShown(false);
+        }}
+      >
+        {children}
+      </div>
+    </styled.Wrapper>
   );
 };
 
-export default Tooltip;
+export default memo(Tooltip);

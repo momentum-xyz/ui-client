@@ -1,7 +1,7 @@
 import {cast, flow, getSnapshot, types} from 'mobx-state-tree';
 import BN from 'bn.js';
 import {ResetModel, RequestModel} from '@momentum-xyz/core';
-import {IconNameType} from '@momentum-xyz/ui-kit-storybook';
+import {IconNameType} from '@momentum-xyz/ui-kit';
 
 import {Wallet, Stake} from 'core/models';
 import {BN_ZERO} from 'core/constants';

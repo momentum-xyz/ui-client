@@ -1,5 +1,5 @@
 import {Instance, types} from 'mobx-state-tree';
-import {ImageSizeEnum} from '@momentum-xyz/ui-kit-storybook';
+import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {WorldStaker} from 'core/models/WorldStaker';

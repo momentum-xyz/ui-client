@@ -1,5 +1,5 @@
 import React, {FC, MutableRefObject} from 'react';
-import {ErrorBoundary, Text} from '@momentum-xyz/ui-kit';
+import {ErrorBoundary} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 import {
   PluginInterface,
@@ -53,7 +53,7 @@ const AssignVideoDialog: FC<PropsInterface> = ({actionRef, objectId, plugin, plu
           {!pluginLoader?.isError ? (
             <PluginInnerWrapper pluginProps={pluginProps} plugin={plugin} actionRef={actionRef} />
           ) : (
-            <Text text={t('errors.errorWhileLoadingPlugin')} size="l" />
+            t('errors.errorWhileLoadingPlugin')
           )}
         </ObjectGlobalPropsContextProvider>
       </ErrorBoundary>

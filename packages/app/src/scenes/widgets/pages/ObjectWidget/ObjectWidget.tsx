@@ -1,6 +1,6 @@
 import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Panel, TabInterface, Tabs} from '@momentum-xyz/ui-kit-storybook';
+import {Panel, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {AssetTypeEnum, BasicAsset2dIdEnum, WidgetEnum} from 'core/enums';
