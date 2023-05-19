@@ -89,8 +89,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
     {
       key: WidgetEnum.NEWSFEED,
       position: PositionEnum.LEFT,
-      iconName: 'no_fire',
-      isHidden: isGuest,
+      iconName: 'newsfeed',
       tooltip: t('labels.newsfeed'),
       onClick: toggle
     },
