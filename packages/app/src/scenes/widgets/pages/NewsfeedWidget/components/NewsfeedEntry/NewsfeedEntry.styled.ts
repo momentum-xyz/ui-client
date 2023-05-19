@@ -43,6 +43,18 @@ export const UserInfoSecondary = styled.div`
   }
 `;
 
+export const UserInfoSecondaryText = styled.div`
+  &:first-of-type {
+    margin-right: 5px;
+  }
+  &.world-name {
+    color: ${(props) => props.theme.accentText};
+  }
+  &.separator {
+    margin: 0 5px;
+  }
+`;
+
 export const Content = styled.div`
   padding-left: 18px;
   margin-top: 10px;
@@ -61,3 +73,4 @@ export const TextEntryText = styled.span`
 export const WorldName = styled.a`
   color: ${(props) => props.theme.accentText};
 `;
+
