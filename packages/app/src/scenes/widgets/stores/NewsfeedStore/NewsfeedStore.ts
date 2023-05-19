@@ -1,26 +1,25 @@
-import {types} from 'mobx-state-tree';
+import {cast, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
 import {NewsfeedEntry, NewsfeedEntryModelInterface} from 'core/models';
-
-enum NewsfeedTypeEnum {
-  UNIVERSAL = 'universal',
-  MY_CONNECTIONS = 'my_connections'
-}
+import {NewsfeedTabTypeEnum} from 'core/enums';
 
 const NewsfeedStore = types.compose(
   ResetModel,
   types
     .model('NewsfeedStore', {
       newsfeedType: types.optional(
-        types.enumeration(Object.values(NewsfeedTypeEnum)),
-        NewsfeedTypeEnum.UNIVERSAL
+        types.enumeration(Object.values(NewsfeedTabTypeEnum)),
+        NewsfeedTabTypeEnum.UNIVERSAL
       ),
       entries: types.optional(types.array(NewsfeedEntry), [])
     })
     .actions((self) => ({
-      setActiveNewsfeedType(type: NewsfeedTypeEnum): void {
+      setActiveNewsfeedType(type: NewsfeedTabTypeEnum): void {
         self.newsfeedType = type;
+      },
+      setEntries(entries: NewsfeedEntryModelInterface[]): void {
+        self.entries = cast(entries);
       }
     }))
     .views((self) => ({
@@ -29,6 +28,16 @@ const NewsfeedStore = types.compose(
       },
       get connectionEntries(): NewsfeedEntryModelInterface[] {
         return self.entries.filter((entry) => !entry.universal);
+      },
+      get currentTabEntries(): NewsfeedEntryModelInterface[] {
+        switch (self.newsfeedType) {
+          case NewsfeedTabTypeEnum.UNIVERSAL:
+            return this.universalEntries;
+          case NewsfeedTabTypeEnum.MY_CONNECTIONS:
+            return this.connectionEntries;
+          default:
+            return this.universalEntries;
+        }
       }
     }))
 );

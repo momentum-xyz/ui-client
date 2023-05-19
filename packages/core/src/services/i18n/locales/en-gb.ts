@@ -1330,7 +1330,9 @@ export const enGb = {
       stakedIn: ' staked in ',
       you: 'You',
       and: ' and ',
-      docked: ' docked'
+      docked: ' docked',
+      boostMessage: 'received a boost of {{amount}} MOM from {{user_name}}',
+      createdMessage: 'was created by {{user_name}}'
     },
     plugin_gd: {
       labels: {

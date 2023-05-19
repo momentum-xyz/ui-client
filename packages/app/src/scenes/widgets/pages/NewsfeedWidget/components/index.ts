@@ -1,2 +1,1 @@
-export * from './StakeList';
-export * from './MyWallet';
+export * from './NewsfeedEntry';

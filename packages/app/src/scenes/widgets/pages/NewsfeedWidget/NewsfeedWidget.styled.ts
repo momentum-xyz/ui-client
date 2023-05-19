@@ -21,4 +21,8 @@ export const Tabs = styled.div`
   z-index: 1;
 `;
 
-export const Content = styled.div``;
+export const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
