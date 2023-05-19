@@ -11,6 +11,8 @@ import {
   ParticleSystem,
   Scene,
   SceneLoader,
+  Sprite,
+  SpriteManager,
   StandardMaterial,
   Texture,
   TransformNode,
@@ -37,6 +39,7 @@ import {TransformTypesEnum, smoothCameraUniverse} from './TransformHelper';
 
 const ACC_PER_ROW = 20;
 const SPACE_BETWEEN_ACC = 10;
+const THUMB_IMAGE_SIZE = 160;
 
 interface BabylonAccountInterface {
   accountDefinition: Odyssey3dUserInterface;
@@ -85,27 +88,6 @@ export class UniverseBuilderHelper {
     const SunColor2 = new Color4(0.286, 0.635, 0.8671);
     this.buildStar(sunColor1, SunColor2);
 
-    /*const ring1 = this.buildNewRingOdysseys(15, 25);
-    const ring2 = this.buildNewRingOdysseys(20, 30);
-    const ring3 = this.buildNewRingOdysseys(25, 35);
-
-    const ring4 = this.buildNewRingAccounts(20, 7);
-    const ring5 = this.buildNewRingAccounts(20, 9);
-    const ring6 = this.buildNewRingAccounts(20, 11);
-
-    this.scene.onBeforeRenderObservable.add(() => {
-      ring1.rotation.y += 0.00005 * scene.getEngine().getDeltaTime();
-      ring1.rotation.x += 0.00005 * scene.getEngine().getDeltaTime();
-      ring2.rotation.y += -0.00005 * scene.getEngine().getDeltaTime();
-      ring2.rotation.x += -0.00005 * scene.getEngine().getDeltaTime();
-      ring3.rotation.y += 0.00005 * scene.getEngine().getDeltaTime();
-      ring3.rotation.x += -0.00005 * scene.getEngine().getDeltaTime();
-
-      ring4.rotation.y += 0.00002 * scene.getEngine().getDeltaTime();
-      ring5.rotation.y += 0.00004 * scene.getEngine().getDeltaTime();
-      ring6.rotation.y += 0.00006 * scene.getEngine().getDeltaTime();
-    });*/
-
     scene.onPointerDown = function castRay() {
       const ray = scene.createPickingRay(
         scene.pointerX,
@@ -149,7 +131,6 @@ export class UniverseBuilderHelper {
       '.glb'
     ).then((result) => {
       this.defineOrbMaterial();
-      
       this.rootMesh = result.meshes[2];
       this.thumbMat = result.meshes[1].material as PBRMaterial;
     });
@@ -364,12 +345,36 @@ export class UniverseBuilderHelper {
       //const rootChildren = rootClone.getChildMeshes();
 
       if (rootClone) {
+        // Set position and Rotation
         rootClone.position.x = Math.cos(radian) * currentRadius;
         rootClone.position.y = 0;
         rootClone.position.z = Math.sin(radian) * currentRadius;
-
         rootClone.rotation = new Vector3(0, 0, 0);
+
         this.setOrbPatricles(rootClone);
+
+        // Set avatar image
+        if (worlds[i].image !== '') {
+          this.GetRoundImageUri(
+            this.baseURL + '/texture/s3/' + worlds[i].image,
+            THUMB_IMAGE_SIZE,
+            (uri) => {
+              const spriteManager = new SpriteManager(
+                'MySpriteManager',
+                uri,
+                1,
+                {width: THUMB_IMAGE_SIZE, height: THUMB_IMAGE_SIZE},
+                this.scene
+              );
+              const sprite = new Sprite('MySprite', spriteManager);
+              sprite.width = 0.7;
+              sprite.height = 0.7;
+              this.scene.onBeforeRenderObservable.add(() => {
+                sprite.position = rootClone.absolutePosition;
+              });
+            }
+          );
+        }
 
         // Metadata
         /*rootChildren[1].metadata = worlds[this.odysseyCounter].id;
@@ -433,7 +438,26 @@ export class UniverseBuilderHelper {
 
         rootClone.rotation = new Vector3(0, 0, 0);
         this.setOrbPatricles(rootClone);
+        const avatarUrl = accounts[i].avatar ?? '';
 
+        // Set avatar image
+        if (avatarUrl !== '') {
+          this.GetRoundImageUri(avatarUrl, THUMB_IMAGE_SIZE, (uri) => {
+            const spriteManager = new SpriteManager(
+              'MySpriteManager',
+              uri,
+              1,
+              {width: THUMB_IMAGE_SIZE, height: THUMB_IMAGE_SIZE},
+              this.scene
+            );
+            const sprite = new Sprite('MySprite', spriteManager);
+            sprite.width = 0.7;
+            sprite.height = 0.7;
+            this.scene.onBeforeRenderObservable.add(() => {
+              sprite.position = rootClone.absolutePosition;
+            });
+          });
+        }
         // Metadata
         /*rootChildren[1].metadata = worlds[this.odysseyCounter].id;
           rootChildren[1].material = this.orbMat;
@@ -609,4 +633,34 @@ export class UniverseBuilderHelper {
       );
     }
   }
+
+  static GetRoundImageUri = (url: string, size: number, onDone: (uri: string) => void): void => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(img, 0, 0, size, size);
+        ctx.globalCompositeOperation = 'destination-in';
+        // draw our circle mask
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(
+          canvas.width / 2, // x
+          canvas.height / 2, // y
+          canvas.width / 2, // radius
+          0, // start angle
+          2 * Math.PI // end angle
+        );
+        ctx.fill();
+        ctx.globalCompositeOperation = 'source-over';
+        onDone(canvas.toDataURL('png'));
+      }
+    };
+
+    img.src = url;
+  };
 }
