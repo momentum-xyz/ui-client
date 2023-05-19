@@ -50,10 +50,15 @@ export class WorldCreatorHelper {
   static placeholder: AbstractMesh;
   static gizmoPartsMap = new Map<string, AbstractMesh>();
 
+  static highlightLayer: HighlightLayer | undefined;
+  // not used
+  static glowLayer: GlowLayer | undefined;
+
   static async initialize(
     scene: Scene,
     onObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void
   ) {
+    console.log('WorldCreatorHelper initialize');
     this.onObjectTransform = onObjectTransform;
     this.isCreatorMode = false;
     this.lastLockedID = '';
@@ -70,6 +75,8 @@ export class WorldCreatorHelper {
     this.setGizmoType(GizmoTypesEnum.Scale);
     await this.setupCustomGizmoParts();
     WorldCreatorHelper.setupCustomGizmo();
+
+    this.highlightLayer = new HighlightLayer('hl1', scene);
   }
 
   static async setupCustomGizmoParts() {
@@ -344,9 +351,6 @@ export class WorldCreatorHelper {
     }
   }
 
-  static highlightLayer: HighlightLayer | undefined;
-  static glowLayer: GlowLayer | undefined;
-
   static toggleHightlightObject(objectId: string, on: boolean) {
     if (this.selectedObjectId === objectId) {
       return;
@@ -355,79 +359,58 @@ export class WorldCreatorHelper {
     const id = on ? objectId : this.selectedObjectId;
     this.selectedObjectId = id;
 
-    // TODO Add/drop highlight layer
-    console.log('TODO toggleHightlightObject', objectId, on);
+    console.log('toggleHightlightObject', objectId, on);
     const node = getNodeFromId(id);
     console.log('toggleHightlightObject node', node);
-    const container = ObjectHelper.objectsMap.get(id)?.container;
-    const meshes = container?.meshes;
-    console.log('toggleHightlightObject meshes', meshes);
+
+    const meshes = node?.getChildMeshes();
     if (on) {
-      if (container && meshes && node) {
-        if (!this.glowLayer) {
-          this.glowLayer = new GlowLayer('glow', ObjectHelper.scene);
-          this.glowLayer.intensity = 0.5;
-          this.glowLayer.customEmissiveColorSelector = (mesh, subMesh, material, result) => {
-            // console.log('glow', mesh.name, mesh, subMesh, material, result);
-            // console.log('glow', mesh.parent?.metadata, mesh.parent?.parent?.metadata);
-            if (this.selectedObjectId === mesh.parent?.metadata) {
-              // the parent with metadata can be many layers higher
-              console.log('glow', mesh.parent?.metadata);
-              result.set(1, 1, 1, 0.4);
-            } else {
-              result.set(0, 0, 0, 0);
-            }
-          };
-        }
-
-        // doesn't work
-        if (!this.highlightLayer) {
-          this.highlightLayer = new HighlightLayer('hl1', ObjectHelper.scene, {
-            // mainTextureFixedSize: 512,
-            // camera: PlayerHelper.camera,
-            // mainTextureRatio: 0.5
-          });
-        }
-
-        for (const mesh of meshes || []) {
-          if (mesh.name !== '__root__') {
-            this.highlightLayer?.addMesh(mesh as any, Color3.Green());
-            console.log('Added mesh to highlight layer: ', mesh.name); // Log the name of the mesh being added to the highlight layer
-          }
-        }
-        // hl.addMesh(node as any, Color3.Green());
-
-        // // Calculate the bounding info of the entire model
-        // let boundingInfo = container.meshes[0].getBoundingInfo();
-        // for (let i = 1; i < container.meshes.length; i++) {
-        //   // boundingInfo = boundingInfo.merge(container.meshes[i].getBoundingInfo());
-        //   boundingInfo = container.meshes[i].getBoundingInfo();
+      if (meshes && node) {
+        // if (!this.glowLayer) {
+        //   this.glowLayer = new GlowLayer('glow', ObjectHelper.scene);
+        //   this.glowLayer.intensity = 0.5;
+        //   this.glowLayer.customEmissiveColorSelector = (mesh, subMesh, material, result) => {
+        //     // console.log('glow', mesh.name, mesh, subMesh, material, result);
+        //     // console.log('glow', mesh.parent?.metadata, mesh.parent?.parent?.metadata);
+        //     if (this.selectedObjectId === mesh.parent?.metadata) {
+        //       // the parent with metadata can be many layers higher
+        //       console.log('glow', mesh.parent?.metadata);
+        //       result.set(1, 1, 1, 0.4);
+        //     } else {
+        //       result.set(0, 0, 0, 0);
+        //     }
+        //   };
         // }
 
-        // // Create a bounding box mesh around the model
-        // const boundingBox = MeshBuilder.CreateBox('boundingBox', {size: 1}, ObjectHelper.scene);
-        // // boundingBox.scaling = boundingInfo.boundingBox.extendSize.scale(2); // extendSize is half the size of the bounding box
-        // boundingBox.parent = node;
-        // // ObjectHelper.scene.addMesh(boundingBox);
-        // // boundingBox.position = boundingInfo.boundingBox.center;
-        // console.log('toggleHightlightObject boundingBox', boundingBox, boundingInfo.boundingBox);
+        // just in case
+        this.highlightLayer?.removeAllMeshes();
 
-        // // Make the bounding box invisible
-        // // boundingBox.isVisible = false;
-
-        // // Add the bounding box to the highlight layer
-        // this.highlightLayer.addMesh(boundingBox, Color3.White());
+        for (const mesh of meshes || []) {
+          try {
+            if (mesh instanceof Mesh) {
+              this.highlightLayer?.addMesh(mesh, Color3.Green());
+            }
+          } catch (e) {
+            console.log('Add mesh to highlight layer error: ', e);
+          }
+        }
       }
     } else {
-      // this.highlightLayer?.removeMesh(node as any);
-      console.log('toggleHightlightObject dispose hl', this.highlightLayer);
-      this.glowLayer?.dispose();
-      this.glowLayer = undefined;
-      // for (const mesh of meshes || []) {
-      //   this.highlightLayer?.removeMesh(mesh as any);
-      // }
-      // this.highlightLayer?.dispose();
-      // this.highlightLayer = undefined;
+      // this.glowLayer?.dispose();
+      // this.glowLayer = undefined;
+
+      console.log('toggleHightlightObject hl remove all meshes from', this.highlightLayer);
+      // this.highlightLayer?.removeAllMeshes();
+      for (const mesh of meshes || []) {
+        try {
+          if (mesh instanceof Mesh) {
+            this.highlightLayer?.removeMesh(mesh);
+          }
+        } catch (e) {
+          console.log('Add mesh to highlight layer error: ', e);
+        }
+      }
+      console.log('toggleHightlightObject hl:', this.highlightLayer);
     }
 
     this.selectedObjectId = on ? objectId : '';
