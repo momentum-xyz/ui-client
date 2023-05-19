@@ -25,6 +25,7 @@ import circle from '../static/Particles/circle_02.png';
 import twirl from '../static/Particles/twirl_01.png';
 import odysseyParticle from '../static/Particles/odysseyParticle.json';
 import sparksParticle from '../static/Particles/sparksParticle.json';
+import rabbit_round from '../static/rabbit_round.png';
 // Star
 import surface from '../static/Particles/surface.png';
 import starlight from '../static/Particles/dot.png';
@@ -350,7 +351,6 @@ export class UniverseBuilderHelper {
         rootClone.position.y = 0;
         rootClone.position.z = Math.sin(radian) * currentRadius;
         rootClone.rotation = new Vector3(0, 0, 0);
-
         this.setOrbPatricles(rootClone);
 
         // Set avatar image
@@ -359,24 +359,17 @@ export class UniverseBuilderHelper {
             this.baseURL + '/texture/s3/' + worlds[i].image,
             THUMB_IMAGE_SIZE,
             (uri) => {
-              const spriteManager = new SpriteManager(
-                'MySpriteManager',
-                uri,
-                1,
-                {width: THUMB_IMAGE_SIZE, height: THUMB_IMAGE_SIZE},
-                this.scene
-              );
-              const sprite = new Sprite('MySprite', spriteManager);
-              sprite.width = 0.7;
-              sprite.height = 0.7;
-              this.scene.onBeforeRenderObservable.add(() => {
-                sprite.position = rootClone.absolutePosition;
-              });
+              this.setOrbThumb(uri, rootClone);
             }
           );
+        } else {
+          this.setOrbThumb(rabbit_round, rootClone, true);
         }
 
         // Metadata
+        rootClone.metadata = worlds[i].id;
+        rootClone.material = this.orbMat;
+
         /*rootChildren[1].metadata = worlds[this.odysseyCounter].id;
           rootChildren[1].material = this.orbMat;
   
@@ -390,6 +383,12 @@ export class UniverseBuilderHelper {
             thumbMatClone.albedoTexture = downloadedTexture;
             rootChildren[0].material = thumbMatClone;
           }*/
+          const babylonWorld = {
+            worldDefinition: worlds[i],
+            rootClone: rootClone
+          };
+  
+          this.worldsMap.set(worlds[i].id, babylonWorld);
       }
       if (orbCounter > currentAmount) {
         orbCounter = 0;
@@ -443,21 +442,13 @@ export class UniverseBuilderHelper {
         // Set avatar image
         if (avatarUrl !== '') {
           this.GetRoundImageUri(avatarUrl, THUMB_IMAGE_SIZE, (uri) => {
-            const spriteManager = new SpriteManager(
-              'MySpriteManager',
-              uri,
-              1,
-              {width: THUMB_IMAGE_SIZE, height: THUMB_IMAGE_SIZE},
-              this.scene
-            );
-            const sprite = new Sprite('MySprite', spriteManager);
-            sprite.width = 0.7;
-            sprite.height = 0.7;
-            this.scene.onBeforeRenderObservable.add(() => {
-              sprite.position = rootClone.absolutePosition;
-            });
+            this.setOrbThumb(uri, rootClone);
           });
+        } else {
+          this.setOrbThumb(rabbit_round, rootClone, true);
         }
+        rootClone.metadata = accounts[i].id;
+        rootClone.material = this.orbMat;
         // Metadata
         /*rootChildren[1].metadata = worlds[this.odysseyCounter].id;
           rootChildren[1].material = this.orbMat;
@@ -472,6 +463,12 @@ export class UniverseBuilderHelper {
             thumbMatClone.albedoTexture = downloadedTexture;
             rootChildren[0].material = thumbMatClone;
           }*/
+          const babylonAccount = {
+            accountDefinition: accounts[i],
+            rootClone: rootClone
+          };
+  
+          this.accountsMap.set(accounts[i].id, babylonAccount);
       }
 
       if (orbCounter > amount) {
@@ -499,6 +496,23 @@ export class UniverseBuilderHelper {
         rings[i].rotation.y += ringRotations[i].rotationY * this.scene.getEngine().getDeltaTime();
       });
     }
+  }
+
+  static setOrbThumb(url: string, rootClone: AbstractMesh, placeHolder?: boolean) {
+    const size = placeHolder ? 512 : THUMB_IMAGE_SIZE;
+    const spriteManager = new SpriteManager(
+      'MySpriteManager',
+      url,
+      1,
+      {width: size, height: size},
+      this.scene
+    );
+    const sprite = new Sprite('MySprite', spriteManager);
+    sprite.width = 0.7;
+    sprite.height = 0.7;
+    this.scene.onBeforeRenderObservable.add(() => {
+      sprite.position = rootClone.absolutePosition;
+    });
   }
 
   static buildStar(color1: Color4, color2: Color4) {
