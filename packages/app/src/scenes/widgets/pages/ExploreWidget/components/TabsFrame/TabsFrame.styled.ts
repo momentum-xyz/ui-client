@@ -10,7 +10,7 @@ export const Tabs = styled.div`
   justify-content: end;
   left 0;
   top: -2px;
-  right: 20px;
+  right: 10px;
   z-index: 1;
 `;
 
