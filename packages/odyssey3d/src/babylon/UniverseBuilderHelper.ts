@@ -1,12 +1,10 @@
 import {
   AbstractMesh,
-  Axis,
   Color3,
   Color4,
   Matrix,
   Mesh,
   MeshBuilder,
-  Nullable,
   PBRMaterial,
   ParticleSystem,
   Scene,
@@ -38,8 +36,6 @@ import {getAssetFileName} from './UtilityHelper';
 import {PlayerHelper} from './PlayerHelper';
 import {TransformTypesEnum, smoothCameraUniverse} from './TransformHelper';
 
-const ACC_PER_ROW = 20;
-const SPACE_BETWEEN_ACC = 10;
 const THUMB_IMAGE_SIZE = 160;
 
 interface BabylonAccountInterface {
@@ -57,13 +53,10 @@ export class UniverseBuilderHelper {
   static baseURL = '';
 
   static rootMesh: AbstractMesh;
-  static thumbMat: PBRMaterial;
   static orbMat: PBRMaterial;
 
   static accountsMap = new Map<string, BabylonAccountInterface>();
   static worldsMap = new Map<string, BabylonWorldInterface>();
-  static totalAmount = 0;
-  static odysseyCounter = 0;
 
   static odysseyPS: ParticleSystem;
   static sparksPS: ParticleSystem;
@@ -133,196 +126,7 @@ export class UniverseBuilderHelper {
     ).then((result) => {
       this.defineOrbMaterial();
       this.rootMesh = result.meshes[2];
-      this.thumbMat = result.meshes[1].material as PBRMaterial;
     });
-  }
-
-  static buildAccountLayer(accounts: Odyssey3dUserInterface[]) {
-    this.rootMesh.setEnabled(true);
-
-    let counter = 0;
-    let row = 0;
-    // Transform node for grouping all account objects.
-    const accountLayer = new TransformNode('AccountLayer', this.scene);
-
-    // Spawn
-    for (let i = 0; i < accounts.length; i++) {
-      const rootClone = this.rootMesh.clone('acc_root' + i, accountLayer) as Mesh;
-      const rootChildren = rootClone.getChildMeshes();
-
-      if (counter >= ACC_PER_ROW) {
-        row++;
-        counter = 0;
-      }
-
-      // Assign position and material
-      if (rootClone && rootChildren.length > 1) {
-        // Set the position of the current instance.
-        const x = counter * SPACE_BETWEEN_ACC;
-        const z = row * SPACE_BETWEEN_ACC;
-        rootClone.position = new Vector3(x, 0, z);
-        rootClone.rotation = new Vector3(0, 0, 0);
-        counter++;
-
-        // Metadata
-        rootChildren[1].metadata = accounts[i].id;
-        rootChildren[1].material = this.orbMat;
-
-        if (accounts[i].avatar !== '') {
-          this.setOrbRotation(rootClone, rootChildren[0]);
-
-          const downloadedTexture = new Texture(accounts[i].avatar as Nullable<string>);
-          const thumbMatClone = this.thumbMat.clone('thumbMatCloneAcc' + i);
-          thumbMatClone.albedoTexture = downloadedTexture;
-          rootChildren[0].material = thumbMatClone;
-        }
-
-        rootClone.billboardMode = Mesh.BILLBOARDMODE_ALL;
-        this.setOrbPatricles(rootChildren[1]);
-
-        const babylonAccount = {
-          accountDefinition: accounts[i],
-          rootClone: rootClone
-        };
-
-        this.accountsMap.set(accounts[i].id, babylonAccount);
-      } else {
-        console.log('Something went wrong with loading custom glb for Accounts and Odysseys');
-      }
-    }
-
-    // Center the accounterLayer in the Universe.
-    const offset = (ACC_PER_ROW * SPACE_BETWEEN_ACC) / 2; // Calculate total width. Divide by 2 for mid point.
-    accountLayer.position.x = accountLayer.position.x - offset; // Apply the offset to the container.
-    accountLayer.position.y = -10;
-    accountLayer.position.z = 200;
-
-    // After all of the orbs are done cloning, disable the initial one
-    PlayerHelper.camera.setTarget(accountLayer.position);
-    this.rootMesh.setEnabled(false);
-  }
-
-  static buildOdysseyLayers(worlds: WorldInfoInterface[]) {
-    this.rootMesh.setEnabled(true);
-
-    this.odysseyCounter = 0;
-    // Base variables.
-    const AllOdysseyRings = new Array<TransformNode>();
-    let totalOdysseys = worlds.length;
-    const halfAmountOfOdysseys = totalOdysseys / 2;
-
-    // Calculate amount of Odyssey is next ring.
-    let odysseysInThisRing = 12;
-    let ringRadius = 25;
-    let zValueRing = 10;
-
-    // Start building rings.
-    while (totalOdysseys >= 1) {
-      if (odysseysInThisRing <= 0) {
-        return;
-      }
-      odysseysInThisRing = Math.min(totalOdysseys, odysseysInThisRing);
-
-      // Build the ring.
-      const newRing: TransformNode = this.buildRing(
-        odysseysInThisRing,
-        ringRadius,
-        AllOdysseyRings.length,
-        worlds
-      );
-
-      // Set newRing depth
-      newRing.position.z = zValueRing;
-      AllOdysseyRings.push(newRing);
-      zValueRing = zValueRing * 1.2;
-
-      totalOdysseys = totalOdysseys - odysseysInThisRing;
-      if (totalOdysseys >= halfAmountOfOdysseys) {
-        // prepare amount for the next ring.
-        odysseysInThisRing = Math.floor(odysseysInThisRing * 1.2);
-
-        // Preparing ring radius
-        ringRadius = ringRadius * 1.1;
-      } else {
-        ringRadius = ringRadius * 0.9;
-      }
-
-      if (totalOdysseys <= 0) {
-        totalOdysseys = 0;
-      }
-
-      if (odysseysInThisRing > totalOdysseys) {
-        odysseysInThisRing = totalOdysseys;
-      }
-    }
-
-    // Create one transform for all Rings.
-    const allRingsTransformNode = new TransformNode('GlobalUniverseTransform', this.scene);
-    allRingsTransformNode.position.z = 200;
-    allRingsTransformNode.position.y = 50;
-    AllOdysseyRings.forEach((ring) => (ring.parent = allRingsTransformNode));
-
-    this.rootMesh.setEnabled(false);
-  }
-
-  static buildRing(
-    amount: number,
-    ringRadius: number,
-    ringNumber: number,
-    worlds: WorldInfoInterface[]
-  ) {
-    const ringLayer = new TransformNode('Ring' + ringNumber, this.scene);
-    const spaceBetweenOddyseys = 360 / amount;
-    let offset = 0;
-
-    // Create instance and location for every Odyssey. Based on amount given.
-    for (let i = 0; i < amount; i++) {
-      const rootClone = this.rootMesh.clone('ring_root' + i, ringLayer) as Mesh;
-      const rootChildren = rootClone.getChildMeshes();
-
-      // Calculate radian for circle placement.
-      // Define how many radian per 1 degree. multiply by current offset (xdegrees)
-      const radian = offset * (Math.PI / 180);
-      const x = Math.cos(radian) * (Math.random() * ringRadius);
-      const y = Math.sin(radian) * ringRadius;
-      const z = Math.random() * 2 * ringNumber;
-
-      if (rootClone) {
-        rootClone.position = new Vector3(x, y, z);
-        rootClone.rotation = new Vector3(0, 0, 0);
-        offset = offset + spaceBetweenOddyseys;
-
-        // Metadata
-        rootChildren[1].metadata = worlds[this.odysseyCounter].id;
-        rootChildren[1].material = this.orbMat;
-
-        if (worlds[this.odysseyCounter].image !== '') {
-          this.setOrbRotation(rootClone, rootChildren[0]);
-
-          const downloadedTexture = new Texture(
-            (this.baseURL + '/texture/s3/' + worlds[this.odysseyCounter].image) as Nullable<string>
-          );
-          const thumbMatClone = this.thumbMat.clone('thumbMatCloneWorld' + i);
-          thumbMatClone.albedoTexture = downloadedTexture;
-          rootChildren[0].material = thumbMatClone;
-        }
-        rootClone.billboardMode = Mesh.BILLBOARDMODE_ALL;
-        this.setOrbPatricles(rootChildren[1]);
-
-        const babylonWorld = {
-          worldDefinition: worlds[this.odysseyCounter],
-          rootClone: rootClone
-        };
-
-        this.worldsMap.set(worlds[this.odysseyCounter].id, babylonWorld);
-      } else {
-        console.log('Something went wrong with loading custom glb for Accounts and Odysseys');
-      }
-
-      this.odysseyCounter++;
-    }
-
-    return ringLayer;
   }
 
   static buildNewRingOdysseys(worlds: WorldInfoInterface[]) {
@@ -515,16 +319,6 @@ export class UniverseBuilderHelper {
     customOrbGlassMat.albedoColor = new Color3(0.95, 0.95, 0.95);
 
     this.orbMat = customOrbGlassMat;
-  }
-
-  static setOrbRotation(root: AbstractMesh, thumb: AbstractMesh) {
-    // Override babylon's conversion of left-right hand
-    root.scaling = new Vector3(1, 1, 1);
-    const alphaRot = -0.25 * 2 * Math.PI;
-    root.rotate(Axis.X, alphaRot);
-    thumb.rotation = new Vector3(0, 0, 0);
-    const betaRot = 0.05 * 2 * Math.PI;
-    thumb.rotate(Axis.Y, betaRot);
   }
 
   static initializeStarParticles(color1: Color4, color2: Color4) {
