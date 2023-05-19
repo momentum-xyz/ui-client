@@ -38,7 +38,7 @@ import {InteractionEffectHelper} from './InteractionEffectHelper';
 const PLAYER_OFFSET = new Vector3(0, -0.5, 3);
 export const PLAYER_OFFSET_RH = new Vector3(0, -0.5, -3);
 
-export const CAMERA_POS_EXPLORER = new Vector3(0, 20, 225);
+export const CAMERA_POS_EXPLORER = new Vector3(0, 20, 0);
 // TODO: Set this from PosBusSelfPosMsg
 const CAMERA_POS_CREATOR = new Vector3(50, 50, 150);
 

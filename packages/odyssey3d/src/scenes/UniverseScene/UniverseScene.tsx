@@ -54,12 +54,12 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
 
     events.on('WorldsAdded', (worlds) => {
       console.log('WorldsAdded', worlds);
-      UniverseBuilderHelper.buildRingLayers(worlds);
+      UniverseBuilderHelper.buildNewRingOdysseys(worlds);
     });
 
     events.on('UsersAdded', (users) => {
       console.log('UsersAdded', users);
-      UniverseBuilderHelper.buildAccountLayer(users);
+      UniverseBuilderHelper.buildNewRingAccounts(users);
     });
 
     events.on('UserSelected', (id) => {
