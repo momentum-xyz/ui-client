@@ -35,6 +35,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
 
   /* Will run one time. */
   const onSceneReady = async (scene: Scene) => {
+    // important for better Highlight effect of selected objects
     scene.setRenderingAutoClearDepthStencil(1, false, false);
 
     const view = scene.getEngine().getRenderingCanvas();

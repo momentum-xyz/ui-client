@@ -2,7 +2,6 @@ import {
   AbstractMesh,
   Color3,
   GizmoManager,
-  GlowLayer,
   HighlightLayer,
   Mesh,
   MeshBuilder,
@@ -37,6 +36,11 @@ export enum GizmoTypesEnum {
   BoundingBox
 }
 
+// const HIGHLIGHT_COLOR = Color3.White();
+// const HIGHLIGHT_COLOR = Color3.Purple();
+const HIGHLIGHT_COLOR = Color3.Teal();
+// const HIGHLIGHT_COLOR = Color3.Green();
+
 export class WorldCreatorHelper {
   static isCreatorMode = false;
   static lastLockedID = '';
@@ -51,8 +55,6 @@ export class WorldCreatorHelper {
   static gizmoPartsMap = new Map<string, AbstractMesh>();
 
   static highlightLayer: HighlightLayer | undefined;
-  // not used
-  static glowLayer: GlowLayer | undefined;
 
   static async initialize(
     scene: Scene,
@@ -359,36 +361,19 @@ export class WorldCreatorHelper {
     const id = on ? objectId : this.selectedObjectId;
     this.selectedObjectId = id;
 
-    console.log('toggleHightlightObject', objectId, on);
     const node = getNodeFromId(id);
-    console.log('toggleHightlightObject node', node);
+    console.log('toggleHightlightObject', {objectId, on, node});
 
     const meshes = node?.getChildMeshes();
     if (on) {
       if (meshes && node) {
-        // if (!this.glowLayer) {
-        //   this.glowLayer = new GlowLayer('glow', ObjectHelper.scene);
-        //   this.glowLayer.intensity = 0.5;
-        //   this.glowLayer.customEmissiveColorSelector = (mesh, subMesh, material, result) => {
-        //     // console.log('glow', mesh.name, mesh, subMesh, material, result);
-        //     // console.log('glow', mesh.parent?.metadata, mesh.parent?.parent?.metadata);
-        //     if (this.selectedObjectId === mesh.parent?.metadata) {
-        //       // the parent with metadata can be many layers higher
-        //       console.log('glow', mesh.parent?.metadata);
-        //       result.set(1, 1, 1, 0.4);
-        //     } else {
-        //       result.set(0, 0, 0, 0);
-        //     }
-        //   };
-        // }
-
-        // just in case
+        // deselect previously selected ones
         this.highlightLayer?.removeAllMeshes();
 
         for (const mesh of meshes || []) {
           try {
             if (mesh instanceof Mesh) {
-              this.highlightLayer?.addMesh(mesh, Color3.Green());
+              this.highlightLayer?.addMesh(mesh, HIGHLIGHT_COLOR);
             }
           } catch (e) {
             console.log('Add mesh to highlight layer error: ', e);
@@ -396,21 +381,7 @@ export class WorldCreatorHelper {
         }
       }
     } else {
-      // this.glowLayer?.dispose();
-      // this.glowLayer = undefined;
-
-      console.log('toggleHightlightObject hl remove all meshes from', this.highlightLayer);
-      // this.highlightLayer?.removeAllMeshes();
-      for (const mesh of meshes || []) {
-        try {
-          if (mesh instanceof Mesh) {
-            this.highlightLayer?.removeMesh(mesh);
-          }
-        } catch (e) {
-          console.log('Add mesh to highlight layer error: ', e);
-        }
-      }
-      console.log('toggleHightlightObject hl:', this.highlightLayer);
+      this.highlightLayer?.removeAllMeshes();
     }
 
     this.selectedObjectId = on ? objectId : '';
