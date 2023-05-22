@@ -6,7 +6,7 @@ import {Frame, Button, Input, TabInterface} from '@momentum-xyz/ui-kit';
 import {useStore} from 'shared/hooks';
 import {Asset3dCategoryEnum} from 'api/enums';
 
-import * as styled from './SpawnAssetPage.styled';
+import * as styled from './SpawnAsset.styled';
 import {UploadCustomAssetPage, AssetsPage, SelectedPage} from './pages';
 
 type TabType = 'community' | 'private' | 'upload' | 'selected';
@@ -16,7 +16,7 @@ const TABS_LIST: TabInterface<TabType>[] = [
   {id: 'private', icon: 'astronaut', label: i18n.t('labels.privateObjectLibrary')}
 ];
 
-const SpawnAssetPage: FC = () => {
+const SpawnAsset: FC = () => {
   const {widgetStore, universeStore} = useStore();
   const {creatorStore} = widgetStore;
   const {spawnAssetStore} = creatorStore;
@@ -36,7 +36,7 @@ const SpawnAssetPage: FC = () => {
   };
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="SpawnAsset-test">
       <styled.ControlsContainer>
         <Frame>
           <styled.ControlsInnerContainer>
@@ -123,4 +123,4 @@ const SpawnAssetPage: FC = () => {
   );
 };
 
-export default observer(SpawnAssetPage);
+export default observer(SpawnAsset);

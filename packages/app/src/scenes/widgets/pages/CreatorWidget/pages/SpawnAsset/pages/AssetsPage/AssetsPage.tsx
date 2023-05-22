@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 
-import AssetsGrid from 'scenes/widgets/pages/CreatorWidget/pages/SpawnAssetPage/components/AssetsGrid/AssetsGrid';
+import AssetsGrid from 'scenes/widgets/pages/CreatorWidget/pages/SpawnAsset/components/AssetsGrid/AssetsGrid';
 import {Asset3dCategoryEnum} from 'api/enums';
 import {useStore} from 'shared/hooks';
 

@@ -8,9 +8,9 @@ import {useStore} from 'shared/hooks';
 import {UnityPositionInterface} from 'core/interfaces';
 import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 
-import * as styled from './SpawnPointPage.styled';
+import * as styled from './SpawnPoint.styled';
 
-const SpawnPointPage: FC = () => {
+const SpawnPoint: FC = () => {
   const {widgetStore, universeStore} = useStore();
   const {creatorStore} = widgetStore;
   const {spawnPointStore} = creatorStore;
@@ -37,7 +37,7 @@ const SpawnPointPage: FC = () => {
   }, [world3dStore, setSpawnPoint, worldId, t]);
 
   return (
-    <styled.Container data-testid="SpawnPointPage-test">
+    <styled.Container data-testid="SpawnPoint-test">
       <div>{t('textMessage.setSpawnPoint')}</div>
 
       <styled.ButtonContainer>
@@ -47,4 +47,4 @@ const SpawnPointPage: FC = () => {
   );
 };
 
-export default observer(SpawnPointPage);
+export default observer(SpawnPoint);

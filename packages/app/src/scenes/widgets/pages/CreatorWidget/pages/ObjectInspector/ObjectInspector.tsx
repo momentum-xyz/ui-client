@@ -8,7 +8,7 @@ import {Asset3d} from 'core/models';
 import {useStore} from 'shared/hooks';
 import {PosBusService} from 'shared/services';
 
-import * as styled from './ObjectInspectorPage.styled';
+import * as styled from './ObjectInspector.styled';
 import {ObjectColorPicker, ObjectTransformForm} from './components';
 import {TransformInterface} from './components/ObjectTransformForm/ObjectTransformForm';
 

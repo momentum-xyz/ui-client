@@ -8,9 +8,9 @@ import {useStore} from 'shared/hooks';
 import {Asset3dInterface} from 'core/models';
 
 import {UploadSkybox, SkyboxList, SkyboxPreview, DeleteSkyboxDialog} from './components';
-import * as styled from './SkyboxSelectorWithPreviewPage.styled';
+import * as styled from './SkyboxSelector.styled';
 
-const SkyboxSelectorWithPreviewPage: FC = () => {
+const SkyboxSelector: FC = () => {
   const {widgetStore, sessionStore, universeStore} = useStore();
   const {creatorStore} = widgetStore;
   const {skyboxSelectorStore} = creatorStore;
@@ -39,7 +39,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
 
   return (
     <>
-      <styled.Container data-testid="SkyboxSelectorWithPreviewPage-test">
+      <styled.Container data-testid="SkyboxSelector-test">
         <styled.ControlsContainer>
           <Frame>
             <styled.ControlsInnerContainer>
@@ -142,4 +142,4 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
   );
 };
 
-export default observer(SkyboxSelectorWithPreviewPage);
+export default observer(SkyboxSelector);

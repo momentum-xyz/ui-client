@@ -8,8 +8,8 @@ import {BasicAsset2dIdEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
 import {subMenuKeyWidgetEnumMap} from 'core/constants';
 
-import {AssignText, AssignImage, AssignVideoDialog} from './components';
-import * as styled from './ObjectFunctionalityPage.styled';
+import {AssignText, AssignImage, AssignVideo} from './components';
+import * as styled from './ObjectFunction.styled';
 
 const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
   {id: BasicAsset2dIdEnum.IMAGE, icon: 'picture_upload', label: 'Picture'},
@@ -17,7 +17,7 @@ const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
   {id: BasicAsset2dIdEnum.TEXT, icon: 'upload', label: 'Text'}
 ];
 
-const ObjectFunctionalityPage: FC = () => {
+const ObjectFunction: FC = () => {
   const {universeStore, widgetStore, widgetManagerStore} = useStore();
   const {creatorStore} = widgetStore;
   const {selectedTab, objectFunctionalityStore, selectedObjectId} = creatorStore;
@@ -93,7 +93,7 @@ const ObjectFunctionalityPage: FC = () => {
         return (
           <>
             {pluginLoader?.plugin ? (
-              <AssignVideoDialog
+              <AssignVideo
                 actionRef={actionRef}
                 plugin={pluginLoader.plugin}
                 pluginLoader={pluginLoader}
@@ -113,7 +113,7 @@ const ObjectFunctionalityPage: FC = () => {
   };
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="ObjectFunction-test">
       <styled.HeadingWrapper>
         <Tabs tabList={TABS_LIST} activeId={activeId} onSelect={handleTypeChange} />
       </styled.HeadingWrapper>
@@ -129,4 +129,4 @@ const ObjectFunctionalityPage: FC = () => {
   );
 };
 
-export default observer(ObjectFunctionalityPage);
+export default observer(ObjectFunction);
