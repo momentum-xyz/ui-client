@@ -39,7 +39,9 @@ const WalletLogin: FC<PropsInterface> = ({
 
     (attachSecondaryAccount
       ? sessionStore.attachAnotherAccount(accountHex, signChallenge)
-      : sessionStore.fetchTokenByWallet2(accountHex, signChallenge)
+      : sessionStore.fetchTokenByWallet(accountHex, signChallenge).then((token) => {
+          sessionStore.saveTokenAndClearUser(token);
+        })
     )
       .then(() => {
         nftStore.setWalletIdByAddress(accountHex, walletConf.id);

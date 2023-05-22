@@ -1200,44 +1200,44 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@babylonjs/core@^5.48.0":
-  version "5.48.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/core/-/core-5.48.0.tgz#79e7b7595620ffde86e0d064ccbc1ca50d93f656"
-  integrity sha512-97d+stKdMGGXmmCuYEo9xhz0v0q5DbWSg2GI6mfa+P1qH9YPmWN+YNxwBs0A2H3HrhBrC/PQOTHUibfA867CoQ==
+"@babylonjs/core@^6.4.1":
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/core/-/core-6.4.1.tgz#3821c28b0c57a6538e409ff45641517dd5e8eb70"
+  integrity sha512-Bd9Az9JJXe8Vi87TrObk1wLc4bpLSXlQtXBLe4NYZWpw28qLMlofw8GCgjDtjQXp7djOPGHuF2KFZsbZyDNgUA==
 
-"@babylonjs/gui-editor@^5.49.0":
-  version "5.49.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/gui-editor/-/gui-editor-5.49.0.tgz#aa6e578d5d2dbc58a8c4a3e8ccdbcdbbfd0c6577"
-  integrity sha512-z++Rlx2ncUtPhfjjP6J0eD7vPV6pMIG2+kgqjuKii92HxItXL6xdXGx5TP0P+mamHkJcZcK/zNzmegIKmSHZDQ==
+"@babylonjs/gui-editor@^6.4.1":
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/gui-editor/-/gui-editor-6.4.1.tgz#4d88a18b5b4c747f038219421e6ba0afd2889283"
+  integrity sha512-LVYJbC5UhdsKppvAOXk79ervc/Xi6gwFHhLC60IdYHROMifnm3Dan8YjSMflEg0U/2VeUZI9odHdSDwS1CiCOQ==
 
-"@babylonjs/gui@^5.48.0":
-  version "5.48.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/gui/-/gui-5.48.0.tgz#b6fab49d4afd0f10c9205a6f288795bc90fa1827"
-  integrity sha512-1LiUQpGXNA3nPHH3vezZY9bdZpALTxAgxvQig2aDts2N7m4QB71U0piqzxn6dTIzhDFSLwQWpJHSSczbxWNgzQ==
+"@babylonjs/gui@^6.4.1":
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/gui/-/gui-6.4.1.tgz#b6fe066284dd5411adab2757904c82f23c519a71"
+  integrity sha512-DRbJR4JFXBQaSLzTTohLo3Fftvifa5uQQGaTUsrRXiGlXM9YHkumosu+4Q+j9Nl4v/+tbLFPWot6zIuXtqjLeA==
 
-"@babylonjs/inspector@^5.49.0":
-  version "5.49.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/inspector/-/inspector-5.49.0.tgz#3f90cfecc00c7aa997030e2f569f132ccb59e244"
-  integrity sha512-xSI7BxAiSl8fNWqHuUAHU/5wetQRDt1kV2v9fe6LCfqloGO/n5rzACvBpqdBGAPO8c43WdWQOlA5/tF5qnsm7g==
+"@babylonjs/inspector@^6.4.1":
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/inspector/-/inspector-6.4.1.tgz#f3a6023de5c583d80194a6fef3db9d795529a00b"
+  integrity sha512-PueaJGPyybMUBteLQ4H9ZGMr44izeSzlzVZu2KdX0ZNcGyv3GxstS+u2z8QVUAYRPlbfhoKqxYnBY54GIlQjZg==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.1.0"
     "@fortawesome/free-regular-svg-icons" "^6.0.0"
     "@fortawesome/free-solid-svg-icons" "^6.0.0"
 
-"@babylonjs/loaders@^5.48.0":
-  version "5.48.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/loaders/-/loaders-5.48.0.tgz#a16f69d03770fa8132b5df1dea51667072ad5e0e"
-  integrity sha512-BbZoceGDsUYis86OeAkFq9CQN1yJ59IOL0O0AtogOt8KQ5E8b0sH4MVdOwuV6h07yLVjo9Ir5RZsWKdGyuWHOw==
+"@babylonjs/loaders@^6.4.1":
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/loaders/-/loaders-6.4.1.tgz#5a5275cbb896bd1d4ab9d1b2e0a083c671dbd4dd"
+  integrity sha512-K/KC1DpGs9HXs5xR8iidH+VYw+tvJyg9huUATSFGWVA3ZVHShF2KWQg4Bk1fMnu7Qj3N/UjYOJjYLJ5MVosuuA==
 
-"@babylonjs/materials@^5.49.0":
-  version "5.49.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/materials/-/materials-5.49.0.tgz#f4e813c32971864c1849187a2747d29192ea9fa5"
-  integrity sha512-L00v6tw1KSqDSf5Uh2Ijsk1dU+ptLIbXFLXh2sdFulPG3OAlEwUHlEd9hV8x4qIQpYz4D5NuEW7PG82NH0cZgA==
+"@babylonjs/materials@^6.4.1":
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/materials/-/materials-6.4.1.tgz#9451b6cf366b5a7753edac5f54c8109d0bdcff26"
+  integrity sha512-mlvJpPOE9Kg64EBLcrFjfj8sLMrr9yMvNKOULIXUbT5vOEdKvtlvaZHnfNPOeHldnqmoK1X5RAQVxtsgh+aHgQ==
 
-"@babylonjs/serializers@^5.49.0":
-  version "5.49.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/serializers/-/serializers-5.49.0.tgz#b28a56ff3feacda468dcd724dbdc2f7889a0e03b"
-  integrity sha512-eGHCdtS04dB6QwYbIYGzO0o+tQ3llWMq3XIZQIFZQNRwFvAHOJkU3Nv8iJ8hKbizQu7urGdhKbK1RP04ciFttQ==
+"@babylonjs/serializers@^6.4.1":
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/serializers/-/serializers-6.4.1.tgz#177489ad84e509b3578b99adae82f61ad92f9ef8"
+  integrity sha512-/hUoHrLNHXGht9ccqsmUT1vhvjHlLTs8R7/oZwWnpuPcVaMuooeVWOYgNt7OVdz02xicfH5t73TinpeiU/BG2w==
 
 "@base2/pretty-print-object@1.0.1":
   version "1.0.1"
@@ -2914,10 +2914,10 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
-"@momentum-xyz/posbus-client@^0.0.1-beta.0":
-  version "0.0.1-beta.0"
-  resolved "https://npm.pkg.github.com/download/@momentum-xyz/posbus-client/0.0.1-beta.0/2c8c5a4b647a19cff17815cef5daa4e2df5d7e74#2c8c5a4b647a19cff17815cef5daa4e2df5d7e74"
-  integrity sha512-ksn3stHHVjGuJAFsG6nlH2bgSJZxsIUelrKsJl5tsN0KccBRxZ9+VU13VWf4igReWcXN8iPecoJftz3Mv/lWXw==
+"@momentum-xyz/posbus-client@0.0.1-beta.1":
+  version "0.0.1-beta.1"
+  resolved "https://npm.pkg.github.com/download/@momentum-xyz/posbus-client/0.0.1-beta.1/fadc1044d9399f30a690272e076a72d4c193b53b#fadc1044d9399f30a690272e076a72d4c193b53b"
+  integrity sha512-trEQEGwAkptZV87Ce9Tds2j4C7lFcdzjPpvsCQs6o24sR9KTFzSyjBud61j+vmlBuobr2lHcNC73W0RE9nJc+g==
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"

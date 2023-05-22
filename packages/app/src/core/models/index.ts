@@ -25,3 +25,4 @@ export * from './SortField';
 export * from './World';
 export * from './WorldStaker';
 export * from './BigStakerInfo';
+export * from './NewsfeedEntry';

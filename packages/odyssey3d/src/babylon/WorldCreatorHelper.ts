@@ -302,9 +302,8 @@ export class WorldCreatorHelper {
       return;
     }
 
-    const objToMove = ObjectHelper.objectsMap.get(id);
-    if (objToMove) {
-      const transformNode = objToMove.objectInstance.rootNodes[0];
+    const transformNode = ObjectHelper.objectsMap.get(id)?.objectInstance.rootNodes[0];
+    if (transformNode instanceof TransformNode) {
       transformNode.position = posToVec3(transform.position);
       transformNode.rotation = posToVec3(transform.rotation);
       transformNode.scaling = posToVec3(transform.scale);
