@@ -1215,10 +1215,10 @@
   resolved "https://registry.yarnpkg.com/@babylonjs/gui/-/gui-6.4.1.tgz#b6fe066284dd5411adab2757904c82f23c519a71"
   integrity sha512-DRbJR4JFXBQaSLzTTohLo3Fftvifa5uQQGaTUsrRXiGlXM9YHkumosu+4Q+j9Nl4v/+tbLFPWot6zIuXtqjLeA==
 
-"@babylonjs/inspector@^6.3.1":
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/@babylonjs/inspector/-/inspector-6.3.1.tgz#2233a8746cce0dd0bf9446e866387685cf67e285"
-  integrity sha512-L4FjJKnMKH/q/9SLBStDXc1ukvdn1qRUjJI5dtPicAm8QEK4YKAb1ql3bWqseEmxoBI6kynUm9Xlx2C+vli5Jg==
+"@babylonjs/inspector@^6.4.1":
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/inspector/-/inspector-6.4.1.tgz#f3a6023de5c583d80194a6fef3db9d795529a00b"
+  integrity sha512-PueaJGPyybMUBteLQ4H9ZGMr44izeSzlzVZu2KdX0ZNcGyv3GxstS+u2z8QVUAYRPlbfhoKqxYnBY54GIlQjZg==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.1.0"
     "@fortawesome/free-regular-svg-icons" "^6.0.0"
