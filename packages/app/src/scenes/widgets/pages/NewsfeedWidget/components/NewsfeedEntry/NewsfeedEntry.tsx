@@ -60,7 +60,9 @@ const NewsfeedEntry: FC<PropsInterface> = ({entry, onWorldOpen}) => {
             <styled.UserInfoTitle>{entry.author_name}</styled.UserInfoTitle>
             <styled.UserInfoSecondary>
               <IconSvg name={actionIconName} size="xs" isWhite />
-              <styled.UserInfoSecondaryText className="world-name">{entry.data.world_name}</styled.UserInfoSecondaryText>
+              <styled.UserInfoSecondaryText className="world-name">
+                {entry.data.world_name}
+              </styled.UserInfoSecondaryText>
               <styled.UserInfoSecondaryText className="separator">/</styled.UserInfoSecondaryText>
               <styled.UserInfoSecondaryText>2023-01-16</styled.UserInfoSecondaryText>
               <styled.UserInfoSecondaryText className="separator">/</styled.UserInfoSecondaryText>

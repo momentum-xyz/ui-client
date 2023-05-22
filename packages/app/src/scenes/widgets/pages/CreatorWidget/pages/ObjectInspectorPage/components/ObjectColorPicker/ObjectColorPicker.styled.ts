@@ -1,4 +1,3 @@
-import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
@@ -62,16 +61,11 @@ export const SelectedColor = styled.div<{background: string}>`
   border: 1px solid ${(props) => props.theme.accentText};
 `;
 
-export const SelectedHex = styled.div`
-  display: flex;
-  flex: 1;
-  height: 40px;
-  padding: 0 20px;
-  align-items: center;
-  border-radius: 4px;
-  color: ${(props) => props.theme.text};
-  font-size: var(--font-size-s);
-  text-transform: uppercase;
-  border: 1px solid ${(props) => props.theme.accentText};
-  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
+export const SelectedHexInputContainer = styled.div`
+  input {
+    border: 1px solid ${(props) => props.theme.accentText};
+    width: 150px;
+    font-size: var(--font-size-s);
+    text-transform: uppercase;
+  }
 `;

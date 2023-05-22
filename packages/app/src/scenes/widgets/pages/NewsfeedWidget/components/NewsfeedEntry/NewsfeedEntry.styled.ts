@@ -73,4 +73,3 @@ export const TextEntryText = styled.span`
 export const WorldName = styled.a`
   color: ${(props) => props.theme.accentText};
 `;
-
