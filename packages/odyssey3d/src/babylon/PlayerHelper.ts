@@ -38,7 +38,6 @@ import {InteractionEffectHelper} from './InteractionEffectHelper';
 const PLAYER_OFFSET = new Vector3(0, -0.5, 3);
 export const PLAYER_OFFSET_RH = new Vector3(0, -0.5, -3);
 
-export const CAMERA_POS_EXPLORER = new Vector3(0, 20, 225);
 // TODO: Set this from PosBusSelfPosMsg
 const CAMERA_POS_CREATOR = new Vector3(50, 50, 150);
 
@@ -211,14 +210,14 @@ export class PlayerHelper {
   }
 
   // TODO: Consider merging the different spawning functions
-  static spawnPlayer(scene: Scene, position?: Vector3) {
+  static spawnPlayer(scene: Scene, position?: Vector3, target?: Vector3) {
     //const assetUrl = getAssetFileName(PlayerHelper.playerAvatar3D);
     SceneLoader.LoadAssetContainer(
       wisp, //ObjectHelper.assetRootUrl,
       '', //assetUrl,
       scene,
       (container) => {
-        this.playerInstantiate(container, position);
+        this.playerInstantiate(container, position, target);
       },
       //on progress
       (event) => {},
@@ -231,8 +230,7 @@ export class PlayerHelper {
   }
 
   // TODO: Consider merging the different instantiating functions
-  static playerInstantiate(container: AssetContainer, position?: Vector3) {
-    console.log('PlayerHelper playerInstantiate');
+  static playerInstantiate(container: AssetContainer, position?: Vector3, target?: Vector3) {
     const instance = container.instantiateModelsToScene();
 
     console.log('PlayerHelper store instance', instance, container);
@@ -252,6 +250,9 @@ export class PlayerHelper {
     playerNode.parent = this.camera;
     if (position) {
       this.camera.position = position;
+    }
+    if (target) {
+      this.camera.target = target;
     }
     playerNode.rotation = new Vector3(0, 0, 0);
     playerNode.scaling = new Vector3(0.5, 0.5, 0.5);

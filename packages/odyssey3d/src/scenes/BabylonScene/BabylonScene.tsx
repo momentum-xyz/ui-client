@@ -62,8 +62,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
           import('@babylonjs/inspector')
         ]).then(() => {
           scene.debugLayer.show({
-              overlay: true,
-              globalRoot: document.body,
+            overlay: true,
+            globalRoot: document.body
           });
         });
       }

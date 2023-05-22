@@ -307,6 +307,8 @@ export const enGb = {
         'by embedding a picture on this object; users can see this image wrapped around the object if it is a basic shape. users will also be able to see this image when they select the object; regardless of its asset type.',
       someonesBio: "{{name}}'s Bio",
       myBio: 'My Bio',
+      myConnections: 'My connections',
+      universal: 'Universal',
       logout: 'Logout',
       worldStats: 'World stats',
       tokenRules: 'Token Rules',
@@ -1328,7 +1330,9 @@ export const enGb = {
       stakedIn: ' staked in ',
       you: 'You',
       and: ' and ',
-      docked: ' docked'
+      docked: ' docked',
+      boostMessage: 'received a boost of {{amount}} MOM from {{user_name}}',
+      createdMessage: 'was created by {{user_name}}'
     },
     plugin_gd: {
       labels: {
