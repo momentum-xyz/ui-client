@@ -25,7 +25,7 @@ export const ControlsRowInputContainer = styled.div`
   align-items: center;
   & input,
   & div {
-    width: 120px;
+    width: 100px;
   }
 `;
 export const ControlsRowInputTitle = styled.h1`
