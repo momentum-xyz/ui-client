@@ -383,7 +383,7 @@ export class UniverseBuilderHelper {
       const max = 0.4;
       return Math.random() * (max - min) + min;
     };
-    
+
     const odysseyPSClone = this.odysseyPS.clone('odysseyPSClone', orbMesh);
     odysseyPSClone.emitRate = randomNumber();
     odysseyPSClone.start();
