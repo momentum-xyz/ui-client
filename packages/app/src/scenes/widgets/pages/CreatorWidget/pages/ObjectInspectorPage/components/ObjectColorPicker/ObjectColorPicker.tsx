@@ -1,4 +1,4 @@
-import {useDebouncedCallback} from '@momentum-xyz/ui-kit';
+import {useDebouncedCallback, Input} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {FC, useEffect} from 'react';
 import {ColorPicker, useColor, toColor} from 'react-color-palette';
@@ -11,7 +11,7 @@ import 'react-color-palette/lib/css/styles.css';
 
 const COLOR_PICKER_DEFAULT_COLOR = '#FFFFFF';
 const COLOR_PICKER_HEIGHT_PX = 180;
-const COLOR_PICKER_WIDTH_PX = 550;
+const COLOR_PICKER_WIDTH_PX = 500;
 const DEBOUNCE_DELAY_MS = 300;
 
 const ObjectColorPage: FC = () => {
@@ -54,6 +54,16 @@ const ObjectColorPage: FC = () => {
   //   world3dStore?.colorPickedPreview(objectId, initialColor);
   // }, [ objectColorStore.objectColor, objectId, world3dStore, universeStore.worldId]);
 
+  const handleColorInputChange = (value: string): void => {
+    const isValidHex = /^#[a-zA-Z\d]{6}$/.test(value);
+    if (!isValidHex) {
+      return;
+    }
+    const color = toColor('hex', value);
+    setColor(color);
+    changeUnityObjectColor(value);
+  };
+
   return (
     <styled.Container data-testid="ObjectColorPage-test">
       <ColorPicker
@@ -71,7 +81,9 @@ const ObjectColorPage: FC = () => {
 
       <styled.ColorContainer>
         <styled.SelectedColor background={color.hex} />
-        <styled.SelectedHex>{color.hex}</styled.SelectedHex>
+        <styled.SelectedHexInputContainer>
+          <Input value={color.hex} onChange={handleColorInputChange} />
+        </styled.SelectedHexInputContainer>
         {/* <Button
                 size="medium"
                 variant="danger"
