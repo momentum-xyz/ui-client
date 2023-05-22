@@ -10,10 +10,9 @@ export const ControlsRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 42px;
 `;
 export const ControlsRowTitle = styled.span`
-  flex: 0 0 100px;
+  flex: 0 0 86px;
 `;
 export const ControlsRowInputsContainer = styled.div`
   flex: 1;
@@ -29,5 +28,5 @@ export const ControlsRowInputContainer = styled.div`
   }
 `;
 export const ControlsRowInputTitle = styled.h1`
-  margin-right: 14px;
+  margin-right: 8px;
 `;

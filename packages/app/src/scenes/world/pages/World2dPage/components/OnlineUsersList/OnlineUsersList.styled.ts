@@ -26,7 +26,7 @@ export const Link = styled.a`
 `;
 
 export const Actions = styled.div`
-  padding: 10px 10px 0 10px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 12px;

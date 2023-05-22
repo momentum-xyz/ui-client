@@ -69,7 +69,7 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
         <div>{t('labels.embedPicture')}</div>
         <span>{t('labels.embedPictureInfo')}</span>
       </styled.InfoContainer>
-      <styled.ScrollableContainer>
+      <styled.Wrapper>
         <Frame>
           <Controller
             control={control}
@@ -123,6 +123,7 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
             rules={{required: true}}
             render={({field: {value, onChange}}) => (
               <Input
+                wide
                 placeholder={t('placeholders.nameYourImage')}
                 value={value}
                 onChange={(value: string) => {
@@ -133,7 +134,7 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
             )}
           />
         </styled.InputContainer>
-      </styled.ScrollableContainer>
+      </styled.Wrapper>
     </styled.Container>
   );
 };

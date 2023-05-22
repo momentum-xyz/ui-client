@@ -24,9 +24,7 @@ export const InfoContainer = styled.div`
   }
 `;
 
-export const ScrollableContainer = styled.div`
-  overflow: auto;
-
+export const Wrapper = styled.div`
   & > div {
     padding: 20px;
   }
@@ -51,14 +49,13 @@ export const ImageUploadContainer = styled.div`
   border: 1px dashed ${(props) => props.theme.text};
   border-radius: 8px;
 
-  width: 480px;
   height: 480px;
 
   &.has-image {
     align-items: center;
     margin: 0px;
 
-    width: 440px;
+    width: 100%;
     height: 440px;
 
     border-style: solid;

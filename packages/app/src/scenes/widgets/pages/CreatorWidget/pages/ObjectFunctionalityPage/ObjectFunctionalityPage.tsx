@@ -120,9 +120,11 @@ const ObjectFunctionalityPage: FC = () => {
 
       <styled.PanelBody>{renderBody()}</styled.PanelBody>
 
-      <styled.ActionBar>
-        <Button label="Embed" onClick={handleSave} />
-      </styled.ActionBar>
+      {activeId && (
+        <styled.ActionBar>
+          <Button label="Embed" onClick={handleSave} />
+        </styled.ActionBar>
+      )}
     </styled.Container>
   );
 };

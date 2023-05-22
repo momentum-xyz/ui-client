@@ -69,7 +69,7 @@ const ObjectInspector: FC = () => {
   };
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="ObjectInspector-test">
       <styled.Section>
         <Frame>
           <styled.Title>{objectName}</styled.Title>
