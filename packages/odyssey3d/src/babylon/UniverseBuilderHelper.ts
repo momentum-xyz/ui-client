@@ -37,6 +37,8 @@ import {PlayerHelper} from './PlayerHelper';
 import {TransformTypesEnum, smoothCameraUniverse} from './TransformHelper';
 
 const THUMB_IMAGE_SIZE = 160;
+export const CAMERA_POS_EXPLORER = new Vector3(-1, 15, -37);
+export const CAMERA_TARGET_EXPLORER = Vector3.Zero();
 
 interface BabylonAccountInterface {
   accountDefinition: Odyssey3dUserInterface;
