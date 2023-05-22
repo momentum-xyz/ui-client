@@ -8,7 +8,7 @@ export function getAssetFileName(id: string): string {
 
 export function getNodeFromId(id: string): TransformNode | undefined {
   const myNode = ObjectHelper.objectsMap.get(id)?.objectInstance.rootNodes[0];
-  if (myNode) {
+  if (myNode instanceof TransformNode) {
     return myNode;
   } else {
     return undefined;
