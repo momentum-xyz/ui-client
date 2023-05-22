@@ -3,7 +3,6 @@ import {rgba} from 'polished';
 
 export const Separator = styled.div`
   height: 1px;
-  width: calc(100% - 20px);
   background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
   margin: 10px;
 `;
@@ -35,6 +34,11 @@ export const SkyboxTypeContainer = styled.div`
   }
 `;
 export const SkyboxSearchContainer = styled.div``;
+
+export const SkyboxListContainer = styled.div`
+  padding: 0 10px;
+`;
+
 export const SkyboxListHeader = styled.div`
   display: flex;
   justify-content: space-between;

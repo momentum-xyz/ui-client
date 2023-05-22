@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding: 0 80px;
+  padding: 10px 0 20px 0;
+  margin: 0 auto;
   display: flex;
+  width: 390px;
   flex-direction: column;
-  min-height: calc(100vh - 370px);
-  max-height: calc(100vh - 370px);
-  overflow: scroll;
   justify-content: space-between;
 `;
+
 export const FormContainer = styled.div``;
 
 export const InputsContainer = styled.div`
@@ -40,7 +40,7 @@ export const ImageUploadContainer = styled.div`
   padding: 45px;
   border: 1px dashed ${(props) => props.theme.text};
   border-radius: 8px;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 
   &.has-image {
     align-items: center;

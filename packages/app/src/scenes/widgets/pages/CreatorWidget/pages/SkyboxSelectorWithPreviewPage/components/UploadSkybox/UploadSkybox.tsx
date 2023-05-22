@@ -86,7 +86,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
   };
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="UploadSkybox-test">
       <styled.FormContainer>
         <Controller
           name="file"

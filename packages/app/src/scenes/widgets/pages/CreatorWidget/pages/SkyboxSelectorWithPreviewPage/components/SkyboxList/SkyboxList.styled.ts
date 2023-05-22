@@ -1,16 +1,13 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 5px;
-
-  max-height: calc(100vh - var(--height-offset) - 235px);
-  overflow: scroll;
 `;
 
 export const SkyboxContainer = styled.button`
-  width: 160px;
+  width: 152px;
 `;
 export const SkyboxInnerContainer = styled.div`
   display: flex;

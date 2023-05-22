@@ -16,7 +16,6 @@ export const ActiveUserContainer = styled.div`
 export const Wrapper = styled.div``;
 
 export const Info = styled.div`
-  padding: 0 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -27,7 +26,7 @@ export const Link = styled.a`
 `;
 
 export const Actions = styled.div`
-  padding: 20px 10px 0 10px;
+  padding: 10px 10px 0 10px;
   display: flex;
   flex-direction: column;
   gap: 12px;

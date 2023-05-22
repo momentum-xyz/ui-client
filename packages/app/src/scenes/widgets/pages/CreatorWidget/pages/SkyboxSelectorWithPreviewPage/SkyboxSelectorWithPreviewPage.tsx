@@ -14,12 +14,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
   const {widgetStore, sessionStore, universeStore} = useStore();
   const {creatorStore} = widgetStore;
   const {skyboxSelectorStore} = creatorStore;
-  const {
-    saveItem,
-
-    communitySkyboxesList,
-    userSkyboxesList
-  } = skyboxSelectorStore;
+  const {saveItem, communitySkyboxesList, userSkyboxesList} = skyboxSelectorStore;
   const {user} = sessionStore;
   const {worldId} = universeStore;
 
@@ -44,7 +39,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
 
   return (
     <>
-      <styled.Container>
+      <styled.Container data-testid="SkyboxSelectorWithPreviewPage-test">
         <styled.ControlsContainer>
           <Frame>
             <styled.ControlsInnerContainer>
@@ -102,7 +97,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
 
       {isUploadingSkybox && <UploadSkybox onBack={() => setIsUploadingSkybox(false)} />}
       {!isUploadingSkybox && !previewSkybox && (
-        <>
+        <styled.SkyboxListContainer>
           <styled.SkyboxListHeader>
             <span>
               {t(
@@ -121,7 +116,7 @@ const SkyboxSelectorWithPreviewPage: FC = () => {
             </span>
           </styled.SkyboxListHeader>
           <SkyboxList skyboxes={filteredSkyboxList} onSkyboxSelect={(sb) => setPreviewSkybox(sb)} />
-        </>
+        </styled.SkyboxListContainer>
       )}
       {!isUploadingSkybox && previewSkybox && (
         <SkyboxPreview

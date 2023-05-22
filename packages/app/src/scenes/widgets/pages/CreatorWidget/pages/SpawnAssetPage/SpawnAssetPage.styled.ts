@@ -17,9 +17,9 @@ export const Header = styled.div`
 `;
 
 export const Body = styled.div`
+  padding: 0 10px 10px 10px;
   display: flex;
   flex-grow: 1;
-  overflow: scroll;
 `;
 
 export const AssetsGroupList = styled.div`
@@ -30,7 +30,6 @@ export const AssetsGroupList = styled.div`
 
 export const Separator = styled.div`
   height: 1px;
-  width: calc(100% - 20px);
   background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
   margin: 10px;
 `;

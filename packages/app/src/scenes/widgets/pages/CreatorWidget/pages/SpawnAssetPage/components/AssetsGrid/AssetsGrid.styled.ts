@@ -11,7 +11,7 @@ export const Grid = styled.div`
 `;
 
 export const GridItem = styled.div`
-  width: 160px;
+  width: 152px;
 `;
 
 export const GridItemInnerContainer = styled.button`

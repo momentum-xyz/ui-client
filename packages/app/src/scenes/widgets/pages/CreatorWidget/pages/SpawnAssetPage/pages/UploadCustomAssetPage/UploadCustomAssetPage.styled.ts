@@ -1,12 +1,10 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding: 0 80px;
+  padding: 10px 0 20px 0;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 382px);
-  max-height: calc(100vh - 382px);
-  overflow: scroll;
   justify-content: space-between;
 `;
 
@@ -17,6 +15,7 @@ export const FileUploaderContainer = styled.div`
 `;
 
 export const Error = styled.p`
+  text-align: center;
   color: red;
 `;
 
@@ -58,7 +57,7 @@ export const UploadContainer = styled.div`
   padding: 45px;
   border: 1px dashed ${(props) => props.theme.text};
   border-radius: 8px;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 
   &.has-image {
     align-items: center;

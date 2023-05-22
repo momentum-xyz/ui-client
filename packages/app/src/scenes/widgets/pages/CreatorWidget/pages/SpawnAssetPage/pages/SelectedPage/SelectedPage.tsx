@@ -74,7 +74,7 @@ export const SelectedPage: FC = () => {
   }
 
   return (
-    <styled.Container className="just-to-be-sure">
+    <styled.Container data-testid="SelectedPage-test">
       <styled.ObjectInfoContainer>
         <Frame>
           <>
@@ -161,6 +161,7 @@ export const SelectedPage: FC = () => {
           />
         )} */}
       </styled.ObjectInfoContainer>
+
       <styled.ControlsRow>
         <Button label={t('actions.goBack')} variant="secondary" onClick={handleGoBack} />
         <Button

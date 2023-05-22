@@ -13,7 +13,7 @@ export const SkyboxList = ({skyboxes, onSkyboxSelect}: PropsInterface): JSX.Elem
   console.log('skyboxes', skyboxes);
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="SkyboxList-test">
       {!!skyboxes.length &&
         skyboxes.map((sb) => (
           <styled.SkyboxContainer key={sb.id} onClick={() => onSkyboxSelect(sb)}>

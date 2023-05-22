@@ -79,7 +79,7 @@ const UploadCustomAssetPage: FC = () => {
   const isUploadReady = spawnAssetStore.isUploadPending;
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="UploadCustomAssetPage-test">
       <styled.FormContainer>
         <Controller
           name="file"
@@ -89,7 +89,7 @@ const UploadCustomAssetPage: FC = () => {
             const filename = value ? URL.createObjectURL(value) : '';
             return (
               <styled.UploadContainer
-                className={cn(!!errors.file && 'error', value && 'has-image', 'testttt')}
+                className={cn(!!errors.file && 'error', value && 'has-image')}
               >
                 {!value && (
                   <styled.AssetInformation>

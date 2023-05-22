@@ -1,19 +1,16 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  padding: 10px 0;
   display: flex;
+  width: 362px;
   flex-direction: column;
   width: 100%;
-  min-height: calc(100vh - 382px);
-  max-height: calc(100vh - 382px);
   align-items: center;
   justify-content: space-between;
-  padding: 0 70px;
-  overflow: scroll;
 `;
 
 export const PreviewContainer = styled.div`
-  width: 362px;
   height: 362px;
   border: 1px solid ${(props) => props.theme.text};
   border-radius: 4px;
@@ -63,7 +60,8 @@ export const ObjectInfoContainer = styled.div`
 `;
 
 export const ControlsRow = styled.div`
+  padding: 20px 0 10px 0;
+  width: 362px;
   display: flex;
-  width: 100%;
   justify-content: space-between;
 `;

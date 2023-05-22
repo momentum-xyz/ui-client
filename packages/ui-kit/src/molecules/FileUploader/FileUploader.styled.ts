@@ -9,8 +9,17 @@ export const Container = styled.div`
   cursor: default;
 
   button {
-    background-color: transparent;
-    box-shadow: none;
+    justify-content: center;
+  }
+
+  &.iconButton {
+    button,
+    button:hover,
+    button:active {
+      border: none;
+      background-color: transparent;
+      box-shadow: none;
+    }
   }
 `;
 
