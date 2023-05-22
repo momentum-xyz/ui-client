@@ -266,11 +266,11 @@ export class UniverseBuilderHelper {
     const ringRotations: {rotationX: number; rotationY: number}[] = [];
     for (let i = 0; i < rings.length; i++) {
       if (i % 3 === 0) {
-        ringRotations[i] = {rotationX: 0.00005, rotationY: -0.00005};
+        ringRotations[i] = {rotationX: 0.00001, rotationY: -0.00001};
       } else if (i % 2 === 0) {
-        ringRotations[i] = {rotationX: -0.00005, rotationY: -0.00005};
+        ringRotations[i] = {rotationX: -0.00001, rotationY: -0.00001};
       } else {
-        ringRotations[i] = {rotationX: 0.00005, rotationY: 0.00005};
+        ringRotations[i] = {rotationX: 0.00001, rotationY: 0.00001};
       }
 
       this.scene.onBeforeRenderObservable.add(() => {
@@ -378,14 +378,18 @@ export class UniverseBuilderHelper {
   }
 
   static setOrbPatricles(orbMesh: AbstractMesh) {
-    const delay = Math.floor(Math.random() * 3000);
-    this.odysseyPS.startDelay = delay;
+    const randomNumber = () => {
+      const min = 0.1;
+      const max = 0.4;
+      return Math.random() * (max - min) + min;
+    };
 
     const odysseyPSClone = this.odysseyPS.clone('odysseyPSClone', orbMesh);
-    odysseyPSClone.start(delay);
+    odysseyPSClone.emitRate = randomNumber();
+    odysseyPSClone.start();
 
     const sparksPSClone = this.sparksPS.clone('sparksPSClone', orbMesh);
-    sparksPSClone.startDelay = delay;
+    sparksPSClone.emitRate = 0.7;
     sparksPSClone.start();
   }
 
