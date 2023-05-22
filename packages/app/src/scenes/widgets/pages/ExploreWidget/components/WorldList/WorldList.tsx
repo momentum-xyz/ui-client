@@ -1,15 +1,7 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {
-  Input,
-  Frame,
-  Slider,
-  ItemCard,
-  stringInputMask,
-  SliderItemInterface,
-  ImageSizeEnum
-} from '@momentum-xyz/ui-kit';
+import {Slider, ItemCard, SliderItemInterface, ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {WorldInfoModelInterface, SearchQueryModelModelType} from 'core/models';
@@ -41,54 +33,40 @@ const WorldList: FC<PropsInterface> = ({
 
   return (
     <styled.Wrapper data-testid="WorldList-test">
-      <Frame>
-        <styled.Search>
-          <Input
-            isSearch
-            isClearable
-            value={searchQuery.query}
-            placeholder={t('actions.searchOdysseys')}
-            opts={stringInputMask}
-            onChange={searchQuery.setQuery}
-            wide
-          />
-        </styled.Search>
-      </Frame>
-      <styled.ScrollableContainer>
-        {searchQuery.isQueryValid ? (
-          <styled.SearchContainer>
-            <styled.SearchResultTitle>
-              {`${searchResults.length} ${t('labels.results')}`}
-            </styled.SearchResultTitle>
+      {searchQuery.isQueryValid ? (
+        <styled.SearchContainer>
+          <styled.SearchResultTitle>
+            <span>{t('labels.searchResults')}</span>
+            <span>{searchResults.length}</span>
+          </styled.SearchResultTitle>
 
-            {searchResults.map((item) => (
-              <ItemCard
-                key={item.id}
-                name={item.name}
-                byName={item.owner_name || item.owner_id}
-                imageErrorIcon="rabbit_fill"
-                description={item.description}
-                imageUrl={getImageAbsoluteUrl(item.avatarHash, ImageSizeEnum.S5)}
-                onByNameClick={() => onSelectUser(item.owner_id)}
-                onInfoClick={() => onSelectWorld(item.id)}
-                onVisitClick={() => onVisitWorld(item.id)}
-                onStakeClick={() => onStakeWorld(item.id)}
-              />
-            ))}
-          </styled.SearchContainer>
-        ) : (
-          <styled.PopularContainer>
-            <styled.BlockTitle>{t('labels.mostStakedIn')}</styled.BlockTitle>
-            <styled.Carousel>
-              <Slider items={mostStakedWorlds} onClick={(uuid) => onSelectWorld(uuid)} />
-            </styled.Carousel>
-            <styled.BlockTitle>{t('labels.newOdysseys')}</styled.BlockTitle>
-            <styled.Carousel>
-              <Slider items={lastCreatedWorlds} onClick={(uuid) => onSelectWorld(uuid)} />
-            </styled.Carousel>
-          </styled.PopularContainer>
-        )}
-      </styled.ScrollableContainer>
+          {searchResults.map((item) => (
+            <ItemCard
+              key={item.id}
+              name={item.name}
+              byName={item.owner_name || item.owner_id}
+              imageErrorIcon="rabbit_fill"
+              description={item.description}
+              imageUrl={getImageAbsoluteUrl(item.avatarHash, ImageSizeEnum.S5)}
+              onByNameClick={() => onSelectUser(item.owner_id)}
+              onInfoClick={() => onSelectWorld(item.id)}
+              onVisitClick={() => onVisitWorld(item.id)}
+              onStakeClick={() => onStakeWorld(item.id)}
+            />
+          ))}
+        </styled.SearchContainer>
+      ) : (
+        <styled.PopularContainer>
+          <styled.BlockTitle>{t('labels.mostStakedIn')}</styled.BlockTitle>
+          <styled.Carousel>
+            <Slider items={mostStakedWorlds} onClick={(uuid) => onSelectWorld(uuid)} />
+          </styled.Carousel>
+          <styled.BlockTitleTwo>{t('labels.newOdysseys')}</styled.BlockTitleTwo>
+          <styled.Carousel>
+            <Slider items={lastCreatedWorlds} onClick={(uuid) => onSelectWorld(uuid)} />
+          </styled.Carousel>
+        </styled.PopularContainer>
+      )}
     </styled.Wrapper>
   );
 };

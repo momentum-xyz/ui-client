@@ -1,23 +1,18 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --scroll-offset: 305px;
+  --actions-offset: 14px;
 
   position: relative;
   display: flex;
 `;
 
 export const Content = styled.div`
+  padding: 0;
   display: flex;
   height: 100%;
   flex-direction: column;
   justify-content: space-between;
-`;
-
-export const ScrollableContainer = styled.div`
-  margin: 10px 0 0 0;
-  height: calc(100vh - var(--scroll-offset));
-  overflow: auto;
 `;
 
 export const VoiceChatUsers = styled.div`
@@ -32,6 +27,7 @@ export const Footer = styled.div`
 `;
 
 export const JoinTitle = styled.div`
+  padding: var(--actions-offset) 0 0 0;
   font-weight: 700;
   font-size: var(--font-size-xl);
   line-height: 24px;
@@ -41,7 +37,7 @@ export const JoinTitle = styled.div`
 `;
 
 export const VoiceChatActions = styled.div`
-  padding: 14px 0 0 0;
+  padding: var(--actions-offset) 0;
   display: flex;
   justify-content: center;
   gap: 22px;

@@ -1,16 +1,12 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --scroll-offset: 270px;
-
   padding: 10px;
   pointer-events: all;
 `;
 
-export const ScrollableContainer = styled.div`
+export const Wrapper = styled.div`
   padding: 10px 0 0 0;
-  height: calc(100vh - var(--scroll-offset));
-  overflow: auto;
 `;
 
 export const Title = styled.div`

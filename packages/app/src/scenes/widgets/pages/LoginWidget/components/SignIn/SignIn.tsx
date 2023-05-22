@@ -29,53 +29,51 @@ const SignIn: FC<PropsInterface> = ({onConnected}) => {
         <styled.Title>{t('login.howToConnectAsAMemberTitle')}</styled.Title>
         <styled.Desc>{t('login.howToConnectAsAMemberDescription')}</styled.Desc>
 
-        <styled.ScrollableContainer>
-          <styled.SignInMethodsContainer>
-            <styled.Title>{t('login.installWalletOrConnect')}</styled.Title>
-            <WalletSelector
-              onSelect={(wallet) => {
-                setSelectedWallet(wallet);
-                setConnectWithWallet(true);
-              }}
-            />
-          </styled.SignInMethodsContainer>
+        <styled.SignInMethodsContainer>
+          <styled.Title>{t('login.installWalletOrConnect')}</styled.Title>
+          <WalletSelector
+            onSelect={(wallet) => {
+              setSelectedWallet(wallet);
+              setConnectWithWallet(true);
+            }}
+          />
+        </styled.SignInMethodsContainer>
 
-          {!selectedWallet && !connectWithWallet && <TrustPoints />}
+        {!selectedWallet && !connectWithWallet && <TrustPoints />}
 
-          {selectedWallet && (
-            <>
-              <styled.ConnectWithWalletRow>
-                <img src={selectedWallet.logo} alt={`${selectedWallet.name}-icon`} />
-                <span>{t('login.connectWith', {wallet: selectedWallet.name})}</span>
-              </styled.ConnectWithWalletRow>
+        {selectedWallet && (
+          <>
+            <styled.ConnectWithWalletRow>
+              <img src={selectedWallet.logo} alt={`${selectedWallet.name}-icon`} />
+              <span>{t('login.connectWith', {wallet: selectedWallet.name})}</span>
+            </styled.ConnectWithWalletRow>
 
-              {!connectWithWallet && (
-                <styled.ConnectWithWallet>
-                  <Button
-                    label={t('login.installBrowserExtension')}
-                    icon="logout" // TODO: Add missing 'install' icon to storybook and use it here
-                    wide
-                    onClick={() => openWalletInstallationLink(selectedWallet.browserExtensionUrl)}
-                  />
-                  <Button
-                    label={t('login.connectWallet')}
-                    icon="link"
-                    wide
-                    onClick={() => setConnectWithWallet(true)}
-                  />
-                </styled.ConnectWithWallet>
-              )}
-
-              {connectWithWallet && (
-                <WalletLogin
-                  key={selectedWallet.name}
-                  walletConf={selectedWallet}
-                  onConnected={onConnected}
+            {!connectWithWallet && (
+              <styled.ConnectWithWallet>
+                <Button
+                  label={t('login.installBrowserExtension')}
+                  icon="logout" // TODO: Add missing 'install' icon to storybook and use it here
+                  wide
+                  onClick={() => openWalletInstallationLink(selectedWallet.browserExtensionUrl)}
                 />
-              )}
-            </>
-          )}
-        </styled.ScrollableContainer>
+                <Button
+                  label={t('login.connectWallet')}
+                  icon="link"
+                  wide
+                  onClick={() => setConnectWithWallet(true)}
+                />
+              </styled.ConnectWithWallet>
+            )}
+
+            {connectWithWallet && (
+              <WalletLogin
+                key={selectedWallet.name}
+                walletConf={selectedWallet}
+                onConnected={onConnected}
+              />
+            )}
+          </>
+        )}
       </Frame>
     </styled.Container>
   );

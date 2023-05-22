@@ -11,11 +11,11 @@ import {subMenuKeyWidgetEnumMap} from 'core/constants';
 
 import * as styled from './CreatorWidget.styled';
 import {
-  SpawnAssetPage,
-  SkyboxSelectorWithPreviewPage,
-  ObjectInspectorPage,
-  AssetCustomisingPage,
-  ObjectFunctionalityPage
+  SpawnAsset,
+  SkyboxSelector,
+  ObjectInspector,
+  AssetCustomising,
+  ObjectFunction
 } from './pages';
 
 type MenuItemType = keyof typeof CreatorTabsEnum;
@@ -32,6 +32,7 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     label: i18n.t('labels.skyboxes')
   }
 ];
+
 const allPanels: SideMenuItemInterface<MenuItemType>[] = [
   ...sideMenuItems,
   {
@@ -84,15 +85,15 @@ const CreatorWidget: FC = () => {
   const content = useMemo(() => {
     switch (selectedTab) {
       case 'addObject':
-        return <SpawnAssetPage />;
+        return <SpawnAsset />;
       case 'skybox':
-        return <SkyboxSelectorWithPreviewPage />;
+        return <SkyboxSelector />;
       case 'inspector':
-        return <ObjectInspectorPage />;
+        return <ObjectInspector />;
       case 'functionality':
-        return <ObjectFunctionalityPage />;
+        return <ObjectFunction />;
       case 'customise':
-        return <AssetCustomisingPage />;
+        return <AssetCustomising />;
       // case 'spawnPoint':
       //   return <SpawnPointPage />;
       default:

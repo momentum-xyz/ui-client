@@ -7,6 +7,20 @@ export const Container = styled.div`
   width: 100%;
   height: 100%;
   cursor: default;
+
+  button {
+    justify-content: center;
+  }
+
+  &.iconButton {
+    button,
+    button:hover,
+    button:active {
+      border: none;
+      background-color: transparent;
+      box-shadow: none;
+    }
+  }
 `;
 
 export const DropZone = styled.div`

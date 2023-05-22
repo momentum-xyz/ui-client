@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {ThemeProvider as ThemeProviderOriginal, ThemeProviderProps} from 'styled-components';
 import {isBrowserSupported, useI18n} from '@momentum-xyz/core';
-import {LoaderFallback, SystemWideError} from '@momentum-xyz/ui-kit';
+import {LoaderFallback, SystemWideError, GlobalStyles} from '@momentum-xyz/ui-kit';
 
 import {ROUTES} from 'core/constants';
 import {useApiHandlers, useStore} from 'shared/hooks';
@@ -17,7 +17,6 @@ import {WelcomePage} from 'scenes/welcome';
 import AppAuth from './AppAuth';
 import AppLayers from './AppLayers';
 import {WidgetManager} from './widgetManager';
-import {GlobalStyles as GlobalStylesOriginal} from './App.styled';
 import {UNIVERSE_ROUTES, WORLD_ROUTES, SYSTEM_ROUTES} from './App.routes';
 import {
   HAS_SEEN_WELCOME_PAGE_LS_KEY,
@@ -25,7 +24,6 @@ import {
 } from './welcome/pages/Welcome/WelcomePage';
 
 const ThemeProvider = ThemeProviderOriginal as unknown as FC<ThemeProviderProps<any, any>>;
-const GlobalStyles = GlobalStylesOriginal as unknown as FC;
 
 const App: FC = () => {
   const rootStore = useStore();

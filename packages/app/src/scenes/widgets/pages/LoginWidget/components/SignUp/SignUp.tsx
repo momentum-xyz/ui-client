@@ -73,7 +73,7 @@ const SignUp: FC<PropsInterface> = ({onCreated}) => {
           </Frame>
 
           {!isProfileCreated && (
-            <styled.ScrollableContainer>
+            <styled.Wrapper>
               <styled.Title>{t('login.nameInputLabel')}</styled.Title>
               <styled.InputContainer>
                 <Controller
@@ -111,7 +111,7 @@ const SignUp: FC<PropsInterface> = ({onCreated}) => {
                   onClick={onUpdateProfile}
                 />
               </styled.InputContainer>
-            </styled.ScrollableContainer>
+            </styled.Wrapper>
           )}
         </>
       )}

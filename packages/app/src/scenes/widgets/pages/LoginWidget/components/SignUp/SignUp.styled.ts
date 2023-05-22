@@ -1,15 +1,11 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-export const Container = styled.div`
-  --scroll-offset: 260px;
-`;
+export const Container = styled.div``;
 
-export const ScrollableContainer = styled.div`
-  margin: 10px 10px 0 10px;
+export const Wrapper = styled.div`
+  padding: 10px;
   border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
-  height: calc(100vh - var(--scroll-offset));
-  overflow: auto;
 `;
 
 export const Title = styled.div`

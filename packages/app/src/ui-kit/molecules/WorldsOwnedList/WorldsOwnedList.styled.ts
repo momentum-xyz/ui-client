@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const Title = styled.div`
-  padding: 10px 0 0 0;
   display: flex;
   align-items: center;
   font-size: var(--icon-size-m);

@@ -1,15 +1,7 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-export const Container = styled.div`
-  --scroll-offset: 230px;
-`;
-
-export const GeneralScrollable = styled.div`
-  height: calc(100vh - var(--scroll-offset));
-  flex-direction: column;
-  overflow: auto;
-`;
+export const Container = styled.div``;
 
 export const WalletContainer = styled.div`
   padding: 0 0 10px 0;

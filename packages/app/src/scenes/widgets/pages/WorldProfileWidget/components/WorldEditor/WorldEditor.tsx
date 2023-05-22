@@ -2,7 +2,7 @@ import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Controller, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
-import {AvatarUpload, Button, ButtonRound, Input, Textarea} from '@momentum-xyz/ui-kit';
+import {AvatarUpload, Button, ButtonRound, Frame, Input, Textarea} from '@momentum-xyz/ui-kit';
 
 import {WorldModelInterface} from 'core/models';
 import {FieldErrorInterface} from 'api/interfaces';
@@ -59,24 +59,24 @@ const WorldEditor: FC<PropsInterface> = ({
 
   return (
     <styled.Container data-testid="WorldProfileWidget-test">
-      {/* AVATAR */}
-      <Controller
-        name="avatarFile"
-        control={control}
-        render={({field: {value, onChange}}) => (
-          <styled.AvatarContainer
-            style={
-              !value && !!world.imageLargeSrc
-                ? {backgroundImage: `url(${world.imageLargeSrc})`}
-                : {}
-            }
-          >
-            <AvatarUpload value={value} onChange={onChange} />
-          </styled.AvatarContainer>
-        )}
-      />
+      <Frame>
+        {/* AVATAR */}
+        <Controller
+          name="avatarFile"
+          control={control}
+          render={({field: {value, onChange}}) => (
+            <styled.AvatarContainer
+              style={
+                !value && !!world.imageLargeSrc
+                  ? {backgroundImage: `url(${world.imageLargeSrc})`}
+                  : {}
+              }
+            >
+              <AvatarUpload value={value} onChange={onChange} />
+            </styled.AvatarContainer>
+          )}
+        />
 
-      <styled.GeneralScrollable>
         <styled.InputsContainer>
           {/* NAME */}
           <Controller
@@ -139,10 +139,15 @@ const WorldEditor: FC<PropsInterface> = ({
         </styled.Actions>
 
         <ProfileInfo joinDate={world.createdAt} />
+      </Frame>
+
+      <styled.StakeInfo>
         <StakingAmount stakedAmount={world.momStaked} tokenSymbol="MOM" />
+
         {!!world.last_staking_comment && <StakingComment comment={world.last_staking_comment} />}
+
         <StakersList stakers={world.stakers} onSelectUser={onSelectUser} />
-      </styled.GeneralScrollable>
+      </styled.StakeInfo>
     </styled.Container>
   );
 };

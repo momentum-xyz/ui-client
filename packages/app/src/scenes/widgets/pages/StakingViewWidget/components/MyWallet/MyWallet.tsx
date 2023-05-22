@@ -75,95 +75,90 @@ const MyWallet: FC<PropsInterface> = ({
           />
         </styled.Filters>
 
-        <styled.ScrollableContainer>
-          <div>{walletSelectContent}</div>
+        <div>{walletSelectContent}</div>
 
-          <styled.Title>{t('labels.rewards')}</styled.Title>
-          <styled.RewardsContainer>
-            <span>{t('labels.totalRewards')}</span>
-            <styled.Amount>
-              <SymbolAmount tokenSymbol="MOM" stringValue={formatBigInt(selectedWallet?.reward)} />
-            </styled.Amount>
-            <Button
-              icon="wallet"
-              label={t('actions.claimRewards')}
-              disabled={!isBlockchainReady}
-              onClick={handleClaimRewards}
-            />
-          </styled.RewardsContainer>
+        <styled.Title>{t('labels.rewards')}</styled.Title>
+        <styled.RewardsContainer>
+          <span>{t('labels.totalRewards')}</span>
+          <styled.Amount>
+            <SymbolAmount tokenSymbol="MOM" stringValue={formatBigInt(selectedWallet?.reward)} />
+          </styled.Amount>
+          <Button
+            icon="wallet"
+            label={t('actions.claimRewards')}
+            disabled={!isBlockchainReady}
+            onClick={handleClaimRewards}
+          />
+        </styled.RewardsContainer>
 
-          <styled.Title>Use Faucet</styled.Title>
-          <styled.AirdropContainer>
-            {canRequestAirdrop !== false ? (
-              <>
-                <span>
-                  Get 10k MOM test tokens from the faucet. It can be requested once per day.
-                </span>
-                <Button
-                  icon="air"
-                  label="Use Faucet"
-                  disabled={!isBlockchainReady}
-                  onClick={handleAirdrop}
-                />
-              </>
-            ) : (
-              <>
-                <span>You can make another request tomorrow at {dateOfNextAllowedAirdrop}</span>
-              </>
-            )}
-          </styled.AirdropContainer>
-
-          <styled.Title>{t('labels.balance')}</styled.Title>
-
-          <styled.TokenBlock>
-            <styled.TitleBlock>{t('labels.accountBalance')}</styled.TitleBlock>
-            <styled.TokenBlockData>
-              <span>Total amount of MOM token in your wallet.</span>
-              <styled.Amount>
-                <SymbolAmount
-                  tokenSymbol="MOM"
-                  stringValue={formatBigInt(selectedWallet?.balance)}
-                />
-              </styled.Amount>
-            </styled.TokenBlockData>
-          </styled.TokenBlock>
-
-          <styled.TokenBlock>
-            <styled.TitleBlock>{t('labels.transferable')}</styled.TitleBlock>
-            <styled.TokenBlockData>
-              <span>Total amount of MOM tokens that can be transferred or used in staking.</span>
-              <styled.Amount>
-                <SymbolAmount tokenSymbol="MOM" stringValue={selectedWalletTransferrable} />
-              </styled.Amount>
-            </styled.TokenBlockData>
-          </styled.TokenBlock>
-
-          <styled.TokenBlock>
-            <styled.TitleBlock>{t('labels.staked')}</styled.TitleBlock>
-            <styled.TokenBlockData>
-              <span>Total amount of MOM tokens that are being staked by you.</span>
-              <styled.Amount>
-                <SymbolAmount tokenSymbol="MOM" stringValue={selectedWalletStaked} />
-              </styled.Amount>
-            </styled.TokenBlockData>
-          </styled.TokenBlock>
-
-          <styled.TokenBlock>
-            <styled.TitleBlock>{t('labels.unbonding')}</styled.TitleBlock>
-            <styled.TokenBlockData>
+        <styled.Title>Use Faucet</styled.Title>
+        <styled.AirdropContainer>
+          {canRequestAirdrop !== false ? (
+            <>
               <span>
-                Total amount of MOM tokens that will be available to be redeemed from previous
-                unstakings
+                Get 10k MOM test tokens from the faucet. It can be requested once per day.
               </span>
-              <styled.Amount>
-                <SymbolAmount
-                  tokenSymbol="MOM"
-                  stringValue={formatBigInt(selectedWallet?.unbonding)}
-                />
-              </styled.Amount>
-            </styled.TokenBlockData>
-          </styled.TokenBlock>
-        </styled.ScrollableContainer>
+              <Button
+                icon="air"
+                label="Use Faucet"
+                disabled={!isBlockchainReady}
+                onClick={handleAirdrop}
+              />
+            </>
+          ) : (
+            <>
+              <span>You can make another request tomorrow at {dateOfNextAllowedAirdrop}</span>
+            </>
+          )}
+        </styled.AirdropContainer>
+
+        <styled.Title>{t('labels.balance')}</styled.Title>
+
+        <styled.TokenBlock>
+          <styled.TitleBlock>{t('labels.accountBalance')}</styled.TitleBlock>
+          <styled.TokenBlockData>
+            <span>Total amount of MOM token in your wallet.</span>
+            <styled.Amount>
+              <SymbolAmount tokenSymbol="MOM" stringValue={formatBigInt(selectedWallet?.balance)} />
+            </styled.Amount>
+          </styled.TokenBlockData>
+        </styled.TokenBlock>
+
+        <styled.TokenBlock>
+          <styled.TitleBlock>{t('labels.transferable')}</styled.TitleBlock>
+          <styled.TokenBlockData>
+            <span>Total amount of MOM tokens that can be transferred or used in staking.</span>
+            <styled.Amount>
+              <SymbolAmount tokenSymbol="MOM" stringValue={selectedWalletTransferrable} />
+            </styled.Amount>
+          </styled.TokenBlockData>
+        </styled.TokenBlock>
+
+        <styled.TokenBlock>
+          <styled.TitleBlock>{t('labels.staked')}</styled.TitleBlock>
+          <styled.TokenBlockData>
+            <span>Total amount of MOM tokens that are being staked by you.</span>
+            <styled.Amount>
+              <SymbolAmount tokenSymbol="MOM" stringValue={selectedWalletStaked} />
+            </styled.Amount>
+          </styled.TokenBlockData>
+        </styled.TokenBlock>
+
+        <styled.TokenBlock>
+          <styled.TitleBlock>{t('labels.unbonding')}</styled.TitleBlock>
+          <styled.TokenBlockData>
+            <span>
+              Total amount of MOM tokens that will be available to be redeemed from previous
+              unstakings
+            </span>
+            <styled.Amount>
+              <SymbolAmount
+                tokenSymbol="MOM"
+                stringValue={formatBigInt(selectedWallet?.unbonding)}
+              />
+            </styled.Amount>
+          </styled.TokenBlockData>
+        </styled.TokenBlock>
       </Frame>
     </styled.Wrapper>
   );

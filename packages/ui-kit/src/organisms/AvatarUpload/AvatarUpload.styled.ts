@@ -2,7 +2,7 @@ import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --width: 360px;
+  --width: 100%;
   --height: 200px;
 
   position: relative;

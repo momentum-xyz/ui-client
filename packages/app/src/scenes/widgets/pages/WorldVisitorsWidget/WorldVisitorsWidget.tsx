@@ -42,7 +42,7 @@ const WorldVisitorsWidget: FC = () => {
         onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_VISITORS)}
       >
         <styled.Content>
-          <styled.ScrollableContainer>
+          <styled.Wrapper>
             {world2dStore?.onlineUsersList.map((userDetails) => (
               <Visitor
                 key={userDetails.userId}
@@ -52,7 +52,7 @@ const WorldVisitorsWidget: FC = () => {
                 onInviteToVoiceChat={onInviteToVoiceChat}
               />
             ))}
-          </styled.ScrollableContainer>
+          </styled.Wrapper>
         </styled.Content>
       </Panel>
     </styled.Container>

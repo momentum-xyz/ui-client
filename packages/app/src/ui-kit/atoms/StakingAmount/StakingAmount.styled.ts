@@ -2,9 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div``;
 
-export const TitleContainer = styled.div`
-  padding: 10px 0 0 0;
-`;
+export const TitleContainer = styled.div``;
 
 export const Title = styled.div`
   display: flex;

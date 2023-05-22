@@ -35,7 +35,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "user",
         "type": "address"
@@ -73,7 +73,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "odyssey_id",
         "type": "uint256"
@@ -92,19 +92,19 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "user",
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "odyssey_from",
         "type": "uint256"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "odyssey_to",
         "type": "uint256"
@@ -117,7 +117,7 @@
       },
       {
         "indexed": false,
-        "internalType": "enum StakingV4.Token",
+        "internalType": "enum StakingV5.Token",
         "name": "token",
         "type": "uint8"
       },
@@ -141,7 +141,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "user",
         "type": "address"
@@ -254,15 +254,15 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "user",
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
-        "name": "odyssey",
+        "name": "odyssey_id",
         "type": "uint256"
       },
       {
@@ -273,7 +273,7 @@
       },
       {
         "indexed": false,
-        "internalType": "enum StakingV4.Token",
+        "internalType": "enum StakingV5.Token",
         "name": "token",
         "type": "uint8"
       },
@@ -291,15 +291,15 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "user",
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
-        "name": "odyssey",
+        "name": "odyssey_id",
         "type": "uint256"
       },
       {
@@ -310,7 +310,7 @@
       },
       {
         "indexed": false,
-        "internalType": "enum StakingV4.Token",
+        "internalType": "enum StakingV5.Token",
         "name": "token",
         "type": "uint8"
       },
@@ -465,7 +465,7 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct StakingV4.StakedBy[]",
+        "internalType": "struct StakingV5.StakedBy[]",
         "name": "",
         "type": "tuple[]"
       }
@@ -691,7 +691,7 @@
         "type": "uint256"
       },
       {
-        "internalType": "enum StakingV4.Token",
+        "internalType": "enum StakingV5.Token",
         "name": "token",
         "type": "uint8"
       }
@@ -745,7 +745,7 @@
         "type": "uint256"
       },
       {
-        "internalType": "enum StakingV4.Token",
+        "internalType": "enum StakingV5.Token",
         "name": "token",
         "type": "uint8"
       }
@@ -926,7 +926,7 @@
         "type": "uint256"
       },
       {
-        "internalType": "enum StakingV4.Token",
+        "internalType": "enum StakingV5.Token",
         "name": "token",
         "type": "uint8"
       }

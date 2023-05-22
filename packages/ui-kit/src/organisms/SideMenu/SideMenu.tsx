@@ -41,7 +41,7 @@ const SideMenu = <T,>({
             className={cn(orientation === 'left' && 'inverted')}
           >
             <Hexagon type="menu" isActive={id === activeId} iconName={iconName} />
-            <MenuLabel text={label} type={orientation} />
+            <MenuLabel text={label} type={orientation} isActive={id === activeId} />
             {pinNumber && (
               <styled.MenuItemNumberPin className={cn(orientation === 'left' && 'inverted')}>
                 {pinNumber < TEN ? '0' : ''}

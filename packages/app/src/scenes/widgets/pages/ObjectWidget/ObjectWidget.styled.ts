@@ -12,10 +12,17 @@ export const Container = styled.div`
   z-index: var(--dialog-z-index);
 `;
 
+export const Wrapper = styled.div`
+  position: relative;
+  padding: 10px 0 16px 0;
+`;
+
 export const Tabs = styled.div`
-  padding: 10px;
+  position: absolute;
   display: flex;
   justify-content: flex-end;
+  top: -2px;
+  right: 10px;
 `;
 
 export const BottomCenteredDock = styled.div`
