@@ -1,7 +1,14 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {ButtonEllipse, Hexagon, ImageSizeEnum, Panel, ProfileLine} from '@momentum-xyz/ui-kit';
+import {
+  ButtonEllipse,
+  Frame,
+  Hexagon,
+  ImageSizeEnum,
+  Panel,
+  ProfileLine
+} from '@momentum-xyz/ui-kit';
 
 import {UserDetailsModelType} from 'core/models';
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -67,29 +74,31 @@ const OnlineUsersList: FC<PropsInterface> = ({
             onClose={() => setActiveUser(null)}
           >
             <styled.Wrapper>
-              <ProfileImage
-                name={activeUser.user?.name || ''}
-                imageHeight={140}
-                image={activeUser.user?.profile.avatarHash}
-                imageErrorIcon="astronaut"
-              />
-
-              <styled.Info>
-                <ProfileInfo
-                  description={activeUser.user?.profile.bio}
-                  weblink={activeUser.user?.profile.profileLink}
-                  joinDate={activeUser.user?.createdAt}
-                  hideBorder
+              <Frame>
+                <ProfileImage
+                  name={activeUser.user?.name || ''}
+                  imageHeight={140}
+                  image={activeUser.user?.profile.avatarHash}
+                  imageErrorIcon="astronaut"
                 />
 
-                {activeUser.worldsOwned.map(({id, name}) => (
-                  <ProfileLine
-                    key={id}
-                    icon="rabbit_fill"
-                    label={<styled.Link onClick={() => onVisitWorld(id)}>{name}</styled.Link>}
+                <styled.Info>
+                  <ProfileInfo
+                    description={activeUser.user?.profile.bio}
+                    weblink={activeUser.user?.profile.profileLink}
+                    joinDate={activeUser.user?.createdAt}
+                    hideBorder
                   />
-                ))}
-              </styled.Info>
+
+                  {activeUser.worldsOwned.map(({id, name}) => (
+                    <ProfileLine
+                      key={id}
+                      icon="rabbit_fill"
+                      label={<styled.Link onClick={() => onVisitWorld(id)}>{name}</styled.Link>}
+                    />
+                  ))}
+                </styled.Info>
+              </Frame>
 
               <styled.Actions>
                 {/*<ButtonEllipse

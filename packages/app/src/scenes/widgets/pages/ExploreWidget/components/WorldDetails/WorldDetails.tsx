@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
-import {Panel, ImageSizeEnum} from '@momentum-xyz/ui-kit';
+import {Panel, ImageSizeEnum, Frame} from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ProfileInfo, ProfileImage, StakersList, StakingComment, StakingAmount} from 'ui-kit';
@@ -42,15 +42,15 @@ const WorldDetails: FC<PropsInterface> = ({
         onClose={onClose}
       >
         <styled.Wrapper>
-          <ProfileImage
-            name={world.name || world.id}
-            image={world.avatarHash}
-            imageErrorIcon="rabbit_fill"
-            byName={world.owner_name || world.owner_id}
-            onByClick={() => onSelectUser(world.owner_id)}
-          />
+          <Frame>
+            <ProfileImage
+              name={world.name || world.id}
+              image={world.avatarHash}
+              imageErrorIcon="rabbit_fill"
+              byName={world.owner_name || world.owner_id}
+              onByClick={() => onSelectUser(world.owner_id)}
+            />
 
-          <styled.GeneralScrollable>
             <ProfileInfo
               description={world.description}
               weblink={world.website_link}
@@ -58,7 +58,9 @@ const WorldDetails: FC<PropsInterface> = ({
               onVisit={() => onVisitWorld(world.id)}
               onStake={() => onStakeWorld(world.id)}
             />
+          </Frame>
 
+          <styled.Info>
             <StakingAmount stakedAmount={world.momStaked} tokenSymbol="MOM" />
 
             {!!world.last_staking_comment && (
@@ -66,7 +68,7 @@ const WorldDetails: FC<PropsInterface> = ({
             )}
 
             <StakersList stakers={world.stakers} onSelectUser={onSelectUser} />
-          </styled.GeneralScrollable>
+          </styled.Info>
         </styled.Wrapper>
       </Panel>
     </styled.Container>

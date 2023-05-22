@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding: 0;
+  padding: 0 0 10px 0;
 `;
 
 export const Wrapper = styled.div`

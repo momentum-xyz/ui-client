@@ -1,15 +1,18 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --scroll-offset: 410px;
+  position: relative;
+`;
 
+export const Wrapper = styled.div`
+  padding: 12px 0 0 0;
   position: relative;
 `;
 
 export const Steps = styled.div`
   position: absolute;
-  right: 20px;
-  top: 42px;
+  right: 0;
+  top: -8px;
   z-index: 1;
 `;
 
@@ -30,10 +33,4 @@ export const WorldName = styled.div`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-`;
-
-export const ScrollableContainer = styled.div`
-  margin: 0 10px;
-  height: calc(100vh - var(--scroll-offset));
-  overflow: auto;
 `;

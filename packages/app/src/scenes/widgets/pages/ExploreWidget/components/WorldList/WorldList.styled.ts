@@ -1,18 +1,7 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  --scroll-offset: 290px;
-`;
-
-export const Search = styled.div`
-  padding: 24px 0 0 0;
-`;
-
-export const ScrollableContainer = styled.div`
-  margin: 0 10px;
-  padding: 10px 0 0 0;
-  height: calc(100vh - var(--scroll-offset));
-  overflow: auto;
+  padding: 0 10px;
 `;
 
 export const PopularContainer = styled.div`
@@ -23,6 +12,17 @@ export const PopularContainer = styled.div`
 
 export const BlockTitle = styled.div`
   color: ${(props) => props.theme.text};
+  line-height: var(--font-size-xl);
+  font-size: var(--font-size-xl);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+`;
+
+export const BlockTitleTwo = styled.div`
+  padding: 10px 0 0 0;
+  color: ${(props) => props.theme.text};
+  line-height: var(--font-size-xl);
   font-size: var(--font-size-xl);
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -38,9 +38,11 @@ export const SearchContainer = styled.div`
 `;
 
 export const SearchResultTitle = styled.div`
-  padding: 0 0 0 10px;
+  display: flex;
+  justify-content: space-between;
   color: ${(props) => props.theme.text};
   font-size: var(--font-size-xl);
+  line-height: var(--font-size-xl);
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-weight: 700;

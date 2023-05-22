@@ -96,61 +96,60 @@ const StakeList: FC<PropsInterface> = ({
           />
         </styled.Filters>
       </Frame>
-      <styled.ScrollableContainer>
-        <styled.SearchContainer>
-          {isStakeListEmpty ? (
-            <>
-              {/* RENDER MOST STAKED WORLDS */}
-              <styled.NoOwnStakes>
-                Make your first stake, here are the most staked into Odysseys
-              </styled.NoOwnStakes>
-              {mostStakedWorlds.map((stake, index) => (
-                <StakeCard
-                  key={index}
-                  worldName={stake.name}
-                  worldImageUrl={getImageAbsoluteUrl(stake.avatarHash, ImageSizeEnum.S5)}
-                  staked={formatBigInt(stake.stake_total)}
-                  tokenSymbol="MOM"
-                  onInfoClick={() => onSelectWorld(stake.id)}
-                  onStakeClick={() => onStake(stake.id)}
-                />
-              ))}
-            </>
-          ) : (
-            <>
-              {/* RENDER MY STAKES */}
-              {stakeList.map((stake, index) => (
-                <StakeCard
-                  key={index}
-                  worldName={stake.name}
-                  worldImageUrl={getImageAbsoluteUrl(stake.avatar_hash, ImageSizeEnum.S5)}
-                  staked={formatBigInt(stake.amount)}
-                  reward={formatBigInt(stake.reward)}
-                  tokenSymbol="MOM"
-                  onInfoClick={() => onSelectWorld(stake.object_id)}
-                  onStakeClick={() => onStake(stake.object_id)}
-                  onUnstakeClick={() => {
-                    setStakeForUnstake(stake);
-                  }}
-                />
-              ))}
 
-              {stakeForUnstake && (
-                <UnstakeWorld
-                  targetStake={stakeForUnstake}
-                  onUnStaked={() => {
-                    setStakeForUnstake(undefined);
-                    onReloadStakes();
-                  }}
-                  onCanceled={() => {
-                    setStakeForUnstake(undefined);
-                  }}
-                />
-              )}
-            </>
-          )}
-        </styled.SearchContainer>
-      </styled.ScrollableContainer>
+      <styled.SearchContainer>
+        {isStakeListEmpty ? (
+          <>
+            {/* RENDER MOST STAKED WORLDS */}
+            <styled.NoOwnStakes>
+              Make your first stake, here are the most staked into Odysseys
+            </styled.NoOwnStakes>
+            {mostStakedWorlds.map((stake, index) => (
+              <StakeCard
+                key={index}
+                worldName={stake.name}
+                worldImageUrl={getImageAbsoluteUrl(stake.avatarHash, ImageSizeEnum.S5)}
+                staked={formatBigInt(stake.stake_total)}
+                tokenSymbol="MOM"
+                onInfoClick={() => onSelectWorld(stake.id)}
+                onStakeClick={() => onStake(stake.id)}
+              />
+            ))}
+          </>
+        ) : (
+          <>
+            {/* RENDER MY STAKES */}
+            {stakeList.map((stake, index) => (
+              <StakeCard
+                key={index}
+                worldName={stake.name}
+                worldImageUrl={getImageAbsoluteUrl(stake.avatar_hash, ImageSizeEnum.S5)}
+                staked={formatBigInt(stake.amount)}
+                reward={formatBigInt(stake.reward)}
+                tokenSymbol="MOM"
+                onInfoClick={() => onSelectWorld(stake.object_id)}
+                onStakeClick={() => onStake(stake.object_id)}
+                onUnstakeClick={() => {
+                  setStakeForUnstake(stake);
+                }}
+              />
+            ))}
+
+            {stakeForUnstake && (
+              <UnstakeWorld
+                targetStake={stakeForUnstake}
+                onUnStaked={() => {
+                  setStakeForUnstake(undefined);
+                  onReloadStakes();
+                }}
+                onCanceled={() => {
+                  setStakeForUnstake(undefined);
+                }}
+              />
+            )}
+          </>
+        )}
+      </styled.SearchContainer>
     </styled.Wrapper>
   );
 };

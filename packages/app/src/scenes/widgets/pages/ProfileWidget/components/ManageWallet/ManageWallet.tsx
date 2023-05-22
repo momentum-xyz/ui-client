@@ -35,61 +35,60 @@ const ManageWallet: FC<PropsInterface> = ({
     <styled.Container data-testid="ManageWallet-test">
       <Frame>
         <styled.Title>{t('titles.myWalletAccounts')}</styled.Title>
-        <styled.GeneralScrollable>
-          <styled.WalletContainer>
-            {wallets.map(({wallet_id}) => {
-              const isDefault = wallet_id === defaultWalletId;
 
-              return (
-                <styled.Wallet key={wallet_id}>
-                  <WalletHash hash={wallet_id} icon="metamask" />
-                  <styled.WalletActions>
-                    <ButtonEllipse
-                      isLabel={isDefault}
-                      variant="secondary"
-                      icon={isDefault ? 'starOn' : 'star'}
-                      label={isDefault ? t('actions.default') : t('actions.setAsDefault')}
-                      onClick={() => onChangeDefaultWallet(wallet_id)}
-                    />
-                    <ButtonEllipse
-                      icon="bin"
-                      variant="secondary"
-                      label={t('actions.remove')}
-                      disabled={isDefault}
-                    />
-                  </styled.WalletActions>
-                </styled.Wallet>
-              );
-            })}
-          </styled.WalletContainer>
+        <styled.WalletContainer>
+          {wallets.map(({wallet_id}) => {
+            const isDefault = wallet_id === defaultWalletId;
 
-          <styled.ConnectContainer>
-            <styled.Title>{t('titles.connectAnotherWallet')}</styled.Title>
-            <WalletSelector onSelect={setSelectedWallet} />
-            {!selectedWallet && <TrustPoints />}
-          </styled.ConnectContainer>
+            return (
+              <styled.Wallet key={wallet_id}>
+                <WalletHash hash={wallet_id} icon="metamask" />
+                <styled.WalletActions>
+                  <ButtonEllipse
+                    isLabel={isDefault}
+                    variant="secondary"
+                    icon={isDefault ? 'starOn' : 'star'}
+                    label={isDefault ? t('actions.default') : t('actions.setAsDefault')}
+                    onClick={() => onChangeDefaultWallet(wallet_id)}
+                  />
+                  <ButtonEllipse
+                    icon="bin"
+                    variant="secondary"
+                    label={t('actions.remove')}
+                    disabled={isDefault}
+                  />
+                </styled.WalletActions>
+              </styled.Wallet>
+            );
+          })}
+        </styled.WalletContainer>
 
-          {selectedWallet && (
-            <div>
-              <styled.ConnectWithWalletRow>
-                <img src={selectedWallet.logo} alt={`${selectedWallet.name}-icon`} />
-                <span>{t('login.connectWith', {wallet: selectedWallet.name})}</span>
-              </styled.ConnectWithWalletRow>
+        <styled.ConnectContainer>
+          <styled.Title>{t('titles.connectAnotherWallet')}</styled.Title>
+          <WalletSelector onSelect={setSelectedWallet} />
+          {!selectedWallet && <TrustPoints />}
+        </styled.ConnectContainer>
 
-              {selectedWallet && (
-                <WalletLogin
-                  key={selectedWallet.name}
-                  walletConf={selectedWallet}
-                  attachSecondaryAccount
-                  onConnected={handleAccountConnected}
-                  onError={(err) => {
-                    console.log(err.toString());
-                  }}
-                />
-              )}
-            </div>
-          )}
-        </styled.GeneralScrollable>
+        {selectedWallet && (
+          <div>
+            <styled.ConnectWithWalletRow>
+              <img src={selectedWallet.logo} alt={`${selectedWallet.name}-icon`} />
+              <span>{t('login.connectWith', {wallet: selectedWallet.name})}</span>
+            </styled.ConnectWithWalletRow>
+
+            {selectedWallet && (
+              <WalletLogin
+                key={selectedWallet.name}
+                walletConf={selectedWallet}
+                attachSecondaryAccount
+                onConnected={handleAccountConnected}
+                onError={(err) => {
+                  console.log(err.toString());
+                }}
+              />
+            )}
+          </div>
+        )}
       </Frame>
     </styled.Container>
   );

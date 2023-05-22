@@ -8,17 +8,25 @@ export const MenuLabel = styled.span`
   font-family: 'Poppins';
   text-transform: uppercase;
   letter-spacing: 0.3em;
+  font-size: var(--font-size-s);
+  font-weight: 500;
+
+  &:hover {
+    color: ${(props) => props.theme.accentText};
+  }
 
   &.right {
     background: linear-gradient(90deg, var(--gradient-background) 0%, transparent 100%);
-    padding: 4px 20px 4px 10px;
+    padding: 1px 20px 1px 10px;
   }
+
   &.left {
     background: linear-gradient(90deg, transparent 0%, var(--gradient-background) 100%);
-    padding: 4px 10px 4px 20px;
+    padding: 1px 10px 1px 20px;
   }
 
   &.bold {
+    color: ${(props) => props.theme.text};
     font-weight: 700;
   }
 `;

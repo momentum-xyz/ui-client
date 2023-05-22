@@ -1,6 +1,6 @@
 import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Panel, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
+import {Frame, Panel, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {AssetTypeEnum, BasicAsset2dIdEnum, WidgetEnum} from 'core/enums';
@@ -67,30 +67,34 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         title={objectStore.objectName || ''}
         onClose={onClose}
       >
-        <styled.Tabs>
-          <Tabs tabList={TABS_LIST} activeId={asset2dId} />
-        </styled.Tabs>
+        <styled.Wrapper>
+          <Frame>
+            <styled.Tabs>
+              <Tabs tabList={TABS_LIST} activeId={asset2dId} />
+            </styled.Tabs>
 
-        {assetType === AssetTypeEnum.TEXT && (
-          <TextViewer
-            title={objectStore.assetStore.content?.title}
-            text={objectStore.assetStore.content?.content}
-          />
-        )}
+            {assetType === AssetTypeEnum.TEXT && (
+              <TextViewer
+                title={objectStore.assetStore.content?.title}
+                text={objectStore.assetStore.content?.content}
+              />
+            )}
 
-        {assetType === AssetTypeEnum.IMAGE && (
-          <ImageViewer imageSrc={objectStore.assetStore.imageSrc} />
-        )}
+            {assetType === AssetTypeEnum.IMAGE && (
+              <ImageViewer imageSrc={objectStore.assetStore.imageSrc} />
+            )}
 
-        {assetType === AssetTypeEnum.PLUGIN && pluginLoader?.plugin && (
-          <PluginViewer
-            plugin={pluginLoader.plugin}
-            pluginLoader={pluginLoader}
-            objectId={data?.id.toString() || ''}
-            isAdmin={isCurrentUserWorldAdmin}
-            onClose={onClose}
-          />
-        )}
+            {assetType === AssetTypeEnum.PLUGIN && pluginLoader?.plugin && (
+              <PluginViewer
+                plugin={pluginLoader.plugin}
+                pluginLoader={pluginLoader}
+                objectId={data?.id.toString() || ''}
+                isAdmin={isCurrentUserWorldAdmin}
+                onClose={onClose}
+              />
+            )}
+          </Frame>
+        </styled.Wrapper>
       </Panel>
     </styled.Container>
   );

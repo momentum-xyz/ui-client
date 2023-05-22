@@ -13,9 +13,9 @@ const TextViewer: FC<PropsInterface> = ({title, text}) => {
     <styled.Container data-testid="TextPage-test">
       <styled.Title>{title}</styled.Title>
 
-      <styled.ScrollableContainer>
+      <styled.Wrapper>
         <styled.Text>{text}</styled.Text>
-      </styled.ScrollableContainer>
+      </styled.Wrapper>
     </styled.Container>
   );
 };

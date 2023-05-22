@@ -30,7 +30,7 @@ export const Container = styled.div`
 `;
 
 export const HeadingWrapper = styled.div`
-  padding: 20px 0;
+  padding: 10px 0;
 `;
 
 export const ContentWrapper = styled.div`

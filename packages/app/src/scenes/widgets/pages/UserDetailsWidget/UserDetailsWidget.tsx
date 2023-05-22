@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
-import {Panel, PositionEnum, ImageSizeEnum} from '@momentum-xyz/ui-kit';
+import {Panel, PositionEnum, ImageSizeEnum, Frame} from '@momentum-xyz/ui-kit';
 
 import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
@@ -55,20 +55,22 @@ const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         onClose={() => widgetManagerStore.close(WidgetEnum.USER_DETAILS)}
       >
         <styled.Wrapper>
-          <ProfileImage
-            name={user.name || user.id}
-            image={user.profile.avatarHash}
-            imageErrorIcon="astronaut"
-          />
+          <Frame>
+            <ProfileImage
+              name={user.name || user.id}
+              image={user.profile.avatarHash}
+              imageErrorIcon="astronaut"
+            />
 
-          <styled.GeneralScrollable>
             <ProfileInfo
               hash={user.wallet}
               description={user?.profile.bio}
               weblink={user?.profile.profileLink}
               joinDate={user?.createdAt}
             />
+          </Frame>
 
+          <styled.Worlds>
             <WorldsOwnedList
               worldsOwned={worldsOwned}
               onSelectWorld={onSelectWorld}
@@ -80,7 +82,7 @@ const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
               onSelectWorld={onSelectWorld}
               onVisitWorld={onVisitWorld}
             />
-          </styled.GeneralScrollable>
+          </styled.Worlds>
         </styled.Wrapper>
       </Panel>
     </styled.Container>

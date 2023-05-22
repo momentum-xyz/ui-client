@@ -10,3 +10,4 @@ export * from './organisms';
 export * from './types';
 export * from './utils';
 export * from './themes';
+export * from './styles-global.styled';

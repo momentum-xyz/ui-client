@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-export const Wrapper = styled.div`
-  --scroll-offset: 305px;
-`;
+export const Wrapper = styled.div``;
 
 export const Title = styled.div`
   padding: 10px 0 0 0;
@@ -19,11 +17,6 @@ export const Filters = styled.div`
   display: grid;
   grid-template-columns: 120px 1fr;
   align-items: center;
-`;
-
-export const ScrollableContainer = styled.div`
-  height: calc(100vh - var(--scroll-offset));
-  overflow: auto;
 `;
 
 export const RewardsContainer = styled.div`

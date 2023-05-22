@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
-import {Panel, ImageSizeEnum} from '@momentum-xyz/ui-kit';
+import {Panel, ImageSizeEnum, Frame} from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ProfileInfo, ProfileImage, WorldsOwnedList, WorldsStakedList} from 'ui-kit';
@@ -38,20 +38,22 @@ const UserDetails: FC<PropsInterface> = (props) => {
         onClose={onClose}
       >
         <styled.Wrapper>
-          <ProfileImage
-            name={user?.name || user?.id || ''}
-            image={user?.profile.avatarHash}
-            imageErrorIcon="astronaut"
-          />
+          <Frame>
+            <ProfileImage
+              name={user?.name || user?.id || ''}
+              image={user?.profile.avatarHash}
+              imageErrorIcon="astronaut"
+            />
 
-          <styled.GeneralScrollable>
             <ProfileInfo
               hash={user?.wallet}
               description={user?.profile.bio}
               weblink={user?.profile.profileLink}
               joinDate={user?.createdAt}
             />
+          </Frame>
 
+          <styled.Worlds>
             <WorldsOwnedList
               worldsOwned={worldsOwned}
               onSelectWorld={onSelectWorld}
@@ -63,7 +65,7 @@ const UserDetails: FC<PropsInterface> = (props) => {
               onSelectWorld={onSelectWorld}
               onVisitWorld={onVisitWorld}
             />
-          </styled.GeneralScrollable>
+          </styled.Worlds>
         </styled.Wrapper>
       </Panel>
     </styled.Container>

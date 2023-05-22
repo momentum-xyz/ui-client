@@ -2,7 +2,7 @@ import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {generatePath, useNavigate} from 'react-router-dom';
 import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
-import {Panel, ImageSizeEnum, PositionEnum} from '@momentum-xyz/ui-kit';
+import {Panel, ImageSizeEnum, PositionEnum, Frame} from '@momentum-xyz/ui-kit';
 
 import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
@@ -63,15 +63,15 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_DETAILS)}
       >
         <styled.Wrapper>
-          <ProfileImage
-            name={world.name || world.id}
-            image={world.avatarHash}
-            imageErrorIcon="rabbit_fill"
-            byName={world.owner_name || world.owner_id}
-            onByClick={() => onSelectUser(world.owner_id)}
-          />
+          <Frame>
+            <ProfileImage
+              name={world.name || world.id}
+              image={world.avatarHash}
+              imageErrorIcon="rabbit_fill"
+              byName={world.owner_name || world.owner_id}
+              onByClick={() => onSelectUser(world.owner_id)}
+            />
 
-          <styled.GeneralScrollable>
             <ProfileInfo
               description={world.description}
               weblink={world.website_link}
@@ -79,7 +79,9 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
               onVisit={() => onVisitWorld(world.id)}
               onStake={() => onStakeWorld(world.id)}
             />
+          </Frame>
 
+          <styled.Info>
             <StakingAmount stakedAmount={world.momStaked} tokenSymbol="MOM" />
 
             {!!world.last_staking_comment && (
@@ -87,7 +89,7 @@ const WorldDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
             )}
 
             <StakersList stakers={world.stakers} onSelectUser={onSelectUser} />
-          </styled.GeneralScrollable>
+          </styled.Info>
         </styled.Wrapper>
       </Panel>
     </styled.Container>
