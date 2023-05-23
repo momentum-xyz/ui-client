@@ -2,10 +2,11 @@ import {flow, types} from 'mobx-state-tree';
 import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
-import {GetSpaceInfoResponse, api} from 'api';
+import {GetSpaceInfoResponse, PostSpaceResponse, api} from 'api';
 import {PluginIdEnum} from 'api/enums';
 import {CreatorTabsEnum} from 'core/enums';
 import {getRootStore} from 'core/utils';
+import {PosBusService} from 'shared/services';
 
 import {
   SkyboxSelectorStore,
@@ -34,6 +35,7 @@ const CreatorStore = types
       getObjectInfoRequest: types.optional(RequestModel, {}),
       getObjectNameRequest: types.optional(RequestModel, {}),
 
+      duplicateObjectRequest: types.optional(RequestModel, {}),
       removeObjectDialog: types.optional(Dialog, {}),
       removeObjectRequest: types.optional(RequestModel, {})
     })
@@ -92,6 +94,32 @@ const CreatorStore = types
 
       // TODO merge these stores??
       getRootStore(self).universeStore.world3dStore?.closeAndResetObjectMenu();
+    }),
+    duplicateObject: flow(function* (
+      worldId: string,
+      assetId: string,
+      name: string,
+      transform: any
+    ) {
+      PosBusService.attachNextReceivedObjectToCamera = true;
+
+      const response: PostSpaceResponse | undefined = yield self.duplicateObjectRequest.send(
+        api.spaceRepository.postSpace,
+        {
+          parent_id: worldId,
+          object_name: name,
+          object_type_id: '4ed3a5bb-53f8-4511-941b-07902982c31c',
+          asset_3d_id: assetId,
+          minimap: false // self.isVisibleInNavigation
+        }
+      );
+      const objectId = response?.object_id;
+
+      if (objectId) {
+        getRootStore(self).universeStore.world3dStore?.setAttachedToCamera(objectId);
+      }
+
+      return objectId;
     })
   }));
 

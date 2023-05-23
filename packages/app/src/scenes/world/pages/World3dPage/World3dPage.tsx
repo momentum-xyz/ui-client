@@ -94,6 +94,22 @@ const World3dPage: FC = () => {
     handleSubMenuActiveChange(tab);
   };
 
+  const handleObjectDuplicate = () => {
+    const {duplicateObject, objectName, objectInfo} = creatorStore;
+
+    if (!objectInfo || !objectName) {
+      return;
+    }
+    // eslint-disable-next-line no-debugger
+    debugger;
+    world3dStore?.closeAndResetObjectMenu();
+
+    const {transform, asset_3d_id} = objectInfo;
+    duplicateObject(worldId, asset_3d_id, objectName, transform).then((objectId) => {
+      console.log('Duplicated object', objectId);
+    });
+  };
+
   const handleLevel2MenuOpen = () => {
     const submenuItems: MenuItemInterface<WidgetEnum>[] = [
       {
@@ -123,6 +139,13 @@ const World3dPage: FC = () => {
         iconName: 'cubicles',
         tooltip: t('labels.selectFunction'),
         onClick: () => handleTabSelection('functionality')
+      },
+      {
+        key: WidgetEnum.DUPLICATE,
+        position: PositionEnum.CENTER,
+        iconName: 'copy',
+        tooltip: t('actions.duplicateObject'),
+        onClick: handleObjectDuplicate
       },
       {
         key: WidgetEnum.REMOVE,
