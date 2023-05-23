@@ -106,8 +106,8 @@
           "packages/app/src",
           "packages/ui-kit/src",
           "packages/core/src",
+          "packages/core3d/src",
           "packages/sdk/src",
-          "packages/odyssey3d/src",
           "packages/plugin_google_drive/src",
           "packages/plugin_miro/src",
           "packages/plugin_video/src"
