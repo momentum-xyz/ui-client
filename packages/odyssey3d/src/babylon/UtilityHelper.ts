@@ -1,4 +1,4 @@
-import {TransformNode} from '@babylonjs/core';
+import {TransformNode, Vector3} from '@babylonjs/core';
 
 import {ObjectHelper} from './ObjectHelper';
 
@@ -13,4 +13,20 @@ export function getNodeFromId(id: string): TransformNode | undefined {
   } else {
     return undefined;
   }
+}
+
+export function getBoundingInfo(node: TransformNode): {
+  min: Vector3;
+  max: Vector3;
+  sizeVec: Vector3;
+  size: number;
+} {
+  const boundingInfo = node.getHierarchyBoundingVectors();
+  const sizeVec = boundingInfo.max.subtract(boundingInfo.min);
+
+  return {
+    ...boundingInfo,
+    sizeVec,
+    size: sizeVec.length()
+  };
 }

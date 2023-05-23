@@ -21,7 +21,7 @@ import {
 
 import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
-import {getAssetFileName} from './UtilityHelper';
+import {getAssetFileName, getBoundingInfo} from './UtilityHelper';
 import {posToVec3} from './TransformHelper';
 import {WorldCreatorHelper} from './WorldCreatorHelper';
 import './initLoaderGLTF';
@@ -235,8 +235,15 @@ export class ObjectHelper {
   static attachToCamera(objectId: string, node: TransformNode) {
     if (this.selectedObjectFromSpawn === '') {
       this.attachedNode = node;
-      node.setParent(PlayerHelper.playerInstance.rootNodes[0]);
-      node.position = new Vector3(0, -0.5, -3);
+      node.setParent(PlayerHelper.getPlayerNode());
+
+      console.log('node bounding box:', node.getHierarchyBoundingVectors());
+      const {size} = getBoundingInfo(node);
+      console.log('size:', size);
+
+      // node.position = new Vector3(0, -0.5, -3);
+      node.position = new Vector3(0, -0.5, -size - 2);
+
       this.setSpawningMaterial(node);
 
       this.selectedObjectFromSpawn = objectId;
