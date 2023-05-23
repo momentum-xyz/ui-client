@@ -1,6 +1,6 @@
 import {useDebouncedCallback, Input} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {FC, useEffect, useState} from 'react';
+import {FC, useEffect} from 'react';
 import {ColorPicker, useColor, toColor} from 'react-color-palette';
 
 import {useStore} from 'shared/hooks';
@@ -23,10 +23,6 @@ const ObjectColorPage: FC = () => {
   const objectId = creatorStore.selectedObjectId || '';
 
   const [color, setColor] = useColor('hex', COLOR_PICKER_DEFAULT_COLOR);
-
-  const [shouldSkipColorChangeFromInput, setShouldSkipColorChangeFromInput] = useState(
-    !objectColorStore.objectColor
-  );
 
   // TODO move these to parent
   const changeUnityObjectColor = useDebouncedCallback((colorHex: string) => {
@@ -59,9 +55,8 @@ const ObjectColorPage: FC = () => {
   // }, [ objectColorStore.objectColor, objectId, world3dStore, universeStore.worldId]);
 
   const handleColorInputChange = (value: string): void => {
-    setShouldSkipColorChangeFromInput(false);
     const isValidHex = /^#[a-zA-Z\d]{6}$/.test(value);
-    if (!isValidHex || shouldSkipColorChangeFromInput) {
+    if (!isValidHex) {
       return;
     }
     const color = toColor('hex', value);
