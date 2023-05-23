@@ -13,6 +13,7 @@ import {
   WalletHash
 } from '@momentum-xyz/ui-kit';
 
+import {WalletInterface} from 'api';
 import {UserModelInterface} from 'core/models';
 import {FieldErrorInterface} from 'api/interfaces';
 import {ProfileFormInterface} from 'core/interfaces';
@@ -21,7 +22,7 @@ import * as styled from './ProfileEditor.styled';
 
 interface PropsInterface {
   user: UserModelInterface;
-  defaultWalletId: string;
+  wallet: WalletInterface | undefined;
   formErrors: FieldErrorInterface[];
   isUpdating: boolean;
   onUpdate: (form: ProfileFormInterface, previousImageHash?: string) => void;
@@ -30,7 +31,7 @@ interface PropsInterface {
 
 const ProfileEditor: FC<PropsInterface> = ({
   user,
-  defaultWalletId,
+  wallet,
   formErrors,
   isUpdating,
   onUpdate,
@@ -154,7 +155,7 @@ const ProfileEditor: FC<PropsInterface> = ({
             label={`${t('actions.joined')} ${signUpDateString(user.createdAt)}`}
           />
 
-          <WalletHash icon="talisman" hash={defaultWalletId} />
+          {wallet && <WalletHash icon={wallet.wallet_icon} hash={wallet.wallet_id} />}
         </styled.Info>
       </Frame>
     </styled.Container>

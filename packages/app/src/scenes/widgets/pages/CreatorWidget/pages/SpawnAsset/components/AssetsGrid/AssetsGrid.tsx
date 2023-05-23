@@ -1,6 +1,6 @@
 import {FC, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Model3dPreview} from '@momentum-xyz/odyssey3d';
+import {Model3dPreview} from '@momentum-xyz/core3d';
 import {Frame, Image} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 

@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import {Model3dPreview} from '@momentum-xyz/odyssey3d';
+import {Model3dPreview} from '@momentum-xyz/core3d';
 import {Button, Input, Radio, ErrorsEnum, FileUploader} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 

@@ -15,7 +15,6 @@ import {
   UserInfoModelInterface,
   WorldInfoModelInterface
 } from 'core/models';
-import {BN_ONE} from 'core/constants';
 
 const Universe2dStore = types.compose(
   ResetModel,
@@ -106,7 +105,7 @@ const Universe2dStore = types.compose(
           .sort((a, b) => {
             const aBN = new BN(a.stake_total || '0');
             const bBN = new BN(b.stake_total || '0');
-            return bBN.sub(aBN).mod(BN_ONE).toNumber();
+            return aBN.lt(bBN) ? 1 : -1;
           })
           .slice(0, 6);
       },
@@ -116,6 +115,13 @@ const Universe2dStore = types.compose(
           name: item.name,
           image: getImageAbsoluteUrl(item.avatarHash, ImageSizeEnum.S5) || ''
         }));
+      },
+      get allSortedWorlds(): WorldInfoModelInterface[] {
+        return [...self.allWorlds].sort((a, b) => {
+          const aBN = new BN(a.stake_total || '0');
+          const bBN = new BN(b.stake_total || '0');
+          return aBN.lt(bBN) ? 1 : -1;
+        });
       }
     }))
     .views((self) => ({

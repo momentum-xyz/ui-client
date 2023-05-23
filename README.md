@@ -28,7 +28,7 @@ It is a monorepo that contains the main application and several common libraries
     ├── packages
     │   ├── app                     # Main application
     │   ├── core                    # Common reusable logic
-    │   ├── odyssey3d               # 3D World Interface based on babylon.js
+    │   ├── core3d                  # 3D World Interface based on babylon.js
     │   ├── sdk                     # Plugins SDK
     │   ├── ui-kit                  # ui-kit with Storybook
     │   │
@@ -43,7 +43,7 @@ It is a monorepo that contains the main application and several common libraries
 flowchart TD
     MAP --> B
     MAP --> C
-    A --> 3D(odyssey3d)
+    A --> 3D(core3d)
     3D --> B{{babylon.js / legacy three.js}}
     A --> S(sdk)
     A[APP] --> C(core)
@@ -92,7 +92,7 @@ yarn start:storybook
 #### 3. How to run odyssey 3d app:
 
 ```
-yarn start:odyssey3d
+yarn start:core3d
 ```
 
 #### 4. How to run plugin:
@@ -126,7 +126,7 @@ yarn build:storybook
 #### 3. How to build odyssey 3d app:
 
 ```
-yarn build:odyssey3d
+yarn build:core3d
 ```
 
 #### 4. How to build plugin:
