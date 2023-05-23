@@ -244,11 +244,11 @@ const World3dStore = types
       const {widgetStore} = getRootStore(self);
       const {creatorStore} = widgetStore;
 
-      if (self.selectedObjectId) {
-        console.log('World3dStore : handleClick : already selected', self.selectedObjectId);
-        return;
-      }
-      // self._deselectObject();
+      // if (self.selectedObjectId) {
+      //   console.log('World3dStore : handleClick : already selected', self.selectedObjectId);
+      //   return;
+      // }
+      self._deselectObject();
 
       // self.objectMenuPosition = clickPos || defaultClickPosition;
 

@@ -2,6 +2,7 @@ import {
   AbstractMesh,
   Color3,
   GizmoManager,
+  HighlightLayer,
   Mesh,
   MeshBuilder,
   Scene,
@@ -35,6 +36,11 @@ export enum GizmoTypesEnum {
   BoundingBox
 }
 
+// const HIGHLIGHT_COLOR = Color3.White();
+// const HIGHLIGHT_COLOR = Color3.Purple();
+const HIGHLIGHT_COLOR = Color3.Teal();
+// const HIGHLIGHT_COLOR = Color3.Green();
+
 export class WorldCreatorHelper {
   static isCreatorMode = false;
   static lastLockedID = '';
@@ -42,19 +48,24 @@ export class WorldCreatorHelper {
   static transformSubscription: {unsubscribe: () => void} | undefined;
   static onObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
   static selectedObjectFromGizmo = '';
+  static selectedObjectId = '';
   static scene: Scene;
 
   static placeholder: AbstractMesh;
   static gizmoPartsMap = new Map<string, AbstractMesh>();
 
+  static highlightLayer: HighlightLayer | undefined;
+
   static async initialize(
     scene: Scene,
     onObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void
   ) {
+    console.log('WorldCreatorHelper initialize');
     this.onObjectTransform = onObjectTransform;
     this.isCreatorMode = false;
     this.lastLockedID = '';
     this.selectedObjectFromGizmo = '';
+    this.selectedObjectId = '';
     this.scene = scene;
 
     // Custom gizmo
@@ -66,6 +77,8 @@ export class WorldCreatorHelper {
     this.setGizmoType(GizmoTypesEnum.Scale);
     await this.setupCustomGizmoParts();
     WorldCreatorHelper.setupCustomGizmo();
+
+    this.highlightLayer = new HighlightLayer('hl1', scene);
   }
 
   static async setupCustomGizmoParts() {
@@ -319,6 +332,7 @@ export class WorldCreatorHelper {
   }
 
   static toggleGizmo(objectId: string, on: boolean) {
+    console.log('toggleGizmo', objectId, on);
     if (on) {
       this.selectedObjectFromGizmo = objectId;
 
@@ -337,6 +351,40 @@ export class WorldCreatorHelper {
       this.transformSubscription?.unsubscribe();
       this.selectedObjectFromGizmo = '';
     }
+  }
+
+  static toggleHightlightObject(objectId: string, on: boolean) {
+    if (this.selectedObjectId === objectId) {
+      return;
+    }
+
+    const id = on ? objectId : this.selectedObjectId;
+    this.selectedObjectId = id;
+
+    const node = getNodeFromId(id);
+    console.log('toggleHightlightObject', {objectId, on, node});
+
+    const meshes = node?.getChildMeshes();
+    if (on) {
+      if (meshes && node) {
+        // deselect previously selected ones
+        this.highlightLayer?.removeAllMeshes();
+
+        for (const mesh of meshes || []) {
+          try {
+            if (mesh instanceof Mesh) {
+              this.highlightLayer?.addMesh(mesh, HIGHLIGHT_COLOR);
+            }
+          } catch (e) {
+            console.log('Add mesh to highlight layer error: ', e);
+          }
+        }
+      }
+    } else {
+      this.highlightLayer?.removeAllMeshes();
+    }
+
+    this.selectedObjectId = on ? objectId : '';
   }
 
   static tryLockObject(id: string) {
