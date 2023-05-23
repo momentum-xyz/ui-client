@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {Image, Frame, ProfileLine, WalletHash} from '@momentum-xyz/ui-kit';
 import {absoluteLink, withoutProtocol, useI18n, signUpDateString} from '@momentum-xyz/core';
 
+import {WalletInterface} from 'api';
 import {WorldsOwnedList, WorldsStakedList} from 'ui-kit';
 import {UserModelInterface, WorldInfoModelInterface} from 'core/models';
 
@@ -10,7 +11,7 @@ import * as styled from './ProfileView.styled';
 
 interface PropsInterface {
   user: UserModelInterface;
-  defaultWalletId: string;
+  wallet: WalletInterface | undefined;
   worldsOwnedList: WorldInfoModelInterface[];
   worldsStakedList: WorldInfoModelInterface[];
   onInfoWorld: (uuid: string) => void;
@@ -19,7 +20,7 @@ interface PropsInterface {
 
 const ProfileView: FC<PropsInterface> = ({
   user,
-  defaultWalletId,
+  wallet,
   worldsOwnedList,
   worldsStakedList,
   onInfoWorld,
@@ -49,7 +50,8 @@ const ProfileView: FC<PropsInterface> = ({
             icon="astro"
             label={`${t('actions.joined')} ${signUpDateString(user.createdAt)}`}
           />
-          <WalletHash icon="talisman" hash={defaultWalletId || ''} />
+
+          {wallet && <WalletHash icon={wallet.wallet_icon} hash={wallet.wallet_id} />}
         </styled.GeneralInfo>
       </Frame>
 

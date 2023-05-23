@@ -1,13 +1,14 @@
 import {FC} from 'react';
 import cn from 'classnames';
 import {signUpDateString, useI18n} from '@momentum-xyz/core';
-import {ProfileLine, ButtonEllipse, WalletHash} from '@momentum-xyz/ui-kit';
+import {ProfileLine, ButtonEllipse, WalletHash, IconNameType} from '@momentum-xyz/ui-kit';
 
 import * as styled from './ProfileInfo.styled';
 
 interface PropsInterface {
   weblink?: string | null;
   hash?: string | null;
+  walletIcon?: IconNameType;
   description?: string | null;
   joinDate?: string | null;
   createDate?: string | null;
@@ -18,6 +19,7 @@ interface PropsInterface {
 
 const ProfileInfo: FC<PropsInterface> = ({
   hash,
+  walletIcon,
   description,
   weblink,
   joinDate,
@@ -52,7 +54,7 @@ const ProfileInfo: FC<PropsInterface> = ({
         />
       )}
 
-      {hash && <WalletHash icon="talisman" hash={hash} />}
+      {hash && <WalletHash icon={walletIcon} hash={hash} />}
 
       {(!!onVisit || !!onStake) && (
         <styled.Actions>

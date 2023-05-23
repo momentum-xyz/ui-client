@@ -11,7 +11,7 @@ import {getImageAbsoluteUrl} from 'core/utils';
 
 const Universe3dPage: FC = () => {
   const {widgetManagerStore, universeStore} = useStore();
-  const {allWorlds, allUsers} = universeStore.universe2dStore;
+  const {allSortedWorlds, allUsers} = universeStore.universe2dStore;
 
   const [readyToHandleEvents, setReadyToHandleEvents] = useState<boolean>(false);
 
@@ -28,7 +28,7 @@ const Universe3dPage: FC = () => {
   useEffect(() => {
     console.log(
       'Universe3dPage: useEffect',
-      allWorlds,
+      allSortedWorlds,
       allUsers,
       usersWereInitialised.current,
       worldsWereInitialised.current,
@@ -38,11 +38,11 @@ const Universe3dPage: FC = () => {
       return;
     }
 
-    if (allWorlds.length > 0 && !usersWereInitialised.current) {
+    if (allSortedWorlds.length > 0 && !usersWereInitialised.current) {
       usersWereInitialised.current = true;
       Universe3dEmitter.emit(
         'WorldsAdded',
-        allWorlds.map((world) => ({
+        allSortedWorlds.map((world) => ({
           id: `${world.id}_temp`,
           name: world.name,
           description: world.description || '',
@@ -63,7 +63,7 @@ const Universe3dPage: FC = () => {
         }))
       );
     }
-  }, [allWorlds, allUsers, allUsers.length, allWorlds.length, readyToHandleEvents]);
+  }, [allUsers.length, allSortedWorlds.length, readyToHandleEvents, allSortedWorlds, allUsers]);
 
   return (
     <UniverseScene

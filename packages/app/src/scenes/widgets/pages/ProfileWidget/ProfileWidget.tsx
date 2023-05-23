@@ -107,7 +107,7 @@ const ProfileWidget: FC = () => {
               {activeMenuId === 'viewProfile' && (
                 <ProfileView
                   user={sessionStore.user}
-                  defaultWalletId={nftStore.defaultWalletId}
+                  wallet={nftStore.selectedWallet}
                   worldsOwnedList={sessionStore.worldsOwnedList}
                   worldsStakedList={sessionStore.worldsStakedList}
                   onVisitWorld={onVisitWorld}
@@ -118,7 +118,7 @@ const ProfileWidget: FC = () => {
               {activeMenuId === 'editProfile' && (
                 <ProfileEditor
                   user={sessionStore.user}
-                  defaultWalletId={nftStore.defaultWalletId}
+                  wallet={nftStore.selectedWallet}
                   formErrors={profileStore.formErrors}
                   isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
                   onUpdate={handleProfileUpdate}

@@ -3,15 +3,15 @@ import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {ButtonEllipse, Frame, WalletHash} from '@momentum-xyz/ui-kit';
 
+import {WalletInterface} from 'api';
 import {WalletLogin, TrustPoints, WalletSelector} from 'ui-kit';
-import {WalletModelInterface} from 'core/models';
 import {WalletConfigInterface} from 'wallets';
 
 import * as styled from './ManageWallet.styled';
 
 interface PropsInterface {
   defaultWalletId: string;
-  wallets: WalletModelInterface[];
+  wallets: WalletInterface[];
   onChangeDefaultWallet: (walletId: string) => void;
   onReloadWallets: () => void;
 }
@@ -37,12 +37,12 @@ const ManageWallet: FC<PropsInterface> = ({
         <styled.Title>{t('titles.myWalletAccounts')}</styled.Title>
 
         <styled.WalletContainer>
-          {wallets.map(({wallet_id}) => {
+          {wallets.map(({wallet_id, wallet_icon}) => {
             const isDefault = wallet_id === defaultWalletId;
 
             return (
               <styled.Wallet key={wallet_id}>
-                <WalletHash hash={wallet_id} icon="metamask" />
+                <WalletHash hash={wallet_id} icon={wallet_icon} />
                 <styled.WalletActions>
                   <ButtonEllipse
                     isLabel={isDefault}
