@@ -1,4 +1,4 @@
-import {FC, memo, useRef, useState} from 'react';
+import {FC, memo, useRef} from 'react';
 import {IMaskInput} from 'react-imask';
 import cn from 'classnames';
 import IMask from 'imask';
@@ -38,9 +38,6 @@ const Input: FC<InputPropsInterface> = ({
   const ref = useRef(null);
   const inputRef = useRef(null);
 
-  const [initialValueChanged, setInitialValueChanged] = useState(false);
-  const [initialValue] = useState(value);
-
   return (
     <styled.Container data-testid="Input-test" className={cn(wide && 'wide')}>
       <IMaskInput
@@ -51,12 +48,9 @@ const Input: FC<InputPropsInterface> = ({
         lazy={!(value || value === 0)}
         value={value || value === 0 ? `${value}` : null}
         onAccept={(_, {unmaskedValue}) => {
-          if (!initialValueChanged && initialValue === unmaskedValue) {
-            return;
+          if (value !== unmaskedValue) {
+            onChange(unmaskedValue);
           }
-
-          setInitialValueChanged(true);
-          onChange(unmaskedValue);
         }}
         // @ts-ignore: Typescript issues in library
         placeholder={placeholder}
@@ -76,12 +70,7 @@ const Input: FC<InputPropsInterface> = ({
       )}
 
       {isClearable && (!!value || value === 0) && (
-        <styled.IconClear
-          onClick={() => {
-            setInitialValueChanged(true);
-            onChange('');
-          }}
-        >
+        <styled.IconClear onClick={() => onChange('')}>
           <IconSvg name="close_large" size="s" />
         </styled.IconClear>
       )}
