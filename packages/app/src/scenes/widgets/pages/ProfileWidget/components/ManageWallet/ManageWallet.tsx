@@ -31,8 +31,6 @@ const ManageWallet: FC<PropsInterface> = ({
     onReloadWallets();
   };
 
-  console.log('WALLETS', wallets);
-
   return (
     <styled.Container data-testid="ManageWallet-test">
       <Frame>

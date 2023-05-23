@@ -44,10 +44,6 @@ const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {user, worldsOwned, worldsStakedIn} = userDetails;
   const myWallet = sessionStore.userId === user.id ? nftStore.selectedWallet : null;
 
-  console.log('///user.wallet');
-  console.log(myWallet);
-  console.log(user.wallet);
-
   return (
     <styled.Container data-testid="UserDetailsWidget-test">
       <Panel
