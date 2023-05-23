@@ -127,7 +127,7 @@ const SpawnAssetStore = types
       if (response) {
         const assets =
           response
-            .map(({id, meta: {name = 'n/a', preview_hash, category}}) => ({
+            .map(({id, meta: {name = id, preview_hash, category}}) => ({
               id,
               category,
               name,
