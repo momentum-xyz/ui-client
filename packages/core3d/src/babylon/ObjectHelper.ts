@@ -242,7 +242,7 @@ export class ObjectHelper {
       console.log('size:', size);
 
       // node.position = new Vector3(0, -0.5, -3);
-      node.position = new Vector3(0, -0.5, -size - 2);
+      node.position = new Vector3(0, 0, -size * 2);
 
       this.setSpawningMaterial(node);
 
