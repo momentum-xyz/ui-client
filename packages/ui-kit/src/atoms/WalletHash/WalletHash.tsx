@@ -14,7 +14,7 @@ export interface WalletHashPropsInterface {
 const WalletHash: FC<WalletHashPropsInterface> = ({icon, hash}) => {
   return (
     <styled.WalletContainer data-testid="WalletHash-test" className={cn(!icon && 'noIcon')}>
-      {icon && <IconSvg name="talisman" size="l" />}
+      {icon && <IconSvg name={icon} size="l" />}
       <styled.Wallet>{hash}</styled.Wallet>
     </styled.WalletContainer>
   );

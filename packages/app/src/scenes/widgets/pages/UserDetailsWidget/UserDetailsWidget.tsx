@@ -12,7 +12,7 @@ import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 import * as styled from './UserDetailsWidget.styled';
 
 const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
-  const {widgetManagerStore, widgetStore} = useStore();
+  const {widgetManagerStore, widgetStore, sessionStore, nftStore} = useStore();
   const {userDetailsStore} = widgetStore;
   const {userDetails} = userDetailsStore;
 
@@ -42,6 +42,11 @@ const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   }
 
   const {user, worldsOwned, worldsStakedIn} = userDetails;
+  const myWallet = sessionStore.userId === user.id ? nftStore.selectedWallet : null;
+
+  console.log('///user.wallet');
+  console.log(myWallet);
+  console.log(user.wallet);
 
   return (
     <styled.Container data-testid="UserDetailsWidget-test">
@@ -63,7 +68,8 @@ const UserDetailsWidget: FC<WidgetInfoModelInterface> = ({data}) => {
             />
 
             <ProfileInfo
-              hash={user.wallet}
+              hash={myWallet?.wallet_id || user.wallet}
+              walletIcon={myWallet?.wallet_icon}
               description={user?.profile.bio}
               weblink={user?.profile.profileLink}
               joinDate={user?.createdAt}

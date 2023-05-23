@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {Universe3dEmitter, useI18n} from '@momentum-xyz/core';
 import {Panel, ImageSizeEnum, Frame} from '@momentum-xyz/ui-kit';
 
+import {WalletInterface} from 'api';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ProfileInfo, ProfileImage, WorldsOwnedList, WorldsStakedList} from 'ui-kit';
 import {UserDetailsModelType} from 'core/models';
@@ -11,13 +12,14 @@ import * as styled from './UserDetails.styled';
 
 interface PropsInterface {
   userDetails: UserDetailsModelType;
+  userWallet?: WalletInterface | null;
   onVisitWorld: (worldId: string) => void;
   onSelectWorld: (worldId: string) => void;
   onClose: () => void;
 }
 
 const UserDetails: FC<PropsInterface> = (props) => {
-  const {userDetails, onVisitWorld, onSelectWorld, onClose} = props;
+  const {userDetails, userWallet, onVisitWorld, onSelectWorld, onClose} = props;
   const {user, userId, worldsOwned, worldsStakedIn} = userDetails;
 
   const {t} = useI18n();
@@ -46,7 +48,8 @@ const UserDetails: FC<PropsInterface> = (props) => {
             />
 
             <ProfileInfo
-              hash={user?.wallet}
+              hash={userWallet?.wallet_id || user?.wallet}
+              walletIcon={userWallet?.wallet_icon}
               description={user?.profile.bio}
               weblink={user?.profile.profileLink}
               joinDate={user?.createdAt}

@@ -18,7 +18,7 @@ const TABS_LIST: TabInterface<ExploreTabType>[] = [
 ];
 
 const ExploreWidget: FC = () => {
-  const {universeStore, widgetManagerStore} = useStore();
+  const {universeStore, widgetManagerStore, nftStore, sessionStore} = useStore();
   const {universe2dStore} = universeStore;
   const {hasSelectedUnit} = universe2dStore;
   const {close} = widgetManagerStore;
@@ -53,6 +53,8 @@ const ExploreWidget: FC = () => {
   const onStakeWorld = (worldId: string) => {
     goToOdysseyAndStake(worldId);
   };
+
+  const isMyProfile = sessionStore.userId === universe2dStore.selectedUser?.userId;
 
   return (
     <styled.Container data-testid="ExploreWidget-test">
@@ -122,6 +124,7 @@ const ExploreWidget: FC = () => {
         <styled.Details>
           <UserDetails
             userDetails={universe2dStore.selectedUser}
+            userWallet={isMyProfile ? nftStore.selectedWallet : null}
             onVisitWorld={onVisitWorld}
             onSelectWorld={onSelectWorld}
             onClose={universe2dStore.resetUnits}

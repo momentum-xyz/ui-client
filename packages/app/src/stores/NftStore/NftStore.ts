@@ -70,7 +70,7 @@ const NftStore = types
       return self._selectedWalletId || self.defaultWalletId || self.walletsAddresses[0];
     },
     get wallets(): WalletInterface[] {
-      return self.walletsAddresses.map(
+      const walletList = self.walletsAddresses.map(
         (address) =>
           self._wallets.find((w) => w.wallet_id === address) || {
             wallet_id: address,
@@ -84,6 +84,15 @@ const NftStore = types
             updated_at: ''
           }
       );
+
+      return walletList.map((wallet) => {
+        const walletId = self.walletsIdByAddress.get(wallet.wallet_id);
+        const walletConf = availableWallets.find((w) => w.id === walletId);
+        return {
+          ...wallet,
+          wallet_icon: walletConf?.icon
+        };
+      });
     }
   }))
   .views((self) => ({

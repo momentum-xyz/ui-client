@@ -1,4 +1,4 @@
-import {UserStatusEnum} from '@momentum-xyz/ui-kit';
+import {IconNameType, UserStatusEnum} from '@momentum-xyz/ui-kit';
 
 import {UserProfileInterface, WorldInfoInterface} from 'api';
 
@@ -53,6 +53,7 @@ export interface WalletInterface {
   transferable: string;
   staked: string;
   unbonding: string;
+  wallet_icon?: IconNameType;
 }
 
 /** FETCH ME **/
