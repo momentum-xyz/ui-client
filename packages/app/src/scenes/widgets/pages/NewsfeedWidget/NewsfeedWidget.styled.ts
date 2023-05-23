@@ -24,5 +24,7 @@ export const Tabs = styled.div`
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  & > div:first-child > div {
+    padding-top: 30px;
+  }
 `;

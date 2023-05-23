@@ -150,7 +150,7 @@ const NewsfeedWidget: FC = () => {
     <styled.Container data-testid="NewsfeedWidget-test">
       <Panel
         isFullHeight
-        size="large"
+        size="normal"
         icon="newsfeed"
         variant="primary"
         title={t('labels.newsfeed')}
