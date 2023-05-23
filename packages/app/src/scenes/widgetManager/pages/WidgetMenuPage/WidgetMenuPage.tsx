@@ -7,6 +7,8 @@ import {useI18n} from '@momentum-xyz/core';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {WidgetEnum} from 'core/enums';
+import {isFeatureEnabled} from 'api/constants';
+import {FeatureFlagEnum} from 'api/enums';
 
 import * as styled from './WidgetMenuPage.styled';
 
@@ -38,6 +40,18 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
     tooltip: t('actions.visitOdyssey'),
     onClick: () => navigate(generatePath(ROUTES.odyssey.base, {worldId: world.id}))
   }));
+
+  const NEWSFEED: MenuItemExtendedInterface[] = isFeatureEnabled(FeatureFlagEnum.NEWSFEED)
+    ? [
+        {
+          key: WidgetEnum.NEWSFEED,
+          position: PositionEnum.LEFT,
+          iconName: 'newsfeed',
+          tooltip: t('labels.newsfeed'),
+          onClick: toggle
+        }
+      ]
+    : [];
 
   const MENU_ITEMS: MenuItemExtendedInterface[] = [
     {
@@ -86,13 +100,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       tooltip: t('labels.stakingOverview'),
       onClick: toggle
     },
-    {
-      key: WidgetEnum.NEWSFEED,
-      position: PositionEnum.LEFT,
-      iconName: 'newsfeed',
-      tooltip: t('labels.newsfeed'),
-      onClick: toggle
-    },
+    ...NEWSFEED,
     ...ODYSSEY_ITEMS,
     {
       key: WidgetEnum.STAKING,
