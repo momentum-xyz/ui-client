@@ -40,8 +40,6 @@ const Universe3dPage: FC = () => {
 
     if (allSortedWorlds.length > 0 && !usersWereInitialised.current) {
       usersWereInitialised.current = true;
-      console.log('allSortedWorlds', allSortedWorlds);
-
       Universe3dEmitter.emit(
         'WorldsAdded',
         allSortedWorlds.map((world) => ({
