@@ -15,7 +15,7 @@ export const useWallet: UseWalletType = () => {
 
   const {ethereum} = window as any;
   // this structure exists when both Metamask and Coinbase Wallet are installed
-  const metamaskProvider = ethereum?.providers?.find((p: any) => p.isMetaMask);
+  const metamaskProvider = ethereum?.providers?.find((p: any) => p.isMetaMask && !p.isTalisman);
   const isInstalled = !!metamaskProvider || ethereum?.isMetaMask;
   console.log('MetaMask useWallet metamaskProvider', metamaskProvider);
 
