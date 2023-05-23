@@ -12,7 +12,7 @@ COPY package.json yarn.lock ./
 COPY packages/core/package.json ./packages/core/
 COPY packages/ui-kit/package.json ./packages/ui-kit/
 COPY packages/sdk/package.json ./packages/sdk/
-COPY packages/odyssey3d/package.json ./packages/odyssey3d/
+COPY packages/core3d/package.json ./packages/core3d/
 
 COPY packages/plugin_miro/package.json ./packages/plugin_miro/
 COPY packages/plugin_google_drive/package.json ./packages/plugin_google_drive/

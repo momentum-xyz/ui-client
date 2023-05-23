@@ -3,7 +3,7 @@ import {matchPath, useLocation} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {useDebouncedCallback, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
-import {BabylonScene} from '@momentum-xyz/odyssey3d';
+import {BabylonScene} from '@momentum-xyz/core3d';
 import {
   Event3dEmitter,
   ClickPositionInterface,

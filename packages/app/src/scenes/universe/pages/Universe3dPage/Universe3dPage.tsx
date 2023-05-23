@@ -1,7 +1,7 @@
 import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Universe3dEmitter} from '@momentum-xyz/core';
-import {UniverseScene} from '@momentum-xyz/odyssey3d';
+import {UniverseScene} from '@momentum-xyz/core3d';
 import {PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {appVariables} from 'api/constants';

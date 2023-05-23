@@ -2,7 +2,7 @@ import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useEffect, useState} from 'react';
 import {Button, Frame, Input} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
-import {Model3dPreview} from '@momentum-xyz/odyssey3d';
+import {Model3dPreview} from '@momentum-xyz/core3d';
 
 import {useStore} from 'shared/hooks';
 
