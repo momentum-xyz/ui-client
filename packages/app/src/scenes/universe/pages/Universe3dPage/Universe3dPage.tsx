@@ -20,6 +20,8 @@ const Universe3dPage: FC = () => {
   const worldsWereInitialised = useRef<boolean>(false);
 
   useEffect(() => {
+    widgetManagerStore.open(WidgetEnum.EXPLORE, PositionEnum.LEFT);
+
     return () => {
       widgetManagerStore.closeAll();
     };

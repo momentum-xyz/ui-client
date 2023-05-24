@@ -38,7 +38,13 @@ const ItemCard: FC<ItemCardPropsInterface> = ({
 
   return (
     <styled.Wrapper data-testid="ItemCard-test" className={cn(variant)}>
-      <Image src={imageUrl} errorIcon={imageErrorIcon} height={imageHeight} onClick={onInfoClick} />
+      <Image
+        src={imageUrl}
+        errorIcon={imageErrorIcon}
+        isIconAccent
+        height={imageHeight}
+        onClick={onInfoClick}
+      />
       <styled.ItemContent className={cn(variant)}>
         <styled.ItemNameContainer>
           <styled.ItemName className={cn(variant)}>

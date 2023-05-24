@@ -67,11 +67,6 @@ const WidgetManagerStore = types
       self.subMenuInfo?.activeKeys.replace(keys);
     }
   }))
-  .actions((self) => ({
-    afterCreate() {
-      self.open(WidgetEnum.EXPLORE, PositionEnum.LEFT);
-    }
-  }))
   .views((self) => ({
     get activeWidgetList(): Array<WidgetEnum> {
       const widgets: WidgetEnum[] = [];

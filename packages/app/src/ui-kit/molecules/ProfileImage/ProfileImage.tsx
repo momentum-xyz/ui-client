@@ -27,6 +27,7 @@ const ProfileImage: FC<PropsInterface> = (props) => {
         <Image
           src={getImageAbsoluteUrl(image, ImageSizeEnum.S6)}
           errorIcon={imageErrorIcon}
+          isIconAccent
           height={imageHeight}
         />
         {name && (

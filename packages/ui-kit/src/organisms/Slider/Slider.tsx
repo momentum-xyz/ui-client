@@ -49,6 +49,7 @@ const Slider = <T,>({
               src={item.image}
               errorIcon={errorIcon}
               errorIconOffset={errorIconOffset}
+              isIconAccent
             />
             <styled.ItemName>
               <span>{item.name}</span>

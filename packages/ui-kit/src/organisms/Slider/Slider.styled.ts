@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import {rgba} from 'polished';
 
 export const Container = styled.div`
+  --lg-name-from: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0)};
+  --lg-name-to: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+
   position: relative;
   margin: 0 -5px;
 
@@ -25,14 +28,17 @@ export const ItemLink = styled.div`
 export const ItemName = styled.div`
   position: absolute;
   display: flex;
+  height: 30px;
+  align-items: center;
   justify-content: flex-start;
+  background: linear-gradient(180deg, var(--lg-name-from) 0%, var(--lg-name-to) 100%);
   color: ${(props) => props.theme.text};
-  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
+  border-radius: 0px 0px 4px 4px;
   font-size: var(--font-size-s);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 600;
-  bottom: 8px;
+  bottom: 0;
   right: 5px;
   left: 5px;
 

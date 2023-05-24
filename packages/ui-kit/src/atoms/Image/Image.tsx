@@ -9,8 +9,9 @@ import * as styled from './Image.styled';
 export interface ImagePropsInterface {
   src?: string | null;
   height?: number;
-  errorIcon?: IconNameType;
+  errorIcon?: IconNameType | null;
   errorIconOffset?: number;
+  isIconAccent?: boolean;
   bordered?: boolean;
   onClick?: () => void;
 }
@@ -20,7 +21,8 @@ const Image: FC<ImagePropsInterface> = ({
   height = 124,
   errorIcon = 'rabbit_fill',
   errorIconOffset = 0,
-  bordered = false,
+  isIconAccent,
+  bordered,
   onClick
 }) => {
   const [isError, setIsError] = useState<boolean>(false);
@@ -35,9 +37,11 @@ const Image: FC<ImagePropsInterface> = ({
       {src && !isError ? (
         <styled.Image src={src} onError={() => setIsError(true)} />
       ) : (
-        <styled.ErroredImage errorIconOffset={errorIconOffset}>
-          <Hexagon type="secondary" iconName={errorIcon} noHover skipOuterBorder />
-        </styled.ErroredImage>
+        <styled.ErrorContainer>
+          <styled.Error errorIconOffset={errorIconOffset} className={cn(isIconAccent && 'accent')}>
+            <Hexagon type="secondary-borderless" iconName={errorIcon} noHover skipOuterBorder />
+          </styled.Error>
+        </styled.ErrorContainer>
       )}
     </styled.Container>
   );
