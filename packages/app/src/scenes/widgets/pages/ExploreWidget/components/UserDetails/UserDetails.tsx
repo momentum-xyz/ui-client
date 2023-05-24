@@ -28,6 +28,10 @@ const UserDetails: FC<PropsInterface> = (props) => {
     Universe3dEmitter.emit('UserSelected', userId);
   }, [userId]);
 
+  if (!user) {
+    return <></>;
+  }
+
   return (
     <styled.Container data-testid="UserDetails-test">
       <Panel
@@ -35,24 +39,24 @@ const UserDetails: FC<PropsInterface> = (props) => {
         size="normal"
         icon="astronaut"
         variant="primary"
-        image={getImageAbsoluteUrl(user?.profile.avatarHash, ImageSizeEnum.S3)}
+        image={getImageAbsoluteUrl(user.profile.avatarHash, ImageSizeEnum.S3)}
         title={t('labels.memberProfile')}
         onClose={onClose}
       >
         <styled.Wrapper>
           <Frame>
             <ProfileImage
-              name={user?.name || user?.id || ''}
-              image={user?.profile.avatarHash}
+              name={user.name || user.id}
+              image={user.profile.avatarHash}
               imageErrorIcon="astronaut"
             />
 
             <ProfileInfo
-              hash={userWallet?.wallet_id || user?.wallet}
+              hash={userWallet?.wallet_id || user.wallet}
               walletIcon={userWallet?.wallet_icon}
-              description={user?.profile.bio}
-              weblink={user?.profile.profileLink}
-              joinDate={user?.createdAt}
+              description={user.profile.bio}
+              weblink={user.profile.profileLink}
+              joinDate={user.createdAt}
             />
           </Frame>
 

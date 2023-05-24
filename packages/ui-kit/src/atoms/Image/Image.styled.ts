@@ -7,7 +7,6 @@ export const Container = styled.div<{height: number}>`
   display: flex;
   width: 100%;
   height: ${(props) => props.height}px;
-  background-color: ${(props) => props.theme.bg && rgba(props.theme.bg, 0.8)};
   align-items: center;
   justify-content: center;
   border-radius: var(--border-radius);
@@ -27,7 +26,23 @@ export const Image = styled.img`
   border-radius: var(--border-radius);
 `;
 
-export const ErroredImage = styled.div<{errorIconOffset: number}>`
+export const ErrorContainer = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius);
+  background-color: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.8)};
+`;
+
+export const Error = styled.div<{errorIconOffset: number}>`
   padding: 0 0 ${(props) => props.errorIconOffset}px 0;
   pointer-events: none;
+
+  &.accent {
+    svg {
+      color: ${(props) => props.theme.accentText};
+    }
+  }
 `;

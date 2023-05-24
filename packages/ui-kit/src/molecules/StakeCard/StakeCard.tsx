@@ -30,7 +30,7 @@ const StakeCard: FC<StakeCardPropsInterface> = ({
 
   return (
     <styled.Wrapper data-testid="StakeCard-test">
-      <Image src={worldImageUrl} errorIcon="rabbit_fill" onClick={onInfoClick} />
+      <Image src={worldImageUrl} errorIcon="rabbit_fill" isIconAccent onClick={onInfoClick} />
       <styled.Content>
         <styled.Name>{worldName}</styled.Name>
 
