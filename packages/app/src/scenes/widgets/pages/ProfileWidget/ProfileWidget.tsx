@@ -120,7 +120,7 @@ const ProfileWidget: FC = () => {
                   user={sessionStore.user}
                   wallet={nftStore.selectedWallet}
                   formErrors={profileStore.formErrors}
-                  isUpdating={profileStore.isUpdating || sessionStore.isUpdatingInBlockchain}
+                  isUpdating={profileStore.isUpdating}
                   onUpdate={handleProfileUpdate}
                   onCancel={() => setActiveMenuId('viewProfile')}
                 />

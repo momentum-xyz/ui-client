@@ -5,19 +5,15 @@ import {api, UploadImageResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
 import {SignUpFormInterface} from 'core/interfaces';
 
-const SignInStore = types.compose(
+const LoginStore = types.compose(
   ResetModel,
   types
-    .model('SignInStore', {
-      wallet: '',
+    .model('LoginStore', {
       avatarRequest: types.optional(RequestModel, {}),
       profileRequest: types.optional(RequestModel, {}),
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), [])
     })
     .actions((self) => ({
-      selectWallet(wallet: string): void {
-        self.wallet = wallet;
-      },
       getAvatarHash: flow(function* (form: SignUpFormInterface) {
         if (!form.avatar) {
           return;
@@ -54,7 +50,6 @@ const SignInStore = types.compose(
 
         if (self.profileRequest.isError && response?.errors) {
           self.fieldErrors = cast(
-            // eslint-disable-next-line
             Object.keys(response.errors).map((key) => ({
               fieldName: key,
               errorMessage: response.errors[key]
@@ -68,11 +63,8 @@ const SignInStore = types.compose(
     .views((self) => ({
       get isUpdating(): boolean {
         return self.profileRequest.isPending || self.avatarRequest.isPending;
-      },
-      get errors(): FieldErrorInterface[] {
-        return [...self.fieldErrors];
       }
     }))
 );
 
-export {SignInStore};
+export {LoginStore};

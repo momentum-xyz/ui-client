@@ -24,12 +24,12 @@ interface PropsInterface {
 const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
   const {sessionStore, widgetManagerStore, universeStore, agoraStore} = useStore();
   const {toggle, activeWidgetList, subMenuInfo} = widgetManagerStore;
-  const {isGuest, userImageUrl} = sessionStore;
   const {isMyWorld, world2dStore} = universeStore;
 
   const {t} = useI18n();
-
   const navigate = useNavigate();
+
+  const isGuest = sessionStore.isGuest || sessionStore.isSignUpInProgress;
 
   const ODYSSEY_ITEMS: MenuItemExtendedInterface[] = sessionStore.worldsOwnedList.map((world) => ({
     key: WidgetEnum.GO_TO,
@@ -78,7 +78,8 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
     {
       key: WidgetEnum.MY_PROFILE,
       position: PositionEnum.LEFT,
-      imageSrc: userImageUrl,
+      iconName: 'astronaut',
+      imageSrc: sessionStore.userImageUrl,
       iconIndicator: agoraStore.hasJoined ? 'voice' : undefined,
       isHidden: isGuest,
       tooltip: t('titles.myProfile'),
@@ -152,6 +153,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
   ];
 
   const items = isWelcomePage ? [] : MENU_ITEMS.filter((menuItem) => !menuItem.isHidden);
+
   return (
     <styled.Container data-testid="WidgetMenuPage-test">
       <Menu
