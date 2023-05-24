@@ -48,7 +48,9 @@ const Input: FC<InputPropsInterface> = ({
         lazy={!(value || value === 0)}
         value={value || value === 0 ? `${value}` : null}
         onAccept={(_, {unmaskedValue}) => {
-          onChange(unmaskedValue);
+          if (value !== unmaskedValue) {
+            onChange(unmaskedValue);
+          }
         }}
         // @ts-ignore: Typescript issues in library
         placeholder={placeholder}
