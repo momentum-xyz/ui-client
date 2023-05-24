@@ -17,6 +17,7 @@ const TABS_LIST: TabInterface<NewsfeedTabTypeEnum>[] = [
 
 const NewsfeedWidget: FC = () => {
   const {widgetManagerStore, widgetStore, sessionStore} = useStore();
+  const {isGuest, worldsOwnedList} = sessionStore;
   const {close} = widgetManagerStore;
   const {newsfeedStore} = widgetStore;
   const {newsfeedType, entries, currentTabEntries, setActiveNewsfeedType, setEntries} =
@@ -30,8 +31,8 @@ const NewsfeedWidget: FC = () => {
     if (entries.length || !sessionStore.user) {
       return;
     }
-    const {isGuest, worldsOwnedList} = sessionStore;
-    const worldId = isGuest ? null : worldsOwnedList[0].id;
+
+    const worldId = !isGuest && worldsOwnedList.length > 0 ? worldsOwnedList[0].id : null;
     const dummyEntries: NewsfeedEntryModelInterface[] = [
       {
         id: '1',
