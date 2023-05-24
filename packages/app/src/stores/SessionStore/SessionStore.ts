@@ -1,69 +1,38 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {LAST_AIRDROP_KEY, RequestModel} from '@momentum-xyz/core';
 
-import {storage} from 'shared/services';
-import {StorageKeyEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {getAccessToken, refreshAxiosToken} from 'api/request';
 import {PolkadotAddressInterface, User, WorldInfo} from 'core/models';
 import PolkadotImplementation from 'shared/services/web3/polkadot.class';
-import {
-  api,
-  AuthChallengeRequest,
-  CheckProfileUpdatingJobResponse,
-  FetchMeResponse,
-  WorldInfoInterface
-} from 'api';
+import {api, AuthChallengeRequest, FetchMeResponse, WorldInfoInterface} from 'api';
 
 const SessionStore = types
   .model('SessionStore', {
     token: '',
     isAuthenticating: true,
     user: types.maybeNull(User),
-    signUpUser: types.maybeNull(User),
     worldsOwnedList: types.optional(types.array(WorldInfo), []),
     worldsStakedList: types.optional(types.array(WorldInfo), []),
-    profileJobId: types.maybeNull(types.string),
 
     guestTokenRequest: types.optional(RequestModel, {}),
     challengeRequest: types.optional(RequestModel, {}),
     tokenRequest: types.optional(RequestModel, {}),
     attachAccountRequest: types.optional(RequestModel, {}),
     profileRequest: types.optional(RequestModel, {}),
-    profileJobRequest: types.optional(RequestModel, {}),
     worldsRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
-    updateAxiosAndPosbusTokens(token: string): void {
-      console.log('SessionStore: updateAxiosAndPosbusTokens', token);
+    updateJwtToken(token: string): void {
       self.token = token;
-      // TODO: Uncomment. Check Unity is ready.
-      // const {universeStore} = getRootStore(self).mainStore;
-      // universeStore.setAuthToken(self.token); // TODO: change key
       refreshAxiosToken(self.token);
-    }
-  }))
-  // FIXME: Profile changes should come from a new PosBus
-  .actions((self) => ({
-    initJobId(): void {
-      const jobId = storage.get<string>(StorageKeyEnum.ProfileJobId);
-      self.profileJobId = jobId || null;
-    },
-    setupJobId(jobId: string) {
-      storage.setString(StorageKeyEnum.ProfileJobId, jobId);
-      self.profileJobId = jobId;
-    },
-    clearJobId() {
-      storage.delete(StorageKeyEnum.ProfileJobId);
-      self.profileJobId = null;
     }
   }))
   .actions((self) => ({
     fetchGuestToken: flow(function* () {
       const response = yield self.guestTokenRequest.send(api.authRepository.getGuestToken, {});
-      self.updateAxiosAndPosbusTokens(response?.token || '');
-
+      self.updateJwtToken(response?.token || '');
       return !!response?.token;
     }),
     fetchTokenByWalletPolkadot: flow(function* (account: PolkadotAddressInterface) {
@@ -74,7 +43,6 @@ const SessionStore = types
       const response = yield self.challengeRequest.send(api.authRepository.getChallenge, data);
 
       if (!!response?.challenge && !!account) {
-        // PolkadotImplementation.getAddresses();
         const result = yield PolkadotImplementation.signRaw(
           account.meta?.source || '',
           PolkadotImplementation.convertStringToHex(response.challenge),
@@ -83,9 +51,6 @@ const SessionStore = types
         if (result?.signature) {
           const data = {wallet: hexPublicKey, signedChallenge: result.signature};
           const response = yield self.tokenRequest.send(api.authRepository.getToken, data);
-          // don't update here, return
-          // self.updateAxiosAndUnityTokens(response?.token || '');
-
           return response?.token;
         }
       }
@@ -109,10 +74,6 @@ const SessionStore = types
             network: account.length > 42 ? 'polkadot' : 'ethereum'
           };
           const response = yield self.tokenRequest.send(api.authRepository.getToken, data);
-
-          // there's a race condition between the token and the stored user profile
-          // self.updateAxiosAndUnityTokens(response?.token || '');
-
           if (response?.token) {
             return response.token;
           }
@@ -152,42 +113,20 @@ const SessionStore = types
             throw new Error(attachResponse.error?.message || 'Error attaching account');
           }
 
-          //self.user.wallets = cast(attachResponse.wallet);
-
           return;
         }
       }
       throw new Error('Error attaching account');
-    }),
-    fetchProfileJobStatus: flow(function* () {
-      if (self.profileJobId) {
-        const response: CheckProfileUpdatingJobResponse = yield self.profileJobRequest.send(
-          api.userProfileRepository.checkJobById,
-          {job_id: self.profileJobId}
-        );
-
-        return response?.status;
-      }
-
-      return;
     }),
     loadUserProfile: flow(function* () {
       const response: FetchMeResponse = yield self.profileRequest.send(
         api.userRepository.fetchMe,
         {}
       );
-      if (!response?.id) {
-        return false;
-      }
 
-      if (!response.name) {
-        // handle tmp user creation
-        self.signUpUser = cast(response);
-      } else {
+      if (response?.id) {
         self.user = cast(response);
-        self.signUpUser = cast(null);
       }
-      return true;
     }),
     loadOwnWorlds: flow(function* () {
       const userWorlds: WorldInfoInterface[] = yield self.worldsRequest.send(
@@ -208,19 +147,7 @@ const SessionStore = types
       if (userWorlds) {
         self.worldsStakedList = cast(userWorlds);
       }
-    }),
-    signOutRedirect(): void {
-      self.clearJobId();
-      self.updateAxiosAndPosbusTokens('');
-
-      // FIXME: To use the storage instance and the StorageKeyEnum
-      localStorage.removeItem(LAST_AIRDROP_KEY);
-      document.location = ROUTES.explore;
-    },
-    // TODO: Removal
-    signInRedirect(isNewAccount?: boolean): void {
-      // document.location = isNewAccount ? ROUTES.signInAccount : ROUTES.signInAccount;
-    }
+    })
   }))
   .actions((self) => ({
     loadUserData: flow(function* () {
@@ -236,24 +163,24 @@ const SessionStore = types
     init: flow(function* () {
       const token = getAccessToken();
       if (token) {
-        self.updateAxiosAndPosbusTokens(token);
+        self.updateJwtToken(token);
       } else {
         yield self.fetchGuestToken();
       }
 
-      self.initJobId();
-
       yield self.loadUserData();
     }),
-    saveTokenAndClearUser(token: string): void {
-      console.log('SessionStore: saveTokenAfterSignIn', token);
-      if (self.user) {
-        console.log('SessionStore: saveTokenAfterSignIn: clear previous user', self.user.id);
-        self.isAuthenticating = true;
-        self.user = null;
-      }
-      // user will be fetched additionally
-      self.updateAxiosAndPosbusTokens(token);
+    saveTokenAndRefreshUser(token: string): void {
+      console.log('[SessionStore]: SaveTokenAndRefreshUser', token);
+      self.updateJwtToken(token);
+      self.loadUserData();
+    },
+    signOutRedirect(): void {
+      self.updateJwtToken('');
+
+      // FIXME: To use the storage instance and the StorageKeyEnum
+      localStorage.removeItem(LAST_AIRDROP_KEY);
+      document.location = ROUTES.explore;
     }
   }))
   .views((self) => ({
@@ -263,20 +190,11 @@ const SessionStore = types
     get isAuthenticated(): boolean {
       return !!self.token || !self.isAuthenticating;
     },
-    get errorFetchingProfile(): boolean {
-      // const {errorCode} = self.profileRequest;
-      // TODO check why sometimes the error code is undefined, perhaps CORS issues
-      // console.log('errorFetchingProfile', errorCode, self.profileRequest);
-      return !!self.token && !self.isAuthenticating && !self.user;
+    get isSignUpInProgress(): boolean {
+      return !!self.user && !self.user.isGuest && !self.user.name;
     },
-    get isTokenPending(): boolean {
-      return self.challengeRequest.isPending || self.tokenRequest.isPending;
-    },
-    get isUpdatingInBlockchain(): boolean {
-      return !!self.profileJobId;
-    },
-    get isGuestTokenPending(): boolean {
-      return self.guestTokenRequest.isPending;
+    get isProfileError(): boolean {
+      return self.profileRequest.isError;
     },
     get isUserReady(): boolean {
       return !!self.user;

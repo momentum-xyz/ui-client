@@ -8,11 +8,7 @@ import {WalletConfigInterface} from 'wallets';
 
 import * as styled from './SignIn.styled';
 
-interface PropsInterface {
-  onConnected?: () => void;
-}
-
-const SignIn: FC<PropsInterface> = ({onConnected}) => {
+const SignIn: FC = () => {
   const {t} = useI18n();
 
   const [selectedWallet, setSelectedWallet] = useState<WalletConfigInterface | null>(null);
@@ -66,11 +62,7 @@ const SignIn: FC<PropsInterface> = ({onConnected}) => {
             )}
 
             {connectWithWallet && (
-              <WalletLogin
-                key={selectedWallet.name}
-                walletConf={selectedWallet}
-                onConnected={onConnected}
-              />
+              <WalletLogin key={selectedWallet.name} walletConf={selectedWallet} />
             )}
           </>
         )}

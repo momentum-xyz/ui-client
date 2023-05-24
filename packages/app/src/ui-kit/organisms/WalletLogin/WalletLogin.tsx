@@ -40,7 +40,7 @@ const WalletLogin: FC<PropsInterface> = ({
     (attachSecondaryAccount
       ? sessionStore.attachAnotherAccount(accountHex, signChallenge)
       : sessionStore.fetchTokenByWallet(accountHex, signChallenge).then((token) => {
-          sessionStore.saveTokenAndClearUser(token);
+          sessionStore.saveTokenAndRefreshUser(token);
         })
     )
       .then(() => {

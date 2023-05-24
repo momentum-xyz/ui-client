@@ -8,7 +8,7 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.div`
-  padding: 10px 0 0 0;
+  padding: 12px 0 0 0;
   font-size: var(--font-size-l);
   text-transform: uppercase;
   letter-spacing: 0.2em;

@@ -4,7 +4,6 @@ import {rgba} from 'polished';
 export const Container = styled.div``;
 
 export const Wrapper = styled.div`
-  padding: 10px;
   border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
 `;
 

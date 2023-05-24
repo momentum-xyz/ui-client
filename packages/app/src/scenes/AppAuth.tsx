@@ -1,71 +1,39 @@
 import {FC, ReactNode, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import {useNavigate} from 'react-router-dom';
+import {PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {PosBusService} from 'shared/services';
-//import {TOAST_GROUND_OPTIONS, ToastContent} from 'ui-kit';
-
-//const PROFILE_JOB_CHECKER_MS = 3 * 1000;
+import {ROUTES} from 'core/constants';
+import {WidgetEnum} from 'core/enums';
 
 const AppAuth: FC<{children: ReactNode}> = ({children}) => {
-  const {sessionStore, nftStore, universeStore} = useStore();
+  const {sessionStore, nftStore, universeStore, widgetManagerStore} = useStore();
+  const {isSignUpInProgress} = sessionStore;
 
-  //const {t} = useI18n();
-
-  // FIXME: It should be removed. Profile changes should come from a new PosBus
-  /*useEffect(() => {
-    let jobInterval: NodeJS.Timer | undefined;
-
-    if (sessionStore.profileJobId) {
-      jobInterval = setInterval(() => {
-        sessionStore.fetchProfileJobStatus().then((status) => {
-          if (status === CheckJobStatusEnum.StatusDone) {
-            sessionStore.clearJobId();
-            sessionStore.loadUserProfile();
-            nftStore.fetchNfts();
-
-            toast.info(
-              <ToastContent
-                headerIconName="people"
-                title={t('titles.alert')}
-                text={t('editProfileWidget.saveSuccess')}
-                showCloseButton
-              />,
-              TOAST_GROUND_OPTIONS
-            );
-          } else if (status === CheckJobStatusEnum.StatusFailed) {
-            sessionStore.clearJobId();
-
-            toast.error(
-              <ToastContent
-                isDanger
-                headerIconName="people"
-                title={t('titles.alert')}
-                text={t('editProfileWidget.saveFailure')}
-                showCloseButton
-              />
-            );
-          }
-        });
-      }, PROFILE_JOB_CHECKER_MS);
-    }
-
-    return () => {
-      clearInterval(jobInterval);
-    };
-  }, [sessionStore.profileJobId, sessionStore, nftStore, t]);*/
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(
-      'AppAuth useEffect sessionStore.token:',
-      sessionStore.token,
-      'user:',
-      sessionStore.user
-    );
-    if (sessionStore.token && sessionStore.user) {
+    if (isSignUpInProgress) {
+      navigate(ROUTES.explore);
+      widgetManagerStore.open(WidgetEnum.LOGIN, PositionEnum.LEFT);
+    }
+  }, [isSignUpInProgress, navigate, widgetManagerStore]);
+
+  useEffect(() => {
+    if (sessionStore.isProfileError) {
+      sessionStore.signOutRedirect();
+    }
+  }, [sessionStore.isProfileError, sessionStore]);
+
+  useEffect(() => {
+    if (sessionStore.token && sessionStore.user?.id) {
+      console.log('[AppAuth]: PosBus init for ', sessionStore.user?.id);
+      console.log('[AppAuth]: PosBus init for ', sessionStore.token);
       PosBusService.init(sessionStore.token, sessionStore.user.id);
     }
-  }, [sessionStore.token, sessionStore.user]);
+  }, [sessionStore, sessionStore.user?.id]);
 
   useEffect(() => {
     if (sessionStore.user && !sessionStore.user.isGuest) {

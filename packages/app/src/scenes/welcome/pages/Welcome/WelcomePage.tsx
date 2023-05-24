@@ -20,6 +20,10 @@ const WelcomePage: FC = () => {
   const navigate = useNavigate();
   const {t} = useI18n();
 
+  useEffect(() => {
+    widgetManagerStore.closeAll();
+  }, [widgetManagerStore]);
+
   const handleNavigation = useCallback(
     (widget?: WidgetEnum) => {
       if (widget) {

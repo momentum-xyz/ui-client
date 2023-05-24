@@ -1,48 +1,30 @@
-import {FC, useCallback, useMemo} from 'react';
+import {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Panel, Steps, StepInterface} from '@momentum-xyz/ui-kit';
+import {Panel, Steps} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
+import {SignUpFormInterface} from 'core/interfaces';
 
+import {SignIn, SignUp, Welcome} from './components';
 import * as styled from './LoginWidget.styled';
-import {SignIn, SignUp} from './components';
-
-type StepsType = 'signIn' | 'signUp';
 
 const LoginWidget: FC = () => {
-  const {sessionStore, widgetManagerStore} = useStore();
-  const {signUpUser, isGuest} = sessionStore;
+  const {sessionStore, widgetManagerStore, widgetStore} = useStore();
+  const {isSignUpInProgress} = sessionStore;
+  const {loginStore} = widgetStore;
 
   const {t} = useI18n();
 
-  const isSignIn = !signUpUser && isGuest;
-  const isSignUp = signUpUser || !isGuest;
-
-  const handleAccountConnected = useCallback(
-    async (close = false) => {
-      console.log('handleAccountConnected');
-      try {
-        // TODO combine them with sessionStore.saveTokenAfterSignIn?
+  const onUpdateProfile = useCallback(
+    async (form: SignUpFormInterface) => {
+      const isDone = await loginStore.updateProfile(form);
+      if (isDone) {
         await sessionStore.loadUserData();
-
-        if (close) {
-          widgetManagerStore.closeAll();
-        }
-      } catch (e) {
-        console.log('Error loading profile', e);
       }
     },
-    [sessionStore, widgetManagerStore]
+    [loginStore, sessionStore]
   );
-
-  const stepList: StepInterface<StepsType>[] = useMemo(() => {
-    const activeStep = isSignUp ? 1 : 0;
-    return [
-      {id: 'signIn', label: '1', variant: activeStep === 0 ? 'active' : 'prev'},
-      {id: 'signUp', label: '2', variant: activeStep === 1 ? 'active' : 'next'}
-    ];
-  }, [isSignUp]);
 
   return (
     <styled.Container data-testid="LoginWidget-test">
@@ -55,12 +37,35 @@ const LoginWidget: FC = () => {
         onClose={widgetManagerStore.closeAll}
       >
         <styled.Steps>
-          <Steps stepList={stepList} />
+          <Steps
+            stepList={[
+              {id: 'signIn', label: '1', variant: !isSignUpInProgress ? 'active' : 'prev'},
+              {id: 'signUp', label: '2', variant: isSignUpInProgress ? 'active' : 'next'}
+            ]}
+          />
         </styled.Steps>
 
         <styled.Content>
-          {isSignIn && <SignIn onConnected={() => handleAccountConnected(false)} />}
-          {isSignUp && <SignUp onCreated={() => handleAccountConnected(true)} />}
+          {isSignUpInProgress ? (
+            <SignUp
+              isUpdating={loginStore.isUpdating}
+              fieldErrors={loginStore.fieldErrors}
+              onUpdate={onUpdateProfile}
+            />
+          ) : (
+            <>
+              {sessionStore.user && !sessionStore.user.isGuest ? (
+                <Welcome
+                  user={sessionStore.user}
+                  onClose={() => {
+                    widgetManagerStore.closeAll();
+                  }}
+                />
+              ) : (
+                <SignIn />
+              )}
+            </>
+          )}
         </styled.Content>
       </Panel>
     </styled.Container>
