@@ -1,9 +1,10 @@
 import {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Panel, Steps} from '@momentum-xyz/ui-kit';
+import {Panel, PositionEnum, Steps} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
+import {WidgetEnum} from 'core/enums';
 import {SignUpFormInterface} from 'core/interfaces';
 
 import {SignIn, SignUp, Welcome} from './components';
@@ -58,7 +59,7 @@ const LoginWidget: FC = () => {
                 <Welcome
                   user={sessionStore.user}
                   onClose={() => {
-                    widgetManagerStore.closeAll();
+                    widgetManagerStore.open(WidgetEnum.EXPLORE, PositionEnum.LEFT);
                   }}
                 />
               ) : (
