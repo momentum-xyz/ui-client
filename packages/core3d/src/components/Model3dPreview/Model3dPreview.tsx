@@ -5,7 +5,7 @@ import {
   SceneLoader,
   Vector3,
   Color4,
-  InstantiatedEntries,
+  // InstantiatedEntries,
   ArcRotateCamera
 } from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
@@ -33,7 +33,7 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
   onSnapshot
 }) => {
   const refScene = useRef<Scene>();
-  const refInstance = useRef<InstantiatedEntries>();
+  // const refInstance = useRef<InstantiatedEntries>();
 
   const [progress, setProgress] = useState<number | null>(null);
   const [isModelLoaded, setIsModelLoaded] = useState(false);
@@ -83,10 +83,10 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
     )
       .then((container) => {
         console.log('Model3dPreview container', container);
-        // container.addAllToScene();
-        const instance = container.instantiateModelsToScene();
-        console.log('Model3dPreview instance', instance);
-        refInstance.current = instance;
+        container.addAllToScene();
+        // const instance = container.instantiateModelsToScene();
+        // console.log('Model3dPreview instance', instance);
+        // refInstance.current = instance;
 
         scene.createDefaultCameraOrLight(true, true, true);
 
@@ -104,9 +104,9 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
             onSnapshot(scene.getEngine().getRenderingCanvas()?.toDataURL('image/png') || '', true);
           }
 
-          for (const group of instance.animationGroups) {
-            group.play(true);
-          }
+          // for (const group of instance.animationGroups) {
+          //   group.play(true);
+          // }
         }, 100);
 
         setIsModelLoaded(true);
@@ -121,11 +121,11 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
   };
 
   const onRender = (scene: Scene) => {
-    const node = refInstance.current?.rootNodes[0];
-    if (node) {
-      // console.log('onRender', node);
-      // node.rotation.y += 0.1;
-    }
+    // const node = refInstance.current?.rootNodes[0];
+    // if (node) {
+    //   // console.log('onRender', node);
+    //   // node.rotation.y += 0.1;
+    // }
     if (scene.activeCamera instanceof ArcRotateCamera) {
       scene.activeCamera.alpha -= 0.001;
       // TODO rotate object, not camera
