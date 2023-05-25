@@ -12,7 +12,6 @@ import {
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
 
-// import {VoiceChatActionEnum} from 'api/enums';
 import {PosBusEventEmitter} from 'core/constants';
 import {PosBusMessageTypeEnum} from 'core/enums';
 import {PosBusMiroStateMessageType as PosBusAttributeMessageType} from 'core/types';
@@ -67,6 +66,17 @@ class PosBusService {
     if (this.main.client && this.main.port) {
       this.main.client.teleport(worldId);
     }
+  }
+
+  static leaveWorld() {
+    this.main.port?.postMessage([
+      MsgType.SIGNAL,
+      {
+        // FIXME: Use const from posbus
+        // value: SignalLeaveWorld
+        value: 5
+      }
+    ]);
   }
 
   static handleIncomingMessage(message: PosbusEvent) {
@@ -303,121 +313,6 @@ class PosBusService {
     this.main._subscribedAttributeTypeTopics.delete(topic);
   }
 
-  // static handleIncomingVibe(message: PosBusVibeMessageType) {
-  //   const {count, type} = message;
-  //   PosBusEventEmitter.emit('user-vibed', type, count);
-  // }
-
-  // static handleIncomingInvite(message: PosBusInviteMessageType) {
-  //   const {spaceId, sender, uiTypeId, uiTypeName} = message;
-  //   PosBusEventEmitter.emit('space-invite', spaceId, sender.id, sender.name, uiTypeId, uiTypeName);
-  // }
-
-  // static handleIncomingBroadcast(message: PosBusBroadcastMessageType) {
-  //   PosBusEventEmitter.emit('broadcast', message);
-  // }
-
-  // static handleScreenShareStart(message: PosBusScreenShareMessageType) {
-  //   PosBusEventEmitter.emit('screen-share', message);
-  // }
-
-  // static handleVoiceChatAction(message: PosBusVoiceChatActionMessageType) {
-  //   const voiceChatActionAttributeValue = message.data.value;
-
-  //   if (
-  //     message.type !== PosBusMessageTypeEnum.ATTRIBUTE_CHANGED ||
-  //     !voiceChatActionAttributeValue
-  //   ) {
-  //     return;
-  //   }
-
-  //   switch (voiceChatActionAttributeValue.action) {
-  //     case VoiceChatActionEnum.KICK_USER:
-  //       PosBusEventEmitter.emit('voice-chat-kick-user', voiceChatActionAttributeValue.userId);
-  //       break;
-  //     case VoiceChatActionEnum.MUTE_USER:
-  //       PosBusEventEmitter.emit('voice-chat-mute-user', voiceChatActionAttributeValue.userId);
-  //       break;
-  //     case VoiceChatActionEnum.MUTE_ALL:
-  //       PosBusEventEmitter.emit('voice-chat-mute-all', voiceChatActionAttributeValue.userId);
-  //       break;
-  //   }
-  // }
-
-  // static handleVoiceChatUser(message: PosBusVoiceChatUserMessageType) {
-  //   const userId = message.data.value?.userId;
-
-  //   if (!userId || message.type !== PosBusMessageTypeEnum.ATTRIBUTE_CHANGED) {
-  //     return;
-  //   }
-
-  //   if (message.data.value?.joined === true) {
-  //     PosBusEventEmitter.emit('voice-chat-user-joined', userId);
-  //   } else if (message.data.value?.joined === false) {
-  //     PosBusEventEmitter.emit('voice-chat-user-left', userId);
-  //   }
-  // }
-
-  // static handleIncomingCommunication(message: PosBusCommunicationMessageType) {
-  //   switch (message.action) {
-  //     case 'kick':
-  //       PosBusEventEmitter.emit('meeting-kick', message.spaceId);
-  //       break;
-  //     case 'mute':
-  //       PosBusEventEmitter.emit('meeting-mute');
-  //       break;
-  //     case 'mute-all':
-  //       PosBusEventEmitter.emit('meeting-mute-all', message.moderatorId);
-  //       break;
-  //     default:
-  //   }
-  // }
-
-  // static handleIncomingStageMode(message: any) {
-  //   console.log(message);
-  // }
-
-  // static handleIncomingHigh5(message: PosBusHigh5MessageType) {
-  //   PosBusEventEmitter.emit('high-five', message.senderId, message.message);
-  // }
-
-  // static handleIncomingEmoji(message: PosBusEmojiMessageType) {
-  //   PosBusEventEmitter.emit('emoji', message);
-  // }
-
-  // static handleIncomingMegamoji(message: PosBusMegamojiMessageType) {
-  //   PosBusEventEmitter.emit('megamoji', message.url);
-  // }
-
-  // static handleNotifyGathering(message: PosBusGatheringMessageType) {
-  //   PosBusEventEmitter.emit('notify-gathering-start', message);
-  // }
-
-  // static handlePosBusMessage(message: PosBusMessageStatusType) {
-  //   switch (message.status) {
-  //     case 'connected':
-  //       PosBusEventEmitter.emit('posbus-connected');
-  //       break;
-  //     case 'disconnected':
-  //       PosBusEventEmitter.emit('posbus-disconnected');
-  //       break;
-  //     default:
-  //       console.warn('Unknown posbus status', message.status);
-  //   }
-  // }
-
-  // static handleFlyToMeMessage(message: PosBusFlyToMeType) {
-  //   PosBusEventEmitter.emit('fly-to-me', message.spaceId, message.pilot, message.pilot_name);
-  // }
-
-  // static handleStartFlyWithMeMessage(message: PosBusFlyWithMeType) {
-  //   PosBusEventEmitter.emit('start-fly-with-me', message.spaceId, message.pilot, message.pilotName);
-  // }
-
-  // static handleStopFlyWithMeMessage(message: PosBusFlyWithMeType) {
-  //   PosBusEventEmitter.emit('stop-fly-with-me', message.spaceId, message.pilot, message.pilotName);
-  // }
-
   static handleSpaceAttributeMessage(target: string, message: PosBusAttributeMessageType) {
     switch (message.type) {
       case PosBusMessageTypeEnum.ATTRIBUTE_CHANGED:
@@ -456,78 +351,6 @@ class PosBusService {
         break;
     }
   }
-
-  // static handleRelayMessage(target: string, message: unknown): void {
-  //   console.log('[unity message]:', target, message);
-
-  //   if (this.main.subscribedAttributeTypeTopics.has(target)) {
-  //     this.handleSpaceAttributeMessage(target, message as PosBusAttributeMessageType);
-  //     return;
-  //   }
-
-  //   // TODO: Old stuff, refactor to new controller attributes system
-  //   switch (target) {
-  //     case 'notify-gathering-start':
-  //       this.handleNotifyGathering(message as PosBusGatheringMessageType);
-  //       break;
-  //     case 'vibe':
-  //       this.handleIncomingVibe(message as PosBusVibeMessageType);
-  //       break;
-  //     case 'invite':
-  //       this.handleIncomingInvite(message as PosBusInviteMessageType);
-  //       break;
-  //     case 'meeting':
-  //       this.handleIncomingCommunication(message as PosBusCommunicationMessageType);
-  //       break;
-  //     case 'broadcast':
-  //       this.handleIncomingBroadcast(message as PosBusBroadcastMessageType);
-  //       break;
-  //     case 'stage':
-  //       this.handleIncomingStageMode(message);
-  //       break;
-  //     case 'high5':
-  //       this.handleIncomingHigh5(message as PosBusHigh5MessageType);
-  //       break;
-  //     case 'emoji':
-  //       this.handleIncomingEmoji(message as PosBusEmojiMessageType);
-  //       break;
-  //     case 'megamoji':
-  //       this.handleIncomingMegamoji(message as PosBusMegamojiMessageType);
-  //       break;
-  //     case 'posbus':
-  //       this.handlePosBusMessage(message as PosBusMessageStatusType);
-  //       break;
-  //     case 'fly-to-me':
-  //       this.handleFlyToMeMessage(message as PosBusFlyToMeType);
-  //       break;
-  //     case 'start-fly-with-me':
-  //       this.handleStartFlyWithMeMessage(message as PosBusFlyWithMeType);
-  //       break;
-  //     case 'stop-fly-with-me':
-  //       this.handleStopFlyWithMeMessage(message as PosBusFlyWithMeType);
-  //       break;
-  //     case 'screen-share':
-  //       this.handleScreenShareStart(message as PosBusScreenShareMessageType);
-  //       break;
-  //     case 'voice-chat-action':
-  //       this.handleVoiceChatAction(message as PosBusVoiceChatActionMessageType);
-  //       break;
-  //     case 'voice-chat-user':
-  //       this.handleVoiceChatUser(message as PosBusVoiceChatUserMessageType);
-  //       break;
-  //     default:
-  //       console.debug('Unknown relay message type', target);
-  //   }
-  // }
-
-  // static handleSimpleNotification(kind: PosBusNotificationEnum, flag: number, message: string) {
-  //   console.log('[unity simple message]:', kind, flag, message);
-  //   if (kind === PosBusNotificationEnum.TextMessage) {
-  //     PosBusEventEmitter.emit('simple-notification', message);
-  //   } else if (kind === PosBusNotificationEnum.HighFive) {
-  //     PosBusEventEmitter.emit('high-five-sent', message);
-  //   }
-  // }
 }
 
 export default PosBusService;

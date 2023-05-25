@@ -1,7 +1,9 @@
-import {FC, useCallback} from 'react';
+import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import {useParams} from 'react-router-dom';
 import {PositionEnum} from '@momentum-xyz/ui-kit';
 
+import {PosBusService} from 'shared/services';
 import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 
@@ -14,10 +16,24 @@ const World2dPage: FC = () => {
   const {agoraVoiceChatStore} = agoraStore;
   const {world2dStore, world3dStore} = universeStore;
 
-  console.log('[WORLD] Users are in VC: ', agoraVoiceChatStore.users.length);
-  console.log('[WORLD] Remove users are in VC: ', agoraVoiceChatStore.agoraRemoteUsers.length);
+  console.log('[World2d] Users are in VC: ', agoraVoiceChatStore.users.length);
+  console.log('[World2d] Remove users are in VC: ', agoraVoiceChatStore.agoraRemoteUsers.length);
 
   const {goToOdysseyHome} = useNavigation();
+  const {worldId} = useParams<{worldId: string}>();
+
+  useEffect(() => {
+    if (worldId) {
+      universeStore.enterWorld(worldId);
+      agoraStore.initUsers(worldId);
+    }
+    return () => {
+      universeStore.leaveWorld();
+      agoraStore.leaveVoiceChat();
+      widgetManagerStore.closeAll();
+      PosBusService.leaveWorld();
+    };
+  }, [worldId, agoraStore, universeStore, widgetManagerStore]);
 
   const onInviteToVoiceChat = (userId: string) => {
     console.log('Invite to the Voice chat: ', userId);
@@ -47,6 +63,7 @@ const World2dPage: FC = () => {
       <styled.OnlineUsers>
         {!isLeftWidgetShown && (
           <OnlineUsersList
+            key={worldId}
             onlineUsers={world2dStore?.onlineUsersList || []}
             voiceChatUsers={agoraVoiceChatStore.users.map((u) => u.id)}
             onVisitWorld={onVisitWorld}

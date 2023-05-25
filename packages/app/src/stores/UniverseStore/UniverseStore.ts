@@ -22,6 +22,7 @@ const UniverseStore = types
       self.world2dStore.init(worldId);
     },
     leaveWorld(): void {
+      self.world2dStore?.unsubscribe();
       self.world2dStore = null;
       self.world3dStore = null;
     }
