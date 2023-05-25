@@ -1,83 +1,54 @@
-import {FC, useEffect, useMemo, useState} from 'react';
-import {matchPath, useLocation} from 'react-router-dom';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {useDebouncedCallback, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
 import {BabylonScene} from '@momentum-xyz/core3d';
 import {
+  useI18n,
   Event3dEmitter,
   ClickPositionInterface,
   ObjectTransformInterface,
-  TransformNoScaleInterface,
-  useI18n
+  TransformNoScaleInterface
 } from '@momentum-xyz/core';
 
 import {CreatorTabsEnum, WidgetEnum} from 'core/enums';
 import {appVariables} from 'api/constants';
 import {PosBusService} from 'shared/services';
-import {WORLD_ROUTES} from 'scenes/App.routes';
 import {subMenuKeyWidgetEnumMap} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {HighFiveContent, TOAST_BASE_OPTIONS} from 'ui-kit';
 
 const World3dPage: FC = () => {
-  const {agoraStore, universeStore, widgetManagerStore, sessionStore, widgetStore} = useStore();
-  const {world3dStore} = universeStore;
+  const {universeStore, widgetManagerStore, sessionStore, widgetStore} = useStore();
+  const {world3dStore, world2dStore, worldId} = universeStore;
   const {creatorStore} = widgetStore;
-
-  const [readyToHandleEvents, setReadyToHandleEvents] = useState<boolean>(false);
   const {selectedTab} = creatorStore;
 
+  const [worldReadyToHandleEvents, setWorldReadyToHandleEvents] = useState<string>();
+
   const {t} = useI18n();
-  const location = useLocation();
 
-  // TODO: FIXME
-  const worldId = useMemo(() => {
-    const paths: string[] = WORLD_ROUTES.map((route) => route.path);
-
-    let worldId = '';
-    paths.forEach((path) => {
-      const match = matchPath({path: path, end: false}, location.pathname);
-      // const match = matchPath<{worldId: string}>({path: path}, location.pathname);
-      if (match?.params?.worldId) {
-        worldId = match.params.worldId;
-      }
-    });
-
-    return worldId;
-  }, [location.pathname]);
+  console.log('[World3dPage]: World ', worldId);
 
   useEffect(() => {
-    if (worldId) {
-      agoraStore.initUsers(worldId);
-    }
-    return () => {
-      agoraStore.leaveVoiceChat();
-      widgetManagerStore.closeAll();
-    };
-  }, [worldId, agoraStore, widgetManagerStore]);
-
-  useEffect(() => {
-    if (worldId && readyToHandleEvents) {
+    if (worldId && worldId === worldReadyToHandleEvents) {
       const teleportToWorld = () => {
         if (!PosBusService.isConnected()) {
-          console.log(`BabylonPage: PosBusService is not connected.`);
+          console.log(`[World3dPage]: PosBusService is not connected.`);
           setTimeout(() => {
             teleportToWorld();
           }, 1000);
           return;
         }
-        console.log(`BabylonPage: Posbus - Set worldId: ${worldId}`);
+
+        // FIXME: Remove after fixing bug on posbus
+        console.log(`[World3dPage]: PosBus - Set worldId: ${worldId}`);
         PosBusService.teleportToWorld(worldId);
       };
       teleportToWorld();
-
-      universeStore.enterWorld(worldId);
+      world2dStore?.subscribe();
     }
-    return () => {
-      universeStore.leaveWorld();
-    };
-  }, [worldId, universeStore, readyToHandleEvents]);
+  }, [worldId, worldReadyToHandleEvents, world2dStore]);
 
   useEffect(() => {
     if (!creatorStore.selectedObjectId || !universeStore.isCreatorMode) {
@@ -86,7 +57,6 @@ const World3dPage: FC = () => {
     }
 
     const highlightObject = !!creatorStore.selectedObjectId;
-
     const showGizmo = creatorStore.selectedTab === 'gizmo';
 
     Event3dEmitter.emit(
@@ -99,17 +69,11 @@ const World3dPage: FC = () => {
 
   const handleObjectClick = (objectId: string, clickPos: ClickPositionInterface) => {
     if (universeStore.isCreatorMode) {
-      console.log('BabylonPage: handle object click in creator mode', objectId);
-
-      // TODO take coords from event
-      // instance3DStore.setLastClickPosition
-
-      // navigate(generatePath(ROUTES.odyssey.creator.base, {worldId: universeStore.worldId}));
-
+      console.log('[World3dPage]: Handle object click in creator mode', objectId);
       world3dStore?.handleClick(objectId, clickPos);
       handleLevel2MenuOpen();
     } else {
-      console.log('BabylonPage: handle object click, NOT creator mode', objectId);
+      console.log('[World3dPage]: Handle object click, NOT creator mode', objectId);
       widgetManagerStore.open(WidgetEnum.OBJECT, PositionEnum.RIGHT, {id: objectId});
     }
   };
@@ -249,10 +213,9 @@ const World3dPage: FC = () => {
     Event3dEmitter.emit('ReceiveHighFive', senderId);
   });
 
-  console.log('WorldPage render', {worldId, world3dStore});
-
   return (
     <BabylonScene
+      key={worldId}
       events={Event3dEmitter}
       renderURL={appVariables.RENDER_SERVICE_URL}
       onMove={handleUserMove}
@@ -262,7 +225,7 @@ const World3dPage: FC = () => {
       onClickOutside={handleClickOutside}
       onBumpReady={handleBumpReady}
       onReadyToHandleEvents={() => {
-        setReadyToHandleEvents(true);
+        setWorldReadyToHandleEvents(worldId);
       }}
     />
   );
