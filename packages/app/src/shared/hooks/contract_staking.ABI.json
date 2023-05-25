@@ -117,7 +117,7 @@
       },
       {
         "indexed": false,
-        "internalType": "enum StakingV5.Token",
+        "internalType": "enum Staking.Token",
         "name": "token",
         "type": "uint8"
       },
@@ -273,7 +273,7 @@
       },
       {
         "indexed": false,
-        "internalType": "enum StakingV5.Token",
+        "internalType": "enum Staking.Token",
         "name": "token",
         "type": "uint8"
       },
@@ -310,7 +310,7 @@
       },
       {
         "indexed": false,
-        "internalType": "enum StakingV5.Token",
+        "internalType": "enum Staking.Token",
         "name": "token",
         "type": "uint8"
       },
@@ -465,7 +465,7 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct StakingV5.StakedBy[]",
+        "internalType": "struct Staking.StakedBy[]",
         "name": "",
         "type": "tuple[]"
       }
@@ -691,7 +691,7 @@
         "type": "uint256"
       },
       {
-        "internalType": "enum StakingV5.Token",
+        "internalType": "enum Staking.Token",
         "name": "token",
         "type": "uint8"
       }
@@ -745,7 +745,7 @@
         "type": "uint256"
       },
       {
-        "internalType": "enum StakingV5.Token",
+        "internalType": "enum Staking.Token",
         "name": "token",
         "type": "uint8"
       }
@@ -926,7 +926,7 @@
         "type": "uint256"
       },
       {
-        "internalType": "enum StakingV5.Token",
+        "internalType": "enum Staking.Token",
         "name": "token",
         "type": "uint8"
       }
