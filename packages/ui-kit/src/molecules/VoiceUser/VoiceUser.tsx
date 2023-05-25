@@ -32,14 +32,14 @@ const VoiceUser: FC<VoiceUserPropsInterface> = ({
       </styled.TitleContainer>
 
       {isMicrophoneOff && (
-        <styled.Actions>
-          <ButtonRound icon="microphoneOff" variant="primary" isLabel />
+        <styled.Actions className="isMuted">
+          <ButtonRound icon="microphoneOff" variant="primary" size="normal" isLabel />
         </styled.Actions>
       )}
 
       {!isMicrophoneOff && isSpeaking && (
         <styled.Actions className="isSpeaking">
-          <ButtonRound icon="talk" variant="primary" isLabel />
+          <ButtonRound icon="talk" variant="primary" size="normal" isLabel />
         </styled.Actions>
       )}
     </styled.Container>
