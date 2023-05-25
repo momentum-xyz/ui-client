@@ -48,6 +48,12 @@ export const Actions = styled.div`
   justify-content: center;
   align-items: center;
 
+  &.isMuted {
+    button {
+      border: 1px solid ${(props) => props.theme.accentText};
+    }
+  }
+
   &.isSpeaking {
     button {
       background: ${(props) => props.theme.accentText};
