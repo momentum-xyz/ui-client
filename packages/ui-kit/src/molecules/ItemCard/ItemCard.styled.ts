@@ -13,13 +13,13 @@ export const Wrapper = styled.div`
   transition: background var(--tr-150-ei), border var(--tr-150-ei);
 
   &.normal {
-    grid-template-columns: 35% 1fr;
-    gap: 20px;
+    grid-template-columns: 35% calc(65% - 16px);
+    gap: 16px;
   }
 
   &.small {
-    grid-template-columns: 40% 1fr;
-    gap: 10px;
+    grid-template-columns: 40% calc(60% - 10px);
+    gap: 9px;
   }
 
   &:hover {
@@ -34,7 +34,7 @@ export const ItemContent = styled.div`
   color: ${(props) => props.theme.text};
 
   &.normal {
-    gap: 10px;
+    gap: 8px;
   }
 
   &.small {
@@ -65,25 +65,23 @@ export const ItemName = styled.div`
     font-size: var(--font-size-s);
     font-weight: 600;
   }
-
-  > span {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
 `;
 
 export const ItemLink = styled.a``;
 
-export const ItemDesc = styled.div`
-  &.normal {
+export const ItemDesc = styled.div<{lines: number}>`
+  display: -webkit-box;
+  -webkit-line-clamp: ${(props) => props.lines};
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis &.normal {
     font-size: var(--font-size-m);
-    line-height: 22px;
+    line-height: 20px;
   }
 
   &.small {
     font-size: var(--font-size-s);
-    line-height: 18px;
+    line-height: 17px;
   }
 `;
 
