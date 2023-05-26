@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useMemo} from 'react';
 import cn from 'classnames';
 import {useI18n} from '@momentum-xyz/core';
 
@@ -36,6 +36,11 @@ const ItemCard: FC<ItemCardPropsInterface> = ({
 }) => {
   const {t} = useI18n();
 
+  const linesCount = useMemo(() => {
+    const lines = variant === 'small' ? 4 : 3;
+    return byName ? lines - 1 : lines;
+  }, [byName, variant]);
+
   return (
     <styled.Wrapper data-testid="ItemCard-test" className={cn(variant)}>
       <Image
@@ -47,9 +52,7 @@ const ItemCard: FC<ItemCardPropsInterface> = ({
       />
       <styled.ItemContent className={cn(variant)}>
         <styled.ItemNameContainer>
-          <styled.ItemName className={cn(variant)}>
-            <span>{name}</span>
-          </styled.ItemName>
+          <styled.ItemName className={cn(variant)}>{name}</styled.ItemName>
           {byName && (
             <span>
               {`${t('labels.by')}: `}
@@ -57,7 +60,12 @@ const ItemCard: FC<ItemCardPropsInterface> = ({
             </span>
           )}
         </styled.ItemNameContainer>
-        {!!description && <styled.ItemDesc className={cn(variant)}>{description}</styled.ItemDesc>}
+
+        {!!description && (
+          <styled.ItemDesc lines={linesCount} className={cn(variant)}>
+            {description}
+          </styled.ItemDesc>
+        )}
 
         <styled.Actions>
           {!!onInfoClick && (
