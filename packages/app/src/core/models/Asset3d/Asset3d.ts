@@ -8,6 +8,7 @@ const Asset3d = types
     id: types.identifier,
     category: types.maybeNull(types.string),
     name: types.string,
+    artist_name: types.optional(types.string, ''),
     // TODO remove
     image: types.string,
     preview_hash: types.maybeNull(types.string),

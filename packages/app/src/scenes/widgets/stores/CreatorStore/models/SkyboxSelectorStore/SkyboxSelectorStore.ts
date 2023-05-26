@@ -11,7 +11,8 @@ import {appVariables} from 'api/constants';
 // const UNITY_SKYBOX_ASSET_ID = '313a597a-8b9a-47a7-9908-52bdc7a21a3e';
 
 const SkyboxDatabaseModel = types.model({
-  name: types.string
+  name: types.string,
+  artist_name: types.optional(types.string, '')
 });
 
 const SkyboxSelectorStore = types
@@ -198,7 +199,7 @@ const SkyboxSelectorStore = types
 
       const value = {
         ...self.userSkyboxes.toJSON(),
-        [hash]: {name, artistName}
+        [hash]: {name, artist_name: artistName}
       };
       yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
         spaceId: appVariables.NODE_ID,
