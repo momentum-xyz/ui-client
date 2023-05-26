@@ -25,8 +25,8 @@ export const useNavigation = () => {
         navigate(generatePath(ROUTES.odyssey.base, {worldId}));
       } else {
         /* Navigate user from World to World */
-        navigate(generatePath(ROUTES.odyssey.base, {worldId}));
-        //document.location = generatePath(ROUTES.odyssey.base, {worldId});
+        // navigate(generatePath(ROUTES.odyssey.base, {worldId}));
+        document.location = generatePath(ROUTES.odyssey.base, {worldId});
       }
     },
     [navigate, baseWorldId]

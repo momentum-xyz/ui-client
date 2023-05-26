@@ -69,7 +69,10 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       isHidden: !isWorld,
       tooltip: t('labels.explore'),
       onClick: () => {
-        navigate(ROUTES.explore);
+        // TEMP we have problems when teleporting to world, then universe, then teleport again to any world
+        // no messages from posbus
+        window.location.href = ROUTES.explore;
+        // navigate(ROUTES.explore);
       }
     },
     {
