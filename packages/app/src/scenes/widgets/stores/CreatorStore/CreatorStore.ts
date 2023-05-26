@@ -7,6 +7,7 @@ import {PluginIdEnum} from 'api/enums';
 import {CreatorTabsEnum} from 'core/enums';
 import {getRootStore} from 'core/utils';
 import {PosBusService} from 'shared/services';
+import {ObjectColorAttributeInterface} from 'api/interfaces';
 
 import {
   SkyboxSelectorStore,
@@ -34,6 +35,9 @@ const CreatorStore = types
       objectInfo: types.maybeNull(types.frozen<GetSpaceInfoResponse>()),
       getObjectInfoRequest: types.optional(RequestModel, {}),
       getObjectNameRequest: types.optional(RequestModel, {}),
+
+      duplicateSourceId: types.maybeNull(types.string),
+      duplicateId: types.maybeNull(types.string),
 
       duplicateObjectRequest: types.optional(RequestModel, {}),
       removeObjectDialog: types.optional(Dialog, {}),
@@ -97,9 +101,9 @@ const CreatorStore = types
     }),
     duplicateObject: flow(function* (
       worldId: string,
+      sourceObjectId: string,
       assetId: string,
-      name: string,
-      transform: any
+      name: string
     ) {
       PosBusService.attachNextReceivedObjectToCamera = true;
 
@@ -116,10 +120,69 @@ const CreatorStore = types
       const objectId = response?.object_id;
 
       if (objectId) {
+        self.duplicateSourceId = sourceObjectId;
+        self.duplicateId = objectId;
         getRootStore(self).universeStore.world3dStore?.setAttachedToCamera(objectId);
       }
 
       return objectId;
+    }),
+    isDuplicatedObject: (id: string) => self.duplicateId === id,
+    updateDuplicatedObject: flow(function* () {
+      const duplicateSourceId = self.duplicateSourceId;
+      const duplicateId = self.duplicateId;
+
+      if (!duplicateSourceId || !duplicateId) {
+        return;
+      }
+
+      const sourceObjectInfo = yield self.getObjectInfoRequest.send(
+        api.spaceInfoRepository.getSpaceInfo,
+        {
+          spaceId: duplicateSourceId
+        }
+      );
+      const duplicateObjectInfo = yield self.getObjectInfoRequest.send(
+        api.spaceInfoRepository.getSpaceInfo,
+        {
+          spaceId: duplicateId
+        }
+      );
+
+      if (!duplicateObjectInfo || !sourceObjectInfo) {
+        return;
+      }
+
+      // 1. Transform data
+      const transform = {
+        position: duplicateObjectInfo.transform.position,
+        rotation: sourceObjectInfo.transform.rotation,
+        scale: sourceObjectInfo.transform.scale
+      };
+      PosBusService.sendObjectTransform(duplicateId, transform);
+
+      // 2. Color
+      const colorResponse: ObjectColorAttributeInterface = yield self.duplicateObjectRequest.send(
+        api.spaceAttributeRepository.getSpaceAttribute,
+        {
+          spaceId: duplicateSourceId,
+          plugin_id: PluginIdEnum.CORE,
+          attribute_name: AttributeNameEnum.OBJECT_COLOR
+        }
+      );
+
+      if (colorResponse && colorResponse.value) {
+        const colorHex = colorResponse.value;
+        const {
+          widgetStore: {
+            creatorStore: {objectColorStore}
+          }
+        } = getRootStore(self);
+        setTimeout(() => {
+          objectColorStore.updateObjectColor(duplicateId, colorHex.replace(/-/g, ''));
+        }, 100);
+      }
+      // 3. Functionality --- skip this
     })
   }));
 

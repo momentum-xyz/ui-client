@@ -264,11 +264,19 @@ const World3dStore = types
       }
     },
     setAttachedToCamera(objectId: string | null) {
+      const {
+        widgetManagerStore,
+        widgetStore: {creatorStore}
+      } = getRootStore(self);
+
       if (!objectId && self.attachedToCameraObjectId) {
         Event3dEmitter.emit('DetachObjectFromCamera', self.attachedToCameraObjectId);
+        const isDuplicatedObject = creatorStore.isDuplicatedObject(self.attachedToCameraObjectId);
+        if (isDuplicatedObject) {
+          creatorStore.updateDuplicatedObject();
+        }
       }
 
-      const {widgetManagerStore} = getRootStore(self);
       const submenuItems: MenuItemInterface<WidgetEnum>[] = [
         {
           key: WidgetEnum.GO_TO,

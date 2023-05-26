@@ -95,17 +95,16 @@ const World3dPage: FC = () => {
   };
 
   const handleObjectDuplicate = () => {
-    const {duplicateObject, objectName, objectInfo} = creatorStore;
+    const {duplicateObject, selectedObjectId, objectName, objectInfo} = creatorStore;
 
-    if (!objectInfo || !objectName) {
+    if (!objectInfo || !objectName || !selectedObjectId) {
       return;
     }
-    // eslint-disable-next-line no-debugger
-    debugger;
+
     world3dStore?.closeAndResetObjectMenu();
 
-    const {transform, asset_3d_id} = objectInfo;
-    duplicateObject(worldId, asset_3d_id, objectName, transform).then((objectId) => {
+    const {asset_3d_id} = objectInfo;
+    duplicateObject(worldId, selectedObjectId, asset_3d_id, objectName).then((objectId) => {
       console.log('Duplicated object', objectId);
     });
   };
