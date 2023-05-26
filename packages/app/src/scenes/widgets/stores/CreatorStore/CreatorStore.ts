@@ -150,6 +150,8 @@ const CreatorStore = types
       );
 
       if (!duplicateObjectInfo || !sourceObjectInfo) {
+        self.duplicateId = null;
+        self.duplicateSourceId = null;
         return;
       }
 
@@ -182,6 +184,8 @@ const CreatorStore = types
           objectColorStore.updateObjectColor(duplicateId, colorHex.replace(/-/g, ''));
         }, 100);
       }
+      self.duplicateId = null;
+      self.duplicateSourceId = null;
       // 3. Functionality --- skip this
     })
   }));
