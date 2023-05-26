@@ -30,7 +30,8 @@ export const SYSTEM_ROUTES: RouteConfigInterface[] = [
 export const UNIVERSE_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.explore,
-    main: () => <Universe2dPage />
+    main: () => <Universe2dPage />,
+    exact: false
   }
 ];
 

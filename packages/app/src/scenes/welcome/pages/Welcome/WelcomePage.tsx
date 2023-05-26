@@ -1,21 +1,20 @@
 import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useNavigate} from 'react-router-dom';
-import {Hexagon, PositionEnum, Button} from '@momentum-xyz/ui-kit';
+import {Button, Hexagon, PositionEnum} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
+import {storage} from 'shared/services';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
-import {WidgetEnum} from 'core/enums';
+import {StorageKeyEnum, WidgetEnum} from 'core/enums';
 
 import * as styled from './WelcomePage.styled';
 
-export const HAS_SEEN_WELCOME_PAGE_LS_KEY = 'hasSeenWelcomePage';
-export const HAS_SEEN_WELCOME_PAGE_LS_VALUE = '1';
+export const HAS_SEEN_WELCOME_VALUE = '1';
 
 const WelcomePage: FC = () => {
   const {widgetManagerStore, sessionStore} = useStore();
-  const {toggle} = widgetManagerStore;
   const {isGuest} = sessionStore;
   const navigate = useNavigate();
   const {t} = useI18n();
@@ -25,26 +24,22 @@ const WelcomePage: FC = () => {
   }, [widgetManagerStore]);
 
   const handleNavigation = useCallback(
-    (widget?: WidgetEnum) => {
-      if (widget) {
-        toggle(widget, PositionEnum.LEFT);
-      }
-      localStorage.setItem(HAS_SEEN_WELCOME_PAGE_LS_KEY, HAS_SEEN_WELCOME_PAGE_LS_VALUE);
+    (widget: WidgetEnum) => {
+      storage.setString(StorageKeyEnum.HasSeenWelcome, HAS_SEEN_WELCOME_VALUE);
+      widgetManagerStore.open(widget, PositionEnum.LEFT);
       navigate(ROUTES.explore);
     },
-    [navigate, toggle]
+    [navigate, widgetManagerStore]
   );
 
   useEffect(() => {
-    const hasSeenWelcomePage =
-      localStorage.getItem(HAS_SEEN_WELCOME_PAGE_LS_KEY) === HAS_SEEN_WELCOME_PAGE_LS_VALUE;
-    if (!isGuest || hasSeenWelcomePage) {
-      handleNavigation();
+    if (!isGuest) {
+      handleNavigation(WidgetEnum.EXPLORE);
     }
-  }, [handleNavigation, isGuest]);
+  }, [isGuest, handleNavigation]);
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="WelcomePage=test">
       <styled.Card>
         <styled.CardHexContainer>
           <Hexagon type="primary-borderless" iconName="astronaut" />
@@ -52,12 +47,13 @@ const WelcomePage: FC = () => {
         <styled.CardTitle>{t('labels.welcomePageJoinTitle')}</styled.CardTitle>
         <styled.CardDescription>{t('labels.welcomePageJoinDescription')}</styled.CardDescription>
         <Button
-          label={t('actions.signUpNow')}
-          icon="astronaut"
           wide
+          icon="astronaut"
+          label={t('actions.signUpNow')}
           onClick={() => handleNavigation(WidgetEnum.LOGIN)}
         />
       </styled.Card>
+
       <styled.Card className="light">
         <styled.CardHexContainer className="light">
           <Hexagon type="primary-borderless" iconName="rocket" />
@@ -68,10 +64,10 @@ const WelcomePage: FC = () => {
         </styled.CardDescription>
         <styled.CardButtonContainer className="light">
           <Button
-            label={t('actions.startJourney')}
+            wide
             icon="rocket"
             variant="secondary"
-            wide
+            label={t('actions.startJourney')}
             onClick={() => handleNavigation(WidgetEnum.EXPLORE)}
           />
         </styled.CardButtonContainer>

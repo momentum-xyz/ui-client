@@ -4,9 +4,9 @@ import {useNavigate} from 'react-router-dom';
 import {PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {PosBusService} from 'shared/services';
+import {PosBusService, storage} from 'shared/services';
 import {ROUTES} from 'core/constants';
-import {WidgetEnum} from 'core/enums';
+import {StorageKeyEnum, WidgetEnum} from 'core/enums';
 
 const AppAuth: FC<{children: ReactNode}> = ({children}) => {
   const {sessionStore, nftStore, universeStore, widgetManagerStore} = useStore();
@@ -20,6 +20,12 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
       widgetManagerStore.open(WidgetEnum.LOGIN, PositionEnum.LEFT);
     }
   }, [isSignUpInProgress, navigate, widgetManagerStore]);
+
+  useEffect(() => {
+    if (sessionStore.isGuest && !storage.get(StorageKeyEnum.HasSeenWelcome)) {
+      navigate(ROUTES.welcome);
+    }
+  }, [sessionStore.isGuest, navigate]);
 
   useEffect(() => {
     if (sessionStore.isProfileError) {

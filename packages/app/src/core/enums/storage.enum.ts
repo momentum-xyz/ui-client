@@ -4,5 +4,6 @@ export enum StorageKeyEnum {
   WalletsByAddress = 'Wallets_By_Address',
   PreferredAudioInput = 'Audio_Input',
   PreferredAudioOutput = 'Audio_Output',
-  ProfileJobId = 'profile-job-id'
+  ProfileJobId = 'profile-job-id',
+  HasSeenWelcome = 'Has_Seen_Welcome'
 }
