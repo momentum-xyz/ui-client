@@ -12,16 +12,11 @@ import {Toast} from 'ui-kit';
 import {createSwitchByConfig, isTargetRoute} from 'core/utils';
 import {World3dPage} from 'scenes/world';
 import {Universe3dPage} from 'scenes/universe';
-import {WelcomePage} from 'scenes/welcome';
 
 import AppAuth from './AppAuth';
-import AppLayers from './AppLayers';
 import {WidgetManager} from './widgetManager';
 import {UNIVERSE_ROUTES, WORLD_ROUTES, SYSTEM_ROUTES} from './App.routes';
-import {
-  HAS_SEEN_WELCOME_PAGE_LS_KEY,
-  HAS_SEEN_WELCOME_PAGE_LS_VALUE
-} from './welcome/pages/Welcome/WelcomePage';
+import {WelcomePage} from './welcome';
 
 const ThemeProvider = ThemeProviderOriginal as unknown as FC<ThemeProviderProps<any, any>>;
 
@@ -30,14 +25,12 @@ const App: FC = () => {
   const {configStore, sessionStore, themeStore, sentryStore} = rootStore;
   const {configLoadingErrorCode} = configStore;
 
-  const isBrowserUnsupported = !isBrowserSupported();
   const {pathname} = useLocation();
   const navigate = useNavigate();
   const {t} = useI18n();
 
+  const isBrowserUnsupported = !isBrowserSupported();
   const isWelcomePage = pathname === ROUTES.welcome;
-  const hasSeenWelcomePage =
-    localStorage.getItem(HAS_SEEN_WELCOME_PAGE_LS_KEY) === HAS_SEEN_WELCOME_PAGE_LS_VALUE;
 
   useApiHandlers();
 
@@ -57,13 +50,6 @@ const App: FC = () => {
       navigate({pathname: ROUTES.system.wrongBrowser});
     }
   }, [isBrowserUnsupported, navigate]);
-
-  useEffect(() => {
-    const shouldGoToWelcomePage = sessionStore.isGuest && !isWelcomePage && !hasSeenWelcomePage;
-    if (shouldGoToWelcomePage) {
-      navigate(ROUTES.welcome);
-    }
-  }, [hasSeenWelcomePage, isWelcomePage, navigate, sessionStore.isGuest]);
 
   if (configStore.isError && !configStore.isConfigReady) {
     return (
@@ -105,7 +91,7 @@ const App: FC = () => {
             <World3dPage />
             <WidgetManager isWorld />
             <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
-              <AppLayers>{createSwitchByConfig(WORLD_ROUTES)}</AppLayers>
+              <main>{createSwitchByConfig(WORLD_ROUTES)}</main>
             </Suspense>
           </>
         ) : (
@@ -115,7 +101,7 @@ const App: FC = () => {
             {isWelcomePage && <WelcomePage />}
             <WidgetManager isWelcomePage={isWelcomePage} />
             <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
-              <AppLayers>{createSwitchByConfig(UNIVERSE_ROUTES)}</AppLayers>
+              <main>{createSwitchByConfig(UNIVERSE_ROUTES)}</main>
             </Suspense>
           </>
         )}

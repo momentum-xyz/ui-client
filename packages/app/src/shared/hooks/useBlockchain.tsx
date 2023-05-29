@@ -1,16 +1,16 @@
 import {useCallback, useMemo, useState} from 'react';
 import Web3 from 'web3';
 import BN from 'bn.js';
-import {
-  checkIfCanRequestAirdrop,
-  getDateOfNextAllowedAirdrop,
-  saveLastAirdropInfo as originalSaveLastAirdropInfo
-} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {dummyWalletConf} from 'wallets';
 import {appVariables} from 'api/constants';
 import {WalletSelectHelper, WalletSelector} from 'ui-kit';
+import {
+  checkIfCanRequestAirdrop,
+  getDateOfNextAllowedAirdrop,
+  saveLastAirdropInfo as originalSaveLastAirdropInfo
+} from 'core/utils';
 
 import stackingABI from './contract_staking.ABI.json';
 import momABI from './contract_MOM.ABI.json';

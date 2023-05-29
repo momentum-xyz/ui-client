@@ -5,11 +5,11 @@ class Storage {
     localStorage.setItem(key, JSON.stringify(value));
   }
 
-  setString(key: StorageKeyEnum, value: string): void {
+  setString(key: StorageKeyEnum | string, value: string): void {
     localStorage.setItem(key, value);
   }
 
-  get<T>(key: StorageKeyEnum): T | string | null {
+  get<T>(key: StorageKeyEnum | string): T | string | null {
     const data: string | null = localStorage.getItem(key);
     try {
       if (data) {
@@ -39,7 +39,7 @@ class Storage {
     }
   }
 
-  delete(key: StorageKeyEnum): void {
+  delete(key: StorageKeyEnum | string): void {
     localStorage.removeItem(key);
   }
 }

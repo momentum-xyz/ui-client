@@ -4,7 +4,6 @@ import {rgba} from 'polished';
 export const Container = styled.div`
   position: fixed;
   top: 0;
-
   background: transparent;
   height: 100vh;
   width: 100vw;
