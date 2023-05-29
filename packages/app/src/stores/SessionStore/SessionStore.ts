@@ -1,5 +1,5 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {LAST_AIRDROP_KEY, RequestModel} from '@momentum-xyz/core';
+import {RequestModel} from '@momentum-xyz/core';
 
 import {ROUTES} from 'core/constants';
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -177,9 +177,6 @@ const SessionStore = types
     },
     signOutRedirect(): void {
       self.updateJwtToken('');
-
-      // FIXME: To use the storage instance and the StorageKeyEnum
-      localStorage.removeItem(LAST_AIRDROP_KEY);
       document.location = ROUTES.explore;
     }
   }))

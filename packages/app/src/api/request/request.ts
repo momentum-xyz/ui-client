@@ -1,9 +1,10 @@
 import axios, {AxiosInstance, AxiosResponse, AxiosRequestConfig, AxiosError} from 'axios';
 
+import {storage} from 'shared/services';
+import {StorageKeyEnum} from 'core/enums';
 import {appVariables, httpErrorCodes} from 'api/constants';
 
 const TOKEN_TYPE = 'Bearer';
-const TOKEN_KEY = 'odyssey.token';
 const REQUEST_TIMEOUT_MS = 120_000;
 export const REQUEST_MAX_RETRIES = 3;
 export const REQUEST_RETRY_DELAY_BASE = 1000;
@@ -45,11 +46,11 @@ const errorHandler = (error: AxiosError) => {
  * Configure actual token
  */
 const setAccessToken = (token: string): void => {
-  localStorage.setItem(TOKEN_KEY, token);
+  storage.setString(StorageKeyEnum.Token, token);
 };
 
 export const getAccessToken = (): string => {
-  return localStorage.getItem(TOKEN_KEY) || '';
+  return storage.get<string>(StorageKeyEnum.Token) || '';
 };
 
 /**
