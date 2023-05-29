@@ -5,4 +5,3 @@ export * from './pluginConfig.interface';
 export * from './attributeValue.interface';
 export * from './api.interface';
 export * from './usePluginHook.interface';
-export * from './unityControl.interface';

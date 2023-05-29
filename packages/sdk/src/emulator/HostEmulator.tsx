@@ -1,13 +1,11 @@
-import React, {FC} from 'react';
+import {FC} from 'react';
 import {BrowserRouter} from 'react-router-dom';
 import {ThemeProvider} from 'styled-components';
 import {DefaultThemeConfig} from '@momentum-xyz/ui-kit';
 
 import {PluginInterface} from '../interfaces';
-import {UnityControlContextProvider} from '../contexts';
 
 import {MomentumRequiredPage, WorldEmulator} from './components/';
-import {dummyUnityControl} from './dummyUnityControl';
 import * as styled from './HostEmulator.styled';
 
 const isDevEnv = process.env.NODE_ENV === 'development';
@@ -35,15 +33,13 @@ export const HostEmulator: FC<PropsInterface> = ({plugin}) => {
   return (
     <ThemeProvider theme={DefaultThemeConfig}>
       <styled.FullScreenContainer>
-        <UnityControlContextProvider value={dummyUnityControl}>
-          {isDevEnv ? (
-            <BrowserRouter>
-              <WorldEmulator plugin={plugin} />
-            </BrowserRouter>
-          ) : (
-            <MomentumRequiredPage />
-          )}
-        </UnityControlContextProvider>
+        {isDevEnv ? (
+          <BrowserRouter>
+            <WorldEmulator plugin={plugin} />
+          </BrowserRouter>
+        ) : (
+          <MomentumRequiredPage />
+        )}
       </styled.FullScreenContainer>
     </ThemeProvider>
   );
