@@ -6,7 +6,6 @@ export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  pointer-events: all;
 `;
 
 export const ButtonHolder = styled.div`

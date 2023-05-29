@@ -43,6 +43,10 @@ const World2dPage: FC = () => {
     goToOdysseyHome(worldId);
   };
 
+  const onViewWorld = () => {
+    widgetManagerStore.open(WidgetEnum.WORLD_PROFILE, PositionEnum.RIGHT);
+  };
+
   const onStakeWorld = () => {
     widgetManagerStore.open(WidgetEnum.STAKING, PositionEnum.RIGHT);
   };
@@ -78,7 +82,11 @@ const World2dPage: FC = () => {
         {!isRightWidgetShown && (
           <>
             {world2dStore?.worldDetails?.world && (
-              <CurrentWorld world={world2dStore.worldDetails.world} onStakeWorld={onStakeWorld} />
+              <CurrentWorld
+                world={world2dStore.worldDetails.world}
+                onViewWorld={onViewWorld}
+                onStakeWorld={onStakeWorld}
+              />
             )}
           </>
         )}
