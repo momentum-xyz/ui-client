@@ -78,11 +78,14 @@ const NewsfeedEntry: FC<NewsfeedEntryPropsInterface> = ({entry, onWorldOpen, onS
   };
 
   const generateImageEntryContent = (id: string, data: NewsFeedMediaEntryDataInterface) => {
+    if (!data.image) {
+      return <></>;
+    }
     return (
-      <styled.ImageEntryContainer>
+      <styled.MediaEntryContainer>
         <Image src={data.image} height={160} />
-        {data.comment && <styled.ImageEntryComment>{data.comment}</styled.ImageEntryComment>}
-        <styled.ImageEntryControlsContainer>
+        {data.comment && <styled.MediaEntryComment>{data.comment}</styled.MediaEntryComment>}
+        <styled.MediaEntryControlsContainer>
           <ButtonEllipse label="share" icon="share" onClick={() => onShare(entry)} />
           {data.world_id && (
             <ButtonEllipse
@@ -91,8 +94,39 @@ const NewsfeedEntry: FC<NewsfeedEntryPropsInterface> = ({entry, onWorldOpen, onS
               onClick={() => onWorldOpen(entry)}
             />
           )}
-        </styled.ImageEntryControlsContainer>
-      </styled.ImageEntryContainer>
+        </styled.MediaEntryControlsContainer>
+      </styled.MediaEntryContainer>
+    );
+  };
+
+  const generateVideoEntryContent = (id: string, data: NewsFeedMediaEntryDataInterface) => {
+    if (!data.video) {
+      return <></>;
+    }
+    return (
+      <styled.MediaEntryContainer>
+        <styled.MediaEntryVideoContainer>
+          <iframe
+            key={data.video}
+            title={t('plugin_video.labels.video') || ''}
+            src={data.video}
+            height="100%"
+            width="100%"
+            allowFullScreen
+          ></iframe>
+        </styled.MediaEntryVideoContainer>
+        {data.comment && <styled.MediaEntryComment>{data.comment}</styled.MediaEntryComment>}
+        <styled.MediaEntryControlsContainer>
+          <ButtonEllipse label="share" icon="share" onClick={() => onShare(entry)} />
+          {data.world_id && (
+            <ButtonEllipse
+              label={t('actions.visitOdyssey')}
+              icon="rocket_flying"
+              onClick={() => onWorldOpen(entry)}
+            />
+          )}
+        </styled.MediaEntryControlsContainer>
+      </styled.MediaEntryContainer>
     );
   };
 
@@ -104,6 +138,8 @@ const NewsfeedEntry: FC<NewsfeedEntryPropsInterface> = ({entry, onWorldOpen, onS
     )
   ) : entry.entry_type === NewsfeedTypeEnum.IMAGE ? (
     generateImageEntryContent(entry.id, entry.data as NewsFeedMediaEntryDataInterface)
+  ) : entry.entry_type === NewsfeedTypeEnum.VIDEO ? (
+    generateVideoEntryContent(entry.id, entry.data as NewsFeedMediaEntryDataInterface)
   ) : (
     <></>
   );

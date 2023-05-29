@@ -79,17 +79,21 @@ export const WorldName = styled.a`
   color: ${(props) => props.theme.accentText};
 `;
 
-export const ImageEntryContainer = styled.div`
+export const MediaEntryContainer = styled.div`
   display: flex;
   gap: 10px;
   flex-direction: column;
 `;
-export const ImageEntryComment = styled.p`
+export const MediaEntryVideoContainer = styled.div`
+  border-radius: 4px;
+  overflow: hidden;
+`;
+export const MediaEntryComment = styled.p`
   display: flex;
   gap: 10px;
   align-items: center;
 `;
-export const ImageEntryControlsContainer = styled.div`
+export const MediaEntryControlsContainer = styled.div`
   display: flex;
   gap: 10px;
   justify-content: flex-end;

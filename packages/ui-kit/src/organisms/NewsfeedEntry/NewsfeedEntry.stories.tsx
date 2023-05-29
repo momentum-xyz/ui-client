@@ -97,17 +97,47 @@ const imageEntries: NewsfeedEntryInterface[] = [
 
 const videoEntries: NewsfeedEntryInterface[] = [
   {
-    id: '6',
-    author_id: 'user_6',
+    id: '3',
+    author_id: 'user_3',
     author_name: 'Jane Doe',
+    author_avatar: 'https://picsum.photos/203',
+    universal: true,
+    entry_type: NewsfeedTypeEnum.VIDEO,
+    created_at: new Date().toDateString(),
+    data: {
+      world_id: 'odyssey_world_1',
+      image: null,
+      video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      comment: null
+    }
+  },
+  {
+    id: '4',
+    author_id: 'user_4',
+    author_name: 'John Doe',
     author_avatar: 'https://picsum.photos/204',
+    universal: true,
+    entry_type: NewsfeedTypeEnum.VIDEO,
+    created_at: new Date().toDateString(),
+    data: {
+      world_id: 'odyssey_world_1',
+      image: null,
+      video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      comment: 'Lorem ipsum dolor sit amet.'
+    }
+  },
+  {
+    id: '5',
+    author_id: 'user_5',
+    author_name: 'John Doe',
+    author_avatar: 'https://picsum.photos/203',
     universal: false,
     entry_type: NewsfeedTypeEnum.VIDEO,
     created_at: new Date().toDateString(),
     data: {
       world_id: null,
       image: null,
-      video: null,
+      video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
       comment: null
     }
   }
