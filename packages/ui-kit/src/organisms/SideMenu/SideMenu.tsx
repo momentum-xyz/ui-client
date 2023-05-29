@@ -30,7 +30,7 @@ const SideMenu = <T,>({
   onSelect
 }: SideMenuPropsInterface<T>) => {
   return (
-    <styled.Wrapper>
+    <styled.Wrapper data-testid="SideMenu-test">
       {sideMenuItems.map(({id, label, iconName, pinNumber}) => (
         <styled.MenuItemContainer
           key={label}

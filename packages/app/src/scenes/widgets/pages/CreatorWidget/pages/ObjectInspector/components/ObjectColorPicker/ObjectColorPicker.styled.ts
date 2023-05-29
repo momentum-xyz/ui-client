@@ -8,7 +8,6 @@ export const Wrapper = styled.div`
 
 export const WrapperInner = styled.div`
   width: 100%;
-  pointer-events: all;
   margin: 35px 10px;
 `;
 

@@ -121,13 +121,15 @@ const CreatorWidget: FC = () => {
   };
 
   return (
-    <styled.Container>
-      <SideMenu
-        activeId={menuItem?.id}
-        orientation="left"
-        sideMenuItems={sideMenuItems}
-        onSelect={handleTabChange}
-      />
+    <styled.Container data-testid="CreatorWidget">
+      <div>
+        <SideMenu
+          activeId={menuItem?.id}
+          orientation="left"
+          sideMenuItems={sideMenuItems}
+          onSelect={handleTabChange}
+        />
+      </div>
 
       {!!selectedTab && !!content && (
         <Panel
