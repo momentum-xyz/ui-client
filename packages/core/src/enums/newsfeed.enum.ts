@@ -5,7 +5,7 @@ export enum NewsfeedTypeEnum {
   BOOST = 'boost',
   IMAGE = 'image',
   VIDEO = 'video',
-  EVENT = 'event',
+  EVENT = 'event'
 }
 
 export interface NewsFeedMediaEntryDataInterface {
