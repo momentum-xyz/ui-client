@@ -74,6 +74,18 @@ export class PlayerHelper {
   static rightHanded = false;
   static selectedSpeed = 1;
   static onSpawnParticles: (() => void) | undefined;
+  static moveKeys = [
+    'w',
+    'a',
+    's',
+    'd',
+    'q',
+    'e',
+    'ArrowUp',
+    'ArrowDown',
+    'ArrowLeft',
+    'ArrowRight'
+  ];
 
   static initialize(
     scene: Scene,
@@ -141,6 +153,11 @@ export class PlayerHelper {
         } else if (evt.sourceEvent.key === '0') {
           PlayerHelper.selectedSpeed = 0.5;
           PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
+        } else if (
+          PlayerHelper.camera.lockedTarget !== null &&
+          PlayerHelper.moveKeys.includes(evt.sourceEvent.key)
+        ) {
+          PlayerHelper.camera.lockedTarget = null;
         }
       })
     );

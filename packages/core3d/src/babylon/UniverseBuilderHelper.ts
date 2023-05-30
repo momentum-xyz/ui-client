@@ -85,6 +85,7 @@ export class UniverseBuilderHelper {
     this.buildStar(sunColor1, SunColor2);
 
     scene.onPointerDown = function castRay() {
+      PlayerHelper.camera.lockedTarget = null;
       const ray = scene.createPickingRay(
         scene.pointerX,
         scene.pointerY,
@@ -406,17 +407,18 @@ export class UniverseBuilderHelper {
       // Rotation
       smoothCameraUniverse(
         PlayerHelper.camera.target,
-        target.rootClone.absolutePosition,
+        target.rootClone,
         TransformTypesEnum.Rotation,
         1000,
         UniverseBuilderHelper.scene,
-        false
+        false,
+        true
       );
 
       // Position
       smoothCameraUniverse(
         PlayerHelper.camera.position,
-        target.rootClone.absolutePosition,
+        target.rootClone,
         TransformTypesEnum.Position,
         2000,
         UniverseBuilderHelper.scene,

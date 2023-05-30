@@ -1,4 +1,4 @@
-import {Scene, TransformNode, Vector3} from '@babylonjs/core';
+import {AbstractMesh, Scene, TransformNode, Vector3} from '@babylonjs/core';
 import {PositionInterface} from '@momentum-xyz/core';
 
 import {PlayerHelper} from './PlayerHelper';
@@ -96,20 +96,21 @@ export function smoothCameraTransform(
 
 export function smoothCameraUniverse(
   startVec: Vector3,
-  targetUserPos: Vector3,
+  target: AbstractMesh,
   transformType: TransformTypesEnum,
   totalTime: number,
   scene: Scene,
-  lerp = false
+  lerp = false,
+  lockTarget = false
 ) {
   const slerpPos = Vector3.Zero();
   let lerpedTarget = Vector3.Zero();
   let elapsedTime = 0;
 
   if (lerp) {
-    lerpedTarget = Vector3.Lerp(startVec, targetUserPos, 0.85);
+    lerpedTarget = Vector3.Lerp(startVec, target.absolutePosition, 0.85);
   } else {
-    lerpedTarget = targetUserPos;
+    lerpedTarget = target.absolutePosition;
   }
 
   const observable = scene.onBeforeRenderObservable.add(() => {
@@ -128,6 +129,10 @@ export function smoothCameraUniverse(
 
     if (elapsedTime > totalTime) {
       scene.onBeforeRenderObservable.remove(observable);
+
+      if (lockTarget) {
+        PlayerHelper.camera.lockedTarget = target;
+      }
     }
   });
 }
