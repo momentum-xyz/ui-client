@@ -175,13 +175,8 @@ const CreatorStore = types
 
       if (colorResponse && colorResponse.value) {
         const colorHex = colorResponse.value;
-        const {
-          widgetStore: {
-            creatorStore: {objectColorStore}
-          }
-        } = getRootStore(self);
         setTimeout(() => {
-          objectColorStore.updateObjectColor(duplicateId, colorHex.replace(/-/g, ''));
+          self.objectColorStore.updateObjectColor(duplicateId, colorHex.replace(/-/g, ''));
         }, 100);
       }
       self.duplicateId = null;

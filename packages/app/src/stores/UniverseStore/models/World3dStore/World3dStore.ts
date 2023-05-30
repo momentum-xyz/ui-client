@@ -50,13 +50,12 @@ const World3dStore = types
     },
     closeAndResetObjectMenu() {
       console.log('closeAndResetObjectMenu', self.selectedObjectId);
+      const {widgetStore, widgetManagerStore} = getRootStore(self);
 
-      const {creatorStore} = getRootStore(self).widgetStore;
-      creatorStore.setSelectedObjectId(null);
-      creatorStore.setSelectedTab(null);
+      widgetStore?.creatorStore?.setSelectedObjectId(null);
+      widgetStore?.creatorStore.setSelectedTab(null);
 
-      const {widgetManagerStore} = getRootStore(self);
-      widgetManagerStore.closeSubMenu();
+      widgetManagerStore?.closeSubMenu();
 
       self._deselectObject();
       self.gizmoMode = GizmoTypeEnum.POSITION;
