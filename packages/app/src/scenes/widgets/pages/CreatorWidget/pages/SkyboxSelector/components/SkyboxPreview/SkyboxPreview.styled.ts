@@ -38,6 +38,7 @@ export const Row = styled.div`
   justify-content: space-between;
   height: 40px;
   gap: 20px;
+  width: 100%;
 `;
 export const Prop = styled.div`
   display: flex;
