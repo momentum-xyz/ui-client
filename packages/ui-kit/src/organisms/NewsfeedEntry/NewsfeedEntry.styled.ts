@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div``;
+export const Wrapper = styled.div`
+  background: #00437333;
+  width: 380px;
+  border-radius: 4px;
+`;
 
 export const Header = styled.div`
   display: flex;
@@ -59,6 +63,7 @@ export const Content = styled.div`
   padding-left: 18px;
   margin-top: 10px;
 `;
+
 export const TextEntryContainer = styled.div`
   display: flex;
   gap: 10px;
@@ -72,4 +77,25 @@ export const TextEntryText = styled.span`
 `;
 export const WorldName = styled.a`
   color: ${(props) => props.theme.accentText};
+`;
+
+export const MediaEntryContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+`;
+export const MediaEntryVideoContainer = styled.div`
+  border-radius: 4px;
+  overflow: hidden;
+`;
+export const MediaEntryComment = styled.p`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+`;
+export const MediaEntryControlsContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
 `;

@@ -9,7 +9,7 @@ import * as styled from './IconSvg.styled';
 const svgModules = require.context('../../assets/svg-sprite', false, /\.svg$/);
 const svgSpritePath: string = svgModules(svgModules.keys()[0]);
 
-export type IconSizeType = 'xxl' | 'xl' | 'l' | 'm' | 's' | 'xs' | 'xxs';
+export type IconSizeType = 'xxl' | 'xll' | 'xl' | 'l' | 'm' | 's' | 'xs' | 'xxs';
 
 export interface IconSvgPropsInterface extends PropsWithThemeInterface {
   name: IconNameType;
