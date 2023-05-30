@@ -18,7 +18,4 @@ export const RightSection = styled.div`
   justify-content: end;
 `;
 
-export const Widget = styled.div`
-  max-height: calc(100vh - var(--menu-height) - var(--menu-padding) * 3);
-  pointer-events: all;
-`;
+export const Widget = styled.div``;

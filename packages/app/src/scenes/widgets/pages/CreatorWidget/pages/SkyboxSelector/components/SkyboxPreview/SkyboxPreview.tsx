@@ -23,6 +23,14 @@ export const SkyboxPreview = ({skybox, onSkyboxSelect, onBack}: PropsInterface):
           <Image src={skybox.image} height={360} bordered />
         </Frame>
         <styled.SkyboxTitle>{skybox.name}</styled.SkyboxTitle>
+        {skybox.artist_name && (
+          <styled.Row>
+            <styled.Prop>
+              <styled.PropName>Created by:</styled.PropName>
+              <styled.PropValue>{skybox.artist_name}</styled.PropValue>
+            </styled.Prop>
+          </styled.Row>
+        )}
       </styled.SkyboxInfoContainer>
 
       <styled.ControlsRow>

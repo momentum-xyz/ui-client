@@ -4,10 +4,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 80px;
-  min-height: calc(100vh - 370px);
-  max-height: calc(100vh - 370px);
-  overflow: scroll;
+  padding: 0 80px 10px 80px;
   justify-content: space-between;
 `;
 export const SkyboxInfoContainer = styled.div`
@@ -41,6 +38,7 @@ export const Row = styled.div`
   justify-content: space-between;
   height: 40px;
   gap: 20px;
+  width: 100%;
 `;
 export const Prop = styled.div`
   display: flex;

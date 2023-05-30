@@ -3,7 +3,6 @@ import styled from 'styled-components';
 export const Container = styled.div`
   padding: 20px 10px 10px 10px;
   width: 100%;
-  pointer-events: all;
 `;
 
 export const HeadingWrapper = styled.div`

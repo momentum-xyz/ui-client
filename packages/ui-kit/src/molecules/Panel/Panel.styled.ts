@@ -22,6 +22,7 @@ export const Container = styled.div`
   background: linear-gradient(180deg, var(--lg-from) 0%, var(--lg-to) 100%);
   box-shadow: -1px -1px 6px rgba(255, 255, 255, 0.2);
   border-radius: var(--radius);
+  pointer-events: all;
 
   &.primary {
     --offset: var(--primary-offset);

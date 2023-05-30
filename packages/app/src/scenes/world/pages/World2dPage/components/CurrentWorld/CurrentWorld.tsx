@@ -10,10 +10,11 @@ import * as styled from './CurrentWorld.styled';
 
 interface PropsInterface {
   world: WorldModelInterface;
+  onViewWorld: () => void;
   onStakeWorld: () => void;
 }
 
-const CurrentWorld: FC<PropsInterface> = ({world, onStakeWorld}) => {
+const CurrentWorld: FC<PropsInterface> = ({world, onViewWorld, onStakeWorld}) => {
   const {name, imageSrc, createdAt, stakersCount, momStaked} = world;
   const {t} = useI18n();
 
@@ -42,7 +43,7 @@ const CurrentWorld: FC<PropsInterface> = ({world, onStakeWorld}) => {
       </styled.Content>
 
       <styled.Hexagons>
-        <Hexagon noHover type="menu" iconName="rabbit_fill" imageSrc={imageSrc} />
+        <Hexagon type="menu" iconName="rabbit_fill" imageSrc={imageSrc} onClick={onViewWorld} />
         <styled.BlankHexagons>
           <styled.BlankHexagon1>
             <Hexagon type="blank-small" />

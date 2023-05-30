@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div``;
+export const Wrapper = styled.div`
+  pointer-events: all;
+`;
+
 export const MenuItemContainer = styled.div`
   display: flex;
   flex-direction: column;
