@@ -31,6 +31,7 @@ export const ControlsRow = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+  margin-bottom: 10px;
 `;
 
 export const Row = styled.div`

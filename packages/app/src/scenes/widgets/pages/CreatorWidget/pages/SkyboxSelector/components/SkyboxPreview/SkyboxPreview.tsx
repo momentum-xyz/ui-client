@@ -8,12 +8,16 @@ import * as styled from './SkyboxPreview.styled';
 interface PropsInterface {
   skybox: Asset3dInterface;
   onSkyboxSelect: (skybox: Asset3dInterface) => void;
-  // eslint-disable-next-line react/no-unused-prop-types
-  onSkyboxDelete?: (skybox: Asset3dInterface) => void;
+  onSkyboxDelete: (skybox: Asset3dInterface) => void;
   onBack: () => void;
 }
 
-export const SkyboxPreview = ({skybox, onSkyboxSelect, onBack}: PropsInterface): JSX.Element => {
+export const SkyboxPreview = ({
+  skybox,
+  onSkyboxSelect,
+  onSkyboxDelete,
+  onBack
+}: PropsInterface): JSX.Element => {
   const {t} = useI18n();
 
   return (
@@ -35,13 +39,14 @@ export const SkyboxPreview = ({skybox, onSkyboxSelect, onBack}: PropsInterface):
 
       <styled.ControlsRow>
         <Button label={t('actions.goBack')} variant="secondary" onClick={onBack} />
-        {/* No delete logic? */}
-        {/* <Button
+        <Button label="Change Skybox" onClick={() => onSkyboxSelect(skybox)} />
+      </styled.ControlsRow>
+      <styled.ControlsRow>
+        <Button
           label={t('actions.delete')}
           variant="secondary"
           onClick={() => onSkyboxDelete(skybox)}
-        /> */}
-        <Button label="Change Skybox" onClick={() => onSkyboxSelect(skybox)} />
+        />
       </styled.ControlsRow>
     </styled.Container>
   );
