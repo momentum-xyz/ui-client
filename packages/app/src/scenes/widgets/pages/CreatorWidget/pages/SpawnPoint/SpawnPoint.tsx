@@ -20,8 +20,8 @@ const SpawnPoint: FC = () => {
   const {t} = useI18n();
 
   const onSetHandler = useCallback(async () => {
-    const position: UnityPositionInterface | null = world3dStore?.getUserPosition() || null;
-    const rotation: UnityPositionInterface | null = world3dStore?.getUserRotation() || null;
+    const position: UnityPositionInterface | null = null;
+    const rotation: UnityPositionInterface | null = null;
 
     if (position && rotation && (await setSpawnPoint(worldId, position, rotation))) {
       toast.info(
