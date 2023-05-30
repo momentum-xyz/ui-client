@@ -1,14 +1,18 @@
 import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useI18n, i18n} from '@momentum-xyz/core';
-import {TabInterface, Tabs, Panel} from '@momentum-xyz/ui-kit';
+import {useI18n, i18n, NewsfeedTypeEnum} from '@momentum-xyz/core';
+import {
+  TabInterface,
+  Tabs,
+  Panel,
+  NewsfeedEntry,
+  NewsfeedEntryInterface
+} from '@momentum-xyz/ui-kit';
 
 import {useNavigation, useStore} from 'shared/hooks';
-import {NewsfeedTabTypeEnum, NewsfeedTypeEnum, WidgetEnum} from 'core/enums';
-import {NewsfeedEntryModelInterface} from 'core/models';
+import {NewsfeedTabTypeEnum, WidgetEnum} from 'core/enums';
 
 import * as styled from './NewsfeedWidget.styled';
-import {NewsfeedEntry} from './components';
 
 const TABS_LIST: TabInterface<NewsfeedTabTypeEnum>[] = [
   {id: NewsfeedTabTypeEnum.UNIVERSAL, icon: 'clock', label: i18n.t('labels.universal')},
@@ -33,7 +37,7 @@ const NewsfeedWidget: FC = () => {
     }
 
     const worldId = !isGuest && worldsOwnedList.length > 0 ? worldsOwnedList[0].id : null;
-    const dummyEntries: NewsfeedEntryModelInterface[] = [
+    const dummyEntries: NewsfeedEntryInterface[] = [
       {
         id: '1',
         author_id: 'user_1',
@@ -137,7 +141,7 @@ const NewsfeedWidget: FC = () => {
   }, [sessionStore.user]);
 
   const handleWorldOpen = useCallback(
-    (entry: NewsfeedEntryModelInterface) => {
+    (entry: NewsfeedEntryInterface) => {
       console.log('Open newsfeed entry world', entry);
       if (!entry.data.world_id) {
         return;
@@ -163,7 +167,12 @@ const NewsfeedWidget: FC = () => {
           </styled.Tabs>
           <styled.Content>
             {currentTabEntries.map((entry) => (
-              <NewsfeedEntry key={entry.id} entry={entry} onWorldOpen={handleWorldOpen} />
+              <NewsfeedEntry
+                key={entry.id}
+                entry={entry}
+                onWorldOpen={handleWorldOpen}
+                onShare={() => {}}
+              />
             ))}
           </styled.Content>
         </styled.Wrapper>

@@ -1,5 +1,6 @@
 import {cast, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
+import {NewsfeedEntryInterface} from '@momentum-xyz/ui-kit';
 
 import {NewsfeedEntry, NewsfeedEntryModelInterface} from 'core/models';
 import {NewsfeedTabTypeEnum} from 'core/enums';
@@ -18,7 +19,7 @@ const NewsfeedStore = types.compose(
       setActiveNewsfeedType(type: NewsfeedTabTypeEnum): void {
         self.newsfeedType = type;
       },
-      setEntries(entries: NewsfeedEntryModelInterface[]): void {
+      setEntries(entries: NewsfeedEntryInterface[]): void {
         self.entries = cast(entries);
       }
     }))

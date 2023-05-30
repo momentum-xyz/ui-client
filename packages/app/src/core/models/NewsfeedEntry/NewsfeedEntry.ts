@@ -1,6 +1,5 @@
 import {types, Instance} from 'mobx-state-tree';
-
-import {NewsfeedTypeEnum} from 'core/enums';
+import {NewsfeedTypeEnum} from '@momentum-xyz/core';
 
 const NewsFeedEntryData = types.model('NewsFeedEntryData', {
   world_id: types.optional(types.maybeNull(types.string), null),
@@ -8,7 +7,12 @@ const NewsFeedEntryData = types.model('NewsFeedEntryData', {
   world_image: types.optional(types.maybeNull(types.string), null),
 
   user_name: types.optional(types.maybeNull(types.string), null),
-  amount: types.optional(types.maybeNull(types.number), null)
+  amount: types.optional(types.maybeNull(types.number), null),
+
+  image: types.optional(types.maybeNull(types.string), null),
+  video: types.optional(types.maybeNull(types.string), null),
+  // world_id: types.optional(types.maybeNull(types.string), null),
+  comment: types.optional(types.maybeNull(types.string), null)
 });
 
 const NewsfeedEntry = types.model('NewsfeedEntry', {
