@@ -13,6 +13,7 @@ export enum WidgetEnum {
   VOICE_CHAT = 'VOICE_CHAT',
   OBJECT = 'OBJECT',
   NEWSFEED = 'NEWSFEED',
+  TIMELINE = 'TIMELINE',
 
   ACTION = 'ACTION',
 

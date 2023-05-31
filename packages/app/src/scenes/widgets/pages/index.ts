@@ -11,3 +11,4 @@ export * from './WorldVisitorsWidget';
 export * from './CreatorWidget';
 export * from './ObjectWidget';
 export * from './NewsfeedWidget';
+export * from './TimelineWidget';
