@@ -1,4 +1,4 @@
-import { rgba } from 'polished';
+import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
