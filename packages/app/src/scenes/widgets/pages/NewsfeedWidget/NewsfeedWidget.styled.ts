@@ -22,6 +22,8 @@ export const Tabs = styled.div`
 `;
 
 export const Content = styled.div`
+  height: calc(100vh - var(--height-offset) - 40px);
+  overflow: scroll;
   display: flex;
   flex-direction: column;
   & > div:first-child > div {

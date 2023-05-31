@@ -18,9 +18,11 @@ const textEntries: NewsfeedEntryInterface[] = [
     author_id: 'user_1',
     author_name: 'John Doe',
     author_avatar: 'https://picsum.photos/201',
+    author_world_id: 'author_world',
+    author_world_name: 'World John',
     universal: true,
     entry_type: NewsfeedTypeEnum.CREATED,
-    created_at: new Date().toDateString(),
+    created_at: new Date().toString(),
     data: {
       world_id: 'odyssey_world_1',
       world_name: 'Odyssey World 1',
@@ -34,9 +36,11 @@ const textEntries: NewsfeedEntryInterface[] = [
     author_id: 'user_2',
     author_name: 'John Doe',
     author_avatar: 'https://picsum.photos/202',
+    author_world_id: 'author_world',
+    author_world_name: 'World John',
     universal: true,
     entry_type: NewsfeedTypeEnum.BOOST,
-    created_at: new Date().toDateString(),
+    created_at: new Date().toString(),
     data: {
       world_id: 'odyssey_world_1',
       world_name: 'Odyssey World 1',
@@ -53,9 +57,11 @@ const imageEntries: NewsfeedEntryInterface[] = [
     author_id: 'user_3',
     author_name: 'Jane Doe',
     author_avatar: 'https://picsum.photos/203',
+    author_world_id: 'author_world',
+    author_world_name: 'World Jane',
     universal: true,
     entry_type: NewsfeedTypeEnum.IMAGE,
-    created_at: new Date().toDateString(),
+    created_at: new Date().toString(),
     data: {
       world_id: 'odyssey_world_1',
       image: 'https://picsum.photos/303',
@@ -68,9 +74,11 @@ const imageEntries: NewsfeedEntryInterface[] = [
     author_id: 'user_4',
     author_name: 'John Doe',
     author_avatar: 'https://picsum.photos/204',
+    author_world_id: 'author_world',
+    author_world_name: 'World John',
     universal: true,
     entry_type: NewsfeedTypeEnum.IMAGE,
-    created_at: new Date().toDateString(),
+    created_at: new Date().toString(),
     data: {
       world_id: 'odyssey_world_1',
       image: 'https://picsum.photos/303',
@@ -83,9 +91,11 @@ const imageEntries: NewsfeedEntryInterface[] = [
     author_id: 'user_5',
     author_name: 'John Doe',
     author_avatar: 'https://picsum.photos/203',
+    author_world_id: 'author_world',
+    author_world_name: 'World John',
     universal: false,
     entry_type: NewsfeedTypeEnum.IMAGE,
-    created_at: new Date().toDateString(),
+    created_at: new Date().toString(),
     data: {
       world_id: null,
       image: 'https://picsum.photos/303',
@@ -101,9 +111,11 @@ const videoEntries: NewsfeedEntryInterface[] = [
     author_id: 'user_3',
     author_name: 'Jane Doe',
     author_avatar: 'https://picsum.photos/203',
+    author_world_id: 'author_world',
+    author_world_name: 'World Jane',
     universal: true,
     entry_type: NewsfeedTypeEnum.VIDEO,
-    created_at: new Date().toDateString(),
+    created_at: new Date().toString(),
     data: {
       world_id: 'odyssey_world_1',
       image: null,
@@ -116,9 +128,11 @@ const videoEntries: NewsfeedEntryInterface[] = [
     author_id: 'user_4',
     author_name: 'John Doe',
     author_avatar: 'https://picsum.photos/204',
+    author_world_id: 'author_world',
+    author_world_name: 'World John',
     universal: true,
     entry_type: NewsfeedTypeEnum.VIDEO,
-    created_at: new Date().toDateString(),
+    created_at: new Date().toString(),
     data: {
       world_id: 'odyssey_world_1',
       image: null,
@@ -131,9 +145,11 @@ const videoEntries: NewsfeedEntryInterface[] = [
     author_id: 'user_5',
     author_name: 'John Doe',
     author_avatar: 'https://picsum.photos/203',
+    author_world_id: 'author_world',
+    author_world_name: 'World John',
     universal: false,
     entry_type: NewsfeedTypeEnum.VIDEO,
-    created_at: new Date().toDateString(),
+    created_at: new Date().toString(),
     data: {
       world_id: null,
       image: null,
@@ -145,7 +161,10 @@ const videoEntries: NewsfeedEntryInterface[] = [
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Template: Story<NewsfeedEntryPropsInterface> = (args) => {
-  return <NewsfeedEntry {...args} onWorldOpen={() => {}} />;
+  const onWorldOpen = (worldId: string) => {
+    console.log('Open world', worldId);
+  };
+  return <NewsfeedEntry {...args} onWorldOpen={onWorldOpen} />;
 };
 
 export const General = Template.bind({});
