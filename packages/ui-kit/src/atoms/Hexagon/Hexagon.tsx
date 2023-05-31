@@ -105,6 +105,7 @@ export interface HexagonPropsInterface {
   imageSrc?: string | null;
   iconName?: IconNameType | null;
   label?: string;
+  noButton?: boolean;
   onClick?: () => void;
 }
 
@@ -120,9 +121,10 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
     iconName,
     imageSrc,
     label,
-    onClick,
     margin,
     tooltip,
+    noButton,
+    onClick,
     ...rest
   } = props;
 
@@ -143,7 +145,8 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
   const shouldHaveButton =
     type !== 'blank' &&
     type !== 'blank-borderless' &&
-    !((type === 'primary' || isMenu) && skipOuterBorder);
+    !((type === 'primary' || isMenu) && skipOuterBorder) &&
+    !noButton;
 
   const hexElementHeight = isBlank
     ? size === 'small'
