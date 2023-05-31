@@ -7,7 +7,7 @@ import {Odyssey3dPropsInterface} from '../../core/interfaces';
 import {PlayerHelper, LightHelper, ObjectHelper} from '../../babylon';
 import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
-import { ScreenCaptureHelper } from '../../babylon/ScreenCaptureHelper';
+import {ScreenCaptureHelper} from '../../babylon/ScreenCaptureHelper';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callbacks}) => {
   const onObjectClick = useMutableCallback(callbacks.onObjectClick);

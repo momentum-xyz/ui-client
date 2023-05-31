@@ -1,6 +1,6 @@
 import {Scene, Tools, VideoRecorder} from '@babylonjs/core';
 
-import { PlayerHelper } from './PlayerHelper';
+import {PlayerHelper} from './PlayerHelper';
 
 export class ScreenCaptureHelper {
   static scene: Scene;
@@ -20,7 +20,7 @@ export class ScreenCaptureHelper {
     if (VideoRecorder.IsSupported(this.scene.getEngine())) {
       const recorder = new VideoRecorder(this.scene.getEngine());
       recorder.startRecording(null, duration).then((videoBlob) => {
-          // Do Something with the videoBlob.
+        // Do Something with the videoBlob.
       });
     }
   }
