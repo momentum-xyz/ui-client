@@ -39,7 +39,13 @@ const Image: FC<ImagePropsInterface> = ({
       ) : (
         <styled.ErrorContainer>
           <styled.Error errorIconOffset={errorIconOffset} className={cn(isIconAccent && 'accent')}>
-            <Hexagon type="secondary-borderless" iconName={errorIcon} noHover skipOuterBorder />
+            <Hexagon
+              type="secondary-borderless"
+              iconName={errorIcon}
+              noHover
+              skipOuterBorder
+              noButton
+            />
           </styled.Error>
         </styled.ErrorContainer>
       )}
