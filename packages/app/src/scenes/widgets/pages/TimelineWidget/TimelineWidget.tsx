@@ -1,6 +1,6 @@
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useI18n} from '@momentum-xyz/core';
+import {Event3dEmitter, useI18n} from '@momentum-xyz/core';
 import {Panel, PostCreator} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
@@ -9,10 +9,17 @@ import {WidgetEnum} from 'core/enums';
 import * as styled from './TimelineWidget.styled';
 
 const TimelineWidget: FC = () => {
-  const {widgetManagerStore, sessionStore} = useStore();
+  const {widgetManagerStore, sessionStore, universeStore} = useStore();
+  const {world3dStore} = universeStore;
   const {user} = sessionStore;
 
   const {t} = useI18n();
+
+  useEffect(() => {
+    return () => {
+      world3dStore?.clearSnapshotOrVideo();
+    };
+  }, [world3dStore]);
 
   if (!user) {
     return <></>;
@@ -32,7 +39,17 @@ const TimelineWidget: FC = () => {
           {!sessionStore.isGuest && (
             <PostCreator
               author={{id: user.id, name: user.name, avatarSrc: user.avatarSrc}}
-              onPublish={() => {}}
+              videoOrScreenshot={undefined}
+              isCreating={false}
+              onMakeScreenshot={() => {
+                Event3dEmitter.emit('MakeScreenshot');
+              }}
+              onCreatePost={(form, postType) => {
+                console.log(form, postType);
+              }}
+              onCancel={() => {
+                world3dStore?.clearSnapshotOrVideo();
+              }}
             />
           )}
         </styled.Wrapper>
