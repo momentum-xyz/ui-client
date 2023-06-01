@@ -399,6 +399,7 @@ export const enGb = {
       createProfile: 'Create a profile',
       memberProfile: 'Member profile',
       odysseyOverview: 'Odyssey Overview',
+      timeline: 'Timeline',
       connectYourWallet: 'Connect your wallet',
       welcomePageJoinTitle: 'Join Odyssey\nas a\nmember',
       welcomePageGuestTitle: 'Enter\nOdyssey as a\nguest',
@@ -410,6 +411,8 @@ export const enGb = {
       loadingPlugin: 'Loading Plugin...',
       loadingToken: 'Loading {{tokenSymbol}}...',
       loadingDynamicScript: 'Loading dynamic script: {{url}}',
+      createSnapshotOrVideo:
+        'Create a snapshot or a video and share this to all visitors of Odyssey',
       unStakedSuccess:
         'Your transaction has been processed. You have successfully unstaked from {{name}}!',
       unStakedError:
@@ -710,6 +713,9 @@ export const enGb = {
       settings: 'Settings',
       default: 'Default',
       setAsDefault: 'Set as default',
+      takeSnapshot: 'Take a snapshot',
+      createVideo: 'Create a video',
+      createEvent: 'Create an event',
       edit: 'Edit',
       deleteObject: 'Delete object',
       duplicateObject: 'Duplicate object',
@@ -730,6 +736,7 @@ export const enGb = {
       searchStakes: 'Search Stakes',
       visitOdyssey: 'Visit Odyssey',
       stakeInOdyssey: 'Stake in Odyssey',
+      addToTimeline: 'Add to timeline',
       seeAll: 'See all',
       approve: 'Approve',
       joinStage: 'Join Stage',

@@ -8,7 +8,8 @@ import {
   Event3dEmitter,
   ClickPositionInterface,
   ObjectTransformInterface,
-  TransformNoScaleInterface
+  TransformNoScaleInterface,
+  MediaEnum
 } from '@momentum-xyz/core';
 
 import {CreatorTabsEnum, WidgetEnum} from 'core/enums';
@@ -219,6 +220,20 @@ const World3dPage: FC = () => {
     }
   };
 
+  const handleScreenshot = (file: File) => {
+    world3dStore?.setScreenshotOrVideo({
+      mediaType: MediaEnum.Screenshot,
+      file: file
+    });
+  };
+
+  const handleRecordedVideo = (file: File) => {
+    world3dStore?.setScreenshotOrVideo({
+      mediaType: MediaEnum.Video,
+      file: file
+    });
+  };
+
   usePosBusEvent('high-five', (senderId, message) => {
     console.info('[POSBUS EVENT] high-five', senderId, message);
     toast.info(
@@ -249,6 +264,8 @@ const World3dPage: FC = () => {
       onReadyToHandleEvents={() => {
         setWorldReadyToHandleEvents(worldId);
       }}
+      onScreenshotReady={handleScreenshot}
+      onVideoReady={handleRecordedVideo}
     />
   );
 };

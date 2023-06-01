@@ -30,4 +30,7 @@ export interface Odyssey3dPropsInterface {
   onBumpReady: () => void;
 
   onReadyToHandleEvents: () => void;
+
+  onScreenshotReady: (file: File) => void;
+  onVideoReady: (file: File) => void;
 }

@@ -5,3 +5,4 @@ export * from './object.interface';
 export * from './texture.interface';
 export * from './setworld.interface';
 export * from './world.interface';
+export * from './media.interface';

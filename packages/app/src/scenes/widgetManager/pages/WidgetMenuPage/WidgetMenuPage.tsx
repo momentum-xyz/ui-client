@@ -119,6 +119,15 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       onClick: toggle
     },
     {
+      key: WidgetEnum.TIMELINE,
+      position: PositionEnum.RIGHT,
+      viewPosition: PositionEnum.RIGHT,
+      iconName: 'clock-two',
+      isHidden: !isWorld,
+      tooltip: t('labels.timeline'),
+      onClick: toggle
+    },
+    {
       key: WidgetEnum.VOICE_CHAT,
       position: PositionEnum.RIGHT,
       iconName: 'voice_chat',
