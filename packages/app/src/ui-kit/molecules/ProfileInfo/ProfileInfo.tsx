@@ -10,6 +10,7 @@ interface PropsInterface {
   hash?: string | null;
   walletIcon?: IconNameType;
   description?: string | null;
+  descriptionLines?: number;
   joinDate?: string | null;
   createDate?: string | null;
   hideBorder?: boolean;
@@ -21,6 +22,7 @@ const ProfileInfo: FC<PropsInterface> = ({
   hash,
   walletIcon,
   description,
+  descriptionLines = 0,
   weblink,
   joinDate,
   createDate,
@@ -32,7 +34,10 @@ const ProfileInfo: FC<PropsInterface> = ({
 
   return (
     <styled.Container data-testid="ProfileInfo-test" className={cn(hideBorder && 'hideBorder')}>
-      {description && <div>{description}</div>}
+      {description && (
+        <styled.Description lines={descriptionLines}>{description}</styled.Description>
+      )}
+
       {weblink && (
         <ProfileLine
           icon="link"

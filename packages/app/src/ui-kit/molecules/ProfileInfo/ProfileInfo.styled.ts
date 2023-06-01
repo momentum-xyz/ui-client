@@ -14,6 +14,13 @@ export const Container = styled.div`
   }
 `;
 
+export const Description = styled.div<{lines: number}>`
+  display: -webkit-box;
+  -webkit-line-clamp: ${(props) => props.lines};
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
+
 export const Hash = styled.div`
   text-decoration: underline;
   text-overflow: ellipsis;
