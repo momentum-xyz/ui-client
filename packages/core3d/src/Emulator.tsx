@@ -83,6 +83,8 @@ const WorldEmulator: FC = () => {
       onClickOutside={() => console.log('onClickOutside')}
       onBumpReady={() => console.log('onBumpReady')}
       onReadyToHandleEvents={() => console.log('onReadyToHandleEvents')}
+      onScreenshotReady={(file) => console.log(file)}
+      onVideoReady={(file) => console.log(file)}
     />
   );
 };

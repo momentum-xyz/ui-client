@@ -40,6 +40,10 @@ export type Event3dType = {
 
   TriggerBump: (userId: string) => void;
 
+  MakeScreenshot: () => void;
+  StartRecordingVideo: (maxDuration: number) => void;
+  StopRecordingVideo: () => void;
+
   // ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
 };
 

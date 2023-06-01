@@ -18,6 +18,12 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
   const onReadyToHandleEvents = useMutableCallback(callbacks.onReadyToHandleEvents);
   // Sent from user1 to BE to trigger sparkles
   const onBumpReady = useMutableCallback(callbacks.onBumpReady);
+  const onScreenshotReady = useMutableCallback(callbacks.onScreenshotReady);
+  const onVideoReady = useMutableCallback(callbacks.onVideoReady);
+
+  // TODO: Implementation
+  console.log(onScreenshotReady);
+  console.log(onVideoReady);
 
   useEffect(() => {
     return () => {
@@ -31,6 +37,9 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       events.off('UsersTransformChanged');
       events.off('ObjectEditModeChanged');
       events.off('TriggerBump');
+      events.off('StartRecordingVideo');
+      events.off('StopRecordingVideo');
+      events.off('MakeScreenshot');
     };
   }, [events]);
 
@@ -126,6 +135,11 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       events.on('TriggerBump', (userId) => {
         PlayerHelper.followPlayer(userId);
       });
+
+      // TODO: Implementation
+      events.on('MakeScreenshot', () => {});
+      events.on('StartRecordingVideo', (maxDuration) => {});
+      events.on('StopRecordingVideo', () => {});
 
       onReadyToHandleEvents();
     } else {
