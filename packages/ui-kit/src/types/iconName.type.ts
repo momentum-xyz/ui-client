@@ -24,6 +24,7 @@ export type IconNameType =
   | 'calendarMinus'
   | 'call_connect'
   | 'call_disconnected'
+  | 'camera'
   | 'cameraOff'
   | 'cameraOn'
   | 'chart'

@@ -10,6 +10,7 @@ export const Container = styled.div`
 
   button {
     justify-content: center;
+    z-index: 2;
   }
 
   &.iconButton {

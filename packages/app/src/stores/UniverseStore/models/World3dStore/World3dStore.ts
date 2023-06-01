@@ -3,12 +3,13 @@ import {MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
 import {
   RequestModel,
   Event3dEmitter,
+  MediaInterface,
   ClickPositionInterface,
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
 
-import {GizmoTypeEnum, WidgetEnum} from 'core/enums';
 import {getRootStore} from 'core/utils';
+import {GizmoTypeEnum, WidgetEnum} from 'core/enums';
 
 const DEFAULT_UNITY_VOLUME = 0.75;
 
@@ -24,6 +25,7 @@ const World3dStore = types
     attachedToCameraObjectId: types.maybeNull(types.string),
 
     waitingForBumpEffectReadyUserId: types.maybeNull(types.string),
+    screenshotOrVideo: types.maybeNull(types.frozen<MediaInterface>()),
 
     gizmoMode: types.optional(
       types.enumeration(Object.values(GizmoTypeEnum)),
@@ -40,6 +42,14 @@ const World3dStore = types
         // Event3dEmitter.emit('ObjectEditModeChanged', self.selectedObjectId, false);
         self.selectedObjectId = null;
       }
+    }
+  }))
+  .actions((self) => ({
+    setScreenshotOrVideo(media: MediaInterface): void {
+      self.screenshotOrVideo = media;
+    },
+    clearSnapshotOrVideo(): void {
+      self.screenshotOrVideo = null;
     }
   }))
   .actions((self) => ({

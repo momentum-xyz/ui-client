@@ -8,6 +8,12 @@ export enum NewsfeedTypeEnum {
   EVENT = 'event'
 }
 
+export enum PostTypeEnum {
+  IMAGE = NewsfeedTypeEnum.IMAGE,
+  VIDEO = NewsfeedTypeEnum.VIDEO,
+  EVENT = NewsfeedTypeEnum.EVENT
+}
+
 export interface NewsFeedMediaEntryDataInterface {
   image: string | null;
   video: string | null;

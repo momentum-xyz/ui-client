@@ -17,6 +17,7 @@ import {ProfileImage, ProfileInfo} from 'ui-kit';
 import * as styled from './OnlineUsersList.styled';
 
 const MAX_USERS_COUNT = 9;
+const DESC_LINES_COUNT = 5;
 
 interface PropsInterface {
   onlineUsers: UserDetailsModelType[];
@@ -85,6 +86,7 @@ const OnlineUsersList: FC<PropsInterface> = ({
                 <styled.Info>
                   <ProfileInfo
                     description={activeUser.user?.profile.bio}
+                    descriptionLines={DESC_LINES_COUNT}
                     weblink={activeUser.user?.profile.profileLink}
                     joinDate={activeUser.user?.createdAt}
                     hideBorder
