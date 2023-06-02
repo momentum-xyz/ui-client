@@ -18202,6 +18202,11 @@ react-textarea-autosize@^8.3.0:
     use-composed-ref "^1.3.0"
     use-latest "^1.2.1"
 
+react-timer-hook@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/react-timer-hook/-/react-timer-hook-3.0.6.tgz#61aca331378ad53058519c579de50c244e66972f"
+  integrity sha512-6O1gcBT7R5gm2W14mGAu35KfX0tdJ9s817UDJTL7/IQUXqK6wkYgZzy1mSLa6N+AQGEhgoVCtTsP7tIhBmSD6A==
+
 react-toastify@^9.1.1:
   version "9.1.1"
   resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-9.1.1.tgz#9280caea4a13dc1739c350d90660a630807bf10b"
