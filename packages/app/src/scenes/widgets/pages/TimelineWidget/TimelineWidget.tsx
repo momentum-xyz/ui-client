@@ -8,6 +8,8 @@ import {WidgetEnum} from 'core/enums';
 
 import * as styled from './TimelineWidget.styled';
 
+const MAX_VIDEO_DURATION_SEC = 15;
+
 const TimelineWidget: FC = () => {
   const {widgetManagerStore, sessionStore, universeStore} = useStore();
   const {world3dStore} = universeStore;
@@ -39,10 +41,17 @@ const TimelineWidget: FC = () => {
           {!sessionStore.isGuest && (
             <PostCreator
               author={{id: user.id, name: user.name, avatarSrc: user.avatarSrc}}
-              videoOrScreenshot={undefined}
+              videoOrScreenshot={world3dStore?.screenshotOrVideo}
+              maxVideoDurationSec={MAX_VIDEO_DURATION_SEC}
               isCreating={false}
               onMakeScreenshot={() => {
                 Event3dEmitter.emit('MakeScreenshot');
+              }}
+              onStartRecording={() => {
+                Event3dEmitter.emit('StartRecordingVideo', MAX_VIDEO_DURATION_SEC);
+              }}
+              onStopRecording={() => {
+                Event3dEmitter.emit('StopRecordingVideo');
               }}
               onCreatePost={(form, postType) => {
                 console.log(form, postType);

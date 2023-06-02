@@ -25,5 +25,11 @@ General.args = {
     id: 'user_2',
     name: 'John Doe',
     avatarSrc: 'https://picsum.photos/202'
-  }
+  },
+  maxVideoDurationSec: 15,
+  onMakeScreenshot: () => {},
+  onStartRecording: () => {},
+  onStopRecording: () => {},
+  onCreatePost: () => {},
+  onCancel: () => {}
 };

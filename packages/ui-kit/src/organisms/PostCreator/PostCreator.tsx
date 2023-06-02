@@ -5,7 +5,7 @@ import {MediaInterface, PostTypeEnum, useI18n} from '@momentum-xyz/core';
 import {PostFormInterface} from '../../interfaces';
 import {ButtonEllipse, Frame, Hexagon} from '../../atoms';
 
-import {ImagePostForm, PostTypeSelector} from './components';
+import {ImagePostForm, VideoPostForm, PostTypeSelector} from './components';
 import * as styled from './PostCreator.styled';
 
 export interface AuthorInterface {
@@ -16,9 +16,12 @@ export interface AuthorInterface {
 
 export interface PostCreatorPropsInterface {
   author: AuthorInterface;
-  videoOrScreenshot?: MediaInterface;
+  videoOrScreenshot?: MediaInterface | null;
+  maxVideoDurationSec: number;
   isCreating?: boolean;
   onMakeScreenshot: () => void;
+  onStartRecording: () => void;
+  onStopRecording: () => void;
   onCreatePost: (form: PostFormInterface, postType: PostTypeEnum) => void;
   onCancel: () => void;
 }
@@ -26,8 +29,11 @@ export interface PostCreatorPropsInterface {
 const PostCreator: FC<PostCreatorPropsInterface> = ({
   author,
   videoOrScreenshot,
+  maxVideoDurationSec,
   isCreating,
   onMakeScreenshot,
+  onStartRecording,
+  onStopRecording,
   onCreatePost,
   onCancel
 }) => {
@@ -70,7 +76,20 @@ const PostCreator: FC<PostCreatorPropsInterface> = ({
             />
           )}
 
-          {postTypeIntent === PostTypeEnum.VIDEO && <></>}
+          {postTypeIntent === PostTypeEnum.VIDEO && (
+            <VideoPostForm
+              video={videoOrScreenshot?.file}
+              isCreating={isCreating}
+              maxVideoDurationSec={maxVideoDurationSec}
+              onStartRecording={onStartRecording}
+              onStopRecording={onStopRecording}
+              onCreatePost={(form) => onCreatePost(form, PostTypeEnum.IMAGE)}
+              onCancel={() => {
+                setPostTypeIntent(null);
+                onCancel();
+              }}
+            />
+          )}
 
           {postTypeIntent === PostTypeEnum.EVENT && <>TBD</>}
         </styled.Content>

@@ -35,6 +35,7 @@
     "react-number-format": "^5.1.4",
     "react-router-dom": "^6.7.0",
     "react-select": "^5.7.0",
+    "react-timer-hook": "^3.0.6",
     "react-use-error-boundary": "^3.0.0",
     "styled-components": "^5.3.6",
     "svg-sprite": "^1.5.4"
