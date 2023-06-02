@@ -9,6 +9,7 @@ export interface UploadAsset3dRequest extends Asset3dRequest {
   asset: File;
   name: string;
   preview_hash?: string;
+  is_private?: boolean;
 }
 
 export interface UploadAsset3dResponse {
@@ -32,6 +33,8 @@ export interface Asset3dMetadataInterface {
 export interface Asset3dInterface {
   id: string;
   meta: Asset3dMetadataInterface;
+  is_private: boolean;
+  user_id: string;
   createdAt: string;
   updatedAt: string;
 }

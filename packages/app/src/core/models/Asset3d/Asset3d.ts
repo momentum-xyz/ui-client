@@ -12,6 +12,7 @@ const Asset3d = types
     // TODO remove
     image: types.string,
     preview_hash: types.maybeNull(types.string),
+    is_private: types.optional(types.boolean, false),
     isUserAttribute: types.optional(types.boolean, false)
   })
   .views((self) => ({

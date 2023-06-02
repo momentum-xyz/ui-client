@@ -16,7 +16,7 @@ import {
 export const upload3DAsset: RequestInterface<UploadAsset3dRequest, UploadAsset3dResponse> = (
   options
 ) => {
-  const {asset, name, headers, worldId, preview_hash, ...restOptions} = options;
+  const {asset, name, headers, worldId, preview_hash, is_private, ...restOptions} = options;
 
   const formData: FormData = new FormData();
   formData.append('asset', asset);
@@ -24,6 +24,10 @@ export const upload3DAsset: RequestInterface<UploadAsset3dRequest, UploadAsset3d
   if (preview_hash) {
     formData.append('preview_hash', preview_hash);
   }
+  if (is_private) {
+    formData.append('is_private', is_private.toString());
+  }
+
   const requestOptions = {
     headers: {
       'Content-Type': 'multipart/form-data',

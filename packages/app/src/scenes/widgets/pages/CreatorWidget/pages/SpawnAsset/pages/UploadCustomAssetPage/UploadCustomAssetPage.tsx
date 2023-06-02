@@ -52,7 +52,7 @@ const UploadCustomAssetPage: FC = () => {
 
   const refSnapshotPreview = useRef<string | undefined>();
 
-  const formSubmitHandler: SubmitHandler<ObjectInfoInterface> = async ({file, name}) => {
+  const formSubmitHandler: SubmitHandler<ObjectInfoInterface> = async ({file, name, type}) => {
     if (!name || !file) {
       return;
     }
@@ -68,7 +68,7 @@ const UploadCustomAssetPage: FC = () => {
       }
     }
     spawnAssetStore.setUploadedAssetName(name);
-    if (await spawnAssetStore.uploadAsset(file, preview_hash)) {
+    if (await spawnAssetStore.uploadAsset(file, preview_hash, type === 'PRIVATE')) {
       toast.info(<ToastContent icon="check" text={t('messages.assetUploaded')} />);
       spawnAssetStore.setActiveTab('community');
     } else {
@@ -87,6 +87,7 @@ const UploadCustomAssetPage: FC = () => {
           rules={{required: true}}
           render={({field: {value, onChange}}) => {
             const filename = value ? URL.createObjectURL(value) : '';
+            console.log('UPLOAD ASSET', {value, filename});
             return (
               <styled.UploadContainer
                 className={cn(!!errors.file && 'error', value && 'has-image')}
