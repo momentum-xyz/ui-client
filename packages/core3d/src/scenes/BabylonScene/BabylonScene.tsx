@@ -52,7 +52,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
     if (view?.id) {
       PlayerHelper.initialize(scene, view, true, onMove, onBumpReady);
       LightHelper.initialize(scene);
-      ScreenCaptureHelper.initialize(scene);
+      ScreenCaptureHelper.initialize(scene, onScreenshotReady, onVideoReady);
       InteractionEffectHelper.initialize(scene);
       InteractionEffectHelper.initializeHi5Particles();
 
@@ -137,9 +137,15 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       });
 
       // TODO: Implementation
-      events.on('MakeScreenshot', () => {});
-      events.on('StartRecordingVideo', (maxDuration) => {});
-      events.on('StopRecordingVideo', () => {});
+      events.on('MakeScreenshot', () => {
+        ScreenCaptureHelper.takeScreenshot(400);
+      });
+      events.on('StartRecordingVideo', (maxDuration) => {
+        ScreenCaptureHelper.recordVideo(maxDuration);
+      });
+      events.on('StopRecordingVideo', () => {
+        ScreenCaptureHelper.stopRecordVideo();
+      });
 
       onReadyToHandleEvents();
     } else {

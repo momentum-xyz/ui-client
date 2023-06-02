@@ -4,24 +4,41 @@ import {PlayerHelper} from './PlayerHelper';
 
 export class ScreenCaptureHelper {
   static scene: Scene;
+  static videoRecorder: VideoRecorder;
+  static onScreen: (file: File) => void;
+  static onVideo: (file: File) => void;
 
-  static initialize(scene: Scene): void {
+  static initialize(
+    scene: Scene,
+    onScreenshot: (file: File) => void,
+    onVideo: (file: File) => void
+  ): void {
+    this.videoRecorder = new VideoRecorder(scene.getEngine());
     this.scene = scene;
+
+    this.onScreen = onScreenshot;
+    this.onVideo = onVideo;
   }
 
   static takeScreenshot(size: number) {
     Tools.CreateScreenshot(this.scene.getEngine(), PlayerHelper.camera, size, (data) => {
-      // Do something with image data
-      //const imageBlob = new Blob([data]);
+      const screenshotFile = new File([data], 'screenshot.png');
+      this.onScreen(screenshotFile);
     });
   }
 
   static recordVideo(duration: number) {
-    if (VideoRecorder.IsSupported(this.scene.getEngine())) {
-      const recorder = new VideoRecorder(this.scene.getEngine());
-      recorder.startRecording(null, duration).then((videoBlob) => {
-        // Do Something with the videoBlob.
+    if (VideoRecorder.IsSupported(this.scene.getEngine()) && !this.videoRecorder.isRecording) {
+      this.videoRecorder.startRecording(null, duration).then((videoBlob) => {
+        const vodeoFile = new File([videoBlob], 'video.webm');
+        this.onVideo(vodeoFile);
       });
+    }
+  }
+
+  static stopRecordVideo() {
+    if (VideoRecorder.IsSupported(this.scene.getEngine()) && this.videoRecorder.isRecording) {
+      this.videoRecorder.stopRecording();
     }
   }
 }
