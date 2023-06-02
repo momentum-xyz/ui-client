@@ -20,8 +20,8 @@ export class ScreenCaptureHelper {
     this.onVideo = onVideo;
   }
 
-  static takeScreenshot(size: number) {
-    Tools.CreateScreenshot(this.scene.getEngine(), PlayerHelper.camera, size, (data) => {
+  static takeScreenshot() {
+    Tools.CreateScreenshot(this.scene.getEngine(), PlayerHelper.camera, {precision: 1}, (data) => {
       fetch(data).then((base64Response) => {
         base64Response.blob().then((blobResponse) => {
           const screenshotFile = new File([blobResponse], 'screenshot.png', {type: 'image/png'});
