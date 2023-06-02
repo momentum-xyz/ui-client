@@ -138,7 +138,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
 
       // TODO: Implementation
       events.on('MakeScreenshot', () => {
-        ScreenCaptureHelper.takeScreenshot(400);
+        ScreenCaptureHelper.takeScreenshot();
       });
       events.on('StartRecordingVideo', (maxDuration) => {
         ScreenCaptureHelper.recordVideo(maxDuration);
