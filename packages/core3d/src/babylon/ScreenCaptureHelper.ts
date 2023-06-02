@@ -22,16 +22,20 @@ export class ScreenCaptureHelper {
 
   static takeScreenshot(size: number) {
     Tools.CreateScreenshot(this.scene.getEngine(), PlayerHelper.camera, size, (data) => {
-      const screenshotFile = new File([data], 'screenshot.png');
-      this.onScreen(screenshotFile);
+      fetch(data).then((base64Response) => {
+        base64Response.blob().then((blobResponse) => {
+          const screenshotFile = new File([blobResponse], 'screenshot.png', {type: 'image/png'});
+          this.onScreen(screenshotFile);
+        });
+      });
     });
   }
 
   static recordVideo(duration: number) {
     if (VideoRecorder.IsSupported(this.scene.getEngine()) && !this.videoRecorder.isRecording) {
       this.videoRecorder.startRecording(null, duration).then((videoBlob) => {
-        const vodeoFile = new File([videoBlob], 'video.webm');
-        this.onVideo(vodeoFile);
+        const videoFile = new File([videoBlob], 'video.webm', {type: 'video/webm'});
+        this.onVideo(videoFile);
       });
     }
   }

@@ -72,31 +72,43 @@ const VideoPostForm: FC<PropsInterface> = ({
           name="file"
           control={control}
           rules={{required: true}}
-          render={({field: {value}}) => (
-            <>
-              {!value ? (
-                <styled.EmptyContainer>
-                  <styled.Actions>
-                    <styled.Message>
-                      {!isRunning && <>{t('messages.startRecording')}</>}
-                    </styled.Message>
+          render={({field: {value}}) => {
+            const videoBlobUrl = value ? URL.createObjectURL(value) : null;
+            return (
+              <>
+                {!videoBlobUrl ? (
+                  <styled.EmptyContainer>
+                    <styled.Actions>
+                      <styled.Message>
+                        {!isRunning && <>{t('messages.startRecording')}</>}
+                      </styled.Message>
 
-                    {!isRunning ? (
-                      <IconButton name="record" size="xxl" isWhite onClick={handleStartRecording} />
-                    ) : (
-                      <IconButton name="record_stop" size="xxl" onClick={handleStopRecording} />
-                    )}
+                      {!isRunning ? (
+                        <IconButton
+                          name="record"
+                          size="xxl"
+                          isWhite
+                          onClick={handleStartRecording}
+                        />
+                      ) : (
+                        <IconButton name="record_stop" size="xxl" onClick={handleStopRecording} />
+                      )}
 
-                    <styled.Timer>
-                      00:{seconds < 10 ? <>{`0${seconds}`}</> : <>{seconds}</>}
-                    </styled.Timer>
-                  </styled.Actions>
-                </styled.EmptyContainer>
-              ) : (
-                <div>video</div>
-              )}
-            </>
-          )}
+                      <styled.Timer>
+                        00:{seconds < 10 ? <>{`0${seconds}`}</> : <>{seconds}</>}
+                      </styled.Timer>
+                    </styled.Actions>
+                  </styled.EmptyContainer>
+                ) : (
+                  <styled.PreviewVideoContainer>
+                    <video controls autoPlay={false} preload={videoBlobUrl}>
+                      <source src={videoBlobUrl} type="video/webm" />
+                    </video>
+                  </styled.PreviewVideoContainer>
+                )}
+              </>
+            );
+          }}
         />
 
         {/* DESCRIPTION */}

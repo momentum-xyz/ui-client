@@ -20,6 +20,17 @@ export const EmptyContainer = styled.div`
   border-radius: var(--radius);
 `;
 
+export const PreviewImageContainer = styled.div<{url: string}>`
+  display: flex;
+  height: var(--height);
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  background-image: url(${(props) => props.url});
+  background-position: center center;
+  background-size: cover;
+`;
+
 export const Actions = styled.div`
   display: flex;
   flex-direction: column;

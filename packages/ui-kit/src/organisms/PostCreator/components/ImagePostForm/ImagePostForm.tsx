@@ -41,17 +41,22 @@ const ImagePostForm: FC<PropsInterface> = ({
           name="file"
           control={control}
           rules={{required: true}}
-          render={({field: {value, onChange}}) => (
+          render={({field: {value}}) => (
             <>
-              {!value ? (
+              {value ? (
+                <styled.PreviewImageContainer url={URL.createObjectURL(value)}>
+                  <styled.Actions>
+                    <span>{t('messages.takeSnapshot')}</span>
+                    <IconButton name="photo_camera" size="xxl" isWhite onClick={onMakeScreenshot} />
+                  </styled.Actions>
+                </styled.PreviewImageContainer>
+              ) : (
                 <styled.EmptyContainer>
                   <styled.Actions>
                     <span>{t('messages.takeSnapshot')}</span>
                     <IconButton name="photo_camera" size="xxl" isWhite onClick={onMakeScreenshot} />
                   </styled.Actions>
                 </styled.EmptyContainer>
-              ) : (
-                <div>image</div>
               )}
             </>
           )}
