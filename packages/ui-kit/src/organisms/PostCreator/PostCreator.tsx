@@ -22,7 +22,7 @@ export interface PostCreatorPropsInterface {
   onMakeScreenshot: () => void;
   onStartRecording: () => void;
   onStopRecording: () => void;
-  onCreatePost: (form: PostFormInterface, postType: PostTypeEnum) => void;
+  onCreatePost: (form: PostFormInterface, postType: PostTypeEnum) => Promise<boolean>;
   onCancel: () => void;
 }
 
@@ -40,6 +40,12 @@ const PostCreator: FC<PostCreatorPropsInterface> = ({
   const [postTypeIntent, setPostTypeIntent] = useState<PostTypeEnum | null>(null);
 
   const {t} = useI18n();
+
+  const handleCreatePost = async (form: PostFormInterface, postType: PostTypeEnum) => {
+    if (await onCreatePost(form, postType)) {
+      setPostTypeIntent(null);
+    }
+  };
 
   return (
     <styled.Wrapper data-testid="PostCreator-test">
@@ -68,7 +74,7 @@ const PostCreator: FC<PostCreatorPropsInterface> = ({
               screenshot={videoOrScreenshot?.file}
               isCreating={isCreating}
               onMakeScreenshot={onMakeScreenshot}
-              onCreatePost={(form) => onCreatePost(form, PostTypeEnum.IMAGE)}
+              onCreatePost={(form) => handleCreatePost(form, PostTypeEnum.IMAGE)}
               onCancel={() => {
                 setPostTypeIntent(null);
                 onCancel();
@@ -83,7 +89,7 @@ const PostCreator: FC<PostCreatorPropsInterface> = ({
               maxVideoDurationSec={maxVideoDurationSec}
               onStartRecording={onStartRecording}
               onStopRecording={onStopRecording}
-              onCreatePost={(form) => onCreatePost(form, PostTypeEnum.IMAGE)}
+              onCreatePost={(form) => handleCreatePost(form, PostTypeEnum.IMAGE)}
               onCancel={() => {
                 setPostTypeIntent(null);
                 onCancel();

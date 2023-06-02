@@ -134,7 +134,7 @@ const VideoPostForm: FC<PropsInterface> = ({
         <ButtonEllipse
           icon="add"
           label={t('actions.addToTimeline')}
-          disabled={!formState.isValid || isCreating}
+          disabled={isCreating || !video}
           onClick={handleCreatePost}
         />
       </styled.FormControls>

@@ -30,6 +30,6 @@ General.args = {
   onMakeScreenshot: () => {},
   onStartRecording: () => {},
   onStopRecording: () => {},
-  onCreatePost: () => {},
+  onCreatePost: () => new Promise(() => true),
   onCancel: () => {}
 };

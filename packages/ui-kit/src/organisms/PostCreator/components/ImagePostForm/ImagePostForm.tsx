@@ -85,7 +85,7 @@ const ImagePostForm: FC<PropsInterface> = ({
         <ButtonEllipse
           icon="add"
           label={t('actions.addToTimeline')}
-          disabled={!formState.isValid || isCreating}
+          disabled={isCreating || !screenshot}
           onClick={handleCreatePost}
         />
       </styled.FormControls>
