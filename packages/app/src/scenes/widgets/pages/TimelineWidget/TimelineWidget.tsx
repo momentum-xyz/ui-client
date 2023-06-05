@@ -12,7 +12,7 @@ const MAX_VIDEO_DURATION_SEC = 15;
 
 const TimelineWidget: FC = () => {
   const {widgetManagerStore, widgetStore, sessionStore, universeStore} = useStore();
-  const {world3dStore} = universeStore;
+  const {world3dStore, worldId} = universeStore;
   const {timelineStore} = widgetStore;
   const {user} = sessionStore;
 
@@ -25,9 +25,10 @@ const TimelineWidget: FC = () => {
   }, [world3dStore]);
 
   const handleCreatePost = async (form: PostFormInterface, postType: PostTypeEnum) => {
-    const isDone = await timelineStore.create(form, postType);
+    const isDone = await timelineStore.create(form, postType, worldId);
     if (isDone) {
       world3dStore?.clearSnapshotOrVideo();
+      timelineStore.fetch(worldId);
     }
     return isDone;
   };

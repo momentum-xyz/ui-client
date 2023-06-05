@@ -12,7 +12,11 @@ const TimelineStore = types.compose(
       request: types.optional(RequestModel, {})
     })
     .actions((self) => ({
-      create: flow(function* (form: PostFormInterface, type: PostTypeEnum) {
+      // TODO: Pagination
+      fetch: flow(function* (objectId: string) {
+        // TODO
+      }),
+      create: flow(function* (form: PostFormInterface, type: PostTypeEnum, objectId: string) {
         if (!form.file || !form.description) {
           return false;
         }
@@ -24,18 +28,19 @@ const TimelineStore = types.compose(
           data
         );
 
-        const hash = fileResponse?.hash;
-        if (!hash) {
+        if (!fileResponse?.hash) {
           return false;
         }
 
         // 2. Item creating
-        /*const response = yield self.request.send(api.userProfileRepository.update, {
-          file: form.file,
-          description: form.description,
-          hash: hash,
-          type: type
-        });*/
+        yield self.request.send(api.timelineRepository.createTimeline, {
+          objectId,
+          type,
+          data: {
+            render_hash: fileResponse?.hash,
+            description: form.description
+          }
+        });
 
         return self.request.isDone && self.fileRequest.isDone;
       })
