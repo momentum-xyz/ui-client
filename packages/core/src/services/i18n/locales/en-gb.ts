@@ -431,6 +431,7 @@ export const enGb = {
       onlineArena: 'Online Mass Collaboration Arena',
       takeSnapshot: 'Take a snapshot from your point of view',
       startRecording: 'Start recording and fly around',
+      recording: 'Recording',
       loading30sec:
         'Loading an Odyssey could take up to 1-2 minutes, depending on your internet connection. While you wait, you can',
       joinUsOnDiscord: 'join us on Discord',
