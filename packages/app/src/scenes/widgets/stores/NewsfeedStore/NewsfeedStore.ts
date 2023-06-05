@@ -189,7 +189,7 @@ const generateDummyItems = (
         user_name: 'Booster man',
         amount: 49
       }
-    },
+    }
     // {
     //   id: `page_${page}_9___2`,
     //   author_id: 'user_6',
@@ -456,7 +456,7 @@ const NewsfeedStore = types.compose(
       ),
       entries: types.optional(types.array(NewsfeedEntry), []),
       currentPage: types.optional(types.number, 0),
-      itemCount: types.optional(types.number, 0),
+      itemCount: types.optional(types.number, 0)
     })
     .actions((self) => ({
       setActiveNewsfeedType(type: NewsfeedTabTypeEnum): void {

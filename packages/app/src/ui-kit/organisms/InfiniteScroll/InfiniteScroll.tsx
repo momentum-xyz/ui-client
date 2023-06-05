@@ -33,11 +33,7 @@ const InfiniteScroll: FC<PropsInterface> = ({
   itemKey
 }) => {
   return (
-    <InfiniteLoader
-      itemCount={itemCount}
-      isItemLoaded={isItemLoaded}
-      loadMoreItems={loadMore}
-    >
+    <InfiniteLoader itemCount={itemCount} isItemLoaded={isItemLoaded} loadMoreItems={loadMore}>
       {({onItemsRendered, ref}) => {
         return (
           <VariableSizeList
