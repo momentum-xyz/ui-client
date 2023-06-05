@@ -86,7 +86,6 @@ const SpawnAssetStore = types
           asset,
           onUploadProgress,
           name: self.uploadedAssetName,
-          worldId: self.worldId,
           preview_hash,
           is_private: isPrivate
         }
@@ -110,7 +109,6 @@ const SpawnAssetStore = types
       const response = yield self.uploadAssetRequest.send(
         api.assets3dRepository.patchAssets3dMetadata,
         {
-          worldId: self.worldId,
           assetId,
           name,
           preview_hash
@@ -124,8 +122,7 @@ const SpawnAssetStore = types
       const response: FetchAssets3dResponse | undefined = yield self.fetchAssets3dRequest.send(
         api.assets3dRepository.fetchAssets3d,
         {
-          category,
-          worldId: self.worldId
+          category
         }
       );
 

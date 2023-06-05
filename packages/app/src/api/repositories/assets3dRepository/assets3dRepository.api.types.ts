@@ -1,11 +1,7 @@
 import {Asset3dCategoryEnum} from 'api/enums';
 import {MetadataInterface} from 'api/interfaces/metadata.interface';
 
-interface Asset3dRequest {
-  worldId: string;
-}
-
-export interface UploadAsset3dRequest extends Asset3dRequest {
+export interface UploadAsset3dRequest {
   asset: File;
   name: string;
   preview_hash?: string;
@@ -17,7 +13,7 @@ export interface UploadAsset3dResponse {
   meta: MetadataInterface;
 }
 
-export interface PatchAsset3dRequest extends Asset3dRequest {
+export interface PatchAsset3dRequest {
   assetId: string;
   name?: string;
   preview_hash?: string;
@@ -39,7 +35,7 @@ export interface Asset3dInterface {
   updatedAt: string;
 }
 
-export interface FetchAssets3dRequest extends Asset3dRequest {
+export interface FetchAssets3dRequest {
   category: Asset3dCategoryEnum;
 }
 

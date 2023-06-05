@@ -16,7 +16,7 @@ import {
 export const upload3DAsset: RequestInterface<UploadAsset3dRequest, UploadAsset3dResponse> = (
   options
 ) => {
-  const {asset, name, headers, worldId, preview_hash, is_private, ...restOptions} = options;
+  const {asset, name, headers, preview_hash, is_private, ...restOptions} = options;
 
   const formData: FormData = new FormData();
   formData.append('asset', asset);
@@ -36,7 +36,7 @@ export const upload3DAsset: RequestInterface<UploadAsset3dRequest, UploadAsset3d
     ...restOptions
   };
 
-  const url = generatePath(assets3dRepositoryEndpoints().upload, {worldId});
+  const url = assets3dRepositoryEndpoints().upload;
 
   return request.post(url, formData, requestOptions);
 };
@@ -44,13 +44,13 @@ export const upload3DAsset: RequestInterface<UploadAsset3dRequest, UploadAsset3d
 export const fetchAssets3d: RequestInterface<FetchAssets3dRequest, FetchAssets3dResponse> = (
   options
 ) => {
-  const {category, worldId, ...restOptions} = options;
+  const {category, ...restOptions} = options;
 
   restOptions.params = {
     category
   };
 
-  const url = generatePath(assets3dRepositoryEndpoints().base, {worldId});
+  const url = assets3dRepositoryEndpoints().base;
 
   return request.get(url, restOptions);
 };
@@ -58,9 +58,9 @@ export const fetchAssets3d: RequestInterface<FetchAssets3dRequest, FetchAssets3d
 export const patchAssets3dMetadata: RequestInterface<PatchAsset3dRequest, Asset3dInterface> = (
   options
 ) => {
-  const {worldId, assetId, name, preview_hash, ...restOptions} = options;
+  const {assetId, name, preview_hash, ...restOptions} = options;
 
-  const url = generatePath(assets3dRepositoryEndpoints().patchMeta, {worldId, assetId});
+  const url = generatePath(assets3dRepositoryEndpoints().patchMeta, {assetId});
 
   return request.patch(url, {meta: {name, preview_hash}}, restOptions);
 };
