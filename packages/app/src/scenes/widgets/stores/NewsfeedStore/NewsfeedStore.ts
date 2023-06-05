@@ -171,7 +171,277 @@ const generateDummyItems = (
         user_name: 'Booster man',
         amount: 49
       }
-    }
+    },
+    {
+      id: `page_${page}_9____1`,
+      author_id: 'user_6',
+      author_name: 'Jane Doe',
+      author_avatar: 'https://picsum.photos/204',
+      author_world_id: worldId,
+      author_world_name: worldName,
+      universal,
+      entry_type: NewsfeedTypeEnum.BOOST,
+      created_at: new Date().toDateString(),
+      data: {
+        world_id: worldId,
+        world_name: 'Odyssey World 2',
+        world_image: 'https://picsum.photos/304',
+        user_name: 'Booster man',
+        amount: 49
+      }
+    },
+    // {
+    //   id: `page_${page}_9___2`,
+    //   author_id: 'user_6',
+    //   author_name: 'Jane Doe',
+    //   author_avatar: 'https://picsum.photos/204',
+    //   author_world_id: worldId,
+    //   author_world_name: worldName,
+    //   universal,
+    //   entry_type: NewsfeedTypeEnum.BOOST,
+    //   created_at: new Date().toDateString(),
+    //   data: {
+    //     world_id: worldId,
+    //     world_name: 'Odyssey World 2',
+    //     world_image: 'https://picsum.photos/304',
+    //     user_name: 'Booster man',
+    //     amount: 49
+    //   }
+    // },
+    // {
+    //   id: `page_${page}_9___3`,
+    //   author_id: 'user_6',
+    //   author_name: 'Jane Doe',
+    //   author_avatar: 'https://picsum.photos/204',
+    //   author_world_id: worldId,
+    //   author_world_name: worldName,
+    //   universal,
+    //   entry_type: NewsfeedTypeEnum.BOOST,
+    //   created_at: new Date().toDateString(),
+    //   data: {
+    //     world_id: worldId,
+    //     world_name: 'Odyssey World 2',
+    //     world_image: 'https://picsum.photos/304',
+    //     user_name: 'Booster man',
+    //     amount: 49
+    //   }
+    // },
+    // {
+    //   id: `page_${page}_9___4`,
+    //   author_id: 'user_6',
+    //   author_name: 'Jane Doe',
+    //   author_avatar: 'https://picsum.photos/204',
+    //   author_world_id: worldId,
+    //   author_world_name: worldName,
+    //   universal,
+    //   entry_type: NewsfeedTypeEnum.BOOST,
+    //   created_at: new Date().toDateString(),
+    //   data: {
+    //     world_id: worldId,
+    //     world_name: 'Odyssey World 2',
+    //     world_image: 'https://picsum.photos/304',
+    //     user_name: 'Booster man',
+    //     amount: 49
+    //   }
+    // },
+    // {
+    //   id: `page_${page}_9___5`,
+    //   author_id: 'user_6',
+    //   author_name: 'Jane Doe',
+    //   author_avatar: 'https://picsum.photos/204',
+    //   author_world_id: worldId,
+    //   author_world_name: worldName,
+    //   universal,
+    //   entry_type: NewsfeedTypeEnum.BOOST,
+    //   created_at: new Date().toDateString(),
+    //   data: {
+    //     world_id: worldId,
+    //     world_name: 'Odyssey World 2',
+    //     world_image: 'https://picsum.photos/304',
+    //     user_name: 'Booster man',
+    //     amount: 49
+    //   }
+    // },
+    // {
+    //   id: `page_${page}_9___6`,
+    //   author_id: 'user_6',
+    //   author_name: 'Jane Doe',
+    //   author_avatar: 'https://picsum.photos/204',
+    //   author_world_id: worldId,
+    //   author_world_name: worldName,
+    //   universal,
+    //   entry_type: NewsfeedTypeEnum.BOOST,
+    //   created_at: new Date().toDateString(),
+    //   data: {
+    //     world_id: worldId,
+    //     world_name: 'Odyssey World 2',
+    //     world_image: 'https://picsum.photos/304',
+    //     user_name: 'Booster man',
+    //     amount: 49
+    //   }
+    // },
+    // {
+    //   id: `page_${page}_9___7`,
+    //   author_id: 'user_6',
+    //   author_name: 'Jane Doe',
+    //   author_avatar: 'https://picsum.photos/204',
+    //   author_world_id: worldId,
+    //   author_world_name: worldName,
+    //   universal,
+    //   entry_type: NewsfeedTypeEnum.BOOST,
+    //   created_at: new Date().toDateString(),
+    //   data: {
+    //     world_id: worldId,
+    //     world_name: 'Odyssey World 2',
+    //     world_image: 'https://picsum.photos/304',
+    //     user_name: 'Booster man',
+    //     amount: 49
+    //   }
+    // },
+    // {
+    //   id: `page_${page}_9___8`,
+    //   author_id: 'user_6',
+    //   author_name: 'Jane Doe',
+    //   author_avatar: 'https://picsum.photos/204',
+    //   author_world_id: worldId,
+    //   author_world_name: worldName,
+    //   universal,
+    //   entry_type: NewsfeedTypeEnum.BOOST,
+    //   created_at: new Date().toDateString(),
+    //   data: {
+    //     world_id: worldId,
+    //     world_name: 'Odyssey World 2',
+    //     world_image: 'https://picsum.photos/304',
+    //     user_name: 'Booster man',
+    //     amount: 49
+    //   }
+    // },
+    // {
+    //   id: `page_${page}_9___9`,
+    //   author_id: 'user_6',
+    //   author_name: 'Jane Doe',
+    //   author_avatar: 'https://picsum.photos/204',
+    //   author_world_id: worldId,
+    //   author_world_name: worldName,
+    //   universal,
+    //   entry_type: NewsfeedTypeEnum.BOOST,
+    //   created_at: new Date().toDateString(),
+    //   data: {
+    //     world_id: worldId,
+    //     world_name: 'Odyssey World 2',
+    //     world_image: 'https://picsum.photos/304',
+    //     user_name: 'Booster man',
+    //     amount: 49
+    //   }
+    // },
+    // {
+    //   id: `page_${page}_9___10`,
+    //   author_id: 'user_6',
+    //   author_name: 'Jane Doe',
+    //   author_avatar: 'https://picsum.photos/204',
+    //   author_world_id: worldId,
+    //   author_world_name: worldName,
+    //   universal,
+    //   entry_type: NewsfeedTypeEnum.BOOST,
+    //   created_at: new Date().toDateString(),
+    //   data: {
+    //     world_id: worldId,
+    //     world_name: 'Odyssey World 2',
+    //     world_image: 'https://picsum.photos/304',
+    //     user_name: 'Booster man',
+    //     amount: 49
+    //   }
+    // },
+    // {
+    //   id: `page_${page}_9___11`,
+    //   author_id: 'user_6',
+    //   author_name: 'Jane Doe',
+    //   author_avatar: 'https://picsum.photos/204',
+    //   author_world_id: worldId,
+    //   author_world_name: worldName,
+    //   universal,
+    //   entry_type: NewsfeedTypeEnum.BOOST,
+    //   created_at: new Date().toDateString(),
+    //   data: {
+    //     world_id: worldId,
+    //     world_name: 'Odyssey World 2',
+    //     world_image: 'https://picsum.photos/304',
+    //     user_name: 'Booster man',
+    //     amount: 49
+    //   }
+    // },
+    // {
+    //   id: `page_${page}_9___12`,
+    //   author_id: 'user_6',
+    //   author_name: 'Jane Doe',
+    //   author_avatar: 'https://picsum.photos/204',
+    //   author_world_id: worldId,
+    //   author_world_name: worldName,
+    //   universal,
+    //   entry_type: NewsfeedTypeEnum.BOOST,
+    //   created_at: new Date().toDateString(),
+    //   data: {
+    //     world_id: worldId,
+    //     world_name: 'Odyssey World 2',
+    //     world_image: 'https://picsum.photos/304',
+    //     user_name: 'Booster man',
+    //     amount: 49
+    //   }
+    // },
+    // {
+    //   id: `page_${page}_9___13`,
+    //   author_id: 'user_6',
+    //   author_name: 'Jane Doe',
+    //   author_avatar: 'https://picsum.photos/204',
+    //   author_world_id: worldId,
+    //   author_world_name: worldName,
+    //   universal,
+    //   entry_type: NewsfeedTypeEnum.BOOST,
+    //   created_at: new Date().toDateString(),
+    //   data: {
+    //     world_id: worldId,
+    //     world_name: 'Odyssey World 2',
+    //     world_image: 'https://picsum.photos/304',
+    //     user_name: 'Booster man',
+    //     amount: 49
+    //   }
+    // },
+    // {
+    //   id: `page_${page}_9___14`,
+    //   author_id: 'user_6',
+    //   author_name: 'Jane Doe',
+    //   author_avatar: 'https://picsum.photos/204',
+    //   author_world_id: worldId,
+    //   author_world_name: worldName,
+    //   universal,
+    //   entry_type: NewsfeedTypeEnum.BOOST,
+    //   created_at: new Date().toDateString(),
+    //   data: {
+    //     world_id: worldId,
+    //     world_name: 'Odyssey World 2',
+    //     world_image: 'https://picsum.photos/304',
+    //     user_name: 'Booster man',
+    //     amount: 49
+    //   }
+    // },
+    // {
+    //   id: `page_${page}_9___15`,
+    //   author_id: 'user_6',
+    //   author_name: 'Jane Doe',
+    //   author_avatar: 'https://picsum.photos/204',
+    //   author_world_id: worldId,
+    //   author_world_name: worldName,
+    //   universal,
+    //   entry_type: NewsfeedTypeEnum.BOOST,
+    //   created_at: new Date().toDateString(),
+    //   data: {
+    //     world_id: worldId,
+    //     world_name: 'Odyssey World 2',
+    //     world_image: 'https://picsum.photos/304',
+    //     user_name: 'Booster man',
+    //     amount: 49
+    //   }
+    // }
   ];
   return dummyEntries;
 };
@@ -185,19 +455,21 @@ const NewsfeedStore = types.compose(
         NewsfeedTabTypeEnum.UNIVERSAL
       ),
       entries: types.optional(types.array(NewsfeedEntry), []),
-      currentPage: types.optional(types.number, 0)
+      currentPage: types.optional(types.number, 0),
+      itemCount: types.optional(types.number, 0),
     })
     .actions((self) => ({
       setActiveNewsfeedType(type: NewsfeedTabTypeEnum): void {
         self.newsfeedType = type;
         self.entries = cast([]);
         self.currentPage = 0;
-        this.loadMore();
+        self.itemCount = 0;
+        // this.loadMore();
       },
       setEntries(entries: NewsfeedEntryInterface[]): void {
         self.entries = cast(entries);
       },
-      loadMore(): void {
+      loadMore(): Promise<void> {
         console.log('loadMore');
         const {sessionStore} = getRootStore(self);
         const {isGuest, worldsOwnedList} = sessionStore;
@@ -212,8 +484,16 @@ const NewsfeedStore = types.compose(
           self.newsfeedType === NewsfeedTabTypeEnum.UNIVERSAL
         );
 
+        // some tmp logic
+        if (self.itemCount === 0) {
+          self.itemCount += nextPageData.length;
+        }
+
         self.currentPage = nextPage;
         self.entries = cast([...self.entries, ...nextPageData]);
+        self.itemCount += self.entries.length;
+
+        return Promise.resolve();
       }
     }))
     .views((self) => ({
