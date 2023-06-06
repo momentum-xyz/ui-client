@@ -1,10 +1,10 @@
-import {FC, useEffect, useRef} from 'react';
+import {FC, useEffect, useMemo, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {Model3dPreview} from '@momentum-xyz/core3d';
-import {Button, Input, Radio, ErrorsEnum, FileUploader} from '@momentum-xyz/ui-kit';
+import {Button, Input, Radio, ErrorsEnum, FileUploader, Loader} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
@@ -33,6 +33,7 @@ const UploadCustomAssetPage: FC = () => {
     control,
     handleSubmit,
     formState: {errors},
+    getValues,
     setError,
     clearErrors
   } = useForm<ObjectInfoInterface>({
@@ -40,6 +41,12 @@ const UploadCustomAssetPage: FC = () => {
       type: 'COMMUNITY'
     }
   });
+
+  const uploadedFile = getValues().file;
+  const modelPreviewFilename = useMemo(
+    () => (uploadedFile ? URL.createObjectURL(uploadedFile) : ''),
+    [uploadedFile]
+  );
 
   const options = [
     {value: 'COMMUNITY', label: 'Available for Community'},
@@ -81,13 +88,19 @@ const UploadCustomAssetPage: FC = () => {
   return (
     <styled.Container data-testid="UploadCustomAssetPage-test">
       <styled.FormContainer>
+        {spawnAssetStore.isUploadPending && (
+          <styled.LoaderContainer>
+            <Loader />
+          </styled.LoaderContainer>
+        )}
         <Controller
           name="file"
           control={control}
           rules={{required: true}}
           render={({field: {value, onChange}}) => {
-            const filename = value ? URL.createObjectURL(value) : '';
-            console.log('UPLOAD ASSET', {value, filename});
+            // use memoised value to avoid re-rendering
+            const filename = modelPreviewFilename; // value ? URL.createObjectURL(value) : '';
+            // console.log('UPLOAD ASSET', {value, filename});
             return (
               <styled.UploadContainer
                 className={cn(!!errors.file && 'error', value && 'has-image')}
@@ -102,8 +115,6 @@ const UploadCustomAssetPage: FC = () => {
                   <styled.PreviewContainer>
                     <Model3dPreview
                       filename={filename}
-                      // TODO it should not be necessary, but currently cannot replace already loaded model
-                      key={filename}
                       onSnapshot={(dataURL) => {
                         console.log('Snapshot:', dataURL);
                         refSnapshotPreview.current = dataURL;
