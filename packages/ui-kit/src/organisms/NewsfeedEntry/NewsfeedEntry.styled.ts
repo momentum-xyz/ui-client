@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
-  width: 380px;
+  width: 360px;
   border-radius: 4px;
 `;
 

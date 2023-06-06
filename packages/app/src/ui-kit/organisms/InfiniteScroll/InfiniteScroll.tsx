@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {VariableSizeList, ListChildComponentProps, ListOnItemsRenderedProps} from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
@@ -32,8 +32,15 @@ const InfiniteScroll: FC<PropsInterface> = ({
   handleItemsRendered,
   itemKey
 }) => {
+  const virtualLoaderRef = useRef(null);
+
   return (
-    <InfiniteLoader itemCount={itemCount} isItemLoaded={isItemLoaded} loadMoreItems={loadMore}>
+    <InfiniteLoader
+      ref={virtualLoaderRef}
+      itemCount={itemCount}
+      isItemLoaded={isItemLoaded}
+      loadMoreItems={loadMore}
+    >
       {({onItemsRendered, ref}) => {
         return (
           <VariableSizeList

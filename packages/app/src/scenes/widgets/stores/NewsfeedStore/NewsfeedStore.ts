@@ -464,36 +464,42 @@ const NewsfeedStore = types.compose(
         self.entries = cast([]);
         self.currentPage = 0;
         self.itemCount = 0;
-        // this.loadMore();
+        this.loadMore();
       },
-      setEntries(entries: NewsfeedEntryInterface[]): void {
+      setEntries(entries: NewsfeedEntryInterface[], page: number, itemCount: number): void {
         self.entries = cast(entries);
+        self.currentPage = page;
+        self.itemCount = itemCount;
       },
       loadMore(): Promise<void> {
-        console.log('loadMore');
-        const {sessionStore} = getRootStore(self);
-        const {isGuest, worldsOwnedList} = sessionStore;
-        const worldId = !isGuest && worldsOwnedList.length > 0 ? worldsOwnedList[0].id : null;
-        const worldName = !isGuest && worldsOwnedList.length > 0 ? worldsOwnedList[0].name : null;
-
-        const nextPage = self.currentPage + 1;
-        const nextPageData = generateDummyItems(
-          worldName,
-          worldId,
-          nextPage,
-          self.newsfeedType === NewsfeedTabTypeEnum.UNIVERSAL
-        );
-
         // some tmp logic
         if (self.itemCount === 0) {
-          self.itemCount += nextPageData.length;
+          self.itemCount += 10;
         }
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            const {sessionStore} = getRootStore(self);
+            const {isGuest, worldsOwnedList} = sessionStore;
+            const worldId = !isGuest && worldsOwnedList.length > 0 ? worldsOwnedList[0].id : null;
+            const worldName =
+              !isGuest && worldsOwnedList.length > 0 ? worldsOwnedList[0].name : null;
 
-        self.currentPage = nextPage;
-        self.entries = cast([...self.entries, ...nextPageData]);
-        self.itemCount += self.entries.length;
+            const nextPage = self.currentPage + 1;
+            const nextPageData = generateDummyItems(
+              worldName,
+              worldId,
+              nextPage,
+              self.newsfeedType === NewsfeedTabTypeEnum.UNIVERSAL
+            );
 
-        return Promise.resolve();
+            this.setEntries(
+              [...self.entries, ...nextPageData],
+              nextPage,
+              self.itemCount + nextPageData.length
+            );
+            resolve();
+          }, 5000);
+        });
       }
     }))
     .views((self) => ({
