@@ -2,7 +2,7 @@ import {FC, memo, useState} from 'react';
 import ReactPlayer from 'react-player';
 import {OnProgressProps} from 'react-player/base';
 
-import {IconButton} from '../../atoms';
+import {IconButton, MediaPlayerTrack} from '../../atoms';
 
 import * as styled from './MediaPlayer.styled';
 
@@ -38,6 +38,7 @@ const MediaPlayer: FC<MediaPlayerInterface> = ({sourceUrl, height = 160}) => {
   };
 
   const seconds = Math.round(progress.playedSeconds);
+  const playedPercent = progress.played * 100;
 
   return (
     <styled.Container data-testid="MediaPlayer-test">
@@ -64,11 +65,7 @@ const MediaPlayer: FC<MediaPlayerInterface> = ({sourceUrl, height = 160}) => {
       <styled.ProgressContainer>
         <styled.Grid>
           <styled.Played>00:{seconds < 10 ? <>{`0${seconds}`}</> : <>{seconds}</>}</styled.Played>
-
-          <styled.Progress>
-            <input type="range" min={0} max={0.999999} step="any" value={progress.played} />
-          </styled.Progress>
-
+          <MediaPlayerTrack playedPercent={playedPercent} />
           <styled.Duration>{duration}</styled.Duration>
         </styled.Grid>
       </styled.ProgressContainer>
