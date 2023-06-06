@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Event3dEmitter, useI18n} from '@momentum-xyz/core';
-import {Panel, PostCreator} from '@momentum-xyz/ui-kit';
+import {Event3dEmitter, PostTypeEnum, useI18n} from '@momentum-xyz/core';
+import {Panel, PostCreator, PostFormInterface} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
@@ -11,8 +11,9 @@ import * as styled from './TimelineWidget.styled';
 const MAX_VIDEO_DURATION_SEC = 15;
 
 const TimelineWidget: FC = () => {
-  const {widgetManagerStore, sessionStore, universeStore} = useStore();
-  const {world3dStore} = universeStore;
+  const {widgetManagerStore, widgetStore, sessionStore, universeStore} = useStore();
+  const {world3dStore, worldId} = universeStore;
+  const {timelineStore} = widgetStore;
   const {user} = sessionStore;
 
   const {t} = useI18n();
@@ -22,6 +23,15 @@ const TimelineWidget: FC = () => {
       world3dStore?.clearSnapshotOrVideo();
     };
   }, [world3dStore]);
+
+  const handleCreatePost = async (form: PostFormInterface, postType: PostTypeEnum) => {
+    const isDone = await timelineStore.create(form, postType, worldId);
+    if (isDone) {
+      world3dStore?.clearSnapshotOrVideo();
+      timelineStore.fetch(worldId);
+    }
+    return isDone;
+  };
 
   if (!user) {
     return <></>;
@@ -53,9 +63,7 @@ const TimelineWidget: FC = () => {
               onStopRecording={() => {
                 Event3dEmitter.emit('StopRecordingVideo');
               }}
-              onCreatePost={(form, postType) => {
-                console.log(form, postType);
-              }}
+              onCreatePost={handleCreatePost}
               onCancel={() => {
                 world3dStore?.clearSnapshotOrVideo();
               }}

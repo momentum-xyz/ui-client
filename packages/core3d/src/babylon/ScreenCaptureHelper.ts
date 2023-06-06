@@ -1,3 +1,4 @@
+import ysFixWebmDuration from 'fix-webm-duration';
 import {Scene, Tools, VideoRecorder} from '@babylonjs/core';
 
 import {PlayerHelper} from './PlayerHelper';
@@ -33,9 +34,16 @@ export class ScreenCaptureHelper {
 
   static recordVideo(duration: number) {
     if (VideoRecorder.IsSupported(this.scene.getEngine()) && !this.videoRecorder.isRecording) {
+      const startTime = Date.now();
+
       this.videoRecorder.startRecording(null, duration).then((videoBlob) => {
-        const videoFile = new File([videoBlob], 'video.webm', {type: 'video/webm'});
-        this.onVideo(videoFile);
+        const duration = Date.now() - startTime;
+
+        // FIX duration for webm type
+        ysFixWebmDuration(videoBlob, duration, {logger: false}).then(function (fixedBlob) {
+          const videoFile = new File([fixedBlob], 'video.webm', {type: 'video/webm'});
+          ScreenCaptureHelper.onVideo(videoFile);
+        });
       });
     }
   }

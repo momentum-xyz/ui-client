@@ -22,17 +22,6 @@ export const EmptyContainer = styled.div`
   border-radius: var(--radius);
 `;
 
-export const PreviewVideoContainer = styled.div`
-  height: var(--height);
-
-  video {
-    width: 100%;
-    height: var(--height);
-    object-fit: cover;
-    border-radius: var(--radius);
-  }
-`;
-
 export const Actions = styled.div`
   display: flex;
   flex-direction: column;

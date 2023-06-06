@@ -22,3 +22,5 @@ export * from './ErrorBoundary';
 export * from './LoaderFallback';
 export * from './Portal';
 export * from './ProgressBar';
+export * from './MediaPlayerTrack';
+export * from './MediaPlayerTime';

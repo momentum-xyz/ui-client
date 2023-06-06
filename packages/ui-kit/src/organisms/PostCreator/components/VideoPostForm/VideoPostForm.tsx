@@ -5,6 +5,7 @@ import {useI18n} from '@momentum-xyz/core';
 
 import {PostFormInterface} from '../../../../interfaces';
 import {ButtonEllipse, IconButton, Input} from '../../../../atoms';
+import {MediaPlayer} from '../../../../molecules';
 
 import * as styled from './VideoPostForm.styled';
 
@@ -80,7 +81,11 @@ const VideoPostForm: FC<PropsInterface> = ({
                   <styled.EmptyContainer>
                     <styled.Actions>
                       <styled.Message>
-                        {!isRunning && <>{t('messages.startRecording')}</>}
+                        {!isRunning ? (
+                          <>{t('messages.startRecording')}</>
+                        ) : (
+                          <>{t('messages.recording')}...</>
+                        )}
                       </styled.Message>
 
                       {!isRunning ? (
@@ -100,11 +105,7 @@ const VideoPostForm: FC<PropsInterface> = ({
                     </styled.Actions>
                   </styled.EmptyContainer>
                 ) : (
-                  <styled.PreviewVideoContainer>
-                    <video controls autoPlay={false} preload={videoBlobUrl}>
-                      <source src={videoBlobUrl} type="video/webm" />
-                    </video>
-                  </styled.PreviewVideoContainer>
+                  <MediaPlayer sourceUrl={videoBlobUrl} />
                 )}
               </>
             );
@@ -134,7 +135,7 @@ const VideoPostForm: FC<PropsInterface> = ({
         <ButtonEllipse
           icon="add"
           label={t('actions.addToTimeline')}
-          disabled={!formState.isValid || isCreating}
+          disabled={isCreating || !video}
           onClick={handleCreatePost}
         />
       </styled.FormControls>

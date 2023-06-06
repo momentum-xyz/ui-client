@@ -10,6 +10,7 @@ import * as spaceAttributeRepository from './repositories/spaceAttributeReposito
 import * as spaceRepository from './repositories/spaceRepository';
 import * as userAttributeRepository from './repositories/userAttributeRepository';
 import * as mediaRepository from './repositories/mediaRepository';
+import * as timelineRepository from './repositories/timelineRepository';
 import * as emojiRepository from './repositories/emojiRepository';
 import * as eventsRepository from './repositories/eventsRepository';
 import * as spaceInfoRepository from './repositories/spaceInfoRepository';
@@ -50,6 +51,7 @@ export const api = {
   userAttributeRepository,
   spaceUserAttributeRepository,
   mediaRepository,
+  timelineRepository,
   emojiRepository,
   eventsRepository,
   spaceInfoRepository,
@@ -76,6 +78,7 @@ export * from './repositories/spaceAttributeRepository/spaceAttribute.api.types'
 export * from './repositories/spaceRepository/spaceRepository.api.types';
 export * from './repositories/userAttributeRepository/userAttributeRepository.api.types';
 export * from './repositories/mediaRepository/mediaRepository.api.types';
+export * from './repositories/timelineRepository/timelineRepository.api.types';
 export * from './repositories/emojiRepository/emojiRepository.api.types';
 export * from './repositories/eventsRepository/eventsRepository.api.types';
 export * from './repositories/assets2dRepository/assets2dRepository.api.types';
