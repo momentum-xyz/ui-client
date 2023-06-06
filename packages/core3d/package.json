@@ -16,12 +16,12 @@
     "copy-files": "copyfiles -u 1 \"src/static/**\" dist/"
   },
   "dependencies": {
-    "@babylonjs/core": "^6.4.1",
-    "@babylonjs/gui": "^6.4.1",
-    "@babylonjs/gui-editor": "^6.4.1",
-    "@babylonjs/loaders": "^6.4.1",
-    "@babylonjs/materials": "^6.4.1",
-    "@babylonjs/serializers": "^6.4.1",
+    "@babylonjs/core": "^6.6.1",
+    "@babylonjs/gui": "^6.6.1",
+    "@babylonjs/gui-editor": "^6.6.1",
+    "@babylonjs/loaders": "^6.6.1",
+    "@babylonjs/materials": "^6.6.1",
+    "@babylonjs/serializers": "^6.6.1",
     "@headlessui/react": "^1.2.0",
     "@momentum-xyz/core": "^0.1.2",
     "@momentum-xyz/ui-kit": "^0.1.4",
@@ -42,7 +42,7 @@
     "web-vitals": "^2.1.0"
   },
   "devDependencies": {
-    "@babylonjs/inspector": "^6.4.1",
+    "@babylonjs/inspector": "^6.6.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
