@@ -21,7 +21,7 @@ const BASE_TEXT_SIZE = 116 + PADDING;
 
 const calculateApproximateTextRowCount = (text: string) => {
   return text.length / 50;
-}
+};
 
 const NewsfeedWidget: FC = () => {
   const {widgetManagerStore, widgetStore} = useStore();
@@ -47,7 +47,6 @@ const NewsfeedWidget: FC = () => {
     },
     [goToOdysseyHome]
   );
-
 
   const isItemLoaded = (index: number) => index < currentTabEntries.length;
 
@@ -99,11 +98,7 @@ const NewsfeedWidget: FC = () => {
       >
         <styled.Wrapper className="wrapper-test">
           <styled.Tabs>
-            <Tabs
-              tabList={TABS_LIST}
-              activeId={newsfeedType}
-              onSelect={setActiveNewsfeedType}
-            />
+            <Tabs tabList={TABS_LIST} activeId={newsfeedType} onSelect={setActiveNewsfeedType} />
           </styled.Tabs>
           <InfiniteScroll
             itemCount={itemCount}
