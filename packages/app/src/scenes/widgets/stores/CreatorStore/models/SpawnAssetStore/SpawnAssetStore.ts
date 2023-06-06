@@ -60,7 +60,11 @@ const SpawnAssetStore = types
     setActiveTab(activeTab: string) {
       self.activeTab = activeTab;
     },
-    uploadAsset: flow(function* (asset: File, preview_hash: string | undefined) {
+    uploadAsset: flow(function* (
+      asset: File,
+      preview_hash: string | undefined,
+      isPrivate: boolean
+    ) {
       if (!self.uploadedAssetName) {
         return;
       }
@@ -82,8 +86,8 @@ const SpawnAssetStore = types
           asset,
           onUploadProgress,
           name: self.uploadedAssetName,
-          worldId: self.worldId,
-          preview_hash
+          preview_hash,
+          is_private: isPrivate
         }
       );
 
@@ -105,7 +109,6 @@ const SpawnAssetStore = types
       const response = yield self.uploadAssetRequest.send(
         api.assets3dRepository.patchAssets3dMetadata,
         {
-          worldId: self.worldId,
           assetId,
           name,
           preview_hash
@@ -119,19 +122,19 @@ const SpawnAssetStore = types
       const response: FetchAssets3dResponse | undefined = yield self.fetchAssets3dRequest.send(
         api.assets3dRepository.fetchAssets3d,
         {
-          category,
-          worldId: self.worldId
+          category
         }
       );
 
       if (response) {
         const assets =
           response
-            .map(({id, meta: {name = id, preview_hash, category}}) => ({
+            .map(({id, meta: {name = id, preview_hash, category}, is_private}) => ({
               id,
               category,
               name,
               preview_hash,
+              is_private,
               image:
                 // FIXME - temp until proper preview images are available
                 preview_hash
@@ -190,9 +193,11 @@ const SpawnAssetStore = types
     get isUploadPending(): boolean {
       return self.uploadAssetRequest.isPending;
     },
-    filteredAsset3dList(category: string): Asset3dInterface[] {
+    filteredAsset3dList(category: string, isPrivate = false): Asset3dInterface[] {
       const assets3dList =
-        category === Asset3dCategoryEnum.BASIC ? self.assets3dBasic : self.assets3dCustom;
+        category === Asset3dCategoryEnum.BASIC
+          ? self.assets3dBasic
+          : self.assets3dCustom.filter((asset) => asset.is_private === isPrivate);
       return self.searchQuery.isQueryValid
         ? assets3dList.filter((asset) =>
             asset.name.toLocaleLowerCase().includes(self.searchQuery.queryLowerCased)

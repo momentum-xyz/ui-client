@@ -109,12 +109,20 @@ const SpawnAsset: FC = () => {
                 {/* <Text text={t('labels.communityAssetPack')} size="l" transform="uppercase" /> */}
                 <AssetsPage
                   assetCategory={Asset3dCategoryEnum.CUSTOM}
+                  isPrivate={false}
                   showPreview
                   assetPageHeader={t('labels.communityAssetPack')}
                 />
               </styled.AssetsGroupList>
             )}
-            {activeTab === 'private' && <div>Coming soon!</div>}
+            {activeTab === 'private' && (
+              <AssetsPage
+                assetCategory={Asset3dCategoryEnum.CUSTOM}
+                isPrivate
+                showPreview
+                assetPageHeader={t('labels.privateObjectLibrary')}
+              />
+            )}
             {activeTab === 'upload' && <UploadCustomAssetPage />}
           </>
         )}
