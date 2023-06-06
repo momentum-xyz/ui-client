@@ -3,7 +3,7 @@ import {ComponentMeta, Story} from '@storybook/react';
 import MediaPlayerTrack, {MediaPlayerTrackInterface} from './MediaPlayerTrack';
 
 export default {
-  title: 'Molecules/MediaPlayerTrack',
+  title: 'Atoms/MediaPlayerTrack',
   component: MediaPlayerTrack,
   decorators: [
     (Story) => (
