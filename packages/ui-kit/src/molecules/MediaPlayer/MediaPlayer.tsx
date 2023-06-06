@@ -2,7 +2,7 @@ import {FC, memo, useState} from 'react';
 import ReactPlayer from 'react-player';
 import {OnProgressProps} from 'react-player/base';
 
-import {IconButton, MediaPlayerTrack} from '../../atoms';
+import {IconButton, MediaPlayerTrack, MediaPlayerTime} from '../../atoms';
 
 import * as styled from './MediaPlayer.styled';
 
@@ -64,17 +64,11 @@ const MediaPlayer: FC<MediaPlayerInterface> = ({sourceUrl, height = 160}) => {
         />
       </styled.PlayPause>
 
-      <styled.ProgressContainer>
-        <styled.Grid>
-          <styled.Played>
-            00:{playedSeconds < 10 ? <>{`0${playedSeconds}`}</> : <>{playedSeconds}</>}
-          </styled.Played>
+      <styled.TrackContainer>
+        <MediaPlayerTime playedSeconds={playedSeconds} duration={duration}>
           <MediaPlayerTrack playedPercent={playedPercent} />
-          <styled.Duration>
-            00:{duration < 10 ? <>{`0${duration}`}</> : <>{duration}</>}
-          </styled.Duration>
-        </styled.Grid>
-      </styled.ProgressContainer>
+        </MediaPlayerTime>
+      </styled.TrackContainer>
     </styled.Container>
   );
 };
