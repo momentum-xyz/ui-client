@@ -68,12 +68,14 @@ export const Progress = styled.div<{value: number}>`
   }
 
   input[type='range'].styled-slider.slider-progress:hover::-webkit-slider-runnable-track {
-    background: linear-gradient(#0061c3, #0061c3) 0 / var(--sx) 100% no-repeat,
+    background: linear-gradient(${(props) => props.theme.text}, ${(props) => props.theme.text}) 0 /
+        var(--sx) 100% no-repeat,
       ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
   }
 
   input[type='range'].styled-slider.slider-progress:active::-webkit-slider-runnable-track {
-    background: linear-gradient(#0061c3, #0061c3) 0 / var(--sx) 100% no-repeat,
+    background: linear-gradient(${(props) => props.theme.text}, ${(props) => props.theme.text}) 0 /
+        var(--sx) 100% no-repeat,
       ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
   }
 
@@ -119,12 +121,14 @@ export const Progress = styled.div<{value: number}>`
   }
 
   input[type='range'].styled-slider.slider-progress:hover::-moz-range-track {
-    background: linear-gradient(#0061c3, #0061c3) 0 / var(--sx) 100% no-repeat,
+    background: linear-gradient(${(props) => props.theme.text}, ${(props) => props.theme.text}) 0 /
+        var(--sx) 100% no-repeat,
       ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
   }
 
   input[type='range'].styled-slider.slider-progress:active::-moz-range-track {
-    background: linear-gradient(#0061c3, #0061c3) 0 / var(--sx) 100% no-repeat,
+    background: linear-gradient(${(props) => props.theme.text}, ${(props) => props.theme.text}) 0 /
+        var(--sx) 100% no-repeat,
       ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
   }
 
@@ -186,10 +190,10 @@ export const Progress = styled.div<{value: number}>`
   }
 
   input[type='range'].styled-slider.slider-progress:hover::-ms-fill-lower {
-    background: #0061c3;
+    background: ${(props) => props.theme.text};
   }
 
   input[type='range'].styled-slider.slider-progress:active::-ms-fill-lower {
-    background: #0061c3;
+    background: ${(props) => props.theme.text};
   }
 `;
