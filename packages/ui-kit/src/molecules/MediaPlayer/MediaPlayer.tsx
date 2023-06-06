@@ -30,14 +30,16 @@ const MediaPlayer: FC<MediaPlayerInterface> = ({sourceUrl, height = 160}) => {
   };
 
   const handleDuration = (duration: number) => {
-    setDuration(duration);
+    if (duration !== Infinity && duration >= 0) {
+      setDuration(Math.round(duration));
+    }
   };
 
   const handleEnded = () => {
     setPlaying(false);
   };
 
-  const seconds = Math.round(progress.playedSeconds);
+  const playedSeconds = Math.round(progress.playedSeconds);
   const playedPercent = progress.played * 100;
 
   return (
@@ -64,9 +66,13 @@ const MediaPlayer: FC<MediaPlayerInterface> = ({sourceUrl, height = 160}) => {
 
       <styled.ProgressContainer>
         <styled.Grid>
-          <styled.Played>00:{seconds < 10 ? <>{`0${seconds}`}</> : <>{seconds}</>}</styled.Played>
+          <styled.Played>
+            00:{playedSeconds < 10 ? <>{`0${playedSeconds}`}</> : <>{playedSeconds}</>}
+          </styled.Played>
           <MediaPlayerTrack playedPercent={playedPercent} />
-          <styled.Duration>{duration}</styled.Duration>
+          <styled.Duration>
+            00:{duration < 10 ? <>{`0${duration}`}</> : <>{duration}</>}
+          </styled.Duration>
         </styled.Grid>
       </styled.ProgressContainer>
     </styled.Container>
