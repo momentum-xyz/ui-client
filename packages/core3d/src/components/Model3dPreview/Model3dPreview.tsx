@@ -6,7 +6,8 @@ import {
   Vector3,
   Color4,
   InstantiatedEntries,
-  ArcRotateCamera
+  ArcRotateCamera,
+  Tools
 } from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
 import cn from 'classnames';
@@ -101,7 +102,11 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
 
         setTimeout(() => {
           if (onSnapshot) {
-            onSnapshot(scene.getEngine().getRenderingCanvas()?.toDataURL('image/png') || '', true);
+            Tools.CreateScreenshot(scene.getEngine(), scene.cameras[0], {precision: 1}, (data) => {
+              fetch(data).then((base64Response) => {
+                onSnapshot(base64Response.url, true);
+              });
+            });
           }
 
           for (const group of instance.animationGroups) {
