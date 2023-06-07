@@ -1,4 +1,4 @@
-import {AttributeNameEnum, AttributeValueInterface} from '@momentum-xyz/sdk';
+import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {
   Client,
   loadClientWorker,
@@ -14,8 +14,6 @@ import {
 import {AttributeValueChanged} from '@momentum-xyz/posbus-client/dist/build/posbus';
 
 import {PosBusEventEmitter} from 'core/constants';
-import {PosBusMessageTypeEnum} from 'core/enums';
-import {PosBusMiroStateMessageType as PosBusAttributeMessageType} from 'core/types';
 import {appVariables} from 'api/constants';
 import {PluginIdEnum} from 'api/enums';
 
@@ -324,45 +322,6 @@ class PosBusService {
 
   static unsubscribe(topic: string) {
     this.main._subscribedAttributeTypeTopics.delete(topic);
-  }
-
-  static handleSpaceAttributeMessage(target: string, message: PosBusAttributeMessageType) {
-    switch (message.type) {
-      case PosBusMessageTypeEnum.ATTRIBUTE_CHANGED:
-        PosBusEventEmitter.emit(
-          'space-attribute-changed',
-          target,
-          message.data.attribute_name,
-          message.data.value as AttributeValueInterface
-        );
-        break;
-      case PosBusMessageTypeEnum.ATTRIBUTE_REMOVED:
-        PosBusEventEmitter.emit('space-attribute-removed', target, message.data.attribute_name);
-        break;
-      case PosBusMessageTypeEnum.SUB_ATTRIBUTE_CHANGED:
-        if (!message.data.sub_name) {
-          return;
-        }
-        PosBusEventEmitter.emit(
-          'space-attribute-item-changed',
-          target,
-          message.data.attribute_name,
-          message.data.sub_name,
-          message.data.value
-        );
-        break;
-      case PosBusMessageTypeEnum.SUB_ATTRIBUTE_REMOVED:
-        if (!message.data.sub_name) {
-          return;
-        }
-        PosBusEventEmitter.emit(
-          'space-attribute-item-removed',
-          target,
-          message.data.attribute_name,
-          message.data.sub_name
-        );
-        break;
-    }
   }
 }
 
