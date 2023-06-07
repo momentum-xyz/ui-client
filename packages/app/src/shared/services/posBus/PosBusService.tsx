@@ -54,7 +54,7 @@ class PosBusService {
   static connect(client: Client, token: string, userId: string) {
     return client.connect(`${appVariables.BE_URL}/posbus`, token, userId).then((port) => {
       this.main.port = port;
-      port.onmessage = PosBusService.handleIncomingMessage;
+      port.onmessage = (msg) => PosBusService.handleIncomingMessage(msg);
     });
   }
 
