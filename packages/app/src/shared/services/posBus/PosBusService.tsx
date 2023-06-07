@@ -11,11 +11,13 @@ import {
   ObjectTransformInterface,
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
+import {AttributeValueChanged} from '@momentum-xyz/posbus-client/dist/build/posbus';
 
 import {PosBusEventEmitter} from 'core/constants';
 import {PosBusMessageTypeEnum} from 'core/enums';
 import {PosBusMiroStateMessageType as PosBusAttributeMessageType} from 'core/types';
 import {appVariables} from 'api/constants';
+import {PluginIdEnum} from 'api/enums';
 
 class PosBusService {
   private static main = new PosBusService();
@@ -215,19 +217,16 @@ class PosBusService {
       }
 
       case MsgType.ATTRIBUTE_VALUE_CHANGED: {
-        console.log('[PosBus Msg] ATTRIBUTE_VALUE_CHANGED: ', data);
-        switch (data.topic) {
-          case 'voice-chat-user': {
-            const {attribute_name, value} = data.data;
-            if (attribute_name === AttributeNameEnum.VOICE_CHAT_USER) {
-              if (value && value.joined) {
-                Event3dEmitter.emit('UserJoinedVoiceChat', value.userId);
-              } else if (value) {
-                Event3dEmitter.emit('UserLeftVoiceChat', value.userId);
-              }
-            }
+        console.debug('[PosBus Msg] ATTRIBUTE_VALUE_CHANGED: ', data);
+        switch (data.plugin_id) {
+          case PluginIdEnum.CORE:
+            this.handleCoreAttributeChange(data);
             break;
-          }
+
+          default:
+            // TODO: pass to plugins
+            console.debug('[PosBus Msg]: ATTRIBUTE_VALUE_CHANGED: unhandled message');
+            break;
         }
         break;
       }
@@ -247,6 +246,20 @@ class PosBusService {
 
       default:
         console.log('Unhandled posbus message', message.data);
+    }
+  }
+
+  static handleCoreAttributeChange(msg: AttributeValueChanged) {
+    switch (msg.attribute_name) {
+      case AttributeNameEnum.VOICE_CHAT_USER: {
+        const value = msg.value;
+        if (value && value.joined) {
+          Event3dEmitter.emit('UserJoinedVoiceChat', value.userId);
+        } else if (value) {
+          Event3dEmitter.emit('UserLeftVoiceChat', value.userId);
+        }
+        break;
+      }
     }
   }
 
