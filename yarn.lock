@@ -18249,6 +18249,11 @@ react-use-error-boundary@^3.0.0:
   resolved "https://registry.yarnpkg.com/react-use-error-boundary/-/react-use-error-boundary-3.0.0.tgz#c5b44acf9ab376f59a219d740ac372b05aba6240"
   integrity sha512-5urkfyU3ZzInEMSHe1gxtDzlQAHs0krTt0V6h8H2L5nXhDKq3OYXnCs9lGHDkEkYvLmsphw8ap5g8uYfvrkJng==
 
+react-virtualized-auto-sizer@^1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/react-virtualized-auto-sizer/-/react-virtualized-auto-sizer-1.0.20.tgz#d9a907253a7c221c52fa57dc775a6ef40c182645"
+  integrity sha512-OdIyHwj4S4wyhbKHOKM1wLSj/UDXm839Z3Cvfg2a9j+He6yDa6i5p0qQvEiCnyQlGO/HyfSnigQwuxvYalaAXA==
+
 react-virtuoso@^2.10.2, react-virtuoso@^2.16.5:
   version "2.19.1"
   resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-2.19.1.tgz#a660a5c3cafcc7a84b59dfc356e1916e632c1e3a"

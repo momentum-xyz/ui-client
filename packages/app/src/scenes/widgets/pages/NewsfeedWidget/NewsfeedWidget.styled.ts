@@ -6,6 +6,8 @@ export const Wrapper = styled.div`
   position: relative;
   padding: 20px 0 0 0;
 
+  height: 100%;
+
   &.collapsed {
     opacity: 0;
   }

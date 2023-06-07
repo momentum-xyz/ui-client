@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useI18n, i18n, NewsfeedTypeEnum} from '@momentum-xyz/core';
 import {TabInterface, Tabs, Panel, NewsfeedEntry} from '@momentum-xyz/ui-kit';
 import {ListChildComponentProps} from 'react-window';
+import AutoSizer from 'react-virtualized-auto-sizer';
 
 import {InfiniteScroll} from 'ui-kit';
 import {useNavigation, useStore} from 'shared/hooks';
@@ -100,19 +101,25 @@ const NewsfeedWidget: FC = () => {
           <styled.Tabs>
             <Tabs tabList={TABS_LIST} activeId={newsfeedType} onSelect={setActiveNewsfeedType} />
           </styled.Tabs>
-          <InfiniteScroll
-            itemCount={itemCount}
-            items={currentTabEntries}
-            estimatedItemSize={116}
-            width={370}
-            height={1000}
-            itemData={{entries: currentTabEntries, onWorldOpen: handleWorldOpen}}
-            row={Row}
-            calcItemSize={calcItemSize}
-            isItemLoaded={isItemLoaded}
-            loadMore={loadMore}
-            itemKey={(index: number) => currentTabEntries[index]?.id || `loading-${index}`}
-          />
+          <AutoSizer>
+            {({height, width}: any) => {
+              return (
+                <InfiniteScroll
+                  itemCount={itemCount}
+                  items={currentTabEntries}
+                  estimatedItemSize={116}
+                  width={width}
+                  height={height}
+                  itemData={{entries: currentTabEntries, onWorldOpen: handleWorldOpen}}
+                  row={Row}
+                  calcItemSize={calcItemSize}
+                  isItemLoaded={isItemLoaded}
+                  loadMore={loadMore}
+                  itemKey={(index: number) => currentTabEntries[index]?.id || `loading-${index}`}
+                />
+              );
+            }}
+          </AutoSizer>
         </styled.Wrapper>
       </Panel>
     </styled.Container>

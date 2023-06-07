@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
+import {format} from 'date-fns-tz';
 import {useI18n, NewsfeedTypeEnum} from '@momentum-xyz/core';
 
 import {Frame, Hexagon, IconSvg, Image, ButtonEllipse} from '../../atoms';
@@ -141,17 +142,8 @@ const NewsfeedEntry: FC<NewsfeedEntryPropsInterface> = ({entry, onWorldOpen, onS
   );
 
   const entryDate = new Date(entry.created_at);
-  const entryDateMonth = entryDate.getMonth() + 1;
-  const entryDateDay = entryDate.getDate();
-  const entryDateFormatted = `${entryDate.getFullYear()}-${
-    entryDateMonth < 10 ? '0' : ''
-  }${entryDateMonth}-${entryDateDay < 10 ? '0' : ''}${entryDateDay}`;
-  let entryDateHours = entryDate.getHours();
-
-  const entryDateHoursAmPm = entryDateHours >= 12 ? 'PM' : 'AM';
-  entryDateHours = entryDateHours % 12;
-  entryDateHours = entryDateHours ? entryDateHours : 12;
-  const entryTimeFormatted = `${entryDateHours} ${entryDateHoursAmPm}`;
+  const entryDateFormatted = format(entryDate, 'yyyy-MM-dd');
+  const entryTimeFormatted = format(entryDate, 'HH aa');
 
   return (
     <styled.Wrapper data-testid="NewsfeedEntry-test">
