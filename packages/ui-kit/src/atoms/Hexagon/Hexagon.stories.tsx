@@ -58,6 +58,20 @@ MenuWithText.args = {type: 'menu', label: '+90'};
 export const MenuBlank = Template.bind({});
 MenuBlank.args = {type: 'blank-small'};
 
+export const MenuImageDisabled = Template.bind({});
+MenuImageDisabled.args = {
+  type: 'menu',
+  imageSrc: IMAGE_SRC,
+  isDisabled: true
+};
+
+export const MenuDisabled = Template.bind({});
+MenuDisabled.args = {
+  type: 'menu',
+  isDisabled: true,
+  iconName: 'astronaut'
+};
+
 export const Primary = Template.bind({});
 Primary.args = {};
 

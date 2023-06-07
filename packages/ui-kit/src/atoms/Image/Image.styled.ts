@@ -24,6 +24,10 @@ export const Image = styled.img`
   height: 100%;
   object-fit: cover;
   border-radius: var(--border-radius);
+
+  &.disabled {
+    opacity: 0.2;
+  }
 `;
 
 export const ErrorContainer = styled.div`
@@ -34,6 +38,10 @@ export const ErrorContainer = styled.div`
   justify-content: center;
   border-radius: var(--border-radius);
   background-color: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.8)};
+
+  &.disabled {
+    background-color: initial;
+  }
 `;
 
 export const Error = styled.div<{errorIconOffset: number}>`

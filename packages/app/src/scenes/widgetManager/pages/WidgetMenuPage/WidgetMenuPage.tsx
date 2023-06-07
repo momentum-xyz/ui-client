@@ -32,15 +32,11 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
   const isGuest = sessionStore.isGuest || sessionStore.isSignUpInProgress;
 
   const handleBackToExplore = () => {
-    if (!universeStore.isScreenRecording) {
-      navigate(ROUTES.explore);
-    }
+    navigate(ROUTES.explore);
   };
 
   const handleToggle = (type: WidgetEnum, position: PositionEnum) => {
-    if (!universeStore.isScreenRecording) {
-      widgetManagerStore.toggle(type, position);
-    }
+    widgetManagerStore.toggle(type, position);
   };
 
   const ODYSSEY_ITEMS: MenuItemExtendedInterface[] = sessionStore.worldsOwnedList.map((world) => ({
@@ -52,18 +48,6 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
     tooltip: t('actions.visitOdyssey'),
     onClick: () => navigate(generatePath(ROUTES.odyssey.base, {worldId: world.id}))
   }));
-
-  const NEWSFEED: MenuItemExtendedInterface[] = isFeatureEnabled(FeatureFlagEnum.NEWSFEED)
-    ? [
-        {
-          key: WidgetEnum.NEWSFEED,
-          position: PositionEnum.LEFT,
-          iconName: 'newsfeed',
-          tooltip: t('labels.newsfeed'),
-          onClick: handleToggle
-        }
-      ]
-    : [];
 
   const MENU_ITEMS: MenuItemExtendedInterface[] = [
     {
@@ -80,6 +64,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'explore',
       isHidden: !isWorld,
       tooltip: t('labels.explore'),
+      isDisabled: universeStore.isScreenRecording,
       onClick: handleBackToExplore
     },
     {
@@ -90,6 +75,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconIndicator: agoraStore.hasJoined ? 'voice' : undefined,
       isHidden: isGuest,
       tooltip: t('titles.myProfile'),
+      isDisabled: universeStore.isScreenRecording,
       onClick: handleToggle
     },
     {
@@ -106,9 +92,18 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'status-2',
       isHidden: isGuest,
       tooltip: t('labels.stakingOverview'),
+      isDisabled: universeStore.isScreenRecording,
       onClick: handleToggle
     },
-    ...NEWSFEED,
+    {
+      key: WidgetEnum.NEWSFEED,
+      position: PositionEnum.LEFT,
+      iconName: 'newsfeed',
+      tooltip: t('labels.newsfeed'),
+      isHidden: !isFeatureEnabled(FeatureFlagEnum.NEWSFEED),
+      isDisabled: universeStore.isScreenRecording,
+      onClick: handleToggle
+    },
     ...ODYSSEY_ITEMS,
     {
       key: WidgetEnum.STAKING,
@@ -116,8 +111,9 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       viewPosition: PositionEnum.RIGHT,
       iconName: 'stake',
       tooltip: t('actions.stakeInOdyssey'),
-      onClick: handleToggle,
-      isHidden: !isWorld || isGuest
+      isHidden: !isWorld || isGuest,
+      isDisabled: universeStore.isScreenRecording,
+      onClick: handleToggle
     },
     {
       key: WidgetEnum.CREATOR,
@@ -126,6 +122,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'pencil',
       isHidden: !isWorld || !isMyWorld,
       tooltip: t('actions.creatorOpen'),
+      isDisabled: universeStore.isScreenRecording,
       onClick: handleToggle
     },
     {
@@ -135,6 +132,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'clock-two',
       isHidden: !isWorld,
       tooltip: t('labels.timeline'),
+      isDisabled: universeStore.isScreenRecording,
       onClick: handleToggle
     },
     {
@@ -147,6 +145,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
           : undefined,
       tooltip: t('labels.voiceChat'),
       onClick: handleToggle,
+      isDisabled: universeStore.isScreenRecording,
       isHidden: !isWorld
     },
     {
@@ -155,6 +154,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'group',
       onClick: handleToggle,
       tooltip: t('labels.visitors'),
+      isDisabled: universeStore.isScreenRecording,
       isHidden: !isWorld
     },
     {
@@ -163,8 +163,9 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'rabbit_fill',
       imageSrc: world2dStore?.imageSrc,
       tooltip: t('labels.odysseyOverview'),
-      onClick: handleToggle,
-      isHidden: !isWorld
+      isHidden: !isWorld,
+      isDisabled: universeStore.isScreenRecording,
+      onClick: handleToggle
     }
   ];
 
