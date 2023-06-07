@@ -47,6 +47,10 @@ const ImagePostForm: FC<PropsInterface> = ({
             <>
               {value ? (
                 <styled.PreviewImageContainer url={URL.createObjectURL(value)}>
+                  <styled.Actions>
+                    <span>{t('messages.takeShot')}</span>
+                    <IconButton name="record_two" size="xxl" isWhite onClick={onMakeScreenshot} />
+                  </styled.Actions>
                   <styled.Delete>
                     <IconButton name="bin" size="xl" isWhite onClick={onClearScreenshot} />
                   </styled.Delete>

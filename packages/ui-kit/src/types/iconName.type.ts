@@ -173,6 +173,7 @@ export type IconNameType =
   | 'rabbit_fill'
   | 'record'
   | 'record_stop'
+  | 'record_two'
   | 'redo'
   | 'refresh'
   | 'remove-user'
