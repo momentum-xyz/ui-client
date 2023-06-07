@@ -21,6 +21,7 @@ const TimelineWidget: FC = () => {
   useEffect(() => {
     return () => {
       world3dStore?.clearSnapshotOrVideo();
+      world3dStore?.setIsScreenRecording(false);
     };
   }, [world3dStore]);
 
@@ -45,6 +46,7 @@ const TimelineWidget: FC = () => {
         variant="primary"
         icon="clock-two"
         title={t('labels.timeline')}
+        isCloseDisabled={universeStore.isScreenRecording}
         onClose={() => widgetManagerStore.close(WidgetEnum.TIMELINE)}
       >
         <styled.Wrapper>
@@ -54,14 +56,17 @@ const TimelineWidget: FC = () => {
               videoOrScreenshot={world3dStore?.screenshotOrVideo}
               maxVideoDurationSec={MAX_VIDEO_DURATION_SEC}
               isCreating={false}
+              isScreenRecording={universeStore.isScreenRecording}
               onMakeScreenshot={() => {
                 Event3dEmitter.emit('MakeScreenshot');
               }}
               onStartRecording={() => {
                 Event3dEmitter.emit('StartRecordingVideo', MAX_VIDEO_DURATION_SEC);
+                world3dStore?.setIsScreenRecording(true);
               }}
               onStopRecording={() => {
                 Event3dEmitter.emit('StopRecordingVideo');
+                world3dStore?.setIsScreenRecording(false);
               }}
               onCreatePost={handleCreatePost}
               onCancel={() => {

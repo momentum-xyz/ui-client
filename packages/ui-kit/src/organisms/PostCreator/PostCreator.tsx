@@ -19,6 +19,7 @@ export interface PostCreatorPropsInterface {
   videoOrScreenshot?: MediaInterface | null;
   maxVideoDurationSec: number;
   isCreating?: boolean;
+  isScreenRecording?: boolean;
   onMakeScreenshot: () => void;
   onStartRecording: () => void;
   onStopRecording: () => void;
@@ -31,6 +32,7 @@ const PostCreator: FC<PostCreatorPropsInterface> = ({
   videoOrScreenshot,
   maxVideoDurationSec,
   isCreating,
+  isScreenRecording,
   onMakeScreenshot,
   onStartRecording,
   onStopRecording,
@@ -86,6 +88,7 @@ const PostCreator: FC<PostCreatorPropsInterface> = ({
             <VideoPostForm
               video={videoOrScreenshot?.file}
               isCreating={isCreating}
+              isScreenRecording={isScreenRecording}
               maxVideoDurationSec={maxVideoDurationSec}
               onStartRecording={onStartRecording}
               onStopRecording={onStopRecording}

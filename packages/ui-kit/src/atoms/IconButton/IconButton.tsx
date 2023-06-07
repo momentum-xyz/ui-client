@@ -8,10 +8,14 @@ export interface IconButtonPropsInterface extends IconSvgPropsInterface {
   onClick?: () => void;
 }
 
-const IconButton: FC<IconButtonPropsInterface> = ({onClick, ...rest}) => {
+const IconButton: FC<IconButtonPropsInterface> = ({onClick, isDisabled, ...rest}) => {
   return (
-    <styled.Button data-testid="IconButton-test" type="button" onClick={onClick}>
-      <IconSvg {...rest} />
+    <styled.Button
+      type="button"
+      onClick={!isDisabled ? onClick : undefined}
+      data-testid="IconButton-test"
+    >
+      <IconSvg isDisabled={isDisabled} {...rest} />
     </styled.Button>
   );
 };

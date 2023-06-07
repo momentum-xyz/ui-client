@@ -12,6 +12,7 @@ import * as styled from './VideoPostForm.styled';
 interface PropsInterface {
   video?: File;
   isCreating?: boolean;
+  isScreenRecording?: boolean;
   maxVideoDurationSec: number;
   onStartRecording: () => void;
   onStopRecording: () => void;
@@ -22,6 +23,7 @@ interface PropsInterface {
 const VideoPostForm: FC<PropsInterface> = ({
   video,
   isCreating,
+  isScreenRecording,
   maxVideoDurationSec,
   onStartRecording,
   onStopRecording,
@@ -130,12 +132,17 @@ const VideoPostForm: FC<PropsInterface> = ({
       </styled.Inputs>
 
       <styled.FormControls>
-        <ButtonEllipse icon="chevron_left" label={t('actions.back')} onClick={handleCancel} />
+        <ButtonEllipse
+          icon="chevron_left"
+          label={t('actions.back')}
+          disabled={isScreenRecording}
+          onClick={handleCancel}
+        />
 
         <ButtonEllipse
           icon="add"
           label={t('actions.addToTimeline')}
-          disabled={isCreating || !video}
+          disabled={isCreating || isScreenRecording || !video}
           onClick={handleCreatePost}
         />
       </styled.FormControls>

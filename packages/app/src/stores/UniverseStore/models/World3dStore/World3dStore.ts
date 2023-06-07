@@ -25,6 +25,8 @@ const World3dStore = types
     attachedToCameraObjectId: types.maybeNull(types.string),
 
     waitingForBumpEffectReadyUserId: types.maybeNull(types.string),
+
+    isScreenRecording: false,
     screenshotOrVideo: types.maybeNull(types.frozen<MediaInterface>()),
 
     gizmoMode: types.optional(
@@ -45,6 +47,9 @@ const World3dStore = types
     }
   }))
   .actions((self) => ({
+    setIsScreenRecording(isRecording: boolean): void {
+      self.isScreenRecording = isRecording;
+    },
     setScreenshotOrVideo(media: MediaInterface): void {
       self.screenshotOrVideo = media;
     },

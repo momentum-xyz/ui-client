@@ -23,13 +23,25 @@ interface PropsInterface {
 
 const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
   const {sessionStore, widgetManagerStore, universeStore, agoraStore} = useStore();
-  const {toggle, activeWidgetList, subMenuInfo} = widgetManagerStore;
+  const {activeWidgetList, subMenuInfo} = widgetManagerStore;
   const {isMyWorld, world2dStore} = universeStore;
 
   const {t} = useI18n();
   const navigate = useNavigate();
 
   const isGuest = sessionStore.isGuest || sessionStore.isSignUpInProgress;
+
+  const handleBackToExplore = () => {
+    if (!universeStore.isScreenRecording) {
+      navigate(ROUTES.explore);
+    }
+  };
+
+  const handleToggle = (type: WidgetEnum, position: PositionEnum) => {
+    if (!universeStore.isScreenRecording) {
+      widgetManagerStore.toggle(type, position);
+    }
+  };
 
   const ODYSSEY_ITEMS: MenuItemExtendedInterface[] = sessionStore.worldsOwnedList.map((world) => ({
     key: WidgetEnum.GO_TO,
@@ -48,7 +60,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
           position: PositionEnum.LEFT,
           iconName: 'newsfeed',
           tooltip: t('labels.newsfeed'),
-          onClick: toggle
+          onClick: handleToggle
         }
       ]
     : [];
@@ -60,7 +72,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'explore',
       isHidden: isWorld,
       tooltip: t('labels.explore'),
-      onClick: toggle
+      onClick: handleToggle
     },
     {
       key: WidgetEnum.GO_TO,
@@ -68,9 +80,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'explore',
       isHidden: !isWorld,
       tooltip: t('labels.explore'),
-      onClick: () => {
-        navigate(ROUTES.explore);
-      }
+      onClick: handleBackToExplore
     },
     {
       key: WidgetEnum.MY_PROFILE,
@@ -80,7 +90,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconIndicator: agoraStore.hasJoined ? 'voice' : undefined,
       isHidden: isGuest,
       tooltip: t('titles.myProfile'),
-      onClick: toggle
+      onClick: handleToggle
     },
     {
       key: WidgetEnum.LOGIN,
@@ -88,7 +98,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'astronaut',
       isHidden: !isGuest,
       tooltip: t('login.connectAsMember'),
-      onClick: toggle
+      onClick: handleToggle
     },
     {
       key: WidgetEnum.STAKING_VIEW,
@@ -96,7 +106,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'status-2',
       isHidden: isGuest,
       tooltip: t('labels.stakingOverview'),
-      onClick: toggle
+      onClick: handleToggle
     },
     ...NEWSFEED,
     ...ODYSSEY_ITEMS,
@@ -106,7 +116,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       viewPosition: PositionEnum.RIGHT,
       iconName: 'stake',
       tooltip: t('actions.stakeInOdyssey'),
-      onClick: toggle,
+      onClick: handleToggle,
       isHidden: !isWorld || isGuest
     },
     {
@@ -116,7 +126,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'pencil',
       isHidden: !isWorld || !isMyWorld,
       tooltip: t('actions.creatorOpen'),
-      onClick: toggle
+      onClick: handleToggle
     },
     {
       key: WidgetEnum.TIMELINE,
@@ -125,7 +135,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'clock-two',
       isHidden: !isWorld,
       tooltip: t('labels.timeline'),
-      onClick: toggle
+      onClick: handleToggle
     },
     {
       key: WidgetEnum.VOICE_CHAT,
@@ -136,14 +146,14 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
           ? 'voice'
           : undefined,
       tooltip: t('labels.voiceChat'),
-      onClick: toggle,
+      onClick: handleToggle,
       isHidden: !isWorld
     },
     {
       key: WidgetEnum.WORLD_VISITORS,
       position: PositionEnum.RIGHT,
       iconName: 'group',
-      onClick: toggle,
+      onClick: handleToggle,
       tooltip: t('labels.visitors'),
       isHidden: !isWorld
     },
@@ -153,7 +163,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'rabbit_fill',
       imageSrc: world2dStore?.imageSrc,
       tooltip: t('labels.odysseyOverview'),
-      onClick: toggle,
+      onClick: handleToggle,
       isHidden: !isWorld
     }
   ];
