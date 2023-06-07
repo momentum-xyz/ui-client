@@ -5,8 +5,6 @@ import {
   Quaternion,
   SceneLoader,
   AssetContainer,
-  ActionManager,
-  ExecuteCodeAction,
   InstantiatedEntries,
   NodeMaterial,
   Texture,
@@ -32,6 +30,7 @@ import {
 } from './TransformHelper';
 import {ObjectHelper} from './ObjectHelper';
 import {InteractionEffectHelper} from './InteractionEffectHelper';
+import {InputHelper} from './InputHelper';
 
 //const NORMAL_SPEED = 0.5;
 //const FAST_SPEED = 1.5;
@@ -74,18 +73,6 @@ export class PlayerHelper {
   static rightHanded = false;
   static selectedSpeed = 1;
   static onSpawnParticles: (() => void) | undefined;
-  static moveKeys = [
-    'w',
-    'a',
-    's',
-    'd',
-    'q',
-    'e',
-    'ArrowUp',
-    'ArrowDown',
-    'ArrowLeft',
-    'ArrowRight'
-  ];
 
   static initialize(
     scene: Scene,
@@ -115,62 +102,7 @@ export class PlayerHelper {
 
     this.camera = camera;
 
-    // Keyboard Input Listener
-    // TODO: Move Action Manager and Key Input to some central place to be used from different scripts
-    scene.actionManager = new ActionManager(scene);
-    scene.actionManager.registerAction(
-      new ExecuteCodeAction(ActionManager.OnKeyDownTrigger, function (evt) {
-        if (evt.sourceEvent.key === 'Shift') {
-          //PlayerHelper.camera.speed = FAST_SPEED;
-          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed * 2;
-        } else if (evt.sourceEvent.key === '1') {
-          PlayerHelper.selectedSpeed = 1;
-          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
-        } else if (evt.sourceEvent.key === '2') {
-          PlayerHelper.selectedSpeed = 2;
-          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
-        } else if (evt.sourceEvent.key === '3') {
-          PlayerHelper.selectedSpeed = 3;
-          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
-        } else if (evt.sourceEvent.key === '4') {
-          PlayerHelper.selectedSpeed = 4;
-          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
-        } else if (evt.sourceEvent.key === '5') {
-          PlayerHelper.selectedSpeed = 5;
-          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
-        } else if (evt.sourceEvent.key === '6') {
-          PlayerHelper.selectedSpeed = 6;
-          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
-        } else if (evt.sourceEvent.key === '7') {
-          PlayerHelper.selectedSpeed = 7;
-          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
-        } else if (evt.sourceEvent.key === '8') {
-          PlayerHelper.selectedSpeed = 8;
-          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
-        } else if (evt.sourceEvent.key === '9') {
-          PlayerHelper.selectedSpeed = 9;
-          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
-        } else if (evt.sourceEvent.key === '0') {
-          PlayerHelper.selectedSpeed = 0.5;
-          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
-        } else if (
-          PlayerHelper.camera.lockedTarget !== null &&
-          PlayerHelper.moveKeys.includes(evt.sourceEvent.key)
-        ) {
-          PlayerHelper.camera.lockedTarget = null;
-        }
-      })
-    );
-
-    scene.actionManager.registerAction(
-      new ExecuteCodeAction(ActionManager.OnKeyUpTrigger, function (evt) {
-        if (evt.sourceEvent.key === 'Shift') {
-          //PlayerHelper.camera.speed = NORMAL_SPEED;
-          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
-        }
-      })
-    );
-
+    InputHelper.initializePlayerControls(scene);
     this.camera.onViewMatrixChangedObservable.add(() => {
       // TODO: Consider where to apply the offset between player and camera
 
