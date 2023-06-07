@@ -2,7 +2,7 @@ import {flow, types} from 'mobx-state-tree';
 import {PostTypeEnum, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {PostFormInterface} from '@momentum-xyz/ui-kit';
 
-import {api, UploadImageResponse} from 'api';
+import {api, UploadFileResponse} from 'api';
 
 const TimelineStore = types.compose(
   ResetModel,
@@ -17,19 +17,26 @@ const TimelineStore = types.compose(
         // TODO
       }),
       create: flow(function* (form: PostFormInterface, type: PostTypeEnum, objectId: string) {
-        if (!form.file || !form.description) {
+        // TODO: Remove. Disabling EP calls
+        if (!form.file || form.file) {
           return false;
         }
 
         // 1. File uploading
-        const data = {file: form.file};
-        const fileResponse: UploadImageResponse = yield self.fileRequest.send(
-          api.mediaRepository.uploadImage,
-          data
+        const fileResponse: UploadFileResponse = yield self.fileRequest.send(
+          type === PostTypeEnum.VIDEO
+            ? api.mediaRepository.uploadVideo
+            : api.mediaRepository.uploadImage,
+          {file: form.file}
         );
 
         if (!fileResponse?.hash) {
           return false;
+        }
+
+        // remove
+        if (fileResponse?.hash) {
+          return true;
         }
 
         // 2. Item creating
@@ -38,7 +45,7 @@ const TimelineStore = types.compose(
           type,
           data: {
             render_hash: fileResponse?.hash,
-            description: form.description
+            description: form.description || ''
           }
         });
 

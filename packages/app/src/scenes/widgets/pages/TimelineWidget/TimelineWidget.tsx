@@ -57,6 +57,9 @@ const TimelineWidget: FC = () => {
               maxVideoDurationSec={MAX_VIDEO_DURATION_SEC}
               isCreating={false}
               isScreenRecording={universeStore.isScreenRecording}
+              onClearVideoOrScreenshot={() => {
+                world3dStore?.clearSnapshotOrVideo();
+              }}
               onMakeScreenshot={() => {
                 Event3dEmitter.emit('MakeScreenshot');
               }}

@@ -1,7 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, UploadImageResponse} from 'api';
+import {api, UploadFileResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
 import {SignUpFormInterface} from 'core/interfaces';
 
@@ -20,7 +20,7 @@ const LoginStore = types.compose(
         }
 
         const data = {file: form.avatar};
-        const userResponse: UploadImageResponse = yield self.avatarRequest.send(
+        const userResponse: UploadFileResponse = yield self.avatarRequest.send(
           api.mediaRepository.uploadImage,
           data
         );
@@ -32,7 +32,7 @@ const LoginStore = types.compose(
         let avatarHash;
         if (form.avatar) {
           const data = {file: form.avatar};
-          const userResponse: UploadImageResponse = yield self.avatarRequest.send(
+          const userResponse: UploadFileResponse = yield self.avatarRequest.send(
             api.mediaRepository.uploadImage,
             data
           );

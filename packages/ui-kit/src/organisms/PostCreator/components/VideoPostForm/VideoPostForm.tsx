@@ -16,6 +16,7 @@ interface PropsInterface {
   maxVideoDurationSec: number;
   onStartRecording: () => void;
   onStopRecording: () => void;
+  onClearVideo: () => void;
   onCreatePost: (form: PostFormInterface) => void;
   onCancel: () => void;
 }
@@ -27,6 +28,7 @@ const VideoPostForm: FC<PropsInterface> = ({
   maxVideoDurationSec,
   onStartRecording,
   onStopRecording,
+  onClearVideo,
   onCreatePost,
   onCancel
 }) => {
@@ -51,6 +53,11 @@ const VideoPostForm: FC<PropsInterface> = ({
   const handleStopRecording = () => {
     onStopRecording();
     pause();
+  };
+
+  const handleClear = () => {
+    onClearVideo();
+    reset(undefined, false);
   };
 
   const handleCancel = () => {
@@ -83,11 +90,7 @@ const VideoPostForm: FC<PropsInterface> = ({
                   <styled.EmptyContainer>
                     <styled.Actions>
                       <styled.Message>
-                        {!isRunning ? (
-                          <>{t('messages.startRecording')}</>
-                        ) : (
-                          <>{t('messages.recording')}...</>
-                        )}
+                        {!isRunning && <>{t('messages.startRecording')}</>}
                       </styled.Message>
 
                       {!isRunning ? (
@@ -107,7 +110,12 @@ const VideoPostForm: FC<PropsInterface> = ({
                     </styled.Actions>
                   </styled.EmptyContainer>
                 ) : (
-                  <MediaPlayer sourceUrl={videoBlobUrl} />
+                  <styled.PreviewVideoContainer>
+                    <MediaPlayer sourceUrl={videoBlobUrl} />
+                    <styled.Delete>
+                      <IconButton name="bin" size="xl" isWhite onClick={handleClear} />
+                    </styled.Delete>
+                  </styled.PreviewVideoContainer>
                 )}
               </>
             );

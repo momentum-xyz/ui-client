@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
-import {api, UploadImageResponse} from 'api';
+import {api, UploadFileResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
 import {WorldFormInterface} from 'core/interfaces';
 import {PluginIdEnum} from 'api/enums';
@@ -23,7 +23,7 @@ const WorldProfileStore = types.compose(
 
         // 1. Avatar uploading.
         if (form.avatarFile) {
-          const imageResponse: UploadImageResponse = yield self.uploadImageRequest.send(
+          const imageResponse: UploadFileResponse = yield self.uploadImageRequest.send(
             api.mediaRepository.uploadImage,
             {file: form.avatarFile}
           );

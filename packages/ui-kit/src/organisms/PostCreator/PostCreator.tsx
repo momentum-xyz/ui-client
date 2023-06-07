@@ -23,6 +23,7 @@ export interface PostCreatorPropsInterface {
   onMakeScreenshot: () => void;
   onStartRecording: () => void;
   onStopRecording: () => void;
+  onClearVideoOrScreenshot: () => void;
   onCreatePost: (form: PostFormInterface, postType: PostTypeEnum) => Promise<boolean>;
   onCancel: () => void;
 }
@@ -36,6 +37,7 @@ const PostCreator: FC<PostCreatorPropsInterface> = ({
   onMakeScreenshot,
   onStartRecording,
   onStopRecording,
+  onClearVideoOrScreenshot,
   onCreatePost,
   onCancel
 }) => {
@@ -76,6 +78,7 @@ const PostCreator: FC<PostCreatorPropsInterface> = ({
               screenshot={videoOrScreenshot?.file}
               isCreating={isCreating}
               onMakeScreenshot={onMakeScreenshot}
+              onClearScreenshot={onClearVideoOrScreenshot}
               onCreatePost={(form) => handleCreatePost(form, PostTypeEnum.IMAGE)}
               onCancel={() => {
                 setPostTypeIntent(null);
@@ -92,7 +95,8 @@ const PostCreator: FC<PostCreatorPropsInterface> = ({
               maxVideoDurationSec={maxVideoDurationSec}
               onStartRecording={onStartRecording}
               onStopRecording={onStopRecording}
-              onCreatePost={(form) => handleCreatePost(form, PostTypeEnum.IMAGE)}
+              onClearVideo={onClearVideoOrScreenshot}
+              onCreatePost={(form) => handleCreatePost(form, PostTypeEnum.VIDEO)}
               onCancel={() => {
                 setPostTypeIntent(null);
                 onCancel();

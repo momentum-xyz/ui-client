@@ -11,6 +11,7 @@ interface PropsInterface {
   screenshot?: File;
   isCreating?: boolean;
   onMakeScreenshot: () => void;
+  onClearScreenshot: () => void;
   onCreatePost: (form: PostFormInterface) => void;
   onCancel: () => void;
 }
@@ -19,6 +20,7 @@ const ImagePostForm: FC<PropsInterface> = ({
   screenshot,
   isCreating,
   onMakeScreenshot,
+  onClearScreenshot,
   onCreatePost,
   onCancel
 }) => {
@@ -45,10 +47,9 @@ const ImagePostForm: FC<PropsInterface> = ({
             <>
               {value ? (
                 <styled.PreviewImageContainer url={URL.createObjectURL(value)}>
-                  <styled.Actions>
-                    <span>{t('messages.takeSnapshot')}</span>
-                    <IconButton name="photo_camera" size="xxl" isWhite onClick={onMakeScreenshot} />
-                  </styled.Actions>
+                  <styled.Delete>
+                    <IconButton name="bin" size="xl" isWhite onClick={onClearScreenshot} />
+                  </styled.Delete>
                 </styled.PreviewImageContainer>
               ) : (
                 <styled.EmptyContainer>
