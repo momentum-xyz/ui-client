@@ -20,6 +20,8 @@ const NewsfeedEntry = types.model('NewsfeedEntry', {
   author_name: types.string,
   author_id: types.string,
   author_avatar: types.maybeNull(types.string),
+  author_world_id: types.maybeNull(types.string),
+  author_world_name: types.maybeNull(types.string),
   universal: types.optional(types.boolean, true),
   entry_type: types.enumeration(Object.values(NewsfeedTypeEnum)),
   created_at: types.string,
