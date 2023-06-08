@@ -73,13 +73,13 @@ const PostCreator: FC<PostCreatorPropsInterface> = ({
             </>
           )}
 
-          {postTypeIntent === PostTypeEnum.IMAGE && (
+          {postTypeIntent === PostTypeEnum.SCREENSHOT && (
             <ImagePostForm
               screenshot={videoOrScreenshot?.file}
               isCreating={isCreating}
               onMakeScreenshot={onMakeScreenshot}
               onClearScreenshot={onClearVideoOrScreenshot}
-              onCreatePost={(form) => handleCreatePost(form, PostTypeEnum.IMAGE)}
+              onCreatePost={(form) => handleCreatePost(form, PostTypeEnum.SCREENSHOT)}
               onCancel={() => {
                 setPostTypeIntent(null);
                 onCancel();

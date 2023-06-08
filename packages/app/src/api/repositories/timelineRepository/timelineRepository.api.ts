@@ -14,15 +14,21 @@ import {
 export const fetchTimeline: RequestInterface<FetchTimelineRequest, FetchTimelineResponse> = (
   options
 ) => {
-  const {objectId, ...restOptions} = options;
+  const {objectId, page, pageSize, ...rest} = options;
+
+  const requestParams = {
+    params: {page, pageSize},
+    ...rest
+  };
+
   const url = generatePath(timelineRepositoryEndpoints().base, {objectId});
-  return request.get(url, restOptions);
+  return request.get(url, requestParams);
 };
 
 export const createTimeline: RequestInterface<CreateTimelineRequest, CreateTimelineResponse> = (
   options
 ) => {
-  const {objectId, type, data, ...restOptions} = options;
+  const {objectId, type, hash, description, ...restOptions} = options;
   const url = generatePath(timelineRepositoryEndpoints().base, {objectId});
-  return request.post(url, {type, data}, restOptions);
+  return request.post(url, {type, hash, description}, restOptions);
 };

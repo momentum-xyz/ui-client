@@ -4,12 +4,13 @@ export enum NewsfeedTypeEnum {
   CALENDAR = 'calendar',
   BOOST = 'boost',
   IMAGE = 'image',
+  SCREENSHOT = 'screenshot',
   VIDEO = 'video',
   EVENT = 'event'
 }
 
 export enum PostTypeEnum {
-  IMAGE = NewsfeedTypeEnum.IMAGE,
+  SCREENSHOT = NewsfeedTypeEnum.SCREENSHOT,
   VIDEO = NewsfeedTypeEnum.VIDEO,
   EVENT = NewsfeedTypeEnum.EVENT
 }

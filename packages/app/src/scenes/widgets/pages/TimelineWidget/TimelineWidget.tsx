@@ -19,11 +19,15 @@ const TimelineWidget: FC = () => {
   const {t} = useI18n();
 
   useEffect(() => {
+    timelineStore.fetch(worldId);
+  }, [timelineStore, worldId]);
+
+  useEffect(() => {
     return () => {
       world3dStore?.clearSnapshotOrVideo();
       world3dStore?.setIsScreenRecording(false);
     };
-  }, [world3dStore]);
+  }, [timelineStore, world3dStore]);
 
   const handleCreatePost = async (form: PostFormInterface, postType: PostTypeEnum) => {
     const isDone = await timelineStore.create(form, postType, worldId);

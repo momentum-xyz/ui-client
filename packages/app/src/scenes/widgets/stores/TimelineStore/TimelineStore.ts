@@ -2,23 +2,32 @@ import {flow, types} from 'mobx-state-tree';
 import {PostTypeEnum, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {PostFormInterface} from '@momentum-xyz/ui-kit';
 
-import {api, UploadFileResponse} from 'api';
+import {api, FetchTimelineResponse, UploadFileResponse} from 'api';
 
 const TimelineStore = types.compose(
   ResetModel,
   types
     .model('TimelineStore', {
       fileRequest: types.optional(RequestModel, {}),
-      request: types.optional(RequestModel, {})
+      createRequest: types.optional(RequestModel, {}),
+      fetchRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
       // TODO: Pagination
       fetch: flow(function* (objectId: string) {
-        // TODO
+        const response: FetchTimelineResponse = yield self.fetchRequest.send(
+          api.timelineRepository.fetchTimeline,
+          {
+            page: 1,
+            pageSize: 10,
+            objectId
+          }
+        );
+
+        console.log(response);
       }),
       create: flow(function* (form: PostFormInterface, type: PostTypeEnum, objectId: string) {
-        // TODO: Remove. Disabling EP calls
-        if (!form.file || form.file) {
+        if (!form.file) {
           return false;
         }
 
@@ -34,27 +43,20 @@ const TimelineStore = types.compose(
           return false;
         }
 
-        // remove
-        if (fileResponse?.hash) {
-          return true;
-        }
-
         // 2. Item creating
-        yield self.request.send(api.timelineRepository.createTimeline, {
-          objectId,
+        yield self.createRequest.send(api.timelineRepository.createTimeline, {
           type,
-          data: {
-            render_hash: fileResponse?.hash,
-            description: form.description || ''
-          }
+          objectId,
+          hash: fileResponse?.hash,
+          description: form.description || ''
         });
 
-        return self.request.isDone && self.fileRequest.isDone;
+        return self.createRequest.isDone && self.fileRequest.isDone;
       })
     }))
     .views((self) => ({
       get isPending(): boolean {
-        return self.request.isPending || self.fileRequest.isPending;
+        return self.createRequest.isPending || self.fileRequest.isPending;
       }
     }))
 );
