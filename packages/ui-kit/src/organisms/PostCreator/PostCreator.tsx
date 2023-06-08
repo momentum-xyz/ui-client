@@ -4,8 +4,9 @@ import {MediaInterface, PostTypeEnum, useI18n} from '@momentum-xyz/core';
 
 import {PostFormInterface} from '../../interfaces';
 import {ButtonEllipse, Frame, Hexagon} from '../../atoms';
+import {PostImageForm, PostVideoForm} from '../../molecules';
 
-import {ImagePostForm, VideoPostForm, PostTypeSelector} from './components';
+import {PostTypeSelector} from './components';
 import * as styled from './PostCreator.styled';
 
 export interface AuthorInterface {
@@ -74,12 +75,12 @@ const PostCreator: FC<PostCreatorPropsInterface> = ({
           )}
 
           {postTypeIntent === PostTypeEnum.SCREENSHOT && (
-            <ImagePostForm
+            <PostImageForm
               screenshot={videoOrScreenshot?.file}
-              isCreating={isCreating}
+              isPending={isCreating}
               onMakeScreenshot={onMakeScreenshot}
               onClearScreenshot={onClearVideoOrScreenshot}
-              onCreatePost={(form) => handleCreatePost(form, PostTypeEnum.SCREENSHOT)}
+              onCreateOrUpdate={(form) => handleCreatePost(form, PostTypeEnum.SCREENSHOT)}
               onCancel={() => {
                 setPostTypeIntent(null);
                 onCancel();
@@ -88,15 +89,15 @@ const PostCreator: FC<PostCreatorPropsInterface> = ({
           )}
 
           {postTypeIntent === PostTypeEnum.VIDEO && (
-            <VideoPostForm
+            <PostVideoForm
               video={videoOrScreenshot?.file}
-              isCreating={isCreating}
+              isPending={isCreating}
               isScreenRecording={isScreenRecording}
               maxVideoDurationSec={maxVideoDurationSec}
               onStartRecording={onStartRecording}
               onStopRecording={onStopRecording}
               onClearVideo={onClearVideoOrScreenshot}
-              onCreatePost={(form) => handleCreatePost(form, PostTypeEnum.VIDEO)}
+              onCreateOrUpdate={(form) => handleCreatePost(form, PostTypeEnum.VIDEO)}
               onCancel={() => {
                 setPostTypeIntent(null);
                 onCancel();

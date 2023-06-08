@@ -3,33 +3,33 @@ import {Controller, useForm} from 'react-hook-form';
 import {useStopwatch} from 'react-timer-hook';
 import {useI18n} from '@momentum-xyz/core';
 
-import {PostFormInterface} from '../../../../interfaces';
-import {ButtonEllipse, IconButton, Input} from '../../../../atoms';
-import {MediaPlayer} from '../../../../molecules';
+import {PostFormInterface} from '../../interfaces';
+import {ButtonEllipse, IconButton, Input} from '../../atoms';
+import {MediaPlayer} from '../index';
 
-import * as styled from './VideoPostForm.styled';
+import * as styled from './PostVideoForm.styled';
 
-interface PropsInterface {
+export interface PostVideoFormPropsInterface {
   video?: File;
-  isCreating?: boolean;
+  isPending?: boolean;
   isScreenRecording?: boolean;
   maxVideoDurationSec: number;
   onStartRecording: () => void;
   onStopRecording: () => void;
   onClearVideo: () => void;
-  onCreatePost: (form: PostFormInterface) => void;
+  onCreateOrUpdate: (form: PostFormInterface) => void;
   onCancel: () => void;
 }
 
-const VideoPostForm: FC<PropsInterface> = ({
+const PostVideoForm: FC<PostVideoFormPropsInterface> = ({
   video,
-  isCreating,
+  isPending,
   isScreenRecording,
   maxVideoDurationSec,
   onStartRecording,
   onStopRecording,
   onClearVideo,
-  onCreatePost,
+  onCreateOrUpdate,
   onCancel
 }) => {
   const {control, setValue, formState, handleSubmit} = useForm<PostFormInterface>();
@@ -42,7 +42,7 @@ const VideoPostForm: FC<PropsInterface> = ({
   }, [video, setValue]);
 
   const handleCreatePost = handleSubmit(async (data: PostFormInterface) => {
-    await onCreatePost({...data});
+    await onCreateOrUpdate({...data});
   });
 
   const handleStartRecording = () => {
@@ -75,7 +75,7 @@ const VideoPostForm: FC<PropsInterface> = ({
   }, [isRunning, maxVideoDurationSec, onStopRecording, pause, seconds]);
 
   return (
-    <styled.Container data-testid="VideoPostForm-test">
+    <styled.Container data-testid="PostVideoForm-test">
       <styled.Inputs>
         {/* Video */}
         <Controller
@@ -133,7 +133,7 @@ const VideoPostForm: FC<PropsInterface> = ({
               onChange={onChange}
               placeholder={t('fields.addDescription')}
               danger={!!formState.errors.description}
-              disabled={isCreating}
+              disabled={isPending}
             />
           )}
         />
@@ -150,7 +150,7 @@ const VideoPostForm: FC<PropsInterface> = ({
         <ButtonEllipse
           icon="add"
           label={t('actions.addToTimeline')}
-          disabled={isCreating || isScreenRecording || !video}
+          disabled={isPending || isScreenRecording || !video}
           onClick={handleCreatePost}
         />
       </styled.FormControls>
@@ -158,4 +158,4 @@ const VideoPostForm: FC<PropsInterface> = ({
   );
 };
 
-export default VideoPostForm;
+export default PostVideoForm;

@@ -2,26 +2,26 @@ import {FC, useEffect} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
 
-import {PostFormInterface} from '../../../../interfaces';
-import {ButtonEllipse, IconButton, Input} from '../../../../atoms';
+import {PostFormInterface} from '../../interfaces';
+import {ButtonEllipse, IconButton, Input} from '../../atoms';
 
-import * as styled from './ImagePostForm.styled';
+import * as styled from './PostImageForm.styled';
 
-interface PropsInterface {
+export interface PostImageFormPropsInterface {
   screenshot?: File;
-  isCreating?: boolean;
+  isPending?: boolean;
   onMakeScreenshot: () => void;
   onClearScreenshot: () => void;
-  onCreatePost: (form: PostFormInterface) => void;
+  onCreateOrUpdate: (form: PostFormInterface) => void;
   onCancel: () => void;
 }
 
-const ImagePostForm: FC<PropsInterface> = ({
+const PostImageForm: FC<PostImageFormPropsInterface> = ({
   screenshot,
-  isCreating,
+  isPending,
   onMakeScreenshot,
   onClearScreenshot,
-  onCreatePost,
+  onCreateOrUpdate,
   onCancel
 }) => {
   const {control, setValue, formState, handleSubmit} = useForm<PostFormInterface>();
@@ -32,11 +32,11 @@ const ImagePostForm: FC<PropsInterface> = ({
   }, [screenshot, setValue]);
 
   const handleCreatePost = handleSubmit(async (data: PostFormInterface) => {
-    await onCreatePost({...data});
+    await onCreateOrUpdate({...data});
   });
 
   return (
-    <styled.Container data-testid="ImagePostForm-test">
+    <styled.Container data-testid="PostImageForm-test">
       <styled.Inputs>
         {/* Screenshot */}
         <Controller
@@ -78,7 +78,7 @@ const ImagePostForm: FC<PropsInterface> = ({
               onChange={onChange}
               placeholder={t('fields.addDescription')}
               danger={!!formState.errors.description}
-              disabled={isCreating}
+              disabled={isPending}
             />
           )}
         />
@@ -90,7 +90,7 @@ const ImagePostForm: FC<PropsInterface> = ({
         <ButtonEllipse
           icon="add"
           label={t('actions.addToTimeline')}
-          disabled={isCreating || !screenshot}
+          disabled={isPending || !screenshot}
           onClick={handleCreatePost}
         />
       </styled.FormControls>
@@ -98,4 +98,4 @@ const ImagePostForm: FC<PropsInterface> = ({
   );
 };
 
-export default ImagePostForm;
+export default PostImageForm;
