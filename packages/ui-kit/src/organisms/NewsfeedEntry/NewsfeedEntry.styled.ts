@@ -1,8 +1,9 @@
+import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  background: #00437333;
-  width: 380px;
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
+  width: 360px;
   border-radius: 4px;
 `;
 
@@ -48,15 +49,18 @@ export const UserInfoSecondary = styled.div`
 `;
 
 export const UserInfoSecondaryText = styled.div`
-  &:first-of-type {
-    margin-right: 5px;
-  }
+  // &:first-of-type {
+  //   margin-right: 5px;
+  // }
   &.world-name {
     color: ${(props) => props.theme.accentText};
   }
   &.separator {
     margin: 0 5px;
   }
+`;
+export const UserInfoSecondaryLink = styled.a`
+  color: ${(props) => props.theme.accentText};
 `;
 
 export const Content = styled.div`
@@ -77,6 +81,7 @@ export const TextEntryText = styled.span`
 `;
 export const WorldName = styled.a`
   color: ${(props) => props.theme.accentText};
+  cursor: pointer;
 `;
 
 export const MediaEntryContainer = styled.div`
