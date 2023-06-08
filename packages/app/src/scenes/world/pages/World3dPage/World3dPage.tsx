@@ -73,7 +73,7 @@ const World3dPage: FC = () => {
       console.log('[World3dPage]: Handle object click in creator mode', objectId);
       world3dStore?.handleClick(objectId, clickPos);
       handleLevel2MenuOpen();
-    } else {
+    } else if (!universeStore.isScreenRecording) {
       console.log('[World3dPage]: Handle object click, NOT creator mode', objectId);
       widgetManagerStore.open(WidgetEnum.OBJECT, PositionEnum.RIGHT, {id: objectId});
     }

@@ -106,6 +106,7 @@ export interface HexagonPropsInterface {
   iconName?: IconNameType | null;
   label?: string;
   noButton?: boolean;
+  isDisabled?: boolean;
   onClick?: () => void;
 }
 
@@ -124,6 +125,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
     margin,
     tooltip,
     noButton,
+    isDisabled,
     onClick,
     ...rest
   } = props;
@@ -162,7 +164,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
 
   const iconSize = hexagonSizeIconSizeMap[size];
   const element = imageSrc ? (
-    <Image src={imageSrc} height={hexElementHeight} errorIcon={iconName} />
+    <Image src={imageSrc} height={hexElementHeight} errorIcon={iconName} isDisabled={isDisabled} />
   ) : iconName ? (
     <IconSvg name={iconName} size={iconSize} isWhite />
   ) : (
@@ -179,7 +181,8 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
         isMenu && 'menu',
         isBlank && 'blank',
         noHover && 'no-hover',
-        isOuterBorder && 'outer-border'
+        isOuterBorder && 'outer-border',
+        isDisabled && 'disabled'
       )}
       onClick={() => {
         onClick?.();
@@ -209,7 +212,8 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
           isBlank && 'blank',
           isMenu && 'menu',
           isActive && !isOuterBorder && 'active',
-          iconName && 'icon-hexagon'
+          iconName && 'icon-hexagon',
+          isDisabled && 'disabled'
         )}
       >
         {isOuterBorder ? (
@@ -219,6 +223,7 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
               skipOuterBorder={true}
               noHover={noHover}
               isActive={isActive}
+              isDisabled={isDisabled}
               iconName={iconName}
               imageSrc={imageSrc}
               label={label}
@@ -240,7 +245,9 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
   return (
     <>
       {shouldHaveButton ? (
-        <styled.WrapperButton>{hexElementWithTooltip}</styled.WrapperButton>
+        <styled.WrapperButton className={cn(isDisabled && 'disabled')}>
+          {hexElementWithTooltip}
+        </styled.WrapperButton>
       ) : (
         hexElementWithTooltip
       )}

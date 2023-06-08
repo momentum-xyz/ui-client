@@ -430,6 +430,7 @@ export const enGb = {
       hello_nickname: 'Well done, {{nickname}}! You just created your Odyssey',
       onlineArena: 'Online Mass Collaboration Arena',
       takeSnapshot: 'Take a snapshot from your point of view',
+      takeShot: 'Take the shot!',
       startRecording: 'Start recording and fly around',
       recording: 'Recording',
       loading30sec:

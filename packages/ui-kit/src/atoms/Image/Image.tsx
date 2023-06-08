@@ -12,6 +12,7 @@ export interface ImagePropsInterface {
   errorIcon?: IconNameType | null;
   errorIconOffset?: number;
   isIconAccent?: boolean;
+  isDisabled?: boolean;
   bordered?: boolean;
   onClick?: () => void;
 }
@@ -23,25 +24,31 @@ const Image: FC<ImagePropsInterface> = ({
   errorIconOffset = 0,
   isIconAccent,
   bordered,
+  isDisabled,
   onClick
 }) => {
   const [isError, setIsError] = useState<boolean>(false);
 
   return (
     <styled.Container
-      className={cn(bordered && 'bordered')}
       height={height}
       data-testid="Image-test"
       onClick={onClick}
+      className={cn(bordered && 'bordered')}
     >
       {src && !isError ? (
-        <styled.Image src={src} onError={() => setIsError(true)} />
+        <styled.Image
+          src={src}
+          onError={() => setIsError(true)}
+          className={cn(isDisabled && 'disabled')}
+        />
       ) : (
-        <styled.ErrorContainer>
+        <styled.ErrorContainer className={cn(isDisabled && 'disabled')}>
           <styled.Error errorIconOffset={errorIconOffset} className={cn(isIconAccent && 'accent')}>
             <Hexagon
               type="secondary-borderless"
               iconName={errorIcon}
+              isDisabled={isDisabled}
               noHover
               skipOuterBorder
               noButton

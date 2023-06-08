@@ -44,3 +44,13 @@ export const FormControls = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+export const PreviewVideoContainer = styled.div`
+  position: relative;
+`;
+
+export const Delete = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+`;

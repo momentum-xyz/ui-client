@@ -34,6 +34,9 @@ const UniverseStore = types
     get isCreatorMode(): boolean {
       return self.world3dStore?.isCreatorMode || false;
     },
+    get isScreenRecording(): boolean {
+      return self.world3dStore?.isScreenRecording || false;
+    },
     get isMyWorld(): boolean {
       return self.world2dStore?.isMyWorld || false;
     },

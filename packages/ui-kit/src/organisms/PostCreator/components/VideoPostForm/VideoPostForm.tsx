@@ -12,9 +12,11 @@ import * as styled from './VideoPostForm.styled';
 interface PropsInterface {
   video?: File;
   isCreating?: boolean;
+  isScreenRecording?: boolean;
   maxVideoDurationSec: number;
   onStartRecording: () => void;
   onStopRecording: () => void;
+  onClearVideo: () => void;
   onCreatePost: (form: PostFormInterface) => void;
   onCancel: () => void;
 }
@@ -22,9 +24,11 @@ interface PropsInterface {
 const VideoPostForm: FC<PropsInterface> = ({
   video,
   isCreating,
+  isScreenRecording,
   maxVideoDurationSec,
   onStartRecording,
   onStopRecording,
+  onClearVideo,
   onCreatePost,
   onCancel
 }) => {
@@ -49,6 +53,11 @@ const VideoPostForm: FC<PropsInterface> = ({
   const handleStopRecording = () => {
     onStopRecording();
     pause();
+  };
+
+  const handleClear = () => {
+    onClearVideo();
+    reset(undefined, false);
   };
 
   const handleCancel = () => {
@@ -81,11 +90,7 @@ const VideoPostForm: FC<PropsInterface> = ({
                   <styled.EmptyContainer>
                     <styled.Actions>
                       <styled.Message>
-                        {!isRunning ? (
-                          <>{t('messages.startRecording')}</>
-                        ) : (
-                          <>{t('messages.recording')}...</>
-                        )}
+                        {!isRunning && <>{t('messages.startRecording')}</>}
                       </styled.Message>
 
                       {!isRunning ? (
@@ -105,7 +110,12 @@ const VideoPostForm: FC<PropsInterface> = ({
                     </styled.Actions>
                   </styled.EmptyContainer>
                 ) : (
-                  <MediaPlayer sourceUrl={videoBlobUrl} />
+                  <styled.PreviewVideoContainer>
+                    <MediaPlayer sourceUrl={videoBlobUrl} />
+                    <styled.Delete>
+                      <IconButton name="bin" size="xl" isWhite onClick={handleClear} />
+                    </styled.Delete>
+                  </styled.PreviewVideoContainer>
                 )}
               </>
             );
@@ -130,12 +140,17 @@ const VideoPostForm: FC<PropsInterface> = ({
       </styled.Inputs>
 
       <styled.FormControls>
-        <ButtonEllipse icon="chevron_left" label={t('actions.back')} onClick={handleCancel} />
+        <ButtonEllipse
+          icon="chevron_left"
+          label={t('actions.back')}
+          disabled={isScreenRecording}
+          onClick={handleCancel}
+        />
 
         <ButtonEllipse
           icon="add"
           label={t('actions.addToTimeline')}
-          disabled={isCreating || !video}
+          disabled={isCreating || isScreenRecording || !video}
           onClick={handleCreatePost}
         />
       </styled.FormControls>

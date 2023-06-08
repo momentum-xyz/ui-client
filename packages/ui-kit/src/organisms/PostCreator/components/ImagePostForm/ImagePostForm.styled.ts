@@ -21,6 +21,7 @@ export const EmptyContainer = styled.div`
 `;
 
 export const PreviewImageContainer = styled.div<{url: string}>`
+  position: relative;
   display: flex;
   height: var(--height);
   align-items: center;
@@ -36,6 +37,12 @@ export const Actions = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 10px;
+`;
+
+export const Delete = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
 `;
 
 export const FormControls = styled.div`

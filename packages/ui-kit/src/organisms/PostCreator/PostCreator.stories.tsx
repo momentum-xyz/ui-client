@@ -31,5 +31,6 @@ General.args = {
   onStartRecording: () => {},
   onStopRecording: () => {},
   onCreatePost: () => new Promise(() => true),
+  onClearVideoOrScreenshot: () => {},
   onCancel: () => {}
 };

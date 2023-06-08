@@ -18,6 +18,7 @@ export interface MenuItemInterface<T> {
   tooltip?: string;
   position: PositionEnum;
   viewPosition?: PositionEnum;
+  isDisabled?: boolean;
   onClick?: (key: T, position: PositionEnum) => void;
 }
 
@@ -166,6 +167,7 @@ const Menu = <T,>({
           indicator={action.iconIndicator}
           tooltip={action.tooltip || null}
           isActive={activeKeys.includes(action.key)}
+          isDisabled={action.isDisabled}
           onClick={() => {
             action.onClick?.(action.key, action.viewPosition || action.position);
           }}

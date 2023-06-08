@@ -32,3 +32,14 @@ export const IsError = Template.bind({});
 IsError.args = {
   src: 'google.com'
 };
+
+export const IsDisabled = Template.bind({});
+IsDisabled.args = {
+  src: 'https://picsum.photos/300',
+  isDisabled: true
+};
+
+export const IsDisabledWithError = Template.bind({});
+IsDisabledWithError.args = {
+  isDisabled: true
+};
