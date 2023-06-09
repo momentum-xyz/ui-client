@@ -12,6 +12,7 @@ import {
 } from '../../babylon/UniverseBuilderHelper';
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 import skyboxWorld from '../../static/CLOUDSCAPE.jpg';
+import {InputHelper} from '../../babylon/InputHelper';
 
 export interface PropsInterface {
   events: Universe3dEmitterType;
@@ -45,15 +46,10 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
     const view = scene.getEngine().getRenderingCanvas();
     if (view?.id) {
       PlayerHelper.initialize(scene, view, false);
+      InputHelper.initializeUniverse(scene, onWorldClick, onUserClick, onClickOutside);
       LightHelper.initialize(scene);
       InteractionEffectHelper.initialize(scene);
-      await UniverseBuilderHelper.initialize(
-        scene,
-        renderURL,
-        onWorldClick,
-        onUserClick,
-        onClickOutside
-      );
+      await UniverseBuilderHelper.initialize(scene, renderURL);
     }
 
     events.on('WorldsAdded', (worlds) => {

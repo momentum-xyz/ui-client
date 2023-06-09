@@ -1,9 +1,7 @@
 import {
   Scene,
-  AbstractMesh,
   SceneLoader,
   AssetContainer,
-  Matrix,
   InstantiatedEntries,
   PBRMaterial,
   TransformNode,
@@ -12,12 +10,7 @@ import {
   Vector3,
   Texture
 } from '@babylonjs/core';
-import {
-  Object3dInterface,
-  Texture3dInterface,
-  ClickPositionInterface,
-  SetWorldInterface
-} from '@momentum-xyz/core';
+import {Object3dInterface, Texture3dInterface, SetWorldInterface} from '@momentum-xyz/core';
 
 import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
@@ -45,63 +38,12 @@ export class ObjectHelper {
   static mySpawningClone: Nullable<TransformNode>;
   static awaitingTexturesMap = new Map<string, Texture3dInterface>();
 
-  static initialize(
-    scene: Scene,
-    assetBaseURL: string,
-    onObjectClick: (objectId: string, clickPosition: ClickPositionInterface) => void,
-    onUserClick: (userId: string, clickPosition: ClickPositionInterface) => void,
-    onClickOutside: () => void
-  ): void {
+  static initialize(scene: Scene, assetBaseURL: string): void {
     this.scene = scene;
     scene.useRightHandedSystem = true;
 
     this.assetRootUrl = `${assetBaseURL}/asset/`;
     this.textureRootUrl = `${assetBaseURL}/texture/`;
-
-    // Mouse Click Listener
-    scene.onPointerDown = function castRay() {
-      const ray = scene.createPickingRay(
-        scene.pointerX,
-        scene.pointerY,
-        Matrix.Identity(),
-        PlayerHelper.camera
-      );
-
-      const lastClick = {
-        x: scene.pointerX,
-        y: scene.pointerY
-      };
-      const hit = scene.pickWithRay(ray);
-
-      if (hit) {
-        if (hit.pickedMesh) {
-          // get the root parent of the picked mesh
-          let parent = hit.pickedMesh;
-          while (parent.parent) {
-            parent = parent.parent as AbstractMesh;
-          }
-          console.log('clicked on object with id: ' + parent.metadata);
-          if (ObjectHelper.objectsMap.has(parent.metadata)) {
-            onObjectClick(parent.metadata, lastClick);
-            // WorldCreatorHelper.selectedObjectFromGizmo = parent.metadata;
-          } else if (
-            PlayerHelper.playerId === parent.metadata ||
-            PlayerHelper.userMap.has(parent.metadata)
-          ) {
-            onUserClick(parent.metadata, lastClick);
-          }
-
-          // For testing, fix this later
-          /*if (!WorldCreatorHelper.isCreatorMode) {
-            WorldCreatorHelper.tryLockObject(parent.metadata);
-          }*/
-        } else {
-          // WorldCreatorHelper.unlockLastObject();
-          // WorldCreatorHelper.selectedObjectFromGizmo = '';
-          onClickOutside();
-        }
-      }
-    };
   }
 
   static setWorld(world: SetWorldInterface) {

@@ -8,6 +8,7 @@ import {PlayerHelper, LightHelper, ObjectHelper} from '../../babylon';
 import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 import {ScreenCaptureHelper} from '../../babylon/ScreenCaptureHelper';
+import {InputHelper} from '../../babylon/InputHelper';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callbacks}) => {
   const onObjectClick = useMutableCallback(callbacks.onObjectClick);
@@ -52,17 +53,15 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
     if (view?.id) {
       PlayerHelper.initialize(scene, view, true, onMove, onBumpReady);
       LightHelper.initialize(scene);
+      InputHelper.initializeWorld(scene, onObjectClick, onUserClick, onClickOutside);
       ScreenCaptureHelper.initialize(scene, onScreenshotReady, onVideoReady);
       InteractionEffectHelper.initialize(scene);
       InteractionEffectHelper.initializeHi5Particles();
 
       ObjectHelper.initialize(
         scene,
-        renderURL,
+        renderURL
         //  props.objects,
-        onObjectClick,
-        onUserClick,
-        onClickOutside
         // onMove,
       );
 
