@@ -1,14 +1,12 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Event3dEmitter, PostTypeEnum, useI18n} from '@momentum-xyz/core';
-import {Panel, PostCreator, PostFormInterface} from '@momentum-xyz/ui-kit';
+import {Panel, PostEntry, PostFormInterface} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 
 import * as styled from './TimelineWidget.styled';
-
-const MAX_VIDEO_DURATION_SEC = 15;
 
 const TimelineWidget: FC = () => {
   const {widgetManagerStore, widgetStore, sessionStore, universeStore} = useStore();
@@ -19,11 +17,15 @@ const TimelineWidget: FC = () => {
   const {t} = useI18n();
 
   useEffect(() => {
+    timelineStore.fetch(worldId);
+  }, [timelineStore, worldId]);
+
+  useEffect(() => {
     return () => {
       world3dStore?.clearSnapshotOrVideo();
       world3dStore?.setIsScreenRecording(false);
     };
-  }, [world3dStore]);
+  }, [timelineStore, world3dStore]);
 
   const handleCreatePost = async (form: PostFormInterface, postType: PostTypeEnum) => {
     const isDone = await timelineStore.create(form, postType, worldId);
@@ -51,10 +53,14 @@ const TimelineWidget: FC = () => {
       >
         <styled.Wrapper>
           {!sessionStore.isGuest && (
-            <PostCreator
-              author={{id: user.id, name: user.name, avatarSrc: user.avatarSrc}}
+            <PostEntry
+              author={{
+                id: user.id,
+                name: user.name,
+                avatarSrc: user.avatarSrc || null,
+                isItMe: true
+              }}
               videoOrScreenshot={world3dStore?.screenshotOrVideo}
-              maxVideoDurationSec={MAX_VIDEO_DURATION_SEC}
               isCreating={false}
               isScreenRecording={universeStore.isScreenRecording}
               onClearVideoOrScreenshot={() => {
@@ -63,15 +69,15 @@ const TimelineWidget: FC = () => {
               onMakeScreenshot={() => {
                 Event3dEmitter.emit('MakeScreenshot');
               }}
-              onStartRecording={() => {
-                Event3dEmitter.emit('StartRecordingVideo', MAX_VIDEO_DURATION_SEC);
+              onStartRecording={(maxDuration) => {
+                Event3dEmitter.emit('StartRecordingVideo', maxDuration);
                 world3dStore?.setIsScreenRecording(true);
               }}
               onStopRecording={() => {
                 Event3dEmitter.emit('StopRecordingVideo');
                 world3dStore?.setIsScreenRecording(false);
               }}
-              onCreatePost={handleCreatePost}
+              onCreateOrUpdatePost={handleCreatePost}
               onCancel={() => {
                 world3dStore?.clearSnapshotOrVideo();
               }}

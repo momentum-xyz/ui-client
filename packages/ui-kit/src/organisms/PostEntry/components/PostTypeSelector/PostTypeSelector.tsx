@@ -19,7 +19,7 @@ const PostTypeSelector: FC<PropsInterface> = ({canPostEvents, onSelect}) => {
         {t('messages.createSnapshotOrVideo')}
       </styled.PostTypeSelectionInfo>
       <styled.PostTypeSelectionTypes>
-        <styled.PostTypeSelectionTypeButton onClick={() => onSelect(PostTypeEnum.IMAGE)}>
+        <styled.PostTypeSelectionTypeButton onClick={() => onSelect(PostTypeEnum.SCREENSHOT)}>
           <IconSvg size="xll" isWhite name="photo_camera" />
           <span>{t('actions.takeSnapshot')}</span>
         </styled.PostTypeSelectionTypeButton>
