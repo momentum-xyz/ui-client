@@ -740,6 +740,7 @@ export const enGb = {
       searchMembers: 'Search Members',
       searchStakes: 'Search Stakes',
       visitOdyssey: 'Visit Odyssey',
+      share: 'Share',
       stakeInOdyssey: 'Stake in Odyssey',
       addToTimeline: 'Add to timeline',
       seeAll: 'See all',

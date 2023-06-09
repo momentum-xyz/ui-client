@@ -1,11 +1,8 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
-  border-radius: 4px;
-`;
-
 export const Header = styled.div`
   display: flex;
+  color: ${(props) => props.theme.text};
   gap: 10px;
 `;
 
@@ -22,12 +19,18 @@ export const UserInfoTitle = styled.h3`
   line-height: 18px;
 `;
 
-export const Content = styled.div`
-  padding: 10px 0 0 18px;
+export const World = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-xxs);
+  font-weight: 400;
+  gap: 2px;
 `;
 
-export const Controls = styled.div`
-  padding: 14px 0 0 0;
-  display: flex;
-  justify-content: flex-end;
+export const Icon = styled.div`
+  padding: 0 2px 0 0;
+`;
+
+export const WorldName = styled.div`
+  color: ${(props) => props.theme.accentText};
 `;

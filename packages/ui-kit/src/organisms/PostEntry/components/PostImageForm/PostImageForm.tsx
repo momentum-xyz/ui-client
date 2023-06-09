@@ -2,8 +2,8 @@ import {FC, useEffect} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
 
-import {PostFormInterface} from '../../interfaces';
-import {ButtonEllipse, IconButton, Input} from '../../atoms';
+import {PostFormInterface} from '../../../../interfaces';
+import {ButtonEllipse, IconButton, Input} from '../../../../atoms';
 
 import * as styled from './PostImageForm.styled';
 

@@ -3,9 +3,9 @@ import {Controller, useForm} from 'react-hook-form';
 import {useStopwatch} from 'react-timer-hook';
 import {useI18n} from '@momentum-xyz/core';
 
-import {PostFormInterface} from '../../interfaces';
-import {ButtonEllipse, IconButton, Input} from '../../atoms';
-import {MediaPlayer} from '../index';
+import {PostFormInterface} from '../../../../interfaces';
+import {ButtonEllipse, IconButton, Input} from '../../../../atoms';
+import {MediaPlayer} from '../../../../molecules';
 
 import * as styled from './PostVideoForm.styled';
 

@@ -16,5 +16,4 @@ export * from './Dialog';
 export * from './FileUploader';
 export * from './SystemWideError';
 export * from './MediaPlayer';
-export * from './PostImageForm';
-export * from './PostVideoForm';
+export * from './PostHeading';
