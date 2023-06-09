@@ -1,7 +1,5 @@
 import {PostTypeEnum} from '@momentum-xyz/core';
 
-import {IconNameType} from '../types';
-
 export interface PostFormInterface {
   file?: File;
   description?: string;
@@ -16,8 +14,7 @@ export interface PostAuthorInterface {
 
 export interface PostEntryInterface {
   id: string;
-  hashSrc: string;
-  icon: IconNameType;
+  hashSrc: string | null;
   description: string | null;
   type: PostTypeEnum;
   objectId?: string;

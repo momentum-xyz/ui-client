@@ -7,7 +7,7 @@ import {MediaPlayer} from '../../../../molecules';
 import * as styled from './PostVideoView.styled';
 
 interface PropsInterface {
-  videoSrc: string;
+  videoSrc: string | null;
   description: string | null;
   onDelete?: () => void;
   onShare?: () => void;
@@ -28,7 +28,7 @@ const PostVideoView: FC<PropsInterface> = ({
   return (
     <styled.Container data-testid="PostVideoView-test">
       <styled.Grid>
-        <MediaPlayer sourceUrl={videoSrc} />
+        {videoSrc && <MediaPlayer sourceUrl={videoSrc} />}
         <styled.Description>{description}</styled.Description>
       </styled.Grid>
 

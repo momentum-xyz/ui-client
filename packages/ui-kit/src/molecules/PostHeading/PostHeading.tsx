@@ -1,8 +1,9 @@
-import {FC} from 'react';
+import {FC, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {format} from 'date-fns-tz';
-import {useI18n} from '@momentum-xyz/core';
+import {PostTypeEnum, useI18n} from '@momentum-xyz/core';
 
+import {IconNameType} from '../../types';
 import {Hexagon, IconSvg} from '../../atoms';
 import {PostAuthorInterface, PostEntryInterface} from '../../interfaces';
 
@@ -18,18 +19,29 @@ const PostHeading: FC<PostHeadingPropsInterface> = ({entry, author}) => {
 
   const entryDate = entry ? new Date(entry.created) : null;
 
+  const icon: IconNameType | null = useMemo(() => {
+    switch (entry?.type) {
+      case PostTypeEnum.VIDEO:
+        return 'camera';
+      case PostTypeEnum.SCREENSHOT:
+        return 'photo_camera';
+      default:
+        return null;
+    }
+  }, [entry?.type]);
+
   return (
     <styled.Header data-testid="PostHeading-test">
       <Hexagon type="fourth-borderless" iconName="astronaut" imageSrc={author.avatarSrc} />
       <styled.UserInfo>
         <styled.UserInfoTitle>
-          <div>
+          <styled.UserName>
             {author.name} {author.isItMe && <>({t('labels.you').toUpperCase()})</>}
-          </div>
+          </styled.UserName>
           {!!entry && !!entryDate && (
             <styled.World>
               <styled.Icon>
-                <IconSvg name={entry.icon} size="xs" isWhite />
+                <IconSvg name={icon || 'alert'} size="xs" isWhite />
               </styled.Icon>
 
               {entry.objectId && (

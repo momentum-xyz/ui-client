@@ -59,8 +59,7 @@ ImageView.args = {
     type: PostTypeEnum.SCREENSHOT,
     created: '2023-06-09T11:07:25.064Z',
     objectId: '1',
-    objectName: 'Odyssey #1',
-    icon: 'photo_camera'
+    objectName: 'Odyssey #1'
   },
   onShare: () => {},
   onVisit: () => {}
@@ -81,8 +80,7 @@ VideoView.args = {
     type: PostTypeEnum.VIDEO,
     created: '2023-06-09T11:07:25.064Z',
     objectId: '1',
-    objectName: 'Odyssey #1',
-    icon: 'camera'
+    objectName: 'Odyssey #1'
   },
   onShare: () => {},
   onVisit: () => {}
