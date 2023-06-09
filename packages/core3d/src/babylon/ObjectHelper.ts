@@ -84,8 +84,9 @@ export class ObjectHelper {
     }
 
     // Handle textures arriving before objects are spawned.
-    if (this.objectsMap.has(texture.objectId)) {
+    if (!this.objectsMap.has(texture.objectId)) {
       this.awaitingTexturesMap.set(texture.objectId, texture);
+      return;
     }
 
     // Handle object color
@@ -108,7 +109,7 @@ export class ObjectHelper {
           const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
           const newTexture = new Texture(
             textureUrl,
-            undefined,
+            scene,
             undefined,
             undefined,
             undefined,
