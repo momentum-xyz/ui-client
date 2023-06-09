@@ -26,3 +26,4 @@ export * from './World';
 export * from './WorldStaker';
 export * from './BigStakerInfo';
 export * from './NewsfeedEntry';
+export * from './TimelineEntry';

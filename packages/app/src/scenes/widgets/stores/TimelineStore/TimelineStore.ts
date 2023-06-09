@@ -1,7 +1,8 @@
-import {flow, types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {PostTypeEnum, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {PostFormInterface} from '@momentum-xyz/ui-kit';
 
+import {TimelineEntry} from 'core/models';
 import {api, FetchTimelineResponse, UploadFileResponse} from 'api';
 
 const TimelineStore = types.compose(
@@ -10,21 +11,24 @@ const TimelineStore = types.compose(
     .model('TimelineStore', {
       fileRequest: types.optional(RequestModel, {}),
       createRequest: types.optional(RequestModel, {}),
-      fetchRequest: types.optional(RequestModel, {})
+      entriesRequest: types.optional(RequestModel, {}),
+      entries: types.optional(types.array(TimelineEntry), [])
     })
     .actions((self) => ({
       // TODO: Pagination
       fetch: flow(function* (objectId: string) {
-        const response: FetchTimelineResponse = yield self.fetchRequest.send(
+        const response: FetchTimelineResponse = yield self.entriesRequest.send(
           api.timelineRepository.fetchTimeline,
           {
             page: 1,
-            pageSize: 10,
+            pageSize: 10000,
             objectId
           }
         );
 
-        console.log(response);
+        if (response) {
+          self.entries = cast(response.activities);
+        }
       }),
       create: flow(function* (form: PostFormInterface, type: PostTypeEnum, objectId: string) {
         if (!form.file) {

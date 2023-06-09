@@ -19,6 +19,13 @@ export const UserInfoTitle = styled.h3`
   line-height: 18px;
 `;
 
+export const UserName = styled.div`
+  width: 300px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
 export const World = styled.div`
   display: flex;
   align-items: center;
@@ -32,5 +39,9 @@ export const Icon = styled.div`
 `;
 
 export const WorldName = styled.div`
+  max-width: 165px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
   color: ${(props) => props.theme.accentText};
 `;

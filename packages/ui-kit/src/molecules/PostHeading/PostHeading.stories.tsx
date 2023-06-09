@@ -48,8 +48,7 @@ WithInfo.args = {
     type: PostTypeEnum.SCREENSHOT,
     created: '2023-06-09T11:07:25.064Z',
     objectId: '1',
-    objectName: 'Odyssey #1',
-    icon: 'photo_camera'
+    objectName: 'Odyssey #1'
   }
 };
 
@@ -66,7 +65,6 @@ WithInfoWithoutWorld.args = {
     hashSrc: IMAGE_SRC,
     description: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.',
     type: PostTypeEnum.SCREENSHOT,
-    created: '2023-06-09T11:07:25.064Z',
-    icon: 'photo_camera'
+    created: '2023-06-09T11:07:25.064Z'
   }
 };
