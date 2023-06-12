@@ -1,19 +1,13 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {format} from 'date-fns-tz';
 import {useI18n, NewsfeedTypeEnum} from '@momentum-xyz/core';
+import {PostTypeEnum} from '@momentum-xyz/core';
 
-import {Frame, Hexagon, IconSvg, Image, ButtonEllipse} from '../../atoms';
-import {IconNameType} from '../../types';
+import {Frame, Hexagon, Image, ButtonEllipse} from '../../atoms';
+import {PostHeading} from '../../molecules';
+import {PostAuthorInterface, PostEntryInterface} from '../../interfaces';
 
 import * as styled from './NewsfeedEntry.styled';
-
-const entryTypeIconMap: {[key: string]: IconNameType} = {
-  [NewsfeedTypeEnum.CREATED]: 'star',
-  [NewsfeedTypeEnum.BOOST]: 'stake',
-  [NewsfeedTypeEnum.IMAGE]: 'photo_camera',
-  [NewsfeedTypeEnum.VIDEO]: 'screenshare'
-};
 
 export interface NewsFeedMemberEntryDataInterface {
   world_id: string | null;
@@ -52,8 +46,6 @@ export interface NewsfeedEntryPropsInterface {
 
 const NewsfeedEntry: FC<NewsfeedEntryPropsInterface> = ({entry, onWorldOpen, onShare}) => {
   const {t} = useI18n();
-
-  const actionIconName: IconNameType = entryTypeIconMap[entry.entry_type as string];
 
   const generateMemberEntryContent = (
     id: string,
@@ -96,37 +88,6 @@ const NewsfeedEntry: FC<NewsfeedEntryPropsInterface> = ({entry, onWorldOpen, onS
     );
   };
 
-  const generateVideoEntryContent = (id: string, data: NewsFeedMediaEntryDataInterface) => {
-    if (!data.video) {
-      return <></>;
-    }
-    return (
-      <styled.MediaEntryContainer>
-        <styled.MediaEntryVideoContainer>
-          <iframe
-            key={data.video}
-            title={t('plugin_video.labels.video') || ''}
-            src={data.video}
-            height="100%"
-            width="100%"
-            allowFullScreen
-          ></iframe>
-        </styled.MediaEntryVideoContainer>
-        {data.comment && <styled.MediaEntryComment>{data.comment}</styled.MediaEntryComment>}
-        <styled.MediaEntryControlsContainer>
-          <ButtonEllipse label="share" icon="share" onClick={() => onShare(entry)} />
-          {data.world_id && (
-            <ButtonEllipse
-              label={t('actions.visitOdyssey')}
-              icon="rocket_flying"
-              onClick={() => onWorldOpen(data.world_id!)}
-            />
-          )}
-        </styled.MediaEntryControlsContainer>
-      </styled.MediaEntryContainer>
-    );
-  };
-
   const content = [NewsfeedTypeEnum.CREATED, NewsfeedTypeEnum.BOOST].includes(entry.entry_type) ? (
     generateMemberEntryContent(
       entry.id,
@@ -135,46 +96,31 @@ const NewsfeedEntry: FC<NewsfeedEntryPropsInterface> = ({entry, onWorldOpen, onS
     )
   ) : entry.entry_type === NewsfeedTypeEnum.IMAGE ? (
     generateImageEntryContent(entry.id, entry.data as NewsFeedMediaEntryDataInterface)
-  ) : entry.entry_type === NewsfeedTypeEnum.VIDEO ? (
-    generateVideoEntryContent(entry.id, entry.data as NewsFeedMediaEntryDataInterface)
   ) : (
     <></>
   );
 
-  const entryDate = new Date(entry.created_at);
-  const entryDateFormatted = format(entryDate, 'yyyy-MM-dd');
-  const entryTimeFormatted = format(entryDate, 'HH aa');
+  const author: PostAuthorInterface = {
+    id: entry.author_id,
+    name: entry.author_name,
+    avatarSrc: entry.author_avatar,
+    isItMe: false
+  }; // tmp
+
+  const postEntry: PostEntryInterface = {
+    id: entry.id,
+    hashSrc: `some_hash`,
+    description: (entry.data as any)?.comment || null,
+    type: PostTypeEnum.EVENT,
+    objectId: (entry.data as any)?.world_id || undefined,
+    objectName: (entry.data as any)?.world_name || undefined,
+    created: entry.created_at
+  };
 
   return (
     <styled.Wrapper data-testid="NewsfeedEntry-test">
       <Frame>
-        <styled.Header>
-          <Hexagon
-            key={`${entry.id}-author-avatar`}
-            type="fourth-borderless"
-            imageSrc={entry.author_avatar}
-          />
-          <styled.UserInfo className="user-info-container">
-            <styled.UserInfoTitle>{entry.author_name}</styled.UserInfoTitle>
-            <styled.UserInfoSecondary>
-              <IconSvg name={actionIconName} size="xs" isWhite />
-
-              {entry.author_world_name && entry.author_world_id && (
-                <>
-                  <styled.UserInfoSecondaryLink onClick={() => onWorldOpen(entry.author_world_id!)}>
-                    {entry.author_world_name}
-                  </styled.UserInfoSecondaryLink>
-                  <styled.UserInfoSecondaryText className="separator">
-                    /
-                  </styled.UserInfoSecondaryText>
-                </>
-              )}
-              <styled.UserInfoSecondaryText>{entryDateFormatted}</styled.UserInfoSecondaryText>
-              <styled.UserInfoSecondaryText className="separator">/</styled.UserInfoSecondaryText>
-              <styled.UserInfoSecondaryText>{entryTimeFormatted}</styled.UserInfoSecondaryText>
-            </styled.UserInfoSecondary>
-          </styled.UserInfo>
-        </styled.Header>
+        <PostHeading author={author} entry={postEntry} />
         <styled.Content>{content}</styled.Content>
       </Frame>
     </styled.Wrapper>
