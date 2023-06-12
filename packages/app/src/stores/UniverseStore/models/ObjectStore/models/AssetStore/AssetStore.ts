@@ -13,7 +13,7 @@ import {
   ObjectInterface,
   ObjectMetadataInterface,
   ObjectOptionsInterface,
-  UploadImageResponse
+  UploadFileResponse
 } from 'api';
 
 const AssetStore = types
@@ -88,7 +88,7 @@ const AssetStore = types
       }
     },
     postNewImage: flow(function* (objectId: string, file: File, title?: string) {
-      const userResponse: UploadImageResponse = yield self.imageUpload.send(
+      const userResponse: UploadFileResponse = yield self.imageUpload.send(
         api.mediaRepository.uploadImage,
         {file}
       );

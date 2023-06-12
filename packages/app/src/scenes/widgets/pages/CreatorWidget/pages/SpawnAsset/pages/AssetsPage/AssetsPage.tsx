@@ -9,6 +9,7 @@ import * as styled from './AssetsPage.styled';
 
 interface PropsInterface {
   assetCategory: Asset3dCategoryEnum;
+  isPrivate?: boolean;
   showPreview?: boolean;
   setFunctionalityAfterCreation?: boolean;
   assetPageHeader?: string;
@@ -16,6 +17,7 @@ interface PropsInterface {
 
 const AssetsPage: FC<PropsInterface> = ({
   assetCategory,
+  isPrivate = false,
   // TODO remove?
   setFunctionalityAfterCreation = false,
   showPreview,
@@ -25,7 +27,7 @@ const AssetsPage: FC<PropsInterface> = ({
   const {creatorStore} = widgetStore;
   const {spawnAssetStore} = creatorStore;
 
-  const assetList = spawnAssetStore.filteredAsset3dList(assetCategory);
+  const assetList = spawnAssetStore.filteredAsset3dList(assetCategory, isPrivate);
 
   useEffect(() => {
     spawnAssetStore.fetchAssets3d(assetCategory);

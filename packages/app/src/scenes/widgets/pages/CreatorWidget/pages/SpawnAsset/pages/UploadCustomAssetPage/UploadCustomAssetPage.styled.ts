@@ -1,3 +1,4 @@
+import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -6,6 +7,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
 `;
 
 export const FileUploaderContainer = styled.div`
@@ -89,4 +91,17 @@ export const AssetInformation = styled.div`
     line-height: 22px;
     letter-spacing: 0.02em;
   }
+`;
+
+export const LoaderContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  // opacity: 0.7;
+  background: ${(props) => rgba(props.theme.accentBg, 0.2)};
+  background-size: cover;
+  border-radius: inherit;
+  height: 100%;
+  z-index: 10;
 `;

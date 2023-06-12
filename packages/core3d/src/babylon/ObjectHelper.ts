@@ -1,9 +1,7 @@
 import {
   Scene,
-  AbstractMesh,
   SceneLoader,
   AssetContainer,
-  Matrix,
   InstantiatedEntries,
   PBRMaterial,
   TransformNode,
@@ -12,12 +10,7 @@ import {
   Vector3,
   Texture
 } from '@babylonjs/core';
-import {
-  Object3dInterface,
-  Texture3dInterface,
-  ClickPositionInterface,
-  SetWorldInterface
-} from '@momentum-xyz/core';
+import {Object3dInterface, Texture3dInterface, SetWorldInterface} from '@momentum-xyz/core';
 
 import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
@@ -32,76 +25,31 @@ interface BabylonObjectInterface {
   objectInstance: InstantiatedEntries;
 }
 
+// Textures waiting for the object to spawn.
+// Map texture labels to texture metadata
+type SlotTexturesType = Map<string, Texture3dInterface>;
+// Nested map: objectID, then (texture) label.
+type AwaitingTexturesType = Map<string, SlotTexturesType>;
+
 export class ObjectHelper {
   static assetRootUrl = '/asset/';
   static textureRootUrl = '/texture/';
   static textureDefaultSize = 's3/';
-  static objectsMap = new Map<string, Nullable<BabylonObjectInterface>>();
+  static objectsMap = new Map<string, BabylonObjectInterface>();
   static scene: Scene;
   static attachedNode: TransformNode;
   static transformSubscription: {unsubscribe: () => void} | undefined;
   static selectedObjectFromSpawn = '';
   static spawningMaterial: PBRMaterial;
   static mySpawningClone: Nullable<TransformNode>;
-  static awaitingTexturesMap = new Map<string, Texture3dInterface>();
+  static awaitingTexturesMap: AwaitingTexturesType = new Map();
 
-  static initialize(
-    scene: Scene,
-    assetBaseURL: string,
-    onObjectClick: (objectId: string, clickPosition: ClickPositionInterface) => void,
-    onUserClick: (userId: string, clickPosition: ClickPositionInterface) => void,
-    onClickOutside: () => void
-  ): void {
+  static initialize(scene: Scene, assetBaseURL: string): void {
     this.scene = scene;
     scene.useRightHandedSystem = true;
 
     this.assetRootUrl = `${assetBaseURL}/asset/`;
     this.textureRootUrl = `${assetBaseURL}/texture/`;
-
-    // Mouse Click Listener
-    scene.onPointerDown = function castRay() {
-      const ray = scene.createPickingRay(
-        scene.pointerX,
-        scene.pointerY,
-        Matrix.Identity(),
-        PlayerHelper.camera
-      );
-
-      const lastClick = {
-        x: scene.pointerX,
-        y: scene.pointerY
-      };
-      const hit = scene.pickWithRay(ray);
-
-      if (hit) {
-        if (hit.pickedMesh) {
-          // get the root parent of the picked mesh
-          let parent = hit.pickedMesh;
-          while (parent.parent) {
-            parent = parent.parent as AbstractMesh;
-          }
-          console.log('clicked on object with id: ' + parent.metadata);
-          if (ObjectHelper.objectsMap.has(parent.metadata)) {
-            onObjectClick(parent.metadata, lastClick);
-            // WorldCreatorHelper.selectedObjectFromGizmo = parent.metadata;
-          } else if (
-            PlayerHelper.playerId === parent.metadata ||
-            PlayerHelper.userMap.has(parent.metadata)
-          ) {
-            onUserClick(parent.metadata, lastClick);
-          }
-
-          // For testing, fix this later
-          /*if (!WorldCreatorHelper.isCreatorMode) {
-            WorldCreatorHelper.tryLockObject(parent.metadata);
-          }*/
-        } else {
-          // WorldCreatorHelper.unlockLastObject();
-          // WorldCreatorHelper.selectedObjectFromGizmo = '';
-          onClickOutside();
-        }
-      }
-    };
   }
 
   static setWorld(world: SetWorldInterface) {
@@ -114,11 +62,10 @@ export class ObjectHelper {
       // TODO: compare/check for changes?
       this.removeObject(object.id);
     }
-    this.objectsMap.set(object.id, null);
 
     const assetUrl = getAssetFileName(object.asset_3d_id);
 
-    await SceneLoader.LoadAssetContainerAsync(
+    const container = await SceneLoader.LoadAssetContainerAsync(
       this.assetRootUrl,
       assetUrl,
       scene,
@@ -127,69 +74,76 @@ export class ObjectHelper {
         //console.log(`Loading progress ${event.loaded}/${event.total}`);
       },
       '.glb'
-    ).then((container) => {
-      this.instantiateObject(container, object, attachToCam);
-    });
+    );
+    this.instantiateObject(container, object, attachToCam);
   }
 
-  static setObjectTexture(scene: Scene, texture: Texture3dInterface): void {
+  static objectTextureChange(scene: Scene, texture: Texture3dInterface): void {
     if (texture.label === 'skybox_custom') {
+      // TODO: refactor special case for world objects.
       SkyboxHelper.set360Skybox(
         scene,
         this.textureRootUrl + SkyboxHelper.defaultSkyboxTextureSize + texture.hash
       );
       return;
     }
-
     // Handle textures arriving before objects are spawned.
-    if (this.objectsMap.has(texture.objectId)) {
-      this.awaitingTexturesMap.set(texture.objectId, texture);
-    }
+    this.appendAwaitingTexture(texture);
+    const obj = this.objectsMap.get(texture.objectId);
+    if (obj) {
+      this.setObjectTextures(obj, scene);
+    } //else: spawnObject will check awaitingTextures
+  }
 
+  static setObjectTextures(obj: BabylonObjectInterface, scene: Scene) {
+    const textures = this.popAwaitingTextures(obj.objectDefinition.id);
+    if (textures) {
+      for (const [label, texture] of textures) {
+        this.setObjectTexture(obj, scene, label, texture);
+      }
+    }
+  }
+
+  static setObjectTexture(
+    obj: BabylonObjectInterface,
+    scene: Scene,
+    label: string,
+    texture: Texture3dInterface
+  ): void {
     // Handle object color
-    if (texture.label === 'object_color') {
-      const obj = this.objectsMap.get(texture.objectId);
-      if (obj) {
+    if (label === 'object_color') {
+      const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
+      const basicShapeMat = childMeshes[0].material as PBRMaterial;
+      basicShapeMat.albedoColor = Color3.FromHexString(texture.hash);
+    } else if (label === 'object_texture') {
+      if (obj.objectDefinition.asset_format.toString() === '2') {
         const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
-        const basicShapeMat = childMeshes[0].material as PBRMaterial;
-        basicShapeMat.albedoColor = Color3.FromHexString(texture.hash);
-        this.awaitingTexturesMap.delete(texture.objectId);
-      }
-      return;
-    }
-    // Handle object texture
-    else if (texture.label === 'object_texture') {
-      const obj = this.objectsMap.get(texture.objectId);
-      if (obj) {
-        if (obj.objectDefinition.asset_format.toString() === '2') {
-          const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
-          const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
-          const newTexture = new Texture(
-            textureUrl,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            (message) => {
-              console.log(
-                'Error when loading a texture for object id: ' +
-                  texture.objectId +
-                  ', error: ' +
-                  message
-              );
-            }
-          );
-          newTexture.uAng = Math.PI;
+        const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
+        const newTexture = new Texture(
+          textureUrl,
+          scene,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          (message) => {
+            console.log(
+              'Error when loading a texture for object id: ' +
+                texture.objectId +
+                ', error: ' +
+                message
+            );
+          }
+        );
+        newTexture.uAng = Math.PI;
 
-          const basicShapeMat = childMeshes[0].material as PBRMaterial;
-          basicShapeMat.albedoColor = Color3.White();
-          basicShapeMat.albedoTexture = newTexture;
-          childMeshes[0].material = basicShapeMat;
-          this.awaitingTexturesMap.delete(texture.objectId);
-        }
+        const basicShapeMat = childMeshes[0].material as PBRMaterial;
+        basicShapeMat.albedoColor = Color3.White();
+        basicShapeMat.albedoTexture = newTexture;
+        childMeshes[0].material = basicShapeMat;
       }
-      return;
+    } else {
+      console.debug('Unhandled object texture label: ' + label);
     }
   }
 
@@ -222,10 +176,7 @@ export class ObjectHelper {
     };
     this.objectsMap.set(object.id, babylonObject);
 
-    const awaitingTexture = this.awaitingTexturesMap.get(object.id);
-    if (awaitingTexture) {
-      this.setObjectTexture(this.scene, awaitingTexture);
-    }
+    this.setObjectTextures(babylonObject, this.scene);
 
     if (attach) {
       this.attachToCamera(object.id, node);
@@ -314,5 +265,26 @@ export class ObjectHelper {
       mapObj[1]?.container.dispose();
     }
     this.objectsMap.clear();
+  }
+
+  /** Append texture to the queue waiting for the object to spawn. */
+  static appendAwaitingTexture(texture: Texture3dInterface): void {
+    const objectID = texture.objectId;
+    let current = this.awaitingTexturesMap.get(objectID);
+    if (!current) {
+      current = new Map();
+      this.awaitingTexturesMap.set(objectID, current);
+    }
+    current.set(texture.label, texture);
+  }
+
+  /** Pop entry from the queue with waiting textures. */
+  static popAwaitingTextures(objectID: string): SlotTexturesType | undefined {
+    // pff, why is map.pop not available by default...
+    const current = this.awaitingTexturesMap.get(objectID);
+    if (current) {
+      this.awaitingTexturesMap.delete(objectID);
+    }
+    return current;
   }
 }

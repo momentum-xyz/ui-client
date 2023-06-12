@@ -4,7 +4,7 @@ import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {Asset3dInterface} from 'core/models';
-import {api, UploadImageResponse} from 'api';
+import {api, UploadFileResponse} from 'api';
 import {PluginIdEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 
@@ -184,7 +184,7 @@ const SkyboxSelectorStore = types
       name: string,
       artistName: string
     ) {
-      const uploadImageResponse: UploadImageResponse = yield self.createSkyboxRequest.send(
+      const uploadImageResponse: UploadFileResponse = yield self.createSkyboxRequest.send(
         api.mediaRepository.uploadImage,
         {file}
       );

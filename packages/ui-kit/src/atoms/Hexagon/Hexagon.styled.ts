@@ -3,7 +3,11 @@ import styled from 'styled-components';
 
 import {HexagonSizesInterface} from './Hexagon';
 
-export const WrapperButton = styled.button``;
+export const WrapperButton = styled.button`
+  &.disabled {
+    cursor: not-allowed;
+  }
+`;
 
 export const Wrapper = styled.div<HexagonSizesInterface>`
   --hexagon-border-color: ${(props) => props.theme.text};
@@ -96,6 +100,10 @@ export const Wrapper = styled.div<HexagonSizesInterface>`
   &.no-hover {
     cursor: default;
   }
+
+  &.disabled {
+    pointer-events: none;
+  }
 `;
 
 export const Hexagon = styled.div`
@@ -119,6 +127,7 @@ export const Hexagon = styled.div`
   &.transparent-background {
     background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
   }
+
   &.success-color {
     background: ${(props) => props.theme.success};
     &.transparent-background {
@@ -130,6 +139,10 @@ export const Hexagon = styled.div`
     &.transparent-background {
       background: ${(props) => props.theme.danger && rgba(props.theme.danger, 0.4)};
     }
+  }
+
+  &.disabled {
+    background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
   }
 
   &:after {

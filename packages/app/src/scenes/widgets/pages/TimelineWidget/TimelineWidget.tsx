@@ -1,27 +1,41 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Event3dEmitter, useI18n} from '@momentum-xyz/core';
-import {Panel, PostCreator} from '@momentum-xyz/ui-kit';
+import {Event3dEmitter, PostTypeEnum, useI18n} from '@momentum-xyz/core';
+import {Panel, PostEntry, PostFormInterface} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
+import {getImageAbsoluteUrl, getVideoAbsoluteUrl} from 'core/utils';
 
 import * as styled from './TimelineWidget.styled';
 
-const MAX_VIDEO_DURATION_SEC = 15;
-
 const TimelineWidget: FC = () => {
-  const {widgetManagerStore, sessionStore, universeStore} = useStore();
-  const {world3dStore} = universeStore;
+  const {widgetManagerStore, widgetStore, sessionStore, universeStore} = useStore();
+  const {world3dStore, worldId} = universeStore;
+  const {timelineStore} = widgetStore;
   const {user} = sessionStore;
 
   const {t} = useI18n();
 
   useEffect(() => {
+    timelineStore.fetch(worldId);
+  }, [timelineStore, worldId]);
+
+  useEffect(() => {
     return () => {
       world3dStore?.clearSnapshotOrVideo();
+      world3dStore?.setIsScreenRecording(false);
     };
-  }, [world3dStore]);
+  }, [timelineStore, world3dStore]);
+
+  const handleCreatePost = async (form: PostFormInterface, postType: PostTypeEnum) => {
+    const isDone = await timelineStore.create(form, postType, worldId);
+    if (isDone) {
+      world3dStore?.clearSnapshotOrVideo();
+      timelineStore.fetch(worldId);
+    }
+    return isDone;
+  };
 
   if (!user) {
     return <></>;
@@ -35,32 +49,90 @@ const TimelineWidget: FC = () => {
         variant="primary"
         icon="clock-two"
         title={t('labels.timeline')}
+        isCloseDisabled={universeStore.isScreenRecording}
         onClose={() => widgetManagerStore.close(WidgetEnum.TIMELINE)}
       >
         <styled.Wrapper>
+          {/* CREATE A NEW ONE FORM */}
           {!sessionStore.isGuest && (
-            <PostCreator
-              author={{id: user.id, name: user.name, avatarSrc: user.avatarSrc}}
+            <PostEntry
+              author={{
+                id: user.id,
+                name: user.name,
+                avatarSrc: user.avatarSrc || null,
+                isItMe: true
+              }}
               videoOrScreenshot={world3dStore?.screenshotOrVideo}
-              maxVideoDurationSec={MAX_VIDEO_DURATION_SEC}
               isCreating={false}
+              isScreenRecording={universeStore.isScreenRecording}
+              onClearVideoOrScreenshot={() => {
+                world3dStore?.clearSnapshotOrVideo();
+              }}
               onMakeScreenshot={() => {
                 Event3dEmitter.emit('MakeScreenshot');
               }}
-              onStartRecording={() => {
-                Event3dEmitter.emit('StartRecordingVideo', MAX_VIDEO_DURATION_SEC);
+              onStartRecording={(maxDuration: number) => {
+                Event3dEmitter.emit('StartRecordingVideo', maxDuration);
+                world3dStore?.setIsScreenRecording(true);
               }}
               onStopRecording={() => {
                 Event3dEmitter.emit('StopRecordingVideo');
+                world3dStore?.setIsScreenRecording(false);
               }}
-              onCreatePost={(form, postType) => {
-                console.log(form, postType);
-              }}
+              onCreateOrUpdatePost={handleCreatePost}
               onCancel={() => {
                 world3dStore?.clearSnapshotOrVideo();
               }}
             />
           )}
+
+          {/* LIST OF ENTRIES */}
+          <styled.ListContainer>
+            {timelineStore.entries.map((entry) => (
+              <PostEntry
+                key={entry.activity_id}
+                author={{
+                  id: entry.user_id,
+                  name: entry.user_id, // FIXME
+                  avatarSrc: null, // FIXME
+                  isItMe: entry.user_id === sessionStore.userId
+                }}
+                entry={{
+                  id: entry.activity_id,
+                  description: entry.data.description,
+                  type: entry.type,
+                  objectId: entry.object_id,
+                  objectName: entry.object_id, // FIXME
+                  created: entry.created_at,
+                  hashSrc:
+                    entry.type === PostTypeEnum.VIDEO
+                      ? getVideoAbsoluteUrl(entry.data.hash)
+                      : getImageAbsoluteUrl(entry.data.hash)
+                }}
+                videoOrScreenshot={world3dStore?.screenshotOrVideo}
+                isCreating={false}
+                isScreenRecording={universeStore.isScreenRecording}
+                onClearVideoOrScreenshot={() => {
+                  world3dStore?.clearSnapshotOrVideo();
+                }}
+                onMakeScreenshot={() => {
+                  Event3dEmitter.emit('MakeScreenshot');
+                }}
+                onStartRecording={(maxDuration) => {
+                  Event3dEmitter.emit('StartRecordingVideo', maxDuration);
+                  world3dStore?.setIsScreenRecording(true);
+                }}
+                onStopRecording={() => {
+                  Event3dEmitter.emit('StopRecordingVideo');
+                  world3dStore?.setIsScreenRecording(false);
+                }}
+                onCreateOrUpdatePost={handleCreatePost}
+                onCancel={() => {
+                  world3dStore?.clearSnapshotOrVideo();
+                }}
+              />
+            ))}
+          </styled.ListContainer>
         </styled.Wrapper>
       </Panel>
     </styled.Container>

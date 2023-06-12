@@ -1,6 +1,7 @@
 import {FC, useEffect} from 'react';
 import {Scene} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
+import {Texture3dInterface} from '@momentum-xyz/core';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
 
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
@@ -8,6 +9,7 @@ import {PlayerHelper, LightHelper, ObjectHelper} from '../../babylon';
 import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 import {ScreenCaptureHelper} from '../../babylon/ScreenCaptureHelper';
+import {InputHelper} from '../../babylon/InputHelper';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callbacks}) => {
   const onObjectClick = useMutableCallback(callbacks.onObjectClick);
@@ -52,17 +54,15 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
     if (view?.id) {
       PlayerHelper.initialize(scene, view, true, onMove, onBumpReady);
       LightHelper.initialize(scene);
+      InputHelper.initializeWorld(scene, onObjectClick, onUserClick, onClickOutside);
       ScreenCaptureHelper.initialize(scene, onScreenshotReady, onVideoReady);
       InteractionEffectHelper.initialize(scene);
       InteractionEffectHelper.initializeHi5Particles();
 
       ObjectHelper.initialize(
         scene,
-        renderURL,
+        renderURL
         //  props.objects,
-        onObjectClick,
-        onUserClick,
-        onClickOutside
         // onMove,
       );
 
@@ -94,8 +94,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
         ObjectHelper.removeObject(objectId);
       });
 
-      events.on('ObjectTextureChanged', (object) => {
-        ObjectHelper.setObjectTexture(scene, object);
+      events.on('ObjectTextureChanged', (object: Texture3dInterface) => {
+        ObjectHelper.objectTextureChange(scene, object);
       });
 
       events.on('ObjectTransform', (id, object) => {

@@ -430,7 +430,9 @@ export const enGb = {
       hello_nickname: 'Well done, {{nickname}}! You just created your Odyssey',
       onlineArena: 'Online Mass Collaboration Arena',
       takeSnapshot: 'Take a snapshot from your point of view',
+      takeShot: 'Take the shot!',
       startRecording: 'Start recording and fly around',
+      recording: 'Recording',
       loading30sec:
         'Loading an Odyssey could take up to 1-2 minutes, depending on your internet connection. While you wait, you can',
       joinUsOnDiscord: 'join us on Discord',
@@ -738,6 +740,7 @@ export const enGb = {
       searchMembers: 'Search Members',
       searchStakes: 'Search Stakes',
       visitOdyssey: 'Visit Odyssey',
+      share: 'Share',
       stakeInOdyssey: 'Stake in Odyssey',
       addToTimeline: 'Add to timeline',
       seeAll: 'See all',

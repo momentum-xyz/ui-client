@@ -1,7 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, UploadImageResponse} from 'api';
+import {api, UploadFileResponse} from 'api';
 import {FieldErrorInterface} from 'api/interfaces';
 import {ProfileFormInterface} from 'core/interfaces';
 
@@ -21,7 +21,7 @@ const ProfileStore = types.compose(
 
         // 1. Avatar uploading.
         if (form.avatarFile) {
-          const userResponse: UploadImageResponse = yield self.editAvatarRequest.send(
+          const userResponse: UploadFileResponse = yield self.editAvatarRequest.send(
             api.mediaRepository.uploadImage,
             {file: form.avatarFile}
           );

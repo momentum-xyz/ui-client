@@ -12,6 +12,8 @@ export const Wrapper = styled.div`
   padding: 0;
 `;
 
-export const SideMenuContainer = styled.div`
-  margin-top: 14px;
+export const ListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;

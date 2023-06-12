@@ -2,7 +2,6 @@ import {
   AbstractMesh,
   Color3,
   Color4,
-  Matrix,
   Mesh,
   MeshBuilder,
   PBRMaterial,
@@ -67,13 +66,7 @@ export class UniverseBuilderHelper {
   static starSphere: AbstractMesh;
   static starMaterial: StandardMaterial;
 
-  static async initialize(
-    scene: Scene,
-    assetBaseURL: string,
-    onWorldClick: (objectId: string) => void,
-    onUserClick: (userId: string) => void,
-    onClickOutside: () => void
-  ) {
+  static async initialize(scene: Scene, assetBaseURL: string) {
     this.scene = scene;
     this.baseURL = assetBaseURL;
     this.initializeOrbParticles();
@@ -84,36 +77,6 @@ export class UniverseBuilderHelper {
     const SunColor2 = new Color4(0.286, 0.635, 0.8671);
     this.buildStar(sunColor1, SunColor2);
 
-    scene.onPointerDown = function castRay() {
-      PlayerHelper.camera.lockedTarget = null;
-      const ray = scene.createPickingRay(
-        scene.pointerX,
-        scene.pointerY,
-        Matrix.Identity(),
-        PlayerHelper.camera
-      );
-
-      const hit = scene.pickWithRay(ray);
-
-      if (hit) {
-        if (hit.pickedMesh) {
-          const pickedId = hit.pickedMesh.metadata;
-
-          // Currently worldIds === userIds, so every click on mesh will be userClick.
-          if (UniverseBuilderHelper.accountsMap.has(pickedId)) {
-            UniverseBuilderHelper.goToOrb(pickedId, true);
-            onUserClick(pickedId);
-            console.log('user');
-          } else if (UniverseBuilderHelper.worldsMap.has(pickedId)) {
-            UniverseBuilderHelper.goToOrb(pickedId, false);
-            onWorldClick(pickedId);
-            console.log('world');
-          }
-        } else {
-          onClickOutside();
-        }
-      }
-    };
     this.odysseyPS.stop();
     this.sparksPS.stop();
   }

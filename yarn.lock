@@ -1200,44 +1200,44 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@babylonjs/core@^6.4.1":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@babylonjs/core/-/core-6.4.1.tgz#3821c28b0c57a6538e409ff45641517dd5e8eb70"
-  integrity sha512-Bd9Az9JJXe8Vi87TrObk1wLc4bpLSXlQtXBLe4NYZWpw28qLMlofw8GCgjDtjQXp7djOPGHuF2KFZsbZyDNgUA==
+"@babylonjs/core@^6.6.1":
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/core/-/core-6.6.1.tgz#3bf21b4c4b05eab2842b31451ad9febbe6ee7f82"
+  integrity sha512-BLqoKSP/CV4/3bl+tv41ZdEjoa+tUrf+8EYBb+rrcW5Wm/kNXyHXyZyZFfnXP2+yum8D4ozV0tyMglLRroKeeg==
 
-"@babylonjs/gui-editor@^6.4.1":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@babylonjs/gui-editor/-/gui-editor-6.4.1.tgz#4d88a18b5b4c747f038219421e6ba0afd2889283"
-  integrity sha512-LVYJbC5UhdsKppvAOXk79ervc/Xi6gwFHhLC60IdYHROMifnm3Dan8YjSMflEg0U/2VeUZI9odHdSDwS1CiCOQ==
+"@babylonjs/gui-editor@^6.6.1":
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/gui-editor/-/gui-editor-6.6.1.tgz#a3822b79fff79e19d09194a411d9ed14841f3fd4"
+  integrity sha512-z7isTJxcz5rNq9CyLLOQbnGXETbSKCQHpQxWrWS1vVJp7W9IgFNBpl+H9l4wpBXR7XvJdTbGeFJs5JThe7lUqQ==
 
-"@babylonjs/gui@^6.4.1":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@babylonjs/gui/-/gui-6.4.1.tgz#b6fe066284dd5411adab2757904c82f23c519a71"
-  integrity sha512-DRbJR4JFXBQaSLzTTohLo3Fftvifa5uQQGaTUsrRXiGlXM9YHkumosu+4Q+j9Nl4v/+tbLFPWot6zIuXtqjLeA==
+"@babylonjs/gui@^6.6.1":
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/gui/-/gui-6.6.1.tgz#6b8098877e2460e79a141d4b18e82face93fda37"
+  integrity sha512-b7fztvxd44xrInArWPqBtC9/QgIOGVL9di1Nv/bQSADvy+n0Wn/vOh4hk00Q+GyU+ANilUeeFuzkFCNLJdPZpA==
 
-"@babylonjs/inspector@^6.4.1":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@babylonjs/inspector/-/inspector-6.4.1.tgz#f3a6023de5c583d80194a6fef3db9d795529a00b"
-  integrity sha512-PueaJGPyybMUBteLQ4H9ZGMr44izeSzlzVZu2KdX0ZNcGyv3GxstS+u2z8QVUAYRPlbfhoKqxYnBY54GIlQjZg==
+"@babylonjs/inspector@^6.6.1":
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/inspector/-/inspector-6.6.1.tgz#701b049bac157f1a0bbe81ccf5d5ec5bf3c459eb"
+  integrity sha512-Vv7s0QtwNq1bzJ7hu2cwa3Tdoxdci7ipHul6EBngvqUI4/kNX4ySo6hiPCeXrjodOP5uVan/+O4CKBtIz3DA6Q==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.1.0"
     "@fortawesome/free-regular-svg-icons" "^6.0.0"
     "@fortawesome/free-solid-svg-icons" "^6.0.0"
 
-"@babylonjs/loaders@^6.4.1":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@babylonjs/loaders/-/loaders-6.4.1.tgz#5a5275cbb896bd1d4ab9d1b2e0a083c671dbd4dd"
-  integrity sha512-K/KC1DpGs9HXs5xR8iidH+VYw+tvJyg9huUATSFGWVA3ZVHShF2KWQg4Bk1fMnu7Qj3N/UjYOJjYLJ5MVosuuA==
+"@babylonjs/loaders@^6.6.1":
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/loaders/-/loaders-6.6.1.tgz#d9b4616d995f00cd3b794221238a8c131624643d"
+  integrity sha512-QT1fmbxBjkP7MxSTER0QB9V5YoYIlfIY4x1pCFjwKEWwTmwzZRgMNXyNBfzXevtgzE6Ryah3WPnq6fU5IelBgQ==
 
-"@babylonjs/materials@^6.4.1":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@babylonjs/materials/-/materials-6.4.1.tgz#9451b6cf366b5a7753edac5f54c8109d0bdcff26"
-  integrity sha512-mlvJpPOE9Kg64EBLcrFjfj8sLMrr9yMvNKOULIXUbT5vOEdKvtlvaZHnfNPOeHldnqmoK1X5RAQVxtsgh+aHgQ==
+"@babylonjs/materials@^6.6.1":
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/materials/-/materials-6.6.1.tgz#0e57bb3d618478d19bdf4be8c91cf0431e2d202b"
+  integrity sha512-61VTQjSuonpM2/kZ3CW0/XdZb3MNZvs0rJo/oMQuWDg6wSd4xOKsSlQLH4ALbdyDagT4g1ojEphhuVYaK9Vj9w==
 
-"@babylonjs/serializers@^6.4.1":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@babylonjs/serializers/-/serializers-6.4.1.tgz#177489ad84e509b3578b99adae82f61ad92f9ef8"
-  integrity sha512-/hUoHrLNHXGht9ccqsmUT1vhvjHlLTs8R7/oZwWnpuPcVaMuooeVWOYgNt7OVdz02xicfH5t73TinpeiU/BG2w==
+"@babylonjs/serializers@^6.6.1":
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/@babylonjs/serializers/-/serializers-6.6.1.tgz#b3c77ea28a66fd5bc50edc5c0fb54ca869850dad"
+  integrity sha512-eMubnEz5tOQgEKwbqonvYbNSLfMA8GmaZbIcawLKou2/XX134GcQ3hNASXWKjJXRSQEvd8HW/2qhQh/sy1r8pg==
 
 "@base2/pretty-print-object@1.0.1":
   version "1.0.1"
@@ -2914,10 +2914,10 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
-"@momentum-xyz/posbus-client@0.0.1-beta.1":
-  version "0.0.1-beta.1"
-  resolved "https://npm.pkg.github.com/download/@momentum-xyz/posbus-client/0.0.1-beta.1/fadc1044d9399f30a690272e076a72d4c193b53b#fadc1044d9399f30a690272e076a72d4c193b53b"
-  integrity sha512-trEQEGwAkptZV87Ce9Tds2j4C7lFcdzjPpvsCQs6o24sR9KTFzSyjBud61j+vmlBuobr2lHcNC73W0RE9nJc+g==
+"@momentum-xyz/posbus-client@0.0.1-beta.2":
+  version "0.0.1-beta.2"
+  resolved "https://npm.pkg.github.com/download/@momentum-xyz/posbus-client/0.0.1-beta.2/7ecdf045c36dfb459a94923cc01dfedfe37bd1c4#7ecdf045c36dfb459a94923cc01dfedfe37bd1c4"
+  integrity sha512-jqGdxIDluppNLeo8HNlAevPKPZItZnr9NggA41YgC9cvCHUlbbd47gR2Rc3zTYsflLaaBc0kXr6x4l/T+/NgFA==
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -11120,6 +11120,11 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
+fix-webm-duration@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/fix-webm-duration/-/fix-webm-duration-1.0.5.tgz#da4558a92196a677302bfc54780b494dd5336a96"
+  integrity sha512-b6oula3OfSknx0aWoLsxvp4DVIYbwsf+UAkr6EDAK3iuMYk/OSNKzmeSI61GXK0MmFTEuzle19BPvTxMIKjkZg==
+
 flat-cache@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/flat-cache/-/flat-cache-3.0.4.tgz#61b0338302b2fe9f957dcc32fc2a87f1c3048b11"
@@ -18056,6 +18061,17 @@ react-player@2.10.1:
   version "2.10.1"
   resolved "https://registry.yarnpkg.com/react-player/-/react-player-2.10.1.tgz#f2ee3ec31393d7042f727737545414b951ffc7e4"
   integrity sha512-ova0jY1Y1lqLYxOehkzbNEju4rFXYVkr5rdGD71nsiG4UKPzRXQPTd3xjoDssheoMNjZ51mjT5ysTrdQ2tEvsg==
+  dependencies:
+    deepmerge "^4.0.0"
+    load-script "^1.0.0"
+    memoize-one "^5.1.1"
+    prop-types "^15.7.2"
+    react-fast-compare "^3.0.1"
+
+react-player@^2.12.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/react-player/-/react-player-2.12.0.tgz#2fc05dbfec234c829292fbca563b544064bd14f0"
+  integrity sha512-rymLRz/2GJJD+Wc01S7S+i9pGMFYnNmQibR2gVE3KmHJCBNN8BhPAlOPTGZtn1uKpJ6p4RPLlzPQ1OLreXd8gw==
   dependencies:
     deepmerge "^4.0.0"
     load-script "^1.0.0"

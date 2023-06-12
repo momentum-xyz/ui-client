@@ -16,6 +16,7 @@ export interface PanelPropsInterface extends PropsWithChildren {
   isFullHeight?: boolean;
   icon?: IconNameType;
   closeIcon?: IconNameType;
+  isCloseDisabled?: boolean;
   topComponent?: ReactNode;
   bottomComponent?: ReactNode;
   onClose?: () => void;
@@ -30,6 +31,7 @@ const Panel: FC<PanelPropsInterface> = ({
   icon,
   isFullHeight,
   closeIcon = 'close_large',
+  isCloseDisabled = false,
   topComponent,
   bottomComponent,
   children,
@@ -63,7 +65,7 @@ const Panel: FC<PanelPropsInterface> = ({
           <styled.Label>{label}</styled.Label>
         </styled.TitleContainer>
         <styled.Actions className={cn(variant)}>
-          <IconButton name={closeIcon} size="s" onClick={onClose} />
+          <IconButton name={closeIcon} size="s" onClick={onClose} isDisabled={isCloseDisabled} />
         </styled.Actions>
       </styled.Header>
 

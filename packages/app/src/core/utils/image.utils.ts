@@ -17,3 +17,16 @@ export const getImageAbsoluteUrl = (
 
   return null;
 };
+
+export const getVideoAbsoluteUrl = (videoUrlOrHash: string | undefined | null): string | null => {
+  const imageServerUrl = `${appVariables.RENDER_SERVICE_URL}/video`;
+  if (videoUrlOrHash) {
+    if (videoUrlOrHash.startsWith('http')) {
+      return videoUrlOrHash;
+    } else {
+      return `${imageServerUrl}/${videoUrlOrHash}`;
+    }
+  }
+
+  return null;
+};

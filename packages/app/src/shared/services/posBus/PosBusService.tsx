@@ -1,4 +1,4 @@
-import {AttributeNameEnum, AttributeValueInterface} from '@momentum-xyz/sdk';
+import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {
   Client,
   loadClientWorker,
@@ -11,11 +11,11 @@ import {
   ObjectTransformInterface,
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
+import {AttributeValueChanged} from '@momentum-xyz/posbus-client/dist/build/posbus';
 
 import {PosBusEventEmitter} from 'core/constants';
-import {PosBusMessageTypeEnum} from 'core/enums';
-import {PosBusMiroStateMessageType as PosBusAttributeMessageType} from 'core/types';
 import {appVariables} from 'api/constants';
+import {PluginIdEnum} from 'api/enums';
 
 class PosBusService {
   private static main = new PosBusService();
@@ -54,7 +54,7 @@ class PosBusService {
   static connect(client: Client, token: string, userId: string) {
     return client.connect(`${appVariables.BE_URL}/posbus`, token, userId).then((port) => {
       this.main.port = port;
-      port.onmessage = PosBusService.handleIncomingMessage;
+      port.onmessage = (msg) => PosBusService.handleIncomingMessage(msg);
     });
   }
 
@@ -215,19 +215,16 @@ class PosBusService {
       }
 
       case MsgType.ATTRIBUTE_VALUE_CHANGED: {
-        console.log('[PosBus Msg] ATTRIBUTE_VALUE_CHANGED: ', data);
-        switch (data.topic) {
-          case 'voice-chat-user': {
-            const {attribute_name, value} = data.data;
-            if (attribute_name === AttributeNameEnum.VOICE_CHAT_USER) {
-              if (value && value.joined) {
-                Event3dEmitter.emit('UserJoinedVoiceChat', value.userId);
-              } else if (value) {
-                Event3dEmitter.emit('UserLeftVoiceChat', value.userId);
-              }
-            }
+        console.debug('[PosBus Msg] ATTRIBUTE_VALUE_CHANGED: ', data);
+        switch (data.plugin_id) {
+          case PluginIdEnum.CORE:
+            this.handleCoreAttributeChange(data);
             break;
-          }
+
+          default:
+            // TODO: pass to plugins
+            console.debug('[PosBus Msg]: ATTRIBUTE_VALUE_CHANGED: unhandled message');
+            break;
         }
         break;
       }
@@ -247,6 +244,20 @@ class PosBusService {
 
       default:
         console.log('Unhandled posbus message', message.data);
+    }
+  }
+
+  static handleCoreAttributeChange(msg: AttributeValueChanged) {
+    switch (msg.attribute_name) {
+      case AttributeNameEnum.VOICE_CHAT_USER: {
+        const value = msg.value;
+        if (value && value.joined) {
+          Event3dEmitter.emit('UserJoinedVoiceChat', value.userId);
+        } else if (value) {
+          Event3dEmitter.emit('UserLeftVoiceChat', value.userId);
+        }
+        break;
+      }
     }
   }
 
@@ -311,45 +322,6 @@ class PosBusService {
 
   static unsubscribe(topic: string) {
     this.main._subscribedAttributeTypeTopics.delete(topic);
-  }
-
-  static handleSpaceAttributeMessage(target: string, message: PosBusAttributeMessageType) {
-    switch (message.type) {
-      case PosBusMessageTypeEnum.ATTRIBUTE_CHANGED:
-        PosBusEventEmitter.emit(
-          'space-attribute-changed',
-          target,
-          message.data.attribute_name,
-          message.data.value as AttributeValueInterface
-        );
-        break;
-      case PosBusMessageTypeEnum.ATTRIBUTE_REMOVED:
-        PosBusEventEmitter.emit('space-attribute-removed', target, message.data.attribute_name);
-        break;
-      case PosBusMessageTypeEnum.SUB_ATTRIBUTE_CHANGED:
-        if (!message.data.sub_name) {
-          return;
-        }
-        PosBusEventEmitter.emit(
-          'space-attribute-item-changed',
-          target,
-          message.data.attribute_name,
-          message.data.sub_name,
-          message.data.value
-        );
-        break;
-      case PosBusMessageTypeEnum.SUB_ATTRIBUTE_REMOVED:
-        if (!message.data.sub_name) {
-          return;
-        }
-        PosBusEventEmitter.emit(
-          'space-attribute-item-removed',
-          target,
-          message.data.attribute_name,
-          message.data.sub_name
-        );
-        break;
-    }
   }
 }
 

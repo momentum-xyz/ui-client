@@ -15,3 +15,5 @@ export * from './ItemCard';
 export * from './Dialog';
 export * from './FileUploader';
 export * from './SystemWideError';
+export * from './MediaPlayer';
+export * from './PostHeading';

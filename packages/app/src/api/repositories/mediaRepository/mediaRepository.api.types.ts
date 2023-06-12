@@ -1,7 +1,7 @@
-export interface UploadImageRequest {
+export interface UploadFileRequest {
   file: File;
 }
 
-export interface UploadImageResponse {
+export interface UploadFileResponse {
   hash: string;
 }
