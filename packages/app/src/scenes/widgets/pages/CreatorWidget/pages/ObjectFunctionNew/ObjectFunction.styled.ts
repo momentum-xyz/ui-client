@@ -1,4 +1,4 @@
-import { rgba } from 'polished';
+import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -29,7 +29,6 @@ export const ActionBar = styled.div`
     justify-content: center;
   }
 `;
-
 
 export const AssignFunctionContainer = styled.div``;
 export const Title = styled.h1`
