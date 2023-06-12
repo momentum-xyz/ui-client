@@ -1,6 +1,7 @@
 import {FC, useEffect} from 'react';
 import {Scene} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
+import {Texture3dInterface} from '@momentum-xyz/core';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
 
 import {Odyssey3dPropsInterface} from '../../core/interfaces';
@@ -93,8 +94,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
         ObjectHelper.removeObject(objectId);
       });
 
-      events.on('ObjectTextureChanged', (object) => {
-        ObjectHelper.setObjectTexture(scene, object);
+      events.on('ObjectTextureChanged', (object: Texture3dInterface) => {
+        ObjectHelper.objectTextureChange(scene, object);
       });
 
       events.on('ObjectTransform', (id, object) => {
