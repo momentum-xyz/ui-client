@@ -15,7 +15,7 @@ import {
   SkyboxSelector,
   ObjectInspector,
   AssetCustomising,
-  ObjectFunction
+  ObjectFunctionNew
 } from './pages';
 
 type MenuItemType = keyof typeof CreatorTabsEnum;
@@ -91,7 +91,7 @@ const CreatorWidget: FC = () => {
       case 'inspector':
         return <ObjectInspector />;
       case 'functionality':
-        return <ObjectFunction />;
+        return <ObjectFunctionNew />;
       case 'customise':
         return <AssetCustomising />;
       // case 'spawnPoint':
