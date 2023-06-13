@@ -314,7 +314,7 @@ class PosBusService {
     wallet: string,
     comment: string,
     amount: string,
-    kind: number // kind = 0 - это mom, kind = 1 - это dad
+    kind: number // kind = 0 - mom, kind = 1 - dad
   ) {
     this.main.port?.postMessage([
       MsgType.ADD_PENDING_STAKE,
