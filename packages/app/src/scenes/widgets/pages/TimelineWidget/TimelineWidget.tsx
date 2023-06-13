@@ -5,6 +5,7 @@ import {Panel, PostEntry, PostFormInterface} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
+import {TimelineEntryModelInterface} from 'core/models';
 import {getImageAbsoluteUrl, getVideoAbsoluteUrl} from 'core/utils';
 
 import * as styled from './TimelineWidget.styled';
@@ -37,6 +38,38 @@ const TimelineWidget: FC = () => {
     return isDone;
   };
 
+  const handleUpdatePost = async (form: PostFormInterface, postType: PostTypeEnum, id: string) => {
+    const isDone = await timelineStore.create(form, postType, worldId);
+    if (isDone) {
+      world3dStore?.clearSnapshotOrVideo();
+      // TODO: Update in list
+      timelineStore.fetch(worldId);
+    }
+    return isDone;
+  };
+
+  const handleClearFile = () => {
+    world3dStore?.clearSnapshotOrVideo();
+  };
+
+  const handleMakeScreenshot = () => {
+    Event3dEmitter.emit('MakeScreenshot');
+  };
+
+  const handleStartRecording = (maxDuration: number) => {
+    Event3dEmitter.emit('StartRecordingVideo', maxDuration);
+    world3dStore?.setIsScreenRecording(true);
+  };
+
+  const handleStopRecording = () => {
+    Event3dEmitter.emit('StopRecordingVideo');
+    world3dStore?.setIsScreenRecording(false);
+  };
+
+  const handleShare = (entry: TimelineEntryModelInterface) => {
+    console.log(entry);
+  };
+
   if (!user) {
     return <></>;
   }
@@ -63,26 +96,14 @@ const TimelineWidget: FC = () => {
                 isItMe: true
               }}
               videoOrScreenshot={world3dStore?.screenshotOrVideo}
-              isCreating={false}
+              isPending={timelineStore.isPending}
               isScreenRecording={universeStore.isScreenRecording}
-              onClearVideoOrScreenshot={() => {
-                world3dStore?.clearSnapshotOrVideo();
-              }}
-              onMakeScreenshot={() => {
-                Event3dEmitter.emit('MakeScreenshot');
-              }}
-              onStartRecording={(maxDuration: number) => {
-                Event3dEmitter.emit('StartRecordingVideo', maxDuration);
-                world3dStore?.setIsScreenRecording(true);
-              }}
-              onStopRecording={() => {
-                Event3dEmitter.emit('StopRecordingVideo');
-                world3dStore?.setIsScreenRecording(false);
-              }}
+              onClearVideoOrScreenshot={handleClearFile}
+              onMakeScreenshot={handleMakeScreenshot}
+              onStartRecording={handleStartRecording}
+              onStopRecording={handleStopRecording}
               onCreateOrUpdatePost={handleCreatePost}
-              onCancel={() => {
-                world3dStore?.clearSnapshotOrVideo();
-              }}
+              onCancelCreation={handleClearFile}
             />
           )}
 
@@ -109,27 +130,19 @@ const TimelineWidget: FC = () => {
                       ? getVideoAbsoluteUrl(entry.data.hash)
                       : getImageAbsoluteUrl(entry.data.hash)
                 }}
+                canEdit={universeStore.isMyWorld || entry.user_id === sessionStore.userId}
                 videoOrScreenshot={world3dStore?.screenshotOrVideo}
-                isCreating={false}
+                isPending={timelineStore.isPending}
                 isScreenRecording={universeStore.isScreenRecording}
-                onClearVideoOrScreenshot={() => {
-                  world3dStore?.clearSnapshotOrVideo();
+                onClearVideoOrScreenshot={handleClearFile}
+                onMakeScreenshot={handleMakeScreenshot}
+                onStartRecording={handleStartRecording}
+                onStopRecording={handleStopRecording}
+                onCreateOrUpdatePost={(form, postType) => {
+                  return handleUpdatePost(form, postType, entry.activity_id);
                 }}
-                onMakeScreenshot={() => {
-                  Event3dEmitter.emit('MakeScreenshot');
-                }}
-                onStartRecording={(maxDuration) => {
-                  Event3dEmitter.emit('StartRecordingVideo', maxDuration);
-                  world3dStore?.setIsScreenRecording(true);
-                }}
-                onStopRecording={() => {
-                  Event3dEmitter.emit('StopRecordingVideo');
-                  world3dStore?.setIsScreenRecording(false);
-                }}
-                onCreateOrUpdatePost={handleCreatePost}
-                onCancel={() => {
-                  world3dStore?.clearSnapshotOrVideo();
-                }}
+                onCancelCreation={handleClearFile}
+                onShare={() => handleShare(entry)}
               />
             ))}
           </styled.ListContainer>

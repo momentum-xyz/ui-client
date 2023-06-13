@@ -22,14 +22,14 @@ export interface PostEntryPropsInterface {
   author: PostAuthorInterface;
   canEdit?: boolean;
   videoOrScreenshot?: MediaInterface | null;
-  isCreating?: boolean;
+  isPending?: boolean;
   isScreenRecording?: boolean;
   onMakeScreenshot: () => void;
   onStartRecording: (maxDuration: number) => void;
   onStopRecording: () => void;
   onClearVideoOrScreenshot: () => void;
-  onCreateOrUpdatePost: (form: PostFormInterface, postType: PostTypeEnum) => Promise<boolean>;
-  onCancel: () => void;
+  onCreateOrUpdatePost: (form: PostFormInterface, type: PostTypeEnum) => Promise<boolean>;
+  onCancelCreation: () => void;
   onDelete?: () => void;
   onVisit?: () => void;
   onShare?: () => void;
@@ -42,14 +42,14 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
   entry,
   canEdit,
   videoOrScreenshot,
-  isCreating,
+  isPending,
   isScreenRecording,
   onMakeScreenshot,
   onStartRecording,
   onStopRecording,
   onClearVideoOrScreenshot,
   onCreateOrUpdatePost,
-  onCancel,
+  onCancelCreation,
   onDelete,
   onShare,
   onVisit
@@ -59,7 +59,12 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
 
   const {t} = useI18n();
 
-  const handleCreatePost = async (form: PostFormInterface, postType: PostTypeEnum) => {
+  const handleBack = () => {
+    setPostTypeIntent(null);
+    onCancelCreation();
+  };
+
+  const handleCreateOrUpdate = async (form: PostFormInterface, postType: PostTypeEnum) => {
     if (await onCreateOrUpdatePost(form, postType)) {
       setPostTypeIntent(null);
     }
@@ -89,14 +94,11 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
               {postTypeIntent === PostTypeEnum.SCREENSHOT && (
                 <PostImageForm
                   screenshot={videoOrScreenshot?.file}
-                  isPending={isCreating}
+                  isPending={isPending}
                   onMakeScreenshot={onMakeScreenshot}
                   onClearScreenshot={onClearVideoOrScreenshot}
-                  onCreateOrUpdate={(form) => handleCreatePost(form, PostTypeEnum.SCREENSHOT)}
-                  onCancel={() => {
-                    setPostTypeIntent(null);
-                    onCancel();
-                  }}
+                  onCreateOrUpdate={(form) => handleCreateOrUpdate(form, PostTypeEnum.SCREENSHOT)}
+                  onCancel={handleBack}
                 />
               )}
 
@@ -104,17 +106,14 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
               {postTypeIntent === PostTypeEnum.VIDEO && (
                 <PostVideoForm
                   video={videoOrScreenshot?.file}
-                  isPending={isCreating}
+                  isPending={isPending}
                   isScreenRecording={isScreenRecording}
                   maxVideoDurationSec={MAX_VIDEO_DURATION}
                   onStartRecording={() => onStartRecording(MAX_VIDEO_DURATION)}
                   onStopRecording={onStopRecording}
                   onClearVideo={onClearVideoOrScreenshot}
-                  onCreateOrUpdate={(form) => handleCreatePost(form, PostTypeEnum.VIDEO)}
-                  onCancel={() => {
-                    setPostTypeIntent(null);
-                    onCancel();
-                  }}
+                  onCreateOrUpdate={(form) => handleCreateOrUpdate(form, PostTypeEnum.VIDEO)}
+                  onCancel={handleBack}
                 />
               )}
             </>
@@ -141,6 +140,43 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
                   onDelete={onDelete}
                   onVisit={onVisit}
                   onShare={onShare}
+                />
+              )}
+
+              {/* Edit screenshot */}
+              {entry.type === PostTypeEnum.SCREENSHOT && mode === 'edit' && (
+                <PostImageForm
+                  screenshot={videoOrScreenshot?.file}
+                  initialDescription={entry.description}
+                  initialScreenshotUrl={entry.hashSrc}
+                  isPending={isPending}
+                  onMakeScreenshot={onMakeScreenshot}
+                  onClearScreenshot={onClearVideoOrScreenshot}
+                  onCreateOrUpdate={(form) => handleCreateOrUpdate(form, PostTypeEnum.SCREENSHOT)}
+                  onCancel={() => {
+                    handleBack();
+                    setMode('view');
+                  }}
+                />
+              )}
+
+              {/* Edit video */}
+              {entry.type === PostTypeEnum.VIDEO && mode === 'edit' && (
+                <PostVideoForm
+                  video={videoOrScreenshot?.file}
+                  initialDescription={entry.description}
+                  initialVideoUrl={entry.hashSrc}
+                  isPending={isPending}
+                  isScreenRecording={isScreenRecording}
+                  maxVideoDurationSec={MAX_VIDEO_DURATION}
+                  onStartRecording={() => onStartRecording(MAX_VIDEO_DURATION)}
+                  onStopRecording={onStopRecording}
+                  onClearVideo={onClearVideoOrScreenshot}
+                  onCreateOrUpdate={(form) => handleCreateOrUpdate(form, PostTypeEnum.VIDEO)}
+                  onCancel={() => {
+                    handleBack();
+                    setMode('view');
+                  }}
                 />
               )}
             </>
