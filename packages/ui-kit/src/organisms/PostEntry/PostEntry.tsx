@@ -126,7 +126,6 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
                   imageSrc={entry.hashSrc}
                   description={entry.description}
                   onEdit={canEdit ? () => setMode('edit') : undefined}
-                  onDelete={onDelete}
                   onVisit={onVisit}
                   onShare={onShare}
                 />
@@ -138,7 +137,6 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
                   videoSrc={entry.hashSrc}
                   description={entry.description}
                   onEdit={canEdit ? () => setMode('edit') : undefined}
-                  onDelete={onDelete}
                   onVisit={onVisit}
                   onShare={onShare}
                 />
@@ -154,6 +152,7 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
                   onMakeScreenshot={onMakeScreenshot}
                   onClearScreenshot={onClearVideoOrScreenshot}
                   onCreateOrUpdate={(form) => handleCreateOrUpdate(form, PostTypeEnum.SCREENSHOT)}
+                  onDelete={onDelete}
                   onCancel={() => {
                     handleBack();
                     setMode('view');
@@ -174,6 +173,7 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
                   onStopRecording={onStopRecording}
                   onClearVideo={onClearVideoOrScreenshot}
                   onCreateOrUpdate={(form) => handleCreateOrUpdate(form, PostTypeEnum.VIDEO)}
+                  onDelete={onDelete}
                   onCancel={() => {
                     handleBack();
                     setMode('view');

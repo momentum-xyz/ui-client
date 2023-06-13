@@ -46,6 +46,14 @@ const TimelineWidget: FC = () => {
     return isDone;
   };
 
+  const handleDeletePost = async (entry: TimelineEntryModelInterface) => {
+    const isDone = await timelineStore.deleteItem(entry, worldId);
+    if (isDone) {
+      timelineStore.fetch(worldId);
+    }
+    return isDone;
+  };
+
   const handleClearFile = () => {
     world3dStore?.clearSnapshotOrVideo();
   };
@@ -139,6 +147,7 @@ const TimelineWidget: FC = () => {
                 onCreateOrUpdatePost={(form) => {
                   return handleUpdatePost(form, entry);
                 }}
+                onDelete={() => handleDeletePost(entry)}
                 onCancelCreation={handleClearFile}
                 onShare={() => handleShare(entry)}
               />

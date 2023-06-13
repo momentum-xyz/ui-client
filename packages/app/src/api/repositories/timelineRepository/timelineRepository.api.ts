@@ -49,6 +49,6 @@ export const deleteItem: RequestInterface<DeleteTimelineRequest, DeleteTimelineR
   options
 ) => {
   const {id, objectId, ...restOptions} = options;
-  const url = generatePath(timelineRepositoryEndpoints().base, {objectId, id});
+  const url = generatePath(timelineRepositoryEndpoints().item, {objectId, id});
   return request.delete(url, restOptions);
 };

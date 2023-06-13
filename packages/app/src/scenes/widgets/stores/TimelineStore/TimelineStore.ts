@@ -12,6 +12,7 @@ const TimelineStore = types.compose(
       mediaUploader: types.optional(MediaUploader, {}),
       createRequest: types.optional(RequestModel, {}),
       updateRequest: types.optional(RequestModel, {}),
+      deleteRequest: types.optional(RequestModel, {}),
       entriesRequest: types.optional(RequestModel, {}),
       entries: types.optional(types.array(TimelineEntry), [])
     })
@@ -77,6 +78,12 @@ const TimelineStore = types.compose(
         }
 
         return self.updateRequest.isDone;
+      }),
+      deleteItem: flow(function* (entry: TimelineEntryModelInterface, objectId: string) {
+        const id = entry.activity_id;
+        yield self.deleteRequest.send(api.timelineRepository.deleteItem, {objectId, id});
+
+        return self.deleteRequest.isDone;
       })
     }))
     .views((self) => ({
@@ -84,6 +91,7 @@ const TimelineStore = types.compose(
         return (
           self.createRequest.isPending ||
           self.updateRequest.isPending ||
+          self.deleteRequest.isPending ||
           self.mediaUploader.fileRequest.isPending
         );
       }

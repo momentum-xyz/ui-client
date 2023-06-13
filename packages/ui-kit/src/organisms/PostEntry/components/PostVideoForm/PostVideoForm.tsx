@@ -20,6 +20,7 @@ export interface PostVideoFormPropsInterface {
   onStopRecording: () => void;
   onClearVideo: () => void;
   onCreateOrUpdate: (form: PostFormInterface) => void;
+  onDelete?: () => void;
   onCancel: () => void;
 }
 
@@ -34,11 +35,14 @@ const PostVideoForm: FC<PostVideoFormPropsInterface> = ({
   onStopRecording,
   onClearVideo,
   onCreateOrUpdate,
+  onDelete,
   onCancel
 }) => {
   const [videoWasDeleted, setVideoWasDeleted] = useState(false);
   const {control, setValue, formState, handleSubmit} = useForm<PostFormInterface>();
   const {seconds, reset, pause, isRunning} = useStopwatch({autoStart: false});
+
+  const isNewPost = !initialVideoUrl;
 
   const {t} = useI18n();
 
@@ -169,12 +173,18 @@ const PostVideoForm: FC<PostVideoFormPropsInterface> = ({
           onClick={handleCancel}
         />
 
-        <ButtonEllipse
-          icon="add"
-          label={t('actions.addToTimeline')}
-          disabled={submitIsDisabled}
-          onClick={handleCreatePost}
-        />
+        <styled.FormControlsGroup>
+          {!!onDelete && (
+            <ButtonEllipse icon="bin" label={t('actions.delete')} onClick={onDelete} />
+          )}
+
+          <ButtonEllipse
+            icon={isNewPost ? 'add' : 'checked'}
+            label={isNewPost ? t('actions.addToTimeline') : t('actions.publish')}
+            disabled={submitIsDisabled}
+            onClick={handleCreatePost}
+          />
+        </styled.FormControlsGroup>
       </styled.FormControls>
     </styled.Container>
   );

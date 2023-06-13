@@ -15,6 +15,7 @@ export interface PostImageFormPropsInterface {
   onMakeScreenshot: () => void;
   onClearScreenshot: () => void;
   onCreateOrUpdate: (form: PostFormInterface) => void;
+  onDelete?: () => void;
   onCancel: () => void;
 }
 
@@ -26,11 +27,14 @@ const PostImageForm: FC<PostImageFormPropsInterface> = ({
   onMakeScreenshot,
   onClearScreenshot,
   onCreateOrUpdate,
+  onDelete,
   onCancel
 }) => {
   const [imageWasDeleted, setImageWasDeleted] = useState(false);
   const {control, setValue, formState, handleSubmit} = useForm<PostFormInterface>();
   const {t} = useI18n();
+
+  const isNewPost = !initialScreenshotUrl;
 
   useEffect(() => {
     setValue('file', screenshot);
@@ -130,12 +134,18 @@ const PostImageForm: FC<PostImageFormPropsInterface> = ({
       <styled.FormControls>
         <ButtonEllipse icon="chevron_left" label={t('actions.back')} onClick={onCancel} />
 
-        <ButtonEllipse
-          icon="add"
-          label={t('actions.addToTimeline')}
-          disabled={submitIsDisabled}
-          onClick={handleCreatePost}
-        />
+        <styled.FormControlsGroup>
+          {!!onDelete && (
+            <ButtonEllipse icon="bin" label={t('actions.delete')} onClick={onDelete} />
+          )}
+
+          <ButtonEllipse
+            icon={isNewPost ? 'add' : 'checked'}
+            label={isNewPost ? t('actions.addToTimeline') : t('actions.publish')}
+            disabled={submitIsDisabled}
+            onClick={handleCreatePost}
+          />
+        </styled.FormControlsGroup>
       </styled.FormControls>
     </styled.Container>
   );

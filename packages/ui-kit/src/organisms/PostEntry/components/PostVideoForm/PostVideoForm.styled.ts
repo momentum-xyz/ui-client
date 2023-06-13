@@ -39,12 +39,6 @@ export const Timer = styled.div`
   letter-spacing: 0.02em;
 `;
 
-export const FormControls = styled.div`
-  padding: 10px 0 0 0;
-  display: flex;
-  justify-content: space-between;
-`;
-
 export const PreviewVideoContainer = styled.div`
   position: relative;
 `;
@@ -53,4 +47,16 @@ export const Delete = styled.div`
   position: absolute;
   top: 10px;
   right: 10px;
+`;
+
+export const FormControls = styled.div`
+  padding: 10px 0 0 0;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const FormControlsGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
 `;
