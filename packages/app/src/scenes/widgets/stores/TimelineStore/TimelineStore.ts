@@ -2,15 +2,16 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {PostTypeEnum, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {PostFormInterface} from '@momentum-xyz/ui-kit';
 
-import {TimelineEntry} from 'core/models';
-import {api, FetchTimelineResponse, UploadFileResponse} from 'api';
+import {MediaUploader, TimelineEntry, TimelineEntryModelInterface} from 'core/models';
+import {api, FetchTimelineResponse} from 'api';
 
 const TimelineStore = types.compose(
   ResetModel,
   types
     .model('TimelineStore', {
-      fileRequest: types.optional(RequestModel, {}),
+      mediaUploader: types.optional(MediaUploader, {}),
       createRequest: types.optional(RequestModel, {}),
+      updateRequest: types.optional(RequestModel, {}),
       entriesRequest: types.optional(RequestModel, {}),
       entries: types.optional(types.array(TimelineEntry), [])
     })
@@ -30,37 +31,61 @@ const TimelineStore = types.compose(
           self.entries = cast(response.activities);
         }
       }),
-      create: flow(function* (form: PostFormInterface, type: PostTypeEnum, objectId: string) {
-        if (!form.file) {
+      createItem: flow(function* (
+        form: PostFormInterface,
+        postType: PostTypeEnum,
+        objectId: string
+      ) {
+        const isVideo = postType === PostTypeEnum.VIDEO;
+        const hash = yield self.mediaUploader.uploadImageOrVideo(form.file, isVideo);
+
+        if (!hash) {
           return false;
         }
 
-        // 1. File uploading
-        const fileResponse: UploadFileResponse = yield self.fileRequest.send(
-          type === PostTypeEnum.VIDEO
-            ? api.mediaRepository.uploadVideo
-            : api.mediaRepository.uploadImage,
-          {file: form.file}
-        );
-
-        if (!fileResponse?.hash) {
-          return false;
-        }
-
-        // 2. Item creating
-        yield self.createRequest.send(api.timelineRepository.createTimeline, {
-          type,
+        yield self.createRequest.send(api.timelineRepository.createItem, {
+          type: postType,
+          hash,
           objectId,
-          hash: fileResponse?.hash,
           description: form.description || ''
         });
 
-        return self.createRequest.isDone && self.fileRequest.isDone;
+        return self.createRequest.isDone && self.mediaUploader.fileRequest.isDone;
+      }),
+      updateItem: flow(function* (
+        form: PostFormInterface,
+        entry: TimelineEntryModelInterface,
+        objectId: string
+      ) {
+        const isVideo = entry.type === PostTypeEnum.VIDEO;
+        const hash = yield self.mediaUploader.uploadImageOrVideo(form.file, isVideo);
+
+        yield self.updateRequest.send(api.timelineRepository.updateItem, {
+          objectId,
+          id: entry.activity_id,
+          type: entry.type,
+          hash: hash || entry.data.hash,
+          description: form.description || ''
+        });
+
+        if (self.updateRequest.isDone) {
+          const storeEntry = self.entries.find((e) => e.activity_id === entry.activity_id);
+          if (storeEntry) {
+            storeEntry.data.hash = hash || entry.data.hash;
+            storeEntry.data.description = form.description || '';
+          }
+        }
+
+        return self.updateRequest.isDone;
       })
     }))
     .views((self) => ({
       get isPending(): boolean {
-        return self.createRequest.isPending || self.fileRequest.isPending;
+        return (
+          self.createRequest.isPending ||
+          self.updateRequest.isPending ||
+          self.mediaUploader.fileRequest.isPending
+        );
       }
     }))
 );

@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useEffect, useMemo, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useStopwatch} from 'react-timer-hook';
 import {useI18n} from '@momentum-xyz/core';
@@ -53,6 +53,14 @@ const PostVideoForm: FC<PostVideoFormPropsInterface> = ({
     setValue('description', initialDescription || '');
   }, [initialDescription, setValue]);
 
+  const submitIsDisabled = useMemo(() => {
+    if (!initialVideoUrl) {
+      return isPending || isScreenRecording || !video;
+    } else {
+      return isPending || isScreenRecording || (videoWasDeleted && !video);
+    }
+  }, [initialVideoUrl, isPending, isScreenRecording, video, videoWasDeleted]);
+
   const handleCreatePost = handleSubmit(async (data: PostFormInterface) => {
     await onCreateOrUpdate({...data});
   });
@@ -94,7 +102,6 @@ const PostVideoForm: FC<PostVideoFormPropsInterface> = ({
         <Controller
           name="file"
           control={control}
-          rules={{required: true}}
           render={({field: {value}}) => {
             const videoUrl = value ? URL.createObjectURL(value) : null;
             const initialUrl = !videoWasDeleted ? initialVideoUrl : null;
@@ -165,7 +172,7 @@ const PostVideoForm: FC<PostVideoFormPropsInterface> = ({
         <ButtonEllipse
           icon="add"
           label={t('actions.addToTimeline')}
-          disabled={isPending || isScreenRecording || !video}
+          disabled={submitIsDisabled}
           onClick={handleCreatePost}
         />
       </styled.FormControls>

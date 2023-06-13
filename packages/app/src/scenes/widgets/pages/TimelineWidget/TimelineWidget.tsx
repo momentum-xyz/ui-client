@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Event3dEmitter, PostTypeEnum, useI18n} from '@momentum-xyz/core';
-import {Panel, PostEntry, PostFormInterface} from '@momentum-xyz/ui-kit';
+import {ImageSizeEnum, Panel, PostEntry, PostFormInterface} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
@@ -30,7 +30,7 @@ const TimelineWidget: FC = () => {
   }, [timelineStore, world3dStore]);
 
   const handleCreatePost = async (form: PostFormInterface, postType: PostTypeEnum) => {
-    const isDone = await timelineStore.create(form, postType, worldId);
+    const isDone = await timelineStore.createItem(form, postType, worldId);
     if (isDone) {
       world3dStore?.clearSnapshotOrVideo();
       timelineStore.fetch(worldId);
@@ -38,12 +38,10 @@ const TimelineWidget: FC = () => {
     return isDone;
   };
 
-  const handleUpdatePost = async (form: PostFormInterface, postType: PostTypeEnum, id: string) => {
-    const isDone = await timelineStore.create(form, postType, worldId);
+  const handleUpdatePost = async (form: PostFormInterface, entry: TimelineEntryModelInterface) => {
+    const isDone = await timelineStore.updateItem(form, entry, worldId);
     if (isDone) {
       world3dStore?.clearSnapshotOrVideo();
-      // TODO: Update in list
-      timelineStore.fetch(worldId);
     }
     return isDone;
   };
@@ -128,7 +126,7 @@ const TimelineWidget: FC = () => {
                   hashSrc:
                     entry.type === PostTypeEnum.VIDEO
                       ? getVideoAbsoluteUrl(entry.data.hash)
-                      : getImageAbsoluteUrl(entry.data.hash)
+                      : getImageAbsoluteUrl(entry.data.hash, ImageSizeEnum.S5)
                 }}
                 canEdit={universeStore.isMyWorld || entry.user_id === sessionStore.userId}
                 videoOrScreenshot={world3dStore?.screenshotOrVideo}
@@ -138,8 +136,8 @@ const TimelineWidget: FC = () => {
                 onMakeScreenshot={handleMakeScreenshot}
                 onStartRecording={handleStartRecording}
                 onStopRecording={handleStopRecording}
-                onCreateOrUpdatePost={(form, postType) => {
-                  return handleUpdatePost(form, postType, entry.activity_id);
+                onCreateOrUpdatePost={(form) => {
+                  return handleUpdatePost(form, entry);
                 }}
                 onCancelCreation={handleClearFile}
                 onShare={() => handleShare(entry)}

@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useEffect, useMemo, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
 
@@ -43,6 +43,14 @@ const PostImageForm: FC<PostImageFormPropsInterface> = ({
     setValue('description', initialDescription || '');
   }, [initialDescription, setValue]);
 
+  const submitIsDisabled = useMemo(() => {
+    if (!initialScreenshotUrl) {
+      return isPending || !screenshot;
+    } else {
+      return isPending || (imageWasDeleted && !screenshot);
+    }
+  }, [imageWasDeleted, initialScreenshotUrl, isPending, screenshot]);
+
   const handleDeleteImage = () => {
     onClearScreenshot();
     setImageWasDeleted(true);
@@ -63,7 +71,6 @@ const PostImageForm: FC<PostImageFormPropsInterface> = ({
         <Controller
           name="file"
           control={control}
-          rules={{required: true}}
           render={({field: {value}}) => {
             const imageUrl = value ? URL.createObjectURL(value) : null;
             const initialUrl = !imageWasDeleted ? initialScreenshotUrl : null;
@@ -126,7 +133,7 @@ const PostImageForm: FC<PostImageFormPropsInterface> = ({
         <ButtonEllipse
           icon="add"
           label={t('actions.addToTimeline')}
-          disabled={isPending || !screenshot}
+          disabled={submitIsDisabled}
           onClick={handleCreatePost}
         />
       </styled.FormControls>

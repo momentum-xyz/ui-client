@@ -67,6 +67,7 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
   const handleCreateOrUpdate = async (form: PostFormInterface, postType: PostTypeEnum) => {
     if (await onCreateOrUpdatePost(form, postType)) {
       setPostTypeIntent(null);
+      setMode('view');
     }
   };
 
