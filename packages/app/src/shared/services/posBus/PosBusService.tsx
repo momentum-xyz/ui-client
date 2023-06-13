@@ -308,6 +308,27 @@ class PosBusService {
     ]);
   }
 
+  static addPendingState(
+    transaction_id: string,
+    odyssey_id: string,
+    wallet: string,
+    comment: string,
+    amount: string,
+    kind: number // kind = 0 - это mom, kind = 1 - это dad
+  ) {
+    this.main.port?.postMessage([
+      MsgType.ADD_PENDING_STAKE,
+      {
+        transaction_id,
+        odyssey_id,
+        wallet,
+        amount,
+        comment,
+        kind
+      }
+    ]);
+  }
+
   public get subscribedAttributeTypeTopics(): Set<string> {
     return this._subscribedAttributeTypeTopics;
   }
