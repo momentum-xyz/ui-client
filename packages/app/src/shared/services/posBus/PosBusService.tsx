@@ -296,18 +296,6 @@ class PosBusService {
     ]);
   }
 
-  static userStakedInOdyssey(tx_hash: string, object_id: string, amount: string, comment: string) {
-    this.main.port?.postMessage([
-      MsgType.USER_STAKED_TO_ODYSSEY,
-      {
-        transaction_hash: tx_hash,
-        object_id,
-        amount,
-        comment
-      }
-    ]);
-  }
-
   static addPendingState(
     transaction_id: string,
     odyssey_id: string,
