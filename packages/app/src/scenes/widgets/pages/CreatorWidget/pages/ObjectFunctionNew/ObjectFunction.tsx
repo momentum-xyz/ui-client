@@ -27,7 +27,11 @@ const ObjectFunction: FC = () => {
 
   const [modifiedOptionValue, setModifiedOptionValue] = useState<string | null>(null);
 
-  const activeId = modifiedOptionValue || objectFunctionalityStore.currentAssetId;
+  const activeId = modifiedOptionValue;
+
+  const tabs: TabInterface<BasicAsset2dIdEnum>[] = objectFunctionalityStore.currentAssetId
+    ? TABS_LIST.filter((tab) => tab.id === objectFunctionalityStore.currentAssetId)
+    : TABS_LIST;
 
   const actionRef = useRef<{doSave: () => void}>({doSave: () => {}});
 
@@ -115,10 +119,6 @@ const ObjectFunction: FC = () => {
 
   return (
     <styled.Container data-testid="ObjectFunction-test">
-      {/* <styled.HeadingWrapper>
-        <Tabs tabList={TABS_LIST} activeId={activeId} onSelect={handleTypeChange} />
-      </styled.HeadingWrapper> */}
-
       {!activeId && (
         <styled.AssignFunctionContainer>
           <styled.Title>Assign a function to the object</styled.Title>
@@ -129,7 +129,7 @@ const ObjectFunction: FC = () => {
             select the object; regardless of its asset type.
           </styled.Text>
           <styled.FunctionTypesContainer>
-            {TABS_LIST.map((tab) => (
+            {tabs.map((tab) => (
               <styled.FunctionType key={tab.id} onClick={() => handleTypeChange(tab.id)}>
                 <IconSvg name={tab.icon} size="xll" isWhite />
                 <styled.FunctionTypeTitle>{tab.label}</styled.FunctionTypeTitle>
