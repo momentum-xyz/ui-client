@@ -164,7 +164,7 @@ const NftStore = types
         self.stakes = cast(response.filter((stake) => !!stake.amount && stake.amount !== '0'));
       }
     }),
-    postPendingStake: flow(function* (options: {
+    /*postPendingStake: flow(function* (options: {
       transaction_id: string;
       odyssey_id: string;
       wallet: string;
@@ -173,7 +173,7 @@ const NftStore = types
       kind: string;
     }) {
       yield self.postPendingStakeRequest.send(api.userRepository.postPendingStake, options);
-    }),
+    }),*/
     loadDefaultWalletId(): void {
       const storedAccount = storage.get<string>(StorageKeyEnum.DefaultAccount);
       if (storedAccount && self.wallets.find((w) => w.wallet_id === storedAccount)) {
