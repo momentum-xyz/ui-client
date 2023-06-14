@@ -120,8 +120,8 @@ const TimelineWidget: FC = () => {
                 key={entry.activity_id}
                 author={{
                   id: entry.user_id,
-                  name: entry.user_id, // FIXME
-                  avatarSrc: null, // FIXME
+                  name: entry.user_name,
+                  avatarSrc: getImageAbsoluteUrl(entry.avatar_hash),
                   isItMe: entry.user_id === sessionStore.userId
                 }}
                 entry={{
@@ -129,7 +129,7 @@ const TimelineWidget: FC = () => {
                   description: entry.data.description,
                   type: entry.type,
                   objectId: entry.object_id,
-                  objectName: entry.object_id, // FIXME
+                  objectName: entry.world_name,
                   created: entry.created_at,
                   hashSrc:
                     entry.type === PostTypeEnum.VIDEO
