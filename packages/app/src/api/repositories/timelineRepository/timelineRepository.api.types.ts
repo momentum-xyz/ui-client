@@ -30,7 +30,7 @@ export interface FetchTimelineResponse {
   activities: TimelineItemInterface[];
 }
 
-/** CREATE TIMELINE **/
+/** CREATE TIMELINE ITEM **/
 
 export interface CreateTimelineRequest {
   objectId: string;
@@ -40,3 +40,24 @@ export interface CreateTimelineRequest {
 }
 
 export interface CreateTimelineResponse {}
+
+/** UPDATE TIMELINE ITEM **/
+
+export interface UpdateTimelineRequest {
+  id: string;
+  objectId: string;
+  type: PostTypeEnum;
+  hash: string;
+  description: string | null;
+}
+
+export interface UpdateTimelineResponse {}
+
+/** DELETE TIMELINE ITEM **/
+
+export interface DeleteTimelineRequest {
+  id: string;
+  objectId: string;
+}
+
+export interface DeleteTimelineResponse {}
