@@ -33,9 +33,8 @@ const ObjectFunction: FC = () => {
     ? TABS_LIST.filter((tab) => tab.id === objectFunctionalityStore.currentAssetId)
     : TABS_LIST;
 
-  const actionRef = useRef<{doSave: () => void; doDelete: () => void}>({
-    doSave: () => {},
-    doDelete: () => {}
+  const actionRef = useRef<{doSave: () => void}>({
+    doSave: () => {}
   });
 
   console.log('ObjectFunctionalityPage', {
@@ -84,8 +83,6 @@ const ObjectFunction: FC = () => {
 
   const handleDelete = async () => {
     try {
-      // actionRef.current?.doDelete();
-
       await objectFunctionalityStore.removeObjectFunctionality();
 
       creatorStore.setSelectedTab(null);
