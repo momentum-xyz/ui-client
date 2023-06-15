@@ -13,7 +13,3 @@ export const Wrapper = styled.div`
   position: relative;
   height: 100%;
 `;
-
-export const EntryItem = styled.div`
-  padding: 10px;
-`;

@@ -2,15 +2,15 @@ import {FC, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import AutoSizer, {Size} from 'react-virtualized-auto-sizer';
 import InfiniteLoader from 'react-window-infinite-loader';
-import {ListChildComponentProps, VariableSizeList} from 'react-window';
+import {VariableSizeList} from 'react-window';
 import {Event3dEmitter, PostTypeEnum, useI18n} from '@momentum-xyz/core';
-import {ImageSizeEnum, Panel, PostEntry, PostFormInterface} from '@momentum-xyz/ui-kit';
+import {Panel, PostFormInterface} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {TimelineEntryModelInterface} from 'core/models';
-import {getImageAbsoluteUrl, getVideoAbsoluteUrl} from 'core/utils';
 
+import {EntityRow} from './components';
 import * as styled from './TimelineWidget.styled';
 
 const TimelineWidget: FC = () => {
@@ -93,86 +93,8 @@ const TimelineWidget: FC = () => {
   };
 
   const setRowHeight = (index: number, size: number) => {
-    scrollListRef.current?.resetAfterIndex(0);
+    scrollListRef.current?.resetAfterIndex(index);
     entityHeightsRef.current = {...entityHeightsRef.current, [index]: size};
-  };
-
-  const EntityRenderer: FC<ListChildComponentProps> = ({index, style, data}) => {
-    const rowRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-      if (rowRef.current) {
-        setRowHeight(index, rowRef.current.clientHeight);
-      }
-    }, [index, rowRef]);
-
-    const entry = data.items[index];
-
-    if (!entry) {
-      return <></>;
-    }
-
-    return (
-      <div style={style}>
-        <styled.EntryItem ref={rowRef}>
-          {/* CREATE A NEW ONE FORM */}
-          {data.isCreationShown && index === 0 ? (
-            <PostEntry
-              author={{
-                id: data.user.id,
-                name: data.user.name,
-                avatarSrc: data.user.avatarSrc || null,
-                isItMe: true
-              }}
-              videoOrScreenshot={world3dStore?.screenshotOrVideo}
-              isPending={timelineStore.isPending}
-              isScreenRecording={universeStore.isScreenRecording}
-              onClearVideoOrScreenshot={handleClearFile}
-              onMakeScreenshot={handleMakeScreenshot}
-              onStartRecording={handleStartRecording}
-              onStopRecording={handleStopRecording}
-              onCreateOrUpdatePost={handleCreatePost}
-              onCancelCreation={handleClearFile}
-            />
-          ) : (
-            <PostEntry
-              author={{
-                id: entry.user_id,
-                name: entry.user_name,
-                avatarSrc: getImageAbsoluteUrl(entry.avatar_hash),
-                isItMe: entry.user_id === sessionStore.userId
-              }}
-              entry={{
-                id: entry.activity_id,
-                description: entry.data.description,
-                type: entry.type,
-                objectId: entry.object_id,
-                objectName: entry.world_name,
-                created: entry.created_at,
-                hashSrc:
-                  entry.type === PostTypeEnum.VIDEO
-                    ? getVideoAbsoluteUrl(entry.data.hash)
-                    : getImageAbsoluteUrl(entry.data.hash, ImageSizeEnum.S5)
-              }}
-              canEdit={universeStore.isMyWorld || entry.user_id === sessionStore.userId}
-              videoOrScreenshot={world3dStore?.screenshotOrVideo}
-              isPending={timelineStore.isPending}
-              isScreenRecording={universeStore.isScreenRecording}
-              onClearVideoOrScreenshot={handleClearFile}
-              onMakeScreenshot={handleMakeScreenshot}
-              onStartRecording={handleStartRecording}
-              onStopRecording={handleStopRecording}
-              onCreateOrUpdatePost={(form) => {
-                return handleUpdatePost(form, entry);
-              }}
-              onDelete={() => handleDeletePost(entry)}
-              onCancelCreation={handleClearFile}
-              onShare={() => handleShare(entry)}
-            />
-          )}
-        </styled.EntryItem>
-      </div>
-    );
   };
 
   if (!user) {
@@ -180,7 +102,7 @@ const TimelineWidget: FC = () => {
   }
 
   console.log('[Timeline]: Entities', timelineStore.entityList);
-  console.log('[Timeline]: Entity Heights', entityHeightsRef.current);
+  console.log('[Timeline]: File', world3dStore?.screenshotOrVideo);
 
   return (
     <styled.Container data-testid="TimelineWidget-test">
@@ -204,7 +126,7 @@ const TimelineWidget: FC = () => {
                   ref={infiniteRef}
                   itemCount={timelineStore.itemCount}
                   isItemLoaded={(index) => index < timelineStore.entityList.length}
-                  loadMoreItems={(startIndex, stopIndex) => {
+                  loadMoreItems={(startIndex) => {
                     timelineStore.loadMore(worldId, startIndex);
                   }}
                 >
@@ -221,14 +143,27 @@ const TimelineWidget: FC = () => {
                         itemCount={timelineStore.itemCount}
                         itemKey={(index) => index}
                         itemData={{
+                          setRowHeight,
                           user: sessionStore.user,
                           items: timelineStore.entityList,
-                          isCreationShown: timelineStore.isCreationShown
+                          isMyWorld: universeStore.isMyWorld,
+                          isPending: timelineStore.isPending,
+                          isCreationShown: timelineStore.isCreationShown,
+                          screenshotOrVideo: world3dStore?.screenshotOrVideo,
+                          isScreenRecording: universeStore.isScreenRecording,
+                          handleCreatePost,
+                          handleClearFile,
+                          handleMakeScreenshot,
+                          handleStartRecording,
+                          handleStopRecording,
+                          handleUpdatePost,
+                          handleDeletePost,
+                          handleShare
                         }}
                         onItemsRendered={onItemsRendered}
                         estimatedItemSize={300}
                       >
-                        {EntityRenderer}
+                        {EntityRow}
                       </VariableSizeList>
                     );
                   }}

@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {MediaInterface, PostTypeEnum, useI18n} from '@momentum-xyz/core';
 
@@ -58,6 +58,12 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
   const [mode, setMode] = useState<ModeType>('view');
 
   const {t} = useI18n();
+
+  useEffect(() => {
+    return () => {
+      console.log('PostEntry UNMOUNT');
+    };
+  }, []);
 
   const handleBack = () => {
     setPostTypeIntent(null);
