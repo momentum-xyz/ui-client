@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Button, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
+import {Button, IconSvg, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
 
 import {ToastContent} from 'ui-kit';
 import {BasicAsset2dIdEnum} from 'core/enums';
@@ -12,9 +13,9 @@ import {AssignText, AssignImage, AssignVideo} from './components';
 import * as styled from './ObjectFunction.styled';
 
 const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
-  {id: BasicAsset2dIdEnum.IMAGE, icon: 'picture_upload', label: 'Picture'},
-  {id: BasicAsset2dIdEnum.VIDEO, icon: 'video_upload', label: 'Video'},
-  {id: BasicAsset2dIdEnum.TEXT, icon: 'upload', label: 'Text'}
+  {id: BasicAsset2dIdEnum.IMAGE, icon: 'picture_upload', label: 'Add a picture'},
+  {id: BasicAsset2dIdEnum.VIDEO, icon: 'video_upload', label: 'Add a video'},
+  {id: BasicAsset2dIdEnum.TEXT, icon: 'upload', label: 'Add a text'}
 ];
 
 const ObjectFunction: FC = () => {
@@ -26,9 +27,16 @@ const ObjectFunction: FC = () => {
 
   const [modifiedOptionValue, setModifiedOptionValue] = useState<string | null>(null);
 
-  const activeId = modifiedOptionValue || objectFunctionalityStore.currentAssetId;
+  const activeId = modifiedOptionValue;
 
-  const actionRef = useRef<{doSave: () => void}>({doSave: () => {}});
+  const tabs: TabInterface<BasicAsset2dIdEnum>[] = objectFunctionalityStore.currentAssetId
+    ? TABS_LIST.filter((tab) => tab.id === objectFunctionalityStore.currentAssetId)
+    : TABS_LIST;
+
+  const actionRef = useRef<{doSave: () => void; doDelete: () => void}>({
+    doSave: () => {},
+    doDelete: () => {}
+  });
 
   console.log('ObjectFunctionalityPage', {
     selectedObjectId,
@@ -74,6 +82,22 @@ const ObjectFunction: FC = () => {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      // actionRef.current?.doDelete();
+
+      await objectFunctionalityStore.removeObjectFunctionality();
+
+      creatorStore.setSelectedTab(null);
+      handleSubMenuActiveChange();
+
+      toast.info(<ToastContent icon="check" text="Deleted" />);
+    } catch (e) {
+      console.log(e);
+      toast.error(<ToastContent icon="alert" text="Error deleting" />);
+    }
+  };
+
   const handleTypeChange = (value: string) => {
     console.log('handleTypeChange', value);
     setModifiedOptionValue(value);
@@ -114,15 +138,35 @@ const ObjectFunction: FC = () => {
 
   return (
     <styled.Container data-testid="ObjectFunction-test">
-      <styled.HeadingWrapper>
-        <Tabs tabList={TABS_LIST} activeId={activeId} onSelect={handleTypeChange} />
-      </styled.HeadingWrapper>
-
+      {!activeId && (
+        <styled.AssignFunctionContainer>
+          <styled.Title>Assign a function to the object</styled.Title>
+          <styled.Text>
+            By embedding a picture, text, video or sound you change the function of this object;
+            users can see an image wrapped around the object or hear a sound when they fly towards
+            the object. Users will also be able to see the text, image or video displayed when they
+            select the object; regardless of its asset type.
+          </styled.Text>
+          <styled.FunctionTypesContainer>
+            {tabs.map((tab) => (
+              <styled.FunctionType key={tab.id} onClick={() => handleTypeChange(tab.id)}>
+                <IconSvg name={tab.icon} size="xll" isWhite />
+                <styled.FunctionTypeTitle>{tab.label}</styled.FunctionTypeTitle>
+              </styled.FunctionType>
+            ))}
+          </styled.FunctionTypesContainer>
+        </styled.AssignFunctionContainer>
+      )}
       <styled.PanelBody>{renderBody()}</styled.PanelBody>
 
       {activeId && (
         <styled.ActionBar>
-          <Button label="Embed" onClick={handleSave} />
+          <Button label="Back" variant="secondary" onClick={() => setModifiedOptionValue(null)} />
+          {objectFunctionalityStore.currentAssetId ? (
+            <Button label="Delete" onClick={handleDelete} />
+          ) : (
+            <Button label="Embed" onClick={handleSave} />
+          )}
         </styled.ActionBar>
       )}
     </styled.Container>
