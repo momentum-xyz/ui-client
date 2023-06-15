@@ -5,33 +5,42 @@ import {PostFormInterface} from '@momentum-xyz/ui-kit';
 import {MediaUploader, TimelineEntry, TimelineEntryModelInterface} from 'core/models';
 import {api, FetchTimelineResponse} from 'api';
 
+const PAGE_SIZE = 5;
+
 const TimelineStore = types.compose(
   ResetModel,
   types
     .model('TimelineStore', {
       mediaUploader: types.optional(MediaUploader, {}),
+      entries: types.optional(types.array(TimelineEntry), []),
+      itemCount: types.optional(types.number, 0),
+
       createRequest: types.optional(RequestModel, {}),
       updateRequest: types.optional(RequestModel, {}),
       deleteRequest: types.optional(RequestModel, {}),
-      entriesRequest: types.optional(RequestModel, {}),
-      entries: types.optional(types.array(TimelineEntry), []),
-
-      itemCount: types.optional(types.number, 0)
+      entriesRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
       loadMore: flow(function* (objectId: string, startIndex: number) {
+        //yield new Promise((res) => setTimeout(res, 3000));
+
         const response: FetchTimelineResponse = yield self.entriesRequest.send(
           api.timelineRepository.fetchTimeline,
           {
             startIndex: startIndex,
-            pageSize: 6,
+            pageSize: PAGE_SIZE,
             objectId
           }
         );
 
         if (response) {
-          self.itemCount = response.totalCount;
           self.entries = cast([...self.entries, ...response.activities]);
+
+          // FYI:
+          // Value of itemCount should be equal to count of loaded times + 1.
+          // It allows us to load pages one by one.
+          const noMoreItems = self.entries.length >= response.totalCount;
+          self.itemCount = noMoreItems ? response.totalCount : self.entries.length + 1;
         }
       }),
       createItem: flow(function* (

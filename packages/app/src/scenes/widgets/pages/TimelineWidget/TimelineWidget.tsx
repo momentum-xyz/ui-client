@@ -40,8 +40,6 @@ const TimelineWidget: FC = () => {
     };
   }, [timelineStore, world3dStore]);
 
-  const isItemLoaded = (index: number) => index < timelineStore.entityList.length;
-
   const handleCreatePost = async (form: PostFormInterface, postType: PostTypeEnum) => {
     const isDone = await timelineStore.createItem(form, postType, worldId);
     if (isDone) {
@@ -90,7 +88,7 @@ const TimelineWidget: FC = () => {
   };
 
   const getRowHeight = (index: number) => {
-    return (entityHeightsRef.current as any)[index] || 30;
+    return (entityHeightsRef.current as any)[index] || 0;
   };
 
   const setRowHeight = (index: number, size: number) => {
@@ -98,7 +96,7 @@ const TimelineWidget: FC = () => {
     entityHeightsRef.current = {...entityHeightsRef.current, [index]: size};
   };
 
-  const Row: FC<ListChildComponentProps> = ({index, style, data}) => {
+  const EntityRenderer: FC<ListChildComponentProps> = ({index, style, data}) => {
     const rowRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -115,7 +113,7 @@ const TimelineWidget: FC = () => {
 
     return (
       <div style={style}>
-        <div ref={rowRef} style={{padding: `10px 10px`}}>
+        <styled.EntryItem ref={rowRef}>
           <PostEntry
             author={{
               id: entry.user_id,
@@ -150,7 +148,7 @@ const TimelineWidget: FC = () => {
             onCancelCreation={handleClearFile}
             onShare={() => handleShare(entry)}
           />
-        </div>
+        </styled.EntryItem>
       </div>
     );
   };
@@ -201,37 +199,36 @@ const TimelineWidget: FC = () => {
             {({height, width}: Size) => {
               console.log('[Timeline]: AutoSizer', height);
               return (
-                <>
-                  <InfiniteLoader
-                    ref={infiniteRef}
-                    itemCount={timelineStore.itemCount}
-                    isItemLoaded={isItemLoaded}
-                    loadMoreItems={(startIndex, stopIndex) => {
-                      timelineStore.loadMore(worldId, startIndex);
-                    }}
-                  >
-                    {({onItemsRendered, ref}) => {
-                      return (
-                        <VariableSizeList
-                          ref={(list) => {
-                            ref(list);
-                            scrollListRef.current = list;
-                          }}
-                          itemCount={timelineStore.itemCount}
-                          itemKey={(index) => index}
-                          itemData={{items: timelineStore.entityList}}
-                          onItemsRendered={onItemsRendered}
-                          estimatedItemSize={300}
-                          width={width}
-                          height={height}
-                          itemSize={getRowHeight}
-                        >
-                          {Row}
-                        </VariableSizeList>
-                      );
-                    }}
-                  </InfiniteLoader>
-                </>
+                <InfiniteLoader
+                  threshold={5}
+                  ref={infiniteRef}
+                  itemCount={timelineStore.itemCount}
+                  isItemLoaded={(index) => index < timelineStore.entityList.length}
+                  loadMoreItems={(startIndex, stopIndex) => {
+                    timelineStore.loadMore(worldId, startIndex);
+                  }}
+                >
+                  {({onItemsRendered, ref}) => {
+                    return (
+                      <VariableSizeList
+                        width={width}
+                        height={height}
+                        ref={(list) => {
+                          ref(list);
+                          scrollListRef.current = list;
+                        }}
+                        itemSize={getRowHeight}
+                        itemCount={timelineStore.itemCount}
+                        itemKey={(index) => index}
+                        itemData={{items: timelineStore.entityList}}
+                        onItemsRendered={onItemsRendered}
+                        estimatedItemSize={300}
+                      >
+                        {EntityRenderer}
+                      </VariableSizeList>
+                    );
+                  }}
+                </InfiniteLoader>
               );
             }}
           </AutoSizer>
