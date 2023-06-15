@@ -49,6 +49,18 @@ const ObjectFunctionalityStore = types
         asset_2d_id: self.currentAssetId
       });
     }),
+    removeObjectFunctionality: flow(function* () {
+      if (!self.objectId) {
+        return;
+      }
+
+      yield self.updateAsset2dRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
+        spaceId: self.objectId,
+        asset_2d_id: null as any
+      });
+
+      self.currentAssetId = "";
+    }),
     selectAsset(id: string) {
       self.currentAssetId = id;
     },

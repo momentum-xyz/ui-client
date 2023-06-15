@@ -6,12 +6,13 @@ import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {TextObjectInterface} from 'core/interfaces';
+import { PluginIdEnum } from 'api/enums';
 
 import * as styled from './AssignText.styled';
 
 interface PropsInterface {
   objectId: string;
-  actionRef: MutableRefObject<{doSave: () => void}>;
+  actionRef: MutableRefObject<{doSave: () => void; doDelete: () => void}>;
 }
 
 const AssignText: FC<PropsInterface> = ({actionRef, objectId}) => {
@@ -40,7 +41,10 @@ const AssignText: FC<PropsInterface> = ({actionRef, objectId}) => {
 
   // TEMP
   actionRef.current = {
-    doSave: handleSubmit(formSubmitHandler)
+    doSave: handleSubmit(formSubmitHandler),
+    doDelete: async () => {
+      await assetStore.deleteFunction(objectId, PluginIdEnum.TEXT);
+    }
   };
 
   const titleErrorMessage = useMemo(() => {

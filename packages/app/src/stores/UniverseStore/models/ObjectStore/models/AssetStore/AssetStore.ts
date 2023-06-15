@@ -112,6 +112,20 @@ const AssetStore = types
       });
 
       yield self.getSpaceAttributeValue(PluginIdEnum.TEXT, objectId);
+    }),
+    deleteFunction: flow(function* (objectId: string, pluginId: PluginIdEnum) {
+      // yield self.setTileRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+      //   spaceId: objectId,
+      //   plugin_id: pluginId,
+      //   attribute_name: AttributeNameEnum.STATE,
+      //   value: null as any
+      // });
+
+      yield self.setTileRequest.send(api.spaceAttributeRepository.deleteSpaceAttribute, {
+        spaceId: objectId,
+        plugin_id: PluginIdEnum.IMAGE,
+        attribute_name: AttributeNameEnum.STATE,
+      });
     })
   }))
   .views((self) => ({

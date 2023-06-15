@@ -33,7 +33,10 @@ const ObjectFunction: FC = () => {
     ? TABS_LIST.filter((tab) => tab.id === objectFunctionalityStore.currentAssetId)
     : TABS_LIST;
 
-  const actionRef = useRef<{doSave: () => void}>({doSave: () => {}});
+  const actionRef = useRef<{doSave: () => void; doDelete: () => void}>({
+    doSave: () => {},
+    doDelete: () => {}
+  });
 
   console.log('ObjectFunctionalityPage', {
     selectedObjectId,
@@ -76,6 +79,22 @@ const ObjectFunction: FC = () => {
     } catch (e) {
       console.log(e);
       toast.error(<ToastContent icon="alert" text="Error saving" />);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      // actionRef.current?.doDelete();
+
+      await objectFunctionalityStore.removeObjectFunctionality();
+
+      creatorStore.setSelectedTab(null);
+      handleSubMenuActiveChange();
+
+      toast.info(<ToastContent icon="check" text="Deleted" />);
+    } catch (e) {
+      console.log(e);
+      toast.error(<ToastContent icon="alert" text="Error deleting" />);
     }
   };
 
@@ -143,7 +162,11 @@ const ObjectFunction: FC = () => {
       {activeId && (
         <styled.ActionBar>
           <Button label="Back" variant="secondary" onClick={() => setModifiedOptionValue(null)} />
-          <Button label="Embed" onClick={handleSave} />
+          {objectFunctionalityStore.currentAssetId ? (
+            <Button label="Delete" onClick={handleDelete} />
+          ) : (
+            <Button label="Embed" onClick={handleSave} />
+          )}
         </styled.ActionBar>
       )}
     </styled.Container>
