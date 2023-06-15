@@ -1,9 +1,17 @@
-import {AbstractMesh, ActionManager, ExecuteCodeAction, Matrix, Scene} from '@babylonjs/core';
+import {
+  AbstractMesh,
+  ActionManager,
+  ExecuteCodeAction,
+  Matrix,
+  NodeMaterial,
+  Scene
+} from '@babylonjs/core';
 import {ClickPositionInterface} from '@momentum-xyz/core';
 
 import {PlayerHelper} from './PlayerHelper';
 import {UniverseBuilderHelper} from './UniverseBuilderHelper';
 import {ObjectHelper} from './ObjectHelper';
+import {ShaderEffectsHelper} from './ShaderEffectsHelper';
 
 export class InputHelper {
   static moveKeys = [
@@ -18,6 +26,8 @@ export class InputHelper {
     'ArrowLeft',
     'ArrowRight'
   ];
+
+  static selectedObjectID = '';
 
   static initializeUniverse(
     scene: Scene,
@@ -39,7 +49,6 @@ export class InputHelper {
       if (hit) {
         if (hit.pickedMesh) {
           const pickedId = hit.pickedMesh.metadata;
-
           // Currently worldIds === userIds, so every click on mesh will be userClick.
           if (UniverseBuilderHelper.accountsMap.has(pickedId)) {
             UniverseBuilderHelper.goToOrb(pickedId, true);
@@ -81,10 +90,13 @@ export class InputHelper {
         if (hit.pickedMesh) {
           // get the root parent of the picked mesh
           let parent = hit.pickedMesh;
+
           while (parent.parent) {
             parent = parent.parent as AbstractMesh;
           }
           console.log('clicked on object with id: ' + parent.metadata);
+          InputHelper.selectedObjectID = parent.metadata;
+
           if (ObjectHelper.objectsMap.has(parent.metadata)) {
             onObjectClick(parent.metadata, lastClick);
           } else if (
@@ -118,16 +130,29 @@ export class InputHelper {
         } else if (evt.sourceEvent.key === '3') {
           PlayerHelper.selectedSpeed = 3;
           PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
+          NodeMaterial.ParseFromSnippetAsync('#JN2BSF#8', ObjectHelper.scene).then((myNodeMat) => {
+            myNodeMat.build();
+
+            ObjectHelper.objectsMap.forEach((element) => {
+              if (element.objectDefinition.name === 'nodeMatTest1') {
+                const childMeshes = element.objectInstance.rootNodes[0].getChildMeshes();
+                childMeshes[0].material = myNodeMat;
+              }
+            });
+          });
         } else if (evt.sourceEvent.key === '4') {
           PlayerHelper.selectedSpeed = 4;
           PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
         } else if (evt.sourceEvent.key === '5') {
+          ShaderEffectsHelper.setShaderForObject('a', 'a');
           PlayerHelper.selectedSpeed = 5;
           PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
         } else if (evt.sourceEvent.key === '6') {
+          ShaderEffectsHelper.changeEffectValues('a', 1);
           PlayerHelper.selectedSpeed = 6;
           PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
         } else if (evt.sourceEvent.key === '7') {
+          ShaderEffectsHelper.changeEffectValues('a', -1);
           PlayerHelper.selectedSpeed = 7;
           PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
         } else if (evt.sourceEvent.key === '8') {
