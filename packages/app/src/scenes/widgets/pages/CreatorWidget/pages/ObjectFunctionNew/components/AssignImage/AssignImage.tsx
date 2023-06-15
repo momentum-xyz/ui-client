@@ -7,7 +7,7 @@ import cn from 'classnames';
 
 import {ImageObjectInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
-import { PluginIdEnum } from 'api/enums';
+import {PluginIdEnum} from 'api/enums';
 
 import * as styled from './AssignImage.styled';
 
@@ -15,7 +15,7 @@ const MAX_ASSET_SIZE_MB = 8;
 const MAX_ASSET_SIZE_B = MAX_ASSET_SIZE_MB * Math.pow(1024, 2);
 
 interface PropsInterface {
-  actionRef: MutableRefObject<{doSave: () => void, doDelete: () => void}>;
+  actionRef: MutableRefObject<{doSave: () => void; doDelete: () => void}>;
   objectId: string;
 }
 
@@ -62,8 +62,8 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
   // TEMP
   actionRef.current = {
     doSave: handleSubmit(formSubmitHandler),
-    doDelete: async() => {
-      await assetStore.deleteFunction(objectId, PluginIdEnum.IMAGE)
+    doDelete: async () => {
+      await assetStore.deleteFunction(objectId, PluginIdEnum.IMAGE);
     }
   };
 

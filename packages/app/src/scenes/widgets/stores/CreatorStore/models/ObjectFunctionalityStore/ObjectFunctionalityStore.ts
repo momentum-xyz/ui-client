@@ -59,7 +59,7 @@ const ObjectFunctionalityStore = types
         asset_2d_id: null as any
       });
 
-      self.currentAssetId = "";
+      self.currentAssetId = '';
     }),
     selectAsset(id: string) {
       self.currentAssetId = id;

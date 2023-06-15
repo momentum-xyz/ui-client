@@ -6,7 +6,7 @@ import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {TextObjectInterface} from 'core/interfaces';
-import { PluginIdEnum } from 'api/enums';
+import {PluginIdEnum} from 'api/enums';
 
 import * as styled from './AssignText.styled';
 
