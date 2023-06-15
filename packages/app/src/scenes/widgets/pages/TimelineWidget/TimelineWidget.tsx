@@ -26,12 +26,13 @@ const TimelineWidget: FC = () => {
   const {t} = useI18n();
 
   useEffect(() => {
+    timelineStore.init(sessionStore.isGuest);
     timelineStore.loadMore(worldId, 0);
 
     return () => {
       timelineStore.resetModel();
     };
-  }, [timelineStore, worldId]);
+  }, [timelineStore, sessionStore, worldId]);
 
   useEffect(() => {
     return () => {
@@ -114,51 +115,72 @@ const TimelineWidget: FC = () => {
     return (
       <div style={style}>
         <styled.EntryItem ref={rowRef}>
-          <PostEntry
-            author={{
-              id: entry.user_id,
-              name: entry.user_name,
-              avatarSrc: getImageAbsoluteUrl(entry.avatar_hash),
-              isItMe: entry.user_id === sessionStore.userId
-            }}
-            entry={{
-              id: entry.activity_id,
-              description: entry.data.description,
-              type: entry.type,
-              objectId: entry.object_id,
-              objectName: entry.world_name,
-              created: entry.created_at,
-              hashSrc:
-                entry.type === PostTypeEnum.VIDEO
-                  ? getVideoAbsoluteUrl(entry.data.hash)
-                  : getImageAbsoluteUrl(entry.data.hash, ImageSizeEnum.S5)
-            }}
-            canEdit={universeStore.isMyWorld || entry.user_id === sessionStore.userId}
-            videoOrScreenshot={world3dStore?.screenshotOrVideo}
-            isPending={timelineStore.isPending}
-            isScreenRecording={universeStore.isScreenRecording}
-            onClearVideoOrScreenshot={handleClearFile}
-            onMakeScreenshot={handleMakeScreenshot}
-            onStartRecording={handleStartRecording}
-            onStopRecording={handleStopRecording}
-            onCreateOrUpdatePost={(form) => {
-              return handleUpdatePost(form, entry);
-            }}
-            onDelete={() => handleDeletePost(entry)}
-            onCancelCreation={handleClearFile}
-            onShare={() => handleShare(entry)}
-          />
+          {/* CREATE A NEW ONE FORM */}
+          {data.isCreationShown && index === 0 ? (
+            <PostEntry
+              author={{
+                id: data.user.id,
+                name: data.user.name,
+                avatarSrc: data.user.avatarSrc || null,
+                isItMe: true
+              }}
+              videoOrScreenshot={world3dStore?.screenshotOrVideo}
+              isPending={timelineStore.isPending}
+              isScreenRecording={universeStore.isScreenRecording}
+              onClearVideoOrScreenshot={handleClearFile}
+              onMakeScreenshot={handleMakeScreenshot}
+              onStartRecording={handleStartRecording}
+              onStopRecording={handleStopRecording}
+              onCreateOrUpdatePost={handleCreatePost}
+              onCancelCreation={handleClearFile}
+            />
+          ) : (
+            <PostEntry
+              author={{
+                id: entry.user_id,
+                name: entry.user_name,
+                avatarSrc: getImageAbsoluteUrl(entry.avatar_hash),
+                isItMe: entry.user_id === sessionStore.userId
+              }}
+              entry={{
+                id: entry.activity_id,
+                description: entry.data.description,
+                type: entry.type,
+                objectId: entry.object_id,
+                objectName: entry.world_name,
+                created: entry.created_at,
+                hashSrc:
+                  entry.type === PostTypeEnum.VIDEO
+                    ? getVideoAbsoluteUrl(entry.data.hash)
+                    : getImageAbsoluteUrl(entry.data.hash, ImageSizeEnum.S5)
+              }}
+              canEdit={universeStore.isMyWorld || entry.user_id === sessionStore.userId}
+              videoOrScreenshot={world3dStore?.screenshotOrVideo}
+              isPending={timelineStore.isPending}
+              isScreenRecording={universeStore.isScreenRecording}
+              onClearVideoOrScreenshot={handleClearFile}
+              onMakeScreenshot={handleMakeScreenshot}
+              onStartRecording={handleStartRecording}
+              onStopRecording={handleStopRecording}
+              onCreateOrUpdatePost={(form) => {
+                return handleUpdatePost(form, entry);
+              }}
+              onDelete={() => handleDeletePost(entry)}
+              onCancelCreation={handleClearFile}
+              onShare={() => handleShare(entry)}
+            />
+          )}
         </styled.EntryItem>
       </div>
     );
   };
 
-  console.log('[Timeline]: Entities', timelineStore.entityList);
-  console.log('[Timeline]: Entity Heights', entityHeightsRef.current);
-
   if (!user) {
     return <></>;
   }
+
+  console.log('[Timeline]: Entities', timelineStore.entityList);
+  console.log('[Timeline]: Entity Heights', entityHeightsRef.current);
 
   return (
     <styled.Container data-testid="TimelineWidget-test">
@@ -173,28 +195,6 @@ const TimelineWidget: FC = () => {
         onClose={() => widgetManagerStore.close(WidgetEnum.TIMELINE)}
       >
         <styled.Wrapper>
-          {/* CREATE A NEW ONE FORM */}
-          {sessionStore.isGuest && (
-            <PostEntry
-              author={{
-                id: user.id,
-                name: user.name,
-                avatarSrc: user.avatarSrc || null,
-                isItMe: true
-              }}
-              videoOrScreenshot={world3dStore?.screenshotOrVideo}
-              isPending={timelineStore.isPending}
-              isScreenRecording={universeStore.isScreenRecording}
-              onClearVideoOrScreenshot={handleClearFile}
-              onMakeScreenshot={handleMakeScreenshot}
-              onStartRecording={handleStartRecording}
-              onStopRecording={handleStopRecording}
-              onCreateOrUpdatePost={handleCreatePost}
-              onCancelCreation={handleClearFile}
-            />
-          )}
-
-          {/* LIST OF ENTRIES */}
           <AutoSizer>
             {({height, width}: Size) => {
               console.log('[Timeline]: AutoSizer', height);
@@ -220,7 +220,11 @@ const TimelineWidget: FC = () => {
                         itemSize={getRowHeight}
                         itemCount={timelineStore.itemCount}
                         itemKey={(index) => index}
-                        itemData={{items: timelineStore.entityList}}
+                        itemData={{
+                          user: sessionStore.user,
+                          items: timelineStore.entityList,
+                          isCreationShown: timelineStore.isCreationShown
+                        }}
                         onItemsRendered={onItemsRendered}
                         estimatedItemSize={300}
                       >

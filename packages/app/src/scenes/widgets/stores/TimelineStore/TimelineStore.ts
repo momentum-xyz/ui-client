@@ -14,6 +14,7 @@ const TimelineStore = types.compose(
       mediaUploader: types.optional(MediaUploader, {}),
       entries: types.optional(types.array(TimelineEntry), []),
       itemCount: types.optional(types.number, 0),
+      isCreationShown: false,
 
       createRequest: types.optional(RequestModel, {}),
       updateRequest: types.optional(RequestModel, {}),
@@ -21,9 +22,10 @@ const TimelineStore = types.compose(
       entriesRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
+      init(isGuest: boolean): void {
+        self.isCreationShown = !isGuest;
+      },
       loadMore: flow(function* (objectId: string, startIndex: number) {
-        //yield new Promise((res) => setTimeout(res, 3000));
-
         const response: FetchTimelineResponse = yield self.entriesRequest.send(
           api.timelineRepository.fetchTimeline,
           {
@@ -33,14 +35,36 @@ const TimelineStore = types.compose(
           }
         );
 
+        // Dummy entry for the creation form
+        if (startIndex === 0 && self.isCreationShown) {
+          self.entries = cast([
+            {
+              activity_id: '',
+              created_at: '',
+              object_id: '',
+              world_name: '',
+              user_id: '',
+              user_name: '',
+              avatar_hash: '',
+              type: PostTypeEnum.SCREENSHOT,
+              data: {
+                hash: '',
+                description: ''
+              }
+            }
+          ]);
+        }
+
         if (response) {
           self.entries = cast([...self.entries, ...response.activities]);
 
-          // FYI:
+          // We should add one item for rendering the creation form
+          const totalCount = self.isCreationShown ? response.totalCount + 1 : response.totalCount;
+
           // Value of itemCount should be equal to count of loaded times + 1.
           // It allows us to load pages one by one.
-          const noMoreItems = self.entries.length >= response.totalCount;
-          self.itemCount = noMoreItems ? response.totalCount : self.entries.length + 1;
+          const noMoreItems = self.entries.length >= totalCount;
+          self.itemCount = noMoreItems ? totalCount : self.entries.length + 1;
         }
       }),
       createItem: flow(function* (
