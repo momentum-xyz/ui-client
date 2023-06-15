@@ -56,7 +56,7 @@ const ObjectFunctionalityStore = types
 
       yield self.updateAsset2dRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
         spaceId: self.objectId,
-        asset_2d_id: ""
+        asset_2d_id: ''
       });
 
       self.currentAssetId = '';

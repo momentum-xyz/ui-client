@@ -118,7 +118,7 @@ const AssetStore = types
         spaceId: objectId,
         plugin_id: pluginId,
         attribute_name: AttributeNameEnum.STATE,
-        value: "" as any
+        value: '' as any
       });
 
       // yield self.setTileRequest.send(api.spaceAttributeRepository.deleteSpaceAttribute, {
