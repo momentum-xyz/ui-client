@@ -1,5 +1,8 @@
-import {FC, useEffect} from 'react';
+import {FC, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
+import AutoSizer, {Size} from 'react-virtualized-auto-sizer';
+import InfiniteLoader from 'react-window-infinite-loader';
+import {ListChildComponentProps, VariableSizeList} from 'react-window';
 import {Event3dEmitter, PostTypeEnum, useI18n} from '@momentum-xyz/core';
 import {ImageSizeEnum, Panel, PostEntry, PostFormInterface} from '@momentum-xyz/ui-kit';
 
@@ -16,10 +19,18 @@ const TimelineWidget: FC = () => {
   const {timelineStore} = widgetStore;
   const {user} = sessionStore;
 
+  const infiniteRef = useRef(null);
+  const scrollListRef = useRef<VariableSizeList | null>();
+  const entityHeightsRef = useRef({});
+
   const {t} = useI18n();
 
   useEffect(() => {
-    timelineStore.fetch(worldId);
+    timelineStore.loadMore(worldId, 0);
+
+    return () => {
+      timelineStore.resetModel();
+    };
   }, [timelineStore, worldId]);
 
   useEffect(() => {
@@ -28,6 +39,8 @@ const TimelineWidget: FC = () => {
       world3dStore?.setIsScreenRecording(false);
     };
   }, [timelineStore, world3dStore]);
+
+  const isItemLoaded = (index: number) => index < timelineStore.entityList.length;
 
   const handleCreatePost = async (form: PostFormInterface, postType: PostTypeEnum) => {
     const isDone = await timelineStore.createItem(form, postType, worldId);
@@ -76,6 +89,75 @@ const TimelineWidget: FC = () => {
     console.log(entry);
   };
 
+  const getRowHeight = (index: number) => {
+    return (entityHeightsRef.current as any)[index] || 30;
+  };
+
+  const setRowHeight = (index: number, size: number) => {
+    scrollListRef.current?.resetAfterIndex(0);
+    entityHeightsRef.current = {...entityHeightsRef.current, [index]: size};
+  };
+
+  const Row: FC<ListChildComponentProps> = ({index, style, data}) => {
+    const rowRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      if (rowRef.current) {
+        setRowHeight(index, rowRef.current.clientHeight);
+      }
+    }, [index, rowRef]);
+
+    const entry = data.items[index];
+
+    if (!entry) {
+      return <></>;
+    }
+
+    return (
+      <div style={style}>
+        <div ref={rowRef} style={{padding: `10px 10px`}}>
+          <PostEntry
+            author={{
+              id: entry.user_id,
+              name: entry.user_name,
+              avatarSrc: getImageAbsoluteUrl(entry.avatar_hash),
+              isItMe: entry.user_id === sessionStore.userId
+            }}
+            entry={{
+              id: entry.activity_id,
+              description: entry.data.description,
+              type: entry.type,
+              objectId: entry.object_id,
+              objectName: entry.world_name,
+              created: entry.created_at,
+              hashSrc:
+                entry.type === PostTypeEnum.VIDEO
+                  ? getVideoAbsoluteUrl(entry.data.hash)
+                  : getImageAbsoluteUrl(entry.data.hash, ImageSizeEnum.S5)
+            }}
+            canEdit={universeStore.isMyWorld || entry.user_id === sessionStore.userId}
+            videoOrScreenshot={world3dStore?.screenshotOrVideo}
+            isPending={timelineStore.isPending}
+            isScreenRecording={universeStore.isScreenRecording}
+            onClearVideoOrScreenshot={handleClearFile}
+            onMakeScreenshot={handleMakeScreenshot}
+            onStartRecording={handleStartRecording}
+            onStopRecording={handleStopRecording}
+            onCreateOrUpdatePost={(form) => {
+              return handleUpdatePost(form, entry);
+            }}
+            onDelete={() => handleDeletePost(entry)}
+            onCancelCreation={handleClearFile}
+            onShare={() => handleShare(entry)}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  console.log('[Timeline]: Entities', timelineStore.entityList);
+  console.log('[Timeline]: Entity Heights', entityHeightsRef.current);
+
   if (!user) {
     return <></>;
   }
@@ -83,8 +165,9 @@ const TimelineWidget: FC = () => {
   return (
     <styled.Container data-testid="TimelineWidget-test">
       <Panel
-        isFullHeight
         size="normal"
+        isFullHeight
+        isScrollDisabled
         variant="primary"
         icon="clock-two"
         title={t('labels.timeline')}
@@ -93,7 +176,7 @@ const TimelineWidget: FC = () => {
       >
         <styled.Wrapper>
           {/* CREATE A NEW ONE FORM */}
-          {!sessionStore.isGuest && (
+          {sessionStore.isGuest && (
             <PostEntry
               author={{
                 id: user.id,
@@ -114,45 +197,44 @@ const TimelineWidget: FC = () => {
           )}
 
           {/* LIST OF ENTRIES */}
-          <styled.ListContainer>
-            {timelineStore.entries.map((entry) => (
-              <PostEntry
-                key={entry.activity_id}
-                author={{
-                  id: entry.user_id,
-                  name: entry.user_name,
-                  avatarSrc: getImageAbsoluteUrl(entry.avatar_hash),
-                  isItMe: entry.user_id === sessionStore.userId
-                }}
-                entry={{
-                  id: entry.activity_id,
-                  description: entry.data.description,
-                  type: entry.type,
-                  objectId: entry.object_id,
-                  objectName: entry.world_name,
-                  created: entry.created_at,
-                  hashSrc:
-                    entry.type === PostTypeEnum.VIDEO
-                      ? getVideoAbsoluteUrl(entry.data.hash)
-                      : getImageAbsoluteUrl(entry.data.hash, ImageSizeEnum.S5)
-                }}
-                canEdit={universeStore.isMyWorld || entry.user_id === sessionStore.userId}
-                videoOrScreenshot={world3dStore?.screenshotOrVideo}
-                isPending={timelineStore.isPending}
-                isScreenRecording={universeStore.isScreenRecording}
-                onClearVideoOrScreenshot={handleClearFile}
-                onMakeScreenshot={handleMakeScreenshot}
-                onStartRecording={handleStartRecording}
-                onStopRecording={handleStopRecording}
-                onCreateOrUpdatePost={(form) => {
-                  return handleUpdatePost(form, entry);
-                }}
-                onDelete={() => handleDeletePost(entry)}
-                onCancelCreation={handleClearFile}
-                onShare={() => handleShare(entry)}
-              />
-            ))}
-          </styled.ListContainer>
+          <AutoSizer>
+            {({height, width}: Size) => {
+              console.log('[Timeline]: AutoSizer', height);
+              return (
+                <>
+                  <InfiniteLoader
+                    ref={infiniteRef}
+                    itemCount={timelineStore.itemCount}
+                    isItemLoaded={isItemLoaded}
+                    loadMoreItems={(startIndex, stopIndex) => {
+                      timelineStore.loadMore(worldId, startIndex);
+                    }}
+                  >
+                    {({onItemsRendered, ref}) => {
+                      return (
+                        <VariableSizeList
+                          ref={(list) => {
+                            ref(list);
+                            scrollListRef.current = list;
+                          }}
+                          itemCount={timelineStore.itemCount}
+                          itemKey={(index) => index}
+                          itemData={{items: timelineStore.entityList}}
+                          onItemsRendered={onItemsRendered}
+                          estimatedItemSize={300}
+                          width={width}
+                          height={height}
+                          itemSize={getRowHeight}
+                        >
+                          {Row}
+                        </VariableSizeList>
+                      );
+                    }}
+                  </InfiniteLoader>
+                </>
+              );
+            }}
+          </AutoSizer>
         </styled.Wrapper>
       </Panel>
     </styled.Container>

@@ -52,7 +52,7 @@ world_name
 
 export interface FetchTimelineRequest {
   objectId: string;
-  page: number;
+  startIndex: number;
   pageSize: number;
 }
 

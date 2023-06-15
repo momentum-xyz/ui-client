@@ -14,22 +14,24 @@ const TimelineStore = types.compose(
       updateRequest: types.optional(RequestModel, {}),
       deleteRequest: types.optional(RequestModel, {}),
       entriesRequest: types.optional(RequestModel, {}),
-      entries: types.optional(types.array(TimelineEntry), [])
+      entries: types.optional(types.array(TimelineEntry), []),
+
+      itemCount: types.optional(types.number, 0)
     })
     .actions((self) => ({
-      // TODO: Pagination
-      fetch: flow(function* (objectId: string) {
+      loadMore: flow(function* (objectId: string, startIndex: number) {
         const response: FetchTimelineResponse = yield self.entriesRequest.send(
           api.timelineRepository.fetchTimeline,
           {
-            page: 1,
-            pageSize: 10000,
+            startIndex: startIndex,
+            pageSize: 6,
             objectId
           }
         );
 
         if (response) {
-          self.entries = cast(response.activities);
+          self.itemCount = response.totalCount;
+          self.entries = cast([...self.entries, ...response.activities]);
         }
       }),
       createItem: flow(function* (
@@ -87,6 +89,9 @@ const TimelineStore = types.compose(
       })
     }))
     .views((self) => ({
+      get entityList() {
+        return [...self.entries];
+      },
       get isPending(): boolean {
         return (
           self.createRequest.isPending ||
