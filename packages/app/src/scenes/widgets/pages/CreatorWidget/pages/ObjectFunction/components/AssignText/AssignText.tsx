@@ -11,7 +11,7 @@ import * as styled from './AssignText.styled';
 
 interface PropsInterface {
   objectId: string;
-  actionRef: MutableRefObject<{doSave: () => void;}>;
+  actionRef: MutableRefObject<{doSave: () => void}>;
 }
 
 const AssignText: FC<PropsInterface> = ({actionRef, objectId}) => {
