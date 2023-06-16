@@ -1,4 +1,5 @@
 import {FC, useEffect, useMemo, useState} from 'react';
+import {observer} from 'mobx-react-lite';
 import {Controller, useForm} from 'react-hook-form';
 import {useStopwatch} from 'react-timer-hook';
 import {useI18n} from '@momentum-xyz/core';
@@ -194,4 +195,4 @@ const PostVideoForm: FC<PostVideoFormPropsInterface> = ({
   );
 };
 
-export default PostVideoForm;
+export default observer(PostVideoForm);

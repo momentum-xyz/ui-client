@@ -1,5 +1,6 @@
 import {FC, useEffect, useMemo, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
+import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 
 import {PostHeading} from '../../molecules';
@@ -156,4 +157,4 @@ const PostImageForm: FC<PostImageFormPropsInterface> = ({
   );
 };
 
-export default PostImageForm;
+export default observer(PostImageForm);

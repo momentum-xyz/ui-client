@@ -117,6 +117,7 @@ const TimelineWidget: FC = () => {
   }
 
   console.log('[Timeline]: Entities', timelineStore.entityList);
+  console.log('[Timeline]: File', world3dStore?.screenshotOrVideo);
 
   return (
     <styled.Container data-testid="TimelineWidget-test">

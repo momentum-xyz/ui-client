@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 
 import {ButtonEllipse, Frame} from '../../atoms';
@@ -55,4 +56,4 @@ const PostVideoView: FC<PostVideoViewPropsInterface> = ({
   );
 };
 
-export default PostVideoView;
+export default observer(PostVideoView);

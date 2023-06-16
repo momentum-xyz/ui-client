@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 
 import {PostHeading} from '../../molecules';
@@ -55,4 +56,4 @@ const PostImageView: FC<PostImageViewPropsInterface> = ({
   );
 };
 
-export default PostImageView;
+export default observer(PostImageView);
