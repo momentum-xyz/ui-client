@@ -87,6 +87,10 @@ const TimelineWidget: FC = () => {
     world3dStore?.setIsScreenRecording(false);
   };
 
+  const handleEdit = (entry: TimelineEntryModelInterface) => {
+    console.log(entry);
+  };
+
   const handleShare = (entry: TimelineEntryModelInterface) => {
     console.log(entry);
   };
@@ -155,7 +159,6 @@ const TimelineWidget: FC = () => {
                             isCreationShown: timelineStore.isCreationShown,
                             screenshotOrVideo: world3dStore?.screenshotOrVideo,
                             isScreenRecording: universeStore.isScreenRecording,
-                            setPostTypeIntent,
                             handleCreatePost,
                             handleClearFile,
                             handleMakeScreenshot,
@@ -163,6 +166,8 @@ const TimelineWidget: FC = () => {
                             handleStopRecording,
                             handleUpdatePost,
                             handleDeletePost,
+                            setPostTypeIntent,
+                            handleEdit,
                             handleShare
                           }}
                           onItemsRendered={onItemsRendered}

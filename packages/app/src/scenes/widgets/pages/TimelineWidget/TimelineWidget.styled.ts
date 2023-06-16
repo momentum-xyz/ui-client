@@ -12,6 +12,7 @@ export const PanelContainer = styled.div`
 export const InfinityList = styled.div`
   &.hidden {
     opacity: 0;
+    pointer-events: none;
   }
 `;
 
