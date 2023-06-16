@@ -57,7 +57,8 @@ const TimelineWidget: FC = () => {
     if (isDone) {
       world3dStore?.clearSnapshotOrVideo();
       setPostTypeIntent(null);
-      //timelineStore.fetch(worldId);
+      // TODO: RE-FETCH
+      // timelineStore.fetch(worldId);
     }
     return isDone;
   };
@@ -74,7 +75,8 @@ const TimelineWidget: FC = () => {
   const handleDeletePost = async (entry: TimelineEntryModelInterface) => {
     const isDone = await timelineStore.deleteItem(entry, worldId);
     if (isDone) {
-      //timelineStore.fetch(worldId);
+      // TODO: RE-FETCH
+      // timelineStore.fetch(worldId);
     }
     return isDone;
   };
@@ -136,7 +138,6 @@ const TimelineWidget: FC = () => {
         <styled.Wrapper>
           <AutoSizer>
             {({height, width}: Size) => {
-              console.log('[Timeline]: AutoSizer', height);
               return (
                 <>
                   <styled.InfinityList

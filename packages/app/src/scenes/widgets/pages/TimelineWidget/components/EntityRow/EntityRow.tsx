@@ -1,4 +1,4 @@
-import {FC, useEffect, useRef} from 'react';
+import {FC, useEffect, useMemo, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {ListChildComponentProps} from 'react-window';
 import {PostTypeEnum} from '@momentum-xyz/core';
@@ -18,13 +18,15 @@ import * as styled from './EntityRow.styled';
 const EntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
   const rowRef = useRef<HTMLDivElement>(null);
 
+  const entry = useMemo(() => {
+    return data.items[index];
+  }, [data, index]);
+
   useEffect(() => {
     if (rowRef.current) {
       data.setRowHeight(index, rowRef.current.clientHeight);
     }
-  }, [index]);
-
-  const entry = data.items[index];
+  }, [index, data, entry?.description]);
 
   if (!entry) {
     return <></>;
