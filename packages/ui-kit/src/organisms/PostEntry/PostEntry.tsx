@@ -1,15 +1,8 @@
-import {FC, useEffect, useState} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {MediaInterface, PostTypeEnum} from '@momentum-xyz/core';
 
-import {Frame} from '../../atoms';
-import {PostHeading} from '../../molecules';
 import {PostAuthorInterface, PostEntryInterface, PostFormInterface} from '../../interfaces';
-
-import {PostImageForm, PostVideoForm, PostImageView, PostVideoView} from './components';
-import * as styled from './PostEntry.styled';
-
-const MAX_VIDEO_DURATION = 15;
 
 export interface PostEntryPropsInterface {
   entry?: PostEntryInterface;
@@ -29,26 +22,11 @@ export interface PostEntryPropsInterface {
   onShare?: () => void;
 }
 
-type ModeType = 'view' | 'edit';
+// TODO: REMOVAL
+const PostEntry: FC<PostEntryPropsInterface> = () => {
+  return <></>;
 
-const PostEntry: FC<PostEntryPropsInterface> = ({
-  author,
-  entry,
-  canEdit,
-  videoOrScreenshot,
-  isPending,
-  isScreenRecording,
-  onMakeScreenshot,
-  onStartRecording,
-  onStopRecording,
-  onClearVideoOrScreenshot,
-  onCreateOrUpdatePost,
-  onCancelCreation,
-  onDelete,
-  onShare,
-  onVisit
-}) => {
-  const [postTypeIntent, setPostTypeIntent] = useState<PostTypeEnum | null>(null);
+  /*const [postTypeIntent, setPostTypeIntent] = useState<PostTypeEnum | null>(null);
   const [mode, setMode] = useState<ModeType>('view');
 
   useEffect(() => {
@@ -72,14 +50,14 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
   return (
     <styled.Wrapper data-testid="PostEntry-test">
       <Frame>
-        {/* HEADER */}
+
         <PostHeading author={author} entry={entry} />
 
         <styled.Content>
-          {/* Creator */}
+          {/* Creator
           {!entry ? (
             <>
-              {/* Create a new screenshot */}
+              {/* Create a new screenshot
               {postTypeIntent === PostTypeEnum.SCREENSHOT && (
                 <PostImageForm
                   screenshot={videoOrScreenshot?.file}
@@ -91,7 +69,7 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
                 />
               )}
 
-              {/* Create a new video */}
+              {/* Create a new video
               {postTypeIntent === PostTypeEnum.VIDEO && (
                 <PostVideoForm
                   video={videoOrScreenshot?.file}
@@ -108,7 +86,7 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
             </>
           ) : (
             <>
-              {/* View screenshot */}
+              {/* View screenshot
               {entry.type === PostTypeEnum.SCREENSHOT && mode === 'view' && (
                 <PostImageView
                   imageSrc={entry.hashSrc}
@@ -119,7 +97,7 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
                 />
               )}
 
-              {/* View video */}
+              {/* View video
               {entry.type === PostTypeEnum.VIDEO && mode === 'view' && (
                 <PostVideoView
                   videoSrc={entry.hashSrc}
@@ -130,7 +108,7 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
                 />
               )}
 
-              {/* Edit screenshot */}
+              {/* Edit screenshot
               {entry.type === PostTypeEnum.SCREENSHOT && mode === 'edit' && (
                 <PostImageForm
                   screenshot={videoOrScreenshot?.file}
@@ -148,7 +126,7 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
                 />
               )}
 
-              {/* Edit video */}
+              {/* Edit video
               {entry.type === PostTypeEnum.VIDEO && mode === 'edit' && (
                 <PostVideoForm
                   video={videoOrScreenshot?.file}
@@ -173,7 +151,7 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
         </styled.Content>
       </Frame>
     </styled.Wrapper>
-  );
+  );*/
 };
 
 export default observer(PostEntry);

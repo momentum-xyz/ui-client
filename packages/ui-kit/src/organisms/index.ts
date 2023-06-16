@@ -6,3 +6,7 @@ export * from './PostEntry';
 export * from './SideMenu';
 export * from './Slider';
 export * from './AvatarUpload';
+export * from './PostImageForm';
+export * from './PostImageView';
+export * from './PostVideoForm';
+export * from './PostVideoView';
