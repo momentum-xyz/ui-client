@@ -2,7 +2,7 @@ import {FC, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {ListChildComponentProps} from 'react-window';
 import {PostTypeEnum} from '@momentum-xyz/core';
-import {ImageSizeEnum, PostEntry} from '@momentum-xyz/ui-kit';
+import {ImageSizeEnum, PostEntry, PostTypeSelector} from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl, getVideoAbsoluteUrl} from 'core/utils';
 
@@ -26,24 +26,16 @@ const EntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
   return (
     <div style={style} data-testid="EntityRow-test">
       <styled.EntryItem ref={rowRef}>
-        {/* CREATE A NEW ONE FORM */}
+        {/* A NEW POST TYPE SELECTOR */}
         {data.isCreationShown && index === 0 ? (
-          <PostEntry
+          <PostTypeSelector
             author={{
               id: data.user.id,
               name: data.user.name,
               avatarSrc: data.user.avatarSrc || null,
               isItMe: true
             }}
-            videoOrScreenshot={data.screenshotOrVideo}
-            isPending={data.isPending}
-            isScreenRecording={data.isScreenRecording}
-            onClearVideoOrScreenshot={data.handleClearFile}
-            onMakeScreenshot={data.handleMakeScreenshot}
-            onStartRecording={data.handleStartRecording}
-            onStopRecording={data.handleStopRecording}
-            onCreateOrUpdatePost={data.handleCreatePost}
-            onCancelCreation={data.handleClearFile}
+            onSelect={data.setPostTypeIntent}
           />
         ) : (
           <PostEntry

@@ -1,18 +1,12 @@
 import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {MediaInterface, PostTypeEnum, useI18n} from '@momentum-xyz/core';
+import {MediaInterface, PostTypeEnum} from '@momentum-xyz/core';
 
-import {PostAuthorInterface, PostEntryInterface, PostFormInterface} from '../../interfaces';
-import {ButtonEllipse, Frame} from '../../atoms';
+import {Frame} from '../../atoms';
 import {PostHeading} from '../../molecules';
+import {PostAuthorInterface, PostEntryInterface, PostFormInterface} from '../../interfaces';
 
-import {
-  PostTypeSelector,
-  PostImageForm,
-  PostVideoForm,
-  PostImageView,
-  PostVideoView
-} from './components';
+import {PostImageForm, PostVideoForm, PostImageView, PostVideoView} from './components';
 import * as styled from './PostEntry.styled';
 
 const MAX_VIDEO_DURATION = 15;
@@ -57,8 +51,6 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
   const [postTypeIntent, setPostTypeIntent] = useState<PostTypeEnum | null>(null);
   const [mode, setMode] = useState<ModeType>('view');
 
-  const {t} = useI18n();
-
   useEffect(() => {
     return () => {
       console.log('PostEntry UNMOUNT');
@@ -87,16 +79,6 @@ const PostEntry: FC<PostEntryPropsInterface> = ({
           {/* Creator */}
           {!entry ? (
             <>
-              {/* Select a type of new post */}
-              {!postTypeIntent && (
-                <>
-                  <PostTypeSelector onSelect={setPostTypeIntent} />
-                  <styled.Controls>
-                    <ButtonEllipse icon="add" label={t('actions.addToTimeline')} disabled />
-                  </styled.Controls>
-                </>
-              )}
-
               {/* Create a new screenshot */}
               {postTypeIntent === PostTypeEnum.SCREENSHOT && (
                 <PostImageForm

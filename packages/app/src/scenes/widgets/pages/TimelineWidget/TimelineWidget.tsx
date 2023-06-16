@@ -1,8 +1,9 @@
-import {FC, useEffect, useRef} from 'react';
+import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import AutoSizer, {Size} from 'react-virtualized-auto-sizer';
 import InfiniteLoader from 'react-window-infinite-loader';
 import {VariableSizeList} from 'react-window';
+import cn from 'classnames';
 import {Event3dEmitter, PostTypeEnum, useI18n} from '@momentum-xyz/core';
 import {Panel, PostFormInterface} from '@momentum-xyz/ui-kit';
 
@@ -22,6 +23,8 @@ const TimelineWidget: FC = () => {
   const infiniteRef = useRef(null);
   const scrollListRef = useRef<VariableSizeList | null>();
   const entityHeightsRef = useRef({});
+
+  const [postTypeIntent, setPostTypeIntent] = useState<PostTypeEnum | null>(null);
 
   const {t} = useI18n();
 
@@ -121,53 +124,56 @@ const TimelineWidget: FC = () => {
             {({height, width}: Size) => {
               console.log('[Timeline]: AutoSizer', height);
               return (
-                <InfiniteLoader
-                  threshold={5}
-                  ref={infiniteRef}
-                  itemCount={timelineStore.itemCount}
-                  isItemLoaded={(index) => index < timelineStore.entityList.length}
-                  loadMoreItems={(startIndex) => {
-                    timelineStore.loadMore(worldId, startIndex);
-                  }}
-                >
-                  {({onItemsRendered, ref}) => {
-                    return (
-                      <VariableSizeList
-                        width={width}
-                        height={height}
-                        ref={(list) => {
-                          ref(list);
-                          scrollListRef.current = list;
-                        }}
-                        itemSize={getRowHeight}
-                        itemCount={timelineStore.itemCount}
-                        itemKey={(index) => index}
-                        itemData={{
-                          setRowHeight,
-                          user: sessionStore.user,
-                          items: timelineStore.entityList,
-                          isMyWorld: universeStore.isMyWorld,
-                          isPending: timelineStore.isPending,
-                          isCreationShown: timelineStore.isCreationShown,
-                          screenshotOrVideo: world3dStore?.screenshotOrVideo,
-                          isScreenRecording: universeStore.isScreenRecording,
-                          handleCreatePost,
-                          handleClearFile,
-                          handleMakeScreenshot,
-                          handleStartRecording,
-                          handleStopRecording,
-                          handleUpdatePost,
-                          handleDeletePost,
-                          handleShare
-                        }}
-                        onItemsRendered={onItemsRendered}
-                        estimatedItemSize={300}
-                      >
-                        {EntityRow}
-                      </VariableSizeList>
-                    );
-                  }}
-                </InfiniteLoader>
+                <styled.InfinityList className={cn(postTypeIntent && 'hidden')}>
+                  <InfiniteLoader
+                    threshold={5}
+                    ref={infiniteRef}
+                    itemCount={timelineStore.itemCount}
+                    isItemLoaded={(index) => index < timelineStore.entityList.length}
+                    loadMoreItems={(startIndex) => {
+                      timelineStore.loadMore(worldId, startIndex);
+                    }}
+                  >
+                    {({onItemsRendered, ref}) => {
+                      return (
+                        <VariableSizeList
+                          width={width}
+                          height={height}
+                          ref={(list) => {
+                            ref(list);
+                            scrollListRef.current = list;
+                          }}
+                          itemSize={getRowHeight}
+                          itemCount={timelineStore.itemCount}
+                          itemKey={(index) => index}
+                          itemData={{
+                            setRowHeight,
+                            user: sessionStore.user,
+                            items: timelineStore.entityList,
+                            isMyWorld: universeStore.isMyWorld,
+                            isPending: timelineStore.isPending,
+                            isCreationShown: timelineStore.isCreationShown,
+                            screenshotOrVideo: world3dStore?.screenshotOrVideo,
+                            isScreenRecording: universeStore.isScreenRecording,
+                            setPostTypeIntent,
+                            handleCreatePost,
+                            handleClearFile,
+                            handleMakeScreenshot,
+                            handleStartRecording,
+                            handleStopRecording,
+                            handleUpdatePost,
+                            handleDeletePost,
+                            handleShare
+                          }}
+                          onItemsRendered={onItemsRendered}
+                          estimatedItemSize={300}
+                        >
+                          {EntityRow}
+                        </VariableSizeList>
+                      );
+                    }}
+                  </InfiniteLoader>
+                </styled.InfinityList>
               );
             }}
           </AutoSizer>
