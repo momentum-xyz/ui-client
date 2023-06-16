@@ -5,11 +5,18 @@ import InfiniteLoader from 'react-window-infinite-loader';
 import {VariableSizeList} from 'react-window';
 import cn from 'classnames';
 import {Event3dEmitter, PostTypeEnum, useI18n} from '@momentum-xyz/core';
-import {Panel, PostFormInterface} from '@momentum-xyz/ui-kit';
+import {
+  Panel,
+  ImageSizeEnum,
+  PostImageForm,
+  PostVideoForm,
+  PostFormInterface
+} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {TimelineEntryModelInterface} from 'core/models';
+import {getImageAbsoluteUrl, getVideoAbsoluteUrl} from 'core/utils';
 
 import {EntityRow} from './components';
 import * as styled from './TimelineWidget.styled';
@@ -25,6 +32,7 @@ const TimelineWidget: FC = () => {
   const entityHeightsRef = useRef({});
 
   const [postTypeIntent, setPostTypeIntent] = useState<PostTypeEnum | null>(null);
+  const [selectedPost, setSelectedPost] = useState<TimelineEntryModelInterface | null>(null);
 
   const {t} = useI18n();
 
@@ -88,7 +96,7 @@ const TimelineWidget: FC = () => {
   };
 
   const handleEdit = (entry: TimelineEntryModelInterface) => {
-    console.log(entry);
+    setSelectedPost(entry);
   };
 
   const handleShare = (entry: TimelineEntryModelInterface) => {
@@ -109,7 +117,6 @@ const TimelineWidget: FC = () => {
   }
 
   console.log('[Timeline]: Entities', timelineStore.entityList);
-  console.log('[Timeline]: File', world3dStore?.screenshotOrVideo);
 
   return (
     <styled.Container data-testid="TimelineWidget-test">
@@ -128,57 +135,174 @@ const TimelineWidget: FC = () => {
             {({height, width}: Size) => {
               console.log('[Timeline]: AutoSizer', height);
               return (
-                <styled.InfinityList className={cn(postTypeIntent && 'hidden')}>
-                  <InfiniteLoader
-                    threshold={5}
-                    ref={infiniteRef}
-                    itemCount={timelineStore.itemCount}
-                    isItemLoaded={(index) => index < timelineStore.entityList.length}
-                    loadMoreItems={(startIndex) => {
-                      timelineStore.loadMore(worldId, startIndex);
-                    }}
+                <>
+                  <styled.InfinityList
+                    className={cn((postTypeIntent || !!selectedPost) && 'hidden')}
                   >
-                    {({onItemsRendered, ref}) => {
-                      return (
-                        <VariableSizeList
-                          width={width}
-                          height={height}
-                          ref={(list) => {
-                            ref(list);
-                            scrollListRef.current = list;
-                          }}
-                          itemSize={getRowHeight}
-                          itemCount={timelineStore.itemCount}
-                          itemKey={(index) => index}
-                          itemData={{
-                            setRowHeight,
-                            user: sessionStore.user,
-                            items: timelineStore.entityList,
-                            isMyWorld: universeStore.isMyWorld,
-                            isPending: timelineStore.isPending,
-                            isCreationShown: timelineStore.isCreationShown,
-                            screenshotOrVideo: world3dStore?.screenshotOrVideo,
-                            isScreenRecording: universeStore.isScreenRecording,
-                            handleCreatePost,
-                            handleClearFile,
-                            handleMakeScreenshot,
-                            handleStartRecording,
-                            handleStopRecording,
-                            handleUpdatePost,
-                            handleDeletePost,
-                            setPostTypeIntent,
-                            handleEdit,
-                            handleShare
-                          }}
-                          onItemsRendered={onItemsRendered}
-                          estimatedItemSize={300}
-                        >
-                          {EntityRow}
-                        </VariableSizeList>
-                      );
-                    }}
-                  </InfiniteLoader>
-                </styled.InfinityList>
+                    <InfiniteLoader
+                      threshold={5}
+                      ref={infiniteRef}
+                      itemCount={timelineStore.itemCount}
+                      isItemLoaded={(index) => index < timelineStore.entityList.length}
+                      loadMoreItems={(startIndex) => {
+                        timelineStore.loadMore(worldId, startIndex);
+                      }}
+                    >
+                      {({onItemsRendered, ref}) => {
+                        return (
+                          <VariableSizeList
+                            width={width}
+                            height={height}
+                            ref={(list) => {
+                              ref(list);
+                              scrollListRef.current = list;
+                            }}
+                            itemSize={getRowHeight}
+                            itemCount={timelineStore.itemCount}
+                            itemKey={(index) => index}
+                            itemData={{
+                              user: sessionStore.user,
+                              items: timelineStore.entityList,
+                              isCreationShown: timelineStore.isCreationShown,
+                              setRowHeight,
+                              setPostTypeIntent,
+                              handleShare,
+                              handleEdit
+                            }}
+                            onItemsRendered={onItemsRendered}
+                            estimatedItemSize={300}
+                          >
+                            {EntityRow}
+                          </VariableSizeList>
+                        );
+                      }}
+                    </InfiniteLoader>
+                  </styled.InfinityList>
+
+                  {/* A NEW SCREENSHOT FORM */}
+                  {postTypeIntent === PostTypeEnum.SCREENSHOT && (
+                    <styled.Overlay>
+                      <PostImageForm
+                        author={{
+                          id: user.id,
+                          name: user.name,
+                          avatarSrc: user.avatarSrc || null,
+                          isItMe: true
+                        }}
+                        isPending={timelineStore.isPending}
+                        screenshot={world3dStore?.screenshotOrVideo?.file}
+                        onMakeScreenshot={handleMakeScreenshot}
+                        onCreateOrUpdate={(form) => {
+                          return handleCreatePost(form, postTypeIntent);
+                        }}
+                        onClearScreenshot={handleClearFile}
+                        onCancel={() => {
+                          handleClearFile();
+                          setPostTypeIntent(null);
+                        }}
+                      />
+                    </styled.Overlay>
+                  )}
+
+                  {/* A NEW VIDEO FORM */}
+                  {postTypeIntent === PostTypeEnum.VIDEO && (
+                    <styled.Overlay>
+                      <PostVideoForm
+                        author={{
+                          id: user.id,
+                          name: user.name,
+                          avatarSrc: user.avatarSrc || null,
+                          isItMe: true
+                        }}
+                        isPending={timelineStore.isPending}
+                        video={world3dStore?.screenshotOrVideo?.file}
+                        isScreenRecording={universeStore.isScreenRecording}
+                        onStartRecording={handleStartRecording}
+                        onStopRecording={handleStopRecording}
+                        onCreateOrUpdate={(form) => {
+                          return handleCreatePost(form, postTypeIntent);
+                        }}
+                        onClearVideo={handleClearFile}
+                        onCancel={() => {
+                          handleClearFile();
+                          setPostTypeIntent(null);
+                        }}
+                      />
+                    </styled.Overlay>
+                  )}
+
+                  {/* EDIT SCREENSHOT FORM */}
+                  {selectedPost?.type === PostTypeEnum.SCREENSHOT && (
+                    <styled.Overlay>
+                      <PostImageForm
+                        author={{
+                          id: user.id,
+                          name: user.name,
+                          avatarSrc: user.avatarSrc || null,
+                          isItMe: true
+                        }}
+                        entry={{
+                          id: selectedPost.activity_id,
+                          description: selectedPost.data.description,
+                          type: selectedPost.type,
+                          objectId: selectedPost.object_id,
+                          objectName: selectedPost.world_name,
+                          created: selectedPost.created_at,
+                          hashSrc: getImageAbsoluteUrl(selectedPost.data.hash, ImageSizeEnum.S5)
+                        }}
+                        isPending={timelineStore.isPending}
+                        screenshot={world3dStore?.screenshotOrVideo?.file}
+                        onMakeScreenshot={handleMakeScreenshot}
+                        onCreateOrUpdate={(form) => {
+                          return handleUpdatePost(form, selectedPost);
+                        }}
+                        onDelete={() => handleDeletePost(selectedPost)}
+                        onClearScreenshot={handleClearFile}
+                        onCancel={() => {
+                          handleClearFile();
+                          setSelectedPost(null);
+                        }}
+                      />
+                    </styled.Overlay>
+                  )}
+
+                  {/* EDIT VIDEO FORM */}
+                  {selectedPost?.type === PostTypeEnum.VIDEO && (
+                    <styled.Overlay>
+                      <PostVideoForm
+                        author={{
+                          id: user.id,
+                          name: user.name,
+                          avatarSrc: user.avatarSrc || null,
+                          isItMe: true
+                        }}
+                        entry={{
+                          id: selectedPost.activity_id,
+                          description: selectedPost.data.description,
+                          type: selectedPost.type,
+                          objectId: selectedPost.object_id,
+                          objectName: selectedPost.world_name,
+                          created: selectedPost.created_at,
+                          hashSrc: getVideoAbsoluteUrl(selectedPost.data.hash)
+                        }}
+                        isPending={timelineStore.isPending}
+                        video={world3dStore?.screenshotOrVideo?.file}
+                        isScreenRecording={universeStore.isScreenRecording}
+                        onStartRecording={handleStartRecording}
+                        onStopRecording={handleStopRecording}
+                        onCreateOrUpdate={(form) => {
+                          return handleUpdatePost(form, selectedPost);
+                        }}
+                        onDelete={() => handleDeletePost(selectedPost)}
+                        onClearVideo={handleClearFile}
+                        onCancel={() => {
+                          handleClearFile();
+                          setSelectedPost(null);
+                        }}
+                      />
+                    </styled.Overlay>
+                  )}
+                </>
               );
             }}
           </AutoSizer>

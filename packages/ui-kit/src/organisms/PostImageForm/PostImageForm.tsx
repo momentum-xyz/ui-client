@@ -11,7 +11,7 @@ import * as styled from './PostImageForm.styled';
 export interface PostImageFormPropsInterface {
   author: PostAuthorInterface;
   entry?: PostEntryInterface;
-  screenshot?: File;
+  screenshot?: File | null;
   isPending?: boolean;
   onMakeScreenshot: () => void;
   onClearScreenshot: () => void;
@@ -38,7 +38,7 @@ const PostImageForm: FC<PostImageFormPropsInterface> = ({
   const isNewPost = !entry;
 
   useEffect(() => {
-    setValue('file', screenshot);
+    setValue('file', screenshot || undefined);
     if (screenshot) {
       setImageWasDeleted(true);
     }

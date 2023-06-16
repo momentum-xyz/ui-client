@@ -21,3 +21,10 @@ export const Wrapper = styled.div`
   position: relative;
   height: 100%;
 `;
+
+export const Overlay = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+`;

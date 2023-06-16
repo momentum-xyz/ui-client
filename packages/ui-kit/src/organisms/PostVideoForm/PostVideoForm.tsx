@@ -15,7 +15,7 @@ export interface PostVideoFormPropsInterface {
   video?: File;
   isPending?: boolean;
   isScreenRecording?: boolean;
-  onStartRecording: () => void;
+  onStartRecording: (maxDuration: number) => void;
   onStopRecording: () => void;
   onClearVideo: () => void;
   onCreateOrUpdate: (form: PostFormInterface) => void;
@@ -70,7 +70,7 @@ const PostVideoForm: FC<PostVideoFormPropsInterface> = ({
   });
 
   const handleStartRecording = () => {
-    onStartRecording();
+    onStartRecording(MAX_VIDEO_DURATION);
     reset();
   };
 
