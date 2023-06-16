@@ -1,9 +1,11 @@
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import cn from 'classnames';
 import {signUpDateString, useI18n} from '@momentum-xyz/core';
 import {ProfileLine, ButtonEllipse, WalletHash, IconNameType} from '@momentum-xyz/ui-kit';
 
 import * as styled from './ProfileInfo.styled';
+
+const CHAR_LIMIT = 130;
 
 interface PropsInterface {
   weblink?: string | null;
@@ -32,10 +34,26 @@ const ProfileInfo: FC<PropsInterface> = ({
 }) => {
   const {t} = useI18n();
 
+  const descriptionIsTooLong = description && description.length > CHAR_LIMIT;
+  const slicedDescription = descriptionIsTooLong
+    ? `${description?.slice(0, CHAR_LIMIT)}...`
+    : description;
+
+  const [showFullDescription, setShowFullDescription] = useState(false);
+
   return (
     <styled.Container data-testid="ProfileInfo-test" className={cn(hideBorder && 'hideBorder')}>
       {description && (
-        <styled.Description lines={descriptionLines}>{description}</styled.Description>
+        <>
+          <styled.Description lines={descriptionLines}>
+            {showFullDescription ? description : slicedDescription}
+          </styled.Description>
+          {descriptionIsTooLong && (
+            <styled.LinkAccent onClick={() => setShowFullDescription(!showFullDescription)}>
+              {showFullDescription ? t('labels.readLess') : t('labels.readMore')}
+            </styled.LinkAccent>
+          )}
+        </>
       )}
 
       {weblink && (

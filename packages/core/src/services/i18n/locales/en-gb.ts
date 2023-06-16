@@ -404,7 +404,9 @@ export const enGb = {
       welcomePageJoinTitle: 'Join Odyssey\nas a\nmember',
       welcomePageGuestTitle: 'Enter\nOdyssey as a\nguest',
       welcomePageJoinDescription: 'Connect your wallet\nand join the\ncommunity',
-      welcomePageGuestDescription: 'Fly around freely and\nenjoy all the\ncreations'
+      welcomePageGuestDescription: 'Fly around freely and\nenjoy all the\ncreations',
+      readMore: 'Read more',
+      readLess: 'Read less'
     },
     messages: {
       loading: 'Loading Odyssey',
