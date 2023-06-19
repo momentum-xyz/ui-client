@@ -3,9 +3,10 @@ import {observer} from 'mobx-react-lite';
 import {useI18n, NewsfeedTypeEnum} from '@momentum-xyz/core';
 import {PostTypeEnum} from '@momentum-xyz/core';
 
-import {Frame, Hexagon, Image, ButtonEllipse} from '../../atoms';
+import {Frame, Hexagon} from '../../atoms';
 import {PostHeading} from '../../molecules';
 import {PostAuthorInterface, PostEntryInterface} from '../../interfaces';
+import {PostImageView} from '../PostEntry/components';
 
 import * as styled from './NewsfeedEntry.styled';
 
@@ -66,25 +67,22 @@ const NewsfeedEntry: FC<NewsfeedEntryPropsInterface> = ({entry, onWorldOpen, onS
     );
   };
 
-  const generateImageEntryContent = (id: string, data: NewsFeedMediaEntryDataInterface) => {
+  const generateImageEntryContent = (
+    id: string,
+    data: NewsFeedMediaEntryDataInterface,
+    entry: NewsfeedEntryInterface
+  ) => {
     if (!data.image) {
       return <></>;
     }
+
     return (
-      <styled.MediaEntryContainer>
-        <Image src={data.image} height={160} />
-        {data.comment && <styled.MediaEntryComment>{data.comment}</styled.MediaEntryComment>}
-        <styled.MediaEntryControlsContainer>
-          <ButtonEllipse label="share" icon="share" onClick={() => onShare(entry)} />
-          {data.world_id && (
-            <ButtonEllipse
-              label={t('actions.visitOdyssey')}
-              icon="rocket_flying"
-              onClick={() => onWorldOpen(data.world_id!)}
-            />
-          )}
-        </styled.MediaEntryControlsContainer>
-      </styled.MediaEntryContainer>
+      <PostImageView
+        imageSrc={data.image}
+        description={data.comment}
+        onVisit={() => onWorldOpen(data.world_id!)}
+        onShare={() => onShare(entry)}
+      />
     );
   };
 
@@ -95,7 +93,7 @@ const NewsfeedEntry: FC<NewsfeedEntryPropsInterface> = ({entry, onWorldOpen, onS
       entry.entry_type
     )
   ) : entry.entry_type === NewsfeedTypeEnum.IMAGE ? (
-    generateImageEntryContent(entry.id, entry.data as NewsFeedMediaEntryDataInterface)
+    generateImageEntryContent(entry.id, entry.data as NewsFeedMediaEntryDataInterface, entry)
   ) : (
     <></>
   );
