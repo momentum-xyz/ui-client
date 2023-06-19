@@ -42,7 +42,7 @@ export interface CreateTimelineRequest {
   description: string | null;
 }
 
-export interface CreateTimelineResponse {}
+export interface CreateTimelineResponse extends TimelineItemInterface {}
 
 /** UPDATE TIMELINE ITEM **/
 

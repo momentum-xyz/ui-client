@@ -9,7 +9,7 @@ import {
 import {PostFormInterface} from '@momentum-xyz/ui-kit';
 
 import {MediaUploader, TimelineEntry, TimelineEntryModelInterface} from 'core/models';
-import {api, FetchTimelineResponse} from 'api';
+import {api, FetchTimelineResponse, TimelineItemInterface} from 'api';
 
 const PAGE_SIZE = 5;
 
@@ -86,15 +86,20 @@ const TimelineStore = types.compose(
           return false;
         }
 
-        const response = yield self.createRequest.send(api.timelineRepository.createItem, {
-          type: postType,
-          hash,
-          objectId,
-          description: form.description || ''
-        });
+        const response: TimelineItemInterface = yield self.createRequest.send(
+          api.timelineRepository.createItem,
+          {
+            type: postType,
+            hash,
+            objectId,
+            description: form.description || ''
+          }
+        );
 
         if (response) {
-          // TODO: Add item to the list
+          const targetIndex = self.isCreationShown ? 1 : 0;
+          self.entries.splice(targetIndex, 0, response);
+          self.itemCount = self.itemCount + 1;
         }
 
         return self.createRequest.isDone && self.mediaUploader.fileRequest.isDone;
