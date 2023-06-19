@@ -1,7 +1,12 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
+export const Container = styled.div`
+  border-radius: 4px;
+`;
+
 export const Wrapper = styled.div`
+  padding: 10px 0 0 18px;
   display: flex;
   flex-direction: column;
   gap: 10px;

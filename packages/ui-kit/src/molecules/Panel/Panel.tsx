@@ -14,6 +14,7 @@ export interface PanelPropsInterface extends PropsWithChildren {
   label?: string;
   image?: string | null;
   isFullHeight?: boolean;
+  isScrollDisabled?: boolean;
   icon?: IconNameType;
   closeIcon?: IconNameType;
   isCloseDisabled?: boolean;
@@ -30,6 +31,7 @@ const Panel: FC<PanelPropsInterface> = ({
   image,
   icon,
   isFullHeight,
+  isScrollDisabled,
   closeIcon = 'close_large',
   isCloseDisabled = false,
   topComponent,
@@ -75,7 +77,7 @@ const Panel: FC<PanelPropsInterface> = ({
 
       <styled.ScrollableContainer
         offset={topComponentHeight + bottomComponentHeight}
-        className={cn(isFullHeight && 'fullHeight')}
+        className={cn(isFullHeight && 'fullHeight', isScrollDisabled && 'scrollDisabled')}
       >
         {children}
       </styled.ScrollableContainer>

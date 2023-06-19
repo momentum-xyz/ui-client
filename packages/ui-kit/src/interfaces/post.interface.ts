@@ -9,7 +9,7 @@ export interface PostAuthorInterface {
   id: string;
   name: string;
   avatarSrc: string | null;
-  isItMe: boolean;
+  isItMe?: boolean;
 }
 
 export interface PostEntryInterface {

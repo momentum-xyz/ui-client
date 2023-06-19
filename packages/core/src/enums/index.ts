@@ -6,3 +6,4 @@ export * from './spaceType.enum';
 export * from './checkJobStatus.enum';
 export * from './newsfeed.enum';
 export * from './media.enum';
+export * from './activity.enum';

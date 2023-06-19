@@ -17,7 +17,7 @@ export interface PostHeadingPropsInterface {
 const PostHeading: FC<PostHeadingPropsInterface> = ({entry, author}) => {
   const {t} = useI18n();
 
-  const entryDate = entry ? new Date(entry.created) : null;
+  const entryDate = entry?.created ? new Date(entry.created) : null;
 
   const icon: IconNameType | null = useMemo(() => {
     switch (entry?.type) {
@@ -38,22 +38,24 @@ const PostHeading: FC<PostHeadingPropsInterface> = ({entry, author}) => {
           <styled.UserName>
             {author.name} {author.isItMe && <>({t('labels.you').toUpperCase()})</>}
           </styled.UserName>
-          {!!entry && !!entryDate && (
+          {!!entry && (
             <styled.World>
               <styled.Icon>
                 <IconSvg name={icon || 'alert'} size="xs" isWhite />
               </styled.Icon>
 
               {entry.objectId && (
-                <>
-                  <styled.WorldName>{entry.objectName || entry.objectId}</styled.WorldName>
-                  <div>/</div>
-                </>
+                <styled.WorldName>{entry.objectName || entry.objectId}</styled.WorldName>
               )}
 
-              <div>{format(entryDate, 'yyyy-MM-dd')}</div>
-              <div>/</div>
-              <div>{format(entryDate, 'HH aa')}</div>
+              {!!entryDate && (
+                <>
+                  <div>/</div>
+                  <div>{format(entryDate, 'yyyy-MM-dd')}</div>
+                  <div>/</div>
+                  <div>{format(entryDate, 'HH aa')}</div>
+                </>
+              )}
             </styled.World>
           )}
         </styled.UserInfoTitle>
