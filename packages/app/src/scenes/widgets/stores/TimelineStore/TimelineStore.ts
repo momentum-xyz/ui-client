@@ -1,5 +1,11 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {PostTypeEnum, RequestModel, ResetModel} from '@momentum-xyz/core';
+import {
+  ActivityUpdateEnum,
+  Event3dEmitter,
+  PostTypeEnum,
+  RequestModel,
+  ResetModel
+} from '@momentum-xyz/core';
 import {PostFormInterface} from '@momentum-xyz/ui-kit';
 
 import {MediaUploader, TimelineEntry, TimelineEntryModelInterface} from 'core/models';
@@ -11,10 +17,14 @@ const TimelineStore = types.compose(
   ResetModel,
   types
     .model('TimelineStore', {
+      worldId: '',
+      isTimelineShown: false,
+      isCreationShown: false,
       mediaUploader: types.optional(MediaUploader, {}),
       entries: types.optional(types.array(TimelineEntry), []),
       itemCount: types.optional(types.number, 0),
-      isCreationShown: false,
+
+      hasUpdates: false,
 
       createRequest: types.optional(RequestModel, {}),
       updateRequest: types.optional(RequestModel, {}),
@@ -22,16 +32,13 @@ const TimelineStore = types.compose(
       entriesRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
-      init(isGuest: boolean): void {
-        self.isCreationShown = !isGuest;
-      },
-      loadMore: flow(function* (objectId: string, startIndex: number) {
+      loadMore: flow(function* (startIndex: number) {
         const response: FetchTimelineResponse = yield self.entriesRequest.send(
           api.timelineRepository.fetchTimeline,
           {
             startIndex: startIndex !== 0 && self.isCreationShown ? startIndex - 1 : startIndex,
             pageSize: PAGE_SIZE,
-            objectId
+            objectId: self.worldId
           }
         );
 
@@ -79,12 +86,16 @@ const TimelineStore = types.compose(
           return false;
         }
 
-        yield self.createRequest.send(api.timelineRepository.createItem, {
+        const response = yield self.createRequest.send(api.timelineRepository.createItem, {
           type: postType,
           hash,
           objectId,
           description: form.description || ''
         });
+
+        if (response) {
+          // TODO: Add item to the list
+        }
 
         return self.createRequest.isDone && self.mediaUploader.fileRequest.isDone;
       }),
@@ -124,6 +135,50 @@ const TimelineStore = types.compose(
 
         return self.deleteRequest.isDone;
       })
+    }))
+    .actions((self) => ({
+      init(isGuest: boolean): void {
+        self.isCreationShown = !isGuest;
+        self.isTimelineShown = true;
+        self.hasUpdates = false;
+      },
+      deInit(): void {
+        self.isCreationShown = false;
+        self.isTimelineShown = false;
+        self.hasUpdates = false;
+        self.entries = cast([]);
+        self.itemCount = 0;
+      },
+      onActivityUpdate(activityId: string, updateType: ActivityUpdateEnum): void {
+        switch (updateType) {
+          case ActivityUpdateEnum.NEW:
+            console.log('[TimelineStore] NEW', activityId);
+            // TODO
+            break;
+          case ActivityUpdateEnum.CHANGED:
+            console.log('[TimelineStore] CHANGED', activityId);
+            // TODO
+            break;
+          case ActivityUpdateEnum.REMOVED:
+            console.log('[TimelineStore] REMOVED', activityId);
+            // TODO
+            break;
+          default:
+            console.log('[TimelineStore] Unknown activity type');
+            break;
+        }
+      }
+    }))
+    .actions((self) => ({
+      subscribe(worldId: string): void {
+        self.worldId = worldId;
+        Event3dEmitter.on('ActivityUpdate', self.onActivityUpdate);
+        console.log('[TimelineStore] Subscribe to activity', self.worldId);
+      },
+      unsubscribe(): void {
+        Event3dEmitter.off('ActivityUpdate', self.onActivityUpdate);
+        console.log('[TimelineStore] Unsubscribe from activity', self.worldId);
+      }
     }))
     .views((self) => ({
       get entityList() {

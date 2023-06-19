@@ -38,10 +38,10 @@ const TimelineWidget: FC = () => {
 
   useEffect(() => {
     timelineStore.init(sessionStore.isGuest);
-    timelineStore.loadMore(worldId, 0);
+    timelineStore.loadMore(0);
 
     return () => {
-      timelineStore.resetModel();
+      timelineStore.deInit();
     };
   }, [timelineStore, sessionStore, worldId]);
 
@@ -57,8 +57,6 @@ const TimelineWidget: FC = () => {
     if (isDone) {
       world3dStore?.clearSnapshotOrVideo();
       setPostTypeIntent(null);
-      // TODO: RE-FETCH
-      // timelineStore.fetch(worldId);
     }
   };
 
@@ -144,9 +142,7 @@ const TimelineWidget: FC = () => {
                       ref={infiniteRef}
                       itemCount={timelineStore.itemCount}
                       isItemLoaded={(index) => index < timelineStore.entityList.length}
-                      loadMoreItems={(startIndex) => {
-                        timelineStore.loadMore(worldId, startIndex);
-                      }}
+                      loadMoreItems={(startIndex) => timelineStore.loadMore(startIndex)}
                     >
                       {({onItemsRendered, ref}) => {
                         return (
@@ -192,9 +188,7 @@ const TimelineWidget: FC = () => {
                         isPending={timelineStore.isPending}
                         screenshot={world3dStore?.screenshotOrVideo?.file}
                         onMakeScreenshot={handleMakeScreenshot}
-                        onCreateOrUpdate={(form) => {
-                          handleCreatePost(form, postTypeIntent);
-                        }}
+                        onCreateOrUpdate={(form) => handleCreatePost(form, postTypeIntent)}
                         onClearScreenshot={handleClearFile}
                         onCancel={() => {
                           handleClearFile();
@@ -219,9 +213,7 @@ const TimelineWidget: FC = () => {
                         isScreenRecording={universeStore.isScreenRecording}
                         onStartRecording={handleStartRecording}
                         onStopRecording={handleStopRecording}
-                        onCreateOrUpdate={(form) => {
-                          handleCreatePost(form, postTypeIntent);
-                        }}
+                        onCreateOrUpdate={(form) => handleCreatePost(form, postTypeIntent)}
                         onClearVideo={handleClearFile}
                         onCancel={() => {
                           handleClearFile();
@@ -253,9 +245,7 @@ const TimelineWidget: FC = () => {
                         isPending={timelineStore.isPending}
                         screenshot={world3dStore?.screenshotOrVideo?.file}
                         onMakeScreenshot={handleMakeScreenshot}
-                        onCreateOrUpdate={(form) => {
-                          handleUpdatePost(form, selectedPost);
-                        }}
+                        onCreateOrUpdate={(form) => handleUpdatePost(form, selectedPost)}
                         onDelete={() => handleDeletePost(selectedPost)}
                         onClearScreenshot={handleClearFile}
                         onCancel={() => {
@@ -290,9 +280,7 @@ const TimelineWidget: FC = () => {
                         isScreenRecording={universeStore.isScreenRecording}
                         onStartRecording={handleStartRecording}
                         onStopRecording={handleStopRecording}
-                        onCreateOrUpdate={(form) => {
-                          handleUpdatePost(form, selectedPost);
-                        }}
+                        onCreateOrUpdate={(form) => handleUpdatePost(form, selectedPost)}
                         onDelete={() => handleDeletePost(selectedPost)}
                         onClearVideo={handleClearFile}
                         onCancel={() => {

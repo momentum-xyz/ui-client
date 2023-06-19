@@ -2914,10 +2914,10 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
-"@momentum-xyz/posbus-client@0.0.1-beta.4":
-  version "0.0.1-beta.4"
-  resolved "https://npm.pkg.github.com/download/@momentum-xyz/posbus-client/0.0.1-beta.4/1903cb0de188decb3423a6c80ac25b929913a2a7#1903cb0de188decb3423a6c80ac25b929913a2a7"
-  integrity sha512-OnIVziSf9Hd4L6YY6QKL1N6Tr5UAzRi71/zNjdlvwPRUkRLZCod+/kLA4+pbaKb0qc7YaMfVgY17/4kkQL53jA==
+"@momentum-xyz/posbus-client@0.0.1-beta.5":
+  version "0.0.1-beta.5"
+  resolved "https://npm.pkg.github.com/download/@momentum-xyz/posbus-client/0.0.1-beta.5/1c38671bc42870e229dfbf7572266c8d11c423a4#1c38671bc42870e229dfbf7572266c8d11c423a4"
+  integrity sha512-5bxTkb/QmBHce4LR580R4ZthgagbHyNGA2bJPRxaKNM45MlQYL1UAph7wc/Is3bsNib8d6XozcqmdzMWup1i2w==
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
