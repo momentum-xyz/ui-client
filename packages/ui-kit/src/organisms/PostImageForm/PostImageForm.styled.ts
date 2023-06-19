@@ -3,9 +3,12 @@ import styled from 'styled-components';
 export const Container = styled.div`
   --height: 160px;
   --radius: 4px;
+
+  border-radius: 4px;
 `;
 
 export const Inputs = styled.div`
+  padding: 10px 0 0 18px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -46,7 +49,7 @@ export const Delete = styled.div`
 `;
 
 export const FormControls = styled.div`
-  padding: 10px 0 0 0;
+  padding: 10px 0 0 18px;
   display: flex;
   justify-content: space-between;
 `;

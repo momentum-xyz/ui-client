@@ -4,16 +4,27 @@ export const Container = styled.div`
   display: flex;
   gap: 12px;
 `;
+
 export const PanelContainer = styled.div`
   display: flex;
 `;
 
-export const Wrapper = styled.div`
-  padding: 0;
+export const InfinityList = styled.div`
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
 `;
 
-export const ListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+export const Wrapper = styled.div`
+  padding: 0;
+  position: relative;
+  height: 100%;
+`;
+
+export const Overlay = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
 `;

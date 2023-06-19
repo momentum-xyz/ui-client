@@ -7,6 +7,7 @@ import {
   PosbusPort
 } from '@momentum-xyz/posbus-client';
 import {
+  ActivityUpdateEnum,
   Event3dEmitter,
   ObjectTransformInterface,
   TransformNoScaleInterface
@@ -239,6 +240,13 @@ class PosBusService {
 
         console.log('High five from', sender_id, message);
         PosBusEventEmitter.emit('high-five', sender_id, message);
+        break;
+      }
+
+      case MsgType.ACTIVITY_UPDATE: {
+        console.log('PosBus activity_update', data);
+        const {activity_id, change_type} = data;
+        Event3dEmitter.emit('ActivityUpdate', activity_id, change_type as ActivityUpdateEnum);
         break;
       }
 

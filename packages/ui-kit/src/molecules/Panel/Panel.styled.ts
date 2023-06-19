@@ -151,6 +151,11 @@ export const ScrollableContainer = styled.div<{offset: number}>`
     height: calc(100vh - var(--height-offset) - ${(props) => props.offset}px);
     overflow: scroll;
   }
+
+  &.scrollDisabled {
+    padding: 0;
+    overflow: initial;
+  }
 `;
 
 export const TopComponent = styled.div`

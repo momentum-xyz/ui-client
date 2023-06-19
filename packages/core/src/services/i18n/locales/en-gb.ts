@@ -433,6 +433,7 @@ export const enGb = {
       takeShot: 'Take the shot!',
       startRecording: 'Start recording and fly around',
       recording: 'Recording',
+      shareThisPost: 'Share this post',
       loading30sec:
         'Loading an Odyssey could take up to 1-2 minutes, depending on your internet connection. While you wait, you can',
       joinUsOnDiscord: 'join us on Discord',

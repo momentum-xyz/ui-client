@@ -7,7 +7,10 @@ const TimelineEntry = types.model('TimelineEntry', {
   activity_id: types.string,
   created_at: types.string,
   object_id: types.string,
+  world_name: types.string,
   user_id: types.string,
+  user_name: types.string,
+  avatar_hash: types.maybeNull(types.string),
   type: types.enumeration(Object.values(PostTypeEnum)),
   data: TimelineEntryData
 });
