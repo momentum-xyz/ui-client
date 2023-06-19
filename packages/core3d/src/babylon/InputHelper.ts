@@ -3,7 +3,6 @@ import {
   ActionManager,
   ExecuteCodeAction,
   Matrix,
-  NodeMaterial,
   Scene
 } from '@babylonjs/core';
 import {ClickPositionInterface} from '@momentum-xyz/core';
@@ -25,8 +24,6 @@ export class InputHelper {
     'ArrowLeft',
     'ArrowRight'
   ];
-
-  static selectedObjectID = '';
 
   static initializeUniverse(
     scene: Scene,
@@ -94,7 +91,6 @@ export class InputHelper {
             parent = parent.parent as AbstractMesh;
           }
           console.log('clicked on object with id: ' + parent.metadata);
-          InputHelper.selectedObjectID = parent.metadata;
 
           if (ObjectHelper.objectsMap.has(parent.metadata)) {
             onObjectClick(parent.metadata, lastClick);
@@ -128,17 +124,6 @@ export class InputHelper {
           PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
         } else if (evt.sourceEvent.key === '3') {
           PlayerHelper.selectedSpeed = 3;
-          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
-          NodeMaterial.ParseFromSnippetAsync('#JN2BSF#8', ObjectHelper.scene).then((myNodeMat) => {
-            myNodeMat.build();
-
-            ObjectHelper.objectsMap.forEach((element) => {
-              if (element.objectDefinition.name === 'nodeMatTest1') {
-                const childMeshes = element.objectInstance.rootNodes[0].getChildMeshes();
-                childMeshes[0].material = myNodeMat;
-              }
-            });
-          });
         } else if (evt.sourceEvent.key === '4') {
           PlayerHelper.selectedSpeed = 4;
           PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;

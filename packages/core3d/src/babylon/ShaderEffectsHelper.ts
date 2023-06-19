@@ -1,7 +1,6 @@
 import {NodeMaterial, Scene} from '@babylonjs/core';
 
 import {ObjectHelper} from './ObjectHelper';
-import {InputHelper} from './InputHelper';
 
 export class ShaderEffectsHelper {
   static scene: Scene;
@@ -18,7 +17,7 @@ export class ShaderEffectsHelper {
     NodeMaterial.ParseFromSnippetAsync(snippetId, ObjectHelper.scene).then((myNodeMat) => {
       myNodeMat.build();
 
-      const objInterface = ObjectHelper.objectsMap.get(InputHelper.selectedObjectID);
+      const objInterface = ObjectHelper.objectsMap.get(objectId);
       if (objInterface === undefined) {
         console.log('Couldnt find object in object map with the id of: ' + objectId);
       } else {
