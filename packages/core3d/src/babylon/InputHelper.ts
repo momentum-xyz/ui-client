@@ -1,10 +1,4 @@
-import {
-  AbstractMesh,
-  ActionManager,
-  ExecuteCodeAction,
-  Matrix,
-  Scene
-} from '@babylonjs/core';
+import {AbstractMesh, ActionManager, ExecuteCodeAction, Matrix, Scene} from '@babylonjs/core';
 import {ClickPositionInterface} from '@momentum-xyz/core';
 
 import {PlayerHelper} from './PlayerHelper';
