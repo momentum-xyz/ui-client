@@ -118,6 +118,7 @@ export class InputHelper {
           PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
         } else if (evt.sourceEvent.key === '3') {
           PlayerHelper.selectedSpeed = 3;
+          PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
         } else if (evt.sourceEvent.key === '4') {
           PlayerHelper.selectedSpeed = 4;
           PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
