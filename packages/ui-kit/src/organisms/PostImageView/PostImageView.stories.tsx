@@ -39,7 +39,7 @@ General.args = {
     objectId: '1',
     objectName: 'Odyssey #1'
   },
-  onShare: () => {},
+  shareUrl: 'Some url',
   onVisit: () => {},
   onEdit: () => {}
 };

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.div``;
 
 export const Wrapper = styled.div`
+  position: relative;
   padding: 10px 0 0 18px;
 `;
 
@@ -19,4 +20,11 @@ export const Controls = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 6px;
+`;
+
+export const ShareBlock = styled.div`
+  position: absolute;
+  left: -10px;
+  right: -10px;
+  bottom: 36px;
 `;

@@ -97,10 +97,6 @@ const TimelineWidget: FC = () => {
     setSelectedPost(entry);
   };
 
-  const handleShare = (entry: TimelineEntryModelInterface) => {
-    console.log(entry);
-  };
-
   const getRowHeight = (index: number) => {
     return (entityHeightsRef.current as any)[index] || 0;
   };
@@ -162,7 +158,6 @@ const TimelineWidget: FC = () => {
                               isCreationShown: timelineStore.isCreationShown,
                               setRowHeight,
                               setPostTypeIntent,
-                              handleShare,
                               handleEdit
                             }}
                             onItemsRendered={onItemsRendered}

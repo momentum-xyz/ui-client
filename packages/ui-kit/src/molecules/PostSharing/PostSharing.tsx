@@ -24,7 +24,7 @@ const PostSharing: FC<PostSharingPropsInterface> = ({title, targetUrl, onClose})
     <styled.Container data-testid="PostSharing-test">
       <styled.Header>
         <div>{t('messages.shareThisPost')}</div>
-        <IconButton name="close_large" isWhite />
+        <IconButton name="close_large" isWhite onClick={onClose} />
       </styled.Header>
 
       <styled.Content>

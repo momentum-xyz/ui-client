@@ -72,7 +72,7 @@ const EntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
               <PostImageView
                 entry={postEntry}
                 author={postAuthor}
-                onShare={() => data.handleShare(entry)}
+                shareUrl={`${document.location.origin}/odyssey/${entry.object_id}`}
                 onEdit={() => data.handleEdit(entry)}
               />
             )}
@@ -82,7 +82,7 @@ const EntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
               <PostVideoView
                 entry={postEntry}
                 author={postAuthor}
-                onShare={() => data.handleShare(entry)}
+                shareUrl={`${document.location.origin}/odyssey/${entry.object_id}`}
                 onEdit={() => data.handleEdit(entry)}
               />
             )}

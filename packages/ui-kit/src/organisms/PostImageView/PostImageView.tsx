@@ -1,8 +1,8 @@
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 
-import {PostHeading} from '../../molecules';
+import {PostHeading, PostSharing} from '../../molecules';
 import {ButtonEllipse, Frame, Image} from '../../atoms';
 import {PostAuthorInterface, PostEntryInterface} from '../../interfaces';
 
@@ -11,7 +11,7 @@ import * as styled from './PostImageView.styled';
 export interface PostImageViewPropsInterface {
   author: PostAuthorInterface;
   entry: PostEntryInterface;
-  onShare?: () => void;
+  shareUrl?: string;
   onVisit?: () => void;
   onEdit?: () => void;
 }
@@ -20,9 +20,11 @@ const PostImageView: FC<PostImageViewPropsInterface> = ({
   author,
   entry,
   onVisit,
-  onShare,
+  shareUrl,
   onEdit
 }) => {
+  const [isSharing, setIsSharing] = useState(false);
+
   const {t} = useI18n();
 
   return (
@@ -39,8 +41,13 @@ const PostImageView: FC<PostImageViewPropsInterface> = ({
 
           <styled.Controls>
             {!!onEdit && <ButtonEllipse icon="pencil" label={t('actions.edit')} onClick={onEdit} />}
-            {!!onShare && (
-              <ButtonEllipse icon="share" label={t('actions.share')} onClick={onShare} />
+            {!!shareUrl && (
+              <ButtonEllipse
+                icon="share"
+                label={t('actions.share')}
+                isActive={isSharing}
+                onClick={() => setIsSharing(!isSharing)}
+              />
             )}
             {!!onVisit && (
               <ButtonEllipse
@@ -50,6 +57,16 @@ const PostImageView: FC<PostImageViewPropsInterface> = ({
               />
             )}
           </styled.Controls>
+
+          {isSharing && shareUrl && (
+            <styled.ShareBlock>
+              <PostSharing
+                title={entry.objectName || ''}
+                targetUrl={shareUrl}
+                onClose={() => setIsSharing(false)}
+              />
+            </styled.ShareBlock>
+          )}
         </styled.Wrapper>
       </Frame>
     </styled.Container>
