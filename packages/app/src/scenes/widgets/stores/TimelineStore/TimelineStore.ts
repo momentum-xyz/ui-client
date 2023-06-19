@@ -29,7 +29,7 @@ const TimelineStore = types.compose(
         const response: FetchTimelineResponse = yield self.entriesRequest.send(
           api.timelineRepository.fetchTimeline,
           {
-            startIndex: startIndex,
+            startIndex: startIndex !== 0 && self.isCreationShown ? startIndex - 1 : startIndex,
             pageSize: PAGE_SIZE,
             objectId
           }
@@ -116,7 +116,11 @@ const TimelineStore = types.compose(
       }),
       deleteItem: flow(function* (entry: TimelineEntryModelInterface, objectId: string) {
         const id = entry.activity_id;
+
         yield self.deleteRequest.send(api.timelineRepository.deleteItem, {objectId, id});
+        if (self.deleteRequest.isDone) {
+          self.entries = cast(self.entries.filter((e) => e.activity_id !== id));
+        }
 
         return self.deleteRequest.isDone;
       })

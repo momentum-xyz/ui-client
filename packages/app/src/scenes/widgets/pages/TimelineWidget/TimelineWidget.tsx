@@ -60,7 +60,6 @@ const TimelineWidget: FC = () => {
       // TODO: RE-FETCH
       // timelineStore.fetch(worldId);
     }
-    return isDone;
   };
 
   const handleUpdatePost = async (form: PostFormInterface, entry: TimelineEntryModelInterface) => {
@@ -69,16 +68,13 @@ const TimelineWidget: FC = () => {
       world3dStore?.clearSnapshotOrVideo();
       setSelectedPost(null);
     }
-    return isDone;
   };
 
   const handleDeletePost = async (entry: TimelineEntryModelInterface) => {
     const isDone = await timelineStore.deleteItem(entry, worldId);
     if (isDone) {
-      // TODO: RE-FETCH
-      // timelineStore.fetch(worldId);
+      setSelectedPost(null);
     }
-    return isDone;
   };
 
   const handleClearFile = () => {
@@ -197,7 +193,7 @@ const TimelineWidget: FC = () => {
                         screenshot={world3dStore?.screenshotOrVideo?.file}
                         onMakeScreenshot={handleMakeScreenshot}
                         onCreateOrUpdate={(form) => {
-                          return handleCreatePost(form, postTypeIntent);
+                          handleCreatePost(form, postTypeIntent);
                         }}
                         onClearScreenshot={handleClearFile}
                         onCancel={() => {
@@ -224,7 +220,7 @@ const TimelineWidget: FC = () => {
                         onStartRecording={handleStartRecording}
                         onStopRecording={handleStopRecording}
                         onCreateOrUpdate={(form) => {
-                          return handleCreatePost(form, postTypeIntent);
+                          handleCreatePost(form, postTypeIntent);
                         }}
                         onClearVideo={handleClearFile}
                         onCancel={() => {
@@ -258,7 +254,7 @@ const TimelineWidget: FC = () => {
                         screenshot={world3dStore?.screenshotOrVideo?.file}
                         onMakeScreenshot={handleMakeScreenshot}
                         onCreateOrUpdate={(form) => {
-                          return handleUpdatePost(form, selectedPost);
+                          handleUpdatePost(form, selectedPost);
                         }}
                         onDelete={() => handleDeletePost(selectedPost)}
                         onClearScreenshot={handleClearFile}
@@ -295,7 +291,7 @@ const TimelineWidget: FC = () => {
                         onStartRecording={handleStartRecording}
                         onStopRecording={handleStopRecording}
                         onCreateOrUpdate={(form) => {
-                          return handleUpdatePost(form, selectedPost);
+                          handleUpdatePost(form, selectedPost);
                         }}
                         onDelete={() => handleDeletePost(selectedPost)}
                         onClearVideo={handleClearFile}
