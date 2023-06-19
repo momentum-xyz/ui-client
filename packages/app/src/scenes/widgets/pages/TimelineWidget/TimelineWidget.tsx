@@ -148,8 +148,7 @@ const TimelineWidget: FC = () => {
                             ref={(list) => {
                               ref(list);
                               scrollListRef.current = list;
-                            }} // created_at:"2023-06-19T11:41:57.508616637Z"
-                            // created_at:"2023-06-19T11:41:57.508616637Z"
+                            }}
                             itemSize={getRowHeight}
                             itemCount={timelineStore.itemCount}
                             itemKey={(index) => index}
@@ -157,6 +156,7 @@ const TimelineWidget: FC = () => {
                               user: sessionStore.user,
                               items: timelineStore.entityList,
                               isCreationShown: timelineStore.isCreationShown,
+                              isMyWorld: universeStore.isMyWorld,
                               setRowHeight,
                               setPostTypeIntent,
                               handleEdit

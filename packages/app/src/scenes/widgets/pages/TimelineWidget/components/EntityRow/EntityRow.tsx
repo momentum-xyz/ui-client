@@ -51,6 +51,8 @@ const EntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
         : getImageAbsoluteUrl(entry.data.hash, ImageSizeEnum.S5)
   };
 
+  const isEditable = data.isMyWorld || entry.user_id === data.user.id;
+
   return (
     <div style={style} data-testid="EntityRow-test">
       <styled.EntryItem ref={rowRef}>
@@ -73,7 +75,7 @@ const EntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
                 entry={postEntry}
                 author={postAuthor}
                 shareUrl={`${document.location.origin}/odyssey/${entry.object_id}`}
-                onEdit={() => data.handleEdit(entry)}
+                onEdit={isEditable ? () => data.handleEdit(entry) : undefined}
               />
             )}
 
@@ -83,7 +85,7 @@ const EntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
                 entry={postEntry}
                 author={postAuthor}
                 shareUrl={`${document.location.origin}/odyssey/${entry.object_id}`}
-                onEdit={() => data.handleEdit(entry)}
+                onEdit={isEditable ? () => data.handleEdit(entry) : undefined}
               />
             )}
           </>
