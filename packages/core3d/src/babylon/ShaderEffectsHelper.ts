@@ -5,18 +5,20 @@ import {InputHelper} from './InputHelper';
 
 export class ShaderEffectsHelper {
   static scene: Scene;
-  static lastEffectObjId: string;
-
   static initialize(scene: Scene): void {
     this.scene = scene;
   }
 
-  static setShaderForObject(snippedID: string, objectId: string) {
-    NodeMaterial.ParseFromSnippetAsync('#JN2BSF#8', ObjectHelper.scene).then((myNodeMat) => {
+  // Example snippet ids from NME
+  //#XDUFVU#22
+  //#JN2BSF#8
+  //#JN2BSF#158
+
+  static setObjectShaderId(snippetId: string, objectId: string) {
+    NodeMaterial.ParseFromSnippetAsync(snippetId, ObjectHelper.scene).then((myNodeMat) => {
       myNodeMat.build();
 
       const objInterface = ObjectHelper.objectsMap.get(InputHelper.selectedObjectID);
-
       if (objInterface === undefined) {
         console.log('Couldnt find object in object map with the id of: ' + objectId);
       } else {
@@ -24,13 +26,29 @@ export class ShaderEffectsHelper {
         childMeshes.forEach((element) => {
           element.material = myNodeMat;
         });
-        this.lastEffectObjId = InputHelper.selectedObjectID;
       }
     });
   }
 
-  static changeEffectValues(objectId: string, changeMultiplier: number) {
-    const objInterface = ObjectHelper.objectsMap.get(this.lastEffectObjId);
+  static setObjectShaderJson(jsonUrl: string, objectId: string) {
+    NodeMaterial.ParseFromFileAsync('myNodeMat', jsonUrl, ObjectHelper.scene).then((myNodeMat) => {
+      myNodeMat.build();
+
+      const objInterface = ObjectHelper.objectsMap.get(objectId);
+      if (objInterface === undefined) {
+        console.log('Couldnt find object in object map with the id of: ' + objectId);
+      } else {
+        const childMeshes = objInterface.objectInstance.rootNodes[0].getChildMeshes();
+        childMeshes.forEach((element) => {
+          element.material = myNodeMat;
+        });
+      }
+    });
+  }
+
+  // Example of getting input blocks and changing their values
+  /*static changeEffectValues(objectId: string, changeMultiplier: number) {
+    const objInterface = ObjectHelper.objectsMap.get(objectId);
 
     if (objInterface === undefined) {
       console.log('Couldnt find object in object map with the id of: ' + objectId);
@@ -50,5 +68,5 @@ export class ShaderEffectsHelper {
         });
       });
     }
-  }
+  }*/
 }

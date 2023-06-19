@@ -11,7 +11,6 @@ import {ClickPositionInterface} from '@momentum-xyz/core';
 import {PlayerHelper} from './PlayerHelper';
 import {UniverseBuilderHelper} from './UniverseBuilderHelper';
 import {ObjectHelper} from './ObjectHelper';
-import {ShaderEffectsHelper} from './ShaderEffectsHelper';
 
 export class InputHelper {
   static moveKeys = [
@@ -144,15 +143,12 @@ export class InputHelper {
           PlayerHelper.selectedSpeed = 4;
           PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
         } else if (evt.sourceEvent.key === '5') {
-          ShaderEffectsHelper.setShaderForObject('a', 'a');
           PlayerHelper.selectedSpeed = 5;
           PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
         } else if (evt.sourceEvent.key === '6') {
-          ShaderEffectsHelper.changeEffectValues('a', 1);
           PlayerHelper.selectedSpeed = 6;
           PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
         } else if (evt.sourceEvent.key === '7') {
-          ShaderEffectsHelper.changeEffectValues('a', -1);
           PlayerHelper.selectedSpeed = 7;
           PlayerHelper.camera.speed = PlayerHelper.selectedSpeed;
         } else if (evt.sourceEvent.key === '8') {
