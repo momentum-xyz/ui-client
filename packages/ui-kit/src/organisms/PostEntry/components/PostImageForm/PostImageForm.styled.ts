@@ -50,3 +50,9 @@ export const FormControls = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+export const FormControlsGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+`;

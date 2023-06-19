@@ -716,6 +716,7 @@ export const enGb = {
       logOut: 'Log out',
       manageWallet: 'Manage wallet',
       settings: 'Settings',
+      publish: 'Publish',
       default: 'Default',
       setAsDefault: 'Set as default',
       takeSnapshot: 'Take a snapshot',

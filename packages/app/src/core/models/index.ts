@@ -1,5 +1,6 @@
 export * from './UserProfile';
 export * from './User';
+export * from './MediaUploader';
 export * from './Object';
 export * from './TrackModel';
 export * from './AgoraRemoteUser';

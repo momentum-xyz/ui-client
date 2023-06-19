@@ -41,10 +41,8 @@ It is a monorepo that contains the main application and several common libraries
 
 ```mermaid
 flowchart TD
-    MAP --> B
-    MAP --> C
     A --> 3D(core3d)
-    3D --> B{{babylon.js / legacy three.js}}
+    3D --> B{{babylon.js}}
     A --> S(sdk)
     A[APP] --> C(core)
     A --> K(ui-kit)
@@ -66,7 +64,7 @@ If you don't have one, create it on https://github.com/settings/tokens by pressi
 Edit (or create if missing) `~/.npmrc` on you local machine and add the following line there:
 
 ```
-//npm.pkg.github.com/:\_authToken=TOKEN
+//npm.pkg.github.com/:_authToken=TOKEN
 ```
 
 Now you should be able to install the dependencies and build the project.

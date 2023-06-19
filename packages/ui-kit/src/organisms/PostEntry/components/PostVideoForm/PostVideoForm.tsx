@@ -1,4 +1,4 @@
-import {FC, useEffect} from 'react';
+import {FC, useEffect, useMemo, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useStopwatch} from 'react-timer-hook';
 import {useI18n} from '@momentum-xyz/core';
@@ -11,6 +11,8 @@ import * as styled from './PostVideoForm.styled';
 
 export interface PostVideoFormPropsInterface {
   video?: File;
+  initialVideoUrl?: string | null;
+  initialDescription?: string | null;
   isPending?: boolean;
   isScreenRecording?: boolean;
   maxVideoDurationSec: number;
@@ -18,11 +20,14 @@ export interface PostVideoFormPropsInterface {
   onStopRecording: () => void;
   onClearVideo: () => void;
   onCreateOrUpdate: (form: PostFormInterface) => void;
+  onDelete?: () => void;
   onCancel: () => void;
 }
 
 const PostVideoForm: FC<PostVideoFormPropsInterface> = ({
   video,
+  initialVideoUrl,
+  initialDescription,
   isPending,
   isScreenRecording,
   maxVideoDurationSec,
@@ -30,16 +35,35 @@ const PostVideoForm: FC<PostVideoFormPropsInterface> = ({
   onStopRecording,
   onClearVideo,
   onCreateOrUpdate,
+  onDelete,
   onCancel
 }) => {
+  const [videoWasDeleted, setVideoWasDeleted] = useState(false);
   const {control, setValue, formState, handleSubmit} = useForm<PostFormInterface>();
   const {seconds, reset, pause, isRunning} = useStopwatch({autoStart: false});
+
+  const isNewPost = !initialVideoUrl;
 
   const {t} = useI18n();
 
   useEffect(() => {
     setValue('file', video);
+    if (video) {
+      setVideoWasDeleted(true);
+    }
   }, [video, setValue]);
+
+  useEffect(() => {
+    setValue('description', initialDescription || '');
+  }, [initialDescription, setValue]);
+
+  const submitIsDisabled = useMemo(() => {
+    if (!initialVideoUrl) {
+      return isPending || isScreenRecording || !video;
+    } else {
+      return isPending || isScreenRecording || (videoWasDeleted && !video);
+    }
+  }, [initialVideoUrl, isPending, isScreenRecording, video, videoWasDeleted]);
 
   const handleCreatePost = handleSubmit(async (data: PostFormInterface) => {
     await onCreateOrUpdate({...data});
@@ -57,6 +81,7 @@ const PostVideoForm: FC<PostVideoFormPropsInterface> = ({
 
   const handleClear = () => {
     onClearVideo();
+    setVideoWasDeleted(true);
     reset(undefined, false);
   };
 
@@ -81,12 +106,20 @@ const PostVideoForm: FC<PostVideoFormPropsInterface> = ({
         <Controller
           name="file"
           control={control}
-          rules={{required: true}}
           render={({field: {value}}) => {
-            const videoBlobUrl = value ? URL.createObjectURL(value) : null;
+            const videoUrl = value ? URL.createObjectURL(value) : null;
+            const initialUrl = !videoWasDeleted ? initialVideoUrl : null;
+
             return (
               <>
-                {!videoBlobUrl ? (
+                {videoUrl || initialUrl ? (
+                  <styled.PreviewVideoContainer>
+                    <MediaPlayer sourceUrl={videoUrl || initialUrl || ''} />
+                    <styled.Delete>
+                      <IconButton name="bin" size="xl" isWhite onClick={handleClear} />
+                    </styled.Delete>
+                  </styled.PreviewVideoContainer>
+                ) : (
                   <styled.EmptyContainer>
                     <styled.Actions>
                       <styled.Message>
@@ -109,13 +142,6 @@ const PostVideoForm: FC<PostVideoFormPropsInterface> = ({
                       </styled.Timer>
                     </styled.Actions>
                   </styled.EmptyContainer>
-                ) : (
-                  <styled.PreviewVideoContainer>
-                    <MediaPlayer sourceUrl={videoBlobUrl} />
-                    <styled.Delete>
-                      <IconButton name="bin" size="xl" isWhite onClick={handleClear} />
-                    </styled.Delete>
-                  </styled.PreviewVideoContainer>
                 )}
               </>
             );
@@ -147,12 +173,18 @@ const PostVideoForm: FC<PostVideoFormPropsInterface> = ({
           onClick={handleCancel}
         />
 
-        <ButtonEllipse
-          icon="add"
-          label={t('actions.addToTimeline')}
-          disabled={isPending || isScreenRecording || !video}
-          onClick={handleCreatePost}
-        />
+        <styled.FormControlsGroup>
+          {!!onDelete && (
+            <ButtonEllipse icon="bin" label={t('actions.delete')} onClick={onDelete} />
+          )}
+
+          <ButtonEllipse
+            icon={isNewPost ? 'add' : 'checked'}
+            label={isNewPost ? t('actions.addToTimeline') : t('actions.publish')}
+            disabled={submitIsDisabled}
+            onClick={handleCreatePost}
+          />
+        </styled.FormControlsGroup>
       </styled.FormControls>
     </styled.Container>
   );

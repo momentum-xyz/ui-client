@@ -3,7 +3,7 @@ import {PostTypeEnum} from '@momentum-xyz/core';
 
 import PostEntry, {PostEntryPropsInterface} from './PostEntry';
 
-const IMAGE_SRC = 'https://picsum.photos/300';
+const IMAGE_SRC = 'https://dev.odyssey.ninja/api/v3/render/get/df32929bf3b6c3a2013a8b51040d8c61';
 const VIDEO_SRC = 'https://dev.odyssey.ninja/api/v3/render/video/982e3e3d937bb8bdf83ea13f666119fb';
 
 export default {
@@ -28,7 +28,7 @@ const Template: Story<PostEntryPropsInterface> = (args) => {
       onStopRecording={() => {}}
       onCreateOrUpdatePost={() => new Promise(() => true)}
       onClearVideoOrScreenshot={() => {}}
-      onCancel={() => {}}
+      onCancelCreation={() => {}}
     />
   );
 };
@@ -65,6 +65,27 @@ ImageView.args = {
   onVisit: () => {}
 };
 
+export const ImageEditable = Template.bind({});
+ImageEditable.args = {
+  author: {
+    id: 'user_2',
+    name: 'John Doe',
+    avatarSrc: 'https://picsum.photos/202',
+    isItMe: true
+  },
+  entry: {
+    id: '1',
+    hashSrc: IMAGE_SRC,
+    description: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.',
+    type: PostTypeEnum.SCREENSHOT,
+    created: '2023-06-09T11:07:25.064Z',
+    objectId: '1',
+    objectName: 'Odyssey #1'
+  },
+  canEdit: true,
+  onShare: () => {}
+};
+
 export const VideoView = Template.bind({});
 VideoView.args = {
   author: {
@@ -84,4 +105,25 @@ VideoView.args = {
   },
   onShare: () => {},
   onVisit: () => {}
+};
+
+export const VideoEditable = Template.bind({});
+VideoEditable.args = {
+  author: {
+    id: 'user_2',
+    name: 'John Doe',
+    avatarSrc: 'https://picsum.photos/202',
+    isItMe: true
+  },
+  entry: {
+    id: '1',
+    hashSrc: VIDEO_SRC,
+    description: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.',
+    type: PostTypeEnum.VIDEO,
+    created: '2023-06-09T11:07:25.064Z',
+    objectId: '1',
+    objectName: 'Odyssey #1'
+  },
+  canEdit: true,
+  onShare: () => {}
 };
