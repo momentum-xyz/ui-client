@@ -12,7 +12,9 @@ import {
   UpdateTimelineRequest,
   UpdateTimelineResponse,
   DeleteTimelineRequest,
-  DeleteTimelineResponse
+  DeleteTimelineResponse,
+  FetchTimelineItemRequest,
+  FetchTimelineItemResponse
 } from './timelineRepository.api.types';
 
 export const fetchTimeline: RequestInterface<FetchTimelineRequest, FetchTimelineResponse> = (
@@ -27,6 +29,15 @@ export const fetchTimeline: RequestInterface<FetchTimelineRequest, FetchTimeline
 
   const url = generatePath(timelineRepositoryEndpoints().base, {objectId});
   return request.get(url, requestParams);
+};
+
+export const fetchItem: RequestInterface<FetchTimelineItemRequest, FetchTimelineItemResponse> = (
+  options
+) => {
+  const {objectId, id, ...rest} = options;
+
+  const url = generatePath(timelineRepositoryEndpoints().item, {objectId, id});
+  return request.get(url, rest);
 };
 
 export const createItem: RequestInterface<CreateTimelineRequest, CreateTimelineResponse> = (

@@ -8,8 +8,13 @@ import {
 } from '@momentum-xyz/core';
 import {PostFormInterface} from '@momentum-xyz/ui-kit';
 
-import {MediaUploader, TimelineEntry, TimelineEntryModelInterface} from 'core/models';
 import {api, FetchTimelineResponse, TimelineItemInterface} from 'api';
+import {
+  MediaUploader,
+  TimelineEntry,
+  TimelineEntryModelInterface,
+  TimelineEntryDataModelInterface
+} from 'core/models';
 
 const PAGE_SIZE = 5;
 
@@ -26,11 +31,29 @@ const TimelineStore = types.compose(
 
       hasUpdates: false,
 
+      itemRequest: types.optional(RequestModel, {}),
       createRequest: types.optional(RequestModel, {}),
       updateRequest: types.optional(RequestModel, {}),
       deleteRequest: types.optional(RequestModel, {}),
       entriesRequest: types.optional(RequestModel, {})
     })
+    .actions((self) => ({
+      addEntity(entity: TimelineItemInterface): void {
+        const targetIndex = self.isCreationShown ? 1 : 0;
+        self.entries.splice(targetIndex, 0, entity);
+        self.itemCount = self.itemCount + 1;
+      },
+      changeEntity(id: string, data: TimelineEntryDataModelInterface): void {
+        const storeEntry = self.entries.find((e) => e.activity_id === id);
+        if (storeEntry) {
+          storeEntry.data = data;
+        }
+      },
+      deleteEntity(id: string): void {
+        self.entries = cast(self.entries.filter((e) => e.activity_id !== id));
+        self.itemCount = self.itemCount - 1;
+      }
+    }))
     .actions((self) => ({
       loadMore: flow(function* (startIndex: number) {
         const response: FetchTimelineResponse = yield self.entriesRequest.send(
@@ -97,9 +120,7 @@ const TimelineStore = types.compose(
         );
 
         if (response) {
-          const targetIndex = self.isCreationShown ? 1 : 0;
-          self.entries.splice(targetIndex, 0, response);
-          self.itemCount = self.itemCount + 1;
+          self.addEntity(response);
         }
 
         return self.createRequest.isDone && self.mediaUploader.fileRequest.isDone;
@@ -121,11 +142,10 @@ const TimelineStore = types.compose(
         });
 
         if (self.updateRequest.isDone) {
-          const storeEntry = self.entries.find((e) => e.activity_id === entry.activity_id);
-          if (storeEntry) {
-            storeEntry.data.hash = hash || entry.data.hash;
-            storeEntry.data.description = form.description || '';
-          }
+          self.changeEntity(entry.activity_id, {
+            hash: hash || entry.data.hash,
+            description: form.description || ''
+          });
         }
 
         return self.updateRequest.isDone;
@@ -135,7 +155,7 @@ const TimelineStore = types.compose(
 
         yield self.deleteRequest.send(api.timelineRepository.deleteItem, {objectId, id});
         if (self.deleteRequest.isDone) {
-          self.entries = cast(self.entries.filter((e) => e.activity_id !== id));
+          self.deleteEntity(id);
         }
 
         return self.deleteRequest.isDone;
@@ -154,25 +174,47 @@ const TimelineStore = types.compose(
         self.entries = cast([]);
         self.itemCount = 0;
       },
-      onActivityUpdate(activityId: string, updateType: ActivityUpdateEnum): void {
+      onActivityUpdate: flow(function* (activityId: string, updateType: ActivityUpdateEnum) {
         switch (updateType) {
           case ActivityUpdateEnum.NEW:
             console.log('[TimelineStore] NEW', activityId);
-            // TODO
+            if (self.isTimelineShown) {
+              const response = yield self.itemRequest.send(api.timelineRepository.fetchItem, {
+                objectId: self.worldId,
+                id: activityId
+              });
+
+              if (response) {
+                self.addEntity(response);
+              }
+            } else {
+              self.hasUpdates = true;
+            }
             break;
           case ActivityUpdateEnum.CHANGED:
             console.log('[TimelineStore] CHANGED', activityId);
-            // TODO
+            if (self.isTimelineShown) {
+              const response = yield self.itemRequest.send(api.timelineRepository.fetchItem, {
+                objectId: self.worldId,
+                id: activityId
+              });
+
+              if (response) {
+                self.changeEntity(activityId, response.data);
+              }
+            }
             break;
           case ActivityUpdateEnum.REMOVED:
             console.log('[TimelineStore] REMOVED', activityId);
-            // TODO
+            if (self.isTimelineShown) {
+              self.deleteEntity(activityId);
+            }
             break;
           default:
             console.log('[TimelineStore] Unknown activity type');
             break;
         }
-      }
+      })
     }))
     .actions((self) => ({
       subscribe(worldId: string): void {

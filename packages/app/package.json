@@ -15,7 +15,7 @@
     "@headlessui/react": "^1.2.0",
     "@momentum-xyz/core": "^0.1.2",
     "@momentum-xyz/core3d": "^0.1.0",
-    "@momentum-xyz/posbus-client": "0.0.1-beta.5",
+    "@momentum-xyz/posbus-client": "0.0.1-beta.6",
     "@momentum-xyz/sdk": "^0.1.5",
     "@momentum-xyz/ui-kit": "^0.1.4",
     "@polkadot/api": "8.10.1",
