@@ -34,9 +34,7 @@ const ProfileInfo: FC<PropsInterface> = ({
 
   return (
     <styled.Container data-testid="ProfileInfo-test" className={cn(hideBorder && 'hideBorder')}>
-      {description && (
-        <TextCut text={description} lines={descriptionLines} />
-      )}
+      {description && <TextCut text={description} lines={descriptionLines} />}
 
       {weblink && (
         <ProfileLine
