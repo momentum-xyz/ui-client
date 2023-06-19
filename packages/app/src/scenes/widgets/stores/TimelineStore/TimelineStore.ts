@@ -162,10 +162,19 @@ const TimelineStore = types.compose(
       })
     }))
     .actions((self) => ({
+      checkLastSeenDate(): void {
+        // TODO
+      },
+      updateLastSeenData(): void {
+        // TODO
+      }
+    }))
+    .actions((self) => ({
       init(isGuest: boolean): void {
         self.isCreationShown = !isGuest;
         self.isTimelineShown = true;
         self.hasUpdates = false;
+        self.updateLastSeenData();
       },
       deInit(): void {
         self.isCreationShown = false;
@@ -173,6 +182,7 @@ const TimelineStore = types.compose(
         self.hasUpdates = false;
         self.entries = cast([]);
         self.itemCount = 0;
+        self.updateLastSeenData();
       },
       onActivityUpdate: flow(function* (activityId: string, updateType: ActivityUpdateEnum) {
         switch (updateType) {

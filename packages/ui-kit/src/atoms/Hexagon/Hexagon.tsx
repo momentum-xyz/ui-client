@@ -90,7 +90,7 @@ const hexagonSizeIconSizeMap: {[key in HexagonSizeType]: IconSizeType} = {
   large: 'xl'
 };
 
-export type HexagonIndicatorType = 'voice';
+export type HexagonIndicatorType = 'voice' | 'danger';
 
 export interface HexagonPropsInterface {
   type: HexagonType;
@@ -199,6 +199,8 @@ const Hexagon: FC<HexagonPropsInterface> = (props) => {
           <IconSvg name="talk" size="xxs" isWhite />
         </styled.IndicatorVoice>
       )}
+
+      {indicator === 'danger' && <styled.IndicatorDanger />}
 
       <styled.Hexagon
         className={cn(

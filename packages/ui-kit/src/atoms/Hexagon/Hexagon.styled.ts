@@ -338,6 +338,20 @@ export const IndicatorVoice = styled.div`
   z-index: 10;
 `;
 
+export const IndicatorDanger = styled.div`
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: ${(props) => props.theme.danger};
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  right: 4px;
+  z-index: 10;
+`;
+
 export const Label = styled.div`
   color: ${(props) => props.theme.text};
   font-size: var(--font-size-xs);
