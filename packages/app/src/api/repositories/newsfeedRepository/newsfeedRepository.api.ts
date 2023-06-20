@@ -4,7 +4,7 @@ import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
 
 import {newsfeedRepositoryEndpoints} from './newsfeedRepository.api.endpoints';
-import { FetchNewsfeedRequest, FetchNewsfeedResponse } from './newsfeedRepository.api.types';
+import {FetchNewsfeedRequest, FetchNewsfeedResponse} from './newsfeedRepository.api.types';
 
 export const fetchNewsfeed: RequestInterface<FetchNewsfeedRequest, FetchNewsfeedResponse> = (
   options
@@ -19,4 +19,3 @@ export const fetchNewsfeed: RequestInterface<FetchNewsfeedRequest, FetchNewsfeed
   const url = generatePath(newsfeedRepositoryEndpoints().base);
   return request.get(url, requestParams);
 };
-
