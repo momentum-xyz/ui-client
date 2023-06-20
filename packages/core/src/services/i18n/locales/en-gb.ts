@@ -409,7 +409,8 @@ export const enGb = {
       welcomePageJoinDescription: 'Connect your wallet\nand join the\ncommunity',
       welcomePageGuestDescription: 'Fly around freely and\nenjoy all the\ncreations',
       assignFunctionToObjectTitle: 'Assign a function to the object',
-      assignFunctionToObjectDescription: 'By embedding a picture, text, video or sound you change the function of this object; users can see an image wrapped around the object or hear a sound when they fly towards the object. Users will also be able to see the text, image or video displayed when they select the object; regardless of its asset type.',
+      assignFunctionToObjectDescription:
+        'By embedding a picture, text, video or sound you change the function of this object; users can see an image wrapped around the object or hear a sound when they fly towards the object. Users will also be able to see the text, image or video displayed when they select the object; regardless of its asset type.'
     },
     messages: {
       loading: 'Loading Odyssey',
