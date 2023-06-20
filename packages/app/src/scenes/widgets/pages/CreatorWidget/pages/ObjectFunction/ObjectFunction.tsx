@@ -3,6 +3,7 @@ import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {Button, IconSvg, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {ToastContent} from 'ui-kit';
 import {BasicAsset2dIdEnum} from 'core/enums';
@@ -12,12 +13,6 @@ import {subMenuKeyWidgetEnumMap} from 'core/constants';
 import {AssignText, AssignImage, AssignVideo} from './components';
 import * as styled from './ObjectFunction.styled';
 
-const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
-  {id: BasicAsset2dIdEnum.IMAGE, icon: 'picture_upload', label: 'Add a picture'},
-  {id: BasicAsset2dIdEnum.VIDEO, icon: 'video_upload', label: 'Add a video'},
-  {id: BasicAsset2dIdEnum.TEXT, icon: 'upload', label: 'Add a text'}
-];
-
 const ObjectFunction: FC = () => {
   const {universeStore, widgetStore, widgetManagerStore} = useStore();
   const {creatorStore} = widgetStore;
@@ -25,9 +20,17 @@ const ObjectFunction: FC = () => {
   const {objectStore} = universeStore;
   const {pluginLoader} = objectStore;
 
+  const {t} = useI18n();
+
   const [modifiedOptionValue, setModifiedOptionValue] = useState<string | null>(null);
 
   const activeId = modifiedOptionValue;
+
+  const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
+    {id: BasicAsset2dIdEnum.IMAGE, icon: 'picture_upload', label: t('labels.addPicture')},
+    {id: BasicAsset2dIdEnum.VIDEO, icon: 'video_upload', label: t('labels.addVideo')},
+    {id: BasicAsset2dIdEnum.TEXT, icon: 'upload', label: t('labels.addText')}
+  ];
 
   const tabs: TabInterface<BasicAsset2dIdEnum>[] = objectFunctionalityStore.currentAssetId
     ? TABS_LIST.filter((tab) => tab.id === objectFunctionalityStore.currentAssetId)
@@ -74,10 +77,10 @@ const ObjectFunction: FC = () => {
       creatorStore.setSelectedTab(null);
       handleSubMenuActiveChange();
 
-      toast.info(<ToastContent icon="check" text="Saved" />);
+      toast.info(<ToastContent icon="check" text={t('labels.saved')} />);
     } catch (e) {
       console.log(e);
-      toast.error(<ToastContent icon="alert" text="Error saving" />);
+      toast.error(<ToastContent icon="alert" text={t('labels.errorSaving')} />);
     }
   };
 
@@ -88,10 +91,10 @@ const ObjectFunction: FC = () => {
       creatorStore.setSelectedTab(null);
       handleSubMenuActiveChange();
 
-      toast.info(<ToastContent icon="check" text="Deleted" />);
+      toast.info(<ToastContent icon="check" text={t('labels.deleted')} />);
     } catch (e) {
       console.log(e);
-      toast.error(<ToastContent icon="alert" text="Error deleting" />);
+      toast.error(<ToastContent icon="alert" text={t('labels.errorDeleting')} />);
     }
   };
 
@@ -137,13 +140,8 @@ const ObjectFunction: FC = () => {
     <styled.Container data-testid="ObjectFunction-test">
       {!activeId && (
         <styled.AssignFunctionContainer>
-          <styled.Title>Assign a function to the object</styled.Title>
-          <styled.Text>
-            By embedding a picture, text, video or sound you change the function of this object;
-            users can see an image wrapped around the object or hear a sound when they fly towards
-            the object. Users will also be able to see the text, image or video displayed when they
-            select the object; regardless of its asset type.
-          </styled.Text>
+          <styled.Title>{t('labels.assignFunctionToObjectTitle')}</styled.Title>
+          <styled.Text>{t('labels.assignFunctionToObjectDescription')}</styled.Text>
           <styled.FunctionTypesContainer>
             {tabs.map((tab) => (
               <styled.FunctionType key={tab.id} onClick={() => handleTypeChange(tab.id)}>
@@ -158,11 +156,15 @@ const ObjectFunction: FC = () => {
 
       {activeId && (
         <styled.ActionBar>
-          <Button label="Back" variant="secondary" onClick={() => setModifiedOptionValue(null)} />
+          <Button
+            label={t('actions.back')}
+            variant="secondary"
+            onClick={() => setModifiedOptionValue(null)}
+          />
           {objectFunctionalityStore.currentAssetId ? (
-            <Button label="Delete" onClick={handleDelete} />
+            <Button label={t('actions.delete')} onClick={handleDelete} />
           ) : (
-            <Button label="Embed" onClick={handleSave} />
+            <Button label={t('actions.embed')} onClick={handleSave} />
           )}
         </styled.ActionBar>
       )}
