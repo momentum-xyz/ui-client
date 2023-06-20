@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Button, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
+import {Button, IconSvg, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {ToastContent} from 'ui-kit';
 import {BasicAsset2dIdEnum} from 'core/enums';
@@ -11,12 +13,6 @@ import {subMenuKeyWidgetEnumMap} from 'core/constants';
 import {AssignText, AssignImage, AssignVideo} from './components';
 import * as styled from './ObjectFunction.styled';
 
-const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
-  {id: BasicAsset2dIdEnum.IMAGE, icon: 'picture_upload', label: 'Picture'},
-  {id: BasicAsset2dIdEnum.VIDEO, icon: 'video_upload', label: 'Video'},
-  {id: BasicAsset2dIdEnum.TEXT, icon: 'upload', label: 'Text'}
-];
-
 const ObjectFunction: FC = () => {
   const {universeStore, widgetStore, widgetManagerStore} = useStore();
   const {creatorStore} = widgetStore;
@@ -24,11 +20,25 @@ const ObjectFunction: FC = () => {
   const {objectStore} = universeStore;
   const {pluginLoader} = objectStore;
 
+  const {t} = useI18n();
+
   const [modifiedOptionValue, setModifiedOptionValue] = useState<string | null>(null);
 
-  const activeId = modifiedOptionValue || objectFunctionalityStore.currentAssetId;
+  const activeId = modifiedOptionValue;
 
-  const actionRef = useRef<{doSave: () => void}>({doSave: () => {}});
+  const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
+    {id: BasicAsset2dIdEnum.IMAGE, icon: 'picture_upload', label: t('labels.addPicture')},
+    {id: BasicAsset2dIdEnum.VIDEO, icon: 'video_upload', label: t('labels.addVideo')},
+    {id: BasicAsset2dIdEnum.TEXT, icon: 'upload', label: t('labels.addText')}
+  ];
+
+  const tabs: TabInterface<BasicAsset2dIdEnum>[] = objectFunctionalityStore.currentAssetId
+    ? TABS_LIST.filter((tab) => tab.id === objectFunctionalityStore.currentAssetId)
+    : TABS_LIST;
+
+  const actionRef = useRef<{doSave: () => void}>({
+    doSave: () => {}
+  });
 
   console.log('ObjectFunctionalityPage', {
     selectedObjectId,
@@ -67,10 +77,24 @@ const ObjectFunction: FC = () => {
       creatorStore.setSelectedTab(null);
       handleSubMenuActiveChange();
 
-      toast.info(<ToastContent icon="check" text="Saved" />);
+      toast.info(<ToastContent icon="check" text={t('labels.saved')} />);
     } catch (e) {
       console.log(e);
-      toast.error(<ToastContent icon="alert" text="Error saving" />);
+      toast.error(<ToastContent icon="alert" text={t('labels.errorSaving')} />);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await objectFunctionalityStore.removeObjectFunctionality();
+
+      creatorStore.setSelectedTab(null);
+      handleSubMenuActiveChange();
+
+      toast.info(<ToastContent icon="check" text={t('labels.deleted')} />);
+    } catch (e) {
+      console.log(e);
+      toast.error(<ToastContent icon="alert" text={t('labels.errorDeleting')} />);
     }
   };
 
@@ -114,15 +138,34 @@ const ObjectFunction: FC = () => {
 
   return (
     <styled.Container data-testid="ObjectFunction-test">
-      <styled.HeadingWrapper>
-        <Tabs tabList={TABS_LIST} activeId={activeId} onSelect={handleTypeChange} />
-      </styled.HeadingWrapper>
-
+      {!activeId && (
+        <styled.AssignFunctionContainer>
+          <styled.Title>{t('labels.assignFunctionToObjectTitle')}</styled.Title>
+          <styled.Text>{t('labels.assignFunctionToObjectDescription')}</styled.Text>
+          <styled.FunctionTypesContainer>
+            {tabs.map((tab) => (
+              <styled.FunctionType key={tab.id} onClick={() => handleTypeChange(tab.id)}>
+                <IconSvg name={tab.icon} size="xll" isWhite />
+                <styled.FunctionTypeTitle>{tab.label}</styled.FunctionTypeTitle>
+              </styled.FunctionType>
+            ))}
+          </styled.FunctionTypesContainer>
+        </styled.AssignFunctionContainer>
+      )}
       <styled.PanelBody>{renderBody()}</styled.PanelBody>
 
       {activeId && (
         <styled.ActionBar>
-          <Button label="Embed" onClick={handleSave} />
+          <Button
+            label={t('actions.back')}
+            variant="secondary"
+            onClick={() => setModifiedOptionValue(null)}
+          />
+          {objectFunctionalityStore.currentAssetId ? (
+            <Button label={t('actions.delete')} onClick={handleDelete} />
+          ) : (
+            <Button label={t('actions.embed')} onClick={handleSave} />
+          )}
         </styled.ActionBar>
       )}
     </styled.Container>
