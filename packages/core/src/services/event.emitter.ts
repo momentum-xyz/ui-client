@@ -9,6 +9,7 @@ import {
   Texture3dInterface,
   WorldInfoInterface
 } from '../interfaces';
+import {ActivityUpdateEnum} from '../enums';
 
 // TODO: Define proper types
 // export type Event2dType = {
@@ -43,6 +44,8 @@ export type Event3dType = {
   MakeScreenshot: () => void;
   StartRecordingVideo: (maxDuration: number) => void;
   StopRecordingVideo: () => void;
+
+  ActivityUpdate: (activityId: string, updateType: ActivityUpdateEnum) => void;
 
   // ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
 };

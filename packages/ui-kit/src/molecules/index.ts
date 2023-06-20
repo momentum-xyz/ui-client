@@ -17,3 +17,5 @@ export * from './FileUploader';
 export * from './SystemWideError';
 export * from './MediaPlayer';
 export * from './PostHeading';
+export * from './PostTypeSelector';
+export * from './PostSharing';

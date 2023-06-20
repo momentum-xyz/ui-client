@@ -18,10 +18,10 @@ import {
 export const fetchTimeline: RequestInterface<FetchTimelineRequest, FetchTimelineResponse> = (
   options
 ) => {
-  const {objectId, page, pageSize, ...rest} = options;
+  const {objectId, startIndex, pageSize, ...rest} = options;
 
   const requestParams = {
-    params: {page, pageSize},
+    params: {startIndex, pageSize},
     ...rest
   };
 

@@ -11,10 +11,11 @@ import {OnlineUsersList, CurrentWorld} from './components';
 import * as styled from './World2dPage.styled';
 
 const World2dPage: FC = () => {
-  const {universeStore, widgetManagerStore, agoraStore} = useStore();
+  const {universeStore, widgetManagerStore, widgetStore, agoraStore} = useStore();
   const {isLeftWidgetShown, isRightWidgetShown} = widgetManagerStore;
   const {agoraVoiceChatStore} = agoraStore;
   const {world2dStore, world3dStore} = universeStore;
+  const {timelineStore} = widgetStore;
 
   console.log('[World2d] Users are in VC: ', agoraVoiceChatStore.users.length);
   console.log('[World2d] Remove users are in VC: ', agoraVoiceChatStore.agoraRemoteUsers.length);
@@ -26,14 +27,16 @@ const World2dPage: FC = () => {
     if (worldId) {
       universeStore.enterWorld(worldId);
       agoraStore.initUsers(worldId);
+      timelineStore.subscribe(worldId);
     }
     return () => {
       universeStore.leaveWorld();
       agoraStore.leaveVoiceChat();
       widgetManagerStore.closeAll();
+      timelineStore.unsubscribe();
       PosBusService.leaveWorld();
     };
-  }, [worldId, agoraStore, universeStore, widgetManagerStore]);
+  }, [worldId, timelineStore, agoraStore, universeStore, widgetManagerStore]);
 
   const onInviteToVoiceChat = (userId: string) => {
     console.log('Invite to the Voice chat: ', userId);
