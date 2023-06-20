@@ -11,7 +11,7 @@ import {OnlineUsersList, CurrentWorld} from './components';
 import * as styled from './World2dPage.styled';
 
 const World2dPage: FC = () => {
-  const {universeStore, widgetManagerStore, widgetStore, agoraStore} = useStore();
+  const {universeStore, widgetManagerStore, widgetStore, agoraStore, sessionStore} = useStore();
   const {isLeftWidgetShown, isRightWidgetShown} = widgetManagerStore;
   const {agoraVoiceChatStore} = agoraStore;
   const {world2dStore, world3dStore} = universeStore;
@@ -27,7 +27,7 @@ const World2dPage: FC = () => {
     if (worldId) {
       universeStore.enterWorld(worldId);
       agoraStore.initUsers(worldId);
-      timelineStore.subscribe(worldId);
+      timelineStore.initAndSubscribe(worldId, sessionStore.userId);
     }
     return () => {
       universeStore.leaveWorld();
@@ -36,7 +36,7 @@ const World2dPage: FC = () => {
       timelineStore.unsubscribe();
       PosBusService.leaveWorld();
     };
-  }, [worldId, timelineStore, agoraStore, universeStore, widgetManagerStore]);
+  }, [worldId, timelineStore, agoraStore, universeStore, widgetManagerStore, sessionStore]);
 
   const onInviteToVoiceChat = (userId: string) => {
     console.log('Invite to the Voice chat: ', userId);

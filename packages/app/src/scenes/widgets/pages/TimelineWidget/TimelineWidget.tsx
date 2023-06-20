@@ -37,11 +37,11 @@ const TimelineWidget: FC = () => {
   const {t} = useI18n();
 
   useEffect(() => {
-    timelineStore.init(sessionStore.isGuest);
+    timelineStore.open(sessionStore.isGuest);
     timelineStore.loadMore(0);
 
     return () => {
-      timelineStore.deInit();
+      timelineStore.close();
     };
   }, [timelineStore, sessionStore, worldId]);
 
