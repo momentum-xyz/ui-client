@@ -22,7 +22,7 @@ interface PropsInterface {
 }
 
 const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
-  const {sessionStore, widgetManagerStore, universeStore, agoraStore} = useStore();
+  const {sessionStore, widgetStore, widgetManagerStore, universeStore, agoraStore} = useStore();
   const {activeWidgetList, subMenuInfo} = widgetManagerStore;
   const {isMyWorld, world2dStore} = universeStore;
 
@@ -133,6 +133,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       isHidden: !isWorld,
       tooltip: t('labels.timeline'),
       isDisabled: universeStore.isScreenRecording,
+      iconIndicator: widgetStore.timelineStore.hasUpdates ? 'danger' : undefined,
       onClick: handleToggle
     },
     {

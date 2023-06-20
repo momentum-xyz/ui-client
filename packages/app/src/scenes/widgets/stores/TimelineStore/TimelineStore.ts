@@ -1,4 +1,6 @@
 import {cast, flow, types} from 'mobx-state-tree';
+import {AttributeNameEnum} from '@momentum-xyz/sdk';
+import {PostFormInterface} from '@momentum-xyz/ui-kit';
 import {
   ActivityUpdateEnum,
   Event3dEmitter,
@@ -6,10 +8,15 @@ import {
   RequestModel,
   ResetModel
 } from '@momentum-xyz/core';
-import {PostFormInterface} from '@momentum-xyz/ui-kit';
 
-import {MediaUploader, TimelineEntry, TimelineEntryModelInterface} from 'core/models';
+import {PluginIdEnum} from 'api/enums';
 import {api, FetchTimelineResponse, TimelineItemInterface} from 'api';
+import {
+  MediaUploader,
+  TimelineEntry,
+  TimelineEntryModelInterface,
+  TimelineEntryDataModelInterface
+} from 'core/models';
 
 const PAGE_SIZE = 5;
 
@@ -17,6 +24,7 @@ const TimelineStore = types.compose(
   ResetModel,
   types
     .model('TimelineStore', {
+      userId: '',
       worldId: '',
       isTimelineShown: false,
       isCreationShown: false,
@@ -26,11 +34,34 @@ const TimelineStore = types.compose(
 
       hasUpdates: false,
 
+      itemRequest: types.optional(RequestModel, {}),
       createRequest: types.optional(RequestModel, {}),
       updateRequest: types.optional(RequestModel, {}),
       deleteRequest: types.optional(RequestModel, {}),
-      entriesRequest: types.optional(RequestModel, {})
+      entriesRequest: types.optional(RequestModel, {}),
+      lastSeenRequest: types.optional(RequestModel, {})
     })
+    .actions((self) => ({
+      addEntity(entity: TimelineItemInterface): void {
+        if (!self.entries.find((e) => e.activity_id === entity.activity_id)) {
+          const targetIndex = self.isCreationShown ? 1 : 0;
+          self.entries.splice(targetIndex, 0, entity);
+          self.itemCount = self.itemCount + 1;
+        }
+      },
+      changeEntity(id: string, data: TimelineEntryDataModelInterface): void {
+        const storeEntry = self.entries.find((e) => e.activity_id === id);
+        if (storeEntry) {
+          storeEntry.data = data;
+        }
+      },
+      deleteEntity(id: string): void {
+        if (self.entries.find((e) => e.activity_id === id)) {
+          self.entries = cast(self.entries.filter((e) => e.activity_id !== id));
+          self.itemCount = self.itemCount - 1;
+        }
+      }
+    }))
     .actions((self) => ({
       loadMore: flow(function* (startIndex: number) {
         const response: FetchTimelineResponse = yield self.entriesRequest.send(
@@ -97,9 +128,7 @@ const TimelineStore = types.compose(
         );
 
         if (response) {
-          const targetIndex = self.isCreationShown ? 1 : 0;
-          self.entries.splice(targetIndex, 0, response);
-          self.itemCount = self.itemCount + 1;
+          self.addEntity(response);
         }
 
         return self.createRequest.isDone && self.mediaUploader.fileRequest.isDone;
@@ -121,11 +150,10 @@ const TimelineStore = types.compose(
         });
 
         if (self.updateRequest.isDone) {
-          const storeEntry = self.entries.find((e) => e.activity_id === entry.activity_id);
-          if (storeEntry) {
-            storeEntry.data.hash = hash || entry.data.hash;
-            storeEntry.data.description = form.description || '';
-          }
+          self.changeEntity(entry.activity_id, {
+            hash: hash || entry.data.hash,
+            description: form.description || ''
+          });
         }
 
         return self.updateRequest.isDone;
@@ -135,48 +163,131 @@ const TimelineStore = types.compose(
 
         yield self.deleteRequest.send(api.timelineRepository.deleteItem, {objectId, id});
         if (self.deleteRequest.isDone) {
-          self.entries = cast(self.entries.filter((e) => e.activity_id !== id));
+          self.deleteEntity(id);
         }
 
         return self.deleteRequest.isDone;
       })
     }))
     .actions((self) => ({
-      init(isGuest: boolean): void {
+      checkLastSeenDate: flow(function* () {
+        /* 1. GETTING LAST SEEN DATE */
+        const attributeResponse = yield self.lastSeenRequest.send(
+          api.spaceUserAttributeRepository.getSpaceUserAttribute,
+          {
+            spaceId: self.worldId,
+            userId: self.userId,
+            pluginId: PluginIdEnum.CORE,
+            attributeName: AttributeNameEnum.TIMELINE_LAST_SEEN
+          }
+        );
+
+        /* 2. GETTING DATE OF A LAST ITEM */
+        const timelineResponse: FetchTimelineResponse = yield self.entriesRequest.send(
+          api.timelineRepository.fetchTimeline,
+          {
+            startIndex: 0,
+            pageSize: 1,
+            objectId: self.worldId
+          }
+        );
+
+        /* 3. SETTING VALUE FOR 'self.hasUpdates' IF IT NEEDS  */
+        const lastSeenDateString = attributeResponse?.lastSeenDate;
+        const lastItemDateString = timelineResponse?.activities[0]?.created_at;
+
+        // There is at least 1 item and user have never seen the timeline
+        if (lastItemDateString && !lastSeenDateString) {
+          self.hasUpdates = true;
+          return;
+        }
+
+        // There is at least 1 new item
+        if (lastItemDateString && lastSeenDateString) {
+          const lastItemDate = new Date(lastItemDateString).getTime();
+          const lastSeenDate = new Date(lastSeenDateString).getTime();
+
+          if (lastItemDate > lastSeenDate) {
+            self.hasUpdates = true;
+            return;
+          }
+        }
+      }),
+      updateLastSeenDate: flow(function* () {
+        yield self.lastSeenRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
+          spaceId: self.worldId,
+          userId: self.userId,
+          pluginId: PluginIdEnum.CORE,
+          attributeName: AttributeNameEnum.TIMELINE_LAST_SEEN,
+          value: {lastSeenDate: new Date().toISOString()}
+        });
+      })
+    }))
+    .actions((self) => ({
+      open(isGuest: boolean): void {
         self.isCreationShown = !isGuest;
         self.isTimelineShown = true;
         self.hasUpdates = false;
+        self.updateLastSeenDate();
       },
-      deInit(): void {
+      close(): void {
         self.isCreationShown = false;
         self.isTimelineShown = false;
         self.hasUpdates = false;
         self.entries = cast([]);
         self.itemCount = 0;
+        self.updateLastSeenDate();
       },
-      onActivityUpdate(activityId: string, updateType: ActivityUpdateEnum): void {
+      onActivityUpdate: flow(function* (activityId: string, updateType: ActivityUpdateEnum) {
         switch (updateType) {
           case ActivityUpdateEnum.NEW:
             console.log('[TimelineStore] NEW', activityId);
-            // TODO
+            if (self.isTimelineShown) {
+              const response = yield self.itemRequest.send(api.timelineRepository.fetchItem, {
+                objectId: self.worldId,
+                id: activityId
+              });
+
+              if (response) {
+                self.addEntity(response);
+              }
+            } else {
+              self.hasUpdates = true;
+            }
             break;
           case ActivityUpdateEnum.CHANGED:
             console.log('[TimelineStore] CHANGED', activityId);
-            // TODO
+            if (self.isTimelineShown) {
+              const response = yield self.itemRequest.send(api.timelineRepository.fetchItem, {
+                objectId: self.worldId,
+                id: activityId
+              });
+
+              if (response) {
+                self.changeEntity(activityId, response.data);
+              }
+            }
             break;
           case ActivityUpdateEnum.REMOVED:
             console.log('[TimelineStore] REMOVED', activityId);
-            // TODO
+            if (self.isTimelineShown) {
+              self.deleteEntity(activityId);
+            }
             break;
           default:
             console.log('[TimelineStore] Unknown activity type');
             break;
         }
-      }
+      })
     }))
     .actions((self) => ({
-      subscribe(worldId: string): void {
+      initAndSubscribe(worldId: string, userId: string): void {
+        self.userId = userId;
         self.worldId = worldId;
+        self.checkLastSeenDate();
+        this.subscribe();
+      },
+      subscribe(): void {
         Event3dEmitter.on('ActivityUpdate', self.onActivityUpdate);
         console.log('[TimelineStore] Subscribe to activity', self.worldId);
       },

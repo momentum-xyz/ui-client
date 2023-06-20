@@ -33,6 +33,15 @@ export interface FetchTimelineResponse {
   activities: TimelineItemInterface[];
 }
 
+/** FETCH TIMELINE ITEM **/
+
+export interface FetchTimelineItemRequest {
+  objectId: string;
+  id: string;
+}
+
+export interface FetchTimelineItemResponse extends TimelineItemInterface {}
+
 /** CREATE TIMELINE ITEM **/
 
 export interface CreateTimelineRequest {
