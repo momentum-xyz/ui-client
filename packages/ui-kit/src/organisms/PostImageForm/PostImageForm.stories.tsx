@@ -1,5 +1,5 @@
 import {ComponentMeta, Story} from '@storybook/react';
-import {PostTypeEnum} from '@momentum-xyz/core';
+import {TimelineTypeEnum} from '@momentum-xyz/core';
 
 import PostImageForm, {PostImageFormPropsInterface} from './PostImageForm';
 
@@ -52,7 +52,7 @@ EditForm.args = {
     id: '1',
     hashSrc: IMAGE_SRC,
     description: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.',
-    type: PostTypeEnum.SCREENSHOT,
+    type: TimelineTypeEnum.SCREENSHOT,
     created: '2023-06-09T11:07:25.064Z',
     objectId: '1',
     objectName: 'Odyssey #1'

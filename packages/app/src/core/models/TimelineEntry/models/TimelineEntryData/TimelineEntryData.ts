@@ -2,7 +2,9 @@ import {types, Instance} from 'mobx-state-tree';
 
 const TimelineEntryData = types.model('TimelineEntryData', {
   hash: types.string,
-  description: types.string
+  description: types.string,
+  token_amount: types.maybeNull(types.string),
+  token_symbol: types.maybeNull(types.string)
 });
 
 export interface TimelineEntryDataModelInterface extends Instance<typeof TimelineEntryData> {}

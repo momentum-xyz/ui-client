@@ -1,4 +1,4 @@
-import {PostTypeEnum} from '@momentum-xyz/core';
+import {TimelineTypeEnum} from '@momentum-xyz/core';
 
 export interface PostFormInterface {
   file?: File;
@@ -16,8 +16,11 @@ export interface PostEntryInterface {
   id: string;
   hashSrc: string | null;
   description: string | null;
-  type: PostTypeEnum;
+  type: TimelineTypeEnum;
   objectId?: string;
   objectName?: string;
+  objectAvatarSrc?: string;
+  tokenSymbol?: string;
+  tokenAmount?: string;
   created: string;
 }

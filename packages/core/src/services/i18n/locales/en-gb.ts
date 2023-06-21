@@ -439,6 +439,8 @@ export const enGb = {
       takeShot: 'Take the shot!',
       startRecording: 'Start recording and fly around',
       recording: 'Recording',
+      wasCreatedBy: 'was created by',
+      receivedBoost: 'received a boost of {{amount}} {{symbol}} from {{name}}',
       shareThisPost: 'Share this post',
       loading30sec:
         'Loading an Odyssey could take up to 1-2 minutes, depending on your internet connection. While you wait, you can',

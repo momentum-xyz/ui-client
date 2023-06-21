@@ -1,7 +1,7 @@
 import {FC, useEffect, useMemo, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
 import {ListChildComponentProps} from 'react-window';
-import {PostTypeEnum} from '@momentum-xyz/core';
+import {TimelineTypeEnum} from '@momentum-xyz/core';
 import {
   ImageSizeEnum,
   PostAuthorInterface,
@@ -46,7 +46,7 @@ const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
     objectName: entry.world_name,
     created: entry.created_at,
     hashSrc:
-      entry.type === PostTypeEnum.VIDEO
+      entry.type === TimelineTypeEnum.VIDEO
         ? getVideoAbsoluteUrl(entry.data.hash)
         : getImageAbsoluteUrl(entry.data.hash, ImageSizeEnum.S5)
   };
@@ -70,7 +70,7 @@ const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
         ) : (
           <>
             {/* SCREENSHOT VIEW */}
-            {entry.type === PostTypeEnum.SCREENSHOT && (
+            {entry.type === TimelineTypeEnum.SCREENSHOT && (
               <PostImageView
                 entry={postEntry}
                 author={postAuthor}
@@ -80,7 +80,7 @@ const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
             )}
 
             {/* VIDEO VIEW */}
-            {entry.type === PostTypeEnum.VIDEO && (
+            {entry.type === TimelineTypeEnum.VIDEO && (
               <PostVideoView
                 entry={postEntry}
                 author={postAuthor}
@@ -90,7 +90,7 @@ const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
             )}
 
             {/* UNKNOWN TYPE */}
-            {![PostTypeEnum.SCREENSHOT, PostTypeEnum.VIDEO].includes(entry.type) && (
+            {![TimelineTypeEnum.SCREENSHOT, TimelineTypeEnum.VIDEO].includes(entry.type) && (
               <div>{entry.type} is an unknown type.</div>
             )}
           </>
