@@ -82,6 +82,7 @@ const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
                 author={postAuthor}
                 shareUrl={shareUrl}
                 onEdit={isEditable ? () => data.handleEdit(entry) : undefined}
+                onVisit={data.handleVisit ? () => data.handleVisit(entry.object_id) : undefined}
               />
             )}
 
@@ -92,6 +93,7 @@ const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
                 author={postAuthor}
                 shareUrl={shareUrl}
                 onEdit={isEditable ? () => data.handleEdit(entry) : undefined}
+                onVisit={data.handleVisit ? () => data.handleVisit(entry.object_id) : undefined}
               />
             )}
 
