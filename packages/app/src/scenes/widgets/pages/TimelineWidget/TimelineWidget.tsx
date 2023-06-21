@@ -17,8 +17,8 @@ import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {TimelineEntryModelInterface} from 'core/models';
 import {getImageAbsoluteUrl, getVideoAbsoluteUrl} from 'core/utils';
+import {PostEntityRow} from 'ui-kit';
 
-import {EntityRow} from './components';
 import * as styled from './TimelineWidget.styled';
 
 const TimelineWidget: FC = () => {
@@ -164,7 +164,7 @@ const TimelineWidget: FC = () => {
                             onItemsRendered={onItemsRendered}
                             estimatedItemSize={300}
                           >
-                            {EntityRow}
+                            {PostEntityRow}
                           </VariableSizeList>
                         );
                       }}

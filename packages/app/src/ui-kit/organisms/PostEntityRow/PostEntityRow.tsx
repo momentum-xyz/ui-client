@@ -13,9 +13,9 @@ import {
 
 import {getImageAbsoluteUrl, getVideoAbsoluteUrl} from 'core/utils';
 
-import * as styled from './EntityRow.styled';
+import * as styled from './PostEntityRow.styled';
 
-const EntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
+const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
   const rowRef = useRef<HTMLDivElement>(null);
 
   const entry = useMemo(() => {
@@ -95,4 +95,4 @@ const EntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
   );
 };
 
-export default observer(EntityRow);
+export default observer(PostEntityRow);
