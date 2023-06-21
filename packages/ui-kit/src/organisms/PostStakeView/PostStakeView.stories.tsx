@@ -42,6 +42,5 @@ General.args = {
     tokenAmount: '1.1',
     tokenSymbol: 'MOM'
   },
-  shareUrl: 'Some url',
   onVisit: () => {}
 };

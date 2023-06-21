@@ -26,17 +26,3 @@ export const WorldName = styled.a`
 `;
 
 export const Description = styled.div``;
-
-export const Controls = styled.div`
-  padding: 10px 0 0 0;
-  display: flex;
-  justify-content: flex-end;
-  gap: 6px;
-`;
-
-export const ShareBlock = styled.div`
-  position: absolute;
-  left: -10px;
-  right: -10px;
-  bottom: 36px;
-`;

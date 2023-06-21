@@ -40,6 +40,5 @@ General.args = {
     objectName: 'Odyssey #1',
     objectAvatarSrc: IMAGE_SRC
   },
-  shareUrl: 'Some url',
   onVisit: () => {}
 };

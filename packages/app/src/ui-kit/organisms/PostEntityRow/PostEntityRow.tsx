@@ -100,7 +100,6 @@ const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
               <PostWorldView
                 entry={postEntry}
                 author={postAuthor}
-                shareUrl={shareUrl}
                 onVisit={() => data.handleVisit(entry.object_id)}
               />
             )}
@@ -110,7 +109,6 @@ const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
               <PostStakeView
                 entry={postEntry}
                 author={postAuthor}
-                shareUrl={shareUrl}
                 onVisit={() => data.handleVisit(entry.object_id)}
               />
             )}
