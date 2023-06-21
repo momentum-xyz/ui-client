@@ -1,7 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {api, FetchTimelineResponse} from 'api';
+import {api, FetchNewsfeedResponse} from 'api';
 import {TimelineEntry} from 'core/models';
 
 const PAGE_SIZE = 5;
@@ -17,13 +17,11 @@ const NewsfeedStore = types.compose(
     })
     .actions((self) => ({
       loadMore: flow(function* (startIndex: number) {
-        // TODO: API
-        const response: FetchTimelineResponse = yield self.entriesRequest.send(
-          api.timelineRepository.fetchTimeline,
+        const response: FetchNewsfeedResponse = yield self.entriesRequest.send(
+          api.newsfeedRepository.fetchNewsfeed,
           {
             startIndex,
-            pageSize: PAGE_SIZE,
-            objectId: 'xxx'
+            pageSize: PAGE_SIZE
           }
         );
 

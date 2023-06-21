@@ -51,7 +51,7 @@ const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
         : getImageAbsoluteUrl(entry.data.hash, ImageSizeEnum.S5)
   };
 
-  const isEditable = data.isMyWorld || entry.user_id === data.user.id;
+  const isEditable = data.isMyWorld || entry.user_id === data.user?.id;
 
   return (
     <div style={style} data-testid="EntityRow-test">
@@ -87,6 +87,11 @@ const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
                 shareUrl={`${document.location.origin}/odyssey/${entry.object_id}`}
                 onEdit={isEditable ? () => data.handleEdit(entry) : undefined}
               />
+            )}
+
+            {/* UNKNOWN TYPE */}
+            {![PostTypeEnum.SCREENSHOT, PostTypeEnum.VIDEO].includes(entry.type) && (
+              <div>{entry.type} is an unknown type.</div>
             )}
           </>
         )}

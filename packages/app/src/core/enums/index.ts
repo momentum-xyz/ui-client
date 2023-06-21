@@ -6,7 +6,6 @@ export * from './loaderStatus.enum';
 export * from './posBusMessageType.enum';
 export * from './assetType.enum';
 export * from './basicAsset2dId.enum';
-export * from './newsfeed.enum';
 export * from './gizmoType.enum';
 export * from './widget.enum';
 export * from './creatorTabs.enum';
