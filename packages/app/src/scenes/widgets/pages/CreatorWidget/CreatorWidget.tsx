@@ -15,7 +15,8 @@ import {
   SkyboxSelector,
   ObjectInspector,
   AssetCustomising,
-  ObjectFunction
+  ObjectFunction,
+  SoundSelector
 } from './pages';
 
 type MenuItemType = keyof typeof CreatorTabsEnum;
@@ -30,6 +31,11 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     id: 'skybox',
     iconName: 'skybox',
     label: i18n.t('labels.skyboxes')
+  },
+  {
+    id: 'sound',
+    iconName: 'music',
+    label: i18n.t('labels.sound')
   }
 ];
 
@@ -55,8 +61,7 @@ const allPanels: SideMenuItemInterface<MenuItemType>[] = [
 const CreatorWidget: FC = () => {
   const {universeStore, widgetStore, widgetManagerStore} = useStore();
   const {creatorStore} = widgetStore;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const world3dStore = universeStore.world3dStore!;
+  const world3dStore = universeStore.world3dStore;
   const worldId = universeStore.worldId;
 
   const {
@@ -73,11 +78,12 @@ const CreatorWidget: FC = () => {
   console.log('CreatorWidget render', {selectedTab});
 
   useEffect(() => {
-    world3dStore.enableCreatorMode();
+    world3dStore?.enableCreatorMode();
     spawnAssetStore.init(worldId); // TEMP
     spawnAssetStore.fetchAllAssets3d(); // TEMP
+
     return () => {
-      world3dStore.disableCreatorMode();
+      world3dStore?.disableCreatorMode();
       creatorStore.resetModel();
     };
   }, [creatorStore, world3dStore, spawnAssetStore, worldId]);
@@ -88,6 +94,8 @@ const CreatorWidget: FC = () => {
         return <SpawnAsset />;
       case 'skybox':
         return <SkyboxSelector />;
+      case 'sound':
+        return <SoundSelector />;
       case 'inspector':
         return <ObjectInspector />;
       case 'functionality':
@@ -121,7 +129,7 @@ const CreatorWidget: FC = () => {
   };
 
   return (
-    <styled.Container data-testid="CreatorWidget">
+    <styled.Container data-testid="CreatorWidget-test">
       <div>
         <SideMenu
           activeId={menuItem?.id}
@@ -134,7 +142,7 @@ const CreatorWidget: FC = () => {
       {!!selectedTab && !!content && (
         <Panel
           isFullHeight
-          size="large"
+          size={['sound'].includes(selectedTab) ? 'normal' : 'large'}
           variant="primary"
           title={panel?.label || ''}
           icon={panel?.iconName as IconNameType}

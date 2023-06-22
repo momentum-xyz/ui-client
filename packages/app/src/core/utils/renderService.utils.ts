@@ -19,12 +19,25 @@ export const getImageAbsoluteUrl = (
 };
 
 export const getVideoAbsoluteUrl = (videoUrlOrHash: string | undefined | null): string | null => {
-  const imageServerUrl = `${appVariables.RENDER_SERVICE_URL}/video`;
+  const videoServerUrl = `${appVariables.RENDER_SERVICE_URL}/video`;
   if (videoUrlOrHash) {
     if (videoUrlOrHash.startsWith('http')) {
       return videoUrlOrHash;
     } else {
-      return `${imageServerUrl}/${videoUrlOrHash}`;
+      return `${videoServerUrl}/${videoUrlOrHash}`;
+    }
+  }
+
+  return null;
+};
+
+export const getTrackAbsoluteUrl = (trackUrlOrHash: string | undefined | null): string | null => {
+  const audioServerUrl = `${appVariables.RENDER_SERVICE_URL}/track`;
+  if (trackUrlOrHash) {
+    if (trackUrlOrHash.startsWith('http')) {
+      return trackUrlOrHash;
+    } else {
+      return `${audioServerUrl}/${trackUrlOrHash}`;
     }
   }
 
