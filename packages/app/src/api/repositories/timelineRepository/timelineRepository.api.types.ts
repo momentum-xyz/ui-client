@@ -13,11 +13,11 @@ export interface TimelineItemInterface {
   avatar_hash: string | null;
   type: TimelineTypeEnum;
   data: {
-    hash: string;
-    description: string;
+    hash: string | null;
+    description: string | null;
     token_amount: string | null;
     token_symbol: string | null;
-    position: {x: number; y: number; z: number};
+    position: {x: number; y: number; z: number} | null;
   };
 }
 
