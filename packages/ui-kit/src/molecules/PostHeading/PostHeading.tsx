@@ -1,7 +1,7 @@
 import {FC, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {format} from 'date-fns-tz';
-import {PostTypeEnum, useI18n} from '@momentum-xyz/core';
+import {TimelineTypeEnum, useI18n} from '@momentum-xyz/core';
 
 import {IconNameType} from '../../types';
 import {Hexagon, IconSvg} from '../../atoms';
@@ -21,10 +21,14 @@ const PostHeading: FC<PostHeadingPropsInterface> = ({entry, author}) => {
 
   const icon: IconNameType | null = useMemo(() => {
     switch (entry?.type) {
-      case PostTypeEnum.VIDEO:
+      case TimelineTypeEnum.VIDEO:
         return 'camera';
-      case PostTypeEnum.SCREENSHOT:
+      case TimelineTypeEnum.SCREENSHOT:
         return 'photo_camera';
+      case TimelineTypeEnum.WORLD_CREATE:
+        return 'star';
+      case TimelineTypeEnum.STAKE:
+        return 'stake';
       default:
         return null;
     }

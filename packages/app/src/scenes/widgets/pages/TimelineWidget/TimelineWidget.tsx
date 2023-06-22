@@ -4,7 +4,7 @@ import AutoSizer, {Size} from 'react-virtualized-auto-sizer';
 import InfiniteLoader from 'react-window-infinite-loader';
 import {VariableSizeList} from 'react-window';
 import cn from 'classnames';
-import {Event3dEmitter, PostTypeEnum, useI18n} from '@momentum-xyz/core';
+import {Event3dEmitter, TimelineTypeEnum, useI18n} from '@momentum-xyz/core';
 import {
   Panel,
   ImageSizeEnum,
@@ -17,8 +17,8 @@ import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {TimelineEntryModelInterface} from 'core/models';
 import {getImageAbsoluteUrl, getVideoAbsoluteUrl} from 'core/utils';
+import {PostEntityRow} from 'ui-kit';
 
-import {EntityRow} from './components';
 import * as styled from './TimelineWidget.styled';
 
 const TimelineWidget: FC = () => {
@@ -31,7 +31,7 @@ const TimelineWidget: FC = () => {
   const scrollListRef = useRef<VariableSizeList | null>();
   const entityHeightsRef = useRef({});
 
-  const [postTypeIntent, setPostTypeIntent] = useState<PostTypeEnum | null>(null);
+  const [postTypeIntent, setPostTypeIntent] = useState<TimelineTypeEnum | null>(null);
   const [selectedPost, setSelectedPost] = useState<TimelineEntryModelInterface | null>(null);
 
   const {t} = useI18n();
@@ -52,7 +52,7 @@ const TimelineWidget: FC = () => {
     };
   }, [timelineStore, world3dStore]);
 
-  const handleCreatePost = async (form: PostFormInterface, postType: PostTypeEnum) => {
+  const handleCreatePost = async (form: PostFormInterface, postType: TimelineTypeEnum) => {
     const isDone = await timelineStore.createItem(form, postType, worldId);
     if (isDone) {
       world3dStore?.clearSnapshotOrVideo();
@@ -164,7 +164,7 @@ const TimelineWidget: FC = () => {
                             onItemsRendered={onItemsRendered}
                             estimatedItemSize={300}
                           >
-                            {EntityRow}
+                            {PostEntityRow}
                           </VariableSizeList>
                         );
                       }}
@@ -172,7 +172,7 @@ const TimelineWidget: FC = () => {
                   </styled.InfinityList>
 
                   {/* A NEW SCREENSHOT FORM */}
-                  {postTypeIntent === PostTypeEnum.SCREENSHOT && (
+                  {postTypeIntent === TimelineTypeEnum.SCREENSHOT && (
                     <styled.Overlay>
                       <PostImageForm
                         author={{
@@ -195,7 +195,7 @@ const TimelineWidget: FC = () => {
                   )}
 
                   {/* A NEW VIDEO FORM */}
-                  {postTypeIntent === PostTypeEnum.VIDEO && (
+                  {postTypeIntent === TimelineTypeEnum.VIDEO && (
                     <styled.Overlay>
                       <PostVideoForm
                         author={{
@@ -220,7 +220,7 @@ const TimelineWidget: FC = () => {
                   )}
 
                   {/* EDIT SCREENSHOT FORM */}
-                  {selectedPost?.type === PostTypeEnum.SCREENSHOT && (
+                  {selectedPost?.type === TimelineTypeEnum.SCREENSHOT && (
                     <styled.Overlay>
                       <PostImageForm
                         author={{
@@ -253,7 +253,7 @@ const TimelineWidget: FC = () => {
                   )}
 
                   {/* EDIT VIDEO FORM */}
-                  {selectedPost?.type === PostTypeEnum.VIDEO && (
+                  {selectedPost?.type === TimelineTypeEnum.VIDEO && (
                     <styled.Overlay>
                       <PostVideoForm
                         author={{

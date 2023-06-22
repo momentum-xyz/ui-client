@@ -1,4 +1,4 @@
-import {PostTypeEnum} from '@momentum-xyz/core';
+import {TimelineTypeEnum} from '@momentum-xyz/core';
 
 /** COMMON **/
 
@@ -7,14 +7,17 @@ export interface TimelineItemInterface {
   created_at: string;
   object_id: string;
   world_name: string;
+  world_avatar_hash: string | null;
   user_id: string;
   user_name: string;
   avatar_hash: string | null;
-  type: PostTypeEnum;
+  type: TimelineTypeEnum;
   data: {
-    hash: string;
-    description: string;
-    position: {x: number; y: number; z: number};
+    hash: string | null;
+    description: string | null;
+    token_amount: string | null;
+    token_symbol: string | null;
+    position: {x: number; y: number; z: number} | null;
   };
 }
 
@@ -46,7 +49,7 @@ export interface FetchTimelineItemResponse extends TimelineItemInterface {}
 
 export interface CreateTimelineRequest {
   objectId: string;
-  type: PostTypeEnum;
+  type: TimelineTypeEnum;
   hash: string;
   description: string | null;
 }
@@ -58,7 +61,7 @@ export interface CreateTimelineResponse extends TimelineItemInterface {}
 export interface UpdateTimelineRequest {
   id: string;
   objectId: string;
-  type: PostTypeEnum;
+  type: TimelineTypeEnum;
   hash: string;
   description: string | null;
 }

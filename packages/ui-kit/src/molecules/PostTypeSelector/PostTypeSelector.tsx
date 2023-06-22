@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {useI18n, PostTypeEnum} from '@momentum-xyz/core';
+import {useI18n, TimelineTypeEnum} from '@momentum-xyz/core';
 
 import {Frame, IconSvg} from '../../atoms';
 import {PostHeading} from '../PostHeading';
@@ -9,15 +9,10 @@ import * as styled from './PostTypeSelector.styled';
 
 export interface PostTypeSelectorPropsInterface {
   author: PostAuthorInterface;
-  canPostEvents?: boolean;
-  onSelect: (type: PostTypeEnum) => void;
+  onSelect: (type: TimelineTypeEnum) => void;
 }
 
-const PostTypeSelector: FC<PostTypeSelectorPropsInterface> = ({
-  author,
-  canPostEvents,
-  onSelect
-}) => {
+const PostTypeSelector: FC<PostTypeSelectorPropsInterface> = ({author, onSelect}) => {
   const {t} = useI18n();
 
   return (
@@ -31,22 +26,17 @@ const PostTypeSelector: FC<PostTypeSelectorPropsInterface> = ({
             {t('messages.createSnapshotOrVideo')}
           </styled.PostTypeSelectionInfo>
           <styled.PostTypeSelectionTypes>
-            <styled.PostTypeSelectionTypeButton onClick={() => onSelect(PostTypeEnum.SCREENSHOT)}>
+            <styled.PostTypeSelectionTypeButton
+              onClick={() => onSelect(TimelineTypeEnum.SCREENSHOT)}
+            >
               <IconSvg size="xll" isWhite name="photo_camera" />
               <span>{t('actions.takeSnapshot')}</span>
             </styled.PostTypeSelectionTypeButton>
 
-            <styled.PostTypeSelectionTypeButton onClick={() => onSelect(PostTypeEnum.VIDEO)}>
+            <styled.PostTypeSelectionTypeButton onClick={() => onSelect(TimelineTypeEnum.VIDEO)}>
               <IconSvg size="xll" isWhite name="camera" />
               <span>{t('actions.createVideo')}</span>
             </styled.PostTypeSelectionTypeButton>
-
-            {canPostEvents && (
-              <styled.PostTypeSelectionTypeButton onClick={() => onSelect(PostTypeEnum.EVENT)}>
-                <IconSvg size="xll" isWhite name="calendar" />
-                <span>{t('actions.createEvent')}</span>
-              </styled.PostTypeSelectionTypeButton>
-            )}
           </styled.PostTypeSelectionTypes>
         </styled.Wrapper>
       </Frame>

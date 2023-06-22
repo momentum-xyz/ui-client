@@ -4,7 +4,7 @@ import {PostFormInterface} from '@momentum-xyz/ui-kit';
 import {
   ActivityUpdateEnum,
   Event3dEmitter,
-  PostTypeEnum,
+  TimelineTypeEnum,
   RequestModel,
   ResetModel
 } from '@momentum-xyz/core';
@@ -84,7 +84,7 @@ const TimelineStore = types.compose(
               user_id: '',
               user_name: '',
               avatar_hash: '',
-              type: PostTypeEnum.SCREENSHOT,
+              type: TimelineTypeEnum.SCREENSHOT,
               data: {
                 hash: '',
                 description: ''
@@ -107,10 +107,10 @@ const TimelineStore = types.compose(
       }),
       createItem: flow(function* (
         form: PostFormInterface,
-        postType: PostTypeEnum,
+        postType: TimelineTypeEnum,
         objectId: string
       ) {
-        const isVideo = postType === PostTypeEnum.VIDEO;
+        const isVideo = postType === TimelineTypeEnum.VIDEO;
         const hash = yield self.mediaUploader.uploadImageOrVideo(form.file, isVideo);
 
         if (!hash) {
@@ -138,7 +138,7 @@ const TimelineStore = types.compose(
         entry: TimelineEntryModelInterface,
         objectId: string
       ) {
-        const isVideo = entry.type === PostTypeEnum.VIDEO;
+        const isVideo = entry.type === TimelineTypeEnum.VIDEO;
         const hash = yield self.mediaUploader.uploadImageOrVideo(form.file, isVideo);
 
         yield self.updateRequest.send(api.timelineRepository.updateItem, {
@@ -152,7 +152,9 @@ const TimelineStore = types.compose(
         if (self.updateRequest.isDone) {
           self.changeEntity(entry.activity_id, {
             hash: hash || entry.data.hash,
-            description: form.description || ''
+            description: form.description || '',
+            token_amount: null,
+            token_symbol: null
           });
         }
 

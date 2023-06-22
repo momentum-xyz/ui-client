@@ -9,6 +9,7 @@ export * from './spaceAttributeRepository';
 export * from './userAttributeRepository';
 export * from './mediaRepository';
 export * from './emojiRepository';
+export * from './newsfeedRepository';
 export * from './timelineRepository';
 export * from './eventsRepository';
 export * from './objectRepository';
