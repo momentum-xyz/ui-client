@@ -1,7 +1,7 @@
 import {FC, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {format} from 'date-fns-tz';
-import {PostTypeEnum, useI18n} from '@momentum-xyz/core';
+import {TimelineTypeEnum, useI18n} from '@momentum-xyz/core';
 
 import {IconNameType} from '../../types';
 import {Hexagon, IconSvg} from '../../atoms';
@@ -17,14 +17,18 @@ export interface PostHeadingPropsInterface {
 const PostHeading: FC<PostHeadingPropsInterface> = ({entry, author}) => {
   const {t} = useI18n();
 
-  const entryDate = entry ? new Date(entry.created) : null;
+  const entryDate = entry?.created ? new Date(entry.created) : null;
 
   const icon: IconNameType | null = useMemo(() => {
     switch (entry?.type) {
-      case PostTypeEnum.VIDEO:
+      case TimelineTypeEnum.VIDEO:
         return 'camera';
-      case PostTypeEnum.SCREENSHOT:
+      case TimelineTypeEnum.SCREENSHOT:
         return 'photo_camera';
+      case TimelineTypeEnum.WORLD_CREATE:
+        return 'star';
+      case TimelineTypeEnum.STAKE:
+        return 'stake';
       default:
         return null;
     }
@@ -38,22 +42,24 @@ const PostHeading: FC<PostHeadingPropsInterface> = ({entry, author}) => {
           <styled.UserName>
             {author.name} {author.isItMe && <>({t('labels.you').toUpperCase()})</>}
           </styled.UserName>
-          {!!entry && !!entryDate && (
+          {!!entry && (
             <styled.World>
               <styled.Icon>
                 <IconSvg name={icon || 'alert'} size="xs" isWhite />
               </styled.Icon>
 
               {entry.objectId && (
-                <>
-                  <styled.WorldName>{entry.objectName || entry.objectId}</styled.WorldName>
-                  <div>/</div>
-                </>
+                <styled.WorldName>{entry.objectName || entry.objectId}</styled.WorldName>
               )}
 
-              <div>{format(entryDate, 'yyyy-MM-dd')}</div>
-              <div>/</div>
-              <div>{format(entryDate, 'HH aa')}</div>
+              {!!entryDate && (
+                <>
+                  <div>/</div>
+                  <div>{format(entryDate, 'yyyy-MM-dd')}</div>
+                  <div>/</div>
+                  <div>{format(entryDate, 'HH aa')}</div>
+                </>
+              )}
             </styled.World>
           )}
         </styled.UserInfoTitle>

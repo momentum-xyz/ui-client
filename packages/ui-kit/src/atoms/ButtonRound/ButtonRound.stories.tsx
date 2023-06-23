@@ -48,3 +48,9 @@ Large.args = {
   variant: 'primary',
   size: 'large'
 };
+
+export const ExtraLarge = Template.bind({});
+ExtraLarge.args = {
+  variant: 'primary',
+  size: 'extra-large'
+};

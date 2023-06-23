@@ -1,122 +1,107 @@
-import {FC, useCallback, useEffect} from 'react';
+import {FC, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useI18n, i18n, NewsfeedTypeEnum} from '@momentum-xyz/core';
-import {TabInterface, Tabs, Panel, NewsfeedEntry} from '@momentum-xyz/ui-kit';
-import {ListChildComponentProps} from 'react-window';
-import AutoSizer from 'react-virtualized-auto-sizer';
+import AutoSizer, {Size} from 'react-virtualized-auto-sizer';
+import InfiniteLoader from 'react-window-infinite-loader';
+import {VariableSizeList} from 'react-window';
+import {useI18n} from '@momentum-xyz/core';
+import {Panel} from '@momentum-xyz/ui-kit';
 
-import {InfiniteScroll} from 'ui-kit';
 import {useNavigation, useStore} from 'shared/hooks';
-import {NewsfeedTabTypeEnum, WidgetEnum} from 'core/enums';
+import {WidgetEnum} from 'core/enums';
+import {PostEntityRow} from 'ui-kit';
 
 import * as styled from './NewsfeedWidget.styled';
 
-const TABS_LIST: TabInterface<NewsfeedTabTypeEnum>[] = [
-  {id: NewsfeedTabTypeEnum.UNIVERSAL, icon: 'clock', label: i18n.t('labels.universal')},
-  {id: NewsfeedTabTypeEnum.MY_CONNECTIONS, icon: 'connect', label: i18n.t('labels.myConnections')}
-];
-
-const PADDING = 10;
-const BASE_IMAGE_SIZE = 272 + PADDING;
-const BASE_TEXT_SIZE = 116 + PADDING;
-
-const calculateApproximateTextRowCount = (text: string) => {
-  return text.length / 50;
-};
-
 const NewsfeedWidget: FC = () => {
-  const {widgetManagerStore, widgetStore} = useStore();
-  const {close} = widgetManagerStore;
+  const {widgetManagerStore, widgetStore, sessionStore, universeStore} = useStore();
+  const {worldId} = universeStore;
   const {newsfeedStore} = widgetStore;
-  const {newsfeedType, currentTabEntries, itemCount, setActiveNewsfeedType, loadMore} =
-    newsfeedStore;
+  const {user} = sessionStore;
+
+  const infiniteRef = useRef(null);
+  const scrollListRef = useRef<VariableSizeList | null>();
+  const entityHeightsRef = useRef({});
 
   const {t} = useI18n();
   const {goToOdysseyHome} = useNavigation();
 
   useEffect(() => {
-    loadMore();
-  }, [loadMore]);
+    newsfeedStore.open();
+    newsfeedStore.loadMore(0);
 
-  const handleWorldOpen = useCallback(
-    (worldId: string) => {
-      console.log('Open newsfeed entry world', worldId);
-      if (!worldId) {
-        return;
-      }
-      goToOdysseyHome(worldId);
-    },
-    [goToOdysseyHome]
-  );
+    return () => {
+      newsfeedStore.close();
+    };
+  }, [newsfeedStore, sessionStore, worldId]);
 
-  const isItemLoaded = (index: number) => index < currentTabEntries.length;
-
-  const calcItemSize = (index: number) => {
-    if (!isItemLoaded(index)) {
-      return 100;
-    }
-    const entry = currentTabEntries[index];
-    if ([NewsfeedTypeEnum.IMAGE, NewsfeedTypeEnum.VIDEO].includes(entry.entry_type)) {
-      if (!entry.data.comment) {
-        return BASE_IMAGE_SIZE;
-      }
-      const approximateTextRowCount = calculateApproximateTextRowCount(entry.data.comment);
-      return BASE_IMAGE_SIZE + 10 + approximateTextRowCount * 22;
-    }
-    return BASE_TEXT_SIZE;
+  const handleVisit = (worldId: string) => {
+    goToOdysseyHome(worldId);
   };
 
-  const Row: FC<ListChildComponentProps<any>> = ({index, style, data}) => {
-    const {entries, onWorldOpen} = data;
-    const entry = entries[index];
-    return (
-      <div style={style}>
-        {isItemLoaded(index) ? (
-          <NewsfeedEntry
-            key={entry.id}
-            entry={entry}
-            onWorldOpen={onWorldOpen}
-            onShare={() => {}}
-          />
-        ) : (
-          'Loading ...'
-        )}
-      </div>
-    );
+  const setRowHeight = (index: number, size: number) => {
+    scrollListRef.current?.resetAfterIndex(index);
+    entityHeightsRef.current = {...entityHeightsRef.current, [index]: size};
   };
 
-  console.log('currentTabEntries', currentTabEntries);
+  const getRowHeight = (index: number) => {
+    return (entityHeightsRef.current as any)[index] || 0;
+  };
+
+  if (!user) {
+    return <></>;
+  }
+
+  console.log('[Newsfeed]: Entities', newsfeedStore.entityList);
 
   return (
     <styled.Container data-testid="NewsfeedWidget-test">
       <Panel
-        isFullHeight
         size="normal"
-        icon="newsfeed"
+        isFullHeight
+        isScrollDisabled
         variant="primary"
+        icon="newsfeed"
         title={t('labels.newsfeed')}
-        onClose={() => close(WidgetEnum.NEWSFEED)}
+        onClose={() => widgetManagerStore.close(WidgetEnum.NEWSFEED)}
       >
-        <styled.Wrapper className="wrapper-test">
-          <styled.Tabs>
-            <Tabs tabList={TABS_LIST} activeId={newsfeedType} onSelect={setActiveNewsfeedType} />
-          </styled.Tabs>
+        <styled.Wrapper>
           <AutoSizer>
-            {({height, width}: any) => {
+            {({height, width}: Size) => {
               return (
-                <InfiniteScroll
-                  itemCount={itemCount}
-                  items={currentTabEntries}
-                  estimatedItemSize={116}
-                  width={width}
-                  height={height}
-                  itemData={{entries: currentTabEntries, onWorldOpen: handleWorldOpen}}
-                  row={Row}
-                  calcItemSize={calcItemSize}
-                  isItemLoaded={isItemLoaded}
-                  loadMore={loadMore}
-                  itemKey={(index: number) => currentTabEntries[index]?.id || `loading-${index}`}
-                />
+                <styled.InfinityList>
+                  <InfiniteLoader
+                    threshold={5}
+                    ref={infiniteRef}
+                    itemCount={newsfeedStore.itemCount}
+                    isItemLoaded={(index) => index < newsfeedStore.entityList.length}
+                    loadMoreItems={(startIndex) => newsfeedStore.loadMore(startIndex)}
+                  >
+                    {({onItemsRendered, ref}) => {
+                      return (
+                        <VariableSizeList
+                          width={width}
+                          height={height}
+                          ref={(list) => {
+                            ref(list);
+                            scrollListRef.current = list;
+                          }}
+                          itemSize={getRowHeight}
+                          itemCount={newsfeedStore.itemCount}
+                          itemKey={(index) => index}
+                          itemData={{
+                            items: newsfeedStore.entityList,
+                            setRowHeight,
+                            handleVisit
+                          }}
+                          onItemsRendered={onItemsRendered}
+                          estimatedItemSize={300}
+                        >
+                          {PostEntityRow}
+                        </VariableSizeList>
+                      );
+                    }}
+                  </InfiniteLoader>
+                </styled.InfinityList>
               );
             }}
           </AutoSizer>

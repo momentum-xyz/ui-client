@@ -265,6 +265,9 @@ export const enGb = {
       skyboxes_other: '{{count}} Skyboxes'
     },
     labels: {
+      addPicture: 'Add a picture',
+      addVideo: 'Add a video',
+      addText: 'Add a text',
       home: 'Home',
       by: 'By',
       or: 'Or',
@@ -405,6 +408,9 @@ export const enGb = {
       welcomePageGuestTitle: 'Enter\nOdyssey as a\nguest',
       welcomePageJoinDescription: 'Connect your wallet\nand join the\ncommunity',
       welcomePageGuestDescription: 'Fly around freely and\nenjoy all the\ncreations',
+      assignFunctionToObjectTitle: 'Assign a function to the object',
+      assignFunctionToObjectDescription:
+        'By embedding a picture, text, video or sound you change the function of this object; users can see an image wrapped around the object or hear a sound when they fly towards the object. Users will also be able to see the text, image or video displayed when they select the object; regardless of its asset type.',
       readMore: 'Read more',
       readLess: 'Read less'
     },
@@ -435,6 +441,9 @@ export const enGb = {
       takeShot: 'Take the shot!',
       startRecording: 'Start recording and fly around',
       recording: 'Recording',
+      wasCreatedBy: 'was created by',
+      receivedBoost: 'received a boost of {{amount}} {{symbol}} from {{name}}',
+      shareThisPost: 'Share this post',
       loading30sec:
         'Loading an Odyssey could take up to 1-2 minutes, depending on your internet connection. While you wait, you can',
       joinUsOnDiscord: 'join us on Discord',
@@ -462,6 +471,10 @@ export const enGb = {
       deleteNamedObject: 'Are you sure you want to delete "{{name}}"?',
       objectDeleted: 'Object removed',
       errorDeletingObject: 'Error removing object',
+      deleted: 'Deleted',
+      errorDeleting: 'Error deleting',
+      saved: 'Saved',
+      errorSaving: 'Error saving',
       removeEventSuccess: 'Removed event successfully.',
       avatarSuccess: 'Avatar saved successfully',
       avatarFailure: 'There was a problem saving the avatar',
@@ -716,6 +729,7 @@ export const enGb = {
       signOut: 'Sign Out',
       sort: 'Sort',
       logOut: 'Log out',
+      embed: 'Embed',
       manageWallet: 'Manage wallet',
       settings: 'Settings',
       publish: 'Publish',

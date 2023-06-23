@@ -15,5 +15,6 @@ export enum AttributeNameEnum {
   WORLD_SETTINGS = 'world_settings',
   TELEPORT = 'teleport',
   OBJECT_COLOR = 'object_color',
-  SPAWN_POINT = 'spawn_point'
+  SPAWN_POINT = 'spawn_point',
+  TIMELINE_LAST_SEEN = 'timeline_last_seen'
 }

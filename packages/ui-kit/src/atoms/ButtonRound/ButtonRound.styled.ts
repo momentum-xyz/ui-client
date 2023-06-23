@@ -26,6 +26,7 @@ export const Button = styled.button`
   --small-size: 26px;
   --normal-size: 30px;
   --large-size: 36px;
+  --extra-large-size: 40px;
 
   display: flex;
   width: var(--size);
@@ -103,5 +104,9 @@ export const Button = styled.button`
 
   &.large {
     --size: var(--large-size);
+  }
+
+  &.extra-large {
+    --size: var(--extra-large-size);
   }
 `;
