@@ -24,3 +24,5 @@ export * from './Portal';
 export * from './ProgressBar';
 export * from './MediaPlayerTrack';
 export * from './MediaPlayerTime';
+export * from './SoundPlayerTrack';
+export * from './SoundPlayerTime';
