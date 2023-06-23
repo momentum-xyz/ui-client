@@ -13,6 +13,7 @@ export interface PostVideoViewPropsInterface {
   entry: PostEntryInterface;
   shareUrl?: string;
   onVisit?: () => void;
+  onDelete?: () => void;
   onEdit?: () => void;
 }
 
@@ -21,6 +22,7 @@ const PostVideoView: FC<PostVideoViewPropsInterface> = ({
   entry,
   onVisit,
   shareUrl,
+  onDelete,
   onEdit
 }) => {
   const [isSharing, setIsSharing] = useState(false);
@@ -40,7 +42,12 @@ const PostVideoView: FC<PostVideoViewPropsInterface> = ({
           </styled.Grid>
 
           <styled.Controls>
+            {!!onDelete && (
+              <ButtonEllipse icon="bin" label={t('actions.delete')} onClick={onDelete} />
+            )}
+
             {!!onEdit && <ButtonEllipse icon="pencil" label={t('actions.edit')} onClick={onEdit} />}
+
             {!!shareUrl && (
               <ButtonEllipse
                 icon="share"
@@ -49,6 +56,7 @@ const PostVideoView: FC<PostVideoViewPropsInterface> = ({
                 onClick={() => setIsSharing(!isSharing)}
               />
             )}
+
             {!!onVisit && (
               <ButtonEllipse
                 icon="rocket_flying"
