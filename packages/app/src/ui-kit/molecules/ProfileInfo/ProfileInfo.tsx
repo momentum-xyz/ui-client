@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import cn from 'classnames';
 import {signUpDateString, useI18n} from '@momentum-xyz/core';
-import {ProfileLine, ButtonEllipse, WalletHash, IconNameType} from '@momentum-xyz/ui-kit';
+import {ProfileLine, ButtonEllipse, WalletHash, IconNameType, TextCut} from '@momentum-xyz/ui-kit';
 
 import * as styled from './ProfileInfo.styled';
 
@@ -34,9 +34,7 @@ const ProfileInfo: FC<PropsInterface> = ({
 
   return (
     <styled.Container data-testid="ProfileInfo-test" className={cn(hideBorder && 'hideBorder')}>
-      {description && (
-        <styled.Description lines={descriptionLines}>{description}</styled.Description>
-      )}
+      {description && <TextCut text={description} lines={descriptionLines} />}
 
       {weblink && (
         <ProfileLine
