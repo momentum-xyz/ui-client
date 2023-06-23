@@ -68,7 +68,7 @@ const TimelineWidget: FC = () => {
     }
   };
 
-  const handleDeletePost = async (entry: TimelineEntryModelInterface) => {
+  const handleDelete = async (entry: TimelineEntryModelInterface) => {
     const isDone = await timelineStore.deleteItem(entry, worldId);
     if (isDone) {
       setSelectedPost(null);
@@ -159,7 +159,8 @@ const TimelineWidget: FC = () => {
                               isMyWorld: universeStore.isMyWorld,
                               setRowHeight,
                               setPostTypeIntent,
-                              handleEdit
+                              handleEdit,
+                              handleDelete
                             }}
                             onItemsRendered={onItemsRendered}
                             estimatedItemSize={300}
@@ -242,7 +243,7 @@ const TimelineWidget: FC = () => {
                         screenshot={world3dStore?.screenshotOrVideo?.file}
                         onMakeScreenshot={handleMakeScreenshot}
                         onCreateOrUpdate={(form) => handleUpdatePost(form, selectedPost)}
-                        onDelete={() => handleDeletePost(selectedPost)}
+                        onDelete={() => handleDelete(selectedPost)}
                         onClearScreenshot={handleClearFile}
                         onCancel={() => {
                           handleClearFile();
@@ -277,7 +278,7 @@ const TimelineWidget: FC = () => {
                         onStartRecording={handleStartRecording}
                         onStopRecording={handleStopRecording}
                         onCreateOrUpdate={(form) => handleUpdatePost(form, selectedPost)}
-                        onDelete={() => handleDeletePost(selectedPost)}
+                        onDelete={() => handleDelete(selectedPost)}
                         onClearVideo={handleClearFile}
                         onCancel={() => {
                           handleClearFile();

@@ -56,7 +56,8 @@ const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
         : getImageAbsoluteUrl(entry.data.hash, ImageSizeEnum.S5)
   };
 
-  const isEditable = data.isMyWorld || entry.user_id === data.user?.id;
+  const isEditShown = entry.user_id === data.user?.id;
+  const isRemoveShown = data.isMyWorld && !isEditShown && data.handleDelete;
   const shareUrl = `${document.location.origin}/odyssey/${entry.object_id}`;
 
   return (
@@ -81,7 +82,8 @@ const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
                 entry={postEntry}
                 author={postAuthor}
                 shareUrl={shareUrl}
-                onEdit={isEditable ? () => data.handleEdit(entry) : undefined}
+                onEdit={isEditShown ? () => data.handleEdit(entry) : undefined}
+                onDelete={isRemoveShown ? () => data.handleDelete(entry) : undefined}
                 onVisit={data.handleVisit ? () => data.handleVisit(entry.object_id) : undefined}
               />
             )}
@@ -92,7 +94,8 @@ const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
                 entry={postEntry}
                 author={postAuthor}
                 shareUrl={shareUrl}
-                onEdit={isEditable ? () => data.handleEdit(entry) : undefined}
+                onEdit={isEditShown ? () => data.handleEdit(entry) : undefined}
+                onDelete={isRemoveShown ? () => data.handleDelete(entry) : undefined}
                 onVisit={data.handleVisit ? () => data.handleVisit(entry.object_id) : undefined}
               />
             )}
