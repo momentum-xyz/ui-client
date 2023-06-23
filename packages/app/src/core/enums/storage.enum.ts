@@ -7,5 +7,6 @@ export enum StorageKeyEnum {
   PreferredAudioOutput = 'Audio_Output',
   ProfileJobId = 'profile-job-id',
   HasSeenWelcome = 'Has_Seen_Welcome',
-  LastAirdrop = 'Last_Airdrop'
+  LastAirdrop = 'Last_Airdrop',
+  VolumeLevel = 'Volume_Level'
 }

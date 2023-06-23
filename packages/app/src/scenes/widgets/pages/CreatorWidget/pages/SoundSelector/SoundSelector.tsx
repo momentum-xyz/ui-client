@@ -1,23 +1,27 @@
-import {FC, useEffect} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button, Frame, SoundPlayer, SoundVolume} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 
+import {SoundFileForm} from './components';
 import * as styled from './SoundSelector.styled';
 
 const SoundSelector: FC = () => {
   const {widgetStore, universeStore} = useStore();
+  const {worldId, musicStore} = universeStore;
   const {creatorStore} = widgetStore;
   const {soundSelectorStore} = creatorStore;
 
+  const [isNewForm, setIsNewForm] = useState(false);
+
   useEffect(() => {
-    soundSelectorStore.fetchSound(universeStore.worldId);
+    soundSelectorStore.fetchTracks(worldId);
 
     return () => {
       soundSelectorStore.resetModel();
     };
-  }, [soundSelectorStore, universeStore]);
+  }, [soundSelectorStore, worldId]);
 
   return (
     <styled.Container data-testid="SoundSelector-test">
@@ -25,11 +29,20 @@ const SoundSelector: FC = () => {
         <styled.Head>
           <styled.Title>Odyssey soundtrack</styled.Title>
           <styled.Info>
-            Lorem ipsum dolor sit amet, consectetuer adipicing elit. Aenean commodo ligula.
+            Sound lorem ipsum dolor sit amet, consectetuer adipicing elit. Aenean commodo ligula.
           </styled.Info>
 
           <styled.UploadBlock>
-            <Button wide label="Upload a sound file" icon="sound_add" />
+            {!isNewForm ? (
+              <Button
+                wide
+                label="Upload a sound file"
+                icon="sound_add"
+                onClick={() => setIsNewForm(true)}
+              />
+            ) : (
+              <SoundFileForm />
+            )}
           </styled.UploadBlock>
         </styled.Head>
       </Frame>
@@ -43,7 +56,7 @@ const SoundSelector: FC = () => {
 
           <styled.TrackBlock>
             <styled.Title>Volume</styled.Title>
-            <SoundVolume volumePercent={30} onChangeVolume={(percent) => {}} />
+            <SoundVolume volumePercent={musicStore.volume} onChangeVolume={musicStore.setVolume} />
           </styled.TrackBlock>
         </styled.TracksWrapper>
       </styled.TracksContainer>

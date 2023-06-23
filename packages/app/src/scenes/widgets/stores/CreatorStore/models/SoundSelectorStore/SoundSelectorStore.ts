@@ -9,7 +9,7 @@ const SoundSelectorStore = types
     })
   )
   .actions((self) => ({
-    fetchSound: flow(function* (worldId: string) {})
+    fetchTracks: flow(function* (worldId: string) {})
   }));
 
 export {SoundSelectorStore};
