@@ -4,8 +4,6 @@ export const Progress = styled.div<{value: number}>`
   --min: 0;
   --max: 100;
 
-  margin: -5px 0 0 0;
-
   input[type='range'].styled-slider {
     width: 100%;
     height: 8px;

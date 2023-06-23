@@ -1,11 +1,11 @@
 import {useState} from 'react';
 import {ComponentMeta, Story} from '@storybook/react';
 
-import SoundPlayerTrack, {SoundPlayerTrackPropsInterface} from './SoundPlayerTrack';
+import SoundVolume, {SoundVolumePropsInterface} from './SoundVolume';
 
 export default {
-  title: 'Atoms/SoundPlayerTrack',
-  component: SoundPlayerTrack,
+  title: 'Molecules/SoundVolume',
+  component: SoundVolume,
   decorators: [
     (Story) => (
       <div style={{width: `330px`, height: `160px`}}>
@@ -13,12 +13,11 @@ export default {
       </div>
     )
   ]
-} as ComponentMeta<typeof SoundPlayerTrack>;
+} as ComponentMeta<typeof SoundVolume>;
 
-const Template: Story<SoundPlayerTrackPropsInterface> = (args) => {
+const Template: Story<SoundVolumePropsInterface> = (args) => {
   const [value, setValue] = useState(30);
-
-  return <SoundPlayerTrack {...args} percent={value} onChange={setValue} />;
+  return <SoundVolume {...args} volumePercent={value} onChangeVolume={setValue} />;
 };
 
 export const General = Template.bind({});

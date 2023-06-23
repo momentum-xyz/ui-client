@@ -3,16 +3,16 @@ import {FC} from 'react';
 import * as styled from './SoundPlayerTrack.styled';
 
 export interface SoundPlayerTrackPropsInterface {
-  playedPercent: number;
+  percent: number;
   onChange: (percent: number) => void;
 }
 
-const SoundPlayerTrack: FC<SoundPlayerTrackPropsInterface> = ({playedPercent, onChange}) => {
+const SoundPlayerTrack: FC<SoundPlayerTrackPropsInterface> = ({percent, onChange}) => {
   return (
-    <styled.Progress value={playedPercent} data-testid="SoundPlayerTrack-test">
+    <styled.Progress value={percent} data-testid="SoundPlayerTrack-test">
       <input
         type="range"
-        value={playedPercent}
+        value={percent}
         onChange={(el) => onChange(Number(el.target.value))}
         className="styled-slider slider-progress"
       />

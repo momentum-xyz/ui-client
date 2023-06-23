@@ -1,6 +1,6 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Frame} from '@momentum-xyz/ui-kit';
+import {Button, Frame, SoundPlayer, SoundVolume} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 
@@ -36,9 +36,15 @@ const SoundSelector: FC = () => {
 
       <styled.TracksContainer>
         <styled.TracksWrapper>
-          <styled.Title>No sound selected</styled.Title>
+          <styled.TrackBlock>
+            <styled.Title>No sound selected</styled.Title>
+            <SoundPlayer />
+          </styled.TrackBlock>
 
-          <styled.Title>Volume</styled.Title>
+          <styled.TrackBlock>
+            <styled.Title>Volume</styled.Title>
+            <SoundVolume volumePercent={30} onChangeVolume={(percent) => {}} />
+          </styled.TrackBlock>
         </styled.TracksWrapper>
       </styled.TracksContainer>
     </styled.Container>
