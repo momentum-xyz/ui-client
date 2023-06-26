@@ -19,6 +19,7 @@ export * from './MediaPlayer';
 export * from './SoundVolume';
 export * from './SoundPlayer';
 export * from './SoundUpload';
+export * from './SoundItem';
 export * from './PostHeading';
 export * from './PostTypeSelector';
 export * from './PostSharing';

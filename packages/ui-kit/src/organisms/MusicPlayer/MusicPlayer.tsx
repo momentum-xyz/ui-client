@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {MediaFileInterface, useI18n} from '@momentum-xyz/core';
 
-import {SoundPlayer, SoundVolume} from '../../molecules';
+import {SoundItem, SoundPlayer, SoundVolume} from '../../molecules';
 
 import * as styled from './MusicPlayer.styled';
 
@@ -35,7 +35,17 @@ const MusicPlayer: FC<MusicPlayerPropsInterface> = ({
         </styled.Block>
       </styled.ActiveTrack>
 
-      <styled.TrackList></styled.TrackList>
+      <styled.TrackList>
+        {tracks.map((track) => (
+          <SoundItem
+            key={track.hash}
+            item={track}
+            isActive={false}
+            onPlayPause={() => {}}
+            onDelete={onDeleteTrack ? () => onDeleteTrack(track.hash) : undefined}
+          />
+        ))}
+      </styled.TrackList>
     </styled.Container>
   );
 };

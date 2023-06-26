@@ -16,7 +16,7 @@ export const ActiveTrack = styled.div`
   padding: 10px;
   display: flex;
   flex-direction: column;
-  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
   border-radius: 4px;
   gap: 10px;
 `;
@@ -27,4 +27,9 @@ export const Block = styled.div`
   gap: 4px;
 `;
 
-export const TrackList = styled.div``;
+export const TrackList = styled.div`
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
