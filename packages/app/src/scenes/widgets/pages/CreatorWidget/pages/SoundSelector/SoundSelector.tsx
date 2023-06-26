@@ -62,7 +62,12 @@ const SoundSelector: FC = () => {
 
       <styled.TracksContainer>
         {soundSelectorStore.soundInfos.length}
-        <SoundListPlayer volumePercent={musicStore.volume} onChangeVolume={musicStore.setVolume} />
+        <SoundListPlayer
+          tracks={[]}
+          volumePercent={musicStore.volume}
+          onChangeVolume={musicStore.setVolume}
+          onDeleteTrack={(hash) => console.log(hash)}
+        />
       </styled.TracksContainer>
     </styled.Container>
   );

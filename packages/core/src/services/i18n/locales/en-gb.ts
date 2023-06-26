@@ -313,6 +313,7 @@ export const enGb = {
       myConnections: 'My connections',
       universal: 'Universal',
       logout: 'Logout',
+      volume: 'Volume',
       worldStats: 'World stats',
       tokenRules: 'Token Rules',
       nameOfInitiative: 'Name of Initiative',
@@ -589,6 +590,7 @@ export const enGb = {
       removeSkyboxCurrentConfirmation:
         'This Skybox is your Current skybox; removing this will change your skybox to the default one.',
       removeSkyboxFinalConfirmation: 'Are you sure you want to do this?',
+      noSoundSelected: 'No sound selected',
       odysseySoundtrack:
         'Here you can set the soundtrack for your Odyssey. The song you select will be heard by visitors to your odyssey when they enter your world. Please be careful only to upload songs you have the rights to. Your Soundtrack will play on loop.',
       uploadAssetInfoTitle: 'Drag and drop your asset here',
@@ -1322,10 +1324,6 @@ export const enGb = {
       audio: 'audio',
       selectInputSource: 'Select input source',
       selectOutputSource: 'Select output source'
-    },
-    musicPlayer: {
-      playerVolume: 'Music Volume',
-      unityVolume: 'Sound Effects Volume'
     },
     collaboration: {
       spaceIsPrivate: 'This space is set to private by its admin and only accessible by its members'
