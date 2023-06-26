@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Frame, SoundListPlayer} from '@momentum-xyz/ui-kit';
+import {Button, Frame, MusicPlayer} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
@@ -61,9 +61,8 @@ const SoundSelector: FC = () => {
       </Frame>
 
       <styled.TracksContainer>
-        {soundSelectorStore.soundInfos.length}
-        <SoundListPlayer
-          tracks={[]}
+        <MusicPlayer
+          tracks={soundSelectorStore.soundList}
           volumePercent={musicStore.volume}
           onChangeVolume={musicStore.setVolume}
           onDeleteTrack={(hash) => console.log(hash)}

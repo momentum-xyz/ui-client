@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {ComponentMeta, Story} from '@storybook/react';
 
-import SoundListPlayer, {SoundListPlayerPropsInterface} from './SoundListPlayer';
+import MusicPlayer, {MusicPlayerPropsInterface} from './MusicPlayer';
 
 const TRACK_LIST = [
   {
@@ -22,8 +22,8 @@ const TRACK_LIST = [
 ];
 
 export default {
-  title: 'Organisms/SoundListPlayer',
-  component: SoundListPlayer,
+  title: 'Organisms/MusicPlayer',
+  component: MusicPlayer,
   decorators: [
     (Story) => (
       <div style={{width: `400px`}}>
@@ -31,11 +31,11 @@ export default {
       </div>
     )
   ]
-} as ComponentMeta<typeof SoundListPlayer>;
+} as ComponentMeta<typeof MusicPlayer>;
 
-const Template: Story<SoundListPlayerPropsInterface> = (args) => {
+const Template: Story<MusicPlayerPropsInterface> = (args) => {
   const [volume, setVolume] = useState(30);
-  return <SoundListPlayer {...args} volumePercent={volume} onChangeVolume={setVolume} />;
+  return <MusicPlayer {...args} volumePercent={volume} onChangeVolume={setVolume} />;
 };
 
 export const NoTracks = Template.bind({});

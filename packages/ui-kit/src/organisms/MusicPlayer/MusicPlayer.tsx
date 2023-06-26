@@ -4,16 +4,16 @@ import {MediaFileInterface, useI18n} from '@momentum-xyz/core';
 
 import {SoundPlayer, SoundVolume} from '../../molecules';
 
-import * as styled from './SoundListPlayer.styled';
+import * as styled from './MusicPlayer.styled';
 
-export interface SoundListPlayerPropsInterface {
+export interface MusicPlayerPropsInterface {
   tracks: MediaFileInterface[];
   volumePercent: number;
   onChangeVolume: (volumePercent: number) => void;
   onDeleteTrack?: (hash: string) => void;
 }
 
-const SoundListPlayer: FC<SoundListPlayerPropsInterface> = ({
+const MusicPlayer: FC<MusicPlayerPropsInterface> = ({
   tracks,
   volumePercent,
   onChangeVolume,
@@ -22,7 +22,7 @@ const SoundListPlayer: FC<SoundListPlayerPropsInterface> = ({
   const {t} = useI18n();
 
   return (
-    <styled.Container data-testid="SoundListPlayer-test">
+    <styled.Container data-testid="MusicPlayer-test">
       <styled.ActiveTrack>
         <styled.Block>
           <styled.Title>{t('messages.noSoundSelected')}</styled.Title>
@@ -40,4 +40,4 @@ const SoundListPlayer: FC<SoundListPlayerPropsInterface> = ({
   );
 };
 
-export default observer(SoundListPlayer);
+export default observer(MusicPlayer);

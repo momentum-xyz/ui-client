@@ -1,11 +1,12 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {MediaFileInterface, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
 import {api} from 'api';
 import {PluginIdEnum} from 'api/enums';
-import {MediaUploader, SoundInfo} from 'core/models';
+import {getTrackAbsoluteUrl} from 'core/utils';
 import {SoundFormInterface} from 'core/interfaces';
+import {MediaUploader, SoundInfo} from 'core/models';
 
 const SoundSelectorStore = types
   .compose(
@@ -62,6 +63,13 @@ const SoundSelectorStore = types
   .views((self) => ({
     get isUpdating(): boolean {
       return self.publishRequest.isPending || self.deleteRequest.isPending;
+    },
+    get soundList(): MediaFileInterface[] {
+      return self.soundInfos.map((item) => ({
+        name: item.name,
+        hash: item.render_hash,
+        url: getTrackAbsoluteUrl(item.render_hash) || ''
+      }));
     }
   }));
 
