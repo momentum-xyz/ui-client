@@ -706,6 +706,7 @@ export const enGb = {
       description: 'Description',
       addDescription: 'Add a description',
       name: 'Name',
+      nameOfSound: 'Name of sound',
       profileName: 'Profile name',
       title: 'Title',
       social: 'Social',

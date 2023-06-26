@@ -27,3 +27,4 @@ export * from './World';
 export * from './WorldStaker';
 export * from './BigStakerInfo';
 export * from './TimelineEntry';
+export * from './SoundInfo';

@@ -3,6 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {Button, Frame, SoundPlayer, SoundVolume} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
+import {SoundFormInterface} from 'core/interfaces';
 
 import {SoundFileForm} from './components';
 import * as styled from './SoundSelector.styled';
@@ -16,12 +17,19 @@ const SoundSelector: FC = () => {
   const [isNewForm, setIsNewForm] = useState(false);
 
   useEffect(() => {
-    soundSelectorStore.fetchTracks(worldId);
+    soundSelectorStore.fetchSound(worldId);
 
     return () => {
       soundSelectorStore.resetModel();
     };
   }, [soundSelectorStore, worldId]);
+
+  const handlePublish = async (form: SoundFormInterface) => {
+    if (await soundSelectorStore.publishSound(form, worldId)) {
+      await soundSelectorStore.fetchSound(worldId);
+      setIsNewForm(false);
+    }
+  };
 
   return (
     <styled.Container data-testid="SoundSelector-test">
@@ -36,12 +44,16 @@ const SoundSelector: FC = () => {
             {!isNewForm ? (
               <Button
                 wide
-                label="Upload a sound file"
                 icon="sound_add"
+                label="Upload a sound file"
                 onClick={() => setIsNewForm(true)}
               />
             ) : (
-              <SoundFileForm />
+              <SoundFileForm
+                isPending={false}
+                onPublish={handlePublish}
+                onCancel={() => setIsNewForm(false)}
+              />
             )}
           </styled.UploadBlock>
         </styled.Head>
