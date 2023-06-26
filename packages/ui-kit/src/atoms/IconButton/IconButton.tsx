@@ -1,4 +1,5 @@
 import {FC, memo} from 'react';
+import cn from 'classnames';
 
 import IconSvg, {IconSvgPropsInterface} from '../IconSvg/IconSvg';
 
@@ -13,6 +14,7 @@ const IconButton: FC<IconButtonPropsInterface> = ({onClick, isDisabled, ...rest}
     <styled.Button
       type="button"
       onClick={!isDisabled ? onClick : undefined}
+      className={cn(isDisabled && 'disabled')}
       data-testid="IconButton-test"
     >
       <IconSvg isDisabled={isDisabled} {...rest} />
