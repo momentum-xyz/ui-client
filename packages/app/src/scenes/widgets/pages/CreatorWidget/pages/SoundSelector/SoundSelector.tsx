@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Frame, SoundPlayer, SoundVolume} from '@momentum-xyz/ui-kit';
+import {Button, Frame, SoundListPlayer} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
@@ -51,9 +51,9 @@ const SoundSelector: FC = () => {
               />
             ) : (
               <SoundFileForm
-                isPending={false}
-                onPublish={handlePublish}
+                isPending={soundSelectorStore.isUpdating}
                 onCancel={() => setIsNewForm(false)}
+                onPublish={handlePublish}
               />
             )}
           </styled.UploadBlock>
@@ -61,17 +61,8 @@ const SoundSelector: FC = () => {
       </Frame>
 
       <styled.TracksContainer>
-        <styled.TracksWrapper>
-          <styled.TrackBlock>
-            <styled.Title>No sound selected</styled.Title>
-            <SoundPlayer />
-          </styled.TrackBlock>
-
-          <styled.TrackBlock>
-            <styled.Title>Volume</styled.Title>
-            <SoundVolume volumePercent={musicStore.volume} onChangeVolume={musicStore.setVolume} />
-          </styled.TrackBlock>
-        </styled.TracksWrapper>
+        {soundSelectorStore.soundInfos.length}
+        <SoundListPlayer volumePercent={musicStore.volume} onChangeVolume={musicStore.setVolume} />
       </styled.TracksContainer>
     </styled.Container>
   );

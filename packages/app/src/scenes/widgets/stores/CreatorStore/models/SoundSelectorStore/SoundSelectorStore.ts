@@ -1,4 +1,4 @@
-import {flow, types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
@@ -11,10 +11,11 @@ const SoundSelectorStore = types
   .compose(
     ResetModel,
     types.model('SoundSelectorStore', {
-      soundInfo: types.maybeNull(SoundInfo),
+      soundInfos: types.optional(types.array(SoundInfo), []),
       mediaUploader: types.optional(MediaUploader, {}),
       fetchRequest: types.optional(RequestModel, {}),
-      publishRequest: types.optional(RequestModel, {})
+      publishRequest: types.optional(RequestModel, {}),
+      deleteRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -29,10 +30,7 @@ const SoundSelectorStore = types
       );
 
       if (attributeResponse?.tracks?.length > 0) {
-        self.soundInfo = SoundInfo.create({
-          name: attributeResponse.tracks[0].name,
-          hash: attributeResponse.tracks[0].render_hash
-        });
+        self.soundInfos = cast(attributeResponse.tracks);
       }
     }),
     publishSound: flow(function* (form: SoundFormInterface, worldId: string) {
@@ -45,11 +43,26 @@ const SoundSelectorStore = types
         spaceId: worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.SOUNDTRACK,
-        value: {tracks: [{render_hash, name: form.name || ''}]}
+        value: {tracks: [...self.soundInfos, {render_hash, name: form.name || ''}]}
+      });
+
+      return self.publishRequest.isDone;
+    }),
+    deleteSound: flow(function* (render_hash: string, worldId: string) {
+      yield self.publishRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+        spaceId: worldId,
+        plugin_id: PluginIdEnum.CORE,
+        attribute_name: AttributeNameEnum.SOUNDTRACK,
+        value: {tracks: [...self.soundInfos.filter((s) => s.render_hash !== render_hash)]}
       });
 
       return self.publishRequest.isDone;
     })
+  }))
+  .views((self) => ({
+    get isUpdating(): boolean {
+      return self.publishRequest.isPending || self.deleteRequest.isPending;
+    }
   }));
 
 export {SoundSelectorStore};

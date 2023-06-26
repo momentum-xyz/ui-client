@@ -4,7 +4,7 @@ import {ComponentMeta, Story} from '@storybook/react';
 import SoundUpload, {SoundUploadPropsInterface} from './SoundUpload';
 
 export default {
-  title: 'Organisms/SoundUpload',
+  title: 'Molecules/SoundUpload',
   component: SoundUpload,
   decorators: [
     (Story) => (

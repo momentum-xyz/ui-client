@@ -2,7 +2,7 @@ import {FC, memo} from 'react';
 import cn from 'classnames';
 import {useI18n} from '@momentum-xyz/core';
 
-import {FileUploader} from '../../molecules';
+import {FileUploader} from '../index';
 
 import * as styled from './SoundUpload.styled';
 
