@@ -3,6 +3,7 @@ export * from './Menu';
 export * from './SideMenu';
 export * from './Slider';
 export * from './AvatarUpload';
+export * from './SoundUpload';
 export * from './PostImageForm';
 export * from './PostImageView';
 export * from './PostVideoForm';

@@ -14,7 +14,7 @@ export interface FileUploaderPropsInterface {
   dragActiveLabel: string;
   onFilesUpload: (file: File | undefined) => void;
   onError?: (error: Error) => void;
-  fileType?: 'image' | 'video';
+  fileType?: 'image' | 'video' | 'audio';
   maxSize?: number;
   enableDragAndDrop?: boolean;
   disabled?: boolean;
