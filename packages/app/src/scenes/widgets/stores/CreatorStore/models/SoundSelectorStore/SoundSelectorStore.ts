@@ -28,10 +28,10 @@ const SoundSelectorStore = types
         }
       );
 
-      if (attributeResponse) {
+      if (attributeResponse?.tracks?.length > 0) {
         self.soundInfo = SoundInfo.create({
-          name: attributeResponse.name,
-          hash: attributeResponse.render_hash
+          name: attributeResponse.tracks[0].name,
+          hash: attributeResponse.tracks[0].render_hash
         });
       }
     }),
@@ -45,7 +45,7 @@ const SoundSelectorStore = types
         spaceId: worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.SOUNDTRACK,
-        value: {render_hash, name: form.name || ''}
+        value: {tracks: [{render_hash, name: form.name || ''}]}
       });
 
       return self.publishRequest.isDone;

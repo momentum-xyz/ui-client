@@ -1,6 +1,7 @@
 import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button, Frame, SoundPlayer, SoundVolume} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {SoundFormInterface} from 'core/interfaces';
@@ -15,6 +16,8 @@ const SoundSelector: FC = () => {
   const {soundSelectorStore} = creatorStore;
 
   const [isNewForm, setIsNewForm] = useState(false);
+
+  const {t} = useI18n();
 
   useEffect(() => {
     soundSelectorStore.fetchSound(worldId);
@@ -35,17 +38,15 @@ const SoundSelector: FC = () => {
     <styled.Container data-testid="SoundSelector-test">
       <Frame>
         <styled.Head>
-          <styled.Title>Odyssey soundtrack</styled.Title>
-          <styled.Info>
-            Sound lorem ipsum dolor sit amet, consectetuer adipicing elit. Aenean commodo ligula.
-          </styled.Info>
+          <styled.Title>{t('titles.odysseySoundtrack')}</styled.Title>
+          <styled.Message>{t('messages.odysseySoundtrack')}</styled.Message>
 
           <styled.UploadBlock>
             {!isNewForm ? (
               <Button
                 wide
                 icon="sound_add"
-                label="Upload a sound file"
+                label={t('actions.uploadSoundFile')}
                 onClick={() => setIsNewForm(true)}
               />
             ) : (

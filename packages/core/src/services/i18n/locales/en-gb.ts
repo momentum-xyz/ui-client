@@ -589,6 +589,8 @@ export const enGb = {
       removeSkyboxCurrentConfirmation:
         'This Skybox is your Current skybox; removing this will change your skybox to the default one.',
       removeSkyboxFinalConfirmation: 'Are you sure you want to do this?',
+      odysseySoundtrack:
+        'Here you can set the soundtrack for your Odyssey. The song you select will be heard by visitors to your odyssey when they enter your world. Please be careful only to upload songs you have the rights to. Your Soundtrack will play on loop.',
       uploadAssetInfoTitle: 'Drag and drop your asset here',
       uploadAssetPictureDescription: 'Drag and drop YOUR CUSTOM image here',
       uploadAssetInfoDescription: 'We support GLB Models & the max file size cannot exceed 50mb',
@@ -613,6 +615,7 @@ export const enGb = {
       create: 'create',
       by: 'By',
       stage: 'Stage mode',
+      odysseySoundtrack: 'Odyssey soundtrack',
       creatorEnabled: 'Odyssey Creator Mode Enabled',
       kickedFromMeeting: 'You have been kicked from a space',
       joinGathering: 'Gathering Event is starting now',
@@ -835,6 +838,7 @@ export const enGb = {
       close: 'Close',
       inviteToStage: 'Invite to stage',
       ready: 'Ready',
+      uploadSoundFile: 'Upload a sound file',
       inviteThisPersonToTheStage: 'Invite this person to the stage?',
       logIn: 'Log In',
       getStarted: 'Get Started',

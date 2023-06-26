@@ -16,7 +16,7 @@ export const Title = styled.div`
   font-weight: 600;
 `;
 
-export const Info = styled.div`
+export const Message = styled.div`
   line-height: 22px;
 `;
 
