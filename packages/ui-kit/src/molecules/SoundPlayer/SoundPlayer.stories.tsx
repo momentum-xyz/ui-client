@@ -22,5 +22,6 @@ const Template: Story<SoundPlayerPropsInterface> = (args) => {
 
 export const NoAudio = Template.bind({});
 NoAudio.args = {
-  audioUrl: null
+  isPlaying: false,
+  isStopped: true
 };

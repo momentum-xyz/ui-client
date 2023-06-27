@@ -10,6 +10,7 @@ import {SessionStore} from './SessionStore';
 import {AgoraStore} from './AgoraStore';
 import {SentryStore} from './SentryStore';
 import {WidgetManagerStore} from './WidgetManagerStore';
+import {MusicStore} from './MusicStore';
 
 const RootStore = types
   .model('RootStore', {
@@ -22,6 +23,7 @@ const RootStore = types
     sentryStore: types.optional(SentryStore, {}),
     universeStore: types.optional(UniverseStore, {}),
     widgetManagerStore: types.optional(WidgetManagerStore, {}),
+    musicStore: types.optional(MusicStore, {}),
 
     /* Connect independent stores */
     widgetStore: types.optional(WidgetsStore, {})

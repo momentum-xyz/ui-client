@@ -9,11 +9,12 @@ import * as styled from './SoundItem.styled';
 export interface SoundItemPropsInterface {
   item: MediaFileInterface;
   isActive: boolean;
-  onPlayPause: () => void;
+  onStart: () => void;
+  onStop: () => void;
   onDelete?: () => void;
 }
 
-const SoundItem: FC<SoundItemPropsInterface> = ({item, isActive, onPlayPause, onDelete}) => {
+const SoundItem: FC<SoundItemPropsInterface> = ({item, isActive, onStart, onStop, onDelete}) => {
   return (
     <styled.Container data-testid="SoundItem-test">
       <styled.Inner className={cn(isActive && 'active')}>
@@ -31,7 +32,7 @@ const SoundItem: FC<SoundItemPropsInterface> = ({item, isActive, onPlayPause, on
             size="normal"
             variant="primary"
             isActive={isActive}
-            onClick={onPlayPause}
+            onClick={isActive ? onStop : onStart}
           />
         </styled.Actions>
       </styled.Inner>

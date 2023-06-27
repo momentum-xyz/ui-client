@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Frame, MusicPlayer} from '@momentum-xyz/ui-kit';
+import {Button, Frame, MusicPlayerView} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
@@ -10,10 +10,11 @@ import {SoundFileForm} from './components';
 import * as styled from './SoundSelector.styled';
 
 const SoundSelector: FC = () => {
-  const {widgetStore, universeStore} = useStore();
-  const {worldId, musicStore} = universeStore;
+  const {widgetStore, universeStore, musicStore} = useStore();
+  const {worldId} = universeStore;
   const {creatorStore} = widgetStore;
   const {soundSelectorStore} = creatorStore;
+  const {soundList} = soundSelectorStore;
 
   const [isNewForm, setIsNewForm] = useState(false);
 
@@ -27,10 +28,20 @@ const SoundSelector: FC = () => {
     };
   }, [soundSelectorStore, worldId]);
 
+  useEffect(() => {
+    musicStore.setTracks(soundList);
+  }, [musicStore, soundList, soundList.length]);
+
   const handlePublish = async (form: SoundFormInterface) => {
     if (await soundSelectorStore.publishSound(form, worldId)) {
       await soundSelectorStore.fetchSound(worldId);
       setIsNewForm(false);
+    }
+  };
+
+  const handleDelete = async (hash: string) => {
+    if (await soundSelectorStore.deleteSound(hash, worldId)) {
+      await soundSelectorStore.fetchSound(worldId);
     }
   };
 
@@ -61,11 +72,17 @@ const SoundSelector: FC = () => {
       </Frame>
 
       <styled.TracksContainer>
-        <MusicPlayer
+        <MusicPlayerView
           tracks={soundSelectorStore.soundList}
+          activeTrack={musicStore.activeTrack}
+          isPlaying={musicStore.isPlaying}
           volumePercent={musicStore.volume}
+          onStart={(track) => musicStore.start(track.hash)}
+          onPlay={musicStore.play}
+          onPause={musicStore.pause}
+          onStop={musicStore.stop}
           onChangeVolume={musicStore.setVolume}
-          onDeleteTrack={(hash) => console.log(hash)}
+          onDeleteTrack={handleDelete}
         />
       </styled.TracksContainer>
     </styled.Container>

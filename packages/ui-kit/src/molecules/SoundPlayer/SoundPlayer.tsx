@@ -5,12 +5,12 @@ import {IconButton, SoundPlayerTime, SoundPlayerTrack} from '../../atoms';
 import * as styled from './SoundPlayer.styled';
 
 export interface SoundPlayerPropsInterface {
-  isPlaying?: boolean;
-  audioUrl?: string | null;
+  isPlaying: boolean;
+  isStopped: boolean;
   onIsPlaying?: (isPlaying: boolean) => void;
 }
 
-const SoundPlayer: FC<SoundPlayerPropsInterface> = ({isPlaying = false, audioUrl, onIsPlaying}) => {
+const SoundPlayer: FC<SoundPlayerPropsInterface> = ({isPlaying, isStopped, onIsPlaying}) => {
   const [duration, setDuration] = useState(0);
   const [progress, setProgress] = useState({
     played: 0,
@@ -31,7 +31,7 @@ const SoundPlayer: FC<SoundPlayerPropsInterface> = ({isPlaying = false, audioUrl
         size="xl2"
         name={isPlaying ? 'pause' : 'play_two'}
         onClick={() => onIsPlaying?.(!isPlaying)}
-        isDisabled={!audioUrl}
+        isDisabled={isStopped}
       />
 
       <SoundPlayerTime playedSeconds={playedSeconds} duration={duration}>

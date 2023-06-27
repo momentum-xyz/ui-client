@@ -23,7 +23,14 @@ export default {
 
 const Template: Story<SoundItemPropsInterface> = (args) => {
   const [isActive, setIsActive] = useState(false);
-  return <SoundItem {...args} isActive={isActive} onPlayPause={() => setIsActive(!isActive)} />;
+  return (
+    <SoundItem
+      {...args}
+      isActive={isActive}
+      onStart={() => setIsActive(true)}
+      onStop={() => setIsActive(false)}
+    />
+  );
 };
 
 export const General = Template.bind({});

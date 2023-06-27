@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {ComponentMeta, Story} from '@storybook/react';
 
-import MusicPlayer, {MusicPlayerPropsInterface} from './MusicPlayer';
+import MusicPlayerView, {MusicPlayerViewPropsInterface} from './MusicPlayerView';
 
 const TRACK_LIST = [
   {
@@ -22,8 +22,8 @@ const TRACK_LIST = [
 ];
 
 export default {
-  title: 'Organisms/MusicPlayer',
-  component: MusicPlayer,
+  title: 'Organisms/MusicPlayerView',
+  component: MusicPlayerView,
   decorators: [
     (Story) => (
       <div style={{width: `400px`}}>
@@ -31,19 +31,29 @@ export default {
       </div>
     )
   ]
-} as ComponentMeta<typeof MusicPlayer>;
+} as ComponentMeta<typeof MusicPlayerView>;
 
-const Template: Story<MusicPlayerPropsInterface> = (args) => {
+const Template: Story<MusicPlayerViewPropsInterface> = (args) => {
   const [volume, setVolume] = useState(30);
-  return <MusicPlayer {...args} volumePercent={volume} onChangeVolume={setVolume} />;
+  return <MusicPlayerView {...args} volumePercent={volume} onChangeVolume={setVolume} />;
 };
 
 export const NoTracks = Template.bind({});
 NoTracks.args = {
-  tracks: []
+  tracks: [],
+  isPlaying: false,
+  onStart: (item) => console.log(item),
+  onPlay: () => console.log('onPlay'),
+  onPause: () => console.log('onStop'),
+  onStop: () => console.log('onStop')
 };
 
 export const WithTracks = Template.bind({});
 WithTracks.args = {
-  tracks: TRACK_LIST
+  tracks: TRACK_LIST,
+  isPlaying: true,
+  onStart: (item) => console.log(item),
+  onPlay: () => console.log('onPlay'),
+  onPause: () => console.log('onStop'),
+  onStop: () => console.log('onStop')
 };

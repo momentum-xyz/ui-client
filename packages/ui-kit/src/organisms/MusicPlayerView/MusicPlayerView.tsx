@@ -4,29 +4,47 @@ import {MediaFileInterface, useI18n} from '@momentum-xyz/core';
 
 import {SoundItem, SoundPlayer, SoundVolume} from '../../molecules';
 
-import * as styled from './MusicPlayer.styled';
+import * as styled from './MusicPlayerView.styled';
 
-export interface MusicPlayerPropsInterface {
+export interface MusicPlayerViewPropsInterface {
   tracks: MediaFileInterface[];
+  activeTrack?: MediaFileInterface | null;
+  isPlaying: boolean;
   volumePercent: number;
+  onStart?: (track: MediaFileInterface) => void;
+  onPlay?: () => void;
+  onPause?: () => void;
+  onStop?: () => void;
   onChangeVolume: (volumePercent: number) => void;
   onDeleteTrack?: (hash: string) => void;
 }
 
-const MusicPlayer: FC<MusicPlayerPropsInterface> = ({
+const MusicPlayerView: FC<MusicPlayerViewPropsInterface> = ({
   tracks,
+  activeTrack,
+  isPlaying,
   volumePercent,
+  onStart,
+  onPlay,
+  onPause,
+  onStop,
   onChangeVolume,
   onDeleteTrack
 }) => {
   const {t} = useI18n();
 
   return (
-    <styled.Container data-testid="MusicPlayer-test">
+    <styled.Container data-testid="MusicPlayerView-test">
       <styled.ActiveTrack>
         <styled.Block>
-          <styled.Title>{t('messages.noSoundSelected')}</styled.Title>
-          <SoundPlayer />
+          <styled.Title>
+            {!activeTrack ? t('messages.noSoundSelected') : activeTrack.name}
+          </styled.Title>
+          <SoundPlayer
+            isPlaying={isPlaying}
+            isStopped={!activeTrack}
+            onIsPlaying={isPlaying ? onPause : onPlay}
+          />
         </styled.Block>
 
         <styled.Block>
@@ -40,8 +58,9 @@ const MusicPlayer: FC<MusicPlayerPropsInterface> = ({
           <SoundItem
             key={track.hash}
             item={track}
-            isActive={false}
-            onPlayPause={() => {}}
+            isActive={activeTrack?.hash === track.hash}
+            onStart={() => onStart?.(track)}
+            onStop={() => onStop?.()}
             onDelete={onDeleteTrack ? () => onDeleteTrack(track.hash) : undefined}
           />
         ))}
@@ -50,4 +69,4 @@ const MusicPlayer: FC<MusicPlayerPropsInterface> = ({
   );
 };
 
-export default observer(MusicPlayer);
+export default observer(MusicPlayerView);

@@ -10,6 +10,9 @@ export const Title = styled.div`
   text-transform: uppercase;
   letter-spacing: 3px;
   font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const ActiveTrack = styled.div`
