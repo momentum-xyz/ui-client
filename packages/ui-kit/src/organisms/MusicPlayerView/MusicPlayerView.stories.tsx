@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {ComponentMeta, Story} from '@storybook/react';
+import {MediaFileInterface} from '@momentum-xyz/core';
 
 import MusicPlayerView, {MusicPlayerViewPropsInterface} from './MusicPlayerView';
 
@@ -34,26 +35,31 @@ export default {
 } as ComponentMeta<typeof MusicPlayerView>;
 
 const Template: Story<MusicPlayerViewPropsInterface> = (args) => {
+  const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(30);
-  return <MusicPlayerView {...args} volumePercent={volume} onChangeVolume={setVolume} />;
+  const [track, setTrack] = useState<MediaFileInterface>();
+  return (
+    <MusicPlayerView
+      {...args}
+      isPlaying={isPlaying}
+      activeTrack={track}
+      volumePercent={volume}
+      onChangeVolume={setVolume}
+      onStart={setTrack}
+      onStop={() => setTrack(undefined)}
+      onPlay={() => setIsPlaying(true)}
+      onPause={() => setIsPlaying(false)}
+    />
+  );
 };
 
 export const NoTracks = Template.bind({});
 NoTracks.args = {
-  tracks: [],
-  isPlaying: false,
-  onStart: (item) => console.log(item),
-  onPlay: () => console.log('onPlay'),
-  onPause: () => console.log('onStop'),
-  onStop: () => console.log('onStop')
+  tracks: []
 };
 
 export const WithTracks = Template.bind({});
 WithTracks.args = {
   tracks: TRACK_LIST,
-  isPlaying: true,
-  onStart: (item) => console.log(item),
-  onPlay: () => console.log('onPlay'),
-  onPause: () => console.log('onStop'),
-  onStop: () => console.log('onStop')
+  onDeleteTrack: (hash) => console.log('onDeleteTrack', hash)
 };
