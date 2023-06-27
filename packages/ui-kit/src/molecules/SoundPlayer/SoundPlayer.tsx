@@ -1,4 +1,4 @@
-import {FC, memo} from 'react';
+import {FC} from 'react';
 
 import {IconButton, SoundPlayerTime, SoundPlayerTrack} from '../../atoms';
 
@@ -21,7 +21,7 @@ const SoundPlayer: FC<SoundPlayerPropsInterface> = ({
   onIsPlaying,
   onChangePlayed
 }) => {
-  const playedPercent = !isStopped ? (playedSec * 100) / durationSec : 0;
+  const playedPercent = !isStopped && durationSec ? (playedSec * 100) / durationSec : 0;
 
   return (
     <styled.Container data-testid="SoundPlayer-test">
@@ -45,4 +45,4 @@ const SoundPlayer: FC<SoundPlayerPropsInterface> = ({
   );
 };
 
-export default memo(SoundPlayer);
+export default SoundPlayer;
