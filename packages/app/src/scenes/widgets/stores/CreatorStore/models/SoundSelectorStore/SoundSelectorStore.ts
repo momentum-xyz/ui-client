@@ -62,7 +62,7 @@ const SoundSelectorStore = types
   }))
   .views((self) => ({
     get isUpdating(): boolean {
-      return self.publishRequest.isPending || self.deleteRequest.isPending;
+      return self.publishRequest.isPending || self.mediaUploader.isPending;
     },
     get soundList(): MediaFileInterface[] {
       return self.soundInfos.map((item) => ({
