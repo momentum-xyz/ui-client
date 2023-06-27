@@ -1,4 +1,5 @@
 import {FC, ReactNode} from 'react';
+import {format} from 'date-fns-tz';
 
 import * as styled from './SoundPlayerTime.styled';
 
@@ -13,15 +14,16 @@ const SoundPlayerTime: FC<SoundPlayerTimePropsInterface> = ({
   duration,
   children
 }) => {
-  const formatSeconds = (seconds: number) => {
-    return <>00:{seconds < 10 ? <>{`0${seconds}`}</> : <>{seconds}</>}</>;
+  const getFormattedString = (seconds: number) => {
+    const date = new Date(Math.round(seconds) * 1000);
+    return format(date, 'mm:ss');
   };
 
   return (
     <styled.Grid data-testid="SoundPlayerTime-test">
-      <styled.Played>{formatSeconds(playedSeconds)}</styled.Played>
+      <styled.Played>{getFormattedString(playedSeconds)}</styled.Played>
       {children}
-      <styled.Duration>{formatSeconds(duration)}</styled.Duration>
+      <styled.Duration>{getFormattedString(duration)}</styled.Duration>
     </styled.Grid>
   );
 };

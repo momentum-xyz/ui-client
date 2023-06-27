@@ -20,7 +20,7 @@ const Template: Story<SoundPlayerTimePropsInterface> = (args) => {
 
 export const General = Template.bind({});
 General.args = {
-  playedSeconds: 0,
-  duration: 15,
+  playedSeconds: 12,
+  duration: 78,
   children: <div />
 };

@@ -1,6 +1,7 @@
 import {cast, types} from 'mobx-state-tree';
 import {MediaFileInterface, ResetModel} from '@momentum-xyz/core';
 import ReactHowler from 'react-howler';
+import raf from 'raf';
 
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
@@ -14,7 +15,11 @@ const MusicStore = types
       isPlaying: false,
       volume: DEFAULT_VOLUME_PERCENT,
       tracks: types.optional(types.array(types.frozen<MediaFileInterface>()), []),
-      activeTrackHash: types.maybeNull(types.string)
+
+      trackHash: types.maybeNull(types.string),
+      durationSec: 0,
+      playedSec: 0,
+      _raf: 0
     })
   )
   .volatile<{player: ReactHowler | null}>(() => ({
@@ -42,7 +47,7 @@ const MusicStore = types
     start(trackHash: string): void {
       if (self.tracks.some((item) => item.hash === trackHash)) {
         self.isPlaying = true;
-        self.activeTrackHash = trackHash;
+        self.trackHash = trackHash;
       }
     },
     play(): void {
@@ -53,19 +58,45 @@ const MusicStore = types
     },
     stop(): void {
       self.isPlaying = false;
-      self.activeTrackHash = null;
+      self.trackHash = null;
+    }
+  }))
+  .actions((self) => ({
+    setDuration(): void {
+      self.durationSec = self.player?.howler.duration() || 0;
+      console.log('DURATION', self.durationSec);
+    },
+    setHowlerSeek(sec: number): void {
+      self.player?.seek(sec);
+    },
+    setSeekPosition(): void {
+      if (self.isPlaying) {
+        self.playedSec = self.player?.howler.seek() || 0;
+        console.log('PLAYED', self.playedSec);
+        self._raf = raf(this.setSeekPosition);
+      }
+    },
+    trackEnded: () => {
+      // TODO LOOP (!)
+      self.isPlaying = false;
+      self.trackHash = null;
+      self.durationSec = 0;
+      self.playedSec = 0;
     }
   }))
   .views((self) => ({
     get activeTrack(): MediaFileInterface | null {
-      return self.tracks.find((track) => track.hash === self.activeTrackHash) || null;
+      return self.tracks.find((track) => track.hash === self.trackHash) || null;
     },
     get howlerProps() {
       return {
+        html5: true,
         src: this.activeTrack?.url || '',
         playing: self.isPlaying,
         volume: self.volume / 100,
-        html5: true
+        onLoad: self.setDuration,
+        onPlay: self.setSeekPosition,
+        onEnd: self.trackEnded
       };
     }
   }));

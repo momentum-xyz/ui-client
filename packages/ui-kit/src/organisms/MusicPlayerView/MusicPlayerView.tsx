@@ -10,12 +10,15 @@ export interface MusicPlayerViewPropsInterface {
   tracks: MediaFileInterface[];
   activeTrack?: MediaFileInterface | null;
   isPlaying: boolean;
+  durationSec?: number;
+  playedSec?: number;
   volumePercent: number;
   onStart?: (track: MediaFileInterface) => void;
   onPlay?: () => void;
   onPause?: () => void;
   onStop?: () => void;
   onChangeVolume: (volumePercent: number) => void;
+  onChangePlayed?: (playedSec: number) => void;
   onDeleteTrack?: (hash: string) => void;
 }
 
@@ -23,12 +26,15 @@ const MusicPlayerView: FC<MusicPlayerViewPropsInterface> = ({
   tracks,
   activeTrack,
   isPlaying,
+  durationSec,
+  playedSec,
   volumePercent,
   onStart,
   onPlay,
   onPause,
   onStop,
   onChangeVolume,
+  onChangePlayed,
   onDeleteTrack
 }) => {
   const {t} = useI18n();
@@ -43,7 +49,10 @@ const MusicPlayerView: FC<MusicPlayerViewPropsInterface> = ({
           <SoundPlayer
             isPlaying={isPlaying}
             isStopped={!activeTrack}
+            durationSec={durationSec}
+            playedSec={playedSec}
             onIsPlaying={isPlaying ? onPause : onPlay}
+            onChangePlayed={onChangePlayed}
           />
         </styled.Block>
 

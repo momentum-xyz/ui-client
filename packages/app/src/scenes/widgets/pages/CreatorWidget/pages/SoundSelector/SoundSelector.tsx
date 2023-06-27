@@ -76,12 +76,15 @@ const SoundSelector: FC = () => {
           tracks={soundSelectorStore.soundList}
           activeTrack={musicStore.activeTrack}
           isPlaying={musicStore.isPlaying}
+          durationSec={musicStore.durationSec}
+          playedSec={musicStore.playedSec}
           volumePercent={musicStore.volume}
           onStart={(track) => musicStore.start(track.hash)}
           onPlay={musicStore.play}
           onPause={musicStore.pause}
           onStop={musicStore.stop}
           onChangeVolume={musicStore.setVolume}
+          onChangePlayed={musicStore.setHowlerSeek}
           onDeleteTrack={handleDelete}
         />
       </styled.TracksContainer>

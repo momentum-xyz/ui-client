@@ -1,4 +1,4 @@
-import {FC, memo, useState} from 'react';
+import {FC, memo} from 'react';
 
 import {IconButton, SoundPlayerTime, SoundPlayerTrack} from '../../atoms';
 
@@ -7,22 +7,21 @@ import * as styled from './SoundPlayer.styled';
 export interface SoundPlayerPropsInterface {
   isPlaying: boolean;
   isStopped: boolean;
+  durationSec?: number;
+  playedSec?: number;
   onIsPlaying?: (isPlaying: boolean) => void;
+  onChangePlayed?: (playedSec: number) => void;
 }
 
-const SoundPlayer: FC<SoundPlayerPropsInterface> = ({isPlaying, isStopped, onIsPlaying}) => {
-  const [duration, setDuration] = useState(0);
-  const [progress, setProgress] = useState({
-    played: 0,
-    playedSeconds: 0
-  });
-
-  const playedSeconds = Math.round(progress.playedSeconds);
-  const playedPercent = progress.played * 100;
-
-  // TODO: Implementation
-  console.log(setDuration);
-  console.log(setProgress);
+const SoundPlayer: FC<SoundPlayerPropsInterface> = ({
+  isPlaying,
+  isStopped,
+  durationSec = 0,
+  playedSec = 0,
+  onIsPlaying,
+  onChangePlayed
+}) => {
+  const playedPercent = !isStopped ? (playedSec * 100) / durationSec : 0;
 
   return (
     <styled.Container data-testid="SoundPlayer-test">
@@ -34,11 +33,11 @@ const SoundPlayer: FC<SoundPlayerPropsInterface> = ({isPlaying, isStopped, onIsP
         isDisabled={isStopped}
       />
 
-      <SoundPlayerTime playedSeconds={playedSeconds} duration={duration}>
+      <SoundPlayerTime playedSeconds={playedSec} duration={durationSec}>
         <SoundPlayerTrack
           percent={playedPercent}
           onChange={(percent) => {
-            console.log(percent);
+            onChangePlayed?.((durationSec * percent) / 100);
           }}
         />
       </SoundPlayerTime>
