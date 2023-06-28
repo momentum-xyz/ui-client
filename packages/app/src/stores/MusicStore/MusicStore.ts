@@ -75,6 +75,8 @@ const MusicStore = types
     stop(): void {
       self.isPlaying = false;
       self.trackHash = null;
+      self.durationSec = 0;
+      self.playedSec = 0;
     }
   }))
   .actions((self) => ({
@@ -99,7 +101,7 @@ const MusicStore = types
       }
       self.watcher = setInterval(() => {
         this.setSeekPosition();
-      }, 1000);
+      }, 500);
     },
     startNextTrack(): void {
       const currentIndex = self.tracks.findIndex((t) => t.render_hash === self.trackHash);

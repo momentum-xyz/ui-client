@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-export const Progress = styled.div<{value: number}>`
+export const Progress = styled.div`
   --min: 0;
   --max: 100;
+  --value: 0;
 
   margin: -5px 0 0 0;
 
@@ -16,7 +17,7 @@ export const Progress = styled.div<{value: number}>`
 
   input[type='range'].styled-slider.slider-progress {
     --range: calc(var(--max) - var(--min));
-    --ratio: calc((${(props) => props.value} - var(--min)) / var(--range));
+    --ratio: calc((var(--value) - var(--min)) / var(--range));
     --sx: calc(0.5 * 2px + var(--ratio) * (100% - 2px));
   }
 
