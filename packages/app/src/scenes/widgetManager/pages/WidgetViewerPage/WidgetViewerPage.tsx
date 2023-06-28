@@ -1,6 +1,5 @@
-import {FC, useEffect, useRef} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import ReactHowler from 'react-howler';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
@@ -10,16 +9,8 @@ import * as widgets from 'scenes/widgets/pages';
 import * as styled from './WidgetViewerPage.styled';
 
 const WidgetViewerPage: FC = () => {
-  const {widgetManagerStore, musicStore} = useStore();
+  const {widgetManagerStore} = useStore();
   const {leftActiveWidget, rightActiveWidget} = widgetManagerStore;
-
-  const playerRef = useRef<ReactHowler>(null);
-
-  useEffect(() => {
-    if (playerRef.current) {
-      musicStore.setPlayer(playerRef.current);
-    }
-  }, [musicStore, musicStore.activeTrack]);
 
   const visualizeSection = (widgetInfo: WidgetInfoModelInterface) => {
     switch (widgetInfo?.type) {
@@ -65,8 +56,6 @@ const WidgetViewerPage: FC = () => {
       <styled.RightSection>
         <styled.Widget>{rightActiveWidget && visualizeSection(rightActiveWidget)}</styled.Widget>
       </styled.RightSection>
-
-      {musicStore.activeTrack && <ReactHowler ref={playerRef} {...musicStore.howlerProps} />}
     </styled.Container>
   );
 };

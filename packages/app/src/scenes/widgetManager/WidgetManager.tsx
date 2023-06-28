@@ -1,5 +1,7 @@
 import {FC} from 'react';
 
+import {MusicPlayer} from 'scenes/widgets/components';
+
 import {WidgetViewerPage, WidgetMenuPage} from './pages';
 import * as styled from './WidgetManager.styled';
 
@@ -11,6 +13,7 @@ interface PropsInterface {
 const WidgetManager: FC<PropsInterface> = (props) => {
   return (
     <styled.Container data-testid="WidgetManager-test">
+      <MusicPlayer />
       <WidgetViewerPage />
       <WidgetMenuPage {...props} />
     </styled.Container>
