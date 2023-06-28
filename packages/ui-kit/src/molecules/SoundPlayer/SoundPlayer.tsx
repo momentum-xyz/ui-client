@@ -8,10 +8,16 @@ import * as styled from './SoundPlayer.styled';
 export interface SoundPlayerPropsInterface {
   state: TrackStateInterface;
   onIsPlaying?: (isPlaying: boolean) => void;
+  onIsSeeking?: (isSeeking: boolean) => void;
   onChangePlayed?: (playedSec: number) => void;
 }
 
-const SoundPlayer: FC<SoundPlayerPropsInterface> = ({state, onIsPlaying, onChangePlayed}) => {
+const SoundPlayer: FC<SoundPlayerPropsInterface> = ({
+  state,
+  onIsPlaying,
+  onIsSeeking,
+  onChangePlayed
+}) => {
   return (
     <styled.Container data-testid="SoundPlayer-test">
       <IconButton
@@ -25,6 +31,7 @@ const SoundPlayer: FC<SoundPlayerPropsInterface> = ({state, onIsPlaying, onChang
       <SoundPlayerTime playedSeconds={state.playedSec} duration={state.durationSec}>
         <SoundPlayerTrack
           percent={state.playedPercent}
+          onIsSeeking={onIsSeeking}
           onChange={(percent) => {
             onChangePlayed?.((state.durationSec * percent) / 100);
           }}

@@ -23,6 +23,7 @@ const MusicPlayerView: FC = () => {
           <SoundPlayer
             state={activeTrackState}
             onIsPlaying={activeTrackState.isPlaying ? musicStore.pause : musicStore.play}
+            onIsSeeking={musicStore.setIsSeeking}
             onChangePlayed={musicStore.setHowlerSeek}
           />
         </styled.Block>

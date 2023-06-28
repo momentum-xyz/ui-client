@@ -20,6 +20,7 @@ const MusicStore = types
       tracks: types.optional(types.array(TrackInfo), []),
       volume: types.optional(types.number, DEFAULT_VOLUME_PERCENT),
       trackHash: types.maybeNull(types.string),
+      isSeeking: false,
       isPlaying: false,
       durationSec: 0,
       playedSec: 0,
@@ -80,12 +81,15 @@ const MusicStore = types
     setDuration(): void {
       self.durationSec = self.player?.howler.duration() || 0;
     },
+    setIsSeeking(isSeeking: boolean): void {
+      self.isSeeking = isSeeking;
+    },
     setHowlerSeek(sec: number): void {
       self.player?.seek(sec);
       self.playedSec = sec;
     },
     setSeekPosition(): void {
-      if (self.isPlaying) {
+      if (!self.isSeeking && self.isPlaying) {
         self.playedSec = self.player?.howler.seek() || 0;
       }
     },
