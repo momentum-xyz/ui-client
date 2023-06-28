@@ -27,3 +27,10 @@ export const TracksContainer = styled.div`
   padding: 20px 0 0 0;
   border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
 `;
+
+export const TrackList = styled.div`
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;

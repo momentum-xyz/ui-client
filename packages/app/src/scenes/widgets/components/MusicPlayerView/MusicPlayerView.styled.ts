@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-export const Container = styled.div`
-  color: ${(props) => props.theme.text};
-`;
+export const Container = styled.div``;
 
 export const Title = styled.div`
   font-size: var(--font-size-l);
@@ -28,11 +26,4 @@ export const Block = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-`;
-
-export const TrackList = styled.div`
-  padding: 10px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 `;

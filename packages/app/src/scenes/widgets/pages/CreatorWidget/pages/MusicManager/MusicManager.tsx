@@ -1,52 +1,53 @@
 import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Frame, MusicPlayerView} from '@momentum-xyz/ui-kit';
+import {Button, Frame, SoundItem} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {SoundFormInterface} from 'core/interfaces';
+import {MusicPlayerView} from 'scenes/widgets/components';
 
-import {SoundFileForm} from './components';
-import * as styled from './SoundSelector.styled';
+import {MusicFileForm} from './components';
+import * as styled from './MusicManager.styled';
 
-const SoundSelector: FC = () => {
+const MusicManager: FC = () => {
   const {widgetStore, universeStore, musicStore} = useStore();
   const {worldId} = universeStore;
   const {creatorStore} = widgetStore;
-  const {soundSelectorStore} = creatorStore;
-  const {soundList} = soundSelectorStore;
+  const {musicManagerStore} = creatorStore;
+  const {soundList} = musicManagerStore;
 
   const [isNewForm, setIsNewForm] = useState(false);
 
   const {t} = useI18n();
 
   useEffect(() => {
-    soundSelectorStore.fetchSound(worldId);
+    musicManagerStore.fetchSound(worldId);
 
     return () => {
-      soundSelectorStore.resetModel();
+      musicManagerStore.resetModel();
     };
-  }, [soundSelectorStore, worldId]);
+  }, [musicManagerStore, worldId]);
 
   useEffect(() => {
     musicStore.setTracks(soundList);
   }, [musicStore, soundList, soundList.length]);
 
   const handlePublish = async (form: SoundFormInterface) => {
-    if (await soundSelectorStore.publishSound(form, worldId)) {
-      await soundSelectorStore.fetchSound(worldId);
+    if (await musicManagerStore.publishSound(form, worldId)) {
+      await musicManagerStore.fetchSound(worldId);
       setIsNewForm(false);
     }
   };
 
   const handleDelete = async (hash: string) => {
-    if (await soundSelectorStore.deleteSound(hash, worldId)) {
-      await soundSelectorStore.fetchSound(worldId);
+    if (await musicManagerStore.deleteSound(hash, worldId)) {
+      await musicManagerStore.fetchSound(worldId);
     }
   };
 
   return (
-    <styled.Container data-testid="SoundSelector-test">
+    <styled.Container data-testid="MusicManager-test">
       <Frame>
         <styled.Head>
           <styled.Title>{t('titles.odysseySoundtrack')}</styled.Title>
@@ -61,8 +62,8 @@ const SoundSelector: FC = () => {
                 onClick={() => setIsNewForm(true)}
               />
             ) : (
-              <SoundFileForm
-                isPending={soundSelectorStore.isUpdating}
+              <MusicFileForm
+                isPending={musicManagerStore.isUpdating}
                 onCancel={() => setIsNewForm(false)}
                 onPublish={handlePublish}
               />
@@ -72,24 +73,25 @@ const SoundSelector: FC = () => {
       </Frame>
 
       <styled.TracksContainer>
-        <MusicPlayerView
-          tracks={soundList}
-          activeTrack={musicStore.activeTrack}
-          isPlaying={musicStore.isPlaying}
-          durationSec={musicStore.durationSec}
-          playedSec={musicStore.playedSec}
-          volumePercent={musicStore.volume}
-          onStart={(track) => musicStore.start(track.hash)}
-          onPlay={musicStore.play}
-          onPause={musicStore.pause}
-          onStop={musicStore.stop}
-          onChangeVolume={musicStore.setVolume}
-          onChangePlayed={musicStore.setHowlerSeek}
-          onDeleteTrack={handleDelete}
-        />
+        {/* ACTIVE TRACK */}
+        <MusicPlayerView />
+
+        {/* TRACK LIST */}
+        <styled.TrackList>
+          {soundList.map((track) => (
+            <SoundItem
+              key={track.hash}
+              item={track}
+              isActive={musicStore.activeTrack?.hash === track.hash}
+              onStart={() => musicStore.start(track.hash)}
+              onStop={musicStore.stop}
+              onDelete={() => handleDelete(track.hash)}
+            />
+          ))}
+        </styled.TrackList>
       </styled.TracksContainer>
     </styled.Container>
   );
 };
 
-export default observer(SoundSelector);
+export default observer(MusicManager);

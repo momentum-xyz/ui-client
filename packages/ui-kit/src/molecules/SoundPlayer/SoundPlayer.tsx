@@ -1,43 +1,32 @@
 import {FC} from 'react';
 
+import {TrackStateInterface} from '../../interfaces';
 import {IconButton, SoundPlayerTime, SoundPlayerTrack} from '../../atoms';
 
 import * as styled from './SoundPlayer.styled';
 
 export interface SoundPlayerPropsInterface {
-  isPlaying: boolean;
-  isStopped: boolean;
-  durationSec?: number;
-  playedSec?: number;
+  state: TrackStateInterface;
   onIsPlaying?: (isPlaying: boolean) => void;
   onChangePlayed?: (playedSec: number) => void;
 }
 
-const SoundPlayer: FC<SoundPlayerPropsInterface> = ({
-  isPlaying,
-  isStopped,
-  durationSec = 0,
-  playedSec = 0,
-  onIsPlaying,
-  onChangePlayed
-}) => {
-  const playedPercent = !isStopped && durationSec ? (playedSec * 100) / durationSec : 0;
-
+const SoundPlayer: FC<SoundPlayerPropsInterface> = ({state, onIsPlaying, onChangePlayed}) => {
   return (
     <styled.Container data-testid="SoundPlayer-test">
       <IconButton
         isAccent
         size="xl2"
-        name={isPlaying ? 'pause' : 'play_two'}
-        onClick={() => onIsPlaying?.(!isPlaying)}
-        isDisabled={isStopped}
+        name={state.isPlaying ? 'pause' : 'play_two'}
+        onClick={() => onIsPlaying?.(!state.isPlaying)}
+        isDisabled={state.isStopped}
       />
 
-      <SoundPlayerTime playedSeconds={playedSec} duration={durationSec}>
+      <SoundPlayerTime playedSeconds={state.playedSec} duration={state.durationSec}>
         <SoundPlayerTrack
-          percent={playedPercent}
+          percent={state.playedPercent}
           onChange={(percent) => {
-            onChangePlayed?.((durationSec * percent) / 100);
+            onChangePlayed?.((state.durationSec * percent) / 100);
           }}
         />
       </SoundPlayerTime>

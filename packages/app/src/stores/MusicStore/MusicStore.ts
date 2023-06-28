@@ -1,5 +1,6 @@
 import {cast, types} from 'mobx-state-tree';
 import {MediaFileInterface, ResetModel} from '@momentum-xyz/core';
+import {TrackStateInterface} from '@momentum-xyz/ui-kit';
 import ReactHowler from 'react-howler';
 
 import {storage} from 'shared/services';
@@ -63,7 +64,6 @@ const MusicStore = types
   .actions((self) => ({
     setDuration(): void {
       self.durationSec = self.player?.howler.duration() || 0;
-      console.log('DURATION', self.durationSec);
     },
     setHowlerSeek(sec: number): void {
       self.player?.seek(sec);
@@ -72,7 +72,6 @@ const MusicStore = types
     setSeekPosition(): void {
       if (self.isPlaying) {
         self.playedSec = self.player?.howler.seek() || 0;
-        console.log('PLAYED', self.playedSec);
       }
     },
     watchSeekPosition(): void {
@@ -94,6 +93,16 @@ const MusicStore = types
   .views((self) => ({
     get activeTrack(): MediaFileInterface | null {
       return self.tracks.find((track) => track.hash === self.trackHash) || null;
+    },
+    get activeTrackState(): TrackStateInterface {
+      const isDurationAvailable = !!this.activeTrack && self.durationSec;
+      return {
+        isPlaying: self.isPlaying,
+        isStopped: !this.activeTrack,
+        durationSec: self.durationSec,
+        playedSec: self.playedSec,
+        playedPercent: isDurationAvailable ? (self.playedSec * 100) / self.durationSec : 0
+      };
     },
     get howlerProps() {
       return {

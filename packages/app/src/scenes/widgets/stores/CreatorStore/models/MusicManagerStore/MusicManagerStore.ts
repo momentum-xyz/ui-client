@@ -8,10 +8,10 @@ import {getTrackAbsoluteUrl} from 'core/utils';
 import {SoundFormInterface} from 'core/interfaces';
 import {MediaUploader, SoundInfo} from 'core/models';
 
-const SoundSelectorStore = types
+const MusicManagerStore = types
   .compose(
     ResetModel,
-    types.model('SoundSelectorStore', {
+    types.model('MusicManagerStore', {
       soundInfos: types.optional(types.array(SoundInfo), []),
       mediaUploader: types.optional(MediaUploader, {}),
       fetchRequest: types.optional(RequestModel, {}),
@@ -78,4 +78,4 @@ const SoundSelectorStore = types
     }
   }));
 
-export {SoundSelectorStore};
+export {MusicManagerStore};

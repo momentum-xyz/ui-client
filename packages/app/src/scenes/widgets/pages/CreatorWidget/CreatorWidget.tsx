@@ -16,7 +16,7 @@ import {
   ObjectInspector,
   AssetCustomising,
   ObjectFunction,
-  SoundSelector
+  MusicManager
 } from './pages';
 
 type MenuItemType = keyof typeof CreatorTabsEnum;
@@ -95,7 +95,7 @@ const CreatorWidget: FC = () => {
       case 'skybox':
         return <SkyboxSelector />;
       case 'sound':
-        return <SoundSelector />;
+        return <MusicManager />;
       case 'inspector':
         return <ObjectInspector />;
       case 'functionality':

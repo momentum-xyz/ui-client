@@ -6,7 +6,7 @@ import {useI18n} from '@momentum-xyz/core';
 
 import {SoundFormInterface} from 'core/interfaces';
 
-import * as styled from './SoundFileForm.styled';
+import * as styled from './MusicFileForm.styled';
 
 interface PropsInterface {
   isPending: boolean;
@@ -14,7 +14,7 @@ interface PropsInterface {
   onCancel: () => void;
 }
 
-const SoundFileForm: FC<PropsInterface> = ({isPending, onPublish, onCancel}) => {
+const MusicFileForm: FC<PropsInterface> = ({isPending, onPublish, onCancel}) => {
   const {t} = useI18n();
 
   const {
@@ -28,7 +28,7 @@ const SoundFileForm: FC<PropsInterface> = ({isPending, onPublish, onCancel}) => 
   });
 
   return (
-    <styled.Container data-testid="SoundFileForm-test">
+    <styled.Container data-testid="MusicFileForm-test">
       <styled.Wrapper>
         <Controller
           name="trackFile"
@@ -75,4 +75,4 @@ const SoundFileForm: FC<PropsInterface> = ({isPending, onPublish, onCancel}) => 
   );
 };
 
-export default observer(SoundFileForm);
+export default observer(MusicFileForm);
