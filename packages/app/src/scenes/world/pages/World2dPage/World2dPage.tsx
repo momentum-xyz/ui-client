@@ -11,8 +11,7 @@ import {OnlineUsersList, CurrentWorld} from './components';
 import * as styled from './World2dPage.styled';
 
 const World2dPage: FC = () => {
-  const {universeStore, widgetManagerStore, widgetStore, agoraStore, sessionStore, musicStore} =
-    useStore();
+  const {universeStore, widgetManagerStore, widgetStore, agoraStore, sessionStore} = useStore();
   const {isLeftWidgetShown, isRightWidgetShown} = widgetManagerStore;
   const {agoraVoiceChatStore} = agoraStore;
   const {world2dStore, world3dStore} = universeStore;
@@ -26,7 +25,6 @@ const World2dPage: FC = () => {
 
   useEffect(() => {
     if (worldId) {
-      musicStore.init();
       universeStore.enterWorld(worldId);
       agoraStore.initUsers(worldId);
       timelineStore.initAndSubscribe(worldId, sessionStore.userId);
@@ -37,7 +35,6 @@ const World2dPage: FC = () => {
       widgetManagerStore.closeAll();
       timelineStore.unsubscribe();
       PosBusService.leaveWorld();
-      musicStore.resetModel();
     };
   }, [worldId]);
 

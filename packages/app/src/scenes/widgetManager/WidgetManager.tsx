@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, memo} from 'react';
 
 import {MusicPlayer} from 'scenes/widgets/components';
 
@@ -13,11 +13,11 @@ interface PropsInterface {
 const WidgetManager: FC<PropsInterface> = (props) => {
   return (
     <styled.Container data-testid="WidgetManager-test">
-      <MusicPlayer />
+      {props.isWorld && <MusicPlayer />}
       <WidgetViewerPage />
       <WidgetMenuPage {...props} />
     </styled.Container>
   );
 };
 
-export default WidgetManager;
+export default memo(WidgetManager);

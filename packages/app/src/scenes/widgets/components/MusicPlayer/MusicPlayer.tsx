@@ -7,9 +7,19 @@ import {useStore} from 'shared/hooks';
 import * as styled from './MusicPlayer.styled';
 
 const MusicPlayer: FC = () => {
-  const {musicStore} = useStore();
+  const {musicStore, universeStore} = useStore();
+  const {worldId} = universeStore;
 
   const playerRef = useRef<ReactHowler>(null);
+
+  useEffect(() => {
+    if (worldId) {
+      musicStore.init();
+    }
+    return () => {
+      musicStore.resetModel();
+    };
+  }, [musicStore, worldId]);
 
   useEffect(() => {
     if (playerRef.current) {
