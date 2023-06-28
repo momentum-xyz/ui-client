@@ -73,7 +73,7 @@ const SoundSelector: FC = () => {
 
       <styled.TracksContainer>
         <MusicPlayerView
-          tracks={soundSelectorStore.soundList}
+          tracks={soundList}
           activeTrack={musicStore.activeTrack}
           isPlaying={musicStore.isPlaying}
           durationSec={musicStore.durationSec}

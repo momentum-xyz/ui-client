@@ -1,7 +1,6 @@
 import {cast, types} from 'mobx-state-tree';
 import {MediaFileInterface, ResetModel} from '@momentum-xyz/core';
 import ReactHowler from 'react-howler';
-import raf from 'raf';
 
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
@@ -18,12 +17,12 @@ const MusicStore = types
 
       trackHash: types.maybeNull(types.string),
       durationSec: 0,
-      playedSec: 0,
-      _raf: 0
+      playedSec: 0
     })
   )
-  .volatile<{player: ReactHowler | null}>(() => ({
-    player: null
+  .volatile<{player: ReactHowler | null; watcher: NodeJS.Timer | null}>(() => ({
+    player: null,
+    watcher: null
   }))
   .actions((self) => ({
     init(): void {
@@ -68,13 +67,21 @@ const MusicStore = types
     },
     setHowlerSeek(sec: number): void {
       self.player?.seek(sec);
+      self.playedSec = sec;
     },
     setSeekPosition(): void {
       if (self.isPlaying) {
         self.playedSec = self.player?.howler.seek() || 0;
         console.log('PLAYED', self.playedSec);
-        self._raf = raf(this.setSeekPosition);
       }
+    },
+    watchSeekPosition(): void {
+      if (self.watcher) {
+        clearInterval(self.watcher);
+      }
+      self.watcher = setInterval(() => {
+        this.setSeekPosition();
+      }, 1000);
     },
     trackEnded: () => {
       // TODO LOOP (!)
@@ -95,7 +102,7 @@ const MusicStore = types
         playing: self.isPlaying,
         volume: self.volume / 100,
         onLoad: self.setDuration,
-        onPlay: self.setSeekPosition,
+        onPlay: self.watchSeekPosition,
         onEnd: self.trackEnded
       };
     }

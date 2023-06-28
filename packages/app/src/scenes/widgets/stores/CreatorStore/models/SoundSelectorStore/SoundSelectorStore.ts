@@ -30,8 +30,8 @@ const SoundSelectorStore = types
         }
       );
 
-      if (attributeResponse?.tracks?.length > 0) {
-        self.soundInfos = cast(attributeResponse.tracks);
+      if (attributeResponse) {
+        self.soundInfos = cast(attributeResponse.tracks || []);
       }
     }),
     publishSound: flow(function* (form: SoundFormInterface, worldId: string) {
@@ -44,7 +44,12 @@ const SoundSelectorStore = types
         spaceId: worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.SOUNDTRACK,
-        value: {tracks: [...self.soundInfos, {render_hash, name: form.name || ''}]}
+        value: {
+          tracks: [
+            ...self.soundInfos.filter((i) => i.render_hash !== render_hash),
+            {render_hash, name: form.name || ''}
+          ]
+        }
       });
 
       return self.publishRequest.isDone;

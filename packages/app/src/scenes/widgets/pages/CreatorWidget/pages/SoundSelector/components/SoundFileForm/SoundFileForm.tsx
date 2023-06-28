@@ -42,7 +42,7 @@ const SoundFileForm: FC<PropsInterface> = ({isPending, onPublish, onCancel}) => 
         <Controller
           name="name"
           control={control}
-          rules={{required: true, maxLength: 32, minLength: 2}}
+          rules={{required: true, minLength: 2}}
           render={({field: {value, onChange}}) => (
             <Input
               wide
