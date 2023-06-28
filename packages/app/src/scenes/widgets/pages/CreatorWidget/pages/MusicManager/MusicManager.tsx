@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button, Frame, SoundItem} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
@@ -15,34 +15,21 @@ const MusicManager: FC = () => {
   const {worldId} = universeStore;
   const {creatorStore} = widgetStore;
   const {musicManagerStore} = creatorStore;
-  const {soundList} = musicManagerStore;
 
   const [isNewForm, setIsNewForm] = useState(false);
 
   const {t} = useI18n();
 
-  useEffect(() => {
-    musicManagerStore.fetchSound(worldId);
-
-    return () => {
-      musicManagerStore.resetModel();
-    };
-  }, [musicManagerStore, worldId]);
-
-  useEffect(() => {
-    musicStore.setTracks(soundList);
-  }, [musicStore, soundList, soundList.length]);
-
   const handlePublish = async (form: SoundFormInterface) => {
     if (await musicManagerStore.publishSound(form, worldId)) {
-      await musicManagerStore.fetchSound(worldId);
+      await musicStore.fetchTracks(worldId);
       setIsNewForm(false);
     }
   };
 
   const handleDelete = async (hash: string) => {
     if (await musicManagerStore.deleteSound(hash, worldId)) {
-      await musicManagerStore.fetchSound(worldId);
+      await musicStore.fetchTracks(worldId);
     }
   };
 
@@ -78,7 +65,7 @@ const MusicManager: FC = () => {
 
         {/* TRACK LIST */}
         <styled.TrackList>
-          {soundList.map((track) => (
+          {musicStore.trackList.map((track) => (
             <SoundItem
               key={track.hash}
               item={track}

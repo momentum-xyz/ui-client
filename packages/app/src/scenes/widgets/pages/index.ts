@@ -12,3 +12,4 @@ export * from './CreatorWidget';
 export * from './ObjectWidget';
 export * from './NewsfeedWidget';
 export * from './TimelineWidget';
+export * from './MusicWidget';

@@ -14,7 +14,7 @@ const MusicPlayer: FC = () => {
 
   useEffect(() => {
     if (worldId) {
-      musicStore.init();
+      musicStore.init(worldId);
     }
     return () => {
       musicStore.resetModel();

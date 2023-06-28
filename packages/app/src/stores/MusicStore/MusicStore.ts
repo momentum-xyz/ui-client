@@ -1,10 +1,15 @@
-import {cast, types} from 'mobx-state-tree';
-import {MediaFileInterface, ResetModel} from '@momentum-xyz/core';
-import {TrackStateInterface} from '@momentum-xyz/ui-kit';
+import {cast, flow, types} from 'mobx-state-tree';
 import ReactHowler from 'react-howler';
+import {MediaFileInterface, RequestModel, ResetModel} from '@momentum-xyz/core';
+import {TrackStateInterface} from '@momentum-xyz/ui-kit';
+import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
+import {api} from 'api';
+import {PluginIdEnum} from 'api/enums';
 import {storage} from 'shared/services';
+import {TrackInfo} from 'core/models';
 import {StorageKeyEnum} from 'core/enums';
+import {getTrackAbsoluteUrl} from 'core/utils';
 
 const DEFAULT_VOLUME_PERCENT = 30;
 
@@ -12,13 +17,13 @@ const MusicStore = types
   .compose(
     ResetModel,
     types.model('MusicStore', {
-      isPlaying: false,
-      volume: DEFAULT_VOLUME_PERCENT,
-      tracks: types.optional(types.array(types.frozen<MediaFileInterface>()), []),
-
+      tracks: types.optional(types.array(TrackInfo), []),
+      volume: types.optional(types.number, DEFAULT_VOLUME_PERCENT),
       trackHash: types.maybeNull(types.string),
+      isPlaying: false,
       durationSec: 0,
-      playedSec: 0
+      playedSec: 0,
+      fetchRequest: types.optional(RequestModel, {})
     })
   )
   .volatile<{player: ReactHowler | null; watcher: NodeJS.Timer | null}>(() => ({
@@ -26,7 +31,7 @@ const MusicStore = types
     watcher: null
   }))
   .actions((self) => ({
-    init(): void {
+    initVolume(): void {
       const stored = storage.get<string>(StorageKeyEnum.VolumeLevel);
       self.volume = stored ? Number(stored) : DEFAULT_VOLUME_PERCENT;
     },
@@ -36,18 +41,28 @@ const MusicStore = types
     },
     setPlayer(player: ReactHowler) {
       self.player = player;
-    }
-  }))
-  .actions((self) => ({
-    setTracks(tracks: MediaFileInterface[]): void {
-      self.tracks = cast(tracks);
-    }
+    },
+    fetchTracks: flow(function* (worldId: string) {
+      const attributeResponse = yield self.fetchRequest.send(
+        api.spaceAttributeRepository.getSpaceAttribute,
+        {
+          spaceId: worldId,
+          plugin_id: PluginIdEnum.CORE,
+          attribute_name: AttributeNameEnum.SOUNDTRACK
+        }
+      );
+
+      if (attributeResponse) {
+        self.tracks = cast(attributeResponse.tracks || []);
+      }
+    })
   }))
   .actions((self) => ({
     start(trackHash: string): void {
-      if (self.tracks.some((item) => item.hash === trackHash)) {
+      if (self.tracks.some((item) => item.render_hash === trackHash)) {
         self.isPlaying = true;
         self.trackHash = trackHash;
+        self.playedSec = 0;
       }
     },
     play(): void {
@@ -82,17 +97,37 @@ const MusicStore = types
         this.setSeekPosition();
       }, 1000);
     },
-    trackEnded: () => {
-      // TODO LOOP (!)
-      self.isPlaying = false;
-      self.trackHash = null;
-      self.durationSec = 0;
-      self.playedSec = 0;
+    startNextTrack(): void {
+      const currentIndex = self.tracks.findIndex((t) => t.render_hash === self.trackHash);
+      const targetIndex = currentIndex === self.tracks.length - 1 ? 0 : currentIndex + 1;
+
+      self.trackHash = self.tracks[targetIndex].render_hash;
+      this.setHowlerSeek(0);
+    }
+  }))
+  .actions((self) => ({
+    async init(worldId: string) {
+      self.initVolume();
+      await self.fetchTracks(worldId);
+
+      if (self.tracks.length > 0) {
+        self.start(self.tracks[0].render_hash);
+      }
     }
   }))
   .views((self) => ({
+    get isAvailable(): boolean {
+      return self.tracks.length > 0;
+    },
+    get trackList(): MediaFileInterface[] {
+      return self.tracks.map((item) => ({
+        name: item.name,
+        hash: item.render_hash,
+        url: getTrackAbsoluteUrl(item.render_hash) || ''
+      }));
+    },
     get activeTrack(): MediaFileInterface | null {
-      return self.tracks.find((track) => track.hash === self.trackHash) || null;
+      return this.trackList.find((track) => track.hash === self.trackHash) || null;
     },
     get activeTrackState(): TrackStateInterface {
       const isDurationAvailable = !!this.activeTrack && self.durationSec;
@@ -112,7 +147,7 @@ const MusicStore = types
         volume: self.volume / 100,
         onLoad: self.setDuration,
         onPlay: self.watchSeekPosition,
-        onEnd: self.trackEnded
+        onEnd: self.startNextTrack
       };
     }
   }));
