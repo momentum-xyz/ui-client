@@ -1,50 +1,35 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Button, IconSvg, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
-import {useI18n} from '@momentum-xyz/core';
+import {Button, IconSvg, TabInterface} from '@momentum-xyz/ui-kit';
+import {useI18n, i18n} from '@momentum-xyz/core';
 
 import {ToastContent} from 'ui-kit';
-import {BasicAsset2dIdEnum} from 'core/enums';
 import {useStore} from 'shared/hooks';
+import {BasicAsset2dIdEnum} from 'core/enums';
 import {subMenuKeyWidgetEnumMap} from 'core/constants';
 
 import {AssignText, AssignImage, AssignVideo} from './components';
 import * as styled from './ObjectFunction.styled';
 
+const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
+  {id: BasicAsset2dIdEnum.IMAGE, icon: 'picture_upload', label: i18n.t('labels.addPicture')},
+  {id: BasicAsset2dIdEnum.VIDEO, icon: 'video_upload', label: i18n.t('labels.addVideo')},
+  {id: BasicAsset2dIdEnum.TEXT, icon: 'upload', label: i18n.t('labels.addText')}
+];
+
 const ObjectFunction: FC = () => {
   const {universeStore, widgetStore, widgetManagerStore} = useStore();
   const {creatorStore} = widgetStore;
   const {selectedTab, objectFunctionalityStore, selectedObjectId} = creatorStore;
+  const {currentAssetId} = objectFunctionalityStore;
   const {objectStore} = universeStore;
   const {pluginLoader} = objectStore;
 
+  const [activeType, setActiveType] = useState<string | null>(null);
+  const actionRef = useRef<{doSave: () => void}>({doSave: () => {}});
+
   const {t} = useI18n();
-
-  const [modifiedOptionValue, setModifiedOptionValue] = useState<string | null>(null);
-
-  const activeId = modifiedOptionValue;
-
-  const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
-    {id: BasicAsset2dIdEnum.IMAGE, icon: 'picture_upload', label: t('labels.addPicture')},
-    {id: BasicAsset2dIdEnum.VIDEO, icon: 'video_upload', label: t('labels.addVideo')},
-    {id: BasicAsset2dIdEnum.TEXT, icon: 'upload', label: t('labels.addText')}
-  ];
-
-  const tabs: TabInterface<BasicAsset2dIdEnum>[] = objectFunctionalityStore.currentAssetId
-    ? TABS_LIST.filter((tab) => tab.id === objectFunctionalityStore.currentAssetId)
-    : TABS_LIST;
-
-  const actionRef = useRef<{doSave: () => void}>({
-    doSave: () => {}
-  });
-
-  console.log('ObjectFunctionalityPage', {
-    selectedObjectId,
-    modifiedOptionValue,
-    currentAssetId: objectFunctionalityStore.currentAssetId
-  });
 
   // TODO remove this and simplify the store
   useEffect(() => {
@@ -55,8 +40,13 @@ const ObjectFunction: FC = () => {
 
     return () => {
       objectFunctionalityStore.resetModel();
+      objectStore.resetModel();
     };
   }, [selectedObjectId, objectFunctionalityStore, objectStore]);
+
+  const availableTabs: TabInterface<BasicAsset2dIdEnum>[] = currentAssetId
+    ? TABS_LIST.filter(({id}) => id === currentAssetId)
+    : TABS_LIST;
 
   const handleSubMenuActiveChange = (): void => {
     const currentTabIsOnSubMenu = selectedTab && subMenuKeyWidgetEnumMap[selectedTab];
@@ -66,85 +56,37 @@ const ObjectFunction: FC = () => {
   };
 
   const handleSave = async () => {
-    try {
-      actionRef.current?.doSave();
+    actionRef.current?.doSave();
 
-      if (modifiedOptionValue) {
-        objectFunctionalityStore.selectAsset(modifiedOptionValue);
-        await objectFunctionalityStore.updateObject();
-      }
-
-      creatorStore.setSelectedTab(null);
-      handleSubMenuActiveChange();
-
-      toast.info(<ToastContent icon="check" text={t('labels.saved')} />);
-    } catch (e) {
-      console.log(e);
-      toast.error(<ToastContent icon="alert" text={t('labels.errorSaving')} />);
+    if (activeType) {
+      objectFunctionalityStore.selectAsset(activeType);
+      await objectFunctionalityStore.updateObject();
     }
+
+    creatorStore.setSelectedTab(null);
+    handleSubMenuActiveChange();
+    toast.info(<ToastContent icon="check" text={t('labels.saved')} />);
   };
 
   const handleDelete = async () => {
-    try {
-      await objectFunctionalityStore.removeObjectFunctionality();
+    await objectFunctionalityStore.removeObjectFunctionality();
 
-      creatorStore.setSelectedTab(null);
-      handleSubMenuActiveChange();
-
-      toast.info(<ToastContent icon="check" text={t('labels.deleted')} />);
-    } catch (e) {
-      console.log(e);
-      toast.error(<ToastContent icon="alert" text={t('labels.errorDeleting')} />);
-    }
-  };
-
-  const handleTypeChange = (value: string) => {
-    console.log('handleTypeChange', value);
-    setModifiedOptionValue(value);
-  };
-
-  const renderBody = () => {
-    if (!selectedObjectId) {
-      return null;
-    }
-
-    switch (activeId) {
-      case BasicAsset2dIdEnum.IMAGE:
-        return <AssignImage actionRef={actionRef} objectId={selectedObjectId} />;
-      case BasicAsset2dIdEnum.TEXT:
-        return <AssignText actionRef={actionRef} objectId={selectedObjectId} />;
-      case BasicAsset2dIdEnum.VIDEO:
-        return (
-          <>
-            {pluginLoader?.plugin ? (
-              <AssignVideo
-                actionRef={actionRef}
-                plugin={pluginLoader.plugin}
-                pluginLoader={pluginLoader}
-                objectId={selectedObjectId}
-              />
-            ) : (
-              <div>
-                Cannot assign functionality because plugin_video is not loaded. Report to
-                development.
-              </div>
-            )}
-          </>
-        );
-      default:
-        return null;
-    }
+    creatorStore.setSelectedTab(null);
+    handleSubMenuActiveChange();
+    toast.info(<ToastContent icon="check" text={t('labels.deleted')} />);
   };
 
   return (
     <styled.Container data-testid="ObjectFunction-test">
-      {!activeId && (
+      {/* FUNCTION IS NOT SELECTED */}
+      {!activeType && (
         <styled.AssignFunctionContainer>
           <styled.Title>{t('labels.assignFunctionToObjectTitle')}</styled.Title>
           <styled.Text>{t('labels.assignFunctionToObjectDescription')}</styled.Text>
+
           <styled.FunctionTypesContainer>
-            {tabs.map((tab) => (
-              <styled.FunctionType key={tab.id} onClick={() => handleTypeChange(tab.id)}>
+            {availableTabs.map((tab) => (
+              <styled.FunctionType key={tab.id} onClick={() => setActiveType(tab.id)}>
                 <IconSvg name={tab.icon} size="xll" isWhite />
                 <styled.FunctionTypeTitle>{tab.label}</styled.FunctionTypeTitle>
               </styled.FunctionType>
@@ -152,25 +94,67 @@ const ObjectFunction: FC = () => {
           </styled.FunctionTypesContainer>
 
           <styled.AssignAttribute>
-            <Button wide icon="sound_add" label={t('actions.addSound')} />
+            <Button
+              wide
+              icon="sound_add"
+              label={t('actions.addSound')}
+              onClick={() => setActiveType('sound')}
+            />
           </styled.AssignAttribute>
         </styled.AssignFunctionContainer>
       )}
-      <styled.PanelBody>{renderBody()}</styled.PanelBody>
 
-      {activeId && (
-        <styled.ActionBar>
-          <Button
-            label={t('actions.back')}
-            variant="secondary"
-            onClick={() => setModifiedOptionValue(null)}
-          />
-          {objectFunctionalityStore.currentAssetId ? (
-            <Button label={t('actions.delete')} onClick={handleDelete} />
-          ) : (
-            <Button label={t('actions.embed')} onClick={handleSave} />
-          )}
-        </styled.ActionBar>
+      {/* FUNCTION IS NOT SELECTED */}
+      {activeType && !!selectedObjectId && (
+        <>
+          <styled.PanelBody>
+            {/* ASSIGN IMAGE */}
+            {activeType === BasicAsset2dIdEnum.IMAGE && (
+              <AssignImage actionRef={actionRef} objectId={selectedObjectId} />
+            )}
+
+            {/* ASSIGN TEXT */}
+            {activeType === BasicAsset2dIdEnum.TEXT && (
+              <AssignText actionRef={actionRef} objectId={selectedObjectId} />
+            )}
+
+            {/* ASSIGN VIDEO */}
+            {activeType === BasicAsset2dIdEnum.VIDEO && (
+              <>
+                {pluginLoader?.plugin ? (
+                  <AssignVideo
+                    actionRef={actionRef}
+                    plugin={pluginLoader.plugin}
+                    pluginLoader={pluginLoader}
+                    objectId={selectedObjectId}
+                  />
+                ) : (
+                  <div>
+                    <div>Cannot assign functionality because plugin_video is not loaded.</div>
+                    <div>Report to development.</div>
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* ASSIGN SOUND */}
+            {/* FIXME: Temp solutions. It will be moved to the new Inspector */}
+            {activeType === 'sound' && <div>SOUND</div>}
+          </styled.PanelBody>
+
+          <styled.ActionBar>
+            <Button
+              variant="secondary"
+              label={t('actions.back')}
+              onClick={() => setActiveType(null)}
+            />
+            {currentAssetId ? (
+              <Button label={t('actions.delete')} onClick={handleDelete} />
+            ) : (
+              <Button label={t('actions.embed')} onClick={handleSave} />
+            )}
+          </styled.ActionBar>
+        </>
       )}
     </styled.Container>
   );
