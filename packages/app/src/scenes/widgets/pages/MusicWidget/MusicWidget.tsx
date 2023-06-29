@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Frame, Panel, SoundItem} from '@momentum-xyz/ui-kit';
+import {Panel, SoundItem} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
@@ -24,13 +24,6 @@ const MusicWidget: FC = () => {
         title={t('labels.sound')}
         onClose={() => widgetManagerStore.close(WidgetEnum.MUSIC)}
       >
-        <Frame>
-          <styled.Head>
-            <styled.Title>{t('titles.odysseySoundtrack')}</styled.Title>
-            <styled.Message>{t('messages.odysseySoundtrack')}</styled.Message>
-          </styled.Head>
-        </Frame>
-
         <styled.TracksContainer>
           {/* ACTIVE TRACK */}
           <MusicPlayerView />
