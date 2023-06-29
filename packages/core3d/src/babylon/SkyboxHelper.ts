@@ -12,6 +12,7 @@ import {
 export class SkyboxHelper {
   static defaultSkyboxTextureSize = 's8/';
   static currentSkybox: Nullable<PhotoDome> = null;
+  static currentSkyboxUrl = '';
 
   static setCubemapSkybox(scene: Scene, url: string): void {
     const skybox = MeshBuilder.CreateBox('skyBox', {size: 1000.0}, scene);
@@ -46,6 +47,7 @@ export class SkyboxHelper {
       }
 
       this.currentSkybox = dome;
+      this.currentSkyboxUrl = url;
     };
   }
 }
