@@ -833,6 +833,7 @@ export const enGb = {
       remove: 'Remove',
       mute: 'Mute',
       unmute: 'Unmute',
+      addSound: 'Add a sound',
       startScreenShare: 'Start screensharing',
       accept: 'Accept',
       switchDevice: 'Switch device',

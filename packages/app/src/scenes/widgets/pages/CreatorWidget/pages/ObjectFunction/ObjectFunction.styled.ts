@@ -2,7 +2,7 @@ import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding: 20px 10px 10px 10px;
+  padding: 10px;
   width: 100%;
 `;
 
@@ -12,7 +12,6 @@ export const HeadingWrapper = styled.div`
 `;
 
 export const PanelBody = styled.div`
-  padding: 10px 0 0 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -31,14 +30,16 @@ export const ActionBar = styled.div`
 `;
 
 export const AssignFunctionContainer = styled.div``;
+
 export const Title = styled.h1`
   font-weight: 600;
   font-size: 15px;
   line-height: 22px;
-  letter-spacing: 0.2em;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
   margin-bottom: 12px;
 `;
+
 export const Text = styled.p`
   font-weight: 400;
   font-size: 14px;
@@ -47,28 +48,37 @@ export const Text = styled.p`
   align-items: center;
   letter-spacing: 0.02em;
 `;
+
 export const FunctionTypesContainer = styled.div`
-  margin-top: 22px;
-  padding-top: 22px;
+  margin: 20px 0 0 0;
+  padding: 20px 0 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
-  display: flex;
-  flex-wrap: wrap;
   gap: 10px;
 `;
+
 export const FunctionType = styled.button`
+  display: flex;
+  height: 110px;
   background-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
   border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
-  height: 110px;
-  width: 175px;
   border-radius: 4px;
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: ${(props) => props.theme.text};
+  font-size: var(--font-size-s);
 `;
+
 export const FunctionTypeTitle = styled.p`
   line-height: 22px;
   letter-spacing: 0.02em;
   margin-top: 8px;
+`;
+
+export const AssignAttribute = styled.p`
+  margin: 20px 0 0 0;
+  padding: 20px 0 0 0;
+  border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
 `;

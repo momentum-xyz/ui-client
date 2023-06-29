@@ -94,23 +94,29 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
                     />
                   )
                 )}
-                {!(value || assetStore.imageSrc) && (
-                  <styled.DragAndDropPrompt>
-                    <span>{t('messages.uploadAssetPictureDescription')}</span>
-                    <span>{t('labels.or')}</span>
-                  </styled.DragAndDropPrompt>
-                )}
-                <FileUploader
-                  label={t('actions.uploadYourAsset')}
-                  dragActiveLabel={t('actions.dropItHere')}
-                  maxSize={MAX_ASSET_SIZE_B}
-                  fileType="image"
-                  onFilesUpload={(d) => {
-                    setHasImage(true);
-                    onChange(d);
-                  }}
-                  enableDragAndDrop={true}
-                />
+
+                <styled.Uploader>
+                  <FileUploader
+                    enableDragAndDrop
+                    label={t('actions.uploadYourAsset')}
+                    dragActiveLabel={t('actions.dropItHere')}
+                    maxSize={MAX_ASSET_SIZE_B}
+                    fileType="image"
+                    onFilesUpload={(d) => {
+                      setHasImage(true);
+                      onChange(d);
+                    }}
+                  >
+                    <>
+                      {!(value || assetStore.imageSrc) && (
+                        <styled.DragAndDropPrompt>
+                          <span>{t('messages.uploadAssetPictureDescription')}</span>
+                          <span>{t('labels.or')}</span>
+                        </styled.DragAndDropPrompt>
+                      )}
+                    </>
+                  </FileUploader>
+                </styled.Uploader>
               </styled.ImageUploadContainer>
             )}
           />
