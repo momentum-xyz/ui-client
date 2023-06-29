@@ -16,5 +16,6 @@ export enum AttributeNameEnum {
   TELEPORT = 'teleport',
   OBJECT_COLOR = 'object_color',
   SPAWN_POINT = 'spawn_point',
-  TIMELINE_LAST_SEEN = 'timeline_last_seen'
+  TIMELINE_LAST_SEEN = 'timeline_last_seen',
+  SOUNDTRACK = 'soundtrack'
 }

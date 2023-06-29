@@ -21,6 +21,18 @@ const MediaUploader = types.compose(
         );
 
         return fileResponse?.hash || null;
+      }),
+      uploadAudio: flow(function* (file?: File) {
+        if (!file) {
+          return null;
+        }
+
+        const fileResponse: UploadFileResponse = yield self.fileRequest.send(
+          api.mediaRepository.uploadAudio,
+          {file: file}
+        );
+
+        return fileResponse?.hash || null;
       })
     }))
     .views((self) => ({

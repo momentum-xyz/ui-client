@@ -36,7 +36,7 @@ const World2dPage: FC = () => {
       timelineStore.unsubscribe();
       PosBusService.leaveWorld();
     };
-  }, [worldId, timelineStore, agoraStore, universeStore, widgetManagerStore, sessionStore]);
+  }, [worldId]);
 
   const onInviteToVoiceChat = (userId: string) => {
     console.log('Invite to the Voice chat: ', userId);

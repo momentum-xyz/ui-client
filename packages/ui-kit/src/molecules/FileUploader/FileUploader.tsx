@@ -1,4 +1,4 @@
-import {FC, useCallback} from 'react';
+import {FC, ReactNode, useCallback} from 'react';
 import cn from 'classnames';
 import {useDropzone} from 'react-dropzone';
 
@@ -14,11 +14,18 @@ export interface FileUploaderPropsInterface {
   dragActiveLabel: string;
   onFilesUpload: (file: File | undefined) => void;
   onError?: (error: Error) => void;
-  fileType?: 'image' | 'video';
+  fileType?: 'image' | 'video' | 'audio';
   maxSize?: number;
   enableDragAndDrop?: boolean;
   disabled?: boolean;
+  children?: ReactNode;
 }
+
+const ALLOWED_EXTENSIONS = {
+  image: {'image/*': ['.jpeg', '.png', '.jpg', '.svg', '.gif']},
+  video: {'video/*': ['.mp4', '.mov', '.wmv', '.mpeg', '.webm', '.mkv']},
+  audio: {'audio/*': ['.mp3', '.ogg', '.aac', '.webm', '.flac']}
+};
 
 /*
  * FileUploader: Component used for uploading files.
@@ -36,7 +43,8 @@ const FileUploader: FC<FileUploaderPropsInterface> = ({
   fileType,
   maxSize = 3 * Math.pow(1024, 2),
   enableDragAndDrop = true,
-  disabled
+  disabled,
+  children
 }) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -57,9 +65,10 @@ const FileUploader: FC<FileUploaderPropsInterface> = ({
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop,
-    accept: fileType ? {[`${fileType as string}/*`]: []} : undefined, // TODO AK Test if this works as intended
-    multiple: false
+    multiple: false,
+    accept: fileType ? ALLOWED_EXTENSIONS[fileType] : undefined
   });
+
   const {onClick, ...restRootProps} = getRootProps();
 
   return (
@@ -69,8 +78,11 @@ const FileUploader: FC<FileUploaderPropsInterface> = ({
       {isDragActive ? (
         <styled.Text>{dragActiveLabel}</styled.Text>
       ) : (
-        // @ts-ignore: FIXME
-        <Button variant="secondary" label={label} onClick={onClick} disabled={disabled} />
+        <>
+          {children}
+          {/* @ts-ignore: FIXME */}
+          <Button variant="secondary" label={label} onClick={onClick} disabled={disabled} />
+        </>
       )}
     </styled.Container>
   );

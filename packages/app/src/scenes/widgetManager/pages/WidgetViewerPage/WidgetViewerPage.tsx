@@ -34,6 +34,8 @@ const WidgetViewerPage: FC = () => {
         return <widgets.TimelineWidget />;
       case WidgetEnum.STAKING:
         return <widgets.StakingWidget {...widgetInfo} />;
+      case WidgetEnum.MUSIC:
+        return <widgets.MusicWidget />;
       case WidgetEnum.VOICE_CHAT:
         return <widgets.VoiceChatWidget />;
       case WidgetEnum.WORLD_PROFILE:

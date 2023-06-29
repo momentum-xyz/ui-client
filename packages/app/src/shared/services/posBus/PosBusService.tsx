@@ -266,6 +266,13 @@ class PosBusService {
         }
         break;
       }
+      case AttributeNameEnum.SOUNDTRACK: {
+        const value = msg.value;
+        if (value?.tracks) {
+          Event3dEmitter.emit('SoundtrackChanged', value.tracks);
+        }
+        break;
+      }
     }
   }
 
