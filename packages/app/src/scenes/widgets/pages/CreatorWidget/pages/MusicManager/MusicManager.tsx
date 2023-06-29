@@ -22,15 +22,12 @@ const MusicManager: FC = () => {
 
   const handlePublish = async (form: SoundFormInterface) => {
     if (await musicManagerStore.publishSound(form, worldId)) {
-      await musicStore.fetchTracks(worldId);
       setIsNewForm(false);
     }
   };
 
   const handleDelete = async (hash: string) => {
-    if (await musicManagerStore.deleteSound(hash, worldId)) {
-      await musicStore.fetchTracks(worldId);
-    }
+    await musicManagerStore.deleteSound(hash, worldId);
   };
 
   return (

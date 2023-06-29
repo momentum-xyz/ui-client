@@ -1,17 +1,17 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import ReactHowler from 'react-howler';
-import {MediaFileInterface, RequestModel, ResetModel} from '@momentum-xyz/core';
+import {Event3dEmitter, MediaFileInterface, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {TrackStateInterface} from '@momentum-xyz/ui-kit';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
 import {api} from 'api';
 import {PluginIdEnum} from 'api/enums';
 import {storage} from 'shared/services';
-import {TrackInfo} from 'core/models';
+import {TrackInfo, TrackInfoModelInterface} from 'core/models';
 import {StorageKeyEnum} from 'core/enums';
 import {getTrackAbsoluteUrl} from 'core/utils';
 
-const DEFAULT_VOLUME_PERCENT = 30;
+const DEFAULT_VOLUME_PERCENT = 25;
 
 const MusicStore = types
   .compose(
@@ -42,21 +42,7 @@ const MusicStore = types
     },
     setPlayer(player: ReactHowler) {
       self.player = player;
-    },
-    fetchTracks: flow(function* (worldId: string) {
-      const attributeResponse = yield self.fetchRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
-        {
-          spaceId: worldId,
-          plugin_id: PluginIdEnum.CORE,
-          attribute_name: AttributeNameEnum.SOUNDTRACK
-        }
-      );
-
-      if (attributeResponse) {
-        self.tracks = cast(attributeResponse.tracks || []);
-      }
-    })
+    }
   }))
   .actions((self) => ({
     start(trackHash: string): void {
@@ -109,6 +95,37 @@ const MusicStore = types
 
       self.trackHash = self.tracks[targetIndex].render_hash;
       this.setHowlerSeek(0);
+    }
+  }))
+  .actions((self) => ({
+    fetchTracks: flow(function* (worldId: string) {
+      const attributeResponse = yield self.fetchRequest.send(
+        api.spaceAttributeRepository.getSpaceAttribute,
+        {
+          spaceId: worldId,
+          plugin_id: PluginIdEnum.CORE,
+          attribute_name: AttributeNameEnum.SOUNDTRACK
+        }
+      );
+
+      if (attributeResponse) {
+        self.tracks = cast(attributeResponse.tracks || []);
+      }
+    }),
+    refreshTracks(tracks: TrackInfoModelInterface[]): void {
+      // New track list doesn't have the track which is playing now
+      if (!tracks.some((t) => t.render_hash === self.trackHash)) {
+        self.stop();
+      }
+      self.tracks = cast(tracks);
+    }
+  }))
+  .actions((self) => ({
+    subscribe: () => {
+      Event3dEmitter.on('SoundtrackChanged', self.refreshTracks);
+    },
+    unsubscribe: () => {
+      Event3dEmitter.off('SoundtrackChanged', self.refreshTracks);
     }
   }))
   .actions((self) => ({

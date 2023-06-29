@@ -15,8 +15,10 @@ const MusicPlayer: FC = () => {
   useEffect(() => {
     if (worldId) {
       musicStore.init(worldId);
+      musicStore.subscribe();
     }
     return () => {
+      musicStore.unsubscribe();
       musicStore.resetModel();
     };
   }, [musicStore, worldId]);
