@@ -25,16 +25,12 @@ import * as styled from './CustomSkyboxWithAI.styled';
 interface SkyboxInfoInterface {
   name: string;
   type: 'COMMUNITY' | 'PRIVATE';
-  file: File;
 }
 
 interface AIParamsInterface {
   styleId?: number;
   prompt: string;
 }
-
-// const MAX_ASSET_SIZE_MB = 8;
-// const MAX_ASSET_SIZE_B = MAX_ASSET_SIZE_MB * Math.pow(1024, 2);
 
 interface PropsInterface {
   onBack: () => void;
@@ -50,6 +46,7 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
     fetchAIStyles,
     AIStyles,
     generateAISkybox,
+    generatedSkyboxFile,
     updateSkyboxGenerationStatus,
     isSkyboxGenerationPending,
     isSkyboxGenerationComplete,
@@ -76,6 +73,42 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
     }
   }, [AIStyles, fetchAIStyles]);
 
+  // useEffect(() => {
+  //   setMode('review');
+
+  //   updateSkyboxGenerationStatus({
+  //     thumb_url:
+  //       'https://blockade-platform-production.s3.amazonaws.com/thumbs/imagine/thumb_vibrant_microdetailed_digital_art_detailed_digital_vr_painting_sky__c24586a3c27d4396__6667781_c.jpg?ver=1',
+  //     pusher_event: 'status_update',
+  //     created_at: {},
+  //     file_url:
+  //       'https://blockade-platform-production.s3.amazonaws.com/images/imagine/vibrant_microdetailed_digital_art_detailed_digital_vr_painting_sky__c24586a3c27d4396__6667781_c.jpg?ver=1',
+  //     type: 'skybox',
+  //     prompt: 'sky',
+  //     remix_imagine_id: null,
+  //     title: 'World #6667781',
+  //     status: 'complete',
+  //     error_message: null,
+  //     skybox_id: 5,
+  //     skybox_style_id: 5,
+  //     depth_map_url: '',
+  //     id: 6667781,
+  //     skybox_name: 'Digital Painting',
+  //     negative_text: null,
+  //     obfuscated_id: 'a2c345493364a169a76277aa719ce4db',
+  //     remix_obfuscated_id: null,
+  //     seed: 631854419,
+  //     isMyFavorite: false,
+  //     user_id: 2436,
+  //     username: 'cs@odyssey.org',
+  //     pusher_channel: 'status_update_a2c345493364a169a76277aa719ce4db',
+  //     queue_position: 0,
+  //     updated_at: {},
+  //     message: null,
+  //     skybox_style_name: 'Digital Painting'
+  //   } as any);
+  // }, []);
+
   usePosBusEvent('attribute-value-changed', ({attribute_name, value}) => {
     console.log('GAGA space-attribute-changed', {attribute_name, value});
     if (attribute_name === 'skybox_ai' && skyboxSelectorStore.pendingGenerationId) {
@@ -86,13 +119,16 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
     }
   });
 
-  useSkyboxPreview({url: skyboxSelectorStore.generatedSkyboxPreviewUrl});
+  const {skipRestoringPreviousSkybox} = useSkyboxPreview({
+    url: skyboxSelectorStore.generatedSkyboxPreviewUrl
+  });
 
   const {
     control: controlAI,
     handleSubmit: handleSubmitAI,
-    formState: {errors: errorsAI}
-    // setError
+    getValues,
+    formState: {errors: errorsAI},
+    setError: setErrorAI
   } = useForm<AIParamsInterface>({
     defaultValues: {
       prompt: ''
@@ -102,7 +138,7 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
   const {
     control,
     handleSubmit,
-    // formState: {errors},
+    formState: {errors},
     setError
   } = useForm<SkyboxInfoInterface>({
     defaultValues: {
@@ -110,25 +146,28 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
       type: 'COMMUNITY'
     }
   });
+  console.log('CustomSkyboxWithAI errors', {errors, errorsAI});
 
   const options = [
-    {value: 'COMMUNITY', label: 'Available for Community'},
-    {value: 'PRIVATE', label: 'Private Asset'}
+    {value: 'COMMUNITY', label: 'Community Library'},
+    {value: 'PRIVATE', label: 'Private Library'}
   ];
 
-  const formSubmitHandler: SubmitHandler<SkyboxInfoInterface> = async ({file, name, type}) => {
-    if (!user) {
+  const formSubmitHandler: SubmitHandler<SkyboxInfoInterface> = async ({name, type}) => {
+    if (!user || !generatedSkyboxFile) {
       return;
     }
-    const isUploadOK = await uploadSkybox(worldId, user.id, file, name);
+    // TODO type
+    const isUploadOK = await uploadSkybox(worldId, user.id, generatedSkyboxFile, name);
     if (!isUploadOK) {
-      setError('file', {
+      setError('root', {
         type: 'submit'
       });
       toast.error(<ToastContent isDanger icon="alert" text={t('assetsUploader.errorSave')} />);
       return;
     } else {
       toast.info(<ToastContent icon="alert" text={t('assetsUploader.successMessage')} />);
+      skipRestoringPreviousSkybox();
       onBack();
     }
   };
@@ -139,12 +178,12 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
       await generateAISkybox(worldId, prompt, styleId);
       setMode('review');
     } catch (e) {
-      // toast.info(<ToastContent icon="alert" text={t('assetsUploader.successMessage')} />);
-
-      // setErrorAI('file', {
-      //   type: 'submit'
-      // });
-      toast.error(<ToastContent isDanger icon="alert" text={t('assetsUploader.errorSave')} />);
+      setErrorAI('root', {
+        type: 'submit'
+      });
+      toast.error(
+        <ToastContent isDanger icon="alert" text={t('skyboxGenerator.errorGenerating')} />
+      );
     }
   };
 
@@ -161,10 +200,9 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
 
   return (
     <styled.Container data-testid="CreateCustomSkyboxWithAI-test">
+      <styled.Header>{t('messages.createCustomSkyboxTitle')}</styled.Header>
       {mode === 'prepare' && (
         <>
-          {/* <styled.FormContainer> */}
-          <styled.Header>{t('messages.createCustomSkyboxTitle')}</styled.Header>
           <styled.Description>{t('messages.createCustomSkyboxDescription')}</styled.Description>
           <Controller
             name="prompt"
@@ -173,7 +211,6 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
             render={({field: {value, onChange}}) => (
               <Textarea
                 placeholder={t('messages.createCustomSkyboxPlaceholder')}
-                // disabled={isUploadPending}
                 onChange={onChange}
                 value={value}
                 danger={!!errorsAI.prompt}
@@ -200,19 +237,11 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
               />
             )}
           />
-          {/* </styled.FormContainer> */}
-          {/* {isUploadPending && <Loader />} */}
           <br />
           <styled.ControlsRow>
-            <Button
-              label={t('actions.goBack')}
-              disabled={isUploadPending}
-              variant="secondary"
-              onClick={onBack}
-            />
+            <Button label={t('actions.goBack')} variant="secondary" onClick={onBack} />
             <Button
               label={t('messages.createCustomSkyboxGenerateSkybox')}
-              disabled={isUploadPending}
               onClick={() => {
                 handleSubmitAI(formSubmitHandlerAI)();
               }}
@@ -223,84 +252,70 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
 
       {mode === 'review' && (
         <>
-          {skyboxSelectorStore.generatedSkyboxThumbUrl && (
-            // <styled.PreviewImageHolder
-            //   // style={{backgroundImage: `url(${URL.createObjectURL(value)})`}}
-            //   // style={{backgroundImage: `url(${skyboxSelectorStore.generatedSkyboxThumbUrl})`}}
-            // >
-            // </styled.PreviewImageHolder>
-            <div style={{width: '100%', minHeight: 300, border: 'red 1px solid'}}>
-              <img src={skyboxSelectorStore.generatedSkyboxThumbUrl} alt="skybox preview" />
-            </div>
-          )}
-          <styled.FormContainer>
-            {/* <Controller
-              name="file"
-              control={control}
-              rules={{required: true}}
-              render={({field: {value, onChange}}) => (
-                <styled.ImageUploadContainer
-                  className={cn(!!errors.file && 'error', value && 'has-image')}
-                >
-                  {!value && (
-                    <styled.SkyboxInformation>
-                      <h1>{t('messages.uploadCustomSkyboxInfoTitle')}</h1>
-                      <span>{t('messages.uploadCustomSkyboxInfoDescription')}</span>
-                    </styled.SkyboxInformation>
-                  )}
-                  {!!value && (
-                    <styled.PreviewImageHolder
-                      style={{backgroundImage: `url(${URL.createObjectURL(value)})`}}
-                    />
-                  )}
-                  {!isUploadPending && (
-                    <FileUploader
-                      label={value ? t('actions.changeImage') : t('actions.uploadYourAsset')}
-                      dragActiveLabel={t('fileUploader.dragActiveLabel')}
-                      maxSize={MAX_ASSET_SIZE_B}
-                      onFilesUpload={(file) => {
-                        onChange(file || null);
-                      }}
-                      onError={handleUploadError}
-                      fileType="image"
-                    />
-                  )}
-                </styled.ImageUploadContainer>
+          <styled.PromptReview>
+            <styled.PromptReviewLabel>Prompt:</styled.PromptReviewLabel>
+            <styled.PromptReviewValue>"{getValues().prompt}"</styled.PromptReviewValue>
+            <styled.PromptReviewLabel>Art Style:</styled.PromptReviewLabel>
+            <div>{AIStyles?.find((style) => style.id === getValues().styleId)?.name}</div>
+          </styled.PromptReview>
+
+          {isSkyboxGenerationComplete && (
+            <>
+              {skyboxSelectorStore.generatedSkyboxThumbUrl && (
+                <styled.PreviewImageHolder>
+                  <styled.Image
+                    src={skyboxSelectorStore.generatedSkyboxThumbUrl}
+                    alt="skybox preview"
+                  />
+                </styled.PreviewImageHolder>
               )}
-            /> */}
-            <styled.InputsContainer>
-              <Controller
-                name="name"
-                control={control}
-                rules={{required: true}}
-                render={({field: {value, onChange}}) => (
-                  <Input
-                    placeholder={'Name your Asset*' || ''}
-                    value={value}
-                    wide
-                    onChange={(value: string) => {
-                      onChange(value);
-                    }}
-                    disabled={isUploadPending}
+              <styled.FormContainer>
+                <styled.InputsContainer>
+                  <Controller
+                    name="name"
+                    control={control}
+                    rules={{required: true}}
+                    render={({field: {value, onChange}}) => (
+                      <Input
+                        placeholder={'Name your Skybox*' || ''}
+                        value={value}
+                        wide
+                        onChange={(value: string) => {
+                          onChange(value);
+                        }}
+                        disabled={isUploadPending}
+                      />
+                    )}
                   />
-                )}
-              />
-              <Controller
-                name="type"
-                control={control}
-                render={({field: {value, onChange}}) => (
-                  <Radio
-                    name="type"
-                    value={value}
-                    onChange={(value: string) => {
-                      onChange(value);
-                    }}
-                    options={options}
-                  />
-                )}
-              />
-            </styled.InputsContainer>
-          </styled.FormContainer>
+                  {/* TODO implement disabled prop for Radio */}
+                  {!isUploadPending && (
+                    <Controller
+                      name="type"
+                      control={control}
+                      render={({field: {value, onChange}}) => (
+                        <Radio
+                          name="type"
+                          value={value}
+                          onChange={(value: string) => {
+                            onChange(value);
+                          }}
+                          options={options}
+                          // disabled={isUploadPending}
+                        />
+                      )}
+                    />
+                  )}
+                </styled.InputsContainer>
+              </styled.FormContainer>
+            </>
+          )}
+          {isSkyboxGenerationPending && (
+            <styled.SkyboxGenerationLoaderContainer>
+              <styled.Separator />
+              <div>Skybox is Generating, Please Wait</div>
+              <Loader />
+            </styled.SkyboxGenerationLoaderContainer>
+          )}
           {isUploadPending && <Loader />}
           <styled.ControlsRow>
             <Button
@@ -310,7 +325,7 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
               onClick={() => setMode('prepare')}
             />
             <Button
-              label="Publish"
+              label="Save skybox"
               disabled={isUploadPending}
               onClick={() => {
                 handleSubmit(formSubmitHandler)();

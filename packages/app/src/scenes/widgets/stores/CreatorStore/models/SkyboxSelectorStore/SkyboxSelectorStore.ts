@@ -42,7 +42,7 @@ const SkyboxSelectorStore = types
       pendingGenerationErrorMessage: types.maybe(types.string),
       generatedSkyboxThumbUrl: types.maybe(types.string),
       generatedSkyboxPreviewUrl: types.maybe(types.string),
-      generatedSkybox: types.maybe(types.string) // FILE?
+      generatedSkyboxFile: types.maybe(types.frozen<File>())
     })
   )
   .views((self) => ({
@@ -284,14 +284,6 @@ const SkyboxSelectorStore = types
       );
       self.AIStyles = cast(response || []);
     }),
-    fetchGeneratedSkybox: flow(function* (url: string) {
-      const response = yield self.fetchGeneratedSkyboxRequest.send(
-        api.skyboxRepository.fetchGeneratedSkybox,
-        {url}
-      );
-      console.log('Downloaded image:', response);
-      return response;
-    }),
     generateAISkybox: flow(function* (
       worldId: string,
       prompt: string,
@@ -331,10 +323,9 @@ const SkyboxSelectorStore = types
         if (!self.fetchGeneratedSkyboxRequest.isError) {
           console.log('Downloaded image size:', response?.length);
           try {
-            self.generatedSkyboxPreviewUrl = URL.createObjectURL(
-              new Blob([response], {type: 'image/jpeg'})
-              // blob
-            );
+            const blob = new Blob([response], {type: 'image/jpeg'});
+            self.generatedSkyboxPreviewUrl = URL.createObjectURL(blob);
+            self.generatedSkyboxFile = new File([blob], 'skybox.png', {type: 'image/jpeg'});
             console.log('Downloaded image url:', self.generatedSkyboxPreviewUrl);
           } catch (e) {
             console.log('Failed to convert downloaded image:', e);

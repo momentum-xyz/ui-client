@@ -1,3 +1,4 @@
+import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -24,6 +25,20 @@ export const Description = styled.div`
   // font-family: Poppins;
   line-height: 22px;
   letter-spacing: 0.28px;
+`;
+
+export const PromptReview = styled.div`
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 10px;
+  marging-bottom: 10px;
+`;
+export const PromptReviewLabel = styled.div`
+  font-weight: 700;
+`;
+export const PromptReviewValue = styled.div`
+  font-weight: 400;
+  font-style: italic;
 `;
 
 export const FormContainer = styled.div`
@@ -97,15 +112,25 @@ export const SkyboxInformation = styled.div`
   }
 `;
 
-export const PreviewImageHolder = styled.div`
-  height: 360px;
-  width: 360px;
-  background-position: center center;
-  background-size: cover;
-  position: absolute;
+export const SkyboxGenerationLoaderContainer = styled.div`
+  height: 150px;
 `;
 
+export const PreviewImageHolder = styled.div`
+  height: 360px;
+  background-position: center center;
+  background-size: cover;
+  border: 1px solid white;
+  border-radius: 4px;
+`;
 export const Image = styled.img`
   height: 100%;
   width: 100%;
+  border-radius: 4px;
+`;
+
+export const Separator = styled.div`
+  height: 1px;
+  background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
+  margin: 10px 0;
 `;

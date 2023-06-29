@@ -907,6 +907,9 @@ export const enGb = {
       errorTooLargeFile: 'Max file size is {{size}}MB',
       errorSave: 'Error uploading asset'
     },
+    skyboxGenerator: {
+      errorGenerating: 'Error generating skybox'
+    },
     eventList: {
       noGatherings: 'There are no gatherings scheduled for this space.',
       eventItem: {
