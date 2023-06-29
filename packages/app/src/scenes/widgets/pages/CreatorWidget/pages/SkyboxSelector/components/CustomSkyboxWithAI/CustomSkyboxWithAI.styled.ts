@@ -1,12 +1,29 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding: 10px 0 20px 0;
-  margin: 0 auto;
+  padding: 10px;
+  // margin: 0 auto;
   display: flex;
-  width: 390px;
+  // width: 390px;
+  gap: 10px;
   flex-direction: column;
   justify-content: space-between;
+`;
+
+export const Header = styled.div`
+  font-size: var(--font-size-s);
+  // font-family: Poppins;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+`;
+
+export const Description = styled.div`
+  font-size: var(--font-size-m);
+  // font-family: Poppins;
+  line-height: 22px;
+  letter-spacing: 0.28px;
 `;
 
 export const FormContainer = styled.div`

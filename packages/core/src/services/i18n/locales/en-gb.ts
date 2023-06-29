@@ -594,6 +594,7 @@ export const enGb = {
       createCustomSkyboxPlaceholder: 'Enter prompt for AI Skybox here...',
       createCustomSkybixSelectArtStyle: 'Select Art Style',
       createCustomSkyboxGenerateSkybox: 'Generate Skybox',
+      createCustomSkyboxPleaseWait: 'Skybox is Generating, Please Wait',
       uploadCustomSkyboxInfoTitle: 'Drag and drop your custom skybox here',
       uploadCustomSkyboxInfoDescription:
         'Your image must be a 360-degree image. This will allow your skybox to fully surround and immerse you in your world. To avoid any pixelation or distortion, we recommend that your image is high-resolution. Our preferred resolution for images is 4k x 2k, but 2k x 1k is acceptable.',

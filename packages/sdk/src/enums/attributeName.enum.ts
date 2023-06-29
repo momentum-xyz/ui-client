@@ -7,6 +7,7 @@ export enum AttributeNameEnum {
   WEBSITE_LINK = 'website_link',
   ACTIVE_SKYBOX = 'active_skybox',
   SKYBOX_LIST = 'skybox_list',
+  SKYBOX_AI = 'skybox_ai',
   MAGIC_LINKS = 'magic_links',
   EMOJIS = 'emojis',
   EVENTS = 'events',

@@ -267,6 +267,7 @@ class PosBusService {
         break;
       }
     }
+    PosBusEventEmitter.emit('attribute-value-changed', msg);
   }
 
   static sendMyTransform(transform: TransformNoScaleInterface) {
