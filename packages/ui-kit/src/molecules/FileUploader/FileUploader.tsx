@@ -1,4 +1,4 @@
-import {FC, useCallback} from 'react';
+import {FC, ReactNode, useCallback} from 'react';
 import cn from 'classnames';
 import {useDropzone} from 'react-dropzone';
 
@@ -18,6 +18,7 @@ export interface FileUploaderPropsInterface {
   maxSize?: number;
   enableDragAndDrop?: boolean;
   disabled?: boolean;
+  children?: ReactNode;
 }
 
 /*
@@ -36,7 +37,8 @@ const FileUploader: FC<FileUploaderPropsInterface> = ({
   fileType,
   maxSize = 3 * Math.pow(1024, 2),
   enableDragAndDrop = true,
-  disabled
+  disabled,
+  children
 }) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -69,8 +71,11 @@ const FileUploader: FC<FileUploaderPropsInterface> = ({
       {isDragActive ? (
         <styled.Text>{dragActiveLabel}</styled.Text>
       ) : (
-        // @ts-ignore: FIXME
-        <Button variant="secondary" label={label} onClick={onClick} disabled={disabled} />
+        <>
+          {children}
+          {/* @ts-ignore: FIXME */}
+          <Button variant="secondary" label={label} onClick={onClick} disabled={disabled} />
+        </>
       )}
     </styled.Container>
   );

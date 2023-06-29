@@ -19,6 +19,7 @@ const MusicFileForm: FC<PropsInterface> = ({isPending, onPublish, onCancel}) => 
 
   const {
     control,
+    setValue,
     handleSubmit,
     formState: {errors, isValid}
   } = useForm<SoundFormInterface>();
@@ -35,7 +36,15 @@ const MusicFileForm: FC<PropsInterface> = ({isPending, onPublish, onCancel}) => 
           control={control}
           rules={{required: true}}
           render={({field: {value, onChange}}) => {
-            return <SoundUpload value={value} onChange={onChange} />;
+            return (
+              <SoundUpload
+                value={value}
+                onChange={(file) => {
+                  onChange(file);
+                  setValue('name', file ? file.name : '');
+                }}
+              />
+            );
           }}
         />
 

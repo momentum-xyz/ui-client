@@ -7,11 +7,6 @@ export const Uploader = styled.div`
   border-radius: 8px;
   border: 1px dashed ${(props) => props.theme.text};
 
-  button {
-    margin: 0 20px -90px 20px;
-    width: 100%;
-  }
-
   &.hasFile {
     height: initial;
     border: initial;
@@ -19,13 +14,18 @@ export const Uploader = styled.div`
   }
 `;
 
+export const Container = styled.div`
+  button {
+    margin: 0 20px -90px 20px;
+    width: 100%;
+  }
+`;
+
 export const Message = styled.div`
-  position: absolute;
+  padding: 18px 0 0 0;
   display: flex;
+  width: 100%;
   flex-direction: column;
-  right: 20px;
-  left: 20px;
-  top: 18px;
   gap: 10px;
 `;
 
@@ -42,6 +42,10 @@ export const Extensions = styled.div`
 
 export const SelectedFile = styled.div`
   padding: 8px 10px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 6px;
   border-radius: 4px;
   background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
   box-shadow: -1px -1px 2px 0px rgba(158, 238, 255, 0.1);
@@ -50,7 +54,14 @@ export const SelectedFile = styled.div`
   line-height: 24px;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+`;
+
+export const Name = styled.div`
+  min-width: 0;
+
+  div {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 `;

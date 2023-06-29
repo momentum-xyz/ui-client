@@ -1,12 +1,16 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  padding: 0 20px;
   display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: ${(props) => props.theme.text};
   cursor: default;
+  gap: 16px;
 
   button {
     justify-content: center;
@@ -31,6 +35,11 @@ export const DropZone = styled.div`
   bottom: 0;
 `;
 
-export const Text = styled.p`
+export const Text = styled.div`
+  padding: 20px 0 0 0;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
   color: white;
 `;
