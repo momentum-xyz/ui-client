@@ -150,9 +150,6 @@ const ObjectFunction: FC = () => {
               </styled.FunctionType>
             ))}
           </styled.FunctionTypesContainer>
-          <div>
-            <Button wide icon="sound_add" label="Add a sound" />
-          </div>
         </styled.AssignFunctionContainer>
       )}
       <styled.PanelBody>{renderBody()}</styled.PanelBody>
