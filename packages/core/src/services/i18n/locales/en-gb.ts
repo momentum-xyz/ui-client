@@ -504,7 +504,7 @@ export const enGb = {
       userRequestDeny: 'Cannot Accept User Request',
       offStageFailure: 'Cannot send {{user}} off stage',
       followingSoundFiles: 'You can upload the following sound files',
-      soundExtensions: 'MP3, OGG, ACC and WEBM',
+      soundExtensions: 'MP3, FLAC, OGG, ACC and WEBM',
       joinStageRequestFailure: 'Request has not been made at the moment, try again later',
       joinStageRefused: 'Could not join stage.',
       inviteToStageFailure: 'Cannot invite {{user}} to stage',

@@ -21,6 +21,12 @@ export interface FileUploaderPropsInterface {
   children?: ReactNode;
 }
 
+const ALLOWED_EXTENSIONS = {
+  image: {'image/*': ['.jpeg', '.png', '.jpg', '.svg', '.gif']},
+  video: {'video/*': ['.mp4', '.mov', '.wmv', '.mpeg', '.webm', '.mkv']},
+  audio: {'audio/*': ['.mp3', '.ogg', '.aac', '.webm', '.flac']}
+};
+
 /*
  * FileUploader: Component used for uploading files.
  *
@@ -59,9 +65,10 @@ const FileUploader: FC<FileUploaderPropsInterface> = ({
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop,
-    accept: fileType ? {[`${fileType as string}/*`]: []} : undefined, // TODO AK Test if this works as intended
-    multiple: false
+    multiple: false,
+    accept: fileType ? ALLOWED_EXTENSIONS[fileType] : undefined
   });
+
   const {onClick, ...restRootProps} = getRootProps();
 
   return (
