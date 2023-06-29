@@ -11,6 +11,7 @@ import {
 } from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
+import {useSkyboxPreview} from '@momentum-xyz/core3d';
 // import cn from 'classnames';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {toast} from 'react-toastify';
@@ -84,6 +85,8 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
       }
     }
   });
+
+  useSkyboxPreview({url: skyboxSelectorStore.generatedSkyboxPreviewUrl});
 
   const {
     control: controlAI,
@@ -227,7 +230,7 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
             // >
             // </styled.PreviewImageHolder>
             <div style={{width: '100%', minHeight: 300, border: 'red 1px solid'}}>
-              <img src={skyboxSelectorStore.generatedSkyboxThumbUrl} />
+              <img src={skyboxSelectorStore.generatedSkyboxThumbUrl} alt="skybox preview" />
             </div>
           )}
           <styled.FormContainer>

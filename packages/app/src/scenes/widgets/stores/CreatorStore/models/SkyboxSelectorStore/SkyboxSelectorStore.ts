@@ -41,6 +41,7 @@ const SkyboxSelectorStore = types
       pendingGenerationStatus: types.maybe(types.string),
       pendingGenerationErrorMessage: types.maybe(types.string),
       generatedSkyboxThumbUrl: types.maybe(types.string),
+      generatedSkyboxPreviewUrl: types.maybe(types.string),
       generatedSkybox: types.maybe(types.string) // FILE?
     })
   )
@@ -317,23 +318,33 @@ const SkyboxSelectorStore = types
     })
   }))
   .actions((self) => ({
-    updateSkyboxGenerationStatus: (statusUpdate: SkyboxGenerationStatusInterface) => {
+    updateSkyboxGenerationStatus: flow(function* (statusUpdate: SkyboxGenerationStatusInterface) {
       console.log('UPDATE Skybox generation status:', statusUpdate);
       self.pendingGenerationStatus = statusUpdate.status;
       if (statusUpdate.status === 'complete') {
         self.generatedSkyboxThumbUrl = statusUpdate.thumb_url;
-        self.generatedSkybox = statusUpdate.file_url;
 
-        self
-          .fetchGeneratedSkybox(statusUpdate.file_url)
-          .then((response) => {
-            console.log('Downloaded image:', response);
-          })
-          .catch((error) => {
-            console.log('Failed to download image:', error);
-          });
+        const response = yield self.fetchGeneratedSkyboxRequest.send(
+          api.skyboxRepository.fetchGeneratedSkybox,
+          {skyboxId: statusUpdate.id}
+        );
+        if (!self.fetchGeneratedSkyboxRequest.isError) {
+          console.log('Downloaded image size:', response?.length);
+          try {
+            self.generatedSkyboxPreviewUrl = URL.createObjectURL(
+              new Blob([response], {type: 'image/jpeg'})
+              // blob
+            );
+            console.log('Downloaded image url:', self.generatedSkyboxPreviewUrl);
+          } catch (e) {
+            console.log('Failed to convert downloaded image:', e);
+          }
+        } else {
+          console.log('Failed to download image:', self.fetchGeneratedSkyboxRequest.error);
+          self.pendingGenerationErrorMessage = 'Error downloading image';
+        }
       }
-    }
+    })
   }));
 
 export {SkyboxSelectorStore};

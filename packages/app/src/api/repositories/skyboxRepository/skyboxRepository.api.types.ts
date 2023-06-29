@@ -23,7 +23,7 @@ export interface GenerateSkyboxResponse {
 }
 
 export interface FetchGeneratedSkyboxRequest {
-  url: string;
+  skyboxId: string | number;
 }
 
 export interface AIStyleItemInterface {

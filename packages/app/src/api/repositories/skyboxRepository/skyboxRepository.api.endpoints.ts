@@ -3,6 +3,7 @@ export const skyboxRepositoryEndpoints = () => {
 
   return {
     base: BASE_URL,
+    skybox: `${BASE_URL}/:skyboxId`,
     styles: `${BASE_URL}/styles`,
     generate: `${BASE_URL}/generate`
   };

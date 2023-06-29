@@ -1,3 +1,4 @@
+import {generatePath} from 'react-router-dom';
 import {RequestInterface} from '@momentum-xyz/core';
 
 import {request} from 'api/request';
@@ -24,8 +25,15 @@ export const generateSkybox: RequestInterface<GenerateSkyboxRequest, GenerateSky
   });
 };
 
-export const fetchGeneratedSkybox: RequestInterface<FetchGeneratedSkyboxRequest, any> = ({url}) => {
-  return request.get(url);
+export const fetchGeneratedSkybox: RequestInterface<FetchGeneratedSkyboxRequest, any> = ({
+  skyboxId
+}) => {
+  const url = generatePath(skyboxRepositoryEndpoints().skybox, {skyboxId});
+  return request.get(
+    url,
+    // {responseType: 'blob'}
+    {responseType: 'arraybuffer'}
+  );
 };
 
 export const fetchAIStyles: RequestInterface<null, FetchAIStylesResponse> = () => {
