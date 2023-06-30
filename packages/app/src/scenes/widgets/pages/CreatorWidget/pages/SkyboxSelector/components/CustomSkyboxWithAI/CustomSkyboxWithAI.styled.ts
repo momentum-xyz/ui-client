@@ -8,7 +8,8 @@ export const Container = styled.div`
   // width: 390px;
   gap: 10px;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  flex: 1 0 auto;
 `;
 
 export const Header = styled.div`
@@ -113,15 +114,11 @@ export const SkyboxInformation = styled.div`
 `;
 
 export const SkyboxGenerationLoaderContainer = styled.div`
-  height: 150px;
+  height: 167px;
 `;
 
 export const PreviewImageHolder = styled.div`
-  height: 360px;
-  background-position: center center;
-  background-size: cover;
-  border: 1px solid white;
-  border-radius: 4px;
+  position: relative;
 `;
 export const Image = styled.img`
   height: 100%;

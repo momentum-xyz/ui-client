@@ -1,0 +1,1 @@
+export const BLOCKADE_LABS_ARTIST_NAME = '__BLOCKADE_LABS__';

@@ -7,7 +7,8 @@ import {
   // ErrorsEnum,
   Loader,
   Textarea,
-  Select
+  Select,
+  Image
 } from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
@@ -16,9 +17,10 @@ import {useSkyboxPreview} from '@momentum-xyz/core3d';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {toast} from 'react-toastify';
 
-import {ToastContent} from 'ui-kit';
+import {BlockadeLabs, ToastContent} from 'ui-kit';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {SkyboxGenerationStatusInterface} from 'api';
+import {BLOCKADE_LABS_ARTIST_NAME} from 'core/constants';
 
 import * as styled from './CustomSkyboxWithAI.styled';
 
@@ -158,7 +160,13 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
       return;
     }
     // TODO type
-    const isUploadOK = await uploadSkybox(worldId, user.id, generatedSkyboxFile, name);
+    const isUploadOK = await uploadSkybox(
+      worldId,
+      user.id,
+      generatedSkyboxFile,
+      name,
+      BLOCKADE_LABS_ARTIST_NAME
+    );
     if (!isUploadOK) {
       setError('root', {
         type: 'submit'
@@ -263,10 +271,9 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
             <>
               {skyboxSelectorStore.generatedSkyboxThumbUrl && (
                 <styled.PreviewImageHolder>
-                  <styled.Image
-                    src={skyboxSelectorStore.generatedSkyboxThumbUrl}
-                    alt="skybox preview"
-                  />
+                  <Image src={skyboxSelectorStore.generatedSkyboxThumbUrl} height={240} bordered />
+
+                  <BlockadeLabs small bottomRightAbsolute />
                 </styled.PreviewImageHolder>
               )}
               <styled.FormContainer>
@@ -334,6 +341,8 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
           </styled.ControlsRow>
         </>
       )}
+
+      <BlockadeLabs withLicense bottomRightFlex />
     </styled.Container>
   );
 };

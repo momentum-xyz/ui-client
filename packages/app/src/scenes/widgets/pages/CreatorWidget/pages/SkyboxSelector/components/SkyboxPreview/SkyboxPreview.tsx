@@ -1,7 +1,9 @@
-import {Frame, Button, Image} from '@momentum-xyz/ui-kit';
+import {Button, Image} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {Asset3dInterface} from 'core/models';
+import {BLOCKADE_LABS_ARTIST_NAME} from 'core/constants';
+import {BlockadeLabs} from 'ui-kit';
 
 import * as styled from './SkyboxPreview.styled';
 
@@ -16,18 +18,29 @@ interface PropsInterface {
 export const SkyboxPreview = ({skybox, onSkyboxSelect, onBack}: PropsInterface): JSX.Element => {
   const {t} = useI18n();
 
+  const isBlockadeLabs = skybox.artist_name === BLOCKADE_LABS_ARTIST_NAME;
+
   return (
     <styled.Container>
       <styled.SkyboxInfoContainer>
-        <Frame>
+        <styled.PreviewHolder>
           <Image src={skybox.image} height={360} bordered />
-        </Frame>
+          {isBlockadeLabs && <BlockadeLabs small bottomRightAbsolute />}
+        </styled.PreviewHolder>
         <styled.SkyboxTitle>{skybox.name}</styled.SkyboxTitle>
         {skybox.artist_name && (
           <styled.Row>
             <styled.Prop>
               <styled.PropName>Created by:</styled.PropName>
-              <styled.PropValue>{skybox.artist_name}</styled.PropValue>
+              <styled.PropValue>
+                {!isBlockadeLabs ? (
+                  skybox.artist_name
+                ) : (
+                  <a href="https://blockadelabs.com/" target="_blank" rel="noreferrer">
+                    Blockade Labs
+                  </a>
+                )}
+              </styled.PropValue>
             </styled.Prop>
           </styled.Row>
         )}
@@ -43,6 +56,7 @@ export const SkyboxPreview = ({skybox, onSkyboxSelect, onBack}: PropsInterface):
         /> */}
         <Button label="Change Skybox" onClick={() => onSkyboxSelect(skybox)} />
       </styled.ControlsRow>
+      {isBlockadeLabs && <BlockadeLabs withLicense bottomRightFlex />}
     </styled.Container>
   );
 };
