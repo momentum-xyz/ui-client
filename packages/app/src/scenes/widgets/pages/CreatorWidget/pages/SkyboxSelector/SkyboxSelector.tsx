@@ -110,7 +110,7 @@ const SkyboxSelector: FC = () => {
         </styled.ControlsContainer>
       </styled.Container>
 
-      {mode === 'view' && (
+      {mode === 'view' && !previewSkybox && (
         <styled.SkyboxListContainer>
           <styled.SkyboxListHeader>
             <span>
@@ -136,7 +136,7 @@ const SkyboxSelector: FC = () => {
       {mode === 'upload' && <UploadSkybox onBack={() => setMode('view')} />}
       {mode === 'gen_ai' && <CustomSkyboxWithAI onBack={() => setMode('view')} />}
 
-      {previewSkybox && (
+      {mode === 'view' && previewSkybox && (
         <SkyboxPreview
           skybox={previewSkybox}
           onSkyboxSelect={(sb) => {
