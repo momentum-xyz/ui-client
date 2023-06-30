@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
@@ -15,7 +15,7 @@ interface PropsInterface {
 }
 
 const AssignSound: FC<PropsInterface> = ({objectId}) => {
-  const {universeStore} = useStore();
+  const {universeStore, musicStore} = useStore();
   const {worldId} = universeStore;
 
   const [isNewForm, setIsNewForm] = useState(false);
@@ -27,6 +27,17 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
     handleSubmit,
     formState: {errors}
   } = useForm<TextObjectInterface>({});
+
+  useEffect(() => {
+    const isWorldMusicPlaying = musicStore.musicPlayer.isPlaying;
+    musicStore.musicPlayer.pause();
+
+    return () => {
+      if (isWorldMusicPlaying) {
+        musicStore.musicPlayer.play();
+      }
+    };
+  }, [musicStore.musicPlayer]);
 
   console.log(worldId, control, errors, t, handleSubmit);
 
