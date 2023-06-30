@@ -2,7 +2,6 @@ import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding: 10px;
   width: 100%;
 `;
 
@@ -18,18 +17,21 @@ export const PanelBody = styled.div`
 `;
 
 export const ActionBar = styled.div`
-  padding: 20px 0 0 0;
-  display: flex;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   justify-content: center;
-  align-items: space-between;
   gap: 40px;
+
   & > button {
     flex: 1;
     justify-content: center;
   }
 `;
 
-export const AssignFunctionContainer = styled.div``;
+export const AssignFunctionContainer = styled.div`
+  padding: 10px;
+`;
 
 export const Title = styled.h1`
   font-weight: 600;

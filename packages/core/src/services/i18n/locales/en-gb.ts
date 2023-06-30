@@ -593,6 +593,8 @@ export const enGb = {
       noSoundSelected: 'No sound selected',
       odysseySoundtrack:
         'Here you can set the soundtrack for your Odyssey. The song you select will be heard by visitors to your odyssey when they enter your world. Please be careful only to upload songs you have the rights to. Your Soundtrack will play on loop.',
+      objectSound:
+        'By embedding a sound to this object; users will also be able to hear this sound played when they fly towards the object To embed a sound; add a Soundcloud url to the sound in the input field below. Or choose a sound from your library.',
       uploadAssetInfoTitle: 'Drag and drop your asset here',
       uploadAssetPictureDescription: 'Drag and drop YOUR CUSTOM image here',
       uploadAssetInfoDescription: 'We support GLB Models & the max file size cannot exceed 50mb',
@@ -618,6 +620,7 @@ export const enGb = {
       by: 'By',
       stage: 'Stage mode',
       odysseySoundtrack: 'Odyssey soundtrack',
+      objectSound: 'Embed a sound',
       creatorEnabled: 'Odyssey Creator Mode Enabled',
       kickedFromMeeting: 'You have been kicked from a space',
       joinGathering: 'Gathering Event is starting now',

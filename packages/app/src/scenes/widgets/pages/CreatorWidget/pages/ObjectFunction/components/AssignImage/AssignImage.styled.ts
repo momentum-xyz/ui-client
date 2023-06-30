@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   --scroll-offset: 455px;
+
+  padding: 10px;
 `;
 
 export const InfoContainer = styled.div`

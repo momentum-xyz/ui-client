@@ -9,7 +9,7 @@ import {useStore} from 'shared/hooks';
 import {BasicAsset2dIdEnum} from 'core/enums';
 import {subMenuKeyWidgetEnumMap} from 'core/constants';
 
-import {AssignText, AssignImage, AssignVideo} from './components';
+import {AssignText, AssignImage, AssignVideo, AssignSound} from './components';
 import * as styled from './ObjectFunction.styled';
 
 const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
@@ -139,7 +139,7 @@ const ObjectFunction: FC = () => {
 
             {/* ASSIGN SOUND */}
             {/* FIXME: Temp solutions. It will be moved to the new Inspector */}
-            {activeType === 'sound' && <div>SOUND</div>}
+            {activeType === 'sound' && <AssignSound objectId={selectedObjectId} />}
           </styled.PanelBody>
 
           <styled.ActionBar>
@@ -148,9 +148,12 @@ const ObjectFunction: FC = () => {
               label={t('actions.back')}
               onClick={() => setActiveType(null)}
             />
-            {currentAssetId ? (
+
+            {currentAssetId && activeType !== 'sound' && (
               <Button label={t('actions.delete')} onClick={handleDelete} />
-            ) : (
+            )}
+
+            {!currentAssetId && activeType !== 'sound' && (
               <Button label={t('actions.embed')} onClick={handleSave} />
             )}
           </styled.ActionBar>

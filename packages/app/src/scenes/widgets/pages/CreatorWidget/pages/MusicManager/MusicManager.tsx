@@ -6,8 +6,8 @@ import {useI18n} from '@momentum-xyz/core';
 import {useStore} from 'shared/hooks';
 import {SoundFormInterface} from 'core/interfaces';
 import {MusicPlayerView} from 'scenes/widgets/components';
+import {MusicFileForm} from 'ui-kit';
 
-import {MusicFileForm} from './components';
 import * as styled from './MusicManager.styled';
 
 const MusicManager: FC = () => {
