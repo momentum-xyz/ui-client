@@ -7,7 +7,13 @@ import {useI18n} from '@momentum-xyz/core';
 import {useStore} from 'shared/hooks';
 import {Asset3dInterface} from 'core/models';
 
-import {UploadSkybox, SkyboxList, SkyboxPreview, DeleteSkyboxDialog} from './components';
+import {
+  UploadSkybox,
+  SkyboxList,
+  SkyboxPreview,
+  DeleteSkyboxDialog,
+  CustomSkyboxWithAI
+} from './components';
 import * as styled from './SkyboxSelector.styled';
 
 const SkyboxSelector: FC = () => {
@@ -22,7 +28,7 @@ const SkyboxSelector: FC = () => {
 
   const [previewSkybox, setPreviewSkybox] = useState<Asset3dInterface | null>(null);
   const [skyboxPreviewType, setSkyboxPreviewType] = useState<'COMMUNITY' | 'PRIVATE'>('COMMUNITY');
-  const [isUploadingSkybox, setIsUploadingSkybox] = useState(false);
+  const [mode, setMode] = useState<'view' | 'upload' | 'gen_ai'>('view');
   const [searchInputValue, setSearchInputValue] = useState<string>('');
 
   useEffect(() => {
@@ -49,7 +55,7 @@ const SkyboxSelector: FC = () => {
                   active={skyboxPreviewType === 'COMMUNITY'}
                   onClick={() => {
                     setPreviewSkybox(null);
-                    setIsUploadingSkybox(false);
+                    setMode('view');
                     setSkyboxPreviewType('COMMUNITY');
                     setSearchInputValue('');
                   }}
@@ -59,7 +65,7 @@ const SkyboxSelector: FC = () => {
                   active={skyboxPreviewType === 'PRIVATE'}
                   onClick={() => {
                     setPreviewSkybox(null);
-                    setIsUploadingSkybox(false);
+                    setMode('view');
                     setSkyboxPreviewType('PRIVATE');
                     setSearchInputValue('');
                   }}
@@ -81,11 +87,20 @@ const SkyboxSelector: FC = () => {
                 />
               </styled.SkyboxSearchContainer>
               <Button
+                label={t('actions.createCustomSkyboxAI')}
+                wide
+                icon="ai"
+                onClick={() => {
+                  setMode('gen_ai');
+                  setPreviewSkybox(null);
+                }}
+              />
+              <Button
                 label={t('actions.uploadCustomSkybox')}
                 wide
                 icon="astronaut"
                 onClick={() => {
-                  setIsUploadingSkybox(true);
+                  setMode('upload');
                   setPreviewSkybox(null);
                 }}
               />
@@ -95,8 +110,7 @@ const SkyboxSelector: FC = () => {
         </styled.ControlsContainer>
       </styled.Container>
 
-      {isUploadingSkybox && <UploadSkybox onBack={() => setIsUploadingSkybox(false)} />}
-      {!isUploadingSkybox && !previewSkybox && (
+      {mode === 'view' && (
         <styled.SkyboxListContainer>
           <styled.SkyboxListHeader>
             <span>
@@ -118,7 +132,11 @@ const SkyboxSelector: FC = () => {
           <SkyboxList skyboxes={filteredSkyboxList} onSkyboxSelect={(sb) => setPreviewSkybox(sb)} />
         </styled.SkyboxListContainer>
       )}
-      {!isUploadingSkybox && previewSkybox && (
+
+      {mode === 'upload' && <UploadSkybox onBack={() => setMode('view')} />}
+      {mode === 'gen_ai' && <CustomSkyboxWithAI onBack={() => setMode('view')} />}
+
+      {previewSkybox && (
         <SkyboxPreview
           skybox={previewSkybox}
           onSkyboxSelect={(sb) => {

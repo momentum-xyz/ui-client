@@ -2,6 +2,7 @@
 export type IconNameType =
   | 'add'
   | 'adjust'
+  | 'ai'
   | 'air'
   | 'airport-signal'
   | 'alert'

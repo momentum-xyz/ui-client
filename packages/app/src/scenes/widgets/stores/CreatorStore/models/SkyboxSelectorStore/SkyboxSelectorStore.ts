@@ -4,7 +4,7 @@ import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {Asset3dInterface} from 'core/models';
-import {api, UploadFileResponse} from 'api';
+import {api, UploadFileResponse, AIStyleItemInterface, SkyboxGenerationStatusInterface} from 'api';
 import {PluginIdEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 
@@ -22,15 +22,27 @@ const SkyboxSelectorStore = types
       request: types.optional(RequestModel, {}),
       worldSettingsRequest: types.optional(RequestModel, {}),
       createSkyboxRequest: types.optional(RequestModel, {}),
-      fetchSkyboxRequest: types.optional(RequestModel, {}),
 
       selectedItemId: types.maybe(types.string),
       currentItemId: types.maybe(types.string),
       defaultSkyboxes: types.optional(types.map(SkyboxDatabaseModel), {}),
       userSkyboxes: types.optional(types.map(SkyboxDatabaseModel), {}),
+      fetchSkyboxRequest: types.optional(RequestModel, {}),
 
       skyboxToDeleteId: types.maybe(types.string),
-      deleteDialog: types.optional(Dialog, {})
+      deleteDialog: types.optional(Dialog, {}),
+
+      fetchAIStylesRequest: types.optional(RequestModel, {}),
+      fetchGeneratedSkyboxRequest: types.optional(RequestModel, {}),
+      generateAISkyboxRequest: types.optional(RequestModel, {}),
+      AIStyles: types.optional(types.array(types.frozen<AIStyleItemInterface>()), []),
+
+      pendingGenerationId: types.maybe(types.string),
+      pendingGenerationStatus: types.maybe(types.string),
+      pendingGenerationErrorMessage: types.maybe(types.string),
+      generatedSkyboxThumbUrl: types.maybe(types.string),
+      generatedSkyboxPreviewUrl: types.maybe(types.string),
+      generatedSkyboxFile: types.maybe(types.frozen<File>())
     })
   )
   .views((self) => ({
@@ -89,6 +101,24 @@ const SkyboxSelectorStore = types
             image: self.generateImageFromHash(id)
           } as Asset3dInterface)
       );
+    },
+    get isSkyboxGenerationPending(): boolean {
+      return (
+        self.generateAISkyboxRequest.isPending ||
+        (!!self.pendingGenerationId &&
+          !self.pendingGenerationErrorMessage &&
+          self.pendingGenerationStatus !== 'complete')
+      );
+    },
+    get isSkyboxGenerationComplete(): boolean {
+      return (
+        !!self.pendingGenerationId &&
+        !self.pendingGenerationErrorMessage &&
+        self.pendingGenerationStatus === 'complete'
+      );
+    },
+    get skyboxGenerationError(): string | undefined {
+      return self.pendingGenerationErrorMessage;
     }
   }))
   .actions((self) => ({
@@ -182,7 +212,7 @@ const SkyboxSelectorStore = types
       userId: string,
       file: File,
       name: string,
-      artistName: string
+      artistName?: string
     ) {
       const uploadImageResponse: UploadFileResponse = yield self.createSkyboxRequest.send(
         api.mediaRepository.uploadImage,
@@ -246,7 +276,66 @@ const SkyboxSelectorStore = types
       return hash
         ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S3}/${hash}`
         : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222';
-    }
+    },
+    fetchAIStyles: flow(function* () {
+      const response = yield self.fetchAIStylesRequest.send(
+        api.skyboxRepository.fetchAIStyles,
+        null
+      );
+      self.AIStyles = cast(response || []);
+    }),
+    generateAISkybox: flow(function* (
+      worldId: string,
+      prompt: string,
+      styleId: number | undefined
+    ) {
+      self.pendingGenerationErrorMessage = undefined;
+      self.pendingGenerationId = undefined;
+
+      const response = yield self.generateAISkyboxRequest.send(
+        api.skyboxRepository.generateSkybox,
+        {
+          prompt,
+          skybox_style_id: styleId ?? self.AIStyles[0]?.id ?? -1,
+          world_id: worldId
+        }
+      );
+
+      console.log('AI Skybox:', response);
+      if (response?.data?.id) {
+        self.pendingGenerationId = String(response.data.id);
+        self.pendingGenerationStatus = response.data.status;
+      }
+      return response;
+    })
+  }))
+  .actions((self) => ({
+    updateSkyboxGenerationStatus: flow(function* (statusUpdate: SkyboxGenerationStatusInterface) {
+      console.log('UPDATE Skybox generation status:', statusUpdate);
+      self.pendingGenerationStatus = statusUpdate.status;
+      if (statusUpdate.status === 'complete') {
+        self.generatedSkyboxThumbUrl = statusUpdate.thumb_url;
+
+        const response = yield self.fetchGeneratedSkyboxRequest.send(
+          api.skyboxRepository.fetchGeneratedSkybox,
+          {skyboxId: statusUpdate.id}
+        );
+        if (!self.fetchGeneratedSkyboxRequest.isError) {
+          console.log('Downloaded image size:', response?.length);
+          try {
+            const blob = new Blob([response], {type: 'image/jpeg'});
+            self.generatedSkyboxPreviewUrl = URL.createObjectURL(blob);
+            self.generatedSkyboxFile = new File([blob], 'skybox.png', {type: 'image/jpeg'});
+            console.log('Downloaded image url:', self.generatedSkyboxPreviewUrl);
+          } catch (e) {
+            console.log('Failed to convert downloaded image:', e);
+          }
+        } else {
+          console.log('Failed to download image:', self.fetchGeneratedSkyboxRequest.error);
+          self.pendingGenerationErrorMessage = 'Error downloading image';
+        }
+      }
+    })
   }));
 
 export {SkyboxSelectorStore};

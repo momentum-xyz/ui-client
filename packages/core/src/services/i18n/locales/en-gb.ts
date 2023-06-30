@@ -596,6 +596,13 @@ export const enGb = {
       uploadAssetInfoTitle: 'Drag and drop your asset here',
       uploadAssetPictureDescription: 'Drag and drop YOUR CUSTOM image here',
       uploadAssetInfoDescription: 'We support GLB Models & the max file size cannot exceed 50mb',
+      createCustomSkyboxTitle: 'Create Custom Skybox With AI',
+      createCustomSkyboxDescription:
+        'Create your own unique 360 skybox for your world by entering a prompt and generating it using the Blockade Labs AI. Simply input your desired concept or atmosphere below as a prompt, and let the AI create a stunning skybox to enhance your Odyssey experience.',
+      createCustomSkyboxPlaceholder: 'Enter prompt for AI Skybox here...',
+      createCustomSkybixSelectArtStyle: 'Select Art Style',
+      createCustomSkyboxGenerateSkybox: 'Generate Skybox',
+      createCustomSkyboxPleaseWait: 'Skybox is Generating, Please Wait',
       uploadCustomSkyboxInfoTitle: 'Drag and drop your custom skybox here',
       uploadCustomSkyboxInfoDescription:
         'Your image must be a 360-degree image. This will allow your skybox to fully surround and immerse you in your world. To avoid any pixelation or distortion, we recommend that your image is high-resolution. Our preferred resolution for images is 4k x 2k, but 2k x 1k is acceptable.',
@@ -867,6 +874,7 @@ export const enGb = {
       changeText: 'Change Text',
       changeImage: 'Change Image',
       selectImage: 'Select Image',
+      createCustomSkyboxAI: 'Create Custom Skybox With AI',
       uploadCustomSkybox: 'Upload Custom Skybox',
       move: 'Move',
       rotate: 'Rotate',
@@ -911,6 +919,9 @@ export const enGb = {
       errorUnsupportedFile: 'Only .glb files are supported',
       errorTooLargeFile: 'Max file size is {{size}}MB',
       errorSave: 'Error uploading asset'
+    },
+    skyboxGenerator: {
+      errorGenerating: 'Error generating skybox'
     },
     eventList: {
       noGatherings: 'There are no gatherings scheduled for this space.',

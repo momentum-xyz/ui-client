@@ -52,6 +52,13 @@ export type PosBusEventType = {
   //   uiTypeId: string,
   //   uiTypeName: string
   // ) => void;
+  'attribute-value-changed': <T extends AttributeValueInterface>(props: {
+    attribute_name: string;
+    change_type: string;
+    plugin_id: string;
+    target_id: string;
+    value?: T;
+  }) => void;
   'space-attribute-changed': <T extends AttributeValueInterface>(
     topic: string,
     attributeName: string,
