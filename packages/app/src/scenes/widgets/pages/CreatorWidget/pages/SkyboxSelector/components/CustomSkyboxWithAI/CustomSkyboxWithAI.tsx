@@ -75,42 +75,6 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
     }
   }, [AIStyles, fetchAIStyles]);
 
-  // useEffect(() => {
-  //   setMode('review');
-
-  //   updateSkyboxGenerationStatus({
-  //     thumb_url:
-  //       'https://blockade-platform-production.s3.amazonaws.com/thumbs/imagine/thumb_vibrant_microdetailed_digital_art_detailed_digital_vr_painting_sky__c24586a3c27d4396__6667781_c.jpg?ver=1',
-  //     pusher_event: 'status_update',
-  //     created_at: {},
-  //     file_url:
-  //       'https://blockade-platform-production.s3.amazonaws.com/images/imagine/vibrant_microdetailed_digital_art_detailed_digital_vr_painting_sky__c24586a3c27d4396__6667781_c.jpg?ver=1',
-  //     type: 'skybox',
-  //     prompt: 'sky',
-  //     remix_imagine_id: null,
-  //     title: 'World #6667781',
-  //     status: 'complete',
-  //     error_message: null,
-  //     skybox_id: 5,
-  //     skybox_style_id: 5,
-  //     depth_map_url: '',
-  //     id: 6667781,
-  //     skybox_name: 'Digital Painting',
-  //     negative_text: null,
-  //     obfuscated_id: 'a2c345493364a169a76277aa719ce4db',
-  //     remix_obfuscated_id: null,
-  //     seed: 631854419,
-  //     isMyFavorite: false,
-  //     user_id: 2436,
-  //     username: 'cs@odyssey.org',
-  //     pusher_channel: 'status_update_a2c345493364a169a76277aa719ce4db',
-  //     queue_position: 0,
-  //     updated_at: {},
-  //     message: null,
-  //     skybox_style_name: 'Digital Painting'
-  //   } as any);
-  // }, []);
-
   usePosBusEvent('attribute-value-changed', ({attribute_name, value}) => {
     console.log('GAGA space-attribute-changed', {attribute_name, value});
     if (attribute_name === 'skybox_ai' && skyboxSelectorStore.pendingGenerationId) {
@@ -148,7 +112,7 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
       type: 'COMMUNITY'
     }
   });
-  console.log('CustomSkyboxWithAI errors', {errors, errorsAI});
+  console.log('CustomSkyboxWithAI errors', {errors, errorsAI}); // TODO show them visually
 
   const options = [
     {value: 'COMMUNITY', label: 'Community Library'},
@@ -194,17 +158,6 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
       );
     }
   };
-
-  // const handleUploadError = (err: Error): void => {
-  //   console.log('File upload error:', err);
-  //   const message =
-  //     err.message === ErrorsEnum.FileSizeTooLarge
-  //       ? t('assetsUploader.errorTooLargeFile', {size: MAX_ASSET_SIZE_MB})
-  //       : t('assetsUploader.errorSave');
-
-  //   toast.error(<ToastContent isDanger icon="alert" text={message} />);
-  //   setError('file', {message: 'upload'});
-  // };
 
   return (
     <styled.Container data-testid="CreateCustomSkyboxWithAI-test">
