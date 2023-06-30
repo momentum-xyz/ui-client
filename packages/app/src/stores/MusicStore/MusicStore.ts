@@ -1,15 +1,12 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import ReactHowler from 'react-howler';
-import {Event3dEmitter, MediaFileInterface, RequestModel, ResetModel} from '@momentum-xyz/core';
-import {TrackStateInterface} from '@momentum-xyz/ui-kit';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
+import {Event3dEmitter, RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api} from 'api';
 import {PluginIdEnum} from 'api/enums';
 import {storage} from 'shared/services';
-import {TrackInfo, TrackInfoModelInterface} from 'core/models';
 import {StorageKeyEnum} from 'core/enums';
-import {getTrackAbsoluteUrl} from 'core/utils';
+import {MusicPlayer} from 'core/models';
 
 const DEFAULT_VOLUME_PERCENT = 25;
 
@@ -17,84 +14,18 @@ const MusicStore = types
   .compose(
     ResetModel,
     types.model('MusicStore', {
-      tracks: types.optional(types.array(TrackInfo), []),
-      volume: types.optional(types.number, DEFAULT_VOLUME_PERCENT),
-      trackHash: types.maybeNull(types.string),
-      isSeeking: false,
-      isPlaying: false,
-      durationSec: 0,
-      playedSec: 0,
+      musicPlayer: types.optional(MusicPlayer, {}),
       fetchRequest: types.optional(RequestModel, {})
     })
   )
-  .volatile<{player: ReactHowler | null; watcher: NodeJS.Timer | null}>(() => ({
-    player: null,
-    watcher: null
-  }))
   .actions((self) => ({
     initVolume(): void {
       const stored = storage.get<string>(StorageKeyEnum.VolumeLevel);
-      self.volume = stored ? Number(stored) : DEFAULT_VOLUME_PERCENT;
+      self.musicPlayer.volume = stored ? Number(stored) : DEFAULT_VOLUME_PERCENT;
     },
     setVolume(volumePercent: number): void {
       storage.setString(StorageKeyEnum.VolumeLevel, volumePercent.toString());
-      self.volume = volumePercent;
-    },
-    setPlayer(player: ReactHowler) {
-      self.player = player;
-    }
-  }))
-  .actions((self) => ({
-    start(trackHash: string): void {
-      if (self.tracks.some((item) => item.render_hash === trackHash)) {
-        self.isPlaying = true;
-        self.trackHash = trackHash;
-        self.playedSec = 0;
-      }
-    },
-    play(): void {
-      self.isPlaying = true;
-    },
-    pause(): void {
-      self.isPlaying = false;
-    },
-    stop(): void {
-      self.isPlaying = false;
-      self.trackHash = null;
-      self.durationSec = 0;
-      self.playedSec = 0;
-    }
-  }))
-  .actions((self) => ({
-    setDuration(): void {
-      self.durationSec = self.player?.howler.duration() || 0;
-    },
-    setIsSeeking(isSeeking: boolean): void {
-      self.isSeeking = isSeeking;
-    },
-    setHowlerSeek(sec: number): void {
-      self.player?.seek(sec);
-      self.playedSec = sec;
-    },
-    setSeekPosition(): void {
-      if (!self.isSeeking && self.isPlaying) {
-        self.playedSec = self.player?.howler.seek() || 0;
-      }
-    },
-    watchSeekPosition(): void {
-      if (self.watcher) {
-        clearInterval(self.watcher);
-      }
-      self.watcher = setInterval(() => {
-        this.setSeekPosition();
-      }, 500);
-    },
-    startNextTrack(): void {
-      const currentIndex = self.tracks.findIndex((t) => t.render_hash === self.trackHash);
-      const targetIndex = currentIndex === self.tracks.length - 1 ? 0 : currentIndex + 1;
-
-      self.trackHash = self.tracks[targetIndex].render_hash;
-      this.setHowlerSeek(0);
+      self.musicPlayer.volume = volumePercent;
     }
   }))
   .actions((self) => ({
@@ -109,23 +40,16 @@ const MusicStore = types
       );
 
       if (attributeResponse) {
-        self.tracks = cast(attributeResponse.tracks || []);
+        self.musicPlayer.refreshTracks(cast(attributeResponse.tracks || []));
       }
-    }),
-    refreshTracks(tracks: TrackInfoModelInterface[]): void {
-      // New track list doesn't have the track which is playing now
-      if (!tracks.some((t) => t.render_hash === self.trackHash)) {
-        self.stop();
-      }
-      self.tracks = cast(tracks);
-    }
+    })
   }))
   .actions((self) => ({
     subscribe: () => {
-      Event3dEmitter.on('SoundtrackChanged', self.refreshTracks);
+      Event3dEmitter.on('SoundtrackChanged', self.musicPlayer.refreshTracks);
     },
     unsubscribe: () => {
-      Event3dEmitter.off('SoundtrackChanged', self.refreshTracks);
+      Event3dEmitter.off('SoundtrackChanged', self.musicPlayer.refreshTracks);
     }
   }))
   .actions((self) => ({
@@ -133,45 +57,17 @@ const MusicStore = types
       self.initVolume();
       await self.fetchTracks(worldId);
 
-      if (self.tracks.length > 0) {
-        self.start(self.tracks[0].render_hash);
+      if (self.musicPlayer.tracks.length > 0) {
+        self.musicPlayer.start(self.musicPlayer.tracks[0].render_hash);
       }
     }
   }))
   .views((self) => ({
     get isAvailable(): boolean {
-      return self.tracks.length > 0;
+      return self.musicPlayer.tracks.length > 0;
     },
-    get trackList(): MediaFileInterface[] {
-      return self.tracks.map((item) => ({
-        name: item.name,
-        hash: item.render_hash,
-        url: getTrackAbsoluteUrl(item.render_hash) || ''
-      }));
-    },
-    get activeTrack(): MediaFileInterface | null {
-      return this.trackList.find((track) => track.hash === self.trackHash) || null;
-    },
-    get activeTrackState(): TrackStateInterface {
-      const isDurationAvailable = !!this.activeTrack && self.durationSec;
-      return {
-        isPlaying: self.isPlaying,
-        isStopped: !this.activeTrack,
-        durationSec: self.durationSec,
-        playedSec: self.playedSec,
-        playedPercent: isDurationAvailable ? (self.playedSec * 100) / self.durationSec : 0
-      };
-    },
-    get howlerProps() {
-      return {
-        html5: true,
-        src: this.activeTrack?.url || '',
-        playing: self.isPlaying,
-        volume: self.volume / 100,
-        onLoad: self.setDuration,
-        onPlay: self.watchSeekPosition,
-        onEnd: self.startNextTrack
-      };
+    get hasActiveTrack(): boolean {
+      return !!self.musicPlayer.activeTrack;
     }
   }));
 

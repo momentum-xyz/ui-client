@@ -9,7 +9,7 @@ import * as styled from './MusicPlayerView.styled';
 
 const MusicPlayerView: FC = () => {
   const {musicStore} = useStore();
-  const {activeTrack, activeTrackState, volume} = musicStore;
+  const {activeTrack, musicPlayer} = musicStore;
 
   const {t} = useI18n();
 
@@ -21,16 +21,16 @@ const MusicPlayerView: FC = () => {
             {!activeTrack ? t('messages.noSoundSelected') : activeTrack.name}
           </styled.Title>
           <SoundPlayer
-            state={activeTrackState}
-            onIsPlaying={activeTrackState.isPlaying ? musicStore.pause : musicStore.play}
-            onIsSeeking={musicStore.setIsSeeking}
-            onChangePlayed={musicStore.setHowlerSeek}
+            state={musicPlayer.activeTrackState}
+            onIsPlaying={musicPlayer.isPlaying ? musicPlayer.pause : musicPlayer.play}
+            onIsSeeking={musicPlayer.setIsSeeking}
+            onChangePlayed={musicPlayer.setHowlerSeek}
           />
         </styled.Block>
 
         <styled.Block>
           <styled.Title>{t('labels.volume')}</styled.Title>
-          <SoundVolume volumePercent={volume} onChangeVolume={musicStore.setVolume} />
+          <SoundVolume volumePercent={musicPlayer.volume} onChangeVolume={musicStore.setVolume} />
         </styled.Block>
       </styled.ActiveTrack>
     </styled.Container>

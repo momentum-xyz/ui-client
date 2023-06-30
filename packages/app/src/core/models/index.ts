@@ -5,6 +5,7 @@ export * from './Object';
 export * from './AgoraRemoteUser';
 export * from './EmojiDetail';
 export * from './PluginLoader';
+export * from './MusicPlayer';
 export * from './DynamicScriptLoader';
 export * from './DynamicScriptList';
 export * from './SearchQuery';

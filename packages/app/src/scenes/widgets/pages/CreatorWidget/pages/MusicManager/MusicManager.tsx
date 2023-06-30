@@ -62,13 +62,13 @@ const MusicManager: FC = () => {
 
         {/* TRACK LIST */}
         <styled.TrackList>
-          {musicStore.trackList.map((track) => (
+          {musicStore.musicPlayer.trackList.map((track) => (
             <SoundItem
               key={track.hash}
               item={track}
-              isActive={musicStore.activeTrack?.hash === track.hash}
-              onStart={() => musicStore.start(track.hash)}
-              onStop={musicStore.stop}
+              isActive={musicStore.musicPlayer.activeTrack?.hash === track.hash}
+              onStart={() => musicStore.musicPlayer.start(track.hash)}
+              onStop={musicStore.musicPlayer.stop}
               onDelete={() => handleDelete(track.hash)}
             />
           ))}
