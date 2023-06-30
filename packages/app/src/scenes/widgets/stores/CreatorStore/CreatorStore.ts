@@ -14,7 +14,8 @@ import {
   SpawnAssetStore,
   SpawnPointStore,
   ObjectFunctionalityStore,
-  ObjectColorStore
+  ObjectColorStore,
+  MusicManagerStore
 } from './models';
 
 type CreatorTabsType = keyof typeof CreatorTabsEnum;
@@ -25,6 +26,7 @@ const CreatorStore = types
     types.model('CreatorStore', {
       skyboxSelectorStore: types.optional(SkyboxSelectorStore, {}),
       spawnAssetStore: types.optional(SpawnAssetStore, {}),
+      musicManagerStore: types.optional(MusicManagerStore, {}),
       spawnPointStore: types.optional(SpawnPointStore, {}),
       objectFunctionalityStore: types.optional(ObjectFunctionalityStore, {}),
       objectColorStore: types.optional(ObjectColorStore, {}),

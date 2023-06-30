@@ -22,7 +22,8 @@ interface PropsInterface {
 }
 
 const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
-  const {sessionStore, widgetStore, widgetManagerStore, universeStore, agoraStore} = useStore();
+  const {sessionStore, widgetStore, widgetManagerStore, universeStore, agoraStore, musicStore} =
+    useStore();
   const {activeWidgetList, subMenuInfo} = widgetManagerStore;
   const {isMyWorld, world2dStore} = universeStore;
 
@@ -122,6 +123,16 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'pencil',
       isHidden: !isWorld || !isMyWorld,
       tooltip: t('actions.creatorOpen'),
+      isDisabled: universeStore.isScreenRecording,
+      onClick: handleToggle
+    },
+    {
+      key: WidgetEnum.MUSIC,
+      position: PositionEnum.RIGHT,
+      viewPosition: PositionEnum.RIGHT,
+      iconName: 'music',
+      isHidden: !isWorld || !musicStore.isAvailable,
+      tooltip: t('labels.sound'),
       isDisabled: universeStore.isScreenRecording,
       onClick: handleToggle
     },

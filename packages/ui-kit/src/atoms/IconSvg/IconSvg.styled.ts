@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Wrapper = styled.span`
   --icon-size-xxl: 40px;
   --icon-size-xll: 32px;
+  --icon-size-xl2: 24px;
   --icon-size-xl: 20px;
   --icon-size-l: 18px;
   --icon-size-m: 16px;
@@ -16,6 +17,10 @@ export const Wrapper = styled.span`
 
   &.danger {
     color: ${(props) => props.theme.danger};
+  }
+
+  &.accent {
+    color: ${(props) => props.theme.accentText};
   }
 
   /* VARIANTS */
@@ -56,6 +61,11 @@ export const Wrapper = styled.span`
     height: var(--icon-size-xl);
   }
 
+  &.xl2 {
+    width: var(--icon-size-xl2);
+    height: var(--icon-size-xl2);
+  }
+
   &.xxl {
     width: var(--icon-size-xxl);
     height: var(--icon-size-xxl);
@@ -69,7 +79,7 @@ export const Wrapper = styled.span`
   /* STATES */
 
   &.disabled {
-    opacity: 0.2;
+    opacity: 0.3;
   }
 `;
 

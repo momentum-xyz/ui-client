@@ -203,6 +203,7 @@ export type IconNameType =
   | 'sortOnAsc'
   | 'sortOnDesc'
   | 'sound'
+  | 'sound_add'
   | 'sound_louder'
   | 'sound_off'
   | 'sound_wave'

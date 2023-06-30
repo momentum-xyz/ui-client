@@ -22,7 +22,6 @@ import * as agoraRepository from './repositories/agoraRepository';
 import * as streamChatRepository from './repositories/streamChatRepository';
 import * as spaceUserAttributeRepository from './repositories/spaceUserAttributeRepository';
 import * as skyboxRepository from './repositories/skyboxRepository';
-import * as playlistRepository from './repositories_OLD/playlistRepository';
 import * as spaceEmojiRepository from './repositories_OLD/spaceEmojiRepository';
 
 /**
@@ -44,7 +43,6 @@ export const api = {
   userRepository,
   userProfileRepository,
   spaceRepository,
-  playlistRepository,
   agoraRepository,
   streamChatRepository,
   spaceEmojiRepository,
@@ -95,5 +93,4 @@ export * from './repositories/streamChatRepository/streamChatRepository.api.type
 export * from './repositories/spaceUserAttributeRepository/spaceUserAttributeRepository.api.types';
 export * from './repositories/skyboxRepository/skyboxRepository.api.types';
 
-export * from './repositories_OLD/playlistRepository/playlistRepository.api.types';
 export * from './repositories_OLD/spaceEmojiRepository/spaceEmojiRepository.api.types';

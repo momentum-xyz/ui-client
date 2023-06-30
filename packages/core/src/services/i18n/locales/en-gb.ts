@@ -313,6 +313,7 @@ export const enGb = {
       myConnections: 'My connections',
       universal: 'Universal',
       logout: 'Logout',
+      volume: 'Volume',
       worldStats: 'World stats',
       tokenRules: 'Token Rules',
       nameOfInitiative: 'Name of Initiative',
@@ -410,7 +411,9 @@ export const enGb = {
       welcomePageGuestDescription: 'Fly around freely and\nenjoy all the\ncreations',
       assignFunctionToObjectTitle: 'Assign a function to the object',
       assignFunctionToObjectDescription:
-        'By embedding a picture, text, video or sound you change the function of this object; users can see an image wrapped around the object or hear a sound when they fly towards the object. Users will also be able to see the text, image or video displayed when they select the object; regardless of its asset type.'
+        'By embedding a picture, text, video or sound you change the function of this object; users can see an image wrapped around the object or hear a sound when they fly towards the object. Users will also be able to see the text, image or video displayed when they select the object; regardless of its asset type.',
+      readMore: 'Read more',
+      readLess: 'Read less'
     },
     messages: {
       loading: 'Loading Odyssey',
@@ -500,6 +503,8 @@ export const enGb = {
       memberRemoveFailure: 'There was an error removing the member',
       userRequestDeny: 'Cannot Accept User Request',
       offStageFailure: 'Cannot send {{user}} off stage',
+      followingSoundFiles: 'You can upload the following sound files',
+      soundExtensions: 'MP3, FLAC, OGG, ACC and WEBM',
       joinStageRequestFailure: 'Request has not been made at the moment, try again later',
       joinStageRefused: 'Could not join stage.',
       inviteToStageFailure: 'Cannot invite {{user}} to stage',
@@ -585,6 +590,9 @@ export const enGb = {
       removeSkyboxCurrentConfirmation:
         'This Skybox is your Current skybox; removing this will change your skybox to the default one.',
       removeSkyboxFinalConfirmation: 'Are you sure you want to do this?',
+      noSoundSelected: 'No sound selected',
+      odysseySoundtrack:
+        'Here you can set the soundtrack for your Odyssey. The song you select will be heard by visitors to your odyssey when they enter your world. Please be careful only to upload songs you have the rights to. Your Soundtrack will play on loop.',
       uploadAssetInfoTitle: 'Drag and drop your asset here',
       uploadAssetPictureDescription: 'Drag and drop YOUR CUSTOM image here',
       uploadAssetInfoDescription: 'We support GLB Models & the max file size cannot exceed 50mb',
@@ -616,6 +624,7 @@ export const enGb = {
       create: 'create',
       by: 'By',
       stage: 'Stage mode',
+      odysseySoundtrack: 'Odyssey soundtrack',
       creatorEnabled: 'Odyssey Creator Mode Enabled',
       kickedFromMeeting: 'You have been kicked from a space',
       joinGathering: 'Gathering Event is starting now',
@@ -709,6 +718,7 @@ export const enGb = {
       description: 'Description',
       addDescription: 'Add a description',
       name: 'Name',
+      nameOfSound: 'Name of sound',
       profileName: 'Profile name',
       title: 'Title',
       social: 'Social',
@@ -793,6 +803,7 @@ export const enGb = {
       dock: 'Dock',
       visit: 'Visit',
       creatorOpen: 'Odyssey Creator',
+      uploadYourSound: 'Upload your sound',
       creatorClose: 'Close Odyssey Creator',
       saveChanges: 'Save changes',
       approving: 'approving',
@@ -836,6 +847,7 @@ export const enGb = {
       close: 'Close',
       inviteToStage: 'Invite to stage',
       ready: 'Ready',
+      uploadSoundFile: 'Upload a sound file',
       inviteThisPersonToTheStage: 'Invite this person to the stage?',
       logIn: 'Log In',
       getStarted: 'Get Started',
@@ -850,6 +862,7 @@ export const enGb = {
       uploadYourAsset: 'Upload your asset',
       addToLibrary: 'Add to library',
       dropItHere: 'Drop it here',
+      dragDropSound: 'Drag and drop your custom sound',
       closePanel: 'Close Panel',
       selectSkybox: 'Select Skybox',
       addSkybox: 'Add Skybox',
@@ -1322,10 +1335,6 @@ export const enGb = {
       audio: 'audio',
       selectInputSource: 'Select input source',
       selectOutputSource: 'Select output source'
-    },
-    musicPlayer: {
-      playerVolume: 'Music Volume',
-      unityVolume: 'Sound Effects Volume'
     },
     collaboration: {
       spaceIsPrivate: 'This space is set to private by its admin and only accessible by its members'

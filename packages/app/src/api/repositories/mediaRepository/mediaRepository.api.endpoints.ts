@@ -3,6 +3,7 @@ export const mediaRepositoryEndpoints = () => {
 
   return {
     uploadImage: `${BASE_URL}/image`,
-    uploadVideo: `${BASE_URL}/video`
+    uploadVideo: `${BASE_URL}/video`,
+    uploadAudio: `${BASE_URL}/audio`
   };
 };

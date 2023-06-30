@@ -13,6 +13,7 @@ export interface PostImageViewPropsInterface {
   entry: PostEntryInterface;
   shareUrl?: string;
   onVisit?: () => void;
+  onDelete?: () => void;
   onEdit?: () => void;
 }
 
@@ -21,6 +22,7 @@ const PostImageView: FC<PostImageViewPropsInterface> = ({
   entry,
   onVisit,
   shareUrl,
+  onDelete,
   onEdit
 }) => {
   const [isSharing, setIsSharing] = useState(false);
@@ -40,7 +42,12 @@ const PostImageView: FC<PostImageViewPropsInterface> = ({
           </styled.Grid>
 
           <styled.Controls>
+            {!!onDelete && (
+              <ButtonEllipse icon="bin" label={t('actions.delete')} onClick={onDelete} />
+            )}
+
             {!!onEdit && <ButtonEllipse icon="pencil" label={t('actions.edit')} onClick={onEdit} />}
+
             {!!shareUrl && (
               <ButtonEllipse
                 icon="share"
@@ -49,6 +56,7 @@ const PostImageView: FC<PostImageViewPropsInterface> = ({
                 onClick={() => setIsSharing(!isSharing)}
               />
             )}
+
             {!!onVisit && (
               <ButtonEllipse
                 icon="rocket_flying"

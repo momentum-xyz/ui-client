@@ -46,6 +46,7 @@ export type Event3dType = {
   StopRecordingVideo: () => void;
 
   ActivityUpdate: (activityId: string, updateType: ActivityUpdateEnum) => void;
+  SoundtrackChanged: (tracks: Array<{name: string; render_hash: string}>) => void;
 
   // ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
 };

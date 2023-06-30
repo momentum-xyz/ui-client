@@ -14,6 +14,7 @@ export enum WidgetEnum {
   OBJECT = 'OBJECT',
   NEWSFEED = 'NEWSFEED',
   TIMELINE = 'TIMELINE',
+  MUSIC = 'MUSIC',
 
   ACTION = 'ACTION',
 
