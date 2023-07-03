@@ -58,7 +58,7 @@ const MusicManager: FC = () => {
 
       <styled.TracksContainer>
         {/* ACTIVE TRACK */}
-        <MusicPlayerView />
+        <MusicPlayerView musicPlayer={musicStore.musicPlayer} setVolume={musicStore.setVolume} />
 
         {/* TRACK LIST */}
         <styled.TrackList>

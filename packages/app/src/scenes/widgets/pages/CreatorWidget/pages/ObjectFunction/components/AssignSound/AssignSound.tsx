@@ -1,12 +1,13 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useEffect, useRef, useState} from 'react';
+import ReactHowler from 'react-howler';
 import {observer} from 'mobx-react-lite';
-import {useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
-import {Button, Frame} from '@momentum-xyz/ui-kit';
+import {Button, Frame, SoundItem} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {MusicFileForm} from 'ui-kit';
-import {TextObjectInterface} from 'core/interfaces';
+import {SoundFormInterface} from 'core/interfaces';
+import {MusicPlayerView} from 'scenes/widgets/components';
 
 import * as styled from './AssignSound.styled';
 
@@ -15,18 +16,16 @@ interface PropsInterface {
 }
 
 const AssignSound: FC<PropsInterface> = ({objectId}) => {
-  const {universeStore, musicStore} = useStore();
-  const {worldId} = universeStore;
+  const {musicStore, widgetStore} = useStore();
+  const {creatorStore} = widgetStore;
+  const {objectFunctionalityStore} = creatorStore;
+  const {objectMusic} = objectFunctionalityStore;
+  const {musicPlayer} = objectMusic;
 
   const [isNewForm, setIsNewForm] = useState(false);
+  const playerRef = useRef<ReactHowler>(null);
 
   const {t} = useI18n();
-
-  const {
-    control,
-    handleSubmit,
-    formState: {errors}
-  } = useForm<TextObjectInterface>({});
 
   useEffect(() => {
     const isWorldMusicPlaying = musicStore.musicPlayer.isPlaying;
@@ -39,7 +38,31 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
     };
   }, [musicStore.musicPlayer]);
 
-  console.log(worldId, control, errors, t, handleSubmit);
+  useEffect(() => {
+    objectMusic.init(objectId);
+    objectMusic.subscribe();
+
+    return () => {
+      objectMusic.unsubscribe();
+      objectMusic.resetModel();
+    };
+  }, [objectId, objectMusic]);
+
+  useEffect(() => {
+    if (playerRef.current) {
+      musicPlayer.setPlayer(playerRef.current);
+    }
+  }, [musicStore, musicPlayer.activeTrack, musicPlayer]);
+
+  const handlePublish = async (form: SoundFormInterface) => {
+    if (await objectMusic.publishSpacialSound(form)) {
+      setIsNewForm(false);
+    }
+  };
+
+  const handleDelete = async (hash: string) => {
+    await objectMusic.deleteSpacialSound(hash);
+  };
 
   return (
     <styled.Container data-testid="AssignSound-test">
@@ -58,16 +81,39 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
               />
             ) : (
               <MusicFileForm
-                isPending={false}
-                //isPending={musicManagerStore.isUpdating}
+                isPending={objectMusic.isUpdating}
                 onCancel={() => setIsNewForm(false)}
-                //onPublish={handlePublish}
-                onPublish={() => {}}
+                onPublish={handlePublish}
               />
             )}
           </styled.UploadBlock>
         </styled.Head>
       </Frame>
+
+      <styled.TracksContainer>
+        <styled.Howler>
+          {objectMusic.hasActiveTrack && (
+            <ReactHowler ref={playerRef} {...musicPlayer.howlerProps} />
+          )}
+        </styled.Howler>
+
+        {/* ACTIVE TRACK */}
+        <MusicPlayerView musicPlayer={musicPlayer} setVolume={objectMusic.updateVolume} />
+
+        {/* TRACK LIST */}
+        <styled.TrackList>
+          {musicPlayer.trackList.map((track) => (
+            <SoundItem
+              key={track.hash}
+              item={track}
+              isActive={musicPlayer.activeTrack?.hash === track.hash}
+              onStart={() => musicPlayer.start(track.hash)}
+              onStop={musicPlayer.stop}
+              onDelete={() => handleDelete(track.hash)}
+            />
+          ))}
+        </styled.TrackList>
+      </styled.TracksContainer>
     </styled.Container>
   );
 };

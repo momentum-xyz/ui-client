@@ -47,6 +47,12 @@ export type Event3dType = {
 
   ActivityUpdate: (activityId: string, updateType: ActivityUpdateEnum) => void;
   SoundtrackChanged: (tracks: Array<{name: string; render_hash: string}>) => void;
+  SpatialSoundChanged: (
+    objectId: string,
+    tracks: Array<{name: string; render_hash: string}>,
+    volume: number,
+    distance: number
+  ) => void;
 
   // ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
 };

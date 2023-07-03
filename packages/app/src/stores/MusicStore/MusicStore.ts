@@ -25,7 +25,7 @@ const MusicStore = types
     },
     setVolume(volumePercent: number): void {
       storage.setString(StorageKeyEnum.VolumeLevel, volumePercent.toString());
-      self.musicPlayer.volume = volumePercent;
+      self.musicPlayer.setVolume(volumePercent);
     }
   }))
   .actions((self) => ({

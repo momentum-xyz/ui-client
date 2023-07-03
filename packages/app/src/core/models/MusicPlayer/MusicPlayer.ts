@@ -1,10 +1,10 @@
-import {cast, types} from 'mobx-state-tree';
+import {cast, Instance, types} from 'mobx-state-tree';
 import ReactHowler from 'react-howler';
 import {MediaFileInterface, ResetModel} from '@momentum-xyz/core';
 import {TrackStateInterface} from '@momentum-xyz/ui-kit';
 
-import {TrackInfo, TrackInfoModelInterface} from 'core/models/TrackInfo';
 import {getTrackAbsoluteUrl} from 'core/utils';
+import {TrackInfo, TrackInfoModelInterface} from 'core/models/TrackInfo';
 
 const MusicPlayer = types
   .compose(
@@ -26,6 +26,9 @@ const MusicPlayer = types
   .actions((self) => ({
     setPlayer(player: ReactHowler) {
       self.player = player;
+    },
+    setVolume(volumePercent: number): void {
+      self.volume = volumePercent;
     },
     start(trackHash: string): void {
       if (self.tracks.some((item) => item.render_hash === trackHash)) {
@@ -121,5 +124,7 @@ const MusicPlayer = types
       };
     }
   }));
+
+export type MusicPlayerModelType = Instance<typeof MusicPlayer>;
 
 export {MusicPlayer};

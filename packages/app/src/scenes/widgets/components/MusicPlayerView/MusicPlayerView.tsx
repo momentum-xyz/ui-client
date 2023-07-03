@@ -3,13 +3,18 @@ import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {SoundPlayer, SoundVolume} from '@momentum-xyz/ui-kit';
 
-import {useStore} from 'shared/hooks';
+import {MusicPlayerModelType} from 'core/models';
 
 import * as styled from './MusicPlayerView.styled';
 
-const MusicPlayerView: FC = () => {
-  const {musicStore} = useStore();
-  const {activeTrack, musicPlayer} = musicStore;
+interface PropsInterface {
+  musicPlayer: MusicPlayerModelType;
+  setVolume: (volumePercent: number) => void;
+}
+
+const MusicPlayerView: FC<PropsInterface> = (props) => {
+  const {musicPlayer, setVolume} = props;
+  const {activeTrack} = musicPlayer;
 
   const {t} = useI18n();
 
@@ -30,7 +35,7 @@ const MusicPlayerView: FC = () => {
 
         <styled.Block>
           <styled.Title>{t('labels.volume')}</styled.Title>
-          <SoundVolume volumePercent={musicPlayer.volume} onChangeVolume={musicStore.setVolume} />
+          <SoundVolume volumePercent={musicPlayer.volume} onChangeVolume={setVolume} />
         </styled.Block>
       </styled.ActiveTrack>
     </styled.Container>

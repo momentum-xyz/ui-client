@@ -273,6 +273,19 @@ class PosBusService {
         }
         break;
       }
+      case AttributeNameEnum.SPATIAL_AUDIO: {
+        const value = msg.value;
+        if (value?.tracks) {
+          Event3dEmitter.emit(
+            'SpatialSoundChanged',
+            msg.target_id,
+            value.tracks,
+            value.volume || 0,
+            value.distance || 0
+          );
+        }
+        break;
+      }
     }
   }
 

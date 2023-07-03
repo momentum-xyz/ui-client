@@ -17,5 +17,6 @@ export enum AttributeNameEnum {
   OBJECT_COLOR = 'object_color',
   SPAWN_POINT = 'spawn_point',
   TIMELINE_LAST_SEEN = 'timeline_last_seen',
-  SOUNDTRACK = 'soundtrack'
+  SOUNDTRACK = 'soundtrack',
+  SPATIAL_AUDIO = 'spatial_audio'
 }
