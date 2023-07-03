@@ -51,7 +51,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
     if (view?.id) {
       player = new WhispControllable(scene);
 
-      PlayerHelper.initialize(scene, view, false);
+      // PlayerHelper.initialize(scene, view, false);
       InputHelper.initializeUniverse(scene, onWorldClick, onUserClick, onClickOutside);
       LightHelper.initialize(scene);
       InteractionEffectHelper.initialize(scene);
@@ -78,7 +78,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
 
     onReadyToHandleEvents();
 
-    PlayerHelper.spawnPlayer(scene, CAMERA_POS_EXPLORER, CAMERA_TARGET_EXPLORER);
+    // PlayerHelper.spawnPlayer(scene, CAMERA_POS_EXPLORER, CAMERA_TARGET_EXPLORER);
 
     if (window.sessionStorage.getItem('babylon_debug')) {
       Promise.all([
@@ -91,7 +91,9 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
   };
 
   const onRender = (scene: Scene) => {
-    player?.update(scene.deltaTime);
+    if (scene.deltaTime) {
+      player?.update(scene.deltaTime * .001);
+    }
   };
 
   return (
