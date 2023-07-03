@@ -3,14 +3,19 @@ import styled from 'styled-components';
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 0 80px 10px 80px;
-  justify-content: space-between;
+  // align-items: center;
+  padding: 10px;
+  // justify-content: space-between;
+  flex: 1 0 auto;
 `;
 export const SkyboxInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+export const PreviewHolder = styled.div`
+  position: relative;
 `;
 
 export const SkyboxTitle = styled.div`
@@ -31,6 +36,7 @@ export const ControlsRow = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+  margin: 20px 0;
 `;
 
 export const Row = styled.div`
@@ -42,7 +48,7 @@ export const Row = styled.div`
 `;
 export const Prop = styled.div`
   display: flex;
-  justify-content: space-between;
+  // justify-content: space-between;
   align-items: center;
   flex: 1;
   letter-spacing: 0.02em;
@@ -54,6 +60,7 @@ export const Prop = styled.div`
 `;
 export const PropName = styled.span`
   margin-right: 5px;
+  width: 120px;
 `;
 export const PropValue = styled.span`
   font-weight: 700;
