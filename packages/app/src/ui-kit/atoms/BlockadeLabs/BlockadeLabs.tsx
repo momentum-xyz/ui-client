@@ -1,6 +1,7 @@
 import {FC} from 'react';
 
 import logo from 'static/images/blockadelabs.svg';
+import {LICENSE_CC4_URL} from 'core/constants';
 
 import * as styled from './BlockadeLabs.styled';
 
@@ -20,11 +21,7 @@ export const BlockadeLabs: FC<BlockadeLabsPropsInterface> = ({withLicense, ...pr
           Blockade Labs
         </a>{' '}
         and licensed under{' '}
-        <a
-          href="https://creativecommons.org/licenses/by/4.0/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href={LICENSE_CC4_URL} target="_blank" rel="noopener noreferrer">
           cc4.0
         </a>
       </styled.Attribution>
