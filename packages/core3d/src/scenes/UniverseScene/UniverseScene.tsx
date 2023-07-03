@@ -92,7 +92,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
 
   const onRender = (scene: Scene) => {
     if (scene.deltaTime) {
-      player?.update(scene.deltaTime * .001);
+      player?.update(Math.min(scene.deltaTime * .001, 1));
     }
   };
 
