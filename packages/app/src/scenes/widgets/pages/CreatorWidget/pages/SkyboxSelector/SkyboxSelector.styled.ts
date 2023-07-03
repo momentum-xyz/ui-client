@@ -7,7 +7,12 @@ export const Separator = styled.div`
   margin: 10px;
 `;
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
 export const ControlsContainer = styled.div``;
 export const ControlsInnerContainer = styled.div`
   display: flex;

@@ -44,73 +44,71 @@ const SkyboxSelector: FC = () => {
   }, [communitySkyboxesList, skyboxPreviewType, userSkyboxesList, searchInputValue]);
 
   return (
-    <>
-      <styled.Container data-testid="SkyboxSelector-test">
-        <styled.ControlsContainer>
-          <Frame>
-            <styled.ControlsInnerContainer>
-              <styled.SkyboxTypeContainer>
-                <Button
-                  label={t('titles.communitySkyboxLibrary')}
-                  active={skyboxPreviewType === 'COMMUNITY'}
-                  onClick={() => {
-                    setPreviewSkybox(null);
-                    setMode('view');
-                    setSkyboxPreviewType('COMMUNITY');
-                    setSearchInputValue('');
-                  }}
-                />
-                <Button
-                  label={t('titles.privateSkyboxLibrary')}
-                  active={skyboxPreviewType === 'PRIVATE'}
-                  onClick={() => {
-                    setPreviewSkybox(null);
-                    setMode('view');
-                    setSkyboxPreviewType('PRIVATE');
-                    setSearchInputValue('');
-                  }}
-                />
-              </styled.SkyboxTypeContainer>
-              <styled.SkyboxSearchContainer>
-                <Input
-                  placeholder={t(
-                    `placeholders.${
-                      skyboxPreviewType === 'COMMUNITY'
-                        ? 'searchCommunityLibrary'
-                        : 'searchPrivateLibrary'
-                    }`
-                  )}
-                  value={searchInputValue}
-                  isSearch
-                  onChange={setSearchInputValue}
-                  wide
-                />
-              </styled.SkyboxSearchContainer>
+    <styled.Container data-testid="SkyboxSelector-test">
+      <styled.ControlsContainer>
+        <Frame>
+          <styled.ControlsInnerContainer>
+            <styled.SkyboxTypeContainer>
               <Button
-                label={t('actions.createCustomSkyboxAI')}
-                wide
-                icon="ai"
+                label={t('titles.communitySkyboxLibrary')}
+                active={skyboxPreviewType === 'COMMUNITY'}
                 onClick={() => {
-                  setMode('gen_ai');
                   setPreviewSkybox(null);
+                  setMode('view');
+                  setSkyboxPreviewType('COMMUNITY');
+                  setSearchInputValue('');
                 }}
               />
               <Button
-                label={t('actions.uploadCustomSkybox')}
-                wide
-                icon="astronaut"
+                label={t('titles.privateSkyboxLibrary')}
+                active={skyboxPreviewType === 'PRIVATE'}
                 onClick={() => {
-                  setMode('upload');
                   setPreviewSkybox(null);
+                  setMode('view');
+                  setSkyboxPreviewType('PRIVATE');
+                  setSearchInputValue('');
                 }}
               />
-            </styled.ControlsInnerContainer>
-          </Frame>
-          <styled.Separator />
-        </styled.ControlsContainer>
-      </styled.Container>
+            </styled.SkyboxTypeContainer>
+            <styled.SkyboxSearchContainer>
+              <Input
+                placeholder={t(
+                  `placeholders.${
+                    skyboxPreviewType === 'COMMUNITY'
+                      ? 'searchCommunityLibrary'
+                      : 'searchPrivateLibrary'
+                  }`
+                )}
+                value={searchInputValue}
+                isSearch
+                onChange={setSearchInputValue}
+                wide
+              />
+            </styled.SkyboxSearchContainer>
+            <Button
+              label={t('actions.createCustomSkyboxAI')}
+              wide
+              icon="ai"
+              onClick={() => {
+                setMode('gen_ai');
+                setPreviewSkybox(null);
+              }}
+            />
+            <Button
+              label={t('actions.uploadCustomSkybox')}
+              wide
+              icon="astronaut"
+              onClick={() => {
+                setMode('upload');
+                setPreviewSkybox(null);
+              }}
+            />
+          </styled.ControlsInnerContainer>
+        </Frame>
+        <styled.Separator />
+      </styled.ControlsContainer>
 
-      {mode === 'view' && (
+      {mode === 'view' && !previewSkybox && (
         <styled.SkyboxListContainer>
           <styled.SkyboxListHeader>
             <span>
@@ -136,7 +134,7 @@ const SkyboxSelector: FC = () => {
       {mode === 'upload' && <UploadSkybox onBack={() => setMode('view')} />}
       {mode === 'gen_ai' && <CustomSkyboxWithAI onBack={() => setMode('view')} />}
 
-      {previewSkybox && (
+      {mode === 'view' && previewSkybox && (
         <SkyboxPreview
           skybox={previewSkybox}
           onSkyboxSelect={(sb) => {
@@ -156,7 +154,7 @@ const SkyboxSelector: FC = () => {
         />
       )}
       {skyboxSelectorStore.deleteDialog.isOpen && <DeleteSkyboxDialog />}
-    </>
+    </styled.Container>
   );
 };
 
