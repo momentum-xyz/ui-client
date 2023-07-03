@@ -56,6 +56,8 @@ export type IconNameType =
   | 'denied'
   | 'direction-arrows'
   | 'discord'
+  | 'distance_large'
+  | 'distance_small'
   | 'document'
   | 'document_add'
   | 'document_info'

@@ -43,6 +43,8 @@ const MusicPlayerView: FC<PropsInterface> = (props) => {
           <styled.Block>
             <styled.Title>{t('labels.distance')}</styled.Title>
             <SoundRange
+              leftIcon="distance_small"
+              rightIcon="distance_large"
               percent={musicPlayer.distancePercent}
               onChange={(percent) => setDistancePercent?.(percent)}
             />
