@@ -127,6 +127,7 @@ const MusicPlayer = types
     },
     get howlerProps() {
       return {
+        loop: true,
         html5: true,
         src: this.activeTrack?.url || '',
         playing: self.isPlaying,
