@@ -8,14 +8,15 @@ import {SoundFormInterface} from 'core/interfaces';
 import {MediaUploader, MusicPlayer, TrackInfoModelInterface} from 'core/models';
 
 const DEFAULT_VOLUME_PERCENT = 25;
+const DEFAULT_DISTANCE = 100;
 
-const ObjectMusic = types
+const ObjectSound = types
   .compose(
     ResetModel,
-    types.model('ObjectMusic', {
+    types.model('ObjectSound', {
       objectId: '',
       mediaUploader: types.optional(MediaUploader, {}),
-      musicPlayer: types.optional(MusicPlayer, {}),
+      musicPlayer: types.optional(MusicPlayer, {hasDistance: true}),
       fetchRequest: types.optional(RequestModel, {}),
       publishRequest: types.optional(RequestModel, {}),
       deleteRequest: types.optional(RequestModel, {})
@@ -35,7 +36,7 @@ const ObjectMusic = types
         value: {
           tracks,
           volume: self.musicPlayer.volume,
-          distance: 0 // TODO self.musicPlayer.distance
+          distance: self.musicPlayer.distance
         }
       });
     })
@@ -53,8 +54,8 @@ const ObjectMusic = types
 
       if (attributeResponse) {
         self.musicPlayer.refreshTracks(cast(attributeResponse.tracks || []));
-        self.musicPlayer.setVolume(attributeResponse.volume || 0);
-        // TODO: distance
+        self.musicPlayer.setVolume(attributeResponse.volume || DEFAULT_VOLUME_PERCENT);
+        self.musicPlayer.setDistance(attributeResponse.distance || DEFAULT_DISTANCE);
       }
     }),
     publishSpacialSound: flow(function* (form: SoundFormInterface) {
@@ -80,11 +81,10 @@ const ObjectMusic = types
       self.musicPlayer.setVolume(volumePercent);
       yield self.updateAttribute(self.musicPlayer.tracks);
     }),
-    updateDistance(volumePercent: number): void {
-      // TODO
-      //self.musicPlayer.setDistance(volumePercent);
-      //yield self.updateAttribute(self.musicPlayer.tracks);
-    }
+    updateDistance: flow(function* (distancePercent: number) {
+      self.musicPlayer.setDistanceByPercent(distancePercent);
+      yield self.updateAttribute(self.musicPlayer.tracks);
+    })
   }))
   .actions((self) => ({
     soundChanged(
@@ -95,8 +95,8 @@ const ObjectMusic = types
     ): void {
       if (objectId === self.objectId) {
         self.musicPlayer.refreshTracks(tracks);
+        self.musicPlayer.setDistance(distance);
         self.musicPlayer.setVolume(volume);
-        // self.musicPlayer.setDistance()
       }
     },
     subscribe() {
@@ -109,7 +109,6 @@ const ObjectMusic = types
   .actions((self) => ({
     async init(objectId: string) {
       self.setObjectId(objectId);
-      self.musicPlayer.setVolume(DEFAULT_VOLUME_PERCENT);
       await self.fetchSpacialSound();
     }
   }))
@@ -125,4 +124,4 @@ const ObjectMusic = types
     }
   }));
 
-export {ObjectMusic};
+export {ObjectSound};

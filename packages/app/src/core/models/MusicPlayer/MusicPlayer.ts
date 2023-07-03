@@ -6,16 +6,20 @@ import {TrackStateInterface} from '@momentum-xyz/ui-kit';
 import {getTrackAbsoluteUrl} from 'core/utils';
 import {TrackInfo, TrackInfoModelInterface} from 'core/models/TrackInfo';
 
+const DISTANCE_MAX_VALUE = 420;
+
 const MusicPlayer = types
   .compose(
     ResetModel,
     types.model('MusicPlayer', {
       tracks: types.optional(types.array(TrackInfo), []),
       trackHash: types.maybeNull(types.string),
+      hasDistance: false,
       isSeeking: false,
       isPlaying: false,
       durationSec: 0,
       playedSec: 0,
+      distance: 0,
       volume: 0
     })
   )
@@ -29,6 +33,12 @@ const MusicPlayer = types
     },
     setVolume(volumePercent: number): void {
       self.volume = volumePercent;
+    },
+    setDistance(distance: number): void {
+      self.distance = distance;
+    },
+    setDistanceByPercent(distancePercent: number): void {
+      self.distance = (DISTANCE_MAX_VALUE * distancePercent) / 100;
     },
     start(trackHash: string): void {
       if (self.tracks.some((item) => item.render_hash === trackHash)) {
@@ -111,6 +121,9 @@ const MusicPlayer = types
         playedSec: self.playedSec,
         playedPercent: isDurationAvailable ? (self.playedSec * 100) / self.durationSec : 0
       };
+    },
+    get distancePercent() {
+      return (self.distance * 100) / DISTANCE_MAX_VALUE;
     },
     get howlerProps() {
       return {

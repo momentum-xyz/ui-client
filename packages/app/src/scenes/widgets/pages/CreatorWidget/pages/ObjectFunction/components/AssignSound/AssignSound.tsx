@@ -19,8 +19,8 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
   const {musicStore, widgetStore} = useStore();
   const {creatorStore} = widgetStore;
   const {objectFunctionalityStore} = creatorStore;
-  const {objectMusic} = objectFunctionalityStore;
-  const {musicPlayer} = objectMusic;
+  const {objectSound} = objectFunctionalityStore;
+  const {musicPlayer} = objectSound;
 
   const [isNewForm, setIsNewForm] = useState(false);
   const playerRef = useRef<ReactHowler>(null);
@@ -39,14 +39,14 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
   }, [musicStore.musicPlayer]);
 
   useEffect(() => {
-    objectMusic.init(objectId);
-    objectMusic.subscribe();
+    objectSound.init(objectId);
+    objectSound.subscribe();
 
     return () => {
-      objectMusic.unsubscribe();
-      objectMusic.resetModel();
+      objectSound.unsubscribe();
+      objectSound.resetModel();
     };
-  }, [objectId, objectMusic]);
+  }, [objectId, objectSound]);
 
   useEffect(() => {
     if (playerRef.current) {
@@ -55,13 +55,13 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
   }, [musicStore, musicPlayer.activeTrack, musicPlayer]);
 
   const handlePublish = async (form: SoundFormInterface) => {
-    if (await objectMusic.publishSpacialSound(form)) {
+    if (await objectSound.publishSpacialSound(form)) {
       setIsNewForm(false);
     }
   };
 
   const handleDelete = async (hash: string) => {
-    await objectMusic.deleteSpacialSound(hash);
+    await objectSound.deleteSpacialSound(hash);
   };
 
   return (
@@ -81,7 +81,7 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
               />
             ) : (
               <MusicFileForm
-                isPending={objectMusic.isUpdating}
+                isPending={objectSound.isUpdating}
                 onCancel={() => setIsNewForm(false)}
                 onPublish={handlePublish}
               />
@@ -92,13 +92,17 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
 
       <styled.TracksContainer>
         <styled.Howler>
-          {objectMusic.hasActiveTrack && (
+          {objectSound.hasActiveTrack && (
             <ReactHowler ref={playerRef} {...musicPlayer.howlerProps} />
           )}
         </styled.Howler>
 
         {/* ACTIVE TRACK */}
-        <MusicPlayerView musicPlayer={musicPlayer} setVolume={objectMusic.updateVolume} />
+        <MusicPlayerView
+          musicPlayer={musicPlayer}
+          setVolume={objectSound.updateVolume}
+          setDistancePercent={objectSound.updateDistance}
+        />
 
         {/* TRACK LIST */}
         <styled.TrackList>

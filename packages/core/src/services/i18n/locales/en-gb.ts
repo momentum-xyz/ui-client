@@ -314,6 +314,7 @@ export const enGb = {
       universal: 'Universal',
       logout: 'Logout',
       volume: 'Volume',
+      distance: 'Distance',
       worldStats: 'World stats',
       tokenRules: 'Token Rules',
       nameOfInitiative: 'Name of Initiative',
