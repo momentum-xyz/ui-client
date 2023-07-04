@@ -25,7 +25,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
   const {sessionStore, widgetStore, widgetManagerStore, universeStore, agoraStore, musicStore} =
     useStore();
   const {activeWidgetList, subMenuInfo} = widgetManagerStore;
-  const {isMyWorld, world2dStore} = universeStore;
+  const {isCurrentUserWorldAdmin, world2dStore} = universeStore;
 
   const {t} = useI18n();
   const navigate = useNavigate();
@@ -121,7 +121,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       position: PositionEnum.CENTER,
       viewPosition: PositionEnum.RIGHT,
       iconName: 'pencil',
-      isHidden: !isWorld || !isMyWorld,
+      isHidden: !isWorld || !isCurrentUserWorldAdmin,
       tooltip: t('actions.creatorOpen'),
       isDisabled: universeStore.isScreenRecording,
       onClick: handleToggle

@@ -387,6 +387,7 @@ export const enGb = {
       changeMusic: 'Change Music (coming soon)',
       tokenGating: 'Token Gating (coming soon)',
       addObject: 'Add Object',
+      coCreators: 'Co-creators',
       spawnPoint: 'Spawn Point',
       skyboxes: 'Skyboxes',
       addCustomSkybox: 'Add Custom Skybox',

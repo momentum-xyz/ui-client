@@ -16,7 +16,8 @@ import {
   ObjectInspector,
   AssetCustomising,
   ObjectFunction,
-  MusicManager
+  MusicManager,
+  Admins
 } from './pages';
 
 type MenuItemType = keyof typeof CreatorTabsEnum;
@@ -36,6 +37,12 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     id: 'sound',
     iconName: 'music',
     label: i18n.t('labels.sound')
+  },
+  {
+    id: 'admins',
+    iconName: 'collaboration',
+    label: i18n.t('labels.coCreators')
+    // TODO make it for owner only
   }
 ];
 
@@ -92,6 +99,8 @@ const CreatorWidget: FC = () => {
     switch (selectedTab) {
       case 'addObject':
         return <SpawnAsset />;
+      case 'admins':
+        return <Admins />;
       case 'skybox':
         return <SkyboxSelector />;
       case 'sound':

@@ -3,6 +3,8 @@ export const spaceRepositoryEndpoints = () => {
 
   return {
     base: `${BASE_URL}`,
-    space: `${BASE_URL}/:spaceId`
+    object: `${BASE_URL}/:objectId`,
+    members: `${BASE_URL}/:objectId/members`,
+    deleteMember: `${BASE_URL}/:objectId/members/:userId`
   };
 };
