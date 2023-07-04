@@ -1,6 +1,6 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
-import {Event3dEmitter, RequestModel, ResetModel} from '@momentum-xyz/core';
+import {Event3dEmitter, ObjectSoundInterface, RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api} from 'api';
 import {PluginIdEnum} from 'api/enums';
@@ -42,7 +42,7 @@ const ObjectSound = types
     })
   }))
   .actions((self) => ({
-    fetchSpacialSound: flow(function* () {
+    loadSpacialSound: flow(function* () {
       const attributeResponse = yield self.fetchRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
@@ -87,16 +87,11 @@ const ObjectSound = types
     })
   }))
   .actions((self) => ({
-    soundChanged(
-      objectId: string,
-      tracks: TrackInfoModelInterface[],
-      volume: number,
-      distance: number
-    ): void {
+    soundChanged(objectId: string, data: ObjectSoundInterface): void {
       if (objectId === self.objectId) {
-        self.musicPlayer.refreshTracks(tracks);
-        self.musicPlayer.setDistance(distance);
-        self.musicPlayer.setVolume(volume);
+        self.musicPlayer.refreshTracks(data.tracks);
+        self.musicPlayer.setDistance(data.distance);
+        self.musicPlayer.setVolume(data.volume);
       }
     },
     subscribe() {
@@ -109,7 +104,7 @@ const ObjectSound = types
   .actions((self) => ({
     async init(objectId: string) {
       self.setObjectId(objectId);
-      await self.fetchSpacialSound();
+      await self.loadSpacialSound();
     }
   }))
   .views((self) => ({

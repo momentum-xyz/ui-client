@@ -15,6 +15,7 @@ import {
 import {AttributeValueChanged} from '@momentum-xyz/posbus-client/dist/build/posbus';
 
 import {PosBusEventEmitter} from 'core/constants';
+import {getTrackAbsoluteUrl} from 'core/utils';
 import {appVariables} from 'api/constants';
 import {PluginIdEnum} from 'api/enums';
 
@@ -152,6 +153,18 @@ class PosBusService {
             hash: entries.string.object_color
           });
         }
+        if (entries?.audio?.spatial) {
+          Event3dEmitter.emit('ObjectSoundChanged', id, {
+            volume: entries.audio.spatial.volume || 0,
+            distance: entries.audio.spatial.distance || 0,
+            tracks: entries.audio.spatial.tracks.map((track: any) => ({
+              ...track,
+              hash_url: getTrackAbsoluteUrl(track.render_hash)
+            }))
+          });
+        }
+
+        // TODO: Sound
         break;
       }
       case MsgType.SET_WORLD: {
@@ -276,13 +289,11 @@ class PosBusService {
       case AttributeNameEnum.SPATIAL_AUDIO: {
         const value = msg.value;
         if (value?.tracks) {
-          Event3dEmitter.emit(
-            'SpatialSoundChanged',
-            msg.target_id,
-            value.tracks,
-            value.volume || 0,
-            value.distance || 0
-          );
+          Event3dEmitter.emit('SpatialSoundChanged', msg.target_id, {
+            tracks: value.tracks,
+            volume: value.volume || 0,
+            distance: value.distance || 0
+          });
         }
         break;
       }

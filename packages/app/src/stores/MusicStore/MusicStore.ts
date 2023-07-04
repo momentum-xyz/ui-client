@@ -29,7 +29,7 @@ const MusicStore = types
     }
   }))
   .actions((self) => ({
-    fetchTracks: flow(function* (worldId: string) {
+    loadTracks: flow(function* (worldId: string) {
       const attributeResponse = yield self.fetchRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
@@ -55,7 +55,7 @@ const MusicStore = types
   .actions((self) => ({
     async init(worldId: string) {
       self.initVolume();
-      await self.fetchTracks(worldId);
+      await self.loadTracks(worldId);
 
       if (self.musicPlayer.tracks.length > 0) {
         self.musicPlayer.start(self.musicPlayer.tracks[0].render_hash);
