@@ -146,6 +146,7 @@ class PosBusService {
             });
           });
         }
+
         if (entries?.string?.object_color) {
           Event3dEmitter.emit('ObjectTextureChanged', {
             objectId: id,
@@ -153,6 +154,7 @@ class PosBusService {
             hash: entries.string.object_color
           });
         }
+
         if (entries?.audio?.spatial) {
           Event3dEmitter.emit('ObjectSoundChanged', id, {
             volume: entries.audio.spatial.volume || 0,
@@ -164,7 +166,6 @@ class PosBusService {
           });
         }
 
-        // TODO: Sound
         break;
       }
       case MsgType.SET_WORLD: {

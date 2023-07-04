@@ -10,7 +10,12 @@ import {
   Vector3,
   Texture
 } from '@babylonjs/core';
-import {Object3dInterface, Texture3dInterface, SetWorldInterface} from '@momentum-xyz/core';
+import {
+  Object3dInterface,
+  Texture3dInterface,
+  SetWorldInterface,
+  ObjectSoundInterface
+} from '@momentum-xyz/core';
 
 import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
@@ -93,6 +98,10 @@ export class ObjectHelper {
     if (obj) {
       this.setObjectTextures(obj, scene);
     } //else: spawnObject will check awaitingTextures
+  }
+
+  static objectSoundChange(scene: Scene, objectId: string, sound: ObjectSoundInterface): void {
+    // TODO
   }
 
   static setObjectTextures(obj: BabylonObjectInterface, scene: Scene) {

@@ -33,6 +33,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       events.off('SetWorld');
       events.off('AddObject');
       events.off('ObjectTextureChanged');
+      events.off('ObjectSoundChanged');
       events.off('ObjectTransform');
       events.off('UserAdded');
       events.off('UserRemoved');
@@ -42,6 +43,9 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       events.off('StartRecordingVideo');
       events.off('StopRecordingVideo');
       events.off('MakeScreenshot');
+      events.off('SendHighFive');
+      events.off('DetachObjectFromCamera');
+      events.off('ReceiveHighFive');
     };
   }, [events]);
 
@@ -98,8 +102,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
         ObjectHelper.objectTextureChange(scene, object);
       });
 
-      events.on('ObjectSoundChanged', (objectId: string, value: ObjectSoundInterface) => {
-        console.log('!!!', objectId, value);
+      events.on('ObjectSoundChanged', (objectId: string, sound: ObjectSoundInterface) => {
+        ObjectHelper.objectSoundChange(scene, objectId, sound);
       });
 
       events.on('ObjectTransform', (id, object) => {
@@ -140,7 +144,6 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
         PlayerHelper.followPlayer(userId);
       });
 
-      // TODO: Implementation
       events.on('MakeScreenshot', () => {
         ScreenCaptureHelper.takeScreenshot();
       });
