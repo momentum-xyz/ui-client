@@ -76,6 +76,49 @@ const ObjectFunction: FC = () => {
     toast.info(<ToastContent icon="check" text={t('labels.deleted')} />);
   };
 
+  const renderBody = () => {
+    if (!activeType || !selectedObjectId) {
+      return;
+    }
+
+    return (
+      <styled.PanelBody>
+        {/* ASSIGN IMAGE */}
+        {activeType === BasicAsset2dIdEnum.IMAGE && (
+          <AssignImage actionRef={actionRef} objectId={selectedObjectId} />
+        )}
+
+        {/* ASSIGN TEXT */}
+        {activeType === BasicAsset2dIdEnum.TEXT && (
+          <AssignText actionRef={actionRef} objectId={selectedObjectId} />
+        )}
+
+        {/* ASSIGN VIDEO */}
+        {activeType === BasicAsset2dIdEnum.VIDEO && (
+          <>
+            {pluginLoader?.plugin ? (
+              <AssignVideo
+                actionRef={actionRef}
+                plugin={pluginLoader.plugin}
+                pluginLoader={pluginLoader}
+                objectId={selectedObjectId}
+              />
+            ) : (
+              <div>
+                <div>Cannot assign functionality because plugin_video is not loaded.</div>
+                <div>Report to development.</div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ASSIGN SOUND */}
+        {/* FIXME: Temp solutions. It will be moved to the new Inspector */}
+        {activeType === 'sound' && <AssignSound objectId={selectedObjectId} />}
+      </styled.PanelBody>
+    );
+  };
+
   return (
     <styled.Container data-testid="ObjectFunction-test">
       {/* FUNCTION IS NOT SELECTED */}
@@ -107,40 +150,7 @@ const ObjectFunction: FC = () => {
       {/* FUNCTION IS NOT SELECTED */}
       {activeType && !!selectedObjectId && (
         <>
-          <styled.PanelBody>
-            {/* ASSIGN IMAGE */}
-            {activeType === BasicAsset2dIdEnum.IMAGE && (
-              <AssignImage actionRef={actionRef} objectId={selectedObjectId} />
-            )}
-
-            {/* ASSIGN TEXT */}
-            {activeType === BasicAsset2dIdEnum.TEXT && (
-              <AssignText actionRef={actionRef} objectId={selectedObjectId} />
-            )}
-
-            {/* ASSIGN VIDEO */}
-            {activeType === BasicAsset2dIdEnum.VIDEO && (
-              <>
-                {pluginLoader?.plugin ? (
-                  <AssignVideo
-                    actionRef={actionRef}
-                    plugin={pluginLoader.plugin}
-                    pluginLoader={pluginLoader}
-                    objectId={selectedObjectId}
-                  />
-                ) : (
-                  <div>
-                    <div>Cannot assign functionality because plugin_video is not loaded.</div>
-                    <div>Report to development.</div>
-                  </div>
-                )}
-              </>
-            )}
-
-            {/* ASSIGN SOUND */}
-            {/* FIXME: Temp solutions. It will be moved to the new Inspector */}
-            {activeType === 'sound' && <AssignSound objectId={selectedObjectId} />}
-          </styled.PanelBody>
+          {renderBody()}
 
           <styled.ActionBar>
             <Button
