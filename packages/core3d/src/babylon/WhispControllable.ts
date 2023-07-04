@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
 import {ArcRotateCamera, KeyboardEventTypes, PointerEventTypes, Scene, Vector2, Vector3} from "@babylonjs/core";
 
 import {Whisp} from "./Whisp";
+
+interface Bindings {
+    [key: string]: number
+}
 
 export class WhispControllable extends Whisp {
     private static readonly BIT_LEFT = 0x01;
@@ -12,20 +15,25 @@ export class WhispControllable extends Whisp {
     private static readonly BIT_DOWN = 0x10;
     private static readonly BIT_UP = 0x20;
     private static readonly BIT_SPRINT = 0x40;
-    private static readonly BITS_MOTION =
+    private static readonly BIT_LOOK = 0x80;
+    private static readonly BITS_LOOK =
+        WhispControllable.BIT_LOOK |
         WhispControllable.BIT_LEFT |
         WhispControllable.BIT_RIGHT |
         WhispControllable.BIT_FORWARD |
         WhispControllable.BIT_BACK |
         WhispControllable.BIT_UP |
         WhispControllable.BIT_DOWN;
-    private static readonly KEY_LEFT = 'a';
-    private static readonly KEY_RIGHT = 'd';
-    private static readonly KEY_FORWARD = 'w';
-    private static readonly KEY_BACK = 's';
-    private static readonly KEY_DOWN = 'q';
-    private static readonly KEY_UP = 'e';
-    private static readonly KEY_SPRINT = "shift";
+    private static readonly BINDINGS: Bindings = {
+        'a': WhispControllable.BIT_LEFT,
+        'd': WhispControllable.BIT_RIGHT,
+        'w': WhispControllable.BIT_FORWARD,
+        's': WhispControllable.BIT_BACK,
+        'q': WhispControllable.BIT_DOWN,
+        'e': WhispControllable.BIT_UP,
+        'shift': WhispControllable.BIT_SPRINT,
+        ' ': WhispControllable.BIT_LOOK
+    };
     private static readonly UP = new Vector3(0, 1, 0);
     private static readonly RIGHT = new Vector3(1, 0, 0);
     private static readonly FORWARD = new Vector3(0, 0, 1);
@@ -61,68 +69,14 @@ export class WhispControllable extends Whisp {
     }
 
     private keyDown(key: string) {
-        switch (key) {
-            case WhispControllable.KEY_LEFT:
-                this.moveState |= WhispControllable.BIT_LEFT;
-
-                break;
-            case WhispControllable.KEY_RIGHT:
-                this.moveState |= WhispControllable.BIT_RIGHT;
-
-                break;
-            case WhispControllable.KEY_FORWARD:
-                this.moveState |= WhispControllable.BIT_FORWARD;
-
-                break;
-            case WhispControllable.KEY_BACK:
-                this.moveState |= WhispControllable.BIT_BACK;
-
-                break;
-            case WhispControllable.KEY_DOWN:
-                this.moveState |= WhispControllable.BIT_DOWN;
-
-                break;
-            case WhispControllable.KEY_UP:
-                this.moveState |= WhispControllable.BIT_UP;
-
-                break;
-            case WhispControllable.KEY_SPRINT:
-                this.moveState |= WhispControllable.BIT_SPRINT;
-
-                break;
+        if (Object.keys(WhispControllable.BINDINGS).indexOf(key) !== -1) {
+            this.moveState |= WhispControllable.BINDINGS[key];
         }
     }
 
     private keyUp(key: string) {
-        switch (key) {
-            case WhispControllable.KEY_LEFT:
-                this.moveState &= ~WhispControllable.BIT_LEFT;
-
-                break;
-            case WhispControllable.KEY_RIGHT:
-                this.moveState &= ~WhispControllable.BIT_RIGHT;
-
-                break;
-            case WhispControllable.KEY_FORWARD:
-                this.moveState &= ~WhispControllable.BIT_FORWARD;
-
-                break;
-            case WhispControllable.KEY_BACK:
-                this.moveState &= ~WhispControllable.BIT_BACK;
-
-                break;
-            case WhispControllable.KEY_DOWN:
-                this.moveState &= ~WhispControllable.BIT_DOWN;
-
-                break;
-            case WhispControllable.KEY_UP:
-                this.moveState &= ~WhispControllable.BIT_UP;
-
-                break;
-            case WhispControllable.KEY_SPRINT:
-                this.moveState &= ~WhispControllable.BIT_SPRINT;
-
-                break;
+        if (Object.keys(WhispControllable.BINDINGS).indexOf(key) !== -1) {
+            this.moveState &= ~WhispControllable.BINDINGS[key];
         }
     }
 
@@ -178,8 +132,8 @@ export class WhispControllable extends Whisp {
     update(delta: number) {
         super.update(delta);
 
-        if (this.moveState & WhispControllable.BITS_MOTION) {
-            if (!(this.moveStatePrevious & WhispControllable.BITS_MOTION)) {
+        if (this.moveState & WhispControllable.BITS_LOOK) {
+            if (!(this.moveStatePrevious & WhispControllable.BITS_LOOK)) {
                 this.startLook();
             }
         }
