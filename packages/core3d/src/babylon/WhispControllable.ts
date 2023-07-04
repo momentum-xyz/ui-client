@@ -43,11 +43,10 @@ export class WhispControllable extends Whisp {
     private static readonly FRICTION = .14;
     private static readonly LOOK_SENSITIVITY = .002;
 
+    private readonly scene: Scene;
     private readonly velocity = new Vector3();
     private readonly cameraPosition = new Vector3();
-    private readonly cursor = new Vector2();
-    private readonly angles = new Vector2();
-    private readonly lookAnchor = new Vector2();
+    private readonly cursorMovement = new Vector2();
 
     private looking = false;
     private camera;
@@ -59,6 +58,7 @@ export class WhispControllable extends Whisp {
 
         this.addListeners(scene);
 
+        this.scene = scene;
         this.camera = new ArcRotateCamera(
             "camera",
             0,
@@ -68,6 +68,12 @@ export class WhispControllable extends Whisp {
             scene);
 
         scene.onBeforeCameraRenderObservable.add(this.updateCamera.bind(this));
+
+        document.addEventListener("pointerlockchange", () => {
+            if (document.pointerLockElement === scene.getEngine().getRenderingCanvas()) {
+                this.startLooking();
+            }
+        });
     }
 
     private keyDown(key: string) {
@@ -111,7 +117,8 @@ export class WhispControllable extends Whisp {
         scene.onPointerObservable.add((pointerInfo) => {
             switch (pointerInfo.type) {
                 case PointerEventTypes.POINTERMOVE:
-                    this.cursor.set(pointerInfo.event.clientX, pointerInfo.event.clientY);
+                    this.cursorMovement.x += pointerInfo.event.movementX;
+                    this.cursorMovement.y += pointerInfo.event.movementY;
 
                     break;
                 case PointerEventTypes.POINTERDOWN:
@@ -125,25 +132,32 @@ export class WhispControllable extends Whisp {
     }
 
     private startLook() {
-        this.angles.set(this.camera.alpha, this.camera.beta);
-        this.lookAnchor.copyFrom(this.cursor);
+        this.scene.getEngine().getRenderingCanvas()?.requestPointerLock();
+    }
 
+    private startLooking() {
         this.looking = true;
     }
 
     private stopLook() {
+        document.exitPointerLock();
+
         this.looking = false;
     }
 
     private updateCamera() {
+        this.cameraPosition.x = this.position.x + WhispControllable.UP.x * WhispControllable.RAISE;
+        this.cameraPosition.y = this.position.y + WhispControllable.UP.y * WhispControllable.RAISE;
+        this.cameraPosition.z = this.position.z + WhispControllable.UP.z * WhispControllable.RAISE;
+
         this.camera.setTarget(this.cameraPosition);
 
         if (this.looking) {
-            this.camera.alpha = this.angles.x + (this.lookAnchor.x - this.cursor.x) *
-                WhispControllable.LOOK_SENSITIVITY;
-            this.camera.beta = this.angles.y + (this.lookAnchor.y - this.cursor.y) *
-                WhispControllable.LOOK_SENSITIVITY;
+            this.camera.alpha -= this.cursorMovement.x * WhispControllable.LOOK_SENSITIVITY;
+            this.camera.beta -= this.cursorMovement.y * WhispControllable.LOOK_SENSITIVITY;
         }
+
+        this.cursorMovement.set(0, 0);
     }
 
     update(delta: number) {
@@ -175,20 +189,15 @@ export class WhispControllable extends Whisp {
             +((this.inputState & WhispControllable.BIT_BACK) === WhispControllable.BIT_BACK)) * acceleration;
 
         const right = this.camera.getDirection(WhispControllable.RIGHT);
-        const up = WhispControllable.UP;
         const forward = this.camera.getDirection(WhispControllable.FORWARD);
 
-        this.velocity.x += forward.x * dz + up.x * dy + right.x * dx;
-        this.velocity.y += forward.y * dz + up.y * dy + right.y * dx;
-        this.velocity.z += forward.z * dz + up.z * dy + right.z * dx;
+        this.velocity.x += forward.x * dz + WhispControllable.UP.x * dy + right.x * dx;
+        this.velocity.y += forward.y * dz + WhispControllable.UP.y * dy + right.y * dx;
+        this.velocity.z += forward.z * dz + WhispControllable.UP.z * dy + right.z * dx;
 
         this.position.x += this.velocity.x * delta;
         this.position.y += this.velocity.y * delta;
         this.position.z += this.velocity.z * delta;
-
-        this.cameraPosition.x = this.position.x + up.x * WhispControllable.RAISE;
-        this.cameraPosition.y = this.position.y + up.y * WhispControllable.RAISE;
-        this.cameraPosition.z = this.position.z + up.z * WhispControllable.RAISE;
 
         const friction = Math.pow(WhispControllable.FRICTION, delta * 2);
 
