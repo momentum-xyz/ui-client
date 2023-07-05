@@ -49,6 +49,7 @@ export class WhispControllable extends Whisp {
     private static readonly CAMERA_SHAKE_MAGNITUDE = .0012;
     private static readonly CAMERA_SHAKE_SPRING = .004;
     private static readonly CAMERA_SHAKE_POWER = 1.2;
+    private static readonly CAMERA_SPRING = .004;
     private static readonly ACCELERATION = 50;
     private static readonly ACCELERATION_SPRINT = 120;
     private static readonly FRICTION = .14;
@@ -155,18 +156,23 @@ export class WhispControllable extends Whisp {
     private stopLook() {
         document.exitPointerLock();
 
+        this.cursorMovement.set(0, 0);
         this.looking = false;
     }
 
     private updateCamera(delta: number) {
         if (this.looking) {
-            this.camera.alpha -= this.cursorMovement.x *
-                WhispControllable.LOOK_SENSITIVITY;
-            this.camera.beta -= this.cursorMovement.y *
-                WhispControllable.LOOK_SENSITIVITY;
-        }
+            const lookSpring = 1 - Math.pow(WhispControllable.CAMERA_SPRING, delta * 2);
 
-        this.cursorMovement.set(0, 0);
+            const dx = lookSpring * this.cursorMovement.x;
+            const dy = lookSpring * this.cursorMovement.y;
+
+            this.camera.alpha -= dx * WhispControllable.LOOK_SENSITIVITY;
+            this.camera.beta -= dy * WhispControllable.LOOK_SENSITIVITY;
+
+            this.cursorMovement.x -= dx;
+            this.cursorMovement.y -= dy;
+        }
 
         this.cameraPosition.x = this.position.x + WhispControllable.UP.x *
             WhispControllable.CAMERA_RAISE;
