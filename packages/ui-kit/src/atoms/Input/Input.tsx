@@ -57,7 +57,12 @@ const Input: FC<InputPropsInterface> = ({
         // @ts-ignore: Typescript issues in library
         placeholder={placeholder}
         disabled={disabled}
-        className={cn(size, danger && 'danger', isSearch && 'search')}
+        className={cn(
+          size,
+          danger && 'danger',
+          isSearch && 'search',
+          (isClearable || isSearch || !!actionRight) && 'with-action'
+        )}
         onKeyPress={(event: KeyboardEvent) => {
           if (event.key === 'Enter') {
             onEnter?.();

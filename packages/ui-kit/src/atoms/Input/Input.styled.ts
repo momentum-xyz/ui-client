@@ -42,6 +42,10 @@ export const Container = styled.div`
       background: ${(props) => props.theme.danger && rgba(props.theme.danger, 0.4)};
     }
 
+    &.with-action {
+      padding-right: 35px;
+    }
+
     &.search {
       padding: 0 40px 0 20px;
     }
