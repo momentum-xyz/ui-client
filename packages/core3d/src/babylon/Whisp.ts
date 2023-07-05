@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {Color3, MeshBuilder, Scene, StandardMaterial, Vector3} from "@babylonjs/core";
+import {Color3, MeshBuilder, Scene, StandardMaterial, TrailMesh, Vector3} from "@babylonjs/core";
 
 export class Whisp {
     private static readonly ANIMATION_SPEED = .07;
@@ -7,6 +7,7 @@ export class Whisp {
     private static readonly FLOAT_MAGNITUDE = .1;
 
     private readonly float;
+    private trail?: TrailMesh;
 
     protected readonly sphere;
     protected readonly position = new Vector3(2, 2, 2);
@@ -15,15 +16,22 @@ export class Whisp {
     /**
      * Construct a whisp
      * @param {Scene} scene The scene
+     * @param {boolean} [trail] True if the whisp should have a trail
      * @param {boolean} [float] True if the whisp should have float motion
      */
-    constructor(scene: Scene, float = false) {
+    constructor(scene: Scene, trail = false, float = false) {
         this.float = float;
         this.sphere = MeshBuilder.CreateSphere('sphere', { diameter: .65 }, scene);
 
+
         const sphereMaterial = new StandardMaterial('sphereMaterial', scene);
         sphereMaterial.diffuseColor = Color3.Blue();
+        sphereMaterial.alpha = .3;
         this.sphere.material = sphereMaterial;
+
+        if (trail) {
+            this.trail = new TrailMesh("WhispTrail", this.sphere, scene, .1, 40);
+        }
     }
 
     /**

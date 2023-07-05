@@ -4,7 +4,6 @@ import {
     KeyboardEventTypes,
     PointerEventTypes,
     Scene,
-    TrailMesh,
     Vector2,
     Vector3
 } from "@babylonjs/core";
@@ -66,12 +65,11 @@ export class WhispControllable extends Whisp {
     private looking = false;
     private camera;
     private cameraShake = 0;
-    private trail;
     private inputState = 0;
     private inputStatePrevious = this.inputState;
 
     constructor(scene: Scene) {
-        super(scene, true);
+        super(scene, true, true);
 
         this.addListeners(scene);
 
@@ -83,8 +81,6 @@ export class WhispControllable extends Whisp {
             WhispControllable.CAMERA_RADIUS,
             this.cameraPosition,
             scene);
-        this.trail = new TrailMesh("WhispTrail", this.sphere, scene, .1, 40);
-        this.trail.start();
 
         document.addEventListener("pointerlockchange", () => {
             if (document.pointerLockElement === scene.getEngine().getRenderingCanvas()) {
