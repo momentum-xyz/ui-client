@@ -65,6 +65,7 @@ const World2dStore = types.compose(
       get isCurrentUserWorldAdmin(): boolean {
         return (
           this.isMyWorld ||
+          // TODO world_details will have flag for admin, switch to it once ready
           self.worldMembers?.members?.some(
             (m) => m.user_id === getRootStore(self).sessionStore.userId
           ) ||

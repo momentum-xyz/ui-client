@@ -92,7 +92,6 @@ const CreatorWidget: FC = () => {
     switch (selectedTab) {
       case 'addObject':
         return <SpawnAsset />;
-
       case 'skybox':
         return <SkyboxSelector />;
       case 'sound':
