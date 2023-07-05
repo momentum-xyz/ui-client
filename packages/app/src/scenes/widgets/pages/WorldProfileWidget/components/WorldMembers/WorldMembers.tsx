@@ -43,11 +43,11 @@ const WorldMembers: FC = () => {
       });
   };
 
-  const handleDelete = (userId: string) => {
+  const handleDelete = (userId: string, name: string) => {
     worldMembers
       ?.deleteMember(userId)
       .then((res) => {
-        toast.info(<ToastContent icon="checked" text="Co-creator deleted successfully" />);
+        toast.info(<ToastContent icon="checked" text={`"${name}" deleted successfully`} />);
       })
       .catch((err) => {
         console.log(err);
@@ -110,7 +110,9 @@ const WorldMembers: FC = () => {
               />
               <styled.UserName>{name}</styled.UserName>
               <styled.ItemAction>
-                <styled.CircleButton onClick={() => handleDelete(user_id)}>-</styled.CircleButton>
+                <styled.CircleButton onClick={() => handleDelete(user_id, name)}>
+                  -
+                </styled.CircleButton>
               </styled.ItemAction>
             </styled.UserItem>
           ))}
