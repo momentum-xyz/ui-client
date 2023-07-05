@@ -19,16 +19,12 @@ import * as styled from './WorldProfileWidget.styled';
 
 type MenuItemType = 'viewWorld' | 'editWorld' | 'editMembers';
 
-const adminMenuItems: SideMenuItemInterface<MenuItemType>[] = [
+const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
   {
     id: 'editWorld',
     iconName: 'edit',
     label: i18n.t('actions.edit')
-  }
-];
-
-const ownerSideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
-  ...adminMenuItems,
+  },
   {
     id: 'editMembers',
     iconName: 'collaboration',
@@ -39,9 +35,7 @@ const ownerSideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
 const WorldProfileWidget: FC = () => {
   const {sessionStore, widgetManagerStore, universeStore, widgetStore} = useStore();
   const {worldProfileStore} = widgetStore;
-  const {world2dStore, isMyWorld} = universeStore;
-
-  const sideMenuItems = isMyWorld ? ownerSideMenuItems : adminMenuItems;
+  const {world2dStore} = universeStore;
 
   const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewWorld');
 
@@ -74,7 +68,7 @@ const WorldProfileWidget: FC = () => {
       return sideMenuItems.find((i) => i.id === activeMenuId)?.iconName;
     }
     return undefined;
-  }, [activeMenuId, sideMenuItems]);
+  }, [activeMenuId]);
 
   if (!world2dStore?.worldDetails?.world) {
     return <></>;
@@ -84,7 +78,7 @@ const WorldProfileWidget: FC = () => {
 
   return (
     <styled.Container data-testid="WorldProfileWidget-test">
-      {world2dStore.isMyWorld && (
+      {world2dStore.isCurrentUserWorldAdmin && (
         <styled.SideMenuContainer>
           <SideMenu
             orientation="left"
