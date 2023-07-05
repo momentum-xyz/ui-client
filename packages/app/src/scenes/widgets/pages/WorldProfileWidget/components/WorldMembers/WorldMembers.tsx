@@ -15,7 +15,9 @@ interface WalletAddressInterface {
 }
 
 const WorldMembers: FC = () => {
-  const worldMembers = useStore().universeStore.world2dStore?.worldMembers;
+  const {universeStore, sessionStore} = useStore();
+  const worldMembers = universeStore.world2dStore?.worldMembers;
+  const {userId: currentUserId} = sessionStore;
 
   const {
     control,
@@ -109,11 +111,13 @@ const WorldMembers: FC = () => {
                 iconName="astronaut"
               />
               <styled.UserName>{name}</styled.UserName>
-              <styled.ItemAction>
-                <styled.CircleButton onClick={() => handleDelete(user_id, name)}>
-                  -
-                </styled.CircleButton>
-              </styled.ItemAction>
+              {currentUserId !== user_id && (
+                <styled.ItemAction>
+                  <styled.CircleButton onClick={() => handleDelete(user_id, name)}>
+                    -
+                  </styled.CircleButton>
+                </styled.ItemAction>
+              )}
             </styled.UserItem>
           ))}
         </styled.UserList>
