@@ -64,7 +64,7 @@ export class WhispControllable extends Whisp {
     private inputStatePrevious = this.inputState;
 
     constructor(scene: Scene) {
-        super(scene);
+        super(scene, true);
 
         this.addListeners(scene);
 
@@ -77,6 +77,7 @@ export class WhispControllable extends Whisp {
             this.cameraPosition,
             scene);
         this.trail = new TrailMesh("WhispTrail", this.sphere, scene, .1, 40);
+        this.trail.start();
 
         document.addEventListener("pointerlockchange", () => {
             if (document.pointerLockElement === scene.getEngine().getRenderingCanvas()) {
