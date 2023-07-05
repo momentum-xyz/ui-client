@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Hexagon, Frame, Input, IconButton} from '@momentum-xyz/ui-kit';
 import {Controller, useForm} from 'react-hook-form';
@@ -26,6 +26,10 @@ const WorldMembers: FC = () => {
     reset,
     setError
   } = useForm<WalletAddressInterface>();
+
+  useEffect(() => {
+    worldMembers?.fetchMembers();
+  }, [worldMembers]);
 
   const formSubmitHandler = ({address}: WalletAddressInterface) => {
     console.log(address);
