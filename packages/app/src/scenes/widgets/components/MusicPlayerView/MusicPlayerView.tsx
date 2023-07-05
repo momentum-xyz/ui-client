@@ -22,24 +22,26 @@ const MusicPlayerView: FC<PropsInterface> = (props) => {
   return (
     <styled.Container data-testid="MusicPlayerView-test">
       <styled.ActiveTrack>
-        <styled.Block>
-          <styled.Title>
-            {!activeTrack ? t('messages.noSoundSelected') : activeTrack.name}
-          </styled.Title>
-          <SoundPlayer
-            state={musicPlayer.activeTrackState}
-            onIsPlaying={musicPlayer.isPlaying ? musicPlayer.pause : musicPlayer.play}
-            onIsSeeking={musicPlayer.setIsSeeking}
-            onChangePlayed={musicPlayer.setHowlerSeek}
-          />
-        </styled.Block>
+        {musicPlayer.isActiveTrackShown && (
+          <styled.Block>
+            <styled.Title>
+              {!activeTrack ? t('messages.noSoundSelected') : activeTrack.name}
+            </styled.Title>
+            <SoundPlayer
+              state={musicPlayer.activeTrackState}
+              onIsPlaying={musicPlayer.isPlaying ? musicPlayer.pause : musicPlayer.play}
+              onIsSeeking={musicPlayer.setIsSeeking}
+              onChangePlayed={musicPlayer.setHowlerSeek}
+            />
+          </styled.Block>
+        )}
 
         <styled.Block>
           <styled.Title>{t('labels.volume')}</styled.Title>
           <SoundRange percent={musicPlayer.volume} onChange={setVolume} />
         </styled.Block>
 
-        {musicPlayer.hasDistance && (
+        {musicPlayer.isDistanceShown && (
           <styled.Block>
             <styled.Title>{t('labels.distance')}</styled.Title>
             <SoundRange

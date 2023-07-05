@@ -15,7 +15,7 @@ import {
   Object3dInterface,
   Texture3dInterface,
   SetWorldInterface,
-  ObjectSoundInterface
+  ObjectSoundInterface, SoundItemInterface
 } from '@momentum-xyz/core';
 
 import {PlayerHelper} from './PlayerHelper';
@@ -44,6 +44,7 @@ export class ObjectHelper {
   static textureRootUrl = '/texture/';
   static textureDefaultSize = 's3/';
   static objectsMap = new Map<string, BabylonObjectInterface>();
+  static objectsSoundMap = new Map<string, Sound>();
   static scene: Scene;
   static attachedNode: TransformNode;
   static transformSubscription: {unsubscribe: () => void} | undefined;
@@ -104,9 +105,9 @@ export class ObjectHelper {
     } //else: spawnObject will check awaitingTextures
   }
 
-  static objectSoundChange(scene: Scene, objectID: string, sound: ObjectSoundInterface): void {
+  static objectSoundChange(scene: Scene, objectID: string, soundData: ObjectSoundInterface): void {
     // Handle sound arriving before objects are spawned.
-    this.appendAwaitingSound(objectID, sound);
+    this.appendAwaitingSound(objectID, soundData);
     const obj = this.objectsMap.get(objectID);
     if (obj) {
       this.setObjectSound(obj, scene);
@@ -166,30 +167,40 @@ export class ObjectHelper {
   }
 
   static setObjectSound(obj: BabylonObjectInterface, scene: Scene) {
-    const sound = this.popAwaitingSound(obj.objectDefinition.id);
-    if (sound) {
-      // TODO: Remove prev sound
+    const prevObjectSound = this.popObjectSound(obj.objectDefinition.id);
+    const newSoundInfo = this.popAwaitingSound(obj.objectDefinition.id);
+    const activeTrack = newSoundInfo?.tracks.find((t: SoundItemInterface) => t.isActive);
 
-      const track = sound.tracks.length > 0 ? sound.tracks[0] : null;
-      if (track) {
-        // TODO: Store current music as field
-        const music = new Sound(track.name, track.hash_url, scene, null, {
-          loop: true,
-          autoplay: true,
-          skipCodecCheck: true,
-          spatialSound: true,
-          maxDistance: sound.distance,
-          volume: sound.volume / 100
-        });
+    // Only distance or volume was changed
+    if (newSoundInfo && prevObjectSound && prevObjectSound?.name === activeTrack?.render_hash) {
+      prevObjectSound.updateOptions({
+        maxDistance: newSoundInfo.distance,
+        volume: newSoundInfo.volume / 100
+      });
 
-        const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
-        music.attachToMesh(childMeshes[0]);
+      this.appendObjectSound(obj.objectDefinition.id, prevObjectSound);
+      console.log('[SOUND] MAP UPD', this.objectsSoundMap);
+      return;
+    }
 
-        console.log('[SOUND] audioEnabled', scene.audioEnabled);
-        console.log('[SOUND] Object id', obj.objectDefinition.id);
-        console.log('[SOUND] music volume', music.getVolume());
-        console.log('[SOUND] music maxDistance', music.maxDistance);
-      }
+    // Stop previous sound if exists
+    prevObjectSound?.dispose();
+
+    if (newSoundInfo && activeTrack) {
+      const sound = new Sound(activeTrack.render_hash, activeTrack.hash_url, scene, null, {
+        loop: true,
+        autoplay: true,
+        spatialSound: true,
+        skipCodecCheck: true,
+        maxDistance: newSoundInfo.distance,
+        volume: newSoundInfo.volume / 100
+      });
+
+      const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
+      sound.attachToMesh(childMeshes[0]);
+
+      this.appendObjectSound(obj.objectDefinition.id, sound);
+      console.log('[SOUND] MAP', this.objectsSoundMap);
     }
   }
 
@@ -336,10 +347,10 @@ export class ObjectHelper {
   }
 
   /** Append sound to the queue waiting for the object to spawn. */
-  static appendAwaitingSound(objectID: string, sound: ObjectSoundInterface): void {
+  static appendAwaitingSound(objectID: string, soundData: ObjectSoundInterface): void {
     const current = this.awaitingSoundMap.get(objectID);
     if (!current) {
-      this.awaitingSoundMap.set(objectID, sound);
+      this.awaitingSoundMap.set(objectID, soundData);
     }
   }
 
@@ -348,6 +359,23 @@ export class ObjectHelper {
     const current = this.awaitingSoundMap.get(objectID);
     if (current) {
       this.awaitingSoundMap.delete(objectID);
+    }
+    return current;
+  }
+
+  /** Append the Sound entry to the map */
+  static appendObjectSound(objectID: string, sound: Sound): void {
+    const current = this.objectsSoundMap.get(objectID);
+    if (!current) {
+      this.objectsSoundMap.set(objectID, sound);
+    }
+  }
+
+  /** Pop the Sound entry from the map */
+  static popObjectSound(objectID: string): Sound | undefined {
+    const current = this.objectsSoundMap.get(objectID);
+    if (current) {
+      this.objectsSoundMap.delete(objectID);
     }
     return current;
   }

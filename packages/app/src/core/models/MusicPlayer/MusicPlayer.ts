@@ -14,7 +14,8 @@ const MusicPlayer = types
     types.model('MusicPlayer', {
       tracks: types.optional(types.array(TrackInfo), []),
       trackHash: types.maybeNull(types.string),
-      hasDistance: false,
+      isDistanceShown: false,
+      isActiveTrackShown: true,
       isSeeking: false,
       isPlaying: false,
       durationSec: 0,

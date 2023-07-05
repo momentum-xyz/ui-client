@@ -1,6 +1,12 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
-import {Event3dEmitter, ObjectSoundInterface, RequestModel, ResetModel} from '@momentum-xyz/core';
+import {
+  Event3dEmitter,
+  ObjectSoundInterface,
+  RequestModel,
+  ResetModel,
+  SoundItemInterface
+} from '@momentum-xyz/core';
 
 import {api} from 'api';
 import {PluginIdEnum} from 'api/enums';
@@ -16,7 +22,7 @@ const ObjectSound = types
     types.model('ObjectSound', {
       objectId: '',
       mediaUploader: types.optional(MediaUploader, {}),
-      musicPlayer: types.optional(MusicPlayer, {hasDistance: true}),
+      musicPlayer: types.optional(MusicPlayer, {isDistanceShown: true, isActiveTrackShown: false}),
       fetchRequest: types.optional(RequestModel, {}),
       publishRequest: types.optional(RequestModel, {}),
       deleteRequest: types.optional(RequestModel, {})
@@ -34,7 +40,10 @@ const ObjectSound = types
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.SPATIAL_AUDIO,
         value: {
-          tracks,
+          tracks: tracks.map((track) => ({
+            ...track,
+            isActive: track.render_hash === self.musicPlayer.trackHash
+          })),
           volume: self.musicPlayer.volume,
           distance: self.musicPlayer.distance
         }
@@ -56,6 +65,11 @@ const ObjectSound = types
         self.musicPlayer.refreshTracks(cast(attributeResponse.tracks || []));
         self.musicPlayer.setVolume(attributeResponse.volume || DEFAULT_VOLUME_PERCENT);
         self.musicPlayer.setDistance(attributeResponse.distance || DEFAULT_DISTANCE);
+
+        const activeTrack = attributeResponse.tracks.find((t: SoundItemInterface) => t.isActive);
+        if (activeTrack) {
+          self.musicPlayer.start(activeTrack.render_hash);
+        }
       }
     }),
     publishSpacialSound: flow(function* (form: SoundFormInterface) {
@@ -83,6 +97,14 @@ const ObjectSound = types
     }),
     updateDistance: flow(function* (distancePercent: number) {
       self.musicPlayer.setDistanceByPercent(distancePercent);
+      yield self.updateAttribute(self.musicPlayer.tracks);
+    }),
+    updateActiveTrack: flow(function* (hash: string | null) {
+      if (hash) {
+        self.musicPlayer.start(hash);
+      } else {
+        self.musicPlayer.stop();
+      }
       yield self.updateAttribute(self.musicPlayer.tracks);
     })
   }))

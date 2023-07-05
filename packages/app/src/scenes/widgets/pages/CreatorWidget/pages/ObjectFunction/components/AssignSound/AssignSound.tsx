@@ -1,5 +1,4 @@
-import {FC, useEffect, useRef, useState} from 'react';
-import ReactHowler from 'react-howler';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {Button, Frame, SoundItem} from '@momentum-xyz/ui-kit';
@@ -23,7 +22,6 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
   const {musicPlayer} = objectSound;
 
   const [isNewForm, setIsNewForm] = useState(false);
-  const playerRef = useRef<ReactHowler>(null);
 
   const {t} = useI18n();
 
@@ -48,12 +46,6 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
     };
   }, [objectId, objectSound]);
 
-  useEffect(() => {
-    if (playerRef.current) {
-      musicPlayer.setPlayer(playerRef.current);
-    }
-  }, [musicStore, musicPlayer.activeTrack, musicPlayer]);
-
   const handlePublish = async (form: SoundFormInterface) => {
     if (await objectSound.publishSpacialSound(form)) {
       setIsNewForm(false);
@@ -62,6 +54,14 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
 
   const handleDelete = async (hash: string) => {
     await objectSound.deleteSpacialSound(hash);
+  };
+
+  const handleStart = async (hash: string) => {
+    await objectSound.updateActiveTrack(hash);
+  };
+
+  const handleStop = async () => {
+    await objectSound.updateActiveTrack(null);
   };
 
   return (
@@ -91,13 +91,7 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
       </Frame>
 
       <styled.TracksContainer>
-        <styled.Howler>
-          {objectSound.hasActiveTrack && (
-            <ReactHowler ref={playerRef} {...musicPlayer.howlerProps} />
-          )}
-        </styled.Howler>
-
-        {/* ACTIVE TRACK */}
+        {/* ACTIVE TRACK. FYI: It will be played by Babylon */}
         <MusicPlayerView
           musicPlayer={musicPlayer}
           setVolume={objectSound.updateVolume}
@@ -111,8 +105,8 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
               key={track.hash}
               item={track}
               isActive={musicPlayer.activeTrack?.hash === track.hash}
-              onStart={() => musicPlayer.start(track.hash)}
-              onStop={musicPlayer.stop}
+              onStart={() => handleStart(track.hash)}
+              onStop={handleStop}
               onDelete={() => handleDelete(track.hash)}
             />
           ))}

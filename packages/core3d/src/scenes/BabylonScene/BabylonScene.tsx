@@ -102,8 +102,8 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
         ObjectHelper.objectTextureChange(scene, object);
       });
 
-      events.on('ObjectSoundChanged', (objectId: string, sound: ObjectSoundInterface) => {
-        ObjectHelper.objectSoundChange(scene, objectId, sound);
+      events.on('ObjectSoundChanged', (objectId: string, soundData: ObjectSoundInterface) => {
+        ObjectHelper.objectSoundChange(scene, objectId, soundData);
       });
 
       events.on('ObjectTransform', (id, object) => {

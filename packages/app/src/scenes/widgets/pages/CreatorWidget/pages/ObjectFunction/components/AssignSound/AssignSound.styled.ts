@@ -23,12 +23,6 @@ export const Message = styled.div`
 
 export const UploadBlock = styled.div``;
 
-export const Howler = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-`;
-
 export const TracksContainer = styled.div`
   margin: 10px 10px 0 10px;
   padding: 20px 0 0 0;
