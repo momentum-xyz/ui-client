@@ -47,6 +47,9 @@ export class WhispControllable extends Whisp {
     private static readonly FORWARD = new Vector3(0, 0, 1);
     private static readonly CAMERA_RAISE = 1.5;
     private static readonly CAMERA_RADIUS = 8;
+    private static readonly CAMERA_SHAKE_MAGNITUDE = .0012;
+    private static readonly CAMERA_SHAKE_SPRING = .004;
+    private static readonly CAMERA_SHAKE_POWER = 1.2;
     private static readonly ACCELERATION = 50;
     private static readonly ACCELERATION_SPRINT = 120;
     private static readonly FRICTION = .14;
@@ -55,10 +58,14 @@ export class WhispControllable extends Whisp {
     private readonly scene: Scene;
     private readonly velocity = new Vector3();
     private readonly cameraPosition = new Vector3();
+    private readonly cameraOffset = new Vector3();
+    private readonly cameraOffsetTarget = new Vector3();
+    private readonly cameraUp = new Vector3();
     private readonly cursorMovement = new Vector2();
 
     private looking = false;
     private camera;
+    private cameraShake = 0;
     private trail;
     private inputState = 0;
     private inputStatePrevious = this.inputState;
@@ -72,7 +79,7 @@ export class WhispControllable extends Whisp {
         this.camera = new ArcRotateCamera(
             "Camera",
             0,
-            0,
+            Math.PI * .5,
             WhispControllable.CAMERA_RADIUS,
             this.cameraPosition,
             scene);
@@ -155,16 +162,7 @@ export class WhispControllable extends Whisp {
         this.looking = false;
     }
 
-    private updateCamera() {
-        this.cameraPosition.x = this.position.x + WhispControllable.UP.x *
-            WhispControllable.CAMERA_RAISE;
-        this.cameraPosition.y = this.position.y + WhispControllable.UP.y *
-            WhispControllable.CAMERA_RAISE;
-        this.cameraPosition.z = this.position.z + WhispControllable.UP.z *
-            WhispControllable.CAMERA_RAISE;
-
-        this.camera.setTarget(this.cameraPosition);
-
+    private updateCamera(delta: number) {
         if (this.looking) {
             this.camera.alpha -= this.cursorMovement.x *
                 WhispControllable.LOOK_SENSITIVITY;
@@ -173,6 +171,36 @@ export class WhispControllable extends Whisp {
         }
 
         this.cursorMovement.set(0, 0);
+
+        this.cameraPosition.x = this.position.x + WhispControllable.UP.x *
+            WhispControllable.CAMERA_RAISE;
+        this.cameraPosition.y = this.position.y + WhispControllable.UP.y *
+            WhispControllable.CAMERA_RAISE;
+        this.cameraPosition.z = this.position.z + WhispControllable.UP.z *
+            WhispControllable.CAMERA_RAISE;
+
+        this.cameraOffsetTarget.set(
+            (Math.random() * 2 - 1) * this.cameraShake,
+            (Math.random() * 2 - 1) * this.cameraShake,
+            (Math.random() * 2 - 1) * this.cameraShake);
+
+        const spring = 1 - Math.pow(WhispControllable.CAMERA_SHAKE_SPRING, delta * 2);
+
+        this.cameraOffset.x += (this.cameraOffsetTarget.x - this.cameraOffset.x) * spring;
+        this.cameraOffset.y += (this.cameraOffsetTarget.y - this.cameraOffset.y) * spring;
+        this.cameraOffset.z += (this.cameraOffsetTarget.z - this.cameraOffset.z) * spring;
+
+        this.cameraPosition.x += this.cameraOffset.x;
+        this.cameraPosition.y += this.cameraOffset.y;
+        this.cameraPosition.z += this.cameraOffset.z;
+
+        this.cameraUp.x = this.cameraOffset.x;
+        this.cameraUp.y = this.cameraOffset.y + 1;
+        this.cameraUp.z = this.cameraOffset.z;
+
+        this.camera.upVector = this.cameraUp.normalize();
+
+        this.camera.setTarget(this.cameraPosition);
     }
 
     update(delta: number) {
@@ -211,6 +239,10 @@ export class WhispControllable extends Whisp {
         this.velocity.y += forward.y * dz + WhispControllable.UP.y * dy + right.y * dx;
         this.velocity.z += forward.z * dz + WhispControllable.UP.z * dy + right.z * dx;
 
+        this.cameraShake = Math.pow(
+            this.velocity.length() * WhispControllable.CAMERA_SHAKE_MAGNITUDE,
+            WhispControllable.CAMERA_SHAKE_POWER);
+
         this.position.x += this.velocity.x * delta;
         this.position.y += this.velocity.y * delta;
         this.position.z += this.velocity.z * delta;
@@ -223,6 +255,6 @@ export class WhispControllable extends Whisp {
 
         super.update(delta);
 
-        this.updateCamera();
+        this.updateCamera(delta);
     }
 }
