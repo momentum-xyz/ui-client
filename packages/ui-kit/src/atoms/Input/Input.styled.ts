@@ -80,14 +80,16 @@ export const IconSearch = styled.div`
   top: 0;
 `;
 
-export const IconClear = styled.div`
+export const ActionHolder = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
   right: 15px;
   bottom: 0;
   top: 0;
+`;
 
+export const ActionIcon = styled(ActionHolder)`
   svg {
     color: ${(props) => props.theme.text};
   }

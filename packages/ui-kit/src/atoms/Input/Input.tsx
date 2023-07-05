@@ -18,6 +18,7 @@ export interface InputPropsInterface {
   danger?: boolean;
   wide?: boolean;
   isClearable?: boolean;
+  actionRight?: React.ReactNode;
   onChange: (value: string) => void;
   onEnter?: () => void;
 }
@@ -32,6 +33,7 @@ const Input: FC<InputPropsInterface> = ({
   wide,
   isSearch,
   isClearable,
+  actionRight,
   onChange,
   onEnter
 }) => {
@@ -63,17 +65,17 @@ const Input: FC<InputPropsInterface> = ({
         }}
       />
 
-      {((isSearch && !isClearable) || (isSearch && isClearable && !value)) && (
-        <styled.IconSearch>
-          <IconSvg name="search" size="m" isWhite />
-        </styled.IconSearch>
-      )}
-
-      {isClearable && (!!value || value === 0) && (
-        <styled.IconClear onClick={() => onChange('')}>
+      {isClearable && (!!value || value === 0) ? (
+        <styled.ActionIcon onClick={() => onChange('')}>
           <IconSvg name="close_large" size="s" />
-        </styled.IconClear>
-      )}
+        </styled.ActionIcon>
+      ) : isSearch ? (
+        <styled.ActionIcon>
+          <IconSvg name="search" size="m" isWhite />
+        </styled.ActionIcon>
+      ) : actionRight ? (
+        <styled.ActionHolder>{actionRight}</styled.ActionHolder>
+      ) : null}
     </styled.Container>
   );
 };
