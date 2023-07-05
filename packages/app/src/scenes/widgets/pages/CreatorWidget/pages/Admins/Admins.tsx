@@ -1,9 +1,12 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Frame, Input} from '@momentum-xyz/ui-kit';
+import {Hexagon, Frame, Input} from '@momentum-xyz/ui-kit';
 import {Controller, useForm} from 'react-hook-form';
+import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
+import {getImageAbsoluteUrl} from 'core/utils';
+import {ToastContent} from 'ui-kit';
 
 import * as styled from './Admins.styled';
 
@@ -22,16 +25,17 @@ const Admins: FC = () => {
     // setError
   } = useForm<WalletAddressInterface>();
 
-  const formatSubmitHandler = ({address}: WalletAddressInterface) => {
+  const formSubmitHandler = ({address}: WalletAddressInterface) => {
     console.log(address);
     worldMembers
       ?.addMember(address)
       .then((res) => {
-        console.log(res);
+        toast.info(<ToastContent icon="checked" text="Co-creator added successfully" />);
         reset();
       })
       .catch((err) => {
         console.log(err);
+        toast.error(<ToastContent icon="alert" text="Something went wrong" />);
       });
   };
 
@@ -39,10 +43,11 @@ const Admins: FC = () => {
     worldMembers
       ?.deleteMember(userId)
       .then((res) => {
-        console.log(res);
+        toast.info(<ToastContent icon="checked" text="Co-creator deleted successfully" />);
       })
       .catch((err) => {
         console.log(err);
+        toast.error(<ToastContent icon="alert" text="Something went wrong" />);
       });
   };
 
@@ -77,7 +82,7 @@ const Admins: FC = () => {
                 wide
                 value={value}
                 onEnter={() => {
-                  handleSubmit(formatSubmitHandler)();
+                  handleSubmit(formSubmitHandler)();
                 }}
               />
             )}
@@ -87,14 +92,22 @@ const Admins: FC = () => {
             Below is a list of all the users who can build in your Odyssey with you.{' '}
           </styled.Text>
         </styled.Head>
-        <div>
+        <styled.UserList>
           {worldMembers?.members.map(({user_id, name, avatar_hash}) => (
-            <div key={user_id} style={{padding: 10, margin: 10, border: '1px solid red'}}>
-              {name} {user_id} {avatar_hash}{' '}
-              <Button label="Remove" onClick={() => handleDelete(user_id)} />
-            </div>
+            <styled.UserItem key={user_id}>
+              <Hexagon
+                type="fourth-borderless"
+                skipOuterBorder
+                imageSrc={getImageAbsoluteUrl(avatar_hash)}
+                iconName="astronaut"
+              />
+              <styled.UserName>{name}</styled.UserName>
+              <styled.ItemAction>
+                <styled.CircleButton onClick={() => handleDelete(user_id)}>-</styled.CircleButton>
+              </styled.ItemAction>
+            </styled.UserItem>
           ))}
-        </div>
+        </styled.UserList>
       </Frame>
     </styled.Container>
   );
