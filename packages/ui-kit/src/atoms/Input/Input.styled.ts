@@ -42,6 +42,10 @@ export const Container = styled.div`
       background: ${(props) => props.theme.danger && rgba(props.theme.danger, 0.4)};
     }
 
+    &.with-action {
+      padding-right: 35px;
+    }
+
     &.search {
       padding: 0 40px 0 20px;
     }
@@ -80,14 +84,16 @@ export const IconSearch = styled.div`
   top: 0;
 `;
 
-export const IconClear = styled.div`
+export const ActionHolder = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
   right: 15px;
   bottom: 0;
   top: 0;
+`;
 
+export const ActionIcon = styled(ActionHolder)`
   svg {
     color: ${(props) => props.theme.text};
   }

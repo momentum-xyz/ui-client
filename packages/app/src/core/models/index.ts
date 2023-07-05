@@ -21,6 +21,7 @@ export * from './UserInfo';
 export * from './UserDetails';
 export * from './WorldInfo';
 export * from './WorldDetails';
+export * from './WorldMembers';
 export * from './FilterField';
 export * from './SortField';
 export * from './World';
