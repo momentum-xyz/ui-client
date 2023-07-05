@@ -15,7 +15,7 @@ interface PropsInterface {
 }
 
 const AssignSound: FC<PropsInterface> = ({objectId}) => {
-  const {musicStore, widgetStore} = useStore();
+  const {widgetStore} = useStore();
   const {creatorStore} = widgetStore;
   const {objectFunctionalityStore} = creatorStore;
   const {objectSound} = objectFunctionalityStore;
@@ -24,17 +24,6 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
   const [isNewForm, setIsNewForm] = useState(false);
 
   const {t} = useI18n();
-
-  useEffect(() => {
-    const isWorldMusicPlaying = musicStore.musicPlayer.isPlaying;
-    musicStore.musicPlayer.pause();
-
-    return () => {
-      if (isWorldMusicPlaying) {
-        musicStore.musicPlayer.play();
-      }
-    };
-  }, [musicStore.musicPlayer]);
 
   useEffect(() => {
     objectSound.init(objectId);
