@@ -15,7 +15,8 @@ import {
   Object3dInterface,
   Texture3dInterface,
   SetWorldInterface,
-  ObjectSoundInterface, SoundItemInterface
+  ObjectSoundInterface,
+  SoundItemInterface
 } from '@momentum-xyz/core';
 
 import {PlayerHelper} from './PlayerHelper';
@@ -323,6 +324,11 @@ export class ObjectHelper {
       mapObj[1]?.container.dispose();
     }
     this.objectsMap.clear();
+
+    for (const mapObj of this.objectsSoundMap) {
+      mapObj[1].dispose();
+    }
+    this.objectsSoundMap.clear();
   }
 
   /** Append texture to the queue waiting for the object to spawn. */
