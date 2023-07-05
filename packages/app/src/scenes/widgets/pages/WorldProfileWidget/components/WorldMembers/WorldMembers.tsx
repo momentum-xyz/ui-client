@@ -8,13 +8,13 @@ import {useStore} from 'shared/hooks';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ToastContent} from 'ui-kit';
 
-import * as styled from './Admins.styled';
+import * as styled from './WorldMembers.styled';
 
 interface WalletAddressInterface {
   address: string;
 }
 
-const Admins: FC = () => {
+const WorldMembers: FC = () => {
   const worldMembers = useStore().universeStore.world2dStore?.worldMembers;
 
   const {
@@ -120,4 +120,4 @@ const Admins: FC = () => {
   );
 };
 
-export default observer(Admins);
+export default observer(WorldMembers);

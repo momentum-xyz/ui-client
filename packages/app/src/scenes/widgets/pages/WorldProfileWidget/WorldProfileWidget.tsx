@@ -1,6 +1,6 @@
 import {FC, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useI18n} from '@momentum-xyz/core';
+import {i18n, useI18n} from '@momentum-xyz/core';
 import {
   Panel,
   ImageSizeEnum,
@@ -14,15 +14,34 @@ import {WidgetEnum} from 'core/enums';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {WorldFormInterface} from 'core/interfaces';
 
-import {WorldEditor, WorldView} from './components';
+import {WorldEditor, WorldMembers, WorldView} from './components';
 import * as styled from './WorldProfileWidget.styled';
 
-type MenuItemType = 'viewWorld' | 'editWorld';
+type MenuItemType = 'viewWorld' | 'editWorld' | 'editMembers';
+
+const adminMenuItems: SideMenuItemInterface<MenuItemType>[] = [
+  {
+    id: 'editWorld',
+    iconName: 'edit',
+    label: i18n.t('actions.edit')
+  }
+];
+
+const ownerSideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
+  ...adminMenuItems,
+  {
+    id: 'editMembers',
+    iconName: 'collaboration',
+    label: i18n.t('labels.coCreators')
+  }
+];
 
 const WorldProfileWidget: FC = () => {
   const {sessionStore, widgetManagerStore, universeStore, widgetStore} = useStore();
   const {worldProfileStore} = widgetStore;
-  const {world2dStore} = universeStore;
+  const {world2dStore, isMyWorld} = universeStore;
+
+  const sideMenuItems = isMyWorld ? ownerSideMenuItems : adminMenuItems;
 
   const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewWorld');
 
@@ -49,17 +68,6 @@ const WorldProfileWidget: FC = () => {
       setActiveMenuId('viewWorld');
     }
   };
-
-  const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = useMemo(
-    () => [
-      {
-        id: 'editWorld',
-        iconName: 'edit',
-        label: t('actions.edit')
-      }
-    ],
-    [t]
-  );
 
   const panelIcon = useMemo(() => {
     if (activeMenuId !== 'viewWorld') {
@@ -92,7 +100,7 @@ const WorldProfileWidget: FC = () => {
       <styled.PanelContainer>
         <Panel
           isFullHeight
-          size="normal"
+          size={activeMenuId === 'editMembers' ? 'large' : 'normal'}
           variant="primary"
           icon={panelIcon}
           title={t('labels.odysseyOverview')}
@@ -114,6 +122,8 @@ const WorldProfileWidget: FC = () => {
                 onCancel={() => setActiveMenuId('viewWorld')}
               />
             )}
+
+            {activeMenuId === 'editMembers' && <WorldMembers />}
           </styled.Wrapper>
         </Panel>
       </styled.PanelContainer>

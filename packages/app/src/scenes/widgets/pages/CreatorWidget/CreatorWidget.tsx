@@ -16,13 +16,12 @@ import {
   ObjectInspector,
   AssetCustomising,
   ObjectFunction,
-  MusicManager,
-  Admins
+  MusicManager
 } from './pages';
 
 type MenuItemType = keyof typeof CreatorTabsEnum;
 
-const adminMenuItems: SideMenuItemInterface<MenuItemType>[] = [
+const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
   {
     id: 'addObject',
     iconName: 'add',
@@ -39,17 +38,9 @@ const adminMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     label: i18n.t('labels.sound')
   }
 ];
-const ownerSideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
-  ...adminMenuItems,
-  {
-    id: 'admins',
-    iconName: 'collaboration',
-    label: i18n.t('labels.coCreators')
-  }
-];
 
 const allPanels: SideMenuItemInterface<MenuItemType>[] = [
-  ...ownerSideMenuItems,
+  ...sideMenuItems,
   {
     id: 'inspector',
     iconName: 'info',
@@ -71,10 +62,7 @@ const CreatorWidget: FC = () => {
   const {universeStore, widgetStore, widgetManagerStore} = useStore();
   const {creatorStore} = widgetStore;
   const world3dStore = universeStore.world3dStore;
-  const isMyWorld = universeStore.isMyWorld;
   const worldId = universeStore.worldId;
-
-  const sideMenuItems = isMyWorld ? ownerSideMenuItems : adminMenuItems;
 
   const {
     selectedTab,
@@ -104,8 +92,7 @@ const CreatorWidget: FC = () => {
     switch (selectedTab) {
       case 'addObject':
         return <SpawnAsset />;
-      case 'admins':
-        return <Admins />;
+
       case 'skybox':
         return <SkyboxSelector />;
       case 'sound':
