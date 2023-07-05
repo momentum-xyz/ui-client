@@ -21,8 +21,8 @@ const Admins: FC = () => {
     control,
     handleSubmit,
     formState: {errors},
-    reset
-    // setError
+    reset,
+    setError
   } = useForm<WalletAddressInterface>();
 
   const formSubmitHandler = ({address}: WalletAddressInterface) => {
@@ -35,6 +35,10 @@ const Admins: FC = () => {
       })
       .catch((err) => {
         console.log(err);
+        setError('address', {
+          type: 'manual',
+          message: err.message
+        });
         toast.error(<ToastContent icon="alert" text="Something went wrong" />);
       });
   };

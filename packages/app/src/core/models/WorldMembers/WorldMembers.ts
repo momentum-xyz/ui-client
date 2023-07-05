@@ -36,6 +36,10 @@ const WorldMembers = types.compose(
           role
         });
 
+        if (self.addMemberRequest.isError) {
+          throw new Error(self.addMemberRequest.errorCode?.toString());
+        }
+
         yield self.fetchMembers();
       }),
       deleteMember: flow(function* (userId: string) {
@@ -43,6 +47,10 @@ const WorldMembers = types.compose(
           worldId: self.worldId,
           userId
         });
+
+        if (self.deleteMemberRequest.isError) {
+          throw new Error(self.deleteMemberRequest.errorCode?.toString());
+        }
 
         yield self.fetchMembers();
       })
