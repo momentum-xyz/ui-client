@@ -7,6 +7,7 @@ on:
       - develop
       - master
       - release/*
+      - feature/happyship-wisp
 
     tags:
       - v[0-9]+.[0-9]+.[0-9]+*
