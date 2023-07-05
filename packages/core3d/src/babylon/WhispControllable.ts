@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {ArcRotateCamera, KeyboardEventTypes, PointerEventTypes, Scene, Vector2, Vector3} from "@babylonjs/core";
+import {
+    ArcRotateCamera,
+    KeyboardEventTypes,
+    PointerEventTypes,
+    Scene,
+    TrailMesh,
+    Vector2,
+    Vector3
+} from "@babylonjs/core";
 
 import {Whisp} from "./Whisp";
 
@@ -37,9 +45,10 @@ export class WhispControllable extends Whisp {
     private static readonly UP = new Vector3(0, 1, 0);
     private static readonly RIGHT = new Vector3(1, 0, 0);
     private static readonly FORWARD = new Vector3(0, 0, 1);
-    private static readonly RAISE = 1.2;
+    private static readonly CAMERA_RAISE = 1.5;
+    private static readonly CAMERA_RADIUS = 8;
     private static readonly ACCELERATION = 50;
-    private static readonly ACCELERATION_SPRINT = 180;
+    private static readonly ACCELERATION_SPRINT = 120;
     private static readonly FRICTION = .14;
     private static readonly LOOK_SENSITIVITY = .002;
 
@@ -50,6 +59,7 @@ export class WhispControllable extends Whisp {
 
     private looking = false;
     private camera;
+    private trail;
     private inputState = 0;
     private inputStatePrevious = this.inputState;
 
@@ -60,14 +70,13 @@ export class WhispControllable extends Whisp {
 
         this.scene = scene;
         this.camera = new ArcRotateCamera(
-            "camera",
+            "Camera",
             0,
             0,
-            10,
+            WhispControllable.CAMERA_RADIUS,
             this.cameraPosition,
             scene);
-
-        scene.onBeforeCameraRenderObservable.add(this.updateCamera.bind(this));
+        this.trail = new TrailMesh("WhispTrail", this.sphere, scene, .1, 40);
 
         document.addEventListener("pointerlockchange", () => {
             if (document.pointerLockElement === scene.getEngine().getRenderingCanvas()) {
@@ -146,23 +155,26 @@ export class WhispControllable extends Whisp {
     }
 
     private updateCamera() {
-        this.cameraPosition.x = this.position.x + WhispControllable.UP.x * WhispControllable.RAISE;
-        this.cameraPosition.y = this.position.y + WhispControllable.UP.y * WhispControllable.RAISE;
-        this.cameraPosition.z = this.position.z + WhispControllable.UP.z * WhispControllable.RAISE;
+        this.cameraPosition.x = this.position.x + WhispControllable.UP.x *
+            WhispControllable.CAMERA_RAISE;
+        this.cameraPosition.y = this.position.y + WhispControllable.UP.y *
+            WhispControllable.CAMERA_RAISE;
+        this.cameraPosition.z = this.position.z + WhispControllable.UP.z *
+            WhispControllable.CAMERA_RAISE;
 
         this.camera.setTarget(this.cameraPosition);
 
         if (this.looking) {
-            this.camera.alpha -= this.cursorMovement.x * WhispControllable.LOOK_SENSITIVITY;
-            this.camera.beta -= this.cursorMovement.y * WhispControllable.LOOK_SENSITIVITY;
+            this.camera.alpha -= this.cursorMovement.x *
+                WhispControllable.LOOK_SENSITIVITY;
+            this.camera.beta -= this.cursorMovement.y *
+                WhispControllable.LOOK_SENSITIVITY;
         }
 
         this.cursorMovement.set(0, 0);
     }
 
     update(delta: number) {
-        super.update(delta);
-
         if (this.inputState & WhispControllable.BITS_LOOK) {
             if (!(this.inputStatePrevious & WhispControllable.BITS_LOOK)) {
                 this.startLook();
@@ -180,13 +192,16 @@ export class WhispControllable extends Whisp {
 
         const dx = (
             +((this.inputState & WhispControllable.BIT_RIGHT) === WhispControllable.BIT_RIGHT) -
-            +((this.inputState & WhispControllable.BIT_LEFT) === WhispControllable.BIT_LEFT)) * acceleration;
+            +((this.inputState & WhispControllable.BIT_LEFT) === WhispControllable.BIT_LEFT)) *
+            acceleration;
         const dy = (
             +((this.inputState & WhispControllable.BIT_UP) === WhispControllable.BIT_UP) -
-            +((this.inputState & WhispControllable.BIT_DOWN) === WhispControllable.BIT_DOWN)) * acceleration;
+            +((this.inputState & WhispControllable.BIT_DOWN) === WhispControllable.BIT_DOWN)) *
+            acceleration;
         const dz = (
             +((this.inputState & WhispControllable.BIT_FORWARD) === WhispControllable.BIT_FORWARD) -
-            +((this.inputState & WhispControllable.BIT_BACK) === WhispControllable.BIT_BACK)) * acceleration;
+            +((this.inputState & WhispControllable.BIT_BACK) === WhispControllable.BIT_BACK)) *
+            acceleration;
 
         const right = this.camera.getDirection(WhispControllable.RIGHT);
         const forward = this.camera.getDirection(WhispControllable.FORWARD);
@@ -204,5 +219,9 @@ export class WhispControllable extends Whisp {
         this.velocity.x *= friction;
         this.velocity.y *= friction;
         this.velocity.z *= friction;
+
+        super.update(delta);
+
+        this.updateCamera();
     }
 }

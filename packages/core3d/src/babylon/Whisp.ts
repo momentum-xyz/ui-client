@@ -8,7 +8,7 @@ export class Whisp {
      * Construct a whisp
      */
     constructor(scene: Scene) {
-        this.sphere = MeshBuilder.CreateSphere('sphere', { diameter: 1 }, scene);
+        this.sphere = MeshBuilder.CreateSphere('sphere', { diameter: .65 }, scene);
 
         const sphereMaterial = new StandardMaterial('sphereMaterial', scene);
         sphereMaterial.diffuseColor = Color3.Blue();
