@@ -28,10 +28,9 @@ export const UserItem = styled.div`
   padding: 8px 10px;
   display: flex;
   align-items: center;
-  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.5)};
   box-shadow: -1px -1px 2px ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.1)};
   border-radius: 4px;
-  cursor: pointer;
   gap: 10px;
 `;
 
@@ -59,14 +58,14 @@ export const CircleButton = styled.div`
   border-radius: 50%;
   cursor: pointer;
   transition: 0.2s ease-in-out;
-  &:hover {
-    background: ${(props) => props.theme.accentText};
-  }
   & > * {
     display: flex;
     justify-content: center;
     align-items: center;
     flex: 1 0 0;
     align-self: stretch;
+  }
+  &:hover {
+    opacity: 0.7;
   }
 `;

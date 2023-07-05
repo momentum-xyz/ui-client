@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Hexagon, Frame, Input} from '@momentum-xyz/ui-kit';
+import {Hexagon, Frame, Input, IconButton} from '@momentum-xyz/ui-kit';
 import {Controller, useForm} from 'react-hook-form';
 import {toast} from 'react-toastify';
 
@@ -84,6 +84,9 @@ const Admins: FC = () => {
                 onEnter={() => {
                   handleSubmit(formSubmitHandler)();
                 }}
+                actionRight={
+                  <IconButton isWhite name="add" onClick={handleSubmit(formSubmitHandler)} />
+                }
               />
             )}
           />
