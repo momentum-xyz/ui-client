@@ -128,6 +128,7 @@ export type IconNameType =
   | 'minimap'
   | 'minimise'
   | 'miro'
+  | 'monitor_upload'
   | 'mouse-pad'
   | 'move'
   | 'music'

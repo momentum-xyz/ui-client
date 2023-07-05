@@ -495,6 +495,7 @@ export const enGb = {
       highFiveReceivedText: 'Click on the button to high five back!',
       launchInitiativeNote: 'Feel free to launch your initiative at a later time.',
       launchSpaceNote: 'Launch your initiative in just one minute',
+      allowCustomize: 'Allow visitors to contribute to this object with text, an image or sound',
       maximumParticipants:
         "The maximum number of video participants have been reached. New participants won't be able to stream their webcam.",
       memberAddSuccess: 'The member was successfully added',
@@ -598,7 +599,8 @@ export const enGb = {
         'By embedding a sound to this object; users will also be able to hear this sound played when they fly towards the object. To embed a sound choose a sound from your library.',
       uploadAssetInfoTitle: 'Drag and drop your asset here',
       uploadAssetPictureDescription: 'Drag and drop YOUR CUSTOM image here',
-      uploadAssetInfoDescription: 'We support GLB Models & the max file size cannot exceed 50mb',
+      uploadAssetDesc1: 'We support GLB Models.',
+      uploadAssetDesc2: 'The max file size cannot exceed 50mb.',
       createCustomSkyboxTitle: 'Create Custom Skybox With AI',
       createCustomSkyboxDescription:
         'Create your own unique 360 skybox for your world by entering a prompt and generating it using the Blockade Labs AI. Simply input your desired concept or atmosphere below as a prompt, and let the AI create a stunning skybox to enhance your Odyssey experience.',

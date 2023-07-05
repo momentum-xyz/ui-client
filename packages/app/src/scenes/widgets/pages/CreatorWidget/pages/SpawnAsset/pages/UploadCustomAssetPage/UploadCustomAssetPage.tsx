@@ -4,7 +4,15 @@ import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {Model3dPreview} from '@momentum-xyz/core3d';
-import {Button, Input, Radio, ErrorsEnum, FileUploader, Loader} from '@momentum-xyz/ui-kit';
+import {
+  Button,
+  Input,
+  Radio,
+  ErrorsEnum,
+  FileUploader,
+  Loader,
+  Checkbox
+} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
@@ -20,6 +28,7 @@ interface ObjectInfoInterface {
   artistName: string;
   type: 'COMMUNITY' | 'PRIVATE';
   file: File;
+  isCustom: boolean;
 }
 
 const UploadCustomAssetPage: FC = () => {
@@ -38,7 +47,8 @@ const UploadCustomAssetPage: FC = () => {
     clearErrors
   } = useForm<ObjectInfoInterface>({
     defaultValues: {
-      type: 'COMMUNITY'
+      type: 'COMMUNITY',
+      isCustom: false
     }
   });
 
@@ -98,17 +108,18 @@ const UploadCustomAssetPage: FC = () => {
           control={control}
           rules={{required: true}}
           render={({field: {value, onChange}}) => {
-            // use memoised value to avoid re-rendering
-            const filename = modelPreviewFilename; // value ? URL.createObjectURL(value) : '';
-            // console.log('UPLOAD ASSET', {value, filename});
+            // use memoized value to avoid re-rendering
+            const filename = modelPreviewFilename;
+
             return (
               <styled.UploadContainer
                 className={cn(!!errors.file && 'error', value && 'has-image')}
               >
                 {!value && (
                   <styled.AssetInformation>
-                    <h1>{t('messages.uploadAssetInfoTitle')}</h1>
-                    <span>{t('messages.uploadAssetInfoDescription')}</span>
+                    <h4>{t('messages.uploadAssetInfoTitle')}</h4>
+                    <div>{t('messages.uploadAssetDesc1')}</div>
+                    <div>{t('messages.uploadAssetDesc2')}</div>
                   </styled.AssetInformation>
                 )}
                 {!!value && (
@@ -116,23 +127,22 @@ const UploadCustomAssetPage: FC = () => {
                     <Model3dPreview
                       filename={filename}
                       onSnapshot={(dataURL) => {
-                        console.log('Snapshot:', dataURL);
                         refSnapshotPreview.current = dataURL;
                       }}
                     />
                   </styled.PreviewContainer>
                 )}
+
                 {!spawnAssetStore.isUploadPending && (
                   <styled.FileUploaderContainer>
                     <FileUploader
+                      fileType="asset"
+                      enableDragAndDrop
+                      maxSize={MAX_ASSET_SIZE}
+                      label={t('actions.uploadYourAsset')}
+                      dragActiveLabel={t('actions.dropItHere')}
                       onFilesUpload={(file) => {
                         clearErrors();
-                        console.log(file);
-                        if (!file || !/\.glb$/i.test(file.name)) {
-                          setError('file', {message: t('errors.onlyGLBSupported') || ''});
-                          return;
-                        }
-
                         onChange(file);
                       }}
                       onError={(err) => {
@@ -147,9 +157,6 @@ const UploadCustomAssetPage: FC = () => {
                         }
                         setError('file', {message: t('assetsUploader.errorSave')});
                       }}
-                      label={t('actions.uploadYourAsset')}
-                      dragActiveLabel={t('actions.dropItHere')}
-                      maxSize={MAX_ASSET_SIZE}
                     />
                     {errors.file && <styled.Error>{errors.file.message}</styled.Error>}
                   </styled.FileUploaderContainer>
@@ -165,32 +172,57 @@ const UploadCustomAssetPage: FC = () => {
             rules={{required: true}}
             render={({field: {value, onChange}}) => (
               <Input
-                placeholder={'Name your Asset*' || ''}
-                value={value}
                 wide
-                onChange={onChange}
+                value={value}
                 disabled={isUploadReady}
+                placeholder={t('placeholders.nameYourAsset')}
+                onChange={onChange}
               />
             )}
           />
+
           <Controller
             name="artistName"
             control={control}
             render={({field: {value, onChange}}) => (
               <Input
-                placeholder={'Name the Artist' || ''}
-                value={value}
                 wide
-                onChange={onChange}
+                value={value}
                 disabled={isUploadReady}
+                placeholder={t('placeholders.nameTheArtist')}
+                onChange={onChange}
               />
             )}
           />
+
+          <Controller
+            name="isCustom"
+            control={control}
+            render={({field: {value, onChange}}) => (
+              <styled.Radio>
+                <Checkbox
+                  value={value}
+                  name="isCustom"
+                  label={t('messages.allowCustomize')}
+                  onChange={onChange}
+                />
+              </styled.Radio>
+            )}
+          />
+
           <Controller
             name="type"
             control={control}
             render={({field: {value, onChange}}) => (
-              <Radio name="type" value={value} onChange={onChange} options={options} />
+              <styled.Radio>
+                <Radio
+                  name="type"
+                  value={value}
+                  options={options}
+                  variant="horizontal"
+                  onChange={onChange}
+                />
+              </styled.Radio>
             )}
           />
         </styled.InputsContainer>
@@ -198,8 +230,8 @@ const UploadCustomAssetPage: FC = () => {
 
       <styled.ControlsRow>
         <Button
-          label={t('actions.goBack')}
           variant="secondary"
+          label={t('actions.goBack')}
           onClick={() => spawnAssetStore.setActiveTab('community')}
         />
         <Button

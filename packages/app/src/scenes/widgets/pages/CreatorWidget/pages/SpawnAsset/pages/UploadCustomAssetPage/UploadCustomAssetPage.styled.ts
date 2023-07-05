@@ -2,12 +2,12 @@ import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding: 10px 0 20px 0;
-  margin: 0 auto;
+  position: relative;
+  padding: 10px 0;
   display: flex;
+  width: 100%;
   flex-direction: column;
   justify-content: space-between;
-  position: relative;
 `;
 
 export const FileUploaderContainer = styled.div`
@@ -38,10 +38,22 @@ export const InputsContainer = styled.div`
   margin-bottom: 20px;
 `;
 
+export const Radio = styled.div`
+  padding: 8px 10px;
+  width: 100%;
+  border-radius: 4px;
+  background: ${(props) => rgba(props.theme.accentBg, 0.2)};
+`;
+
 export const ControlsRow = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+
+  button {
+    min-width: 160px;
+    justify-content: center;
+  }
 `;
 
 export const UploadContainer = styled.div`
@@ -51,8 +63,8 @@ export const UploadContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   border-radius: 6px;
-  width: 390px;
-  height: 390px;
+  width: 100%;
+  height: 240px;
   padding-top: 0px;
   margin-top: 0px;
 
@@ -80,16 +92,20 @@ export const UploadContainer = styled.div`
 
 export const AssetInformation = styled.div`
   margin-bottom: 20px;
-  & > h1 {
-    font-weight: 500;
+  font-size: var(--font-size-s);
+
+  & > h4 {
+    font-weight: 600;
     text-transform: uppercase;
     margin-bottom: 10px;
     letter-spacing: 0.08em;
+    text-align: center;
     line-height: 21px;
   }
-  & > span {
+  & > div {
     line-height: 22px;
     letter-spacing: 0.02em;
+    text-align: center;
   }
 `;
 
@@ -98,7 +114,6 @@ export const LoaderContainer = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  // opacity: 0.7;
   background: ${(props) => rgba(props.theme.accentBg, 0.2)};
   background-size: cover;
   border-radius: inherit;

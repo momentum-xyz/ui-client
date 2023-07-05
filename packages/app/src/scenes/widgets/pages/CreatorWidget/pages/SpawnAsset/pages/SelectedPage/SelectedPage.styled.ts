@@ -1,18 +1,16 @@
 import styled from 'styled-components';
+import {rgba} from 'polished';
 
 export const Container = styled.div`
   padding: 10px 0;
-  display: flex;
-  width: 362px;
-  flex-direction: column;
   width: 100%;
   align-items: center;
   justify-content: space-between;
 `;
 
 export const PreviewContainer = styled.div`
-  height: 362px;
-  border: 1px solid ${(props) => props.theme.text};
+  height: 240px;
+  border: 1px solid ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
   border-radius: 4px;
 `;
 
@@ -28,12 +26,14 @@ export const ObjectTitle = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
 `;
+
 export const Row = styled.div`
   display: flex;
   justify-content: space-between;
   height: 40px;
   gap: 20px;
 `;
+
 export const Prop = styled.div`
   display: flex;
   justify-content: space-between;
@@ -46,22 +46,24 @@ export const Prop = styled.div`
     max-width: 254px;
   }
 `;
+
 export const PropName = styled.span`
   margin-right: 5px;
 `;
+
 export const PropValue = styled.span`
   font-weight: 700;
 `;
 
-export const ObjectInfoContainer = styled.div`
-  // display: flex;
-  // flex-direction: column;
-  // align-items: center;
-`;
+export const ObjectInfoContainer = styled.div``;
 
 export const ControlsRow = styled.div`
   padding: 20px 0 10px 0;
-  width: 362px;
   display: flex;
   justify-content: space-between;
+
+  button {
+    min-width: 160px;
+    justify-content: center;
+  }
 `;
