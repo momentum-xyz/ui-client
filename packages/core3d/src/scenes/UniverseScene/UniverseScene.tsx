@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import {FC, useEffect} from 'react';
 import {Scene} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
@@ -13,6 +15,7 @@ import {
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 import skyboxWorld from '../../static/CLOUDSCAPE.jpg';
 import {InputHelper} from '../../babylon/InputHelper';
+import {WhispControllable} from "../../babylon/WhispControllable";
 
 export interface PropsInterface {
   events: Universe3dEmitterType;
@@ -28,6 +31,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
   const onUserClick = useMutableCallback(callbacks.onUserClick);
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);
   const onReadyToHandleEvents = useMutableCallback(callbacks.onReadyToHandleEvents);
+  let player!: WhispControllable;
 
   useEffect(() => {
     return () => {
@@ -45,7 +49,9 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
     console.log('onSceneReady', scene);
     const view = scene.getEngine().getRenderingCanvas();
     if (view?.id) {
-      PlayerHelper.initialize(scene, view, false);
+      player = new WhispControllable(scene);
+
+      // PlayerHelper.initialize(scene, view, false);
       InputHelper.initializeUniverse(scene, onWorldClick, onUserClick, onClickOutside);
       LightHelper.initialize(scene);
       InteractionEffectHelper.initialize(scene);
@@ -72,7 +78,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
 
     onReadyToHandleEvents();
 
-    PlayerHelper.spawnPlayer(scene, CAMERA_POS_EXPLORER, CAMERA_TARGET_EXPLORER);
+    // PlayerHelper.spawnPlayer(scene, CAMERA_POS_EXPLORER, CAMERA_TARGET_EXPLORER);
 
     if (window.sessionStorage.getItem('babylon_debug')) {
       Promise.all([
@@ -85,7 +91,9 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
   };
 
   const onRender = (scene: Scene) => {
-    // console.log('onRender', scene);
+    if (scene.deltaTime) {
+      player?.update(Math.min(scene.deltaTime * .001, 1));
+    }
   };
 
   return (
