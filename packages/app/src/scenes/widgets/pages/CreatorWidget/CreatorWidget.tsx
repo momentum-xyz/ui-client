@@ -22,7 +22,7 @@ import {
 
 type MenuItemType = keyof typeof CreatorTabsEnum;
 
-const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
+const adminMenuItems: SideMenuItemInterface<MenuItemType>[] = [
   {
     id: 'addObject',
     iconName: 'add',
@@ -37,17 +37,19 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     id: 'sound',
     iconName: 'music',
     label: i18n.t('labels.sound')
-  },
+  }
+];
+const ownerSideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
+  ...adminMenuItems,
   {
     id: 'admins',
     iconName: 'collaboration',
     label: i18n.t('labels.coCreators')
-    // TODO make it for owner only
   }
 ];
 
 const allPanels: SideMenuItemInterface<MenuItemType>[] = [
-  ...sideMenuItems,
+  ...ownerSideMenuItems,
   {
     id: 'inspector',
     iconName: 'info',
@@ -69,7 +71,10 @@ const CreatorWidget: FC = () => {
   const {universeStore, widgetStore, widgetManagerStore} = useStore();
   const {creatorStore} = widgetStore;
   const world3dStore = universeStore.world3dStore;
+  const isMyWorld = universeStore.isMyWorld;
   const worldId = universeStore.worldId;
+
+  const sideMenuItems = isMyWorld ? ownerSideMenuItems : adminMenuItems;
 
   const {
     selectedTab,

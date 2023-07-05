@@ -63,8 +63,13 @@ const World2dStore = types.compose(
         return self.worldDetails?.world?.owner_id === getRootStore(self).sessionStore.userId;
       },
       get isCurrentUserWorldAdmin(): boolean {
-        // TODO check members
-        return this.isMyWorld;
+        return (
+          this.isMyWorld ||
+          self.worldMembers?.members?.some(
+            (m) => m.user_id === getRootStore(self).sessionStore.userId
+          ) ||
+          false
+        );
       },
       get image(): string | null {
         return self.worldDetails?.world?.avatarHash || null;
