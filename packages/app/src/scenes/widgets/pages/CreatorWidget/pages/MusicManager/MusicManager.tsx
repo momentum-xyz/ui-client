@@ -6,8 +6,8 @@ import {useI18n} from '@momentum-xyz/core';
 import {useStore} from 'shared/hooks';
 import {SoundFormInterface} from 'core/interfaces';
 import {MusicPlayerView} from 'scenes/widgets/components';
+import {MusicFileForm} from 'ui-kit';
 
-import {MusicFileForm} from './components';
 import * as styled from './MusicManager.styled';
 
 const MusicManager: FC = () => {
@@ -58,17 +58,17 @@ const MusicManager: FC = () => {
 
       <styled.TracksContainer>
         {/* ACTIVE TRACK */}
-        <MusicPlayerView />
+        <MusicPlayerView musicPlayer={musicStore.musicPlayer} setVolume={musicStore.setVolume} />
 
         {/* TRACK LIST */}
         <styled.TrackList>
-          {musicStore.trackList.map((track) => (
+          {musicStore.musicPlayer.trackList.map((track) => (
             <SoundItem
               key={track.hash}
               item={track}
-              isActive={musicStore.activeTrack?.hash === track.hash}
-              onStart={() => musicStore.start(track.hash)}
-              onStop={musicStore.stop}
+              isActive={musicStore.musicPlayer.activeTrack?.hash === track.hash}
+              onStart={() => musicStore.musicPlayer.start(track.hash)}
+              onStop={musicStore.musicPlayer.stop}
               onDelete={() => handleDelete(track.hash)}
             />
           ))}

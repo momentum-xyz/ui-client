@@ -142,7 +142,7 @@ const CreatorWidget: FC = () => {
       {!!selectedTab && !!content && (
         <Panel
           isFullHeight
-          size={['sound'].includes(selectedTab) ? 'normal' : 'large'}
+          size={['sound', 'functionality'].includes(selectedTab) ? 'normal' : 'large'}
           variant="primary"
           title={panel?.label || ''}
           icon={panel?.iconName as IconNameType}

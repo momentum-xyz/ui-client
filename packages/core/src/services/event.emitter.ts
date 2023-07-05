@@ -2,10 +2,12 @@ import EventEmitter from 'eventemitter3';
 
 import {
   Object3dInterface,
+  ObjectSoundInterface,
   ObjectTransformInterface,
   Odyssey3dUserInterface,
   Odyssey3dUserTransformInterface,
   SetWorldInterface,
+  SoundItemInterface,
   Texture3dInterface,
   WorldInfoInterface
 } from '../interfaces';
@@ -46,7 +48,9 @@ export type Event3dType = {
   StopRecordingVideo: () => void;
 
   ActivityUpdate: (activityId: string, updateType: ActivityUpdateEnum) => void;
-  SoundtrackChanged: (tracks: Array<{name: string; render_hash: string}>) => void;
+  SoundtrackChanged: (tracks: SoundItemInterface[]) => void;
+  SpatialSoundChanged: (objectId: string, value: ObjectSoundInterface) => void;
+  ObjectSoundChanged: (objectId: string, value: ObjectSoundInterface) => void;
 
   // ObjectLockChanged: (objectId: string, isLocked: boolean) => void;
 };

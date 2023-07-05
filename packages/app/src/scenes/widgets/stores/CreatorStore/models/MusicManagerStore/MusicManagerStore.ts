@@ -24,7 +24,7 @@ const MusicManagerStore = types
         return false;
       }
 
-      const tracks: TrackInfoModelInterface[] = getRootStore(self).musicStore.tracks;
+      const tracks: TrackInfoModelInterface[] = getRootStore(self).musicStore.musicPlayer.tracks;
 
       yield self.publishRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
         spaceId: worldId,
@@ -41,7 +41,7 @@ const MusicManagerStore = types
       return self.publishRequest.isDone;
     }),
     deleteSound: flow(function* (render_hash: string, worldId: string) {
-      const tracks: TrackInfoModelInterface[] = getRootStore(self).musicStore.tracks;
+      const tracks: TrackInfoModelInterface[] = getRootStore(self).musicStore.musicPlayer.tracks;
 
       yield self.publishRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
         spaceId: worldId,

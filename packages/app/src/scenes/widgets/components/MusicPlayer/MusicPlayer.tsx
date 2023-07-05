@@ -8,6 +8,7 @@ import * as styled from './MusicPlayer.styled';
 
 const MusicPlayer: FC = () => {
   const {musicStore, universeStore} = useStore();
+  const {musicPlayer} = musicStore;
   const {worldId} = universeStore;
 
   const playerRef = useRef<ReactHowler>(null);
@@ -25,13 +26,13 @@ const MusicPlayer: FC = () => {
 
   useEffect(() => {
     if (playerRef.current) {
-      musicStore.setPlayer(playerRef.current);
+      musicPlayer.setPlayer(playerRef.current);
     }
-  }, [musicStore, musicStore.activeTrack]);
+  }, [musicStore, musicPlayer.activeTrack, musicPlayer]);
 
   return (
     <styled.Container>
-      {musicStore.activeTrack && <ReactHowler ref={playerRef} {...musicStore.howlerProps} />}
+      {musicStore.hasActiveTrack && <ReactHowler ref={playerRef} {...musicPlayer.howlerProps} />}
     </styled.Container>
   );
 };

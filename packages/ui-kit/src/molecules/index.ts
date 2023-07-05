@@ -16,7 +16,7 @@ export * from './Dialog';
 export * from './FileUploader';
 export * from './SystemWideError';
 export * from './MediaPlayer';
-export * from './SoundVolume';
+export * from './SoundRange';
 export * from './SoundPlayer';
 export * from './SoundUpload';
 export * from './SoundItem';

@@ -5,6 +5,8 @@ import {flow, types} from 'mobx-state-tree';
 import {api, GetSpaceInfoResponse} from 'api';
 import {PluginIdEnum} from 'api/enums';
 
+import {ObjectSound} from './models';
+
 const PORTAL_ASSET_3D_ID = 'de240de6-d911-4d84-9406-8b81550dfea8';
 
 const ObjectFunctionalityStore = types
@@ -19,7 +21,9 @@ const ObjectFunctionalityStore = types
 
       getAttributeItemRequest: types.optional(RequestModel, {}),
       currentAssetId: types.maybe(types.string),
-      isObjectPortal: types.optional(types.boolean, false)
+      isObjectPortal: types.optional(types.boolean, false),
+
+      objectSound: types.optional(ObjectSound, {})
     })
   )
   .actions((self) => ({

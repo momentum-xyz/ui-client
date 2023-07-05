@@ -8,9 +8,16 @@ import {
   Color3,
   Nullable,
   Vector3,
-  Texture
+  Texture,
+  Sound
 } from '@babylonjs/core';
-import {Object3dInterface, Texture3dInterface, SetWorldInterface} from '@momentum-xyz/core';
+import {
+  Object3dInterface,
+  Texture3dInterface,
+  SetWorldInterface,
+  ObjectSoundInterface,
+  SoundItemInterface
+} from '@momentum-xyz/core';
 
 import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
@@ -30,12 +37,16 @@ interface BabylonObjectInterface {
 type SlotTexturesType = Map<string, Texture3dInterface>;
 // Nested map: objectID, then (texture) label.
 type AwaitingTexturesType = Map<string, SlotTexturesType>;
+// Map: objectID, then sound data.
+type AwaitingSoundType = Map<string, ObjectSoundInterface>;
 
 export class ObjectHelper {
   static assetRootUrl = '/asset/';
+  static trackRootUrl = '/track/';
   static textureRootUrl = '/texture/';
   static textureDefaultSize = 's3/';
   static objectsMap = new Map<string, BabylonObjectInterface>();
+  static objectsSoundMap = new Map<string, Sound>();
   static scene: Scene;
   static attachedNode: TransformNode;
   static transformSubscription: {unsubscribe: () => void} | undefined;
@@ -43,12 +54,14 @@ export class ObjectHelper {
   static spawningMaterial: PBRMaterial;
   static mySpawningClone: Nullable<TransformNode>;
   static awaitingTexturesMap: AwaitingTexturesType = new Map();
+  static awaitingSoundMap: AwaitingSoundType = new Map();
 
   static initialize(scene: Scene, assetBaseURL: string): void {
     this.scene = scene;
     scene.useRightHandedSystem = true;
 
     this.assetRootUrl = `${assetBaseURL}/asset/`;
+    this.trackRootUrl = `${assetBaseURL}/track/`;
     this.textureRootUrl = `${assetBaseURL}/texture/`;
   }
 
@@ -93,6 +106,15 @@ export class ObjectHelper {
     if (obj) {
       this.setObjectTextures(obj, scene);
     } //else: spawnObject will check awaitingTextures
+  }
+
+  static objectSoundChange(scene: Scene, objectID: string, soundData: ObjectSoundInterface): void {
+    // Handle sound arriving before objects are spawned.
+    this.appendAwaitingSound(objectID, soundData);
+    const obj = this.objectsMap.get(objectID);
+    if (obj) {
+      this.setObjectSound(obj, scene);
+    }
   }
 
   static setObjectTextures(obj: BabylonObjectInterface, scene: Scene) {
@@ -147,6 +169,50 @@ export class ObjectHelper {
     }
   }
 
+  static setObjectSound(obj: BabylonObjectInterface, scene: Scene) {
+    const prevObjectSound = this.popObjectSound(obj.objectDefinition.id);
+    const newSoundInfo = this.popAwaitingSound(obj.objectDefinition.id);
+    const newTrack = newSoundInfo?.tracks.find((t: SoundItemInterface) => t.isActive);
+
+    // Only distance or volume was changed
+    if (newSoundInfo && prevObjectSound && prevObjectSound?.name === newTrack?.render_hash) {
+      prevObjectSound.updateOptions({
+        maxDistance: newSoundInfo.distance,
+        volume: newSoundInfo.volume / 100
+      });
+
+      this.appendObjectSound(obj.objectDefinition.id, prevObjectSound);
+      console.log('[SOUND] MAP UPD', this.objectsSoundMap);
+      return;
+    }
+
+    // Stop previous sound if exists
+    prevObjectSound?.dispose();
+
+    if (newSoundInfo && newTrack) {
+      const sound = new Sound(
+        newTrack.render_hash,
+        `${this.trackRootUrl}${newTrack.render_hash}`,
+        scene,
+        null,
+        {
+          loop: true,
+          autoplay: true,
+          spatialSound: true,
+          skipCodecCheck: true,
+          maxDistance: newSoundInfo.distance,
+          volume: newSoundInfo.volume / 100
+        }
+      );
+
+      const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
+      sound.attachToMesh(childMeshes[0]);
+
+      this.appendObjectSound(obj.objectDefinition.id, sound);
+      console.log('[SOUND] MAP', this.objectsSoundMap);
+    }
+  }
+
   static instantiateObject(container: AssetContainer, object: Object3dInterface, attach: boolean) {
     const instance = container.instantiateModelsToScene();
     const node = instance.rootNodes[0];
@@ -177,6 +243,7 @@ export class ObjectHelper {
     this.objectsMap.set(object.id, babylonObject);
 
     this.setObjectTextures(babylonObject, this.scene);
+    this.setObjectSound(babylonObject, this.scene);
 
     if (attach) {
       this.attachToCamera(object.id, node);
@@ -265,6 +332,11 @@ export class ObjectHelper {
       mapObj[1]?.container.dispose();
     }
     this.objectsMap.clear();
+
+    for (const mapObj of this.objectsSoundMap) {
+      mapObj[1].dispose();
+    }
+    this.objectsSoundMap.clear();
   }
 
   /** Append texture to the queue waiting for the object to spawn. */
@@ -284,6 +356,40 @@ export class ObjectHelper {
     const current = this.awaitingTexturesMap.get(objectID);
     if (current) {
       this.awaitingTexturesMap.delete(objectID);
+    }
+    return current;
+  }
+
+  /** Append sound to the queue waiting for the object to spawn. */
+  static appendAwaitingSound(objectID: string, soundData: ObjectSoundInterface): void {
+    const current = this.awaitingSoundMap.get(objectID);
+    if (!current) {
+      this.awaitingSoundMap.set(objectID, soundData);
+    }
+  }
+
+  /** Pop entry from the queue with waiting sound */
+  static popAwaitingSound(objectID: string): ObjectSoundInterface | undefined {
+    const current = this.awaitingSoundMap.get(objectID);
+    if (current) {
+      this.awaitingSoundMap.delete(objectID);
+    }
+    return current;
+  }
+
+  /** Append the Sound entry to the map */
+  static appendObjectSound(objectID: string, sound: Sound): void {
+    const current = this.objectsSoundMap.get(objectID);
+    if (!current) {
+      this.objectsSoundMap.set(objectID, sound);
+    }
+  }
+
+  /** Pop the Sound entry from the map */
+  static popObjectSound(objectID: string): Sound | undefined {
+    const current = this.objectsSoundMap.get(objectID);
+    if (current) {
+      this.objectsSoundMap.delete(objectID);
     }
     return current;
   }

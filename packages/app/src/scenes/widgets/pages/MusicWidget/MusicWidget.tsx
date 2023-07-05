@@ -11,6 +11,7 @@ import * as styled from './MusicWidget.styled';
 
 const MusicWidget: FC = () => {
   const {musicStore, widgetManagerStore} = useStore();
+  const {musicPlayer} = musicStore;
 
   const {t} = useI18n();
 
@@ -26,17 +27,17 @@ const MusicWidget: FC = () => {
       >
         <styled.TracksContainer>
           {/* ACTIVE TRACK */}
-          <MusicPlayerView />
+          <MusicPlayerView musicPlayer={musicStore.musicPlayer} setVolume={musicStore.setVolume} />
 
           {/* TRACK LIST */}
           <styled.TrackList>
-            {musicStore.trackList.map((track) => (
+            {musicPlayer.trackList.map((track) => (
               <SoundItem
                 key={track.hash}
                 item={track}
-                isActive={musicStore.activeTrack?.hash === track.hash}
-                onStart={() => musicStore.start(track.hash)}
-                onStop={musicStore.stop}
+                isActive={musicPlayer.activeTrack?.hash === track.hash}
+                onStart={() => musicPlayer.start(track.hash)}
+                onStop={musicPlayer.stop}
               />
             ))}
           </styled.TrackList>

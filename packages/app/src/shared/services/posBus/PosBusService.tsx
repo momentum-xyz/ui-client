@@ -145,6 +145,7 @@ class PosBusService {
             });
           });
         }
+
         if (entries?.string?.object_color) {
           Event3dEmitter.emit('ObjectTextureChanged', {
             objectId: id,
@@ -152,6 +153,15 @@ class PosBusService {
             hash: entries.string.object_color
           });
         }
+
+        if (entries?.audio?.spatial) {
+          Event3dEmitter.emit('ObjectSoundChanged', id, {
+            volume: entries.audio.spatial.volume || 0,
+            distance: entries.audio.spatial.distance || 0,
+            tracks: entries.audio.spatial.tracks
+          });
+        }
+
         break;
       }
       case MsgType.SET_WORLD: {
@@ -270,6 +280,17 @@ class PosBusService {
         const value = msg.value;
         if (value?.tracks) {
           Event3dEmitter.emit('SoundtrackChanged', value.tracks);
+        }
+        break;
+      }
+      case AttributeNameEnum.SPATIAL_AUDIO: {
+        const value = msg.value;
+        if (value?.tracks) {
+          Event3dEmitter.emit('SpatialSoundChanged', msg.target_id, {
+            tracks: value.tracks,
+            volume: value.volume || 0,
+            distance: value.distance || 0
+          });
         }
         break;
       }
