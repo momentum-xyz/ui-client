@@ -42,6 +42,7 @@ type AwaitingSoundType = Map<string, ObjectSoundInterface>;
 
 export class ObjectHelper {
   static assetRootUrl = '/asset/';
+  static trackRootUrl = '/track/';
   static textureRootUrl = '/texture/';
   static textureDefaultSize = 's3/';
   static objectsMap = new Map<string, BabylonObjectInterface>();
@@ -60,6 +61,7 @@ export class ObjectHelper {
     scene.useRightHandedSystem = true;
 
     this.assetRootUrl = `${assetBaseURL}/asset/`;
+    this.trackRootUrl = `${assetBaseURL}/track/`;
     this.textureRootUrl = `${assetBaseURL}/texture/`;
   }
 
@@ -170,10 +172,10 @@ export class ObjectHelper {
   static setObjectSound(obj: BabylonObjectInterface, scene: Scene) {
     const prevObjectSound = this.popObjectSound(obj.objectDefinition.id);
     const newSoundInfo = this.popAwaitingSound(obj.objectDefinition.id);
-    const activeTrack = newSoundInfo?.tracks.find((t: SoundItemInterface) => t.isActive);
+    const newTrack = newSoundInfo?.tracks.find((t: SoundItemInterface) => t.isActive);
 
     // Only distance or volume was changed
-    if (newSoundInfo && prevObjectSound && prevObjectSound?.name === activeTrack?.render_hash) {
+    if (newSoundInfo && prevObjectSound && prevObjectSound?.name === newTrack?.render_hash) {
       prevObjectSound.updateOptions({
         maxDistance: newSoundInfo.distance,
         volume: newSoundInfo.volume / 100
@@ -187,15 +189,21 @@ export class ObjectHelper {
     // Stop previous sound if exists
     prevObjectSound?.dispose();
 
-    if (newSoundInfo && activeTrack) {
-      const sound = new Sound(activeTrack.render_hash, activeTrack.hash_url, scene, null, {
-        loop: true,
-        autoplay: true,
-        spatialSound: true,
-        skipCodecCheck: true,
-        maxDistance: newSoundInfo.distance,
-        volume: newSoundInfo.volume / 100
-      });
+    if (newSoundInfo && newTrack) {
+      const sound = new Sound(
+        newTrack.render_hash,
+        `${this.trackRootUrl}${newTrack.render_hash}`,
+        scene,
+        null,
+        {
+          loop: true,
+          autoplay: true,
+          spatialSound: true,
+          skipCodecCheck: true,
+          maxDistance: newSoundInfo.distance,
+          volume: newSoundInfo.volume / 100
+        }
+      );
 
       const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
       sound.attachToMesh(childMeshes[0]);

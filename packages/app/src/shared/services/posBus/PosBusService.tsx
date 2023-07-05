@@ -15,7 +15,6 @@ import {
 import {AttributeValueChanged} from '@momentum-xyz/posbus-client/dist/build/posbus';
 
 import {PosBusEventEmitter} from 'core/constants';
-import {getTrackAbsoluteUrl} from 'core/utils';
 import {appVariables} from 'api/constants';
 import {PluginIdEnum} from 'api/enums';
 
@@ -159,10 +158,7 @@ class PosBusService {
           Event3dEmitter.emit('ObjectSoundChanged', id, {
             volume: entries.audio.spatial.volume || 0,
             distance: entries.audio.spatial.distance || 0,
-            tracks: entries.audio.spatial.tracks.map((track: any) => ({
-              ...track,
-              hash_url: getTrackAbsoluteUrl(track.render_hash)
-            }))
+            tracks: entries.audio.spatial.tracks
           });
         }
 
