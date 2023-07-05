@@ -5,7 +5,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
-import {getImageAbsoluteUrl} from 'core/utils';
+import {ETHEREUM_ADDRESS_REGEX, getImageAbsoluteUrl} from 'core/utils';
 import {ToastContent} from 'ui-kit';
 
 import * as styled from './WorldMembers.styled';
@@ -80,7 +80,7 @@ const WorldMembers: FC = () => {
                 message: 'Wallet address is required'
               },
               pattern: {
-                value: /^0x[a-fA-F0-9]{40}$/,
+                value: ETHEREUM_ADDRESS_REGEX,
                 message: 'Invalid wallet address'
               }
             }}
