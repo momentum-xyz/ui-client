@@ -8,8 +8,12 @@ import {GetSpaceAttributeItemRequest, SpaceAttributeItemResponse} from 'api';
 import {getSpaceAttributeItem} from 'api/repositories/spaceAttributeRepository';
 
 import {
+  AddWorldMemberRequest,
   DeleteSpaceRequest,
+  DeleteWorldMemberRequest,
   FetchSpaceRequest,
+  FetchWorldMembersRequest,
+  FetchWorldMembersResponse,
   PostSpaceRequest,
   PostSpaceResponse
 } from './spaceRepository.api.types';
@@ -60,5 +64,42 @@ export const postSpace: RequestInterface<PostSpaceRequest, PostSpaceResponse> = 
 export const deleteSpace: RequestInterface<DeleteSpaceRequest, DeleteSpaceRequest> = (options) => {
   const {spaceId, ...restOptions} = options;
 
-  return request.delete(generatePath(spaceRepositoryEndpoints().space, {spaceId}), restOptions);
+  return request.delete(
+    generatePath(spaceRepositoryEndpoints().object, {objectId: spaceId}),
+    restOptions
+  );
+};
+
+export const fetchWorldMembers: RequestInterface<
+  FetchWorldMembersRequest,
+  FetchWorldMembersResponse
+> = (options) => {
+  const {worldId, ...restOptions} = options;
+
+  return request.get(
+    generatePath(spaceRepositoryEndpoints().members, {objectId: worldId}),
+    restOptions
+  );
+};
+
+export const addWorldMember: RequestInterface<AddWorldMemberRequest, null> = (options) => {
+  const {worldId, address, role, ...restOptions} = options;
+
+  return request.post(
+    generatePath(spaceRepositoryEndpoints().members, {objectId: worldId}),
+    {
+      wallet: address,
+      role
+    },
+    restOptions
+  );
+};
+
+export const deleteWorldMember: RequestInterface<DeleteWorldMemberRequest, null> = (options) => {
+  const {worldId, userId, ...restOptions} = options;
+
+  return request.delete(
+    generatePath(spaceRepositoryEndpoints().deleteMember, {objectId: worldId, userId}),
+    restOptions
+  );
 };

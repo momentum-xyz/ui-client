@@ -28,3 +28,27 @@ export interface DeleteSpaceRequest {
 }
 
 export interface DeleteSpaceRequest {}
+
+export interface FetchWorldMembersRequest {
+  worldId: string;
+}
+
+export interface WorldMemberInterface {
+  user_id: string;
+  name: string;
+  avatar_hash: string;
+  role: string;
+}
+
+export interface FetchWorldMembersResponse extends Array<WorldMemberInterface> {}
+
+export interface AddWorldMemberRequest {
+  worldId: string;
+  address: string;
+  role: string;
+}
+
+export interface DeleteWorldMemberRequest {
+  worldId: string;
+  userId: string;
+}

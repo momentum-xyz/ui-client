@@ -99,3 +99,5 @@ export const getDateOfNextAllowedAirdrop = <B extends boolean = false>(
         })
   ) as B extends true ? Date : string;
 };
+
+export const ETHEREUM_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;

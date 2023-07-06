@@ -2,7 +2,7 @@ import {types, cast} from 'mobx-state-tree';
 import {Event3dEmitter, ResetModel} from '@momentum-xyz/core';
 
 import {getRootStore} from 'core/utils';
-import {UserDetails, WorldDetails, WorldInfo} from 'core/models';
+import {UserDetails, WorldDetails, WorldInfo, WorldMembers} from 'core/models';
 
 const World2dStore = types.compose(
   ResetModel,
@@ -10,6 +10,7 @@ const World2dStore = types.compose(
     .model('World2dStore', {
       worldId: types.optional(types.string, ''),
       worldDetails: types.maybeNull(WorldDetails),
+      worldMembers: types.maybeNull(WorldMembers),
       onlineUsersList: types.optional(types.array(UserDetails), []),
 
       // FIXME: Removal
@@ -19,6 +20,7 @@ const World2dStore = types.compose(
       init(worldId: string) {
         self.worldId = worldId;
         self.worldDetails = WorldDetails.create({worldId});
+        self.worldMembers = WorldMembers.create({worldId});
       },
       addOnlineUser(userId: string) {
         if (!self.onlineUsersList.find((u) => u.userId === userId)) {
@@ -61,7 +63,14 @@ const World2dStore = types.compose(
         return self.worldDetails?.world?.owner_id === getRootStore(self).sessionStore.userId;
       },
       get isCurrentUserWorldAdmin(): boolean {
-        return this.isMyWorld;
+        return (
+          this.isMyWorld ||
+          // TODO world_details will have flag for admin, switch to it once ready
+          self.worldMembers?.members?.some(
+            (m) => m.user_id === getRootStore(self).sessionStore.userId
+          ) ||
+          false
+        );
       },
       get image(): string | null {
         return self.worldDetails?.world?.avatarHash || null;
