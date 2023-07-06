@@ -166,7 +166,7 @@ const SpawnAssetStore = types
     selectAsset(asset: Asset3dInterface | null) {
       self.selectedAsset = asset ? Asset3d.create({...asset}) : undefined;
     },
-    spawnObject: flow(function* (worldId: string) {
+    spawnPreviewObject: flow(function* (worldId: string) {
       // it's pretty ugly solution but having 2 comm channels (API and WS) leads to possibility of race condition
       // and it's not clear after we receive response here whether we've already received it from WS or not
       // and babylon module is not currently flexible enough to handle this situation
@@ -184,8 +184,6 @@ const SpawnAssetStore = types
             ? ObjectTypeIdEnum.CUSTOMIZABLE
             : ObjectTypeIdEnum.NORMAL
         }
-
-        // 4ed3a5bb-53f8-4511-941b-079029111111
       );
       const objectId = response?.object_id;
 

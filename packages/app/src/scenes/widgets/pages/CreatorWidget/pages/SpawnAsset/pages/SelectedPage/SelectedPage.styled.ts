@@ -63,6 +63,15 @@ export const Radio = styled.div`
   background: ${(props) => rgba(props.theme.accentBg, 0.2)};
 `;
 
+export const FlyMessage = styled.div`
+  display: flex;
+  gap: 10px;
+
+  svg {
+    margin: 4px 0 0 0;
+  }
+`;
+
 export const ObjectInfoContainer = styled.div`
   display: flex;
   flex-direction: column;

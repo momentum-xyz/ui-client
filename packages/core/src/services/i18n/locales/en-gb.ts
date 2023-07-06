@@ -444,6 +444,8 @@ export const enGb = {
       startRecording: 'Start recording and fly around',
       recording: 'Recording',
       wasCreatedBy: 'was created by',
+      flyForSpawning:
+        'You can fly around with the preview of the object until you reached the perfect spawning point and place the object',
       receivedBoost: 'received a boost of {{amount}} {{symbol}} from {{name}}',
       shareThisPost: 'Share this post',
       loading30sec:
@@ -755,6 +757,8 @@ export const enGb = {
       settings: 'Settings',
       publish: 'Publish',
       default: 'Default',
+      preview: 'Preview',
+      spawn: 'Spawn',
       setAsDefault: 'Set as default',
       takeSnapshot: 'Take a snapshot',
       createVideo: 'Create a video',
