@@ -5,6 +5,17 @@ import checked from '../../assets/icons/ellipse.svg';
 
 export const RadioList = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: flex-start;
+
+  &.horizontal {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
 `;
 
 export const Form = styled.div`
@@ -13,8 +24,6 @@ export const Form = styled.div`
   --mark-size: 12px;
   --radius: 50%;
   --offset: 8px;
-
-  margin: 0 0 10px 0;
 
   &:last-child {
     margin: 0;

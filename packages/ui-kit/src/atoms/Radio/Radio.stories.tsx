@@ -31,6 +31,12 @@ General.args = {
   options: OPTIONS
 };
 
+export const Horizontal = Template.bind({});
+Horizontal.args = {
+  options: OPTIONS,
+  horizontal: true
+};
+
 export const HasDisabled = Template.bind({});
 HasDisabled.args = {
   options: OPTIONS_WITH_DISABLES
