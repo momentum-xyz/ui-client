@@ -1,6 +1,6 @@
 import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useEffect, useState} from 'react';
-import {Button, Input} from '@momentum-xyz/ui-kit';
+import {Button, Checkbox, Input} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 import {Model3dPreview} from '@momentum-xyz/core3d';
 
@@ -49,22 +49,6 @@ export const SelectedPage: FC = () => {
     }
   };
 
-  // const handleDevUpload = (file: File | undefined) => {
-  //   console.log({file, asset});
-  //   if (asset && file) {
-  //     spawnAssetStore
-  //       .uploadImageToMediaManager(file)
-  //       .then((imageHash) => {
-  //         alert(
-  //           `UPDATE asset_3d SET meta = jsonb_set(meta, '{preview_hash}', '"${imageHash}"', TRUE) WHERE asset_3d_id = '${asset.id}';`
-  //         );
-  //       })
-  //       .catch((err) => {
-  //         alert(err);
-  //       });
-  //   }
-  // };
-
   const handleGoBack = () => {
     selectAsset(null);
   };
@@ -72,6 +56,9 @@ export const SelectedPage: FC = () => {
   if (!asset) {
     return null;
   }
+
+  console.log(asset);
+  console.log('assetInfo', assetInfo);
 
   return (
     <styled.Container data-testid="SelectedPage-test">
@@ -85,8 +72,6 @@ export const SelectedPage: FC = () => {
           />
         </styled.PreviewContainer>
 
-        <styled.ObjectTitle>{asset.name}</styled.ObjectTitle>
-
         {assetInfo?.extras?.author && (
           <styled.Row>
             <styled.Prop>
@@ -96,16 +81,21 @@ export const SelectedPage: FC = () => {
           </styled.Row>
         )}
 
-        <styled.Row>
-          <styled.Prop>
-            <styled.PropName>Change name:</styled.PropName>
-            <Input
-              placeholder={t('placeholders.defaultAssetName')}
-              value={spawnAssetStore.navigationObjectName}
-              onChange={spawnAssetStore.setNavigationObjectName}
-            />
-          </styled.Prop>
-        </styled.Row>
+        <Input
+          wide
+          placeholder={t('placeholders.defaultAssetName')}
+          value={spawnAssetStore.navigationObjectName}
+          onChange={spawnAssetStore.setNavigationObjectName}
+        />
+
+        <styled.Radio>
+          <Checkbox
+            name="isCustomizable"
+            value={spawnAssetStore.isCustomizable}
+            label={t('messages.allowCustomize')}
+            onChange={spawnAssetStore.setIsCustomizable}
+          />
+        </styled.Radio>
       </styled.ObjectInfoContainer>
 
       <styled.ControlsRow>

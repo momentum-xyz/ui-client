@@ -28,7 +28,7 @@ interface ObjectInfoInterface {
   artistName: string;
   type: 'COMMUNITY' | 'PRIVATE';
   file: File;
-  isCustom: boolean;
+  isCustomizable: boolean;
 }
 
 const UploadCustomAssetPage: FC = () => {
@@ -48,7 +48,7 @@ const UploadCustomAssetPage: FC = () => {
   } = useForm<ObjectInfoInterface>({
     defaultValues: {
       type: 'COMMUNITY',
-      isCustom: false
+      isCustomizable: false
     }
   });
 
@@ -69,25 +69,28 @@ const UploadCustomAssetPage: FC = () => {
 
   const refSnapshotPreview = useRef<string | undefined>();
 
-  const formSubmitHandler: SubmitHandler<ObjectInfoInterface> = async ({file, name, type}) => {
+  const formSubmitHandler: SubmitHandler<ObjectInfoInterface> = async (form) => {
+    const {file, name, type, isCustomizable} = form;
     if (!name || !file) {
       return;
     }
+
     let preview_hash: string | undefined;
     if (refSnapshotPreview.current) {
-      try {
-        const blob = await (await fetch(refSnapshotPreview.current)).blob();
-        console.log('Snapshot blob:', blob);
-        preview_hash = await spawnAssetStore.uploadImageToMediaManager(blob as File); // TODO fix type
-        console.log('Snapshot uploaded, hash:', preview_hash);
-      } catch (err) {
-        console.log('Snapshot upload error:', err, '. Ignore and continue');
-      }
+      const blob = await (await fetch(refSnapshotPreview.current)).blob();
+      console.log('Snapshot blob:', blob);
+      preview_hash = await spawnAssetStore.uploadImageToMediaManager(blob as File); // TODO fix type
+      console.log('Snapshot uploaded, hash:', preview_hash);
     }
+
     spawnAssetStore.setUploadedAssetName(name);
+
     if (await spawnAssetStore.uploadAsset(file, preview_hash, type === 'PRIVATE')) {
       toast.info(<ToastContent icon="check" text={t('messages.assetUploaded')} />);
       spawnAssetStore.setActiveTab('community');
+
+      // TODO: SPAWN
+      console.log(isCustomizable);
     } else {
       toast.error(<ToastContent isDanger icon="alert" text={t('messages.assetNotUploaded')} />);
     }
@@ -196,13 +199,13 @@ const UploadCustomAssetPage: FC = () => {
           />
 
           <Controller
-            name="isCustom"
+            name="isCustomizable"
             control={control}
             render={({field: {value, onChange}}) => (
               <styled.Radio>
                 <Checkbox
                   value={value}
-                  name="isCustom"
+                  name="isCustomizable"
                   label={t('messages.allowCustomize')}
                   onChange={onChange}
                 />

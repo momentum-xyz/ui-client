@@ -9,9 +9,10 @@ export const Container = styled.div`
 `;
 
 export const PreviewContainer = styled.div`
+  margin: 0 0 10px 0;
   height: 240px;
-  border: 1px solid ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
   border-radius: 4px;
+  border: 1px solid ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
 `;
 
 export const ObjectTitle = styled.div`
@@ -55,7 +56,18 @@ export const PropValue = styled.span`
   font-weight: 700;
 `;
 
-export const ObjectInfoContainer = styled.div``;
+export const Radio = styled.div`
+  padding: 8px 10px;
+  width: 100%;
+  border-radius: 4px;
+  background: ${(props) => rgba(props.theme.accentBg, 0.2)};
+`;
+
+export const ObjectInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
 
 export const ControlsRow = styled.div`
   padding: 20px 0 10px 0;

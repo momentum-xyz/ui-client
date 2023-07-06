@@ -1,5 +1,5 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {ObjectTypeIdEnum, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {api, FetchAssets3dResponse, PostSpaceResponse, UploadAsset3dRequest} from 'api';
@@ -18,6 +18,7 @@ const SpawnAssetStore = types
       uploadProgress: types.maybeNull(types.number),
       selectedAsset: types.maybe(Asset3d),
       navigationObjectName: '',
+      isCustomizable: false,
       isVisibleInNavigation: false,
       uploadedAssetName: '',
       searchQuery: types.optional(SearchQuery, {}),
@@ -45,6 +46,9 @@ const SpawnAssetStore = types
     setNavigationObjectName(name: string) {
       self.navigationObjectName = name;
     },
+    setIsCustomizable(isCustomizable: boolean) {
+      self.isCustomizable = isCustomizable;
+    },
     setUploadedAssetName(name: string) {
       self.uploadedAssetName = name;
     },
@@ -53,6 +57,7 @@ const SpawnAssetStore = types
     },
     resetSelectedObjectFields() {
       self.navigationObjectName = '';
+      self.isCustomizable = false;
       self.isVisibleInNavigation = false;
     }
   }))
@@ -71,7 +76,6 @@ const SpawnAssetStore = types
 
       console.log('uploadAsset', asset);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const onUploadProgress = (progressEvent: any) => {
         console.log(progressEvent);
         const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
@@ -174,11 +178,14 @@ const SpawnAssetStore = types
         {
           parent_id: worldId,
           object_name: self.navigationObjectName,
-          // TODO: What is it for? Discussion !!!
-          object_type_id: '4ed3a5bb-53f8-4511-941b-07902982c31c',
           asset_3d_id: self.selectedAsset?.id,
-          minimap: self.isVisibleInNavigation
+          minimap: self.isVisibleInNavigation,
+          object_type_id: self.isCustomizable
+            ? ObjectTypeIdEnum.CUSTOMIZABLE
+            : ObjectTypeIdEnum.NORMAL
         }
+
+        // 4ed3a5bb-53f8-4511-941b-079029111111
       );
       const objectId = response?.object_id;
 
