@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {ObjectTypeIdEnum, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
-import {api, FetchAssets3dResponse, PostSpaceResponse, UploadAsset3dRequest} from 'api';
+import {api, FetchAssets3dResponse, PostSpaceResponse, UploadAsset3dResponse} from 'api';
 import {Asset3dCategoryEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 import {Asset3d, Asset3dInterface, SearchQuery} from 'core/models';
@@ -84,7 +84,7 @@ const SpawnAssetStore = types
 
       self.setUploadProgress(0);
 
-      const response: UploadAsset3dRequest = yield self.uploadAssetRequest.send(
+      const response: UploadAsset3dResponse = yield self.uploadAssetRequest.send(
         api.assets3dRepository.upload3DAsset,
         {
           asset,
@@ -96,7 +96,7 @@ const SpawnAssetStore = types
       );
 
       console.log('uploadAsset response', response);
-      return self.uploadAssetRequest.isDone;
+      return response?.id;
     }),
     uploadImageToMediaManager: flow(function* (file: File) {
       const data = {file: file};
@@ -166,7 +166,7 @@ const SpawnAssetStore = types
     selectAsset(asset: Asset3dInterface | null) {
       self.selectedAsset = asset ? Asset3d.create({...asset}) : undefined;
     },
-    spawnPreviewObject: flow(function* (worldId: string) {
+    spawnPreviewObject: flow(function* (worldId: string, assetId?: string) {
       // it's pretty ugly solution but having 2 comm channels (API and WS) leads to possibility of race condition
       // and it's not clear after we receive response here whether we've already received it from WS or not
       // and babylon module is not currently flexible enough to handle this situation
@@ -178,7 +178,7 @@ const SpawnAssetStore = types
         {
           parent_id: worldId,
           object_name: self.navigationObjectName,
-          asset_3d_id: self.selectedAsset?.id,
+          asset_3d_id: self.selectedAsset?.id || assetId,
           minimap: self.isVisibleInNavigation,
           object_type_id: self.isCustomizable
             ? ObjectTypeIdEnum.CUSTOMIZABLE
@@ -188,7 +188,6 @@ const SpawnAssetStore = types
       const objectId = response?.object_id;
 
       if (objectId) {
-        getRootStore(self).universeStore.world3dStore?.closeAndResetObjectMenu();
         getRootStore(self).universeStore.world3dStore?.setAttachedToCamera(objectId);
       }
 

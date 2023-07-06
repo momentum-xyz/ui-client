@@ -35,6 +35,7 @@ export const SelectedPage: FC = () => {
 
   const handleSpawn = useCallback(() => {
     world3dStore?.setAttachedToCamera(null);
+    world3dStore?.closeAndResetObjectMenu();
     spawnAssetStore.selectAsset(null);
   }, [spawnAssetStore, world3dStore]);
 
