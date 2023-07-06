@@ -1,4 +1,5 @@
 import {FC, memo} from 'react';
+import cn from 'classnames';
 
 import * as styled from './Radio.styled';
 
@@ -12,16 +13,17 @@ export interface RadioPropsInterface {
   name: string;
   value?: string | null;
   options: RadioOptionInterface[];
+  variant?: 'vertical' | 'horizontal';
   onChange?: (value: string) => void;
 }
 
-const Radio: FC<RadioPropsInterface> = ({name, value, options, onChange}) => {
-  console.log(value);
+const Radio: FC<RadioPropsInterface> = (props) => {
+  const {name, value, options, variant = 'vertical', onChange} = props;
 
   return (
-    <styled.RadioList data-testid="Radio-test">
+    <styled.RadioList data-testid="Radio-test" className={cn(variant)}>
       {options.map((option) => (
-        <styled.Form key={option.value}>
+        <styled.Form key={option.value} className={cn(variant)}>
           <input
             id={option.value}
             type="radio"

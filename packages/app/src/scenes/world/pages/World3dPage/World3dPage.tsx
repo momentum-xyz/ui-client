@@ -96,7 +96,7 @@ const World3dPage: FC = () => {
   };
 
   const handleObjectDuplicate = () => {
-    const {duplicateObject, selectedObjectId, objectName, objectInfo} = creatorStore;
+    const {selectedObjectId, objectName, objectInfo} = creatorStore;
 
     if (!objectInfo || !objectName || !selectedObjectId) {
       return;
@@ -104,10 +104,13 @@ const World3dPage: FC = () => {
 
     world3dStore?.closeAndResetObjectMenu();
 
-    const {asset_3d_id} = objectInfo;
-    duplicateObject(worldId, selectedObjectId, asset_3d_id, objectName).then((objectId) => {
-      console.log('Duplicated object', objectId);
-    });
+    const {asset_3d_id, object_type_id} = objectInfo;
+
+    creatorStore
+      .duplicateObject(worldId, selectedObjectId, asset_3d_id, objectName, object_type_id)
+      .then((objectId) => {
+        console.log('Duplicated object', objectId);
+      });
   };
 
   const handleLevel2MenuOpen = () => {

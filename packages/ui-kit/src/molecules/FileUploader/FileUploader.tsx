@@ -14,7 +14,7 @@ export interface FileUploaderPropsInterface {
   dragActiveLabel: string;
   onFilesUpload: (file: File | undefined) => void;
   onError?: (error: Error) => void;
-  fileType?: 'image' | 'video' | 'audio';
+  fileType?: 'image' | 'video' | 'audio' | 'asset';
   maxSize?: number;
   enableDragAndDrop?: boolean;
   disabled?: boolean;
@@ -24,7 +24,8 @@ export interface FileUploaderPropsInterface {
 const ALLOWED_EXTENSIONS = {
   image: {'image/*': ['.jpeg', '.png', '.jpg', '.svg', '.gif']},
   video: {'video/*': ['.mp4', '.mov', '.wmv', '.mpeg', '.webm', '.mkv']},
-  audio: {'audio/*': ['.mp3', '.ogg', '.aac', '.webm', '.flac']}
+  audio: {'audio/*': ['.mp3', '.ogg', '.aac', '.webm', '.flac']},
+  asset: {'model/gltf-binary': ['.glb']}
 };
 
 /*

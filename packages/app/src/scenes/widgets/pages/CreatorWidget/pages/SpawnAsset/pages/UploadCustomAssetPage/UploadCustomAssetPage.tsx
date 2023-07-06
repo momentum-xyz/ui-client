@@ -1,10 +1,19 @@
-import {FC, useEffect, useMemo, useRef} from 'react';
+import {FC, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import cn from 'classnames';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {Model3dPreview} from '@momentum-xyz/core3d';
-import {Button, Input, Radio, ErrorsEnum, FileUploader, Loader} from '@momentum-xyz/ui-kit';
+import {
+  Button,
+  Input,
+  Radio,
+  ErrorsEnum,
+  FileUploader,
+  Loader,
+  Checkbox,
+  IconSvg
+} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
@@ -20,25 +29,30 @@ interface ObjectInfoInterface {
   artistName: string;
   type: 'COMMUNITY' | 'PRIVATE';
   file: File;
+  isCustomizable: boolean;
 }
 
 const UploadCustomAssetPage: FC = () => {
-  const {widgetStore} = useStore();
+  const {widgetStore, universeStore} = useStore();
+  const {worldId, world3dStore} = universeStore;
   const {creatorStore} = widgetStore;
   const {spawnAssetStore} = creatorStore;
+
+  const [isPreviewShown, setIsPreviewShown] = useState(false);
 
   const {t} = useI18n();
 
   const {
     control,
-    handleSubmit,
-    formState: {errors},
-    getValues,
     setError,
-    clearErrors
+    getValues,
+    clearErrors,
+    handleSubmit,
+    formState: {errors, isValid}
   } = useForm<ObjectInfoInterface>({
     defaultValues: {
-      type: 'COMMUNITY'
+      type: 'COMMUNITY',
+      isCustomizable: false
     }
   });
 
@@ -59,29 +73,43 @@ const UploadCustomAssetPage: FC = () => {
 
   const refSnapshotPreview = useRef<string | undefined>();
 
-  const formSubmitHandler: SubmitHandler<ObjectInfoInterface> = async ({file, name, type}) => {
+  const handleSpawnPreview: SubmitHandler<ObjectInfoInterface> = async (form) => {
+    const {file, name, type, isCustomizable} = form;
     if (!name || !file) {
       return;
     }
+
     let preview_hash: string | undefined;
     if (refSnapshotPreview.current) {
-      try {
-        const blob = await (await fetch(refSnapshotPreview.current)).blob();
-        console.log('Snapshot blob:', blob);
-        preview_hash = await spawnAssetStore.uploadImageToMediaManager(blob as File); // TODO fix type
-        console.log('Snapshot uploaded, hash:', preview_hash);
-      } catch (err) {
-        console.log('Snapshot upload error:', err, '. Ignore and continue');
-      }
+      const blob = await (await fetch(refSnapshotPreview.current)).blob();
+      console.log('Snapshot blob:', blob);
+      preview_hash = await spawnAssetStore.uploadImageToMediaManager(blob as File); // TODO fix type
+      console.log('Snapshot uploaded, hash:', preview_hash);
     }
+
     spawnAssetStore.setUploadedAssetName(name);
-    if (await spawnAssetStore.uploadAsset(file, preview_hash, type === 'PRIVATE')) {
+
+    const assetId = await spawnAssetStore.uploadAsset(file, preview_hash, type === 'PRIVATE');
+    if (assetId) {
       toast.info(<ToastContent icon="check" text={t('messages.assetUploaded')} />);
-      spawnAssetStore.setActiveTab('community');
+
+      spawnAssetStore.setNavigationObjectName(name);
+      spawnAssetStore.setIsCustomizable(isCustomizable);
+
+      if (await spawnAssetStore.spawnPreviewObject(worldId, assetId)) {
+        setIsPreviewShown(true);
+      }
     } else {
       toast.error(<ToastContent isDanger icon="alert" text={t('messages.assetNotUploaded')} />);
     }
   };
+
+  const handleSpawn = useCallback(() => {
+    //spawnAssetStore.setActiveTab('community');
+    world3dStore?.setAttachedToCamera(null);
+    world3dStore?.closeAndResetObjectMenu();
+    spawnAssetStore.selectAsset(null);
+  }, [spawnAssetStore, world3dStore]);
 
   const isUploadReady = spawnAssetStore.isUploadPending;
 
@@ -98,17 +126,18 @@ const UploadCustomAssetPage: FC = () => {
           control={control}
           rules={{required: true}}
           render={({field: {value, onChange}}) => {
-            // use memoised value to avoid re-rendering
-            const filename = modelPreviewFilename; // value ? URL.createObjectURL(value) : '';
-            // console.log('UPLOAD ASSET', {value, filename});
+            // use memoized value to avoid re-rendering
+            const filename = modelPreviewFilename;
+
             return (
               <styled.UploadContainer
                 className={cn(!!errors.file && 'error', value && 'has-image')}
               >
                 {!value && (
                   <styled.AssetInformation>
-                    <h1>{t('messages.uploadAssetInfoTitle')}</h1>
-                    <span>{t('messages.uploadAssetInfoDescription')}</span>
+                    <h4>{t('messages.uploadAssetInfoTitle')}</h4>
+                    <div>{t('messages.uploadAssetDesc1')}</div>
+                    <div>{t('messages.uploadAssetDesc2')}</div>
                   </styled.AssetInformation>
                 )}
                 {!!value && (
@@ -116,23 +145,22 @@ const UploadCustomAssetPage: FC = () => {
                     <Model3dPreview
                       filename={filename}
                       onSnapshot={(dataURL) => {
-                        console.log('Snapshot:', dataURL);
                         refSnapshotPreview.current = dataURL;
                       }}
                     />
                   </styled.PreviewContainer>
                 )}
+
                 {!spawnAssetStore.isUploadPending && (
                   <styled.FileUploaderContainer>
                     <FileUploader
+                      fileType="asset"
+                      enableDragAndDrop
+                      maxSize={MAX_ASSET_SIZE}
+                      label={t('actions.uploadYourAsset')}
+                      dragActiveLabel={t('actions.dropItHere')}
                       onFilesUpload={(file) => {
                         clearErrors();
-                        console.log(file);
-                        if (!file || !/\.glb$/i.test(file.name)) {
-                          setError('file', {message: t('errors.onlyGLBSupported') || ''});
-                          return;
-                        }
-
                         onChange(file);
                       }}
                       onError={(err) => {
@@ -147,9 +175,6 @@ const UploadCustomAssetPage: FC = () => {
                         }
                         setError('file', {message: t('assetsUploader.errorSave')});
                       }}
-                      label={t('actions.uploadYourAsset')}
-                      dragActiveLabel={t('actions.dropItHere')}
-                      maxSize={MAX_ASSET_SIZE}
                     />
                     {errors.file && <styled.Error>{errors.file.message}</styled.Error>}
                   </styled.FileUploaderContainer>
@@ -165,48 +190,94 @@ const UploadCustomAssetPage: FC = () => {
             rules={{required: true}}
             render={({field: {value, onChange}}) => (
               <Input
-                placeholder={'Name your Asset*' || ''}
-                value={value}
                 wide
+                value={value}
+                disabled={isUploadReady || isPreviewShown}
+                placeholder={t('placeholders.nameYourAsset')}
                 onChange={onChange}
-                disabled={isUploadReady}
               />
             )}
           />
+
           <Controller
             name="artistName"
             control={control}
             render={({field: {value, onChange}}) => (
               <Input
-                placeholder={'Name the Artist' || ''}
-                value={value}
                 wide
+                value={value}
+                disabled={isUploadReady || isPreviewShown}
+                placeholder={t('placeholders.nameTheArtist')}
                 onChange={onChange}
-                disabled={isUploadReady}
               />
             )}
           />
-          <Controller
-            name="type"
-            control={control}
-            render={({field: {value, onChange}}) => (
-              <Radio name="type" value={value} onChange={onChange} options={options} />
-            )}
-          />
+
+          {!isPreviewShown ? (
+            <>
+              <Controller
+                name="isCustomizable"
+                control={control}
+                render={({field: {value, onChange}}) => (
+                  <styled.Radio>
+                    <Checkbox
+                      value={value}
+                      name="isCustomizable"
+                      label={t('messages.allowCustomize')}
+                      onChange={onChange}
+                    />
+                  </styled.Radio>
+                )}
+              />
+
+              <Controller
+                name="type"
+                control={control}
+                render={({field: {value, onChange}}) => (
+                  <styled.Radio>
+                    <Radio
+                      name="type"
+                      value={value}
+                      options={options}
+                      variant="horizontal"
+                      onChange={onChange}
+                    />
+                  </styled.Radio>
+                )}
+              />
+            </>
+          ) : (
+            <styled.Radio>
+              <styled.FlyMessage>
+                <IconSvg name="alert" size="m" isWhite />
+                <div>{t('messages.flyForSpawning')}</div>
+              </styled.FlyMessage>
+            </styled.Radio>
+          )}
         </styled.InputsContainer>
       </styled.FormContainer>
 
       <styled.ControlsRow>
         <Button
-          label={t('actions.goBack')}
           variant="secondary"
+          label={t('actions.goBack')}
+          disabled={isPreviewShown}
           onClick={() => spawnAssetStore.setActiveTab('community')}
         />
-        <Button
-          label="Publish"
-          disabled={isUploadReady}
-          onClick={() => handleSubmit(formSubmitHandler)()}
-        />
+
+        {!isPreviewShown ? (
+          <Button
+            label={t('actions.preview')}
+            disabled={isUploadReady || !isValid}
+            onClick={() => handleSubmit(handleSpawnPreview)()}
+          />
+        ) : (
+          <Button
+            label={t('actions.spawn')}
+            disabled={!spawnAssetStore.navigationObjectName}
+            onClick={handleSpawn}
+          />
+        )}
       </styled.ControlsRow>
     </styled.Container>
   );
