@@ -183,6 +183,7 @@ const SpawnAssetStore = types
       const objectId = response?.object_id;
 
       if (objectId) {
+        getRootStore(self).universeStore.world3dStore?.closeAndResetObjectMenu();
         getRootStore(self).universeStore.world3dStore?.setAttachedToCamera(objectId);
       }
 
