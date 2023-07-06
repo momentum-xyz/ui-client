@@ -1,6 +1,6 @@
 import {cast, flow, getSnapshot, types} from 'mobx-state-tree';
 import BN from 'bn.js';
-import {ResetModel, RequestModel} from '@momentum-xyz/core';
+import {ResetModel, RequestModel, TokenEnum} from '@momentum-xyz/core';
 import {IconNameType} from '@momentum-xyz/ui-kit';
 
 import {Wallet, Stake} from 'core/models';
@@ -29,9 +29,9 @@ const NftStore = types
       stakes: types.optional(types.array(Stake), []),
       defaultWalletId: '',
       _selectedWalletId: types.maybeNull(types.string),
+      currentToken: types.optional(types.frozen<TokenEnum>(), TokenEnum.MOM_TOKEN),
 
       chainDecimals: types.optional(types.number, 18),
-      tokenSymbol: 'MOM',
 
       accumulatedRewards: types.frozen(new BN(0)),
 
@@ -59,6 +59,9 @@ const NftStore = types
         // transferable: new BN(wallet.transferable),
         unbonding: new BN(wallet.unbonding)
       };
+    },
+    get tokenSymbol(): string {
+      return self.currentToken === TokenEnum.MOM_TOKEN ? 'MOM' : 'DAD';
     },
     get selectedWalletId(): string {
       console.log(
@@ -189,6 +192,9 @@ const NftStore = types
     },
     setSelectedWalletId(walletId: string | null) {
       self._selectedWalletId = walletId;
+    },
+    setCurrentToken(token: TokenEnum) {
+      self.currentToken = token;
     }
   }))
   .views((self) => ({

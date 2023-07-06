@@ -1,6 +1,7 @@
 import {useCallback, useMemo, useState} from 'react';
 import Web3 from 'web3';
 import BN from 'bn.js';
+import {TokenEnum} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {dummyWalletConf} from 'wallets';
@@ -14,12 +15,8 @@ import {
 
 import stackingABI from './contract_staking.ABI.json';
 import momABI from './contract_MOM.ABI.json';
+import dadABI from './contract_DAD.ABI.json';
 import faucetABI from './contract_faucet.ABI.json';
-
-enum TokenEnum {
-  MOM_TOKEN = 0,
-  DAD_TOKEN = 1
-}
 
 const DELAY_REFRESH_DATA_MS = 2000;
 
@@ -38,7 +35,7 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
 
   const isCorrectAccount = account === requiredAccountAddress;
 
-  const [stakingContract, momContract, faucetContract] = useMemo(() => {
+  const [stakingContract, momContract, dadContract, faucetContract] = useMemo(() => {
     if (!library) {
       return [];
     }
@@ -50,13 +47,14 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
     );
 
     const momContract = new web3.eth.Contract(momABI as any, appVariables.CONTRACT_MOM_ADDRESS);
+    const dadContract = new web3.eth.Contract(dadABI as any, appVariables.CONTRACT_DAD_ADDRESS);
 
     const faucetContract = new web3.eth.Contract(
       faucetABI as any,
       appVariables.CONTRACT_FAUCET_ADDRESS
     );
 
-    return [stakingContract, momContract, faucetContract];
+    return [stakingContract, momContract, dadContract, faucetContract];
   }, [library]);
 
   const stake = useCallback(
@@ -67,7 +65,9 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
         return;
       }
 
-      const res = await momContract?.methods
+      const tokenContract = tokenKind === TokenEnum.MOM_TOKEN ? momContract : dadContract;
+
+      const res = await tokenContract?.methods
         .approve(appVariables.CONTRACT_STAKING_ADDRESS, amount)
         .send({from: account});
       console.log('useBlockchain stake approve result', res);
@@ -84,7 +84,7 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
 
       return result;
     },
-    [momContract, account, stakingContract, isCorrectAccount, refreshStakeRelatedData]
+    [momContract, dadContract, account, stakingContract, isCorrectAccount, refreshStakeRelatedData]
   );
 
   const unstake = useCallback(
