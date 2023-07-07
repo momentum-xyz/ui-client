@@ -1,3 +1,4 @@
+import {TokenEnum} from '@momentum-xyz/core';
 import BN from 'bn.js';
 
 import {StorageKeyEnum} from 'core/enums';
@@ -101,3 +102,7 @@ export const getDateOfNextAllowedAirdrop = <B extends boolean = false>(
 };
 
 export const ETHEREUM_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
+
+export const tokenKindToSymbol = (kind: TokenEnum): string => {
+  return kind === TokenEnum.MOM_TOKEN ? 'MOM' : 'DAD';
+};

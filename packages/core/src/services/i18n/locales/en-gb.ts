@@ -279,6 +279,7 @@ export const enGb = {
       accounts: 'Accounts',
       account: 'Account',
       myWallet: 'My Wallet',
+      token: 'Token',
       members: 'Members',
       emoji: 'EMOJI',
       staked: 'Staked',

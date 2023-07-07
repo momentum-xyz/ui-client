@@ -133,11 +133,10 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
                 selectedWalletId={nftStore.selectedWalletId}
                 balanceTransferrable={nftStore.balanceTransferrable}
                 tokenSymbol={nftStore.tokenSymbol}
-                tokenKind={nftStore.currentToken}
+                showTokenSelector={nftStore.hasDADTokens}
                 isNextDisabled={!amountString || isBalanceTooLow || !isBlockchainReady}
                 onSelectWalletId={nftStore.setSelectedWalletId}
                 onChangeAmountValue={setAmountString}
-                onChangeToken={nftStore.setCurrentToken}
                 onNextClick={() => setActiveStep('authorize')}
               />
             )}

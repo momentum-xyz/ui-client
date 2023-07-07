@@ -7,7 +7,7 @@ import {Wallet, Stake} from 'core/models';
 import {BN_ZERO} from 'core/constants';
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
-import {formatBigInt, getRootStore} from 'core/utils';
+import {formatBigInt, getRootStore, tokenKindToSymbol} from 'core/utils';
 import {PluginIdEnum} from 'api/enums';
 import {api, StakeInterface, WalletInterface} from 'api';
 import {availableWallets, dummyWalletConf, WalletConfigInterface} from 'wallets';
@@ -48,7 +48,7 @@ const NftStore = types
   )
   .views((self) => ({
     get tokenSymbol(): string {
-      return self.currentToken === TokenEnum.MOM_TOKEN ? 'MOM' : 'DAD';
+      return tokenKindToSymbol(self.currentToken);
     },
     get selectedWalletId(): string {
       console.log(
@@ -102,6 +102,11 @@ const NftStore = types
     get selectedWalletConf(): WalletConfigInterface {
       const walletId = self.walletsIdByAddress.get(self.selectedWalletId);
       return availableWallets.find((w) => w.id === walletId) || dummyWalletConf;
+    },
+    get hasDADTokens(): boolean {
+      return self._wallets.some(
+        (wallet) => wallet.contract_id === TokenKindToContractAddress[TokenEnum.DAD_TOKEN]
+      );
     }
   }))
   .views((self) => ({
@@ -261,6 +266,10 @@ const NftStore = types
   .actions((self) => ({
     initMyWalletsAndStakes: flow(function* () {
       yield self.loadMyWallets();
+      if (self.hasDADTokens) {
+        self.setCurrentToken(TokenEnum.DAD_TOKEN);
+      }
+
       yield self.loadMyStakes();
       self.loadDefaultWalletId();
     })

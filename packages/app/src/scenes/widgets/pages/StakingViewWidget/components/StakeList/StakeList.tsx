@@ -13,7 +13,7 @@ import {
 } from '@momentum-xyz/ui-kit';
 
 import {StakeSortType} from 'core/types';
-import {formatBigInt, getImageAbsoluteUrl} from 'core/utils';
+import {formatBigInt, getImageAbsoluteUrl, tokenKindToSymbol} from 'core/utils';
 import {
   FilterFieldModelType,
   SearchQueryModelModelType,
@@ -126,7 +126,7 @@ const StakeList: FC<PropsInterface> = ({
                 worldImageUrl={getImageAbsoluteUrl(stake.avatar_hash, ImageSizeEnum.S5)}
                 staked={formatBigInt(stake.amount)}
                 reward={formatBigInt(stake.reward)}
-                tokenSymbol="MOM"
+                tokenSymbol={tokenKindToSymbol(stake.kind)}
                 onInfoClick={() => onSelectWorld(stake.object_id)}
                 onStakeClick={() => onStake(stake.object_id)}
                 onUnstakeClick={() => {

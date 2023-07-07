@@ -1,21 +1,17 @@
 import {FC, ReactNode} from 'react';
 import {observer} from 'mobx-react-lite';
-import {TokenEnum, useI18n} from '@momentum-xyz/core';
+import {useI18n} from '@momentum-xyz/core';
 import {
   Button,
   Select,
   Input,
   SelectOptionInterface,
-  numberInputSuffixMask,
-  Radio
+  numberInputSuffixMask
 } from '@momentum-xyz/ui-kit';
 
-import * as styled from './StakeAmount.styled';
+import {TokenSelector} from 'ui-kit';
 
-const tokenOptions = [
-  {value: String(TokenEnum.MOM_TOKEN), label: 'MOM'},
-  {value: String(TokenEnum.DAD_TOKEN), label: 'DAD'}
-];
+import * as styled from './StakeAmount.styled';
 
 interface PropsInterface {
   worldName: string;
@@ -27,10 +23,9 @@ interface PropsInterface {
   selectedWalletId: string | null;
   balanceTransferrable: string;
   tokenSymbol: string;
-  tokenKind: TokenEnum;
+  showTokenSelector?: boolean;
   onSelectWalletId: (wallet: string | null) => void;
   onChangeAmountValue: (value: string) => void;
-  onChangeToken: (token: TokenEnum) => void;
   onNextClick: () => void;
 }
 
@@ -44,10 +39,9 @@ const StakeAmount: FC<PropsInterface> = ({
   selectedWalletId,
   balanceTransferrable,
   tokenSymbol,
-  tokenKind,
+  showTokenSelector,
   onSelectWalletId,
   onChangeAmountValue,
-  onChangeToken,
   onNextClick
 }) => {
   const {t} = useI18n();
@@ -76,15 +70,12 @@ const StakeAmount: FC<PropsInterface> = ({
 
         <styled.WalletContent>{walletSelectContent}</styled.WalletContent>
 
-        <styled.SectionGrid>
-          <div>Token</div>
-          <Radio
-            name="token"
-            value={String(tokenKind)}
-            options={tokenOptions}
-            onChange={(val) => onChangeToken(Number(val))}
-          />
-        </styled.SectionGrid>
+        {showTokenSelector && (
+          <styled.SectionGrid>
+            <div>Token</div>
+            <TokenSelector />
+          </styled.SectionGrid>
+        )}
       </styled.Section>
 
       {/* Balance */}
