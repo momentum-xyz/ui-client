@@ -167,12 +167,12 @@ export class WhispControllable extends Whisp {
             this.cursorMovement.y -= dy;
         }
 
-        this.cameraPosition.x = this.position.x + WhispControllable.UP.x *
+        this.cameraPosition.x = this.position.x + Math.cos(Math.PI - this.camera.beta) *
+            WhispControllable.CAMERA_RAISE * Math.cos(this.camera.alpha);
+        this.cameraPosition.y = this.position.y + Math.sin(Math.PI - this.camera.beta) *
             WhispControllable.CAMERA_RAISE;
-        this.cameraPosition.y = this.position.y + WhispControllable.UP.y *
-            WhispControllable.CAMERA_RAISE;
-        this.cameraPosition.z = this.position.z + WhispControllable.UP.z *
-            WhispControllable.CAMERA_RAISE;
+        this.cameraPosition.z = this.position.z + Math.cos(Math.PI - this.camera.beta) *
+            WhispControllable.CAMERA_RAISE * Math.sin(this.camera.alpha);
 
         this.cameraOffsetTarget.set(
             (Math.random() * 2 - 1) * this.cameraShake,
