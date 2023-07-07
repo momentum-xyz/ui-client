@@ -21,9 +21,10 @@ interface PropsInterface {
 const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
   const {universeStore} = useStore();
   const {objectStore} = universeStore;
-  const {assetStore} = objectStore;
+  const {objectContentStore} = objectStore;
+  const {normalContent} = objectContentStore;
 
-  const [hasImage, setHasImage] = useState<boolean>(!!assetStore.imageSrc);
+  const [hasImage, setHasImage] = useState<boolean>(!!normalContent.imageSrc);
 
   const {t} = useI18n();
 
@@ -35,18 +36,18 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
   } = useForm<ImageObjectInterface>({});
 
   useEffect(() => {
-    const sameValues = hasImage && !!assetStore.imageSrc;
+    const sameValues = hasImage && !!normalContent.imageSrc;
     if (sameValues) {
       return;
     }
-    setHasImage(!!assetStore.imageSrc);
-  }, [assetStore.imageSrc, setHasImage]);
+    setHasImage(!!normalContent.imageSrc);
+  }, [normalContent.imageSrc, setHasImage]);
 
   useEffect(() => {
-    if (assetStore.title) {
-      setValue('title', assetStore.title);
+    if (normalContent.title) {
+      setValue('title', normalContent.title);
     }
-  }, [assetStore.title]);
+  }, [normalContent, normalContent.title]);
 
   const formSubmitHandler: SubmitHandler<ImageObjectInterface> = async (
     data: ImageObjectInterface
@@ -55,7 +56,7 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
       return;
     }
 
-    await assetStore.postNewImage(objectId, data.image, data.title);
+    await normalContent.postNewImage(objectId, data.image, data.title);
   };
 
   // TEMP
@@ -80,7 +81,7 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
                 className={cn(
                   'test',
                   !!errors.image && 'error',
-                  (value || assetStore.imageSrc) && 'has-image'
+                  (value || normalContent.imageSrc) && 'has-image'
                 )}
               >
                 {value ? (
@@ -88,9 +89,9 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
                     style={{backgroundImage: `url(${URL.createObjectURL(value)})`}}
                   />
                 ) : (
-                  assetStore.imageSrc && (
+                  normalContent.imageSrc && (
                     <styled.PreviewImageHolder
-                      style={{backgroundImage: `url(${assetStore.imageSrc ?? undefined})`}}
+                      style={{backgroundImage: `url(${normalContent.imageSrc ?? undefined})`}}
                     />
                   )
                 )}
@@ -108,7 +109,7 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
                     }}
                   >
                     <>
-                      {!(value || assetStore.imageSrc) && (
+                      {!(value || normalContent.imageSrc) && (
                         <styled.DragAndDropPrompt>
                           <span>{t('messages.uploadAssetPictureDescription')}</span>
                           <span>{t('labels.or')}</span>

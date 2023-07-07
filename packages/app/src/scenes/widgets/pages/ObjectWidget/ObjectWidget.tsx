@@ -12,8 +12,8 @@ import * as styled from './ObjectWidget.styled';
 const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {universeStore, widgetManagerStore} = useStore();
   const {objectStore, isCurrentUserWorldAdmin} = universeStore;
-  const {pluginLoader, assetStore, asset2dId} = objectStore;
-  const {assetType} = assetStore;
+  const {pluginLoader, objectContentStore, asset2dId} = objectStore;
+  const {assetType, normalContent} = objectContentStore;
 
   const onClose = useCallback(() => {
     widgetManagerStore.close(WidgetEnum.OBJECT);
@@ -75,14 +75,14 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
 
             {assetType === AssetTypeEnum.TEXT && (
               <TextViewer
-                title={objectStore.assetStore.content?.title}
-                text={objectStore.assetStore.content?.content}
+                title={normalContent.content?.title}
+                text={normalContent.content?.content}
               />
             )}
 
-            {assetType === AssetTypeEnum.IMAGE && (
-              <ImageViewer imageSrc={objectStore.assetStore.imageSrc} />
-            )}
+            {assetType === AssetTypeEnum.IMAGE && <ImageViewer imageSrc={normalContent.imageSrc} />}
+
+            {assetType === AssetTypeEnum.CLAIMABLE && <div>CUSTOM</div>}
 
             {assetType === AssetTypeEnum.PLUGIN && pluginLoader?.plugin && (
               <PluginViewer
