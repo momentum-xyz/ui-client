@@ -4,7 +4,7 @@ import {observer} from 'mobx-react-lite';
 import * as styled from './ImageViewer.styled';
 
 interface PropsInterface {
-  imageSrc: string | null;
+  imageSrc?: string | null;
 }
 
 const ImageViewer: FC<PropsInterface> = ({imageSrc}) => {

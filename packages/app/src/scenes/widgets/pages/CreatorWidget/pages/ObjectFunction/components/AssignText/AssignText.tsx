@@ -17,7 +17,8 @@ interface PropsInterface {
 const AssignText: FC<PropsInterface> = ({actionRef, objectId}) => {
   const {universeStore} = useStore();
   const {objectStore} = universeStore;
-  const {assetStore} = objectStore;
+  const {objectContentStore} = objectStore;
+  const {normalContent} = objectContentStore;
 
   const {t} = useI18n();
 
@@ -27,15 +28,15 @@ const AssignText: FC<PropsInterface> = ({actionRef, objectId}) => {
     formState: {errors}
   } = useForm<TextObjectInterface>({
     defaultValues: {
-      title: assetStore.content?.title,
-      content: assetStore.content?.content
+      title: normalContent.content?.title,
+      content: normalContent.content?.content
     }
   });
 
   const formSubmitHandler: SubmitHandler<TextObjectInterface> = async (
     data: TextObjectInterface
   ) => {
-    await assetStore.postNewContent(objectId, data);
+    await normalContent.postNewContent(objectId, data);
   };
 
   // TEMP

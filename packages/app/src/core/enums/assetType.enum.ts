@@ -3,5 +3,6 @@ export enum AssetTypeEnum {
   IMAGE = 'image',
   VIDEO = 'video',
   TEXT = 'text',
-  DOCK = 'Docking station'
+  DOCK = 'Docking station',
+  CLAIMABLE = 'claimable'
 }

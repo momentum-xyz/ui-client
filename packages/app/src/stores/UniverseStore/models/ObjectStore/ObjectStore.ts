@@ -1,5 +1,5 @@
-import {types, flow} from 'mobx-state-tree';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {types, flow, cast} from 'mobx-state-tree';
+import {ObjectTypeIdEnum, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
 import {PluginIdEnum} from 'api/enums';
@@ -7,7 +7,7 @@ import {api, GetSpaceInfoResponse} from 'api';
 import {BasicAsset2dIdEnum} from 'core/enums';
 import {PluginAttributesManager, PluginLoader, DynamicScriptList} from 'core/models';
 
-import {AssetStore} from './models';
+import {ObjectContentStore} from './models';
 
 const {REACT_APP_LOCAL_PLUGINS = '{}'} = process.env;
 const localPlugins = JSON.parse(REACT_APP_LOCAL_PLUGINS);
@@ -29,6 +29,7 @@ const ObjectStore = types
     ResetModel,
     types.model('ObjectStore', {
       objectName: types.maybe(types.string),
+      objectTypeId: types.maybe(types.enumeration(Object.values(ObjectTypeIdEnum))),
       asset2dId: types.maybe(types.string),
 
       objectRequest: types.optional(RequestModel, {}),
@@ -38,7 +39,7 @@ const ObjectStore = types
       dynamicScriptList: types.optional(DynamicScriptList, {}),
       pluginLoader: types.maybe(PluginLoader),
 
-      assetStore: types.optional(AssetStore, {})
+      objectContentStore: types.optional(ObjectContentStore, {})
     })
   )
   .actions((self) => ({
@@ -90,21 +91,24 @@ const ObjectStore = types
       }
 
       self.asset2dId = spaceInfo.asset_2d_id;
+      self.objectTypeId = cast(spaceInfo.object_type_id);
 
       switch (self.asset2dId) {
         case BasicAsset2dIdEnum.TEXT:
-        case BasicAsset2dIdEnum.IMAGE: {
+        case BasicAsset2dIdEnum.IMAGE:
+        case BasicAsset2dIdEnum.CUSTOMIZABLE: {
           const objectResponse = yield self.assetRequest.send(api.assets2dRepository.get2dAsset, {
             assetId: self.asset2dId
           });
+
           if (objectResponse?.meta.pluginId) {
-            self.assetStore.setObject(objectResponse, objectId);
+            self.objectContentStore.setObject(objectResponse, objectId);
           }
           break;
         }
         default: {
           yield self.initPluginLoader(self.asset2dId, objectId);
-          self.assetStore.assetType = 'plugin';
+          self.objectContentStore.assetType = 'plugin';
           break;
         }
       }
