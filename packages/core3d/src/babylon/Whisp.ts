@@ -1,5 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {Color3, MeshBuilder, Scene, StandardMaterial, TrailMesh, Vector3} from "@babylonjs/core";
+import {
+    Color3,
+    MeshBuilder,
+    ParticleSystem,
+    Scene,
+    StandardMaterial,
+    Texture,
+    TrailMesh,
+    Vector3
+} from "@babylonjs/core";
+
+import pentagon from '../static/Particles/pentagon.png';
 
 export class Whisp {
     private static readonly ANIMATION_SPEED = .07;
@@ -8,6 +19,8 @@ export class Whisp {
 
     private readonly float;
     private trail?: TrailMesh;
+    private particlesBeams?: ParticleSystem;
+    private particlesSparks?: ParticleSystem;
 
     protected readonly sphere;
     protected readonly position = new Vector3(2, 2, 2);
@@ -23,7 +36,6 @@ export class Whisp {
         this.float = float;
         this.sphere = MeshBuilder.CreateSphere('sphere', { diameter: .65 }, scene);
 
-
         const sphereMaterial = new StandardMaterial('sphereMaterial', scene);
         sphereMaterial.diffuseColor = Color3.Blue();
         sphereMaterial.alpha = .3;
@@ -32,6 +44,43 @@ export class Whisp {
         if (trail) {
             this.trail = new TrailMesh("WhispTrail", this.sphere, scene, .1, 40);
         }
+    }
+
+    /**
+     * Create outward facing light beam particles
+     * @param {Scene} scene The scene
+     * @protected
+     */
+    protected createParticlesBeams(scene: Scene) {
+
+    }
+
+    /**
+     * Create raising sparks particles
+     * @param {Scene} scene The scene
+     * @protected
+     */
+    protected createParticlesSparks(scene: Scene) {
+        this.particlesSparks = new ParticleSystem("ParticlesSparks", 8, scene);
+        this.particlesSparks.emitter = this.sphere;
+        this.particlesSparks.particleTexture = new Texture(pentagon, scene);
+        this.particlesSparks.minInitialRotation = 0;
+        this.particlesSparks.minInitialRotation = Math.PI * 2 / 5;
+        this.particlesSparks.minLifeTime = .5;
+        this.particlesSparks.maxLifeTime = .8;
+        this.particlesSparks.isLocal = true;
+        this.particlesSparks.emitRate = 6;
+
+        this.particlesSparks.direction1 = this.particlesSparks.direction2 = new Vector3();
+
+        this.particlesSparks.addSizeGradient(0, 0, 0);
+        this.particlesSparks.addSizeGradient(.3, .1, .25);
+        this.particlesSparks.addSizeGradient(1, 0, 0);
+
+        this.particlesSparks.minEmitBox = new Vector3(-.1, -.1, -.1);
+        this.particlesSparks.maxEmitBox = new Vector3(.1, .1, .1);
+
+        this.particlesSparks.start();
     }
 
     /**

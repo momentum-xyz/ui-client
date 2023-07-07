@@ -83,11 +83,8 @@ export class WhispControllable extends Whisp {
             this.cameraPosition,
             scene);
 
-        document.addEventListener("pointerlockchange", () => {
-            if (document.pointerLockElement === scene.getEngine().getRenderingCanvas()) {
-                this.startLooking();
-            }
-        });
+        this.createParticlesBeams(scene);
+        this.createParticlesSparks(scene);
     }
 
     private keyDown(key: string) {
@@ -135,25 +132,21 @@ export class WhispControllable extends Whisp {
                     this.cursorMovement.y += pointerInfo.event.movementY;
 
                     break;
-                case PointerEventTypes.POINTERDOWN:
-
-                    break;
-                case PointerEventTypes.POINTERUP:
-
-                    break;
             }
         });
-    }
 
-    private startLook() {
-        this.scene.getEngine().getRenderingCanvas()?.requestPointerLock();
+        document.addEventListener("pointerlockchange", () => {
+            if (document.pointerLockElement === scene.getEngine().getRenderingCanvas()) {
+                this.startLooking();
+            }
+        });
     }
 
     private startLooking() {
         this.looking = true;
     }
 
-    private stopLook() {
+    private stopLooking() {
         document.exitPointerLock();
 
         this.cursorMovement.set(0, 0);
@@ -208,11 +201,11 @@ export class WhispControllable extends Whisp {
     update(delta: number) {
         if (this.inputState & WhispControllable.BITS_LOOK) {
             if (!(this.inputStatePrevious & WhispControllable.BITS_LOOK)) {
-                this.startLook();
+                this.scene.getEngine().getRenderingCanvas()?.requestPointerLock();
             }
         }
         else {
-            this.stopLook();
+            this.stopLooking();
         }
 
         this.inputStatePrevious = this.inputState;
