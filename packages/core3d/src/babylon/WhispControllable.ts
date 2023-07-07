@@ -194,8 +194,12 @@ export class WhispControllable extends Whisp {
         this.cameraUp.z = this.cameraOffset.z;
 
         this.camera.upVector = this.cameraUp.normalize();
-
         this.camera.setTarget(this.cameraPosition);
+
+        this.sphere.rotation.set(
+            Math.PI * .5 - this.camera.beta,
+            Math.PI * -.5 - this.camera.alpha,
+            this.animationPhase * Math.PI * 2);
     }
 
     update(delta: number) {

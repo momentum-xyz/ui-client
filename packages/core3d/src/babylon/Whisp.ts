@@ -9,7 +9,7 @@ import {
     TrailMesh,
     Vector3,
     MeshBuilder,
-    Color4,
+    Color4, CanvasAlphaMode, Engine,
 } from "@babylonjs/core";
 
 import pentagon from '../static/Particles/pentagon.png';
@@ -37,15 +37,30 @@ export class Whisp {
      */
     constructor(scene: Scene, trail = false, float = false) {
         this.float = float;
-        this.sphere = MeshBuilder.CreateSphere('sphere', { diameter: .65 }, scene);
+        this.sphere = MeshBuilder.CreateIcoSphere('Sphere', {
+            flat: true,
+            subdivisions: 1,
+            radius: .3
+        }, scene);
 
-        const sphereMaterial = new StandardMaterial('sphereMaterial', scene);
-        sphereMaterial.diffuseColor = Color3.Blue();
-        sphereMaterial.alpha = .3;
+        const sphereMaterial = new StandardMaterial('SphereMaterial', scene);
+        sphereMaterial.diffuseColor = new Color3(.8, .8, 1);
+        sphereMaterial.alpha = .15;
+        sphereMaterial.alphaMode = Engine.ALPHA_ONEONE;
         this.sphere.material = sphereMaterial;
 
         if (trail) {
             this.trail = new TrailMesh("WhispTrail", this.sphere, scene, .1, 40);
+
+            const trailMaterial = new StandardMaterial("TrailMaterial", scene);
+
+            trailMaterial.diffuseColor = new Color3(.8, .8, 1);
+            trailMaterial.alpha = .15;
+            trailMaterial.alphaMode = Engine.ALPHA_ADD;
+            trailMaterial.disableLighting = true;
+            trailMaterial.emissiveColor = new Color3(1, 1, 1);
+
+            this.trail.material = trailMaterial;
         }
     }
 
