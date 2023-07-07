@@ -6,14 +6,14 @@ import {useStore} from 'shared/hooks';
 import {AssetTypeEnum, BasicAsset2dIdEnum, WidgetEnum} from 'core/enums';
 import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 
-import {ImageViewer, PluginViewer, TextViewer} from './components';
+import {CustomViewer, ImageViewer, PluginViewer, TextViewer} from './components';
 import * as styled from './ObjectWidget.styled';
 
 const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {universeStore, widgetManagerStore} = useStore();
   const {objectStore, isCurrentUserWorldAdmin} = universeStore;
-  const {pluginLoader, assetStore, asset2dId} = objectStore;
-  const {assetType} = assetStore;
+  const {pluginLoader, objectContentStore, asset2dId} = objectStore;
+  const {assetType, normalContent} = objectContentStore;
 
   const onClose = useCallback(() => {
     widgetManagerStore.close(WidgetEnum.OBJECT);
@@ -59,43 +59,92 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
 
   return (
     <styled.Container data-testid="ObjectWidget-test">
-      <Panel
-        isFullHeight
-        size="large"
-        icon="document"
-        variant="primary"
-        title={objectStore.objectName || ''}
-        onClose={onClose}
-      >
-        <styled.Wrapper>
-          <Frame>
-            <styled.Tabs>
-              <Tabs tabList={TABS_LIST} activeId={asset2dId} />
-            </styled.Tabs>
-
-            {assetType === AssetTypeEnum.TEXT && (
+      {assetType === AssetTypeEnum.TEXT && (
+        <Panel
+          isFullHeight
+          size="large"
+          icon="document"
+          variant="primary"
+          title={objectStore.objectName || ''}
+          onClose={onClose}
+        >
+          <styled.Wrapper>
+            <Frame>
+              <styled.Tabs>
+                <Tabs tabList={TABS_LIST} activeId={asset2dId} />
+              </styled.Tabs>
               <TextViewer
-                title={objectStore.assetStore.content?.title}
-                text={objectStore.assetStore.content?.content}
+                title={normalContent.content?.title}
+                text={normalContent.content?.content}
               />
-            )}
+            </Frame>
+          </styled.Wrapper>
+        </Panel>
+      )}
 
-            {assetType === AssetTypeEnum.IMAGE && (
-              <ImageViewer imageSrc={objectStore.assetStore.imageSrc} />
-            )}
+      {assetType === AssetTypeEnum.IMAGE && (
+        <Panel
+          isFullHeight
+          size="large"
+          icon="document"
+          variant="primary"
+          title={objectStore.objectName || ''}
+          onClose={onClose}
+        >
+          <styled.Wrapper>
+            <Frame>
+              <styled.Tabs>
+                <Tabs tabList={TABS_LIST} activeId={asset2dId} />
+              </styled.Tabs>
+              <ImageViewer imageSrc={normalContent.imageSrc} />
+            </Frame>
+          </styled.Wrapper>
+        </Panel>
+      )}
 
-            {assetType === AssetTypeEnum.PLUGIN && pluginLoader?.plugin && (
-              <PluginViewer
-                plugin={pluginLoader.plugin}
-                pluginLoader={pluginLoader}
-                objectId={data?.id.toString() || ''}
-                isAdmin={isCurrentUserWorldAdmin}
-                onClose={onClose}
-              />
-            )}
-          </Frame>
-        </styled.Wrapper>
-      </Panel>
+      {assetType === AssetTypeEnum.CLAIMABLE && (
+        <Panel
+          isFullHeight
+          size="large"
+          icon="document"
+          variant="primary"
+          title={objectStore.objectName || ''}
+          onClose={onClose}
+        >
+          <styled.Wrapper>
+            <CustomViewer />
+          </styled.Wrapper>
+        </Panel>
+      )}
+
+      {assetType === AssetTypeEnum.PLUGIN && (
+        <Panel
+          isFullHeight
+          size="large"
+          icon="document"
+          variant="primary"
+          title={objectStore.objectName || ''}
+          onClose={onClose}
+        >
+          <styled.Wrapper>
+            <Frame>
+              <styled.Tabs>
+                <Tabs tabList={TABS_LIST} activeId={asset2dId} />
+              </styled.Tabs>
+
+              {pluginLoader?.plugin && (
+                <PluginViewer
+                  plugin={pluginLoader.plugin}
+                  pluginLoader={pluginLoader}
+                  objectId={data?.id.toString() || ''}
+                  isAdmin={isCurrentUserWorldAdmin}
+                  onClose={onClose}
+                />
+              )}
+            </Frame>
+          </styled.Wrapper>
+        </Panel>
+      )}
     </styled.Container>
   );
 };

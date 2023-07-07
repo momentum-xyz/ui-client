@@ -152,7 +152,10 @@ const World3dStore = types
           key: WidgetEnum.GO_TO,
           position: PositionEnum.CENTER, // TODO 2nd floor
           iconName: 'checked',
-          onClick: () => this.setAttachedToCamera(null)
+          onClick: () => {
+            this.setAttachedToCamera(null);
+            self.closeAndResetObjectMenu();
+          }
         }
       ];
 

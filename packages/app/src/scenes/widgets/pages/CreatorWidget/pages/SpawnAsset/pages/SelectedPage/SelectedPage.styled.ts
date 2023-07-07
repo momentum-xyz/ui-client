@@ -1,19 +1,18 @@
 import styled from 'styled-components';
+import {rgba} from 'polished';
 
 export const Container = styled.div`
   padding: 10px 0;
-  display: flex;
-  width: 362px;
-  flex-direction: column;
   width: 100%;
   align-items: center;
   justify-content: space-between;
 `;
 
 export const PreviewContainer = styled.div`
-  height: 362px;
-  border: 1px solid ${(props) => props.theme.text};
+  margin: 0 0 10px 0;
+  height: 240px;
   border-radius: 4px;
+  border: 1px solid ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
 `;
 
 export const ObjectTitle = styled.div`
@@ -28,12 +27,14 @@ export const ObjectTitle = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
 `;
+
 export const Row = styled.div`
   display: flex;
   justify-content: space-between;
   height: 40px;
   gap: 20px;
 `;
+
 export const Prop = styled.div`
   display: flex;
   justify-content: space-between;
@@ -46,22 +47,44 @@ export const Prop = styled.div`
     max-width: 254px;
   }
 `;
+
 export const PropName = styled.span`
   margin-right: 5px;
 `;
+
 export const PropValue = styled.span`
   font-weight: 700;
 `;
 
+export const Radio = styled.div`
+  padding: 8px 10px;
+  width: 100%;
+  border-radius: 4px;
+  background: ${(props) => rgba(props.theme.accentBg, 0.2)};
+`;
+
+export const FlyMessage = styled.div`
+  display: flex;
+  gap: 10px;
+
+  svg {
+    margin: 4px 0 0 0;
+  }
+`;
+
 export const ObjectInfoContainer = styled.div`
-  // display: flex;
-  // flex-direction: column;
-  // align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `;
 
 export const ControlsRow = styled.div`
   padding: 20px 0 10px 0;
-  width: 362px;
   display: flex;
   justify-content: space-between;
+
+  button {
+    min-width: 160px;
+    justify-content: center;
+  }
 `;

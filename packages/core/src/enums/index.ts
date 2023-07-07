@@ -8,3 +8,4 @@ export * from './timeline.enum';
 export * from './media.enum';
 export * from './activity.enum';
 export * from './blockchain.enum';
+export * from './objectTypeId.enum';
