@@ -1,16 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 import {
     Color3,
-    MeshBuilder,
     ParticleSystem,
     Scene,
     StandardMaterial,
     Texture,
     TrailMesh,
-    Vector3
+    Vector3,
+    MeshBuilder,
+    Color4,
 } from "@babylonjs/core";
 
 import pentagon from '../static/Particles/pentagon.png';
+import beam from '../static/Particles/beam.png';
 
 export class Whisp {
     private static readonly ANIMATION_SPEED = .07;
@@ -52,7 +55,29 @@ export class Whisp {
      * @protected
      */
     protected createParticlesBeams(scene: Scene) {
+        this.particlesBeams = new ParticleSystem("ParticlesWhispBeams", 8, scene);
+        this.particlesBeams.emitter = this.sphere;
+        this.particlesBeams.blendMode = ParticleSystem.BLENDMODE_ADD;
+        this.particlesBeams.particleTexture = new Texture(beam, scene);
+        this.particlesBeams.minInitialRotation = 0;
+        this.particlesBeams.minInitialRotation = Math.PI * 2;
+        this.particlesBeams.minLifeTime = .5;
+        this.particlesBeams.maxLifeTime = 1.2;
+        this.particlesBeams.minSize = .65;
+        this.particlesBeams.maxSize = 1.6;
+        this.particlesBeams.maxAngularSpeed = 1.2;
+        this.particlesBeams.minAngularSpeed = -this.particlesBeams.maxAngularSpeed;
+        this.particlesBeams.isLocal = true;
+        this.particlesBeams.emitRate = 6;
 
+        this.particlesBeams.addColorGradient(0, new Color4(1, 1, 1, 0));
+        this.particlesBeams.addColorGradient(.5, new Color4(1, 1, 1, 1));
+        this.particlesBeams.addColorGradient(1, new Color4(1, 1, 1, 0));
+
+        this.particlesBeams.direction1 = this.particlesBeams.direction2 = new Vector3();
+        this.particlesBeams.minEmitBox = this.particlesBeams.maxEmitBox = new Vector3();
+
+        this.particlesBeams.start();
     }
 
     /**
@@ -61,8 +86,9 @@ export class Whisp {
      * @protected
      */
     protected createParticlesSparks(scene: Scene) {
-        this.particlesSparks = new ParticleSystem("ParticlesSparks", 8, scene);
+        this.particlesSparks = new ParticleSystem("ParticlesWhispSparks", 8, scene);
         this.particlesSparks.emitter = this.sphere;
+        this.particlesSparks.blendMode = ParticleSystem.BLENDMODE_ADD;
         this.particlesSparks.particleTexture = new Texture(pentagon, scene);
         this.particlesSparks.minInitialRotation = 0;
         this.particlesSparks.minInitialRotation = Math.PI * 2 / 5;
@@ -74,7 +100,7 @@ export class Whisp {
         this.particlesSparks.direction1 = this.particlesSparks.direction2 = new Vector3();
 
         this.particlesSparks.addSizeGradient(0, 0, 0);
-        this.particlesSparks.addSizeGradient(.3, .1, .25);
+        this.particlesSparks.addSizeGradient(.5, .1, .25);
         this.particlesSparks.addSizeGradient(1, 0, 0);
 
         this.particlesSparks.minEmitBox = new Vector3(-.1, -.1, -.1);
