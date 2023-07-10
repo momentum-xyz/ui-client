@@ -16,7 +16,8 @@ const World = types
     owner_id: types.string,
     owner_name: types.maybeNull(types.string),
     stake_total: types.maybeNull(types.string),
-    stakers: types.maybeNull(types.optional(types.array(WorldStaker), []))
+    stakers: types.maybeNull(types.optional(types.array(WorldStaker), [])),
+    is_admin: types.optional(types.boolean, false)
   })
   .views((self) => ({
     get imageSrc(): string | null {

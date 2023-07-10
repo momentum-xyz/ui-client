@@ -55,11 +55,6 @@ const WorldMembers = types.compose(
         yield self.fetchMembers();
       })
     }))
-    .actions((self) => ({
-      afterCreate() {
-        self.fetchMembers();
-      }
-    }))
 );
 
 export type WorldMembersModelType = Instance<typeof WorldMembers>;
