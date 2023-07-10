@@ -67,9 +67,9 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         PosBusService.addPendingState(
           result.transactionHash,
           worldId,
-          amountAtoms.toString(),
           selectedWalletId,
           comment,
+          amountAtoms.toString(),
           nftStore.currentToken
         );
       }
