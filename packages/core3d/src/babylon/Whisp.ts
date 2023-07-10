@@ -151,7 +151,6 @@ export class Whisp {
             root.parent = this.node;
         }
 
-        this.particlesSparks?.stop();
         this.sphere.setEnabled(false);
     }
 
