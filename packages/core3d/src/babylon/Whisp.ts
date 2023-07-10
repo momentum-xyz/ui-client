@@ -150,6 +150,9 @@ export class Whisp {
         for (const root of this.assets.rootNodes) {
             root.parent = this.node;
         }
+
+        this.particlesSparks?.stop();
+        this.sphere.setEnabled(false);
     }
 
     /**

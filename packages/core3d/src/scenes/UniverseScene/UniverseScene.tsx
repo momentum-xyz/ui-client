@@ -40,16 +40,9 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
     };
   }, [events]);
 
-  const onSceneReady = async (scene: Scene) => {
-    SkyboxHelper.set360Skybox(scene, skyboxWorld);
-
-    console.log('onSceneReady', scene);
-    const view = scene.getEngine().getRenderingCanvas();
-    if (view?.id) {
-      player = new WhispControllable(scene);
-
-      // Example for loading a GLB asset into the whisp, also works for non players
-      SceneLoader.LoadAssetContainer(
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const loadAsset = (scene: Scene) => {
+    SceneLoader.LoadAssetContainer(
         lowPolyBunny,
         '',
         scene,
@@ -60,6 +53,18 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
         (scene, message) => {
 
         });
+  };
+
+  const onSceneReady = async (scene: Scene) => {
+    SkyboxHelper.set360Skybox(scene, skyboxWorld);
+
+    console.log('onSceneReady', scene);
+    const view = scene.getEngine().getRenderingCanvas();
+    if (view?.id) {
+      player = new WhispControllable(scene);
+
+      // Example for loading a GLB asset into the whisp, also works for non players
+      // loadAsset(scene);
 
       // PlayerHelper.initialize(scene, view, false);
       InputHelper.initializeUniverse(scene, onWorldClick, onUserClick, onClickOutside);
