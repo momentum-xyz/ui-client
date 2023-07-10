@@ -13,7 +13,7 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {universeStore, widgetManagerStore} = useStore();
   const {objectStore, isCurrentUserWorldAdmin} = universeStore;
   const {pluginLoader, objectContentStore, asset2dId} = objectStore;
-  const {assetType, normalContent} = objectContentStore;
+  const {assetType, normalContent, customizableContent} = objectContentStore;
 
   const onClose = useCallback(() => {
     widgetManagerStore.close(WidgetEnum.OBJECT);
@@ -105,15 +105,13 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
       {assetType === AssetTypeEnum.CLAIMABLE && (
         <Panel
           isFullHeight
-          size="large"
-          icon="document"
+          size="normal"
           variant="primary"
-          title={objectStore.objectName || ''}
+          icon={customizableContent?.widgetIcon || 'alert'}
+          title={customizableContent?.widgetTitle || ''}
           onClose={onClose}
         >
-          <styled.Wrapper>
-            <CustomViewer />
-          </styled.Wrapper>
+          <CustomViewer />
         </Panel>
       )}
 

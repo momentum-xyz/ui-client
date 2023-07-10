@@ -1,5 +1,15 @@
+import {AttributeValueInterface} from '@momentum-xyz/sdk';
+
+/** COMMON **/
 export interface SpaceInterface {
   name: string;
+}
+
+export interface CustomizableObjectInterface extends AttributeValueInterface {
+  text: string;
+  title: string;
+  image_hash: string;
+  owner_id?: string;
 }
 
 export interface FetchSpaceRequest {
