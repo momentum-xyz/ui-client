@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
     ArcRotateCamera, Color3, Color4, Engine,
-    KeyboardEventTypes, MeshBuilder, ParticleSystem,
+    KeyboardEventTypes, Mesh, MeshBuilder,
     PointerEventTypes,
     Scene, SolidParticleSystem, StandardMaterial, Texture,
     Vector2,
@@ -57,10 +56,13 @@ export class WhispControllable extends Whisp {
     private static readonly FRICTION = .14;
     private static readonly LOOK_SENSITIVITY = .002;
     private static readonly STAR_SPAWN_DISTANCE = 9;
-    private static readonly STAR_CLIP_DISTANCE = 11;
+    private static readonly STAR_CLIP_DISTANCE = 13;
     private static readonly STAR_SPAWN_RADIUS = 5;
-    private static readonly STAR_SCALE = .1;
-    private static readonly STAR_STRETCH = 1;
+    private static readonly STAR_SCALE = .04;
+    private static readonly STAR_STRETCH = 1.26031992;
+    private static readonly STAR_COUNT = 80;
+    private static readonly STAR_THRESHOLD = 4;
+    private static readonly STAR_RAMP = .03;
 
     private readonly scene: Scene;
     private readonly cameraPosition = new Vector3();
@@ -70,6 +72,9 @@ export class WhispControllable extends Whisp {
     private readonly cursorMovement = new Vector2();
 
     private particlesStars?: SolidParticleSystem;
+    private particlesStarsMesh?: Mesh;
+    private particlesStarsMaterial?: StandardMaterial;
+    private particlesStarsIntensity = 0;
     private looking = false;
     private camera;
     private cameraShake = 0;
@@ -102,7 +107,7 @@ export class WhispControllable extends Whisp {
         const directionAngles = this.directionAngles;
 
         const makeParticleSpawn = (particlePosition: Vector3, initial = false) => {
-            const tangent = direction.cross(new Vector3(0, 1, 0)).normalize();
+            const tangent = direction.cross(WhispControllable.UP).normalize();
             const bitangent = direction.cross(tangent);
             const angle = Math.PI * 2 * Math.random();
             const radius = Math.sqrt(Math.random()) * WhispControllable.STAR_SPAWN_RADIUS;
@@ -126,19 +131,20 @@ export class WhispControllable extends Whisp {
         this.particlesStars = new SolidParticleSystem("ParticlesStars", scene);
         this.particlesStars.addShape(MeshBuilder.CreatePlane("ParticlesStarsPlane", {
 
-        }, scene), 64);
+        }, scene), WhispControllable.STAR_COUNT);
 
-        const starMesh = this.particlesStars.buildMesh();
-        const starMaterial = new StandardMaterial("ParticlesStarsMaterial", scene);
+        this.particlesStarsMesh = this.particlesStars.buildMesh();
+        this.particlesStarsMaterial = new StandardMaterial("ParticlesStarsMaterial", scene);
 
-        starMaterial.opacityTexture = new Texture(flare);
-        starMaterial.alphaMode = Engine.ALPHA_ADD;
-        starMaterial.backFaceCulling = false;
-        starMaterial.disableLighting = true;
-        starMaterial.emissiveColor = new Color3(1, 1, 1);
+        this.particlesStarsMaterial.opacityTexture = new Texture(flare);
+        this.particlesStarsMaterial.alphaMode = Engine.ALPHA_ADD;
+        this.particlesStarsMaterial.alpha = 0;
+        this.particlesStarsMaterial.backFaceCulling = false;
+        this.particlesStarsMaterial.disableLighting = true;
+        this.particlesStarsMaterial.emissiveColor = new Color3(1, 1, 1);
 
-        starMesh.material = starMaterial;
-        starMesh.alwaysSelectAsActiveMesh = true;
+        this.particlesStarsMesh.material = this.particlesStarsMaterial;
+        this.particlesStarsMesh.alwaysSelectAsActiveMesh = true;
 
         this.particlesStars.initParticles = function() {
             for (let i = 0; i < this.nbParticles; ++i) {
@@ -162,8 +168,13 @@ export class WhispControllable extends Whisp {
             const dy = particle.position.y - position.y;
             const dz = particle.position.z - position.z;
             const dot = direction.x * dx + direction.y * dy + direction.z * dz;
+            const dcx = particle.position.x - position.x - dot * direction.x;
+            const dcy = particle.position.y - position.y - dot * direction.y;
+            const dcz = particle.position.z - position.z - dot * direction.z;
 
-            if (dot < -WhispControllable.STAR_CLIP_DISTANCE) {
+            if (dot < -WhispControllable.STAR_CLIP_DISTANCE ||
+                dcx * dcx + dcy * dcy + dcz * dcz >
+                WhispControllable.STAR_SPAWN_RADIUS * WhispControllable.STAR_SPAWN_RADIUS) {
                 this.recycleParticle(particle);
             }
             else {
@@ -352,6 +363,26 @@ export class WhispControllable extends Whisp {
         this.cameraShake = Math.pow(
             this.velocity.length() * WhispControllable.CAMERA_SHAKE_MAGNITUDE,
             WhispControllable.CAMERA_SHAKE_POWER);
+
+        const starsIntensityPrevious = this.particlesStarsIntensity;
+
+        this.particlesStarsIntensity = Math.min(
+            1,
+            Math.max(0, this.velocity.length() - WhispControllable.STAR_THRESHOLD) *
+                WhispControllable.STAR_RAMP);
+
+        if (this.particlesStarsIntensity !== starsIntensityPrevious) {
+            if (starsIntensityPrevious === 0) {
+                this.particlesStarsMesh?.setEnabled(true);
+            }
+            else if (this.particlesStarsIntensity === 0) {
+                this.particlesStarsMesh?.setEnabled(false);
+            }
+        }
+
+        if (this.particlesStarsMaterial) {
+            this.particlesStarsMaterial.alpha = this.particlesStarsIntensity;
+        }
 
         const friction = Math.pow(WhispControllable.FRICTION, delta * 2);
 

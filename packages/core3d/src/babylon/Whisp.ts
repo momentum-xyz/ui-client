@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import {
     Color3,
     ParticleSystem,
@@ -10,7 +8,9 @@ import {
     Vector3,
     MeshBuilder,
     Color4,
-    Engine, FresnelParameters, TransformNode, Quaternion, Matrix,
+    Engine,
+    FresnelParameters,
+    TransformNode,
 } from "@babylonjs/core";
 
 import pentagon from '../static/Particles/pentagon.png';
