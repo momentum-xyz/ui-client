@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Radio} from '@momentum-xyz/ui-kit';
 import {TokenEnum} from '@momentum-xyz/core';
@@ -15,10 +15,12 @@ const tokenOptions = [
 const TokenSelector: FC = () => {
   const {currentToken, setCurrentToken} = useStore().nftStore;
 
+  const uniqueSuffix = useMemo(() => Math.random().toString(36).substring(7), []);
+
   return (
     <styled.TokenSelectorWrapper>
       <Radio
-        name="token"
+        name={'token' + uniqueSuffix}
         variant="horizontal"
         value={String(currentToken)}
         options={tokenOptions}
