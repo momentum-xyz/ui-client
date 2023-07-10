@@ -1,5 +1,5 @@
 import {FC, useEffect} from 'react';
-import {Scene} from '@babylonjs/core';
+import {Scene, SceneLoader} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
 import {Universe3dEmitterType} from '@momentum-xyz/core';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
@@ -12,6 +12,7 @@ import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 import skyboxWorld from '../../static/CLOUDSCAPE.jpg';
 import {InputHelper} from '../../babylon/InputHelper';
 import {WhispControllable} from "../../babylon/WhispControllable";
+import lowPolyBunny from '../../static/lowPolyBunny.glb';
 
 export interface PropsInterface {
   events: Universe3dEmitterType;
@@ -46,6 +47,19 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
     const view = scene.getEngine().getRenderingCanvas();
     if (view?.id) {
       player = new WhispControllable(scene);
+
+      // Example for loading a GLB asset into the whisp, also works for non players
+      SceneLoader.LoadAssetContainer(
+        lowPolyBunny,
+        '',
+        scene,
+        container => {
+          player.setAsset(container);
+        },
+        event => {},
+        (scene, message) => {
+
+        });
 
       // PlayerHelper.initialize(scene, view, false);
       InputHelper.initializeUniverse(scene, onWorldClick, onUserClick, onClickOutside);

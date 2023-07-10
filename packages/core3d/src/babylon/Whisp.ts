@@ -10,7 +10,7 @@ import {
     Color4,
     Engine,
     FresnelParameters,
-    TransformNode,
+    TransformNode, AssetContainer, InstantiatedEntries,
 } from "@babylonjs/core";
 
 import pentagon from '../static/Particles/pentagon.png';
@@ -27,6 +27,7 @@ export class Whisp {
     private trail?: TrailMesh;
     private particlesBeams?: ParticleSystem;
     private particlesSparks?: ParticleSystem;
+    private assets?: InstantiatedEntries;
 
     protected readonly node = new TransformNode("WhispRoot");
     protected readonly velocity = new Vector3();
@@ -140,6 +141,18 @@ export class Whisp {
     }
 
     /**
+     * Set the 3D asset for this whisp
+     * @param {AssetContainer} container The asset container containing the asset
+     */
+    setAsset(container: AssetContainer) {
+        this.assets = container.instantiateModelsToScene();
+
+        for (const root of this.assets.rootNodes) {
+            root.parent = this.node;
+        }
+    }
+
+    /**
      * Update the state
      * @param {number} delta The time delta in seconds
      */
@@ -158,6 +171,11 @@ export class Whisp {
                 0,
                 Math.atan2(this.direction.x, this.direction.z) + Math.PI * .5,
                 Math.asin(-this.direction.y));
+
+            this.node.rotation.set(
+                this.directionAngles.z,
+                this.directionAngles.y - Math.PI * .5,
+                0);
         }
 
         if (this.float) {
