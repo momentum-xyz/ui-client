@@ -9,7 +9,7 @@ export interface CustomizableObjectInterface extends AttributeValueInterface {
   text: string;
   title: string;
   image_hash: string;
-  owner_id?: string;
+  claimed_by?: string;
 }
 
 export interface FetchSpaceRequest {
@@ -61,4 +61,16 @@ export interface AddWorldMemberRequest {
 export interface DeleteWorldMemberRequest {
   worldId: string;
   userId: string;
+}
+
+/** CLAIM AND CUSTOMIZE OBJECT **/
+
+export interface ClaimAndCustomizeRequest extends CustomizableObjectInterface {
+  objectId: string;
+}
+
+/** CLEAN CUSTOMIZATION AND UNCLAIM OBJECT **/
+
+export interface CleanCustomizationRequest {
+  objectId: string;
 }

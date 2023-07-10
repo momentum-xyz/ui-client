@@ -14,7 +14,7 @@ const CustomViewer: FC = () => {
   const {objectContentStore} = objectStore;
   const {customizableContent} = objectContentStore;
 
-  const canUserEdit = customizableContent.content?.owner_id === sessionStore.userId;
+  const canUserEdit = customizableContent.content?.claimed_by === sessionStore.userId;
   const canUserDelete = canUserEdit || universeStore.isMyWorld;
 
   const handleSignUp = () => {
@@ -41,7 +41,12 @@ const CustomViewer: FC = () => {
         <NewOrEditForm
           isPending={false}
           content={customizableContent.content}
-          onCreateOrUpdate={() => {}}
+          onCreateOrUpdate={async (form) => {
+            if (await customizableContent.claimAndCustomize(form)) {
+              customizableContent.setIsEditing(false);
+              customizableContent.fetchContent();
+            }
+          }}
         />
       )}
 

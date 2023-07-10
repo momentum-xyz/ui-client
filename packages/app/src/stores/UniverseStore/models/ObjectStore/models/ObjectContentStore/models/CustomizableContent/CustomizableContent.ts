@@ -3,7 +3,9 @@ import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {IconNameType} from '@momentum-xyz/ui-kit';
 
+import {MediaUploader} from 'core/models';
 import {api, CustomizableObjectInterface} from 'api';
+import {CustomizableObjectFormInterface} from 'core/interfaces';
 
 const CustomizableContent = types
   .compose(
@@ -12,9 +14,13 @@ const CustomizableContent = types
       pluginId: '',
       objectId: '',
       isEditing: false,
+
       content: types.maybe(types.frozen<CustomizableObjectInterface>()),
 
-      fetchRequest: types.optional(RequestModel, {})
+      mediaUploader: types.optional(MediaUploader, {}),
+      fetchRequest: types.optional(RequestModel, {}),
+      customizeRequest: types.optional(RequestModel, {}),
+      cleanRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -33,19 +39,38 @@ const CustomizableContent = types
 
       if (attributeResponse) {
         alert(1);
-        console.log('attributeResponse', attributeResponse);
+        self.content = attributeResponse;
       }
-    })
+    }),
+    fetchContent(): void {
+      this.initContent(self.pluginId, self.objectId);
+    }
   }))
   .actions((self) => ({
     setIsEditing(isEditing: boolean): void {
       self.isEditing = isEditing;
     },
-    claimAndCustomize: flow(function* () {
-      // TODO
+    claimAndCustomize: flow(function* (form: CustomizableObjectFormInterface) {
+      const render_hash = yield self.mediaUploader.uploadImageOrVideo(form.image);
+      if (!render_hash) {
+        return false;
+      }
+
+      yield self.customizeRequest.send(api.spaceRepository.claimAndCustomize, {
+        objectId: self.objectId,
+        text: form.text || '',
+        title: form.title || '',
+        image_hash: render_hash
+      });
+
+      return self.customizeRequest.isDone;
     }),
     unclaimAndClear: flow(function* () {
-      // TODO
+      yield self.cleanRequest.send(api.spaceRepository.cleanCustomization, {
+        objectId: self.objectId
+      });
+
+      return self.cleanRequest.isDone;
     })
   }))
   .views((self) => ({

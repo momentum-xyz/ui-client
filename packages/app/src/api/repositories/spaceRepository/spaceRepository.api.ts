@@ -8,6 +8,8 @@ import {GetSpaceAttributeItemRequest, SpaceAttributeItemResponse} from 'api';
 import {getSpaceAttributeItem} from 'api/repositories/spaceAttributeRepository';
 
 import {
+  ClaimAndCustomizeRequest,
+  CleanCustomizationRequest,
   AddWorldMemberRequest,
   DeleteSpaceRequest,
   DeleteWorldMemberRequest,
@@ -102,4 +104,18 @@ export const deleteWorldMember: RequestInterface<DeleteWorldMemberRequest, null>
     generatePath(spaceRepositoryEndpoints().deleteMember, {objectId: worldId, userId}),
     restOptions
   );
+};
+
+export const claimAndCustomize: RequestInterface<ClaimAndCustomizeRequest, null> = (options) => {
+  const {text, title, image_hash, objectId, ...rest} = options;
+
+  const url = generatePath(spaceRepositoryEndpoints().claimAndCustomize, {objectId});
+  return request.post(url, {text, title, image_hash}, rest);
+};
+
+export const cleanCustomization: RequestInterface<CleanCustomizationRequest, null> = (options) => {
+  const {objectId, ...rest} = options;
+
+  const url = generatePath(spaceRepositoryEndpoints().cleanCustomization, {objectId});
+  return request.post(url, {}, rest);
 };

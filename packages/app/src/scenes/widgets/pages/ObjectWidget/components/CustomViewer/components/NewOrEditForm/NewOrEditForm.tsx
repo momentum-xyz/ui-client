@@ -1,6 +1,7 @@
 import {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Controller, useForm} from 'react-hook-form';
+import cn from 'classnames';
 import {useI18n} from '@momentum-xyz/core';
 import {
   Button,
@@ -157,7 +158,7 @@ const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate
                 : getImageAbsoluteUrl(content?.image_hash);
 
               return (
-                <styled.CustomImage>
+                <styled.CustomImage className={cn(!!errors.image && 'error')}>
                   <styled.Uploader>
                     <FileUploader
                       fileType="image"

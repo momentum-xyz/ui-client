@@ -81,6 +81,10 @@ export const CustomImage = styled.div`
   border-radius: 6px;
   border: 1px dashed ${(props) => props.theme.text};
   border-radius: 8px;
+
+  &.error {
+    border: 1px dashed ${(props) => props.theme.danger};
+  }
 `;
 
 export const Uploader = styled.div`
