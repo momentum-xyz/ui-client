@@ -9,6 +9,7 @@ import {
   FileUploader,
   Frame,
   IconSvg,
+  ImageSizeEnum,
   Input,
   Textarea
 } from '@momentum-xyz/ui-kit';
@@ -23,6 +24,7 @@ interface PropsInterface {
   content?: CustomizableObjectInterface | null;
   isPending: boolean;
   onCreateOrUpdate: (form: CustomizableObjectFormInterface) => void;
+  onBack: () => void;
 }
 
 type ImageType = 'custom' | 'ai';
@@ -30,7 +32,7 @@ type ImageType = 'custom' | 'ai';
 const MAX_ASSET_SIZE_MB = 8;
 const MAX_ASSET_SIZE_B = MAX_ASSET_SIZE_MB * Math.pow(1024, 2);
 
-const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate}) => {
+const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate, onBack}) => {
   const [selectedImageType, setSelectedImageType] = useState<ImageType | null>(null);
 
   const {t} = useI18n();
@@ -46,6 +48,7 @@ const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate
     if (content) {
       setValue('title', content.title);
       setValue('text', content.text);
+      setSelectedImageType('custom');
     }
   }, [content, setValue]);
 
@@ -155,7 +158,7 @@ const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate
             render={({field: {value, onChange}}) => {
               const imageUrl = value
                 ? URL.createObjectURL(value)
-                : getImageAbsoluteUrl(content?.image_hash);
+                : getImageAbsoluteUrl(content?.image_hash, ImageSizeEnum.S5);
 
               return (
                 <styled.CustomImage className={cn(!!errors.image && 'error')}>
@@ -191,6 +194,9 @@ const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate
       <styled.Separator />
 
       <styled.Actions>
+        <div>
+          <Button label={t('actions.back')} onClick={onBack} />
+        </div>
         <Button
           label="Contribute"
           onClick={handleCreateOrUpdate}

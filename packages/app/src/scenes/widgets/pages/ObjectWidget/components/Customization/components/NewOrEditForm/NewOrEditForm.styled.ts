@@ -43,6 +43,7 @@ export const InputsContainer = styled.div`
 `;
 
 export const Separator = styled.div`
+  margin: 0 10px;
   height: 1px;
   background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
 `;
@@ -126,7 +127,7 @@ export const PreviewImage = styled.div`
 `;
 
 export const Actions = styled.div`
-  padding: 0 0 10px 0;
+  padding: 10px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 `;

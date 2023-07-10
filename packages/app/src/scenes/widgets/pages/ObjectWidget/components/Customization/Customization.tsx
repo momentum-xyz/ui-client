@@ -4,6 +4,7 @@ import {Button, PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
+import {CustomizableObjectFormInterface} from 'core/interfaces';
 
 import {ContentViewer, NewOrEditForm} from './components';
 import * as styled from './Customization.styled';
@@ -20,6 +21,24 @@ const Customization: FC = () => {
   const handleSignUp = () => {
     widgetManagerStore.closeAll();
     widgetManagerStore.open(WidgetEnum.LOGIN, PositionEnum.LEFT);
+  };
+
+  const handleCustomize = async (form: CustomizableObjectFormInterface) => {
+    if (await customizableContent.claimAndCustomize(form)) {
+      customizableContent.setIsEditing(false);
+      customizableContent.fetchContent();
+    }
+  };
+  const handleBack = () => {
+    customizableContent.setIsEditing(false);
+  };
+
+  const handleEdit = () => {
+    customizableContent.setIsEditing(true);
+  };
+
+  const handleDelete = async () => {
+    await customizableContent.unclaimAndClear();
   };
 
   if (customizableContent.isLoading) {
@@ -45,20 +64,18 @@ const Customization: FC = () => {
         <NewOrEditForm
           content={customizableContent.content}
           isPending={customizableContent.isPending}
-          onCreateOrUpdate={async (form) => {
-            if (await customizableContent.claimAndCustomize(form)) {
-              customizableContent.setIsEditing(false);
-              customizableContent.fetchContent();
-            }
-          }}
+          onCreateOrUpdate={handleCustomize}
+          onBack={handleBack}
         />
       )}
 
       {customizableContent.isViewForm && !!customizableContent.content && (
         <ContentViewer
+          authorName={customizableContent.content.claimed_by} // TODO
+          authorAvatarHash={null} // TODO
           content={customizableContent.content}
-          onDelete={canUserDelete ? () => {} : undefined}
-          onEdit={canUserEdit ? () => {} : undefined}
+          onDelete={canUserDelete ? handleDelete : undefined}
+          onEdit={canUserEdit ? handleEdit : undefined}
         />
       )}
     </styled.Container>

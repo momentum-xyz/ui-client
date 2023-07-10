@@ -71,7 +71,6 @@ const CustomizableContent = types
 
       if (self.cleanRequest.isDone) {
         self.content = undefined;
-        self.isEditing = false;
       }
 
       return self.cleanRequest.isDone;
