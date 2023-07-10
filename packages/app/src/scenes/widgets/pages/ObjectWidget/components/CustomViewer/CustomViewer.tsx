@@ -5,6 +5,7 @@ import {Button, PositionEnum} from '@momentum-xyz/ui-kit';
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 
+import {NewOrEditForm} from './components';
 import * as styled from './CustomViewer.styled';
 
 const CustomViewer: FC = () => {
@@ -36,7 +37,13 @@ const CustomViewer: FC = () => {
 
   return (
     <styled.Container data-testid="CustomViewer-test">
-      {customizableContent.isNewOrEditForm && <div>EDIT</div>}
+      {customizableContent.isNewOrEditForm && (
+        <NewOrEditForm
+          isPending={false}
+          content={customizableContent.content}
+          onCreateOrUpdate={() => {}}
+        />
+      )}
 
       {customizableContent.isViewForm && <div>VIEW {canUserDelete}</div>}
     </styled.Container>
