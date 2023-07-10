@@ -59,10 +59,10 @@ export class WhispControllable extends Whisp {
     private static readonly STAR_CLIP_DISTANCE = 13;
     private static readonly STAR_SPAWN_RADIUS = 5;
     private static readonly STAR_SCALE = .04;
-    private static readonly STAR_STRETCH = 1.26031992;
+    private static readonly STAR_STRETCH = 1.8;
     private static readonly STAR_COUNT = 80;
     private static readonly STAR_THRESHOLD = 4;
-    private static readonly STAR_RAMP = .03;
+    private static readonly STAR_RAMP = .026031992;
 
     private readonly scene: Scene;
     private readonly cameraPosition = new Vector3();
@@ -112,7 +112,9 @@ export class WhispControllable extends Whisp {
             const angle = Math.PI * 2 * Math.random();
             const radius = Math.sqrt(Math.random()) * WhispControllable.STAR_SPAWN_RADIUS;
             const distance = initial ?
-                (Math.random() * 2 - 1) * WhispControllable.STAR_CLIP_DISTANCE :
+                Math.random() * (WhispControllable.STAR_SPAWN_DISTANCE +
+                    WhispControllable.STAR_CLIP_DISTANCE) -
+                    WhispControllable.STAR_SPAWN_DISTANCE :
                 WhispControllable.STAR_SPAWN_DISTANCE +
                     (WhispControllable.STAR_CLIP_DISTANCE -
                         WhispControllable.STAR_SPAWN_DISTANCE) * Math.random();
@@ -172,7 +174,7 @@ export class WhispControllable extends Whisp {
             const dcy = particle.position.y - position.y - dot * direction.y;
             const dcz = particle.position.z - position.z - dot * direction.z;
 
-            if (dot < -WhispControllable.STAR_CLIP_DISTANCE ||
+            if (dot < -WhispControllable.STAR_SPAWN_DISTANCE ||
                 dcx * dcx + dcy * dcy + dcz * dcz >
                 WhispControllable.STAR_SPAWN_RADIUS * WhispControllable.STAR_SPAWN_RADIUS) {
                 this.recycleParticle(particle);
