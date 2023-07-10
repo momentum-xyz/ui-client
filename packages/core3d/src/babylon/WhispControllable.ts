@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-    ArcRotateCamera,
-    KeyboardEventTypes,
+    ArcRotateCamera, Color4, Engine,
+    KeyboardEventTypes, MeshBuilder, ParticleSystem,
     PointerEventTypes,
-    Scene,
+    Scene, SolidParticleSystem, StandardMaterial, Texture,
     Vector2,
     Vector3
 } from "@babylonjs/core";
 
+import flare from "../static/Particles/flare.png";
+
 import {Whisp} from "./Whisp";
 
-interface Bindings {
+interface KeyBindings {
     [key: string]: number
 }
 
@@ -31,7 +33,7 @@ export class WhispControllable extends Whisp {
         WhispControllable.BIT_BACK |
         WhispControllable.BIT_UP |
         WhispControllable.BIT_DOWN;
-    private static readonly BINDINGS: Bindings = {
+    private static readonly BINDINGS: KeyBindings = {
         'a': WhispControllable.BIT_LEFT,
         'd': WhispControllable.BIT_RIGHT,
         'w': WhispControllable.BIT_FORWARD,
@@ -54,15 +56,20 @@ export class WhispControllable extends Whisp {
     private static readonly ACCELERATION_SPRINT = 120;
     private static readonly FRICTION = .14;
     private static readonly LOOK_SENSITIVITY = .002;
+    private static readonly STAR_SPAWN_DISTANCE = 8;
+    private static readonly STAR_SPAWN_RADIUS = 5;
 
     private readonly scene: Scene;
     private readonly velocity = new Vector3();
+    private readonly direction = new Vector3(0, 0, 1);
     private readonly cameraPosition = new Vector3();
     private readonly cameraOffset = new Vector3();
     private readonly cameraOffsetTarget = new Vector3();
     private readonly cameraUp = new Vector3();
     private readonly cursorMovement = new Vector2();
 
+    private particlesStars?: SolidParticleSystem;
+    private particlesStarsCount = 30;
     private looking = false;
     private camera;
     private cameraShake = 0;
@@ -85,6 +92,94 @@ export class WhispControllable extends Whisp {
 
         this.createParticlesBeams(scene);
         this.createParticlesSparks(scene);
+        this.createParticlesStars(scene);
+    }
+
+    private createParticlesStars(scene: Scene) {
+        const position = this.cameraPosition;
+        const velocity = this.velocity;
+        const direction = this.direction;
+
+        const makeParticleSpawn = (particlePosition: Vector3, initial = false) => {
+            const tangent = direction.cross(new Vector3(0, 1, 0)).normalize();
+            const bitangent = direction.cross(tangent);
+            const angle = Math.PI * 2 * Math.random();
+            const radius = Math.sqrt(Math.random()) * WhispControllable.STAR_SPAWN_RADIUS;
+            const distance = (initial ? Math.random() * 2 - 1 : 1) * WhispControllable.STAR_SPAWN_DISTANCE;
+
+            particlePosition.x = position.x + direction.x * distance +
+                Math.cos(angle) * tangent.x * radius +
+                Math.sin(angle) * bitangent.x * radius;
+            particlePosition.y = position.y + direction.y * distance +
+                Math.cos(angle) * tangent.y * radius +
+                Math.sin(angle) * bitangent.y * radius;
+            particlePosition.z = position.z + direction.z * distance +
+                Math.cos(angle) * tangent.z * radius +
+                Math.sin(angle) * bitangent.z * radius;
+        };
+
+        this.particlesStars = new SolidParticleSystem("ParticlesStars", scene);
+        this.particlesStars.addShape(MeshBuilder.CreatePlane("ParticlesStarsPlane", {
+
+        }, scene), 64);
+
+        const starMesh = this.particlesStars.buildMesh();
+        const starMaterial = new StandardMaterial("ParticlesStarsMaterial", scene);
+
+        starMaterial.diffuseTexture = new Texture(flare);
+        starMaterial.alphaMode = Engine.ALPHA_ADD;
+        starMaterial.backFaceCulling = false;
+
+        starMesh.material = starMaterial;
+        starMesh.alwaysSelectAsActiveMesh = true;
+
+        this.particlesStars.initParticles = function() {
+            for (let i = 0; i < this.nbParticles; ++i) {
+                this.recycleParticle(this.particles[i]);
+
+                makeParticleSpawn(this.particles[i].position, true);
+            }
+        };
+
+        this.particlesStars.recycleParticle = function(particle) {
+            makeParticleSpawn(particle.position);
+
+            const scale = .25;
+            particle.scale.x = scale;
+            particle.scale.y = scale;
+            particle.scale.z = scale;
+            particle.rotation.x = Math.random() * 3.5;
+            particle.rotation.y = Math.random() * 3.5;
+            particle.rotation.z = Math.random() * 3.5;
+            particle.color = new Color4(0, 0, 0, 0);
+
+            return particle;
+        };
+
+        this.particlesStars.updateParticle = function(particle) {
+            const dx = particle.position.x - position.x;
+            const dy = particle.position.y - position.y;
+            const dz = particle.position.z - position.z;
+            const dot = direction.x * dx + direction.y * dy + direction.z * dz;
+
+            if (dot < -WhispControllable.STAR_SPAWN_DISTANCE || dot > WhispControllable.STAR_SPAWN_DISTANCE) {
+                this.recycleParticle(particle);
+            }
+            else {
+                const visibility = Math.cos(dot * (Math.PI * .5 / WhispControllable.STAR_SPAWN_DISTANCE));
+
+                particle.color?.set(visibility, visibility, visibility, visibility);
+
+                particle.position.x -= velocity.x * scene.deltaTime * .001;
+                particle.position.y -= velocity.y * scene.deltaTime * .001;
+                particle.position.z -= velocity.z * scene.deltaTime * .001;
+            }
+
+            return particle;
+        };
+
+        this.particlesStars.isAlwaysVisible = true;
+        this.particlesStars.initParticles();
     }
 
     private keyDown(key: string) {
@@ -196,10 +291,14 @@ export class WhispControllable extends Whisp {
         this.camera.upVector = this.cameraUp.normalize();
         this.camera.setTarget(this.cameraPosition);
 
-        this.sphere.rotation.set(
+        this.node.rotation.set(
             Math.PI * .5 - this.camera.beta,
             Math.PI * -.5 - this.camera.alpha,
-            this.animationPhase * Math.PI * 2);
+            0);
+        this.sphere.rotation.set(
+            this.animationPhase * Math.PI * -2,
+            -this.node.rotation.y,
+            0);
     }
 
     update(delta: number) {
@@ -251,6 +350,13 @@ export class WhispControllable extends Whisp {
         this.velocity.x *= friction;
         this.velocity.y *= friction;
         this.velocity.z *= friction;
+        this.direction.copyFrom(this.velocity).normalize();
+
+        if (this.direction.length() === 0) {
+            this.direction.set(0, 0, 1);
+        }
+
+        this.particlesStars?.setParticles();
 
         super.update(delta);
 

@@ -10,25 +10,28 @@ import {
     Vector3,
     MeshBuilder,
     Color4,
-    Engine,
+    Engine, FresnelParameters, TransformNode,
 } from "@babylonjs/core";
 
 import pentagon from '../static/Particles/pentagon.png';
 import beam from '../static/Particles/beam.png';
 
 export class Whisp {
+    public static readonly RADIUS = .24;
+
     private static readonly ANIMATION_SPEED = .09;
     private static readonly FLOAT_PHASES = [3, 2, 4];
-    private static readonly FLOAT_MAGNITUDE = .14;
+    private static readonly FLOAT_MAGNITUDE = .18;
 
     private readonly float;
     private trail?: TrailMesh;
     private particlesBeams?: ParticleSystem;
     private particlesSparks?: ParticleSystem;
 
+    protected readonly node = new TransformNode("WhispRoot");
     protected readonly sphere;
     protected readonly position = new Vector3(2, 2, 2);
-    protected animationPhase = 0;
+    protected animationPhase = Math.random();
 
     /**
      * Construct a whisp
@@ -40,20 +43,26 @@ export class Whisp {
         this.float = float;
         this.sphere = MeshBuilder.CreateIcoSphere('Sphere', {
             flat: true,
-            subdivisions: 1,
-            radius: .24
+            subdivisions: 2,
+            radius: Whisp.RADIUS
         }, scene);
+        this.sphere.parent = this.node;
 
         const sphereMaterial = new StandardMaterial('SphereMaterial', scene);
 
         sphereMaterial.diffuseColor = new Color3(.8, .8, 1);
-        sphereMaterial.alpha = .05;
-        sphereMaterial.alphaMode = Engine.ALPHA_ONEONE;
+        sphereMaterial.alpha = .5;
+        sphereMaterial.alphaMode = Engine.ALPHA_ADD;
+        sphereMaterial.reflectionFresnelParameters = new FresnelParameters();
+        sphereMaterial.reflectionFresnelParameters.power = 3;
+        sphereMaterial.reflectionFresnelParameters.leftColor =
+            sphereMaterial.reflectionFresnelParameters.rightColor =
+                Color3.White();
 
         this.sphere.material = sphereMaterial;
 
         if (trail) {
-            this.trail = new TrailMesh("WhispTrail", this.sphere, scene, .07, 60);
+            this.trail = new TrailMesh("WhispTrail", this.node, scene, .07, 60);
 
             const trailMaterial = new StandardMaterial("TrailMaterial", scene);
 
@@ -118,11 +127,11 @@ export class Whisp {
         this.particlesSparks.direction1 = this.particlesSparks.direction2 = new Vector3();
 
         this.particlesSparks.addSizeGradient(0, 0, 0);
-        this.particlesSparks.addSizeGradient(.5, .1, .2);
+        this.particlesSparks.addSizeGradient(.5, .1, .28);
         this.particlesSparks.addSizeGradient(1, 0, 0);
 
-        this.particlesSparks.minEmitBox = new Vector3(-.1, -.1, -.1);
-        this.particlesSparks.maxEmitBox = new Vector3(.1, .1, .1);
+        this.particlesSparks.minEmitBox = new Vector3(-.07, -.07, -.07);
+        this.particlesSparks.maxEmitBox = this.particlesSparks.minEmitBox.clone().negate();
 
         this.particlesSparks.start();
     }
@@ -132,9 +141,9 @@ export class Whisp {
      * @param {number} delta The time delta in seconds
      */
     update(delta: number) {
-        this.sphere.position.x = this.position.x;
-        this.sphere.position.y = this.position.y;
-        this.sphere.position.z = this.position.z;
+        this.node.position.x = this.position.x;
+        this.node.position.y = this.position.y;
+        this.node.position.z = this.position.z;
 
         if (this.float) {
             const angle = Math.PI * 2 * this.animationPhase *
@@ -142,10 +151,10 @@ export class Whisp {
             const radius = Math.sin(Math.PI * 2 * this.animationPhase *
                 Whisp.FLOAT_PHASES[1]) * Whisp.FLOAT_MAGNITUDE;
 
-            this.sphere.position.x += Math.cos(angle) * radius;
-            this.sphere.position.y += Math.sin(Math.PI * 2 * this.animationPhase *
+            this.node.position.x += Math.cos(angle) * radius;
+            this.node.position.y += Math.sin(Math.PI * 2 * this.animationPhase *
                 Whisp.FLOAT_PHASES[2]) * Whisp.FLOAT_MAGNITUDE;
-            this.sphere.position.z += Math.sin(angle) * radius;
+            this.node.position.z += Math.sin(angle) * radius;
         }
 
         if ((this.animationPhase += Whisp.ANIMATION_SPEED * delta) > 1) {
