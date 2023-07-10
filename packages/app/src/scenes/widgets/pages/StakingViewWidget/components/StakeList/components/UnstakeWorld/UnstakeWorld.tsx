@@ -25,7 +25,7 @@ const UnstakeWorld: FC<PropsInterface> = ({targetStake, onUnStaked, onCanceled})
   const handleUnstake = useCallback(async () => {
     try {
       console.log('Unstake: ', targetStake.object_id);
-      await unstake(targetStake.object_id);
+      await unstake(targetStake.object_id, targetStake.kind);
       console.log('Unstake success: ', targetStake.object_id);
       onUnStaked();
 
@@ -44,7 +44,15 @@ const UnstakeWorld: FC<PropsInterface> = ({targetStake, onUnStaked, onCanceled})
         />
       );
     }
-  }, [targetStake.object_id, targetStake.name, unstake, onUnStaked, t, onCanceled]);
+  }, [
+    targetStake.object_id,
+    targetStake.name,
+    targetStake.kind,
+    unstake,
+    onUnStaked,
+    t,
+    onCanceled
+  ]);
 
   useEffect(() => {
     if (isBlockchainReady) {

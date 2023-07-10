@@ -15,6 +15,7 @@ export const Title = styled.div`
 export const Filters = styled.div`
   padding: 12px 0 10px 0;
   display: grid;
+  gap: 10px;
   grid-template-columns: 120px 1fr;
   align-items: center;
 `;
