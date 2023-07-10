@@ -32,6 +32,7 @@ interface PropsInterface {
   mostStakedWorlds: WorldInfoModelInterface[];
   filterField: FilterFieldModelType;
   filterOptions: SelectOptionInterface<string>[];
+  moreFilters?: React.ReactNode;
   sortField: SortFieldModelType;
   sortOptions: SelectOptionInterface<StakeSortType>[];
   onReloadStakes: () => void;
@@ -46,6 +47,7 @@ const StakeList: FC<PropsInterface> = ({
   mostStakedWorlds,
   filterField,
   filterOptions,
+  moreFilters,
   sortField,
   sortOptions,
   onReloadStakes,
@@ -95,6 +97,8 @@ const StakeList: FC<PropsInterface> = ({
             onSingleChange={(value) => filterField.setField(value || '')}
           />
         </styled.Filters>
+
+        {moreFilters}
       </Frame>
 
       <styled.SearchContainer>
