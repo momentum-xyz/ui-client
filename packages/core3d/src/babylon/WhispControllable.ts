@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-    ArcRotateCamera, Color4, Engine,
+    ArcRotateCamera, Color3, Color4, Engine,
     KeyboardEventTypes, MeshBuilder, ParticleSystem,
     PointerEventTypes,
     Scene, SolidParticleSystem, StandardMaterial, Texture,
@@ -56,12 +56,13 @@ export class WhispControllable extends Whisp {
     private static readonly ACCELERATION_SPRINT = 120;
     private static readonly FRICTION = .14;
     private static readonly LOOK_SENSITIVITY = .002;
-    private static readonly STAR_SPAWN_DISTANCE = 8;
+    private static readonly STAR_SPAWN_DISTANCE = 9;
+    private static readonly STAR_CLIP_DISTANCE = 11;
     private static readonly STAR_SPAWN_RADIUS = 5;
+    private static readonly STAR_SCALE = .1;
+    private static readonly STAR_STRETCH = 1;
 
     private readonly scene: Scene;
-    private readonly velocity = new Vector3();
-    private readonly direction = new Vector3(0, 0, 1);
     private readonly cameraPosition = new Vector3();
     private readonly cameraOffset = new Vector3();
     private readonly cameraOffsetTarget = new Vector3();
@@ -69,7 +70,6 @@ export class WhispControllable extends Whisp {
     private readonly cursorMovement = new Vector2();
 
     private particlesStars?: SolidParticleSystem;
-    private particlesStarsCount = 30;
     private looking = false;
     private camera;
     private cameraShake = 0;
@@ -99,13 +99,18 @@ export class WhispControllable extends Whisp {
         const position = this.cameraPosition;
         const velocity = this.velocity;
         const direction = this.direction;
+        const directionAngles = this.directionAngles;
 
         const makeParticleSpawn = (particlePosition: Vector3, initial = false) => {
             const tangent = direction.cross(new Vector3(0, 1, 0)).normalize();
             const bitangent = direction.cross(tangent);
             const angle = Math.PI * 2 * Math.random();
             const radius = Math.sqrt(Math.random()) * WhispControllable.STAR_SPAWN_RADIUS;
-            const distance = (initial ? Math.random() * 2 - 1 : 1) * WhispControllable.STAR_SPAWN_DISTANCE;
+            const distance = initial ?
+                (Math.random() * 2 - 1) * WhispControllable.STAR_CLIP_DISTANCE :
+                WhispControllable.STAR_SPAWN_DISTANCE +
+                    (WhispControllable.STAR_CLIP_DISTANCE -
+                        WhispControllable.STAR_SPAWN_DISTANCE) * Math.random();
 
             particlePosition.x = position.x + direction.x * distance +
                 Math.cos(angle) * tangent.x * radius +
@@ -126,9 +131,11 @@ export class WhispControllable extends Whisp {
         const starMesh = this.particlesStars.buildMesh();
         const starMaterial = new StandardMaterial("ParticlesStarsMaterial", scene);
 
-        starMaterial.diffuseTexture = new Texture(flare);
+        starMaterial.opacityTexture = new Texture(flare);
         starMaterial.alphaMode = Engine.ALPHA_ADD;
         starMaterial.backFaceCulling = false;
+        starMaterial.disableLighting = true;
+        starMaterial.emissiveColor = new Color3(1, 1, 1);
 
         starMesh.material = starMaterial;
         starMesh.alwaysSelectAsActiveMesh = true;
@@ -144,14 +151,8 @@ export class WhispControllable extends Whisp {
         this.particlesStars.recycleParticle = function(particle) {
             makeParticleSpawn(particle.position);
 
-            const scale = .25;
-            particle.scale.x = scale;
-            particle.scale.y = scale;
-            particle.scale.z = scale;
-            particle.rotation.x = Math.random() * 3.5;
-            particle.rotation.y = Math.random() * 3.5;
-            particle.rotation.z = Math.random() * 3.5;
-            particle.color = new Color4(0, 0, 0, 0);
+            particle.scale.set(0, 0, 0);
+            particle.color = new Color4(1, 1, 1, 1);
 
             return particle;
         };
@@ -162,17 +163,28 @@ export class WhispControllable extends Whisp {
             const dz = particle.position.z - position.z;
             const dot = direction.x * dx + direction.y * dy + direction.z * dz;
 
-            if (dot < -WhispControllable.STAR_SPAWN_DISTANCE || dot > WhispControllable.STAR_SPAWN_DISTANCE) {
+            if (dot < -WhispControllable.STAR_CLIP_DISTANCE) {
                 this.recycleParticle(particle);
             }
             else {
-                const visibility = Math.cos(dot * (Math.PI * .5 / WhispControllable.STAR_SPAWN_DISTANCE));
+                const visibility = Math.max(
+                    0,
+                    Math.cos(dot * (Math.PI * .5 / WhispControllable.STAR_SPAWN_DISTANCE)));
+                const scale = visibility * WhispControllable.STAR_SCALE;
 
-                particle.color?.set(visibility, visibility, visibility, visibility);
+                particle.scale.set(
+                    scale * (1 + velocity.length() * WhispControllable.STAR_STRETCH),
+                    scale,
+                    scale);
 
                 particle.position.x -= velocity.x * scene.deltaTime * .001;
                 particle.position.y -= velocity.y * scene.deltaTime * .001;
                 particle.position.z -= velocity.z * scene.deltaTime * .001;
+                particle.rotation.set(
+                    directionAngles.x,
+                    directionAngles.y,
+                    directionAngles.z
+                );
             }
 
             return particle;
@@ -341,20 +353,11 @@ export class WhispControllable extends Whisp {
             this.velocity.length() * WhispControllable.CAMERA_SHAKE_MAGNITUDE,
             WhispControllable.CAMERA_SHAKE_POWER);
 
-        this.position.x += this.velocity.x * delta;
-        this.position.y += this.velocity.y * delta;
-        this.position.z += this.velocity.z * delta;
-
         const friction = Math.pow(WhispControllable.FRICTION, delta * 2);
 
         this.velocity.x *= friction;
         this.velocity.y *= friction;
         this.velocity.z *= friction;
-        this.direction.copyFrom(this.velocity).normalize();
-
-        if (this.direction.length() === 0) {
-            this.direction.set(0, 0, 1);
-        }
 
         this.particlesStars?.setParticles();
 

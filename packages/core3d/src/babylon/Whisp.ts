@@ -10,7 +10,7 @@ import {
     Vector3,
     MeshBuilder,
     Color4,
-    Engine, FresnelParameters, TransformNode,
+    Engine, FresnelParameters, TransformNode, Quaternion, Matrix,
 } from "@babylonjs/core";
 
 import pentagon from '../static/Particles/pentagon.png';
@@ -29,6 +29,9 @@ export class Whisp {
     private particlesSparks?: ParticleSystem;
 
     protected readonly node = new TransformNode("WhispRoot");
+    protected readonly velocity = new Vector3();
+    protected readonly direction = new Vector3(0, 0, 1);
+    protected readonly directionAngles = new Vector3();
     protected readonly sphere;
     protected readonly position = new Vector3(2, 2, 2);
     protected animationPhase = Math.random();
@@ -141,9 +144,21 @@ export class Whisp {
      * @param {number} delta The time delta in seconds
      */
     update(delta: number) {
+        this.position.x += this.velocity.x * delta;
+        this.position.y += this.velocity.y * delta;
+        this.position.z += this.velocity.z * delta;
+
         this.node.position.x = this.position.x;
         this.node.position.y = this.position.y;
         this.node.position.z = this.position.z;
+
+        if (this.velocity.length() !== 0) {
+            this.direction.copyFrom(this.velocity).normalize();
+            this.directionAngles.set(
+                0,
+                Math.atan2(this.direction.x, this.direction.z) + Math.PI * .5,
+                Math.asin(-this.direction.y));
+        }
 
         if (this.float) {
             const angle = Math.PI * 2 * this.animationPhase *
