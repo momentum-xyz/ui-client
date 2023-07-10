@@ -1,9 +1,9 @@
-import {flow, types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {IconNameType} from '@momentum-xyz/ui-kit';
 
-import {MediaUploader} from 'core/models';
+import {MediaUploader, User} from 'core/models';
 import {api, CustomizableObjectInterface} from 'api';
 import {CustomizableObjectFormInterface} from 'core/interfaces';
 
@@ -16,9 +16,11 @@ const CustomizableContent = types
       isEditing: false,
 
       content: types.maybe(types.frozen<CustomizableObjectInterface>()),
+      author: types.maybe(User),
 
       mediaUploader: types.optional(MediaUploader, {}),
       fetchRequest: types.optional(RequestModel, {}),
+      authorRequest: types.optional(RequestModel, {}),
       customizeRequest: types.optional(RequestModel, {}),
       cleanRequest: types.optional(RequestModel, {})
     })
@@ -39,6 +41,16 @@ const CustomizableContent = types
 
       if (attributeResponse) {
         self.content = attributeResponse;
+      }
+
+      if (attributeResponse?.created_at) {
+        const authorResponse = yield self.authorRequest.send(api.userRepository.fetchUser, {
+          userId: attributeResponse.created_at
+        });
+
+        if (authorResponse) {
+          self.author = cast(authorResponse);
+        }
       }
     }),
     fetchContent(): void {
@@ -71,6 +83,7 @@ const CustomizableContent = types
 
       if (self.cleanRequest.isDone) {
         self.content = undefined;
+        self.author = undefined;
       }
 
       return self.cleanRequest.isDone;
@@ -86,7 +99,7 @@ const CustomizableContent = types
       return self.mediaUploader.isPending || self.customizeRequest.isPending;
     },
     get isLoading(): boolean {
-      return self.fetchRequest.isNotComplete;
+      return self.fetchRequest.isPending || self.authorRequest.isPending;
     },
     get isNewOrEditForm(): boolean {
       return !self.content || (!!self.content && self.isEditing);

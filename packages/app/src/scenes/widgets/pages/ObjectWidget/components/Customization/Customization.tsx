@@ -71,9 +71,9 @@ const Customization: FC = () => {
 
       {customizableContent.isViewForm && !!customizableContent.content && (
         <ContentViewer
-          authorName={customizableContent.content.claimed_by} // TODO
-          authorAvatarHash={null} // TODO
           content={customizableContent.content}
+          authorName={customizableContent.author?.name}
+          authorAvatarHash={customizableContent.author?.profile.avatarHash}
           onDelete={canUserDelete ? handleDelete : undefined}
           onEdit={canUserEdit ? handleEdit : undefined}
         />

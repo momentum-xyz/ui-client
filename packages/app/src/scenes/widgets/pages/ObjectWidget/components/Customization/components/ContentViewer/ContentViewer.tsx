@@ -37,9 +37,9 @@ const ContentViewer: FC<PropsInterface> = ({
 
           <styled.UserInfo>
             <styled.UserInfoTitle>
-              <styled.UserName>{authorName}</styled.UserName>
+              <styled.UserName>{authorName || content.claimed_by}</styled.UserName>
               <styled.Date>
-                <div>{dateWithoutTime(null)}</div>
+                <div>{dateWithoutTime(content.created_at)}</div>
               </styled.Date>
             </styled.UserInfoTitle>
           </styled.UserInfo>
@@ -58,7 +58,7 @@ const ContentViewer: FC<PropsInterface> = ({
 
           <styled.Controls>
             {!!onDelete && (
-              <ButtonEllipse icon="bin" label={t('actions.delete')} onClick={onDelete} />
+              <ButtonEllipse icon="bin" label={t('actions.remove')} onClick={onDelete} />
             )}
 
             {!!onEdit && <ButtonEllipse icon="pencil" label={t('actions.edit')} onClick={onEdit} />}

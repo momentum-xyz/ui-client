@@ -130,4 +130,9 @@ export const Actions = styled.div`
   padding: 10px;
   display: flex;
   justify-content: space-between;
+
+  button {
+    min-width: 140px;
+    justify-content: center;
+  }
 `;
