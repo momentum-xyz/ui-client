@@ -23,10 +23,6 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
   const onScreenshotReady = useMutableCallback(callbacks.onScreenshotReady);
   const onVideoReady = useMutableCallback(callbacks.onVideoReady);
 
-  // TODO: Implementation
-  console.log(onScreenshotReady);
-  console.log(onVideoReady);
-
   useEffect(() => {
     return () => {
       // Cleaning everything
