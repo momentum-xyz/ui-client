@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n, i18n} from '@momentum-xyz/core';
 import {TabInterface, Tabs, Panel, SelectOptionInterface, PositionEnum} from '@momentum-xyz/ui-kit';
@@ -6,6 +6,7 @@ import {TabInterface, Tabs, Panel, SelectOptionInterface, PositionEnum} from '@m
 import {useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {StakeSortType} from 'core/types';
+import {TokenSelector} from 'ui-kit';
 
 import {StakeList, MyWallet} from './components';
 import * as styled from './StakingViewWidget.styled';
@@ -35,6 +36,14 @@ const StakingViewWidget: FC = () => {
     }
   ];
 
+  const stakeList = useMemo(() => {
+    if (!nftStore.hasDADTokens) {
+      return stakingViewStore.filteredAndSortedStakeList;
+    }
+    const tokenKind = nftStore.currentToken;
+    return stakingViewStore.filteredAndSortedStakeList.filter((stake) => stake.kind === tokenKind);
+  }, [nftStore.currentToken, nftStore.hasDADTokens, stakingViewStore.filteredAndSortedStakeList]);
+
   const onSelectWorld = (worldId: string) => {
     widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id: worldId});
   };
@@ -62,11 +71,19 @@ const StakingViewWidget: FC = () => {
             {activeTab === 'stakes' && (
               <StakeList
                 searchQuery={stakingViewStore.searchQuery}
-                stakeList={stakingViewStore.filteredAndSortedStakeList}
+                stakeList={stakeList}
                 mostStakedWorlds={universe2dStore.mostStakedWorlds}
                 isStakeListEmpty={nftStore.stakes.length === 0}
                 filterField={stakingViewStore.filterField}
                 filterOptions={nftStore.walletOptions}
+                moreFilters={
+                  nftStore.hasDADTokens && (
+                    <styled.TokenSelector>
+                      <div>{t('labels.token')}</div>
+                      <TokenSelector />
+                    </styled.TokenSelector>
+                  )
+                }
                 sortField={stakingViewStore.sortField}
                 sortOptions={sortOptions}
                 onReloadStakes={nftStore.loadMyStakes}
@@ -81,6 +98,8 @@ const StakingViewWidget: FC = () => {
                 selectedWallet={nftStore.selectedWallet}
                 selectedWalletTransferrable={nftStore.balanceTransferrable}
                 selectedWalletStaked={nftStore.balanceStaked}
+                tokenSymbol={nftStore.tokenSymbol}
+                showTokenSelector={nftStore.hasDADTokens}
                 onSelectWallet={nftStore.setSelectedWalletId}
               />
             )}

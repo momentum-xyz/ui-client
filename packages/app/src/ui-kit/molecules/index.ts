@@ -6,3 +6,4 @@ export * from './WorldsOwnedList';
 export * from './WorldsStakedList';
 export * from './WalletSelectHelper';
 export * from './WalletSelector';
+export * from './TokenSelector';
