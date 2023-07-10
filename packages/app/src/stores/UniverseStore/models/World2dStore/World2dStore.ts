@@ -63,14 +63,7 @@ const World2dStore = types.compose(
         return self.worldDetails?.world?.owner_id === getRootStore(self).sessionStore.userId;
       },
       get isCurrentUserWorldAdmin(): boolean {
-        return (
-          this.isMyWorld ||
-          // TODO world_details will have flag for admin, switch to it once ready
-          self.worldMembers?.members?.some(
-            (m) => m.user_id === getRootStore(self).sessionStore.userId
-          ) ||
-          false
-        );
+        return self.worldDetails?.world?.is_admin === true;
       },
       get image(): string | null {
         return self.worldDetails?.world?.avatarHash || null;

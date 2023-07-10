@@ -21,6 +21,7 @@ export interface WorldInterface {
   owner_name?: string | null;
   stake_total?: string | null;
   stakers: WorldStakerInterface[] | null;
+  is_admin?: boolean;
 }
 
 export interface WorldStakerInterface {
