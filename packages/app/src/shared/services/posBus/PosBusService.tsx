@@ -342,14 +342,14 @@ class PosBusService {
     kind: number // kind = 0 - mom, kind = 1 - dad
   ) {
     this.main.port?.postMessage([
-      MsgType.ADD_PENDING_STAKE,
+      MsgType.USER_STAKED_TO_ODYSSEY,
       {
-        transaction_id,
-        odyssey_id,
-        wallet,
-        amount,
-        comment,
-        kind
+        transaction_hash: transaction_id,
+        wallet: wallet,
+        comment: comment,
+        amount: amount,
+        object_id: odyssey_id,
+        kind: kind
       }
     ]);
   }
