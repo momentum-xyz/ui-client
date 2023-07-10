@@ -6,7 +6,7 @@ import {useStore} from 'shared/hooks';
 import {AssetTypeEnum, BasicAsset2dIdEnum, WidgetEnum} from 'core/enums';
 import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 
-import {CustomViewer, ImageViewer, PluginViewer, TextViewer} from './components';
+import {Customization, ImageViewer, PluginViewer, TextViewer} from './components';
 import * as styled from './ObjectWidget.styled';
 
 const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
@@ -111,7 +111,7 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
           title={customizableContent?.widgetTitle || ''}
           onClose={onClose}
         >
-          <CustomViewer />
+          <Customization />
         </Panel>
       )}
 

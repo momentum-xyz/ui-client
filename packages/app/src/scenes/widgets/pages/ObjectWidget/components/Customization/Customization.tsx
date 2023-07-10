@@ -5,10 +5,10 @@ import {Button, PositionEnum} from '@momentum-xyz/ui-kit';
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 
-import {NewOrEditForm} from './components';
-import * as styled from './CustomViewer.styled';
+import {ContentViewer, NewOrEditForm} from './components';
+import * as styled from './Customization.styled';
 
-const CustomViewer: FC = () => {
+const Customization: FC = () => {
   const {universeStore, sessionStore, widgetManagerStore} = useStore();
   const {objectStore} = universeStore;
   const {objectContentStore} = objectStore;
@@ -21,6 +21,10 @@ const CustomViewer: FC = () => {
     widgetManagerStore.closeAll();
     widgetManagerStore.open(WidgetEnum.LOGIN, PositionEnum.LEFT);
   };
+
+  if (customizableContent.isLoading) {
+    return <></>;
+  }
 
   if (sessionStore.isGuest && !customizableContent.content) {
     return (
@@ -39,8 +43,8 @@ const CustomViewer: FC = () => {
     <styled.Container data-testid="CustomViewer-test">
       {customizableContent.isNewOrEditForm && (
         <NewOrEditForm
-          isPending={false}
           content={customizableContent.content}
+          isPending={customizableContent.isPending}
           onCreateOrUpdate={async (form) => {
             if (await customizableContent.claimAndCustomize(form)) {
               customizableContent.setIsEditing(false);
@@ -50,9 +54,15 @@ const CustomViewer: FC = () => {
         />
       )}
 
-      {customizableContent.isViewForm && <div>VIEW {canUserDelete}</div>}
+      {customizableContent.isViewForm && !!customizableContent.content && (
+        <ContentViewer
+          content={customizableContent.content}
+          onDelete={canUserDelete ? () => {} : undefined}
+          onEdit={canUserEdit ? () => {} : undefined}
+        />
+      )}
     </styled.Container>
   );
 };
 
-export default observer(CustomViewer);
+export default observer(Customization);

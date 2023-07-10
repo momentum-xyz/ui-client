@@ -38,7 +38,6 @@ const CustomizableContent = types
       );
 
       if (attributeResponse) {
-        alert(1);
         self.content = attributeResponse;
       }
     }),
@@ -70,6 +69,11 @@ const CustomizableContent = types
         objectId: self.objectId
       });
 
+      if (self.cleanRequest.isDone) {
+        self.content = undefined;
+        self.isEditing = false;
+      }
+
       return self.cleanRequest.isDone;
     })
   }))
@@ -79,6 +83,12 @@ const CustomizableContent = types
     }
   }))
   .views((self) => ({
+    get isPending(): boolean {
+      return self.mediaUploader.isPending || self.customizeRequest.isPending;
+    },
+    get isLoading(): boolean {
+      return self.fetchRequest.isNotComplete;
+    },
     get isNewOrEditForm(): boolean {
       return !self.content || (!!self.content && self.isEditing);
     },
