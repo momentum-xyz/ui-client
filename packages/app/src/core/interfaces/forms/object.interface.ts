@@ -14,3 +14,9 @@ export interface ImageObjectInterface extends AttributeValueInterface {
   image?: File;
   render_hash?: string;
 }
+
+export interface CustomizableObjectFormInterface {
+  text?: string;
+  title?: string;
+  image?: File;
+}

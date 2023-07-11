@@ -5,6 +5,8 @@ export const spaceRepositoryEndpoints = () => {
     base: `${BASE_URL}`,
     object: `${BASE_URL}/:objectId`,
     members: `${BASE_URL}/:objectId/members`,
-    deleteMember: `${BASE_URL}/:objectId/members/:userId`
+    deleteMember: `${BASE_URL}/:objectId/members/:userId`,
+    claimAndCustomize: `${BASE_URL}/:objectId/claim-and-customise`,
+    cleanCustomization: `${BASE_URL}/:objectId/unclaim-and-clear-customisation`
   };
 };
