@@ -2,6 +2,7 @@ import {flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {api, UploadFileResponse} from 'api';
+import {getFileFromUrl} from 'core/utils';
 
 const MediaUploader = types.compose(
   ResetModel,
@@ -33,6 +34,12 @@ const MediaUploader = types.compose(
         );
 
         return fileResponse?.hash || null;
+      })
+    }))
+    .actions((self) => ({
+      uploadImageByUrl: flow(function* (url: string) {
+        const file = yield getFileFromUrl(url, 'image.jpg');
+        return self.uploadImageOrVideo(file, false);
       })
     }))
     .views((self) => ({

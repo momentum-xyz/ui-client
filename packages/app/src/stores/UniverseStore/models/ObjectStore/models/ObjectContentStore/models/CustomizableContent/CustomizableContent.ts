@@ -77,9 +77,9 @@ const CustomizableContent = types
       self.isEditing = isEditing;
     },
     claimAndCustomize: flow(function* (form: CustomizableObjectFormInterface) {
-      const imageHashOrUrl = form.image
-        ? yield self.mediaUploader.uploadImageOrVideo(form.image)
-        : form.imageAIUrl;
+      const imageHashOrUrl = form.imageAIUrl
+        ? yield self.mediaUploader.uploadImageByUrl(form.imageAIUrl)
+        : yield self.mediaUploader.uploadImageOrVideo(form.image);
 
       if (!imageHashOrUrl) {
         return false;

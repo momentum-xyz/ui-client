@@ -10,3 +10,4 @@ export * from './promise.utils';
 export * from './ipfs.utils';
 export * from './convertToHex.util';
 export * from './blockchain.utils';
+export * from './file.utils';
