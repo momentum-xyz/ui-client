@@ -188,6 +188,7 @@ export type IconNameType =
   | 'screenshare'
   | 'search'
   | 'send'
+  | 'settings-slider'
   | 'settings'
   | 'share'
   | 'share_location'

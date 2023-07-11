@@ -13,9 +13,15 @@ import {api, StakeInterface, WalletInterface} from 'api';
 import {availableWallets, dummyWalletConf, WalletConfigInterface} from 'wallets';
 import {appVariables} from 'api/constants';
 
-const TokenKindToContractAddress = {
-  [TokenEnum.MOM_TOKEN]: appVariables.CONTRACT_MOM_ADDRESS,
-  [TokenEnum.DAD_TOKEN]: appVariables.CONTRACT_DAD_ADDRESS
+const getTokenKindToContractAddress = (kind: TokenEnum) => {
+  switch (kind) {
+    case TokenEnum.MOM_TOKEN:
+      return appVariables.CONTRACT_MOM_ADDRESS;
+    case TokenEnum.DAD_TOKEN:
+      return appVariables.CONTRACT_DAD_ADDRESS;
+    default:
+      return '';
+  }
 };
 
 interface AccountBalanceInterface {
@@ -87,7 +93,7 @@ const NftStore = types
   }))
   .views((self) => ({
     get selectedWallet(): WalletInterface | undefined {
-      const contractId = TokenKindToContractAddress[self.currentToken];
+      const contractId = getTokenKindToContractAddress(self.currentToken);
       console.log(
         '[Blockchain] selectedWallet',
         self.selectedWalletId,
@@ -105,7 +111,7 @@ const NftStore = types
     },
     get hasDADTokens(): boolean {
       return self._wallets.some(
-        (wallet) => wallet.contract_id === TokenKindToContractAddress[TokenEnum.DAD_TOKEN]
+        (wallet) => wallet.contract_id === getTokenKindToContractAddress(TokenEnum.DAD_TOKEN)
       );
     }
   }))
