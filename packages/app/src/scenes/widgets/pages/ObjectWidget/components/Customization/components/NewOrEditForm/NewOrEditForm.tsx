@@ -105,7 +105,7 @@ const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate
             render={({field: {value, onChange}}) => (
               <Textarea
                 value={value}
-                placeholder="Write your store here*"
+                placeholder="Write your story here*"
                 danger={!!errors.text}
                 onChange={onChange}
                 lines={8}
