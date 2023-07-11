@@ -108,7 +108,7 @@ const MyWallet: FC<PropsInterface> = ({
           />
         </styled.RewardsContainer>
 
-        {appVariables.CONTRACT_FAUCET_ADDRESS !== "" ?? (
+        {!!appVariables.CONTRACT_FAUCET_ADDRESS && (
             <>
               <styled.Title>Use Faucet</styled.Title>
               <styled.AirdropContainer>
