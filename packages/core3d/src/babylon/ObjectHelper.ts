@@ -301,6 +301,12 @@ export class ObjectHelper {
     }
 
     this.mySpawningClone?.dispose();
+
+    const obj = this.objectsMap.get(this.selectedObjectFromSpawn);
+    if (obj && obj.effect && obj.effect !== EffectsEnum.NONE) {
+      this.setObjectEffect(this.selectedObjectFromSpawn, obj.effect, true);
+    }
+
     this.selectedObjectFromSpawn = '';
 
     PlayerHelper.setSelfPos(new Vector3(0, -0.5, -3));
@@ -336,7 +342,7 @@ export class ObjectHelper {
     }
   }
 
-  static setObjectEffect(objectId: string, effect: string) {
+  static setObjectEffect(objectId: string, effect: string, force = false) {
     console.log('setObjectEffect', objectId, effect);
     const obj = this.objectsMap.get(objectId);
     if (!obj) {
@@ -360,7 +366,7 @@ export class ObjectHelper {
       });
       console.log('setObjectEffect: original object is visible');
     } else if (effect === EffectsEnum.TRANSPARENT) {
-      if (obj.effect === effect) {
+      if (obj.effect === effect && !force) {
         return;
       }
       if (obj.cloneWithEffect) {
