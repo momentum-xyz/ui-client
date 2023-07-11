@@ -13,7 +13,7 @@ import {
 } from '@momentum-xyz/ui-kit';
 
 import {StakeSortType} from 'core/types';
-import {formatBigInt, getImageAbsoluteUrl} from 'core/utils';
+import {formatBigInt, getImageAbsoluteUrl, tokenKindToSymbol} from 'core/utils';
 import {
   FilterFieldModelType,
   SearchQueryModelModelType,
@@ -32,6 +32,7 @@ interface PropsInterface {
   mostStakedWorlds: WorldInfoModelInterface[];
   filterField: FilterFieldModelType;
   filterOptions: SelectOptionInterface<string>[];
+  moreFilters?: React.ReactNode;
   sortField: SortFieldModelType;
   sortOptions: SelectOptionInterface<StakeSortType>[];
   onReloadStakes: () => void;
@@ -46,6 +47,7 @@ const StakeList: FC<PropsInterface> = ({
   mostStakedWorlds,
   filterField,
   filterOptions,
+  moreFilters,
   sortField,
   sortOptions,
   onReloadStakes,
@@ -95,6 +97,8 @@ const StakeList: FC<PropsInterface> = ({
             onSingleChange={(value) => filterField.setField(value || '')}
           />
         </styled.Filters>
+
+        {moreFilters}
       </Frame>
 
       <styled.SearchContainer>
@@ -126,7 +130,7 @@ const StakeList: FC<PropsInterface> = ({
                 worldImageUrl={getImageAbsoluteUrl(stake.avatar_hash, ImageSizeEnum.S5)}
                 staked={formatBigInt(stake.amount)}
                 reward={formatBigInt(stake.reward)}
-                tokenSymbol="MOM"
+                tokenSymbol={tokenKindToSymbol(stake.kind)}
                 onInfoClick={() => onSelectWorld(stake.object_id)}
                 onStakeClick={() => onStake(stake.object_id)}
                 onUnstakeClick={() => {

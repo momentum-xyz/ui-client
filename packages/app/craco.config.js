@@ -60,12 +60,12 @@ module.exports = {
           '@momentum-xyz/sdk': {
             singleton: true,
             eager: true,
-            requiredVersion: 'latest'
+            requiredVersion: '0.1.5'
           },
           '@momentum-xyz/ui-kit': {
             singleton: true,
             eager: true,
-            requiredVersion: 'latest'
+            requiredVersion: '0.1.4'
           }
         }
       })

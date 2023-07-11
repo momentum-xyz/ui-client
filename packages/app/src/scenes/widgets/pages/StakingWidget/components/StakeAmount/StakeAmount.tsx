@@ -9,6 +9,8 @@ import {
   numberInputSuffixMask
 } from '@momentum-xyz/ui-kit';
 
+import {TokenSelector} from 'ui-kit';
+
 import * as styled from './StakeAmount.styled';
 
 interface PropsInterface {
@@ -21,6 +23,7 @@ interface PropsInterface {
   selectedWalletId: string | null;
   balanceTransferrable: string;
   tokenSymbol: string;
+  showTokenSelector?: boolean;
   onSelectWalletId: (wallet: string | null) => void;
   onChangeAmountValue: (value: string) => void;
   onNextClick: () => void;
@@ -36,6 +39,7 @@ const StakeAmount: FC<PropsInterface> = ({
   selectedWalletId,
   balanceTransferrable,
   tokenSymbol,
+  showTokenSelector,
   onSelectWalletId,
   onChangeAmountValue,
   onNextClick
@@ -65,6 +69,13 @@ const StakeAmount: FC<PropsInterface> = ({
         </styled.SectionGrid>
 
         <styled.WalletContent>{walletSelectContent}</styled.WalletContent>
+
+        {showTokenSelector && (
+          <styled.SectionGrid>
+            <div>Token</div>
+            <TokenSelector />
+          </styled.SectionGrid>
+        )}
       </styled.Section>
 
       {/* Balance */}

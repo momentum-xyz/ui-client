@@ -6,6 +6,7 @@ import {Frame, Select, SymbolAmount, Button, SelectOptionInterface} from '@momen
 import {formatBigInt} from 'core/utils';
 import {WalletModelInterface} from 'core/models';
 import {useBlockchain} from 'shared/hooks';
+import {TokenSelector} from 'ui-kit';
 
 import * as styled from './MyWallet.styled';
 
@@ -15,6 +16,8 @@ interface PropsInterface {
   selectedWallet?: WalletModelInterface;
   selectedWalletTransferrable: string;
   selectedWalletStaked: string;
+  showTokenSelector?: boolean;
+  tokenSymbol?: string;
 }
 
 const MyWallet: FC<PropsInterface> = ({
@@ -22,6 +25,8 @@ const MyWallet: FC<PropsInterface> = ({
   selectedWallet,
   selectedWalletTransferrable,
   selectedWalletStaked,
+  showTokenSelector,
+  tokenSymbol,
   onSelectWallet
 }) => {
   const {t} = useI18n();
@@ -73,6 +78,13 @@ const MyWallet: FC<PropsInterface> = ({
             placeholder={t('actions.selectWallet')}
             onSingleChange={onSelectWallet}
           />
+
+          {showTokenSelector && (
+            <>
+              <div>{t('labels.token')}</div>
+              <TokenSelector />
+            </>
+          )}
         </styled.Filters>
 
         <div>{walletSelectContent}</div>
@@ -81,7 +93,10 @@ const MyWallet: FC<PropsInterface> = ({
         <styled.RewardsContainer>
           <span>{t('labels.totalRewards')}</span>
           <styled.Amount>
-            <SymbolAmount tokenSymbol="MOM" stringValue={formatBigInt(selectedWallet?.reward)} />
+            <SymbolAmount
+              tokenSymbol={tokenSymbol}
+              stringValue={formatBigInt(selectedWallet?.reward)}
+            />
           </styled.Amount>
           <Button
             icon="wallet"
@@ -119,7 +134,10 @@ const MyWallet: FC<PropsInterface> = ({
           <styled.TokenBlockData>
             <span>Total amount of MOM token in your wallet.</span>
             <styled.Amount>
-              <SymbolAmount tokenSymbol="MOM" stringValue={formatBigInt(selectedWallet?.balance)} />
+              <SymbolAmount
+                tokenSymbol={tokenSymbol}
+                stringValue={formatBigInt(selectedWallet?.balance)}
+              />
             </styled.Amount>
           </styled.TokenBlockData>
         </styled.TokenBlock>
@@ -129,7 +147,7 @@ const MyWallet: FC<PropsInterface> = ({
           <styled.TokenBlockData>
             <span>Total amount of MOM tokens that can be transferred or used in staking.</span>
             <styled.Amount>
-              <SymbolAmount tokenSymbol="MOM" stringValue={selectedWalletTransferrable} />
+              <SymbolAmount tokenSymbol={tokenSymbol} stringValue={selectedWalletTransferrable} />
             </styled.Amount>
           </styled.TokenBlockData>
         </styled.TokenBlock>
@@ -139,7 +157,7 @@ const MyWallet: FC<PropsInterface> = ({
           <styled.TokenBlockData>
             <span>Total amount of MOM tokens that are being staked by you.</span>
             <styled.Amount>
-              <SymbolAmount tokenSymbol="MOM" stringValue={selectedWalletStaked} />
+              <SymbolAmount tokenSymbol={tokenSymbol} stringValue={selectedWalletStaked} />
             </styled.Amount>
           </styled.TokenBlockData>
         </styled.TokenBlock>
@@ -153,7 +171,7 @@ const MyWallet: FC<PropsInterface> = ({
             </span>
             <styled.Amount>
               <SymbolAmount
-                tokenSymbol="MOM"
+                tokenSymbol={tokenSymbol}
                 stringValue={formatBigInt(selectedWallet?.unbonding)}
               />
             </styled.Amount>

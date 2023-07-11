@@ -1,16 +1,28 @@
 import {cast, flow, getSnapshot, types} from 'mobx-state-tree';
 import BN from 'bn.js';
-import {ResetModel, RequestModel} from '@momentum-xyz/core';
+import {ResetModel, RequestModel, TokenEnum} from '@momentum-xyz/core';
 import {IconNameType} from '@momentum-xyz/ui-kit';
 
 import {Wallet, Stake} from 'core/models';
 import {BN_ZERO} from 'core/constants';
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
-import {formatBigInt, getRootStore} from 'core/utils';
+import {formatBigInt, getRootStore, tokenKindToSymbol} from 'core/utils';
 import {PluginIdEnum} from 'api/enums';
 import {api, StakeInterface, WalletInterface} from 'api';
 import {availableWallets, dummyWalletConf, WalletConfigInterface} from 'wallets';
+import {appVariables} from 'api/constants';
+
+const getTokenKindToContractAddress = (kind: TokenEnum) => {
+  switch (kind) {
+    case TokenEnum.MOM_TOKEN:
+      return appVariables.CONTRACT_MOM_ADDRESS;
+    case TokenEnum.DAD_TOKEN:
+      return appVariables.CONTRACT_DAD_ADDRESS;
+    default:
+      return '';
+  }
+};
 
 interface AccountBalanceInterface {
   free: BN;
@@ -29,9 +41,9 @@ const NftStore = types
       stakes: types.optional(types.array(Stake), []),
       defaultWalletId: '',
       _selectedWalletId: types.maybeNull(types.string),
+      currentToken: types.optional(types.frozen<TokenEnum>(), TokenEnum.MOM_TOKEN),
 
       chainDecimals: types.optional(types.number, 18),
-      tokenSymbol: 'MOM',
 
       accumulatedRewards: types.frozen(new BN(0)),
 
@@ -41,28 +53,12 @@ const NftStore = types
     })
   )
   .views((self) => ({
-    get balance(): AccountBalanceInterface {
-      const walletId = self._selectedWalletId || self.defaultWalletId || self.walletsAddresses[0];
-      const wallet = self._wallets.find((w) => w.wallet_id === walletId);
-      console.log('BALANCE', wallet, walletId, self.wallets);
-      if (!wallet) {
-        return {
-          free: new BN(0),
-          reserved: new BN(0),
-          // transferable: new BN(0),
-          unbonding: new BN(0)
-        };
-      }
-      return {
-        free: new BN(wallet.balance),
-        reserved: new BN(wallet.staked),
-        // transferable: new BN(wallet.transferable),
-        unbonding: new BN(wallet.unbonding)
-      };
+    get tokenSymbol(): string {
+      return tokenKindToSymbol(self.currentToken);
     },
     get selectedWalletId(): string {
       console.log(
-        'selectedWalletId',
+        '[Blockchain] selectedWalletId',
         self._selectedWalletId,
         self.defaultWalletId,
         self.walletsAddresses[0]
@@ -97,16 +93,51 @@ const NftStore = types
   }))
   .views((self) => ({
     get selectedWallet(): WalletInterface | undefined {
-      return self.wallets.find((w) => w.wallet_id === self.selectedWalletId);
+      const contractId = getTokenKindToContractAddress(self.currentToken);
+      console.log(
+        '[Blockchain] selectedWallet',
+        self.selectedWalletId,
+        contractId,
+        self.currentToken,
+        self.wallets
+      );
+      return self._wallets.find(
+        (w) => w.wallet_id === self.selectedWalletId && w.contract_id === contractId
+      );
     },
     get selectedWalletConf(): WalletConfigInterface {
       const walletId = self.walletsIdByAddress.get(self.selectedWalletId);
       return availableWallets.find((w) => w.id === walletId) || dummyWalletConf;
+    },
+    get hasDADTokens(): boolean {
+      return self._wallets.some(
+        (wallet) => wallet.contract_id === getTokenKindToContractAddress(TokenEnum.DAD_TOKEN)
+      );
+    }
+  }))
+  .views((self) => ({
+    get balance(): AccountBalanceInterface {
+      const wallet = self.selectedWallet;
+      console.log('[Blockchain] BALANCE', wallet);
+      if (!wallet) {
+        return {
+          free: new BN(0),
+          reserved: new BN(0),
+          // transferable: new BN(0),
+          unbonding: new BN(0)
+        };
+      }
+      return {
+        free: new BN(wallet.balance),
+        reserved: new BN(wallet.staked),
+        // transferable: new BN(wallet.transferable),
+        unbonding: new BN(wallet.unbonding)
+      };
     }
   }))
   .views((self) => ({
     get walletOptions(): Array<{label: string; value: string; icon: IconNameType}> {
-      console.log('walletOptions', self.walletsAddresses);
+      console.log('[Blockchain] walletOptions', self.walletsAddresses);
       return self.walletsAddresses.map((address) => {
         const walletId = self.walletsIdByAddress.get(address);
         const conf = availableWallets.find((w) => w.id === walletId) || dummyWalletConf;
@@ -150,7 +181,7 @@ const NftStore = types
           pluginId: PluginIdEnum.WALLETS
         }
       );
-      console.log('responseWallets', responseWallets);
+      console.log('[Blockchain] responseWallets', responseWallets);
       if (responseWallets?.wallet) {
         self.walletsAddresses = cast(responseWallets.wallet);
       }
@@ -189,6 +220,9 @@ const NftStore = types
     },
     setSelectedWalletId(walletId: string | null) {
       self._selectedWalletId = walletId;
+    },
+    setCurrentToken(token: TokenEnum) {
+      self.currentToken = token;
     }
   }))
   .views((self) => ({
@@ -238,6 +272,10 @@ const NftStore = types
   .actions((self) => ({
     initMyWalletsAndStakes: flow(function* () {
       yield self.loadMyWallets();
+      if (self.hasDADTokens) {
+        self.setCurrentToken(TokenEnum.DAD_TOKEN);
+      }
+
       yield self.loadMyStakes();
       self.loadDefaultWalletId();
     })

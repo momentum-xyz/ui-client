@@ -48,8 +48,8 @@ const PostEntityRow: FC<ListChildComponentProps> = ({index, style, data}) => {
     objectId: entry.object_id,
     objectName: entry.world_name,
     objectAvatarSrc: getImageAbsoluteUrl(entry.world_avatar_hash) || undefined,
-    tokenSymbol: entry.token_symbol,
-    tokenAmount: formatBigInt(entry.token_amount),
+    tokenSymbol: entry.data.token_symbol,
+    tokenAmount: formatBigInt(entry.data.token_amount),
     hashSrc:
       entry.type === TimelineTypeEnum.VIDEO
         ? getVideoAbsoluteUrl(entry.data.hash)
