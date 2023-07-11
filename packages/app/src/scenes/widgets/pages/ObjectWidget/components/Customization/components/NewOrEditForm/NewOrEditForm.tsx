@@ -4,16 +4,22 @@ import {Controller, useForm} from 'react-hook-form';
 import cn from 'classnames';
 import {useI18n} from '@momentum-xyz/core';
 import {
+  Frame,
+  Image,
+  Input,
+  Loader,
+  Select,
   Button,
+  IconSvg,
+  Textarea,
+  ButtonEllipse,
   ButtonRound,
   FileUploader,
-  Frame,
-  IconSvg,
   ImageSizeEnum,
-  Input,
-  Textarea
+  SelectOptionInterface
 } from '@momentum-xyz/ui-kit';
 
+import {LeonardoModelIdEnum} from 'core/enums';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {CustomizableObjectInterface} from 'api';
 import {CustomizableObjectFormInterface} from 'core/interfaces';
@@ -23,7 +29,11 @@ import * as styled from './NewOrEditForm.styled';
 interface PropsInterface {
   content?: CustomizableObjectInterface | null;
   isPending: boolean;
+  isGenerating: boolean;
+  generatedImages: string[];
+  onGenerateImages: (prompt: string, modelId: LeonardoModelIdEnum) => void;
   onCreateOrUpdate: (form: CustomizableObjectFormInterface) => void;
+  onClearGeneratedImages: () => void;
   onBack: () => void;
 }
 
@@ -32,12 +42,39 @@ type ImageType = 'custom' | 'ai';
 const MAX_ASSET_SIZE_MB = 8;
 const MAX_ASSET_SIZE_B = MAX_ASSET_SIZE_MB * Math.pow(1024, 2);
 
-const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate, onBack}) => {
+const MODEL_OPTIONS: SelectOptionInterface<LeonardoModelIdEnum>[] = [
+  {
+    label: 'Creative',
+    value: LeonardoModelIdEnum.CREATIVE
+  },
+  {
+    label: 'Select',
+    value: LeonardoModelIdEnum.SELECT
+  },
+  {
+    label: 'Signature',
+    value: LeonardoModelIdEnum.SIGNATURE
+  }
+];
+
+const NewOrEditForm: FC<PropsInterface> = ({
+  content,
+  isPending,
+  isGenerating,
+  generatedImages,
+  onGenerateImages,
+  onClearGeneratedImages,
+  onCreateOrUpdate,
+  onBack
+}) => {
   const [selectedImageType, setSelectedImageType] = useState<ImageType | null>(null);
+  const [modelId, setModelId] = useState<LeonardoModelIdEnum | null>(null);
+  const [prompt, setPrompt] = useState<string | null>(null);
 
   const {t} = useI18n();
 
   const {
+    watch,
     control,
     setValue,
     handleSubmit,
@@ -54,17 +91,40 @@ const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate
 
   const handleImageType = useCallback(
     (imageType: ImageType) => {
+      if (isGenerating) {
+        return;
+      }
+
       if (imageType !== selectedImageType) {
+        setPrompt(null);
+        setModelId(null);
         setSelectedImageType(imageType);
+
+        onClearGeneratedImages();
+
         setValue('image', undefined);
+        setValue('imageAIUrl', undefined);
       }
     },
-    [selectedImageType, setValue]
+    [isGenerating, onClearGeneratedImages, selectedImageType, setValue]
   );
+
+  const handleGenerateImages = useCallback(() => {
+    if (prompt && modelId) {
+      onGenerateImages(prompt, modelId);
+    }
+  }, [modelId, onGenerateImages, prompt]);
+
+  const handleClearGeneratedImages = useCallback(() => {
+    setValue('imageAIUrl', undefined);
+    onClearGeneratedImages();
+  }, [onClearGeneratedImages, setValue]);
 
   const handleCreateOrUpdate = handleSubmit((form: CustomizableObjectFormInterface) => {
     onCreateOrUpdate(form);
   });
+
+  const [imageValue, imageAIUrlValue] = watch(['image', 'imageAIUrl']);
 
   return (
     <styled.Container data-testid="NewOrEditForm-test">
@@ -104,11 +164,11 @@ const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate
             rules={{required: true, minLength: 2}}
             render={({field: {value, onChange}}) => (
               <Textarea
+                lines={4}
                 value={value}
                 placeholder="Write your story here*"
                 danger={!!errors.text}
                 onChange={onChange}
-                lines={8}
               />
             )}
           />
@@ -152,9 +212,8 @@ const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate
         {/* CUSTOM IMAGE */}
         {selectedImageType === 'custom' && (
           <Controller
-            control={control}
             name="image"
-            rules={{required: true}}
+            control={control}
             render={({field: {value, onChange}}) => {
               const imageUrl = value
                 ? URL.createObjectURL(value)
@@ -188,7 +247,97 @@ const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate
         )}
 
         {/* AI IMAGE */}
-        {selectedImageType === 'ai' && <div>ai</div>}
+        {selectedImageType === 'ai' && (
+          <styled.AIInputsContainer>
+            {!isGenerating && generatedImages.length === 0 && (
+              <styled.AIInputs>
+                <Textarea
+                  lines={4}
+                  value={prompt}
+                  placeholder="Enter prompt for AI Image here. Describe what you would like to see?*"
+                  danger={!!errors.text}
+                  onChange={setPrompt}
+                />
+
+                <Select
+                  wide
+                  isClearable
+                  isSearchable
+                  value={modelId}
+                  options={MODEL_OPTIONS}
+                  placeholder="Select a model*"
+                  onSingleChange={setModelId}
+                />
+
+                <styled.CreateAIImagesButton>
+                  <ButtonEllipse
+                    icon="picture_add"
+                    label="Create image"
+                    disabled={!prompt || !modelId}
+                    onClick={handleGenerateImages}
+                  />
+                </styled.CreateAIImagesButton>
+              </styled.AIInputs>
+            )}
+
+            {isGenerating && (
+              <styled.AIImagesContainer>
+                <styled.Subtitle>Image is generating, please wait</styled.Subtitle>
+                <styled.Loader>
+                  <Loader />
+                </styled.Loader>
+              </styled.AIImagesContainer>
+            )}
+
+            {!isGenerating && generatedImages.length > 0 && (
+              <>
+                <Controller
+                  name="imageAIUrl"
+                  control={control}
+                  render={({field: {value, onChange}}) => (
+                    <>
+                      {!value ? (
+                        <styled.AIImagesContainer>
+                          <styled.Subtitle>Choose an image</styled.Subtitle>
+                          <styled.AIImagesGrid>
+                            {generatedImages.map((url) => (
+                              <Image
+                                key={url}
+                                src={url}
+                                bordered
+                                height={130}
+                                errorIcon="ai"
+                                onClick={() => onChange(url)}
+                              />
+                            ))}
+                          </styled.AIImagesGrid>
+                        </styled.AIImagesContainer>
+                      ) : (
+                        <styled.AIImagesContainer>
+                          <styled.Subtitle>Choose an image</styled.Subtitle>
+                          <styled.SelectedAIImage>
+                            <Image bordered src={value} height={270} errorIcon="ai" />
+                            <styled.ClearSelectedAIImage>
+                              <ButtonRound icon="close_large" onClick={() => onChange(undefined)} />
+                            </styled.ClearSelectedAIImage>
+                          </styled.SelectedAIImage>
+                        </styled.AIImagesContainer>
+                      )}
+                    </>
+                  )}
+                />
+
+                <styled.ClearAIImagesButton>
+                  <ButtonEllipse
+                    icon="chevron_left"
+                    label="Make new image"
+                    onClick={handleClearGeneratedImages}
+                  />
+                </styled.ClearAIImagesButton>
+              </>
+            )}
+          </styled.AIInputsContainer>
+        )}
       </Frame>
 
       <styled.Separator />
@@ -198,7 +347,7 @@ const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate
         <Button
           label="Contribute"
           onClick={handleCreateOrUpdate}
-          disabled={!isValid || isPending}
+          disabled={!isValid || isPending || (!imageValue && !imageAIUrlValue)}
         />
       </styled.Actions>
     </styled.Container>

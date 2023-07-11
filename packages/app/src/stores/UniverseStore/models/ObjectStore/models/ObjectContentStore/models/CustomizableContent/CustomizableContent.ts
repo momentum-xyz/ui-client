@@ -3,9 +3,15 @@ import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {IconNameType} from '@momentum-xyz/ui-kit';
 
+import {LeonardoModelIdEnum} from 'core/enums';
 import {MediaUploader, User} from 'core/models';
-import {api, CustomizableObjectInterface} from 'api';
 import {CustomizableObjectFormInterface} from 'core/interfaces';
+import {
+  api,
+  CustomizableObjectInterface,
+  FetchAIGeneratedImagesResponse,
+  GenerateAIImagesResponse
+} from 'api';
 
 const CustomizableContent = types
   .compose(
@@ -15,6 +21,10 @@ const CustomizableContent = types
       objectId: '',
       isEditing: false,
 
+      isGenerating: false,
+      generationJobId: types.maybeNull(types.string),
+      generatedImages: types.optional(types.array(types.string), []),
+
       content: types.maybe(types.frozen<CustomizableObjectInterface>()),
       author: types.maybe(User),
 
@@ -22,9 +32,14 @@ const CustomizableContent = types
       fetchRequest: types.optional(RequestModel, {}),
       authorRequest: types.optional(RequestModel, {}),
       customizeRequest: types.optional(RequestModel, {}),
+      generateRequest: types.optional(RequestModel, {}),
+      fetchGeneratedRequest: types.optional(RequestModel, {}),
       cleanRequest: types.optional(RequestModel, {})
     })
   )
+  .volatile<{watcher: NodeJS.Timer | null}>(() => ({
+    watcher: null
+  }))
   .actions((self) => ({
     initContent: flow(function* (pluginId: string, objectId: string) {
       self.pluginId = pluginId;
@@ -62,8 +77,11 @@ const CustomizableContent = types
       self.isEditing = isEditing;
     },
     claimAndCustomize: flow(function* (form: CustomizableObjectFormInterface) {
-      const render_hash = yield self.mediaUploader.uploadImageOrVideo(form.image);
-      if (!render_hash) {
+      const imageHashOrUrl = form.imageAIUrl
+        ? yield self.mediaUploader.uploadImageByUrl(form.imageAIUrl)
+        : yield self.mediaUploader.uploadImageOrVideo(form.image);
+
+      if (!imageHashOrUrl) {
         return false;
       }
 
@@ -71,7 +89,7 @@ const CustomizableContent = types
         objectId: self.objectId,
         text: form.text || '',
         title: form.title || '',
-        image_hash: render_hash
+        image_hash: imageHashOrUrl
       });
 
       return self.customizeRequest.isDone;
@@ -88,6 +106,56 @@ const CustomizableContent = types
 
       return self.cleanRequest.isDone;
     })
+  }))
+  .actions((self) => ({
+    startFetchingImages(): void {
+      if (self.watcher) {
+        clearInterval(self.watcher);
+      }
+      self.watcher = setInterval(() => {
+        this.fetchGeneratedAIImages();
+      }, 1000);
+    },
+    fetchGeneratedAIImages: flow(function* () {
+      const response: FetchAIGeneratedImagesResponse = yield self.fetchGeneratedRequest.send(
+        api.aiImagesRepository.fetchImages,
+        {
+          leonardoId: self.generationJobId || ''
+        }
+      );
+
+      if (response) {
+        const {generated_images} = response.data.generations_by_pk;
+        if (generated_images.length > 0) {
+          clearInterval(self.watcher || undefined);
+          self.generatedImages = cast(generated_images.map((i) => i.url));
+          self.isGenerating = false;
+        }
+      }
+    })
+  }))
+  .actions((self) => ({
+    generateAIImages: flow(function* (prompt: string, modelId: LeonardoModelIdEnum) {
+      self.isGenerating = true;
+
+      const response: GenerateAIImagesResponse = yield self.generateRequest.send(
+        api.aiImagesRepository.generateImages,
+        {
+          prompt: prompt,
+          model: modelId
+        }
+      );
+
+      if (response?.data.sdGenerationJob) {
+        self.generationJobId = response.data.sdGenerationJob.generationId;
+        self.startFetchingImages();
+      } else {
+        self.isGenerating = false;
+      }
+    }),
+    clearGeneratedImages(): void {
+      self.generatedImages = cast([]);
+    }
   }))
   .views((self) => ({
     get wasClaimed(): boolean {

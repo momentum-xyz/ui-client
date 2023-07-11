@@ -48,6 +48,8 @@ const Select = <T,>({
 }: SelectPropsInterface<T>) => {
   return (
     <styled.Container data-testid="Select-test" className={cn(wide && 'wide')}>
+      <styled.GlobalSelectStyle />
+
       <ReactSelect
         options={options}
         isMulti={isMulti}
@@ -59,6 +61,7 @@ const Select = <T,>({
         menuPlacement={menuPlacement}
         maxMenuHeight={maxMenuHeight}
         classNamePrefix="Select"
+        menuPortalTarget={document.body}
         value={
           value && Array.isArray(value)
             ? value.map((i) => options.find((opt) => opt.value === i))
@@ -120,6 +123,10 @@ const Select = <T,>({
           )
         }}
         styles={{
+          menuPortal: (base) => ({
+            ...base,
+            zIndex: 9999
+          }),
           dropdownIndicator: (baseStyles, state) => ({
             ...baseStyles,
             display: isClearable && state.hasValue ? 'none' : baseStyles.display
