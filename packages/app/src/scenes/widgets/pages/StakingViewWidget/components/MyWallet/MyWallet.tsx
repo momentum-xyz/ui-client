@@ -8,6 +8,8 @@ import {WalletModelInterface} from 'core/models';
 import {useBlockchain} from 'shared/hooks';
 import {TokenSelector} from 'ui-kit';
 
+import {appVariables} from "../../../../../../api/constants";
+
 import * as styled from './MyWallet.styled';
 
 interface PropsInterface {
@@ -106,26 +108,31 @@ const MyWallet: FC<PropsInterface> = ({
           />
         </styled.RewardsContainer>
 
-        <styled.Title>Use Faucet</styled.Title>
-        <styled.AirdropContainer>
-          {canRequestAirdrop !== false ? (
+        {appVariables.CONTRACT_FAUCET_ADDRESS !== "" ?? (
             <>
+              <styled.Title>Use Faucet</styled.Title>
+              <styled.AirdropContainer>
+                {canRequestAirdrop !== false ? (
+                    <>
               <span>
                 Get 10k MOM test tokens from the faucet. It can be requested once per day.
               </span>
-              <Button
-                icon="air"
-                label="Use Faucet"
-                disabled={!isBlockchainReady}
-                onClick={handleAirdrop}
-              />
+                      <Button
+                          icon="air"
+                          label="Use Faucet"
+                          disabled={!isBlockchainReady}
+                          onClick={handleAirdrop}
+                      />
+                    </>
+                ) : (
+                    <>
+                      <span>You can make another request tomorrow at {dateOfNextAllowedAirdrop}</span>
+                    </>
+                )}
+              </styled.AirdropContainer>
             </>
-          ) : (
-            <>
-              <span>You can make another request tomorrow at {dateOfNextAllowedAirdrop}</span>
-            </>
-          )}
-        </styled.AirdropContainer>
+        )}
+
 
         <styled.Title>{t('labels.balance')}</styled.Title>
 
