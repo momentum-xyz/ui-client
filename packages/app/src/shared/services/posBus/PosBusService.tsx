@@ -334,21 +334,21 @@ class PosBusService {
   }
 
   static addPendingState(
-    transaction_id: string,
-    odyssey_id: string,
+    transaction_hash: string,
+    object_id: string,
     wallet: string,
     comment: string,
     amount: string,
     kind: number // kind = 0 - mom, kind = 1 - dad
   ) {
     this.main.port?.postMessage([
-      MsgType.ADD_PENDING_STAKE,
+      MsgType.USER_STAKED_TO_ODYSSEY,
       {
-        transaction_id,
-        odyssey_id,
+        transaction_hash,
+        object_id,
         wallet,
-        amount,
         comment,
+        amount,
         kind
       }
     ]);
