@@ -27,7 +27,13 @@ const WelcomePage: FC = () => {
     (widget: WidgetEnum) => {
       storage.setString(StorageKeyEnum.HasSeenWelcome, HAS_SEEN_WELCOME_VALUE);
       widgetManagerStore.open(widget, PositionEnum.LEFT);
-      navigate(ROUTES.explore);
+      const redirectRoute = storage.get(StorageKeyEnum.RedirectOnLogin);
+      if (redirectRoute) {
+        navigate(redirectRoute);
+        storage.delete(StorageKeyEnum.RedirectOnLogin);
+      } else {
+        navigate(ROUTES.explore);
+      }
     },
     [navigate, widgetManagerStore]
   );

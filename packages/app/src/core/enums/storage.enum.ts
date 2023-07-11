@@ -3,6 +3,7 @@ export enum StorageKeyEnum {
   Token = 'odyssey.token',
   DefaultAccount = 'Default_Account',
   WalletsByAddress = 'Wallets_By_Address',
+  RedirectOnLogin = 'Redirect_On_Login',
   PreferredAudioInput = 'Audio_Input',
   PreferredAudioOutput = 'Audio_Output',
   ProfileJobId = 'profile-job-id',

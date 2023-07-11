@@ -1,6 +1,6 @@
 import {FC, ReactNode, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
@@ -13,6 +13,7 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
   const {isSignUpInProgress} = sessionStore;
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (isSignUpInProgress) {
@@ -22,10 +23,11 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
   }, [isSignUpInProgress, navigate, widgetManagerStore]);
 
   useEffect(() => {
-    if (sessionStore.isGuest && !storage.get(StorageKeyEnum.HasSeenWelcome)) {
+    if (sessionStore.isGuest && !storage.get(StorageKeyEnum.HasSeenWelcome) && location.pathname !== ROUTES.welcome) {
+      storage.setString(StorageKeyEnum.RedirectOnLogin, location.pathname);
       navigate(ROUTES.welcome);
     }
-  }, [sessionStore.isGuest, navigate]);
+  }, [sessionStore.isGuest, navigate, location]);
 
   useEffect(() => {
     if (sessionStore.isProfileError) {
