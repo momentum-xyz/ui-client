@@ -30,6 +30,8 @@ interface BabylonObjectInterface {
   container: AssetContainer;
   objectDefinition: Object3dInterface;
   objectInstance: InstantiatedEntries;
+  cloneWithEffect?: TransformNode;
+  effect?: string;
 }
 
 // Textures waiting for the object to spawn.
@@ -55,6 +57,7 @@ export class ObjectHelper {
   static mySpawningClone: Nullable<TransformNode>;
   static awaitingTexturesMap: AwaitingTexturesType = new Map();
   static awaitingSoundMap: AwaitingSoundType = new Map();
+  static awaitingEffectsMap = new Map<string, string>();
 
   static initialize(scene: Scene, assetBaseURL: string): void {
     this.scene = scene;
@@ -164,6 +167,10 @@ export class ObjectHelper {
         basicShapeMat.albedoTexture = newTexture;
         childMeshes[0].material = basicShapeMat;
       }
+    } else if (label === 'object_effect') {
+      this.setObjectEffect(obj.objectDefinition.id, texture.hash);
+    } else if (label === 'name') {
+      // noop
     } else {
       console.debug('Unhandled object texture label: ' + label);
     }
@@ -245,6 +252,12 @@ export class ObjectHelper {
     this.setObjectTextures(babylonObject, this.scene);
     this.setObjectSound(babylonObject, this.scene);
 
+    const effect = this.awaitingEffectsMap.get(object.id);
+    if (effect) {
+      this.setObjectEffect(object.id, effect);
+      this.awaitingEffectsMap.delete(object.id);
+    }
+
     if (attach) {
       this.attachToCamera(object.id, node);
     }
@@ -310,6 +323,80 @@ export class ObjectHelper {
     childMeshes.forEach((element) => {
       element.setEnabled(false);
     });
+  }
+
+  static objectEffectChange(objectId: string, effect: string | null) {
+    const obj = this.objectsMap.get(objectId);
+    if (obj) {
+      this.setObjectEffect(objectId, effect);
+    } else if (effect) {
+      this.awaitingEffectsMap.set(objectId, effect);
+    }
+  }
+
+  static setObjectEffect(objectId: string, effect: string | null) {
+    console.log('setObjectEffect', objectId, effect);
+    const obj = this.objectsMap.get(objectId);
+    if (!obj) {
+      console.log('setObjectEffect: object not found:', objectId, this.objectsMap);
+      return;
+    }
+
+    if (effect === null) {
+      if (!obj.cloneWithEffect) {
+        return;
+      }
+      console.log('setObjectEffect: removing effect');
+      obj.cloneWithEffect.dispose();
+      obj.cloneWithEffect = undefined;
+      obj.effect = undefined;
+
+      // make sure the object is visible
+      const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
+      childMeshes.forEach((element) => {
+        element.setEnabled(true);
+      });
+      console.log('setObjectEffect: original object is visible');
+    } else {
+      if (obj.effect === effect) {
+        return;
+      }
+      if (obj.cloneWithEffect) {
+        obj.cloneWithEffect.dispose();
+      }
+
+      const node = obj.objectInstance.rootNodes[0];
+      const clone = node.clone('clone', node.parent);
+      if (!(clone instanceof TransformNode)) {
+        console.log('setObjectEffect: clone is not a TransformNode');
+        return;
+      }
+      // const effectMat = new StandardMaterial('effect', this.scene);
+      const effectMat = new PBRMaterial('effect', this.scene);
+      effectMat.albedoColor = Color3.Teal();
+      effectMat.emissiveColor = Color3.White();
+      effectMat.reflectivityColor = Color3.Green();
+      effectMat.alpha = 0.7;
+
+      const cloneChildren = clone.getChildMeshes();
+      cloneChildren.forEach((element) => {
+        element.material = effectMat;
+        // console.log('setObjectEffect:', objectId, 'element', element, element.material);
+        // if (element.material) {
+        //   element.material.alpha = 0.4;
+        // }
+      });
+      console.log('setObjectEffect: effect added');
+
+      obj.cloneWithEffect = clone;
+      obj.effect = effect;
+
+      const childMeshes = node.getChildMeshes();
+      childMeshes.forEach((element) => {
+        element.setEnabled(false);
+      });
+      console.log('setObjectEffect: original object is hidden');
+    }
   }
 
   static removeObject(id: string) {

@@ -27,6 +27,7 @@ export type Event3dType = {
   ObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
   SetWorld: (world: SetWorldInterface, userId: string) => void;
   ObjectTextureChanged: (texture: Texture3dInterface) => void;
+  ObjectEffectChanged: (objectId: string, effect: string | null) => void;
 
   UserAdded: (user: Odyssey3dUserInterface) => void;
   UserRemoved: (userId: string) => void;

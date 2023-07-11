@@ -154,6 +154,10 @@ class PosBusService {
           });
         }
 
+        if (entries?.string?.object_effect) {
+          Event3dEmitter.emit('ObjectEffectChanged', id, entries.string.object_effect);
+        }
+
         if (entries?.audio?.spatial) {
           Event3dEmitter.emit('ObjectSoundChanged', id, {
             volume: entries.audio.spatial.volume || 0,

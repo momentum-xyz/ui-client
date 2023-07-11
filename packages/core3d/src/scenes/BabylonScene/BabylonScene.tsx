@@ -30,6 +30,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       events.off('AddObject');
       events.off('ObjectTextureChanged');
       events.off('ObjectSoundChanged');
+      events.off('ObjectEffectChanged');
       events.off('ObjectTransform');
       events.off('UserAdded');
       events.off('UserRemoved');
@@ -100,6 +101,10 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
 
       events.on('ObjectSoundChanged', (objectId: string, soundData: ObjectSoundInterface) => {
         ObjectHelper.objectSoundChange(scene, objectId, soundData);
+      });
+
+      events.on('ObjectEffectChanged', (objectId: string, effect: string | null) => {
+        ObjectHelper.objectEffectChange(objectId, effect);
       });
 
       events.on('ObjectTransform', (id, object) => {
