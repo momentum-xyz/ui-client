@@ -101,9 +101,22 @@ const NftStore = types
         self.currentToken,
         self.wallets
       );
-      return self._wallets.find(
+      const walletWithBalance = self._wallets.find(
         (w) => w.wallet_id === self.selectedWalletId && w.contract_id === contractId
       );
+      const fallbackWallet = {
+        wallet_id: self.selectedWalletId,
+        balance: '0',
+        staked: '0',
+        unbonding: '0',
+        transferable: '0',
+        reward: '0',
+        blockchain_name: '',
+        contract_id: '',
+        updated_at: ''
+      };
+      console.log('[Blockchain] selectedWallet', {walletWithBalance, fallbackWallet});
+      return walletWithBalance || fallbackWallet;
     },
     get selectedWalletConf(): WalletConfigInterface {
       const walletId = self.walletsIdByAddress.get(self.selectedWalletId);
