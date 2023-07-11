@@ -7,8 +7,7 @@ import {formatBigInt} from 'core/utils';
 import {WalletModelInterface} from 'core/models';
 import {useBlockchain} from 'shared/hooks';
 import {TokenSelector} from 'ui-kit';
-
-import {appVariables} from "../../../../../../api/constants";
+import {appVariables} from 'api/constants';
 
 import * as styled from './MyWallet.styled';
 
