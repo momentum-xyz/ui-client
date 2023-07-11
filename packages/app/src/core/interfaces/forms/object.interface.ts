@@ -19,4 +19,5 @@ export interface CustomizableObjectFormInterface {
   text?: string;
   title?: string;
   image?: File;
+  imageAIUrl?: string;
 }

@@ -64,6 +64,10 @@ const Customization: FC = () => {
         <NewOrEditForm
           content={customizableContent.content}
           isPending={customizableContent.isPending}
+          isGenerating={customizableContent.isGenerating}
+          generatedImages={customizableContent.generatedImages}
+          onGenerateImages={customizableContent.generateAIImages}
+          onClearGeneratedImages={customizableContent.clearGeneratedImages}
           onCreateOrUpdate={handleCustomize}
           onBack={handleBack}
         />

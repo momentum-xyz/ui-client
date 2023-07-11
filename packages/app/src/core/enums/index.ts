@@ -9,3 +9,4 @@ export * from './basicAsset2dId.enum';
 export * from './gizmoType.enum';
 export * from './widget.enum';
 export * from './creatorTabs.enum';
+export * from './leonardoModel.enum';
