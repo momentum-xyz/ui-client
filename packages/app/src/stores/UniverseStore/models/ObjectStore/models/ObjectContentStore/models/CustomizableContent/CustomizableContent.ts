@@ -2,6 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {IconNameType} from '@momentum-xyz/ui-kit';
+import {EffectsEnum} from '@momentum-xyz/core3d';
 
 import {MediaUploader, User} from 'core/models';
 import {api, CustomizableObjectInterface} from 'api';
@@ -22,6 +23,7 @@ const CustomizableContent = types
       fetchRequest: types.optional(RequestModel, {}),
       authorRequest: types.optional(RequestModel, {}),
       customizeRequest: types.optional(RequestModel, {}),
+      setEffectAttrRequest: types.optional(RequestModel, {}),
       cleanRequest: types.optional(RequestModel, {})
     })
   )
@@ -74,7 +76,18 @@ const CustomizableContent = types
         image_hash: render_hash
       });
 
-      return self.customizeRequest.isDone;
+      if (!self.customizeRequest.isDone) {
+        return false;
+      }
+
+      yield self.setEffectAttrRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+        spaceId: self.objectId,
+        plugin_id: self.pluginId,
+        attribute_name: AttributeNameEnum.OBJECT_EFFECT,
+        value: {value: EffectsEnum.NONE}
+      });
+
+      return self.setEffectAttrRequest.isDone;
     }),
     unclaimAndClear: flow(function* () {
       yield self.cleanRequest.send(api.spaceRepository.cleanCustomization, {
@@ -86,7 +99,18 @@ const CustomizableContent = types
         self.author = undefined;
       }
 
-      return self.cleanRequest.isDone;
+      if (self.cleanRequest.isError) {
+        return false;
+      }
+
+      yield self.setEffectAttrRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+        spaceId: self.objectId,
+        plugin_id: self.pluginId,
+        attribute_name: AttributeNameEnum.OBJECT_EFFECT,
+        value: {value: EffectsEnum.TRANSPARENT}
+      });
+
+      return self.setEffectAttrRequest.isDone;
     })
   }))
   .views((self) => ({

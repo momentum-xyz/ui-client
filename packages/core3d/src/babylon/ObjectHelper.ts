@@ -19,6 +19,8 @@ import {
   SoundItemInterface
 } from '@momentum-xyz/core';
 
+import {EffectsEnum} from '../core/enums';
+
 import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
 import {getAssetFileName, getBoundingInfo} from './UtilityHelper';
@@ -31,7 +33,7 @@ interface BabylonObjectInterface {
   objectDefinition: Object3dInterface;
   objectInstance: InstantiatedEntries;
   cloneWithEffect?: TransformNode;
-  effect?: string;
+  effect?: EffectsEnum;
 }
 
 // Textures waiting for the object to spawn.
@@ -325,7 +327,7 @@ export class ObjectHelper {
     });
   }
 
-  static objectEffectChange(objectId: string, effect: string | null) {
+  static objectEffectChange(objectId: string, effect: string) {
     const obj = this.objectsMap.get(objectId);
     if (obj) {
       this.setObjectEffect(objectId, effect);
@@ -334,7 +336,7 @@ export class ObjectHelper {
     }
   }
 
-  static setObjectEffect(objectId: string, effect: string | null) {
+  static setObjectEffect(objectId: string, effect: string) {
     console.log('setObjectEffect', objectId, effect);
     const obj = this.objectsMap.get(objectId);
     if (!obj) {
@@ -342,7 +344,7 @@ export class ObjectHelper {
       return;
     }
 
-    if (effect === null) {
+    if (effect === EffectsEnum.NONE) {
       if (!obj.cloneWithEffect) {
         return;
       }
@@ -357,7 +359,7 @@ export class ObjectHelper {
         element.setEnabled(true);
       });
       console.log('setObjectEffect: original object is visible');
-    } else {
+    } else if (effect === EffectsEnum.TRANSPARENT) {
       if (obj.effect === effect) {
         return;
       }
@@ -396,6 +398,8 @@ export class ObjectHelper {
         element.setEnabled(false);
       });
       console.log('setObjectEffect: original object is hidden');
+    } else {
+      console.log('setObjectEffect: unknown effect:', effect);
     }
   }
 

@@ -103,7 +103,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
         ObjectHelper.objectSoundChange(scene, objectId, soundData);
       });
 
-      events.on('ObjectEffectChanged', (objectId: string, effect: string | null) => {
+      events.on('ObjectEffectChanged', (objectId: string, effect: string) => {
         ObjectHelper.objectEffectChange(objectId, effect);
       });
 
