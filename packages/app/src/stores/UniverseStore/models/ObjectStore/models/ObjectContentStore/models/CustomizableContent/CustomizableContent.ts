@@ -77,8 +77,11 @@ const CustomizableContent = types
       self.isEditing = isEditing;
     },
     claimAndCustomize: flow(function* (form: CustomizableObjectFormInterface) {
-      const render_hash = yield self.mediaUploader.uploadImageOrVideo(form.image);
-      if (!render_hash) {
+      const imageHashOrUrl = form.image
+        ? yield self.mediaUploader.uploadImageOrVideo(form.image)
+        : form.imageAIUrl;
+
+      if (!imageHashOrUrl) {
         return false;
       }
 
@@ -86,7 +89,7 @@ const CustomizableContent = types
         objectId: self.objectId,
         text: form.text || '',
         title: form.title || '',
-        image_hash: render_hash
+        image_hash: imageHashOrUrl
       });
 
       return self.customizeRequest.isDone;
