@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {rgba} from 'polished';
 
 export const Container = styled.div``;
 
@@ -32,6 +33,7 @@ export const Date = styled.div`
   display: flex;
   align-items: center;
   font-size: var(--font-size-xxs);
+  color: ${(props) => props.theme.text && rgba(props.theme.text, 0.8)};
   font-weight: 400;
   gap: 2px;
 `;

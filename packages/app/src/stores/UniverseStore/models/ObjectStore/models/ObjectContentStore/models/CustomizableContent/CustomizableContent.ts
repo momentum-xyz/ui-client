@@ -43,9 +43,9 @@ const CustomizableContent = types
         self.content = attributeResponse;
       }
 
-      if (attributeResponse?.created_at) {
+      if (attributeResponse?.claimed_by) {
         const authorResponse = yield self.authorRequest.send(api.userRepository.fetchUser, {
-          userId: attributeResponse.created_at
+          userId: attributeResponse.claimed_by
         });
 
         if (authorResponse) {

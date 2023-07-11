@@ -194,9 +194,7 @@ const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate
       <styled.Separator />
 
       <styled.Actions>
-        <div>
-          <Button label={t('actions.back')} onClick={onBack} />
-        </div>
+        <div>{!!content && <Button label={t('actions.back')} onClick={onBack} />}</div>
         <Button
           label="Contribute"
           onClick={handleCreateOrUpdate}
