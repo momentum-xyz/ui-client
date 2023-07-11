@@ -5,15 +5,21 @@ import cn from 'classnames';
 import {useI18n} from '@momentum-xyz/core';
 import {
   Button,
+  ButtonEllipse,
   ButtonRound,
   FileUploader,
   Frame,
   IconSvg,
+  Image,
   ImageSizeEnum,
   Input,
+  Loader,
+  Select,
+  SelectOptionInterface,
   Textarea
 } from '@momentum-xyz/ui-kit';
 
+import {LeonardoModelIdEnum} from 'core/enums';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {CustomizableObjectInterface} from 'api';
 import {CustomizableObjectFormInterface} from 'core/interfaces';
@@ -23,7 +29,11 @@ import * as styled from './NewOrEditForm.styled';
 interface PropsInterface {
   content?: CustomizableObjectInterface | null;
   isPending: boolean;
+  isGenerating: boolean;
+  generatedImages: string[];
+  onGenerateImages: (prompt: string, modelId: LeonardoModelIdEnum) => void;
   onCreateOrUpdate: (form: CustomizableObjectFormInterface) => void;
+  onClearGeneratedImages: () => void;
   onBack: () => void;
 }
 
@@ -32,8 +42,34 @@ type ImageType = 'custom' | 'ai';
 const MAX_ASSET_SIZE_MB = 8;
 const MAX_ASSET_SIZE_B = MAX_ASSET_SIZE_MB * Math.pow(1024, 2);
 
-const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate, onBack}) => {
+const MODEL_OPTIONS: SelectOptionInterface<LeonardoModelIdEnum>[] = [
+  {
+    label: 'Creative',
+    value: LeonardoModelIdEnum.CREATIVE
+  },
+  {
+    label: 'Select',
+    value: LeonardoModelIdEnum.SELECT
+  },
+  {
+    label: 'Signature',
+    value: LeonardoModelIdEnum.SIGNATURE
+  }
+];
+
+const NewOrEditForm: FC<PropsInterface> = ({
+  content,
+  isPending,
+  isGenerating,
+  generatedImages,
+  onGenerateImages,
+  onClearGeneratedImages,
+  onCreateOrUpdate,
+  onBack
+}) => {
   const [selectedImageType, setSelectedImageType] = useState<ImageType | null>(null);
+  const [modelId, setModelId] = useState<LeonardoModelIdEnum | null>(null);
+  const [prompt, setPrompt] = useState<string | null>(null);
 
   const {t} = useI18n();
 
@@ -49,18 +85,35 @@ const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate
       setValue('title', content.title);
       setValue('text', content.text);
       setSelectedImageType('custom');
+      setModelId(null);
+      setPrompt(null);
     }
   }, [content, setValue]);
 
   const handleImageType = useCallback(
     (imageType: ImageType) => {
+      if (isGenerating) {
+        return;
+      }
+
       if (imageType !== selectedImageType) {
         setSelectedImageType(imageType);
         setValue('image', undefined);
       }
     },
-    [selectedImageType, setValue]
+    [isGenerating, selectedImageType, setValue]
   );
+
+  const handleGenerateImages = useCallback(() => {
+    if (prompt && modelId) {
+      onGenerateImages(prompt, modelId);
+    }
+  }, [modelId, onGenerateImages, prompt]);
+
+  const handleClearGeneratedImages = useCallback(() => {
+    setValue('imageAIUrl', undefined);
+    onClearGeneratedImages();
+  }, [onClearGeneratedImages, setValue]);
 
   const handleCreateOrUpdate = handleSubmit((form: CustomizableObjectFormInterface) => {
     onCreateOrUpdate(form);
@@ -104,11 +157,11 @@ const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate
             rules={{required: true, minLength: 2}}
             render={({field: {value, onChange}}) => (
               <Textarea
+                lines={4}
                 value={value}
                 placeholder="Write your store here*"
                 danger={!!errors.text}
                 onChange={onChange}
-                lines={8}
               />
             )}
           />
@@ -188,7 +241,109 @@ const NewOrEditForm: FC<PropsInterface> = ({content, isPending, onCreateOrUpdate
         )}
 
         {/* AI IMAGE */}
-        {selectedImageType === 'ai' && <div>ai</div>}
+        {selectedImageType === 'ai' && (
+          <Controller
+            control={control}
+            name="image"
+            rules={{required: true}}
+            render={({field: {value, onChange}}) => {
+              return (
+                <styled.AIInputsContainer>
+                  {!isGenerating && generatedImages.length === 0 && (
+                    <styled.AIInputs>
+                      <Textarea
+                        lines={4}
+                        value={prompt}
+                        placeholder="Enter prompt for AI Image here. Describe what you would like to see?*"
+                        danger={!!errors.text}
+                        onChange={setPrompt}
+                      />
+
+                      <Select
+                        wide
+                        isClearable
+                        isSearchable
+                        value={modelId}
+                        options={MODEL_OPTIONS}
+                        placeholder="Select a model*"
+                        onSingleChange={setModelId}
+                      />
+
+                      <styled.CreateAIImagesButton>
+                        <ButtonEllipse
+                          icon="picture_add"
+                          label="Create image"
+                          disabled={!prompt || !modelId}
+                          onClick={handleGenerateImages}
+                        />
+                      </styled.CreateAIImagesButton>
+                    </styled.AIInputs>
+                  )}
+
+                  {isGenerating && (
+                    <styled.AIImagesContainer>
+                      <styled.Subtitle>Image is generating, please wait</styled.Subtitle>
+                      <styled.Loader>
+                        <Loader />
+                      </styled.Loader>
+                    </styled.AIImagesContainer>
+                  )}
+
+                  {!isGenerating && generatedImages.length > 0 && (
+                    <>
+                      <Controller
+                        name="imageAIUrl"
+                        control={control}
+                        render={({field: {value, onChange}}) => (
+                          <>
+                            {!value ? (
+                              <styled.AIImagesContainer>
+                                <styled.Subtitle>Choose an image</styled.Subtitle>
+                                <styled.AIImagesGrid>
+                                  {generatedImages.map((url) => (
+                                    <Image
+                                      key={url}
+                                      src={url}
+                                      height={130}
+                                      errorIcon="ai"
+                                      bordered
+                                      onClick={() => onChange(url)}
+                                    />
+                                  ))}
+                                </styled.AIImagesGrid>
+                              </styled.AIImagesContainer>
+                            ) : (
+                              <styled.AIImagesContainer>
+                                <styled.Subtitle>Choose an image</styled.Subtitle>
+                                <styled.SelectedAIImage>
+                                  <Image bordered src={value} height={270} errorIcon="ai" />
+                                  <styled.ClearSelectedAIImage>
+                                    <ButtonRound
+                                      icon="close_large"
+                                      onClick={() => onChange(undefined)}
+                                    />
+                                  </styled.ClearSelectedAIImage>
+                                </styled.SelectedAIImage>
+                              </styled.AIImagesContainer>
+                            )}
+                          </>
+                        )}
+                      />
+
+                      <styled.ClearAIImagesButton>
+                        <ButtonEllipse
+                          icon="chevron_left"
+                          label="Make new image"
+                          onClick={handleClearGeneratedImages}
+                        />
+                      </styled.ClearAIImagesButton>
+                    </>
+                  )}
+                </styled.AIInputsContainer>
+              );
+            }}
+          />
+        )}
       </Frame>
 
       <styled.Separator />

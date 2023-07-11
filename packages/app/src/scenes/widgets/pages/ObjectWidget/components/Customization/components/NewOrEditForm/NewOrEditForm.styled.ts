@@ -126,6 +126,57 @@ export const PreviewImage = styled.div`
   border-radius: 8px;
 `;
 
+export const Loader = styled.div`
+  height: 290px;
+`;
+
+export const AIInputsContainer = styled.div`
+  margin: 10px 0 0 0;
+`;
+
+export const AIInputs = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+export const AIImagesContainer = styled.div`
+  padding: 10px;
+  height: 320px;
+  border-radius: 4px;
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+`;
+
+export const AIImagesGrid = styled.div`
+  padding: 8px 0 0 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+`;
+
+export const SelectedAIImage = styled.div`
+  padding: 8px 0 0 0;
+  position: relative;
+`;
+
+export const ClearSelectedAIImage = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 18px;
+`;
+
+export const CreateAIImagesButton = styled.div`
+  padding: 5px 0 0 0;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const ClearAIImagesButton = styled.div`
+  padding: 10px 0 0 0;
+  display: flex;
+  justify-content: flex-start;
+`;
+
 export const Actions = styled.div`
   padding: 10px;
   display: flex;
