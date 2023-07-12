@@ -108,6 +108,13 @@ const CustomizableContent = types
       return self.setEffectAttrRequest.isDone;
     }),
     unclaimAndClear: flow(function* () {
+      yield self.setEffectAttrRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+        spaceId: self.objectId,
+        plugin_id: self.pluginId,
+        attribute_name: AttributeNameEnum.OBJECT_EFFECT,
+        value: {value: EffectsEnum.TRANSPARENT}
+      });
+
       yield self.cleanRequest.send(api.spaceRepository.cleanCustomization, {
         objectId: self.objectId
       });
@@ -117,18 +124,7 @@ const CustomizableContent = types
         self.author = undefined;
       }
 
-      if (self.cleanRequest.isError) {
-        return false;
-      }
-
-      yield self.setEffectAttrRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-        spaceId: self.objectId,
-        plugin_id: self.pluginId,
-        attribute_name: AttributeNameEnum.OBJECT_EFFECT,
-        value: {value: EffectsEnum.TRANSPARENT}
-      });
-
-      return self.setEffectAttrRequest.isDone;
+      return self.cleanRequest.isError;
     })
   }))
   .actions((self) => ({
