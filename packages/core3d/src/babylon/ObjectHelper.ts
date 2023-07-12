@@ -427,6 +427,7 @@ export class ObjectHelper {
       mapObj[1]?.objectInstance.dispose();
       mapObj[1]?.container.removeFromScene();
       mapObj[1]?.container.dispose();
+      mapObj[1]?.cloneWithEffect?.dispose();
     }
     this.objectsMap.clear();
 
