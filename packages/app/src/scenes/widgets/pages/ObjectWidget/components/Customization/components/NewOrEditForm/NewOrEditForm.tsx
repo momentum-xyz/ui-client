@@ -134,7 +134,7 @@ const NewOrEditForm: FC<PropsInterface> = ({
       <Frame>
         <styled.Title>What’s your Contribution?</styled.Title>
         <styled.Description>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+          Please enter your idea and personalize the object with an image.
         </styled.Description>
       </Frame>
 
@@ -238,7 +238,9 @@ const NewOrEditForm: FC<PropsInterface> = ({
                     >
                       {imageUrl ? (
                         <>
-                          <styled.PreviewImage style={{backgroundImage: `url(${imageUrl})`}} />
+                          <styled.PreviewImage>
+                            <Image src={imageUrl} height={278} />
+                          </styled.PreviewImage>
                           <styled.ClearSelectedImage>
                             <ButtonRound
                               icon="close_large"
