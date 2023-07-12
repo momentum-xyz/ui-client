@@ -29,14 +29,20 @@ class PosBusService {
 
   public static attachNextReceivedObjectToCamera = false;
 
-  public static init(token: string, userId: string) {
+  public static init(token: string, userId: string, worldId: string | null) {
     console.log('PosBusService init', token, userId);
     this.userId = userId;
     if (this.main.client) {
       this.main.client.disconnect();
-      this.connect(this.main.client, token, userId).catch((err) => {
-        console.error(err);
-      });
+      this.connect(this.main.client, token, userId)
+        .catch((err) => {
+          console.error(err);
+        })
+        .then(() => {
+          if (worldId) {
+            this.teleportToWorld(worldId);
+          }
+        });
     } else {
       const workerUrl = new URL('@momentum-xyz/posbus-client/worker.mjs', import.meta.url);
       const wasmUrl = new URL('@momentum-xyz/posbus-client/pbc.wasm', import.meta.url);
@@ -45,6 +51,11 @@ class PosBusService {
           console.log('PosBus client loaded', client);
           this.main.client = client;
           return this.connect(client, token, userId);
+        })
+        .then(() => {
+          if (worldId) {
+            this.teleportToWorld(worldId);
+          }
         })
         .catch((err) => {
           console.error(err);
