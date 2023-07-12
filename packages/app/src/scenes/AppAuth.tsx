@@ -37,9 +37,9 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
     if (sessionStore.token && sessionStore.user?.id) {
       console.log('[AppAuth]: PosBus init for ', sessionStore.user?.id);
       console.log('[AppAuth]: PosBus init for ', sessionStore.token);
-      PosBusService.init(sessionStore.token, sessionStore.user.id);
+      PosBusService.init(sessionStore.token, sessionStore.user.id, universeStore.worldId || null);
     }
-  }, [sessionStore, sessionStore.user?.id]);
+  }, [sessionStore.token, sessionStore.user?.id, universeStore.worldId]);
 
   useEffect(() => {
     if (sessionStore.user && !sessionStore.user.isGuest) {
