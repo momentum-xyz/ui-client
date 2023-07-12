@@ -390,7 +390,12 @@ const NewOrEditForm: FC<PropsInterface> = ({
         <Button
           label="Contribute"
           onClick={handleCreateOrUpdate}
-          disabled={!isValid || isPending || (!imageValue && !imageAIUrlValue)}
+          disabled={
+            !isValid ||
+            isPending ||
+            (!content && !imageValue && !imageAIUrlValue) ||
+            (!!content && isImageCleared && !imageValue && !imageAIUrlValue)
+          }
         />
       </styled.Actions>
     </styled.Container>
