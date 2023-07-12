@@ -71,6 +71,7 @@ const NewOrEditForm: FC<PropsInterface> = ({
   const [modelId, setModelId] = useState<LeonardoModelIdEnum | null>(null);
   const [prompt, setPrompt] = useState<string | null>(null);
   const [isClearConfirm, setIsClearConfirm] = useState(false);
+  const [isImageCleared, setIsImageCleared] = useState(false);
 
   const {t} = useI18n();
 
@@ -219,7 +220,10 @@ const NewOrEditForm: FC<PropsInterface> = ({
             render={({field: {value, onChange}}) => {
               const imageUrl = value
                 ? URL.createObjectURL(value)
-                : getImageAbsoluteUrl(content?.image_hash, ImageSizeEnum.S5);
+                : getImageAbsoluteUrl(
+                    !isImageCleared ? content?.image_hash : null,
+                    ImageSizeEnum.S5
+                  );
 
               return (
                 <styled.CustomImage className={cn(!!errors.image && 'error')}>
@@ -239,6 +243,7 @@ const NewOrEditForm: FC<PropsInterface> = ({
                             <ButtonRound
                               icon="close_large"
                               onClick={() => {
+                                setIsImageCleared(true);
                                 onChange(undefined);
                               }}
                             />
