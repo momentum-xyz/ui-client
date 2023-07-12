@@ -10,7 +10,7 @@ import {
     Color4,
     Engine,
     FresnelParameters,
-    TransformNode, AssetContainer, InstantiatedEntries,
+    TransformNode, AssetContainer, InstantiatedEntries, Sprite, SpriteManager,
 } from "@babylonjs/core";
 
 import pentagon from '../static/Particles/pentagon.png';
@@ -29,6 +29,7 @@ export class Whisp {
     private particlesBeams?: ParticleSystem;
     private particlesSparks?: ParticleSystem;
     private assets?: InstantiatedEntries;
+    private sprite?: Sprite;
 
     protected readonly node = new TransformNode("WhispRoot");
     protected readonly velocity = new Vector3();
@@ -159,6 +160,20 @@ export class Whisp {
     }
 
     /**
+     * Set the avatar image for this whisp
+     * @param {SpriteManager} spriteManager The avatar sprite manager
+     * @param {Scene} scene The scene
+     */
+    setAvatar(spriteManager: SpriteManager, scene: Scene) {
+        this.particlesSparks?.stop();
+
+        this.sprite = new Sprite(
+            "Avatar",
+            spriteManager);
+        this.sprite.width = this.sprite.height = Whisp.RADIUS * 2;
+    }
+
+    /**
      * Update the state
      * @param {number} delta The time delta in seconds
      */
@@ -198,6 +213,10 @@ export class Whisp {
 
         if ((this.animationPhase += Whisp.ANIMATION_SPEED * delta) > 1) {
             --this.animationPhase;
+        }
+
+        if (this.sprite) {
+            this.sprite.position.copyFrom(this.node.position);
         }
     }
 }
