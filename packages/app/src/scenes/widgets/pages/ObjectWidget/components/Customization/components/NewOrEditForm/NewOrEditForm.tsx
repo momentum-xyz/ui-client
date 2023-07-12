@@ -387,6 +387,17 @@ const NewOrEditForm: FC<PropsInterface> = ({
 
       <styled.Separator />
 
+      {selectedImageType === 'ai' && generatedImages.length === 0 && !isGenerating && (
+        <styled.WarningContainer>
+          <styled.AlertIcon>
+            <IconSvg name="alert" isWhite />
+          </styled.AlertIcon>
+          <styled.WarningInner>
+            You can add your contribution after adding an image
+          </styled.WarningInner>
+        </styled.WarningContainer>
+      )}
+
       <styled.Actions>
         <div>{!!content && <Button label={t('actions.back')} onClick={onBack} />}</div>
         <Button

@@ -222,3 +222,15 @@ export const ClearConfirmActions = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+export const WarningContainer = styled.div`
+  margin: 0 10px;
+  padding: 8px 10px 10px 10px;
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  background: ${(props) => props.theme.danger && rgba(props.theme.danger, 0.6)};
+  border-radius: 4px;
+  gap: 10px;
+`;
+
+export const WarningInner = styled.div``;
