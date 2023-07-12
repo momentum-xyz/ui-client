@@ -70,6 +70,7 @@ const NewOrEditForm: FC<PropsInterface> = ({
   const [selectedImageType, setSelectedImageType] = useState<ImageType | null>(null);
   const [modelId, setModelId] = useState<LeonardoModelIdEnum | null>(null);
   const [prompt, setPrompt] = useState<string | null>(null);
+  const [isClearConfirm, setIsClearConfirm] = useState(false);
 
   const {t} = useI18n();
 
@@ -117,6 +118,7 @@ const NewOrEditForm: FC<PropsInterface> = ({
 
   const handleClearGeneratedImages = useCallback(() => {
     setValue('imageAIUrl', undefined);
+    setIsClearConfirm(false);
     onClearGeneratedImages();
   }, [onClearGeneratedImages, setValue]);
 
@@ -272,7 +274,6 @@ const NewOrEditForm: FC<PropsInterface> = ({
                 <Select
                   wide
                   isClearable
-                  isSearchable
                   value={modelId}
                   options={MODEL_OPTIONS}
                   placeholder="Select a model*"
@@ -281,7 +282,7 @@ const NewOrEditForm: FC<PropsInterface> = ({
 
                 <styled.CreateAIImagesButton>
                   <ButtonEllipse
-                    icon="picture_add"
+                    icon="picture"
                     label="Create image"
                     disabled={!prompt || !modelId}
                     onClick={handleGenerateImages}
@@ -305,9 +306,34 @@ const NewOrEditForm: FC<PropsInterface> = ({
                   name="imageAIUrl"
                   control={control}
                   render={({field: {value, onChange}}) => (
-                    <>
-                      {!value ? (
-                        <styled.AIImagesContainer>
+                    <styled.AIImagesContainer className={cn(isClearConfirm && 'withoutHeight')}>
+                      {isClearConfirm && (
+                        <styled.ClearConfirmContainer>
+                          <styled.AlertIcon>
+                            <IconSvg name="alert" isWhite />
+                          </styled.AlertIcon>
+                          <styled.ClearConfirmInner>
+                            <div>Are you sure you want to remove these images and try again?</div>
+                            <styled.ClearConfirmActions>
+                              <ButtonEllipse
+                                icon="close_large"
+                                variant="thirty"
+                                label={t('actions.cancel')}
+                                onClick={() => setIsClearConfirm(false)}
+                              />
+
+                              <ButtonEllipse
+                                icon="bin"
+                                label={t('actions.delete')}
+                                onClick={handleClearGeneratedImages}
+                              />
+                            </styled.ClearConfirmActions>
+                          </styled.ClearConfirmInner>
+                        </styled.ClearConfirmContainer>
+                      )}
+
+                      {!isClearConfirm && !value && (
+                        <>
                           <styled.Subtitle>Choose an image</styled.Subtitle>
                           <styled.AIImagesGrid>
                             {generatedImages.map((url) => (
@@ -321,9 +347,11 @@ const NewOrEditForm: FC<PropsInterface> = ({
                               />
                             ))}
                           </styled.AIImagesGrid>
-                        </styled.AIImagesContainer>
-                      ) : (
-                        <styled.AIImagesContainer>
+                        </>
+                      )}
+
+                      {!isClearConfirm && !!value && (
+                        <>
                           <styled.Subtitle>Choose an image</styled.Subtitle>
                           <styled.SelectedAIImage>
                             <Image bordered src={value} height={270} errorIcon="ai" />
@@ -331,9 +359,9 @@ const NewOrEditForm: FC<PropsInterface> = ({
                               <ButtonRound icon="close_large" onClick={() => onChange(undefined)} />
                             </styled.ClearSelectedAIImage>
                           </styled.SelectedAIImage>
-                        </styled.AIImagesContainer>
+                        </>
                       )}
-                    </>
+                    </styled.AIImagesContainer>
                   )}
                 />
 
@@ -341,7 +369,7 @@ const NewOrEditForm: FC<PropsInterface> = ({
                   <ButtonEllipse
                     icon="chevron_left"
                     label="Make new image"
-                    onClick={handleClearGeneratedImages}
+                    onClick={() => setIsClearConfirm(true)}
                   />
                 </styled.ClearAIImagesButton>
               </>

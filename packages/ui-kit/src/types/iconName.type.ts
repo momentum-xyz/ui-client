@@ -151,6 +151,7 @@ export type IconNameType =
   | 'person_add'
   | 'person_idea'
   | 'photo_camera'
+  | 'picture'
   | 'picture_add'
   | 'picture_upload'
   | 'pie_chart'
