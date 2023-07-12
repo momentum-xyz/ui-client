@@ -61,13 +61,12 @@ export const deleteSpaceAttribute: RequestInterface<DeleteSpaceAttributeRequest,
 ) => {
   const {spaceId, plugin_id, attribute_name, ...restOptions} = options;
 
-  const url =
-    generatePath(spaceAttributesRepositoryEndpoints().attributes, {spaceId}) +
-    '?' +
-    new URLSearchParams({
-      plugin_id,
-      attribute_name
-    });
+  restOptions.params = {
+    plugin_id,
+    attribute_name
+  };
+
+  const url = generatePath(spaceAttributesRepositoryEndpoints().attributes, {spaceId});
 
   return request.delete(url, restOptions);
 };
