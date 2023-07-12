@@ -29,7 +29,6 @@ export class Whisp {
     private particlesBeams?: ParticleSystem;
     private particlesSparks?: ParticleSystem;
     private assets?: InstantiatedEntries;
-    private sprite?: Sprite;
 
     protected readonly node = new TransformNode("WhispRoot");
     protected readonly velocity = new Vector3();
@@ -37,6 +36,7 @@ export class Whisp {
     protected readonly directionAngles = new Vector3();
     protected readonly sphere;
     protected readonly position = new Vector3(2, 2, 2);
+    protected sprite?: Sprite;
     protected animationPhase = Math.random();
 
     /**
