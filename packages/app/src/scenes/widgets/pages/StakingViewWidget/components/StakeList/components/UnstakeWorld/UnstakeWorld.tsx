@@ -62,6 +62,7 @@ const UnstakeWorld: FC<PropsInterface> = ({targetStake, onUnStaked, onCanceled})
           text={t('messages.askToUnstake')}
           approveInfo={{title: t('actions.yes'), onClick: handleUnstake}}
           declineInfo={{title: t('actions.no'), onClick: onCanceled}}
+          onClose={onCanceled}
         />,
         TOAST_NOT_AUTO_CLOSE_OPTIONS
       );
