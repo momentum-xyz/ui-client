@@ -1,9 +1,11 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {ObjectTypeIdEnum, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
+import {AttributeNameEnum} from '@momentum-xyz/sdk';
+import {EffectsEnum} from '@momentum-xyz/core3d';
 
 import {api, FetchAssets3dResponse, PostSpaceResponse, UploadAsset3dResponse} from 'api';
-import {Asset3dCategoryEnum} from 'api/enums';
+import {Asset3dCategoryEnum, PluginIdEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 import {Asset3d, Asset3dInterface, SearchQuery} from 'core/models';
 import {PosBusService} from 'shared/services';
@@ -26,6 +28,7 @@ const SpawnAssetStore = types
       uploadAssetRequest: types.optional(RequestModel, {}),
       fetchAssets3dRequest: types.optional(RequestModel, {}),
       spawnObjectRequest: types.optional(RequestModel, {}),
+      setEffectAttrRequest: types.optional(RequestModel, {}),
       setIsVisibleRequest: types.optional(RequestModel, {}),
 
       assets3d: types.array(Asset3d),
@@ -189,6 +192,15 @@ const SpawnAssetStore = types
 
       if (objectId) {
         getRootStore(self).universeStore.world3dStore?.setAttachedToCamera(objectId);
+
+        if (self.isCustomizable) {
+          yield self.setEffectAttrRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+            spaceId: objectId,
+            plugin_id: PluginIdEnum.CORE,
+            attribute_name: AttributeNameEnum.OBJECT_EFFECT,
+            value: {value: EffectsEnum.TRANSPARENT}
+          });
+        }
       }
 
       return objectId;
