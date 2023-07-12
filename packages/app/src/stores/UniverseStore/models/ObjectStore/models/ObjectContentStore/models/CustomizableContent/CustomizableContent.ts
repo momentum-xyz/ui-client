@@ -83,7 +83,7 @@ const CustomizableContent = types
         ? yield self.mediaUploader.uploadImageByUrl(form.imageAIUrl)
         : yield self.mediaUploader.uploadImageOrVideo(form.image);
 
-      if (!imageHashOrUrl) {
+      if (!imageHashOrUrl && !self.content?.image_hash) {
         return false;
       }
 
@@ -91,7 +91,7 @@ const CustomizableContent = types
         objectId: self.objectId,
         text: form.text || '',
         title: form.title || '',
-        image_hash: imageHashOrUrl
+        image_hash: imageHashOrUrl || self.content?.image_hash || ''
       });
 
       if (!self.customizeRequest.isDone) {

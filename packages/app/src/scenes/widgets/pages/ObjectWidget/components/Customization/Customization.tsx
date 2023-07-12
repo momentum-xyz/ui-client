@@ -16,7 +16,6 @@ const Customization: FC = () => {
   const {customizableContent} = objectContentStore;
 
   const canUserEdit = customizableContent.content?.claimed_by === sessionStore.userId;
-  const canUserDelete = canUserEdit || universeStore.isMyWorld;
 
   const handleSignUp = () => {
     widgetManagerStore.closeAll();
@@ -78,7 +77,7 @@ const Customization: FC = () => {
           content={customizableContent.content}
           authorName={customizableContent.author?.name}
           authorAvatarHash={customizableContent.author?.profile.avatarHash}
-          onDelete={canUserDelete ? handleDelete : undefined}
+          onDelete={canUserEdit ? handleDelete : undefined}
           onEdit={canUserEdit ? handleEdit : undefined}
         />
       )}

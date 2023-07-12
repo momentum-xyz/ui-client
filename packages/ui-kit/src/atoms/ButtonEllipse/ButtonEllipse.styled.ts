@@ -25,11 +25,11 @@ export const Button = styled.button`
   --primary-color-hover: ${(props) => props.theme.accentText};
   --primary-color-active: ${(props) => props.theme.accentBg};
   --primary-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
+  --primary-border-color-disabled: transparent;
 
   --secondary-border-color: transparent;
   --secondary-border-color-hover: transparent;
   --secondary-border-color-active: ${(props) => props.theme.accentText};
-  --primary-border-color-disabled: transparent;
 
   --secondary-bg-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
   --secondary-bg-color-hover: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
@@ -41,6 +41,22 @@ export const Button = styled.button`
   --secondary-color-hover: ${(props) => props.theme.accentText};
   --secondary-color-active: ${(props) => props.theme.accentBg};
   --secondary-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
+
+  --thirty-border-color: ${(props) => props.theme.text};
+  --thirty-border-color-hover: ${(props) => props.theme.accentText};
+  --thirty-border-color-active: ${(props) => props.theme.accentBg};
+  --thirty-border-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.2)};
+
+  --thirty-bg-color: transparent;
+  --thirty-bg-color-hover: transparent;
+  --thirty-bg-color-active: transparent;
+  --thirty-bg-color-disabled: transparent;
+
+  --thirty-color: ${(props) => props.theme.text};
+  --thirty-color-hover: ${(props) => props.theme.accentText};
+  --thirty-color-active: ${(props) => props.theme.accentBg};
+  --thirty-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
+  --thirty-border-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.2)};
 
   --normal-height: 26px;
   --normal-radius: 14px;
@@ -141,6 +157,47 @@ export const Button = styled.button`
 
       svg {
         color: var(--secondary-color-disabled);
+      }
+    }
+  }
+
+  &.thirty {
+    --border-color: var(--thirty-border-color);
+    --bg-color: var(--thirty-bg-color);
+    --color: var(--thirty-color);
+
+    svg {
+      color: var(--thirty-color);
+    }
+
+    &:hover {
+      --border-color: var(--thirty-border-color-hover);
+      --bg-color: var(--thirty-bg-color-hover);
+      --color: var(--thirty-color-hover);
+
+      svg {
+        color: var(--thirty-color-hover);
+      }
+    }
+
+    &.active,
+    &:active {
+      --border-color: var(--thirty-border-color-active);
+      --bg-color: var(--thirty-bg-color-active);
+      --color: var(--thirty-color-active);
+
+      svg {
+        color: var(--thirty-color-active);
+      }
+    }
+
+    &:disabled {
+      --border-color: var(--thirty-border-color-disabled);
+      --bg-color: var(--thirty-bg-color-disabled);
+      --color: var(--thirty-color-disabled);
+
+      svg {
+        color: var(--thirty-color-disabled);
       }
     }
   }
