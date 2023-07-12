@@ -1,21 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import {FC, useEffect} from 'react';
-import {Scene} from '@babylonjs/core';
+import {Scene, SceneLoader} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
 import {Universe3dEmitterType} from '@momentum-xyz/core';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
 
-import {PlayerHelper, LightHelper, SkyboxHelper} from '../../babylon';
+import {LightHelper, SkyboxHelper} from '../../babylon';
 import {
-  CAMERA_POS_EXPLORER,
-  CAMERA_TARGET_EXPLORER,
   UniverseBuilderHelper
 } from '../../babylon/UniverseBuilderHelper';
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 import skyboxWorld from '../../static/CLOUDSCAPE.jpg';
 import {InputHelper} from '../../babylon/InputHelper';
 import {WhispControllable} from "../../babylon/WhispControllable";
+import lowPolyBunny from '../../static/lowPolyBunny.glb';
 
 export interface PropsInterface {
   events: Universe3dEmitterType;
@@ -43,6 +40,21 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
     };
   }, [events]);
 
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const loadAsset = (scene: Scene) => {
+    SceneLoader.LoadAssetContainer(
+        lowPolyBunny,
+        '',
+        scene,
+        container => {
+          player.setAsset(container);
+        },
+        event => {},
+        (scene, message) => {
+
+        });
+  };
+
   const onSceneReady = async (scene: Scene) => {
     SkyboxHelper.set360Skybox(scene, skyboxWorld);
 
@@ -50,6 +62,9 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
     const view = scene.getEngine().getRenderingCanvas();
     if (view?.id) {
       player = new WhispControllable(scene);
+
+      // Example for loading a GLB asset into the whisp, also works for non players
+      // loadAsset(scene);
 
       // PlayerHelper.initialize(scene, view, false);
       InputHelper.initializeUniverse(scene, onWorldClick, onUserClick, onClickOutside);
