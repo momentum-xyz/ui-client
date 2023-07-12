@@ -118,12 +118,23 @@ export const DragAndDropPrompt = styled.div`
 `;
 
 export const PreviewImage = styled.div`
+  position: absolute;
   background-position: center center;
   background-size: cover;
-  position: absolute;
   width: 100%;
   height: 100%;
   border-radius: 8px;
+`;
+
+export const ClearSelectedImage = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 10px;
+
+  button {
+    min-width: 0;
+    margin: 0;
+  }
 `;
 
 export const Loader = styled.div`

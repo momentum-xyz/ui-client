@@ -225,13 +225,23 @@ const NewOrEditForm: FC<PropsInterface> = ({
                     <FileUploader
                       fileType="image"
                       enableDragAndDrop
-                      label="Upload from computer"
+                      label={!imageUrl ? 'Upload from computer' : undefined}
                       dragActiveLabel={t('actions.dropItHere')}
                       maxSize={MAX_ASSET_SIZE_B}
                       onFilesUpload={onChange}
                     >
                       {imageUrl ? (
-                        <styled.PreviewImage style={{backgroundImage: `url(${imageUrl})`}} />
+                        <>
+                          <styled.PreviewImage style={{backgroundImage: `url(${imageUrl})`}} />
+                          <styled.ClearSelectedImage>
+                            <ButtonRound
+                              icon="close_large"
+                              onClick={() => {
+                                onChange(undefined);
+                              }}
+                            />
+                          </styled.ClearSelectedImage>
+                        </>
                       ) : (
                         <styled.DragAndDropPrompt>
                           <span>{t('messages.uploadAssetPictureDescription')}</span>
