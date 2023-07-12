@@ -393,5 +393,13 @@ export class WhispControllable extends Whisp {
         super.update(delta);
 
         this.updateCamera(delta);
+
+        if (this.sprite) {
+            const epsilon = .01;
+
+            this.sprite.position.x -= forward.x * epsilon;
+            this.sprite.position.y -= forward.y * epsilon;
+            this.sprite.position.z -= forward.z * epsilon;
+        }
     }
 }

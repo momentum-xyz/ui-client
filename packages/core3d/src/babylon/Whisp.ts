@@ -10,18 +10,19 @@ import {
     Color4,
     Engine,
     FresnelParameters,
-    TransformNode, AssetContainer, InstantiatedEntries,
+    TransformNode, AssetContainer, InstantiatedEntries, Sprite, SpriteManager,
 } from "@babylonjs/core";
 
 import pentagon from '../static/Particles/pentagon.png';
 import beam from '../static/Particles/beam.png';
 
 export class Whisp {
-    public static readonly RADIUS = .24;
+    public static readonly SCALE = 1.5; // Size multiplier
+    public static readonly RADIUS = .24 * Whisp.SCALE;
 
     private static readonly ANIMATION_SPEED = .09;
     private static readonly FLOAT_PHASES = [3, 2, 4];
-    private static readonly FLOAT_MAGNITUDE = .18;
+    private static readonly FLOAT_MAGNITUDE = .18 * Whisp.SCALE;
 
     private readonly float;
     private trail?: TrailMesh;
@@ -35,6 +36,7 @@ export class Whisp {
     protected readonly directionAngles = new Vector3();
     protected readonly sphere;
     protected readonly position = new Vector3(2, 2, 2);
+    protected sprite?: Sprite;
     protected animationPhase = Math.random();
 
     /**
@@ -66,7 +68,7 @@ export class Whisp {
         this.sphere.material = sphereMaterial;
 
         if (trail) {
-            this.trail = new TrailMesh("WhispTrail", this.node, scene, .07, 60);
+            this.trail = new TrailMesh("WhispTrail", this.node, scene, .07 * Whisp.SCALE, 60);
 
             const trailMaterial = new StandardMaterial("TrailMaterial", scene);
 
@@ -94,8 +96,8 @@ export class Whisp {
         this.particlesBeams.minInitialRotation = Math.PI * 2;
         this.particlesBeams.minLifeTime = .5;
         this.particlesBeams.maxLifeTime = 1.2;
-        this.particlesBeams.minSize = .65;
-        this.particlesBeams.maxSize = 1.6;
+        this.particlesBeams.minSize = .65 * Whisp.SCALE;
+        this.particlesBeams.maxSize = 1.6 * Whisp.SCALE;
         this.particlesBeams.maxAngularSpeed = 1.2;
         this.particlesBeams.minAngularSpeed = -this.particlesBeams.maxAngularSpeed;
         this.particlesBeams.isLocal = true;
@@ -131,13 +133,26 @@ export class Whisp {
         this.particlesSparks.direction1 = this.particlesSparks.direction2 = new Vector3();
 
         this.particlesSparks.addSizeGradient(0, 0, 0);
-        this.particlesSparks.addSizeGradient(.5, .1, .28);
+        this.particlesSparks.addSizeGradient(.5, .1 * Whisp.SCALE, .28 * Whisp.SCALE);
         this.particlesSparks.addSizeGradient(1, 0, 0);
 
-        this.particlesSparks.minEmitBox = new Vector3(-.07, -.07, -.07);
+        this.particlesSparks.minEmitBox = new Vector3(
+            -.07 * Whisp.SCALE,
+            -.07 * Whisp.SCALE,
+            -.07 * Whisp.SCALE);
         this.particlesSparks.maxEmitBox = this.particlesSparks.minEmitBox.clone().negate();
 
         this.particlesSparks.start();
+    }
+
+    /**
+     * Set the sphere to inverted or not inverted
+     * @param {boolean} inverted True if the sphere should be inverted
+     */
+    private setSphereInverted(inverted: boolean) {
+        if (this.sphere.material) {
+            this.sphere.material.cullBackFaces = false;
+        }
     }
 
     /**
@@ -152,6 +167,22 @@ export class Whisp {
         }
 
         this.sphere.setEnabled(false);
+    }
+
+    /**
+     * Set the avatar image for this whisp
+     * @param {SpriteManager} spriteManager The avatar sprite manager
+     * @param {Scene} scene The scene
+     */
+    setAvatar(spriteManager: SpriteManager, scene: Scene) {
+        this.particlesSparks?.stop();
+
+        this.sprite = new Sprite(
+            "Avatar",
+            spriteManager);
+        this.sprite.width = this.sprite.height = Whisp.RADIUS * 2;
+
+        this.setSphereInverted(true);
     }
 
     /**
@@ -194,6 +225,10 @@ export class Whisp {
 
         if ((this.animationPhase += Whisp.ANIMATION_SPEED * delta) > 1) {
             --this.animationPhase;
+        }
+
+        if (this.sprite) {
+            this.sprite.position.copyFrom(this.node.position);
         }
     }
 }

@@ -1,5 +1,5 @@
 import {FC, useEffect} from 'react';
-import {Scene, SceneLoader} from '@babylonjs/core';
+import {Scene, SceneLoader, SpriteManager} from '@babylonjs/core';
 import SceneComponent from 'babylonjs-hook';
 import {Universe3dEmitterType} from '@momentum-xyz/core';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
@@ -13,6 +13,7 @@ import skyboxWorld from '../../static/CLOUDSCAPE.jpg';
 import {InputHelper} from '../../babylon/InputHelper';
 import {WhispControllable} from "../../babylon/WhispControllable";
 import lowPolyBunny from '../../static/lowPolyBunny.glb';
+import rabbit_round from "../../static/rabbit_round.png";
 
 export interface PropsInterface {
   events: Universe3dEmitterType;
@@ -55,6 +56,21 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
         });
   };
 
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const loadAvatar = (scene: Scene) => {
+    const spriteManager = new SpriteManager(
+        "AvatarManager",
+        rabbit_round,
+        1,
+        {
+          width: 512,
+          height: 512
+        },
+        scene);
+
+    player.setAvatar(spriteManager, scene);
+  };
+
   const onSceneReady = async (scene: Scene) => {
     SkyboxHelper.set360Skybox(scene, skyboxWorld);
 
@@ -65,6 +81,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
 
       // Example for loading a GLB asset into the whisp, also works for non players
       // loadAsset(scene);
+      loadAvatar(scene);
 
       // PlayerHelper.initialize(scene, view, false);
       InputHelper.initializeUniverse(scene, onWorldClick, onUserClick, onClickOutside);
