@@ -20,5 +20,6 @@ export enum AttributeNameEnum {
   TIMELINE_LAST_SEEN = 'timeline_last_seen',
   SOUNDTRACK = 'soundtrack',
   SPATIAL_AUDIO = 'spatial_audio',
+  OBJECT_EFFECT = 'object_effect',
   USER_CUSTOMISABLE_DATA = 'user_customisable_data'
 }
