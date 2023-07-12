@@ -146,6 +146,16 @@ export class Whisp {
     }
 
     /**
+     * Set the sphere to inverted or not inverted
+     * @param {boolean} inverted True if the sphere should be inverted
+     */
+    private setSphereInverted(inverted: boolean) {
+        if (this.sphere.material) {
+            this.sphere.material.cullBackFaces = false;
+        }
+    }
+
+    /**
      * Set the 3D asset for this whisp
      * @param {AssetContainer} container The asset container containing the asset
      */
@@ -171,6 +181,8 @@ export class Whisp {
             "Avatar",
             spriteManager);
         this.sprite.width = this.sprite.height = Whisp.RADIUS * 2;
+
+        this.setSphereInverted(true);
     }
 
     /**
