@@ -9,7 +9,9 @@ import {
   Nullable,
   Vector3,
   Texture,
-  Sound
+  Sound,
+  Analyser,
+  Engine
 } from '@babylonjs/core';
 import {
   Object3dInterface,
@@ -52,6 +54,7 @@ export class ObjectHelper {
   static objectsMap = new Map<string, BabylonObjectInterface>();
   static objectsSoundMap = new Map<string, Sound>();
   static scene: Scene;
+  static analyser: Analyser;
   static attachedNode: TransformNode;
   static transformSubscription: {unsubscribe: () => void} | undefined;
   static selectedObjectFromSpawn = '';
@@ -68,6 +71,17 @@ export class ObjectHelper {
     this.assetRootUrl = `${assetBaseURL}/asset/`;
     this.trackRootUrl = `${assetBaseURL}/track/`;
     this.textureRootUrl = `${assetBaseURL}/texture/`;
+  }
+
+  static enableAnalyzer() {
+    this.analyser = new Analyser(this.scene);
+    this.analyser.DEBUGCANVASSIZE.width = 160;
+    this.analyser.DEBUGCANVASSIZE.height = 100;
+    this.analyser.DEBUGCANVASPOS.x = 80;
+    this.analyser.DEBUGCANVASPOS.y = 20;
+
+    Engine.audioEngine?.connectToAnalyser(this.analyser);
+    this.analyser.drawDebugCanvas();
   }
 
   static setWorld(world: SetWorldInterface) {
