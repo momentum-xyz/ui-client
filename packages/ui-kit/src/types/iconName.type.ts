@@ -236,6 +236,7 @@ export type IconNameType =
   | 'twitter'
   | 'typing'
   | 'undo'
+  | 'unstake'
   | 'upload'
   | 'user-network'
   | 'vector'

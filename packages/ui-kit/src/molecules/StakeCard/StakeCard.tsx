@@ -58,7 +58,7 @@ const StakeCard: FC<StakeCardPropsInterface> = ({
             <ButtonEllipse
               variant="secondary"
               label={t('actions.unstake')}
-              icon="fly-to"
+              icon="unstake"
               onClick={onUnstakeClick}
             />
           )}
