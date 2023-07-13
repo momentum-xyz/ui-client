@@ -5,15 +5,13 @@ import {Universe3dEmitterType} from '@momentum-xyz/core';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
 
 import {LightHelper, SkyboxHelper} from '../../babylon';
-import {
-  UniverseBuilderHelper
-} from '../../babylon/UniverseBuilderHelper';
+import {UniverseBuilderHelper} from '../../babylon/UniverseBuilderHelper';
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 import skyboxWorld from '../../static/CLOUDSCAPE.jpg';
 import {InputHelper} from '../../babylon/InputHelper';
-import {WhispControllable} from "../../babylon/WhispControllable";
+import {WhispControllable} from '../../babylon/WhispControllable';
 import lowPolyBunny from '../../static/lowPolyBunny.glb';
-import rabbit_round from "../../static/rabbit_round.png";
+import rabbit_round from '../../static/rabbit_round.png';
 
 export interface PropsInterface {
   events: Universe3dEmitterType;
@@ -44,29 +42,29 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
   /* eslint-disable @typescript-eslint/no-unused-vars */
   const loadAsset = (scene: Scene) => {
     SceneLoader.LoadAssetContainer(
-        lowPolyBunny,
-        '',
-        scene,
-        container => {
-          player.setAsset(container);
-        },
-        event => {},
-        (scene, message) => {
-
-        });
+      lowPolyBunny,
+      '',
+      scene,
+      (container) => {
+        player.setAsset(container);
+      },
+      (event) => {},
+      (scene, message) => {}
+    );
   };
 
   /* eslint-disable @typescript-eslint/no-unused-vars */
   const loadAvatar = (scene: Scene) => {
     const spriteManager = new SpriteManager(
-        "AvatarManager",
-        rabbit_round,
-        1,
-        {
-          width: 512,
-          height: 512
-        },
-        scene);
+      'AvatarManager',
+      rabbit_round,
+      1,
+      {
+        width: 512,
+        height: 512
+      },
+      scene
+    );
 
     player.setAvatar(spriteManager, scene);
   };
@@ -124,7 +122,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
 
   const onRender = (scene: Scene) => {
     if (scene.deltaTime) {
-      player?.update(Math.min(scene.deltaTime * .001, 1));
+      player?.update(Math.min(scene.deltaTime * 0.001, 1));
     }
   };
 
