@@ -20,6 +20,9 @@ export class Whisp {
     public static readonly SCALE = 1.5; // Size multiplier
     public static readonly RADIUS = .24 * Whisp.SCALE;
 
+    private static readonly SPHERE_OPACITY = .7;
+    private static readonly AVATAR_SIZE = .8;
+    private static readonly AVATAR_OPACITY = .8;
     private static readonly ANIMATION_SPEED = .09;
     private static readonly FLOAT_PHASES = [3, 2, 4];
     private static readonly FLOAT_MAGNITUDE = .18 * Whisp.SCALE;
@@ -57,10 +60,10 @@ export class Whisp {
         const sphereMaterial = new StandardMaterial('SphereMaterial', scene);
 
         sphereMaterial.diffuseColor = new Color3(.8, .8, 1);
-        sphereMaterial.alpha = .5;
+        sphereMaterial.alpha = Whisp.SPHERE_OPACITY;
         sphereMaterial.alphaMode = Engine.ALPHA_ADD;
         sphereMaterial.reflectionFresnelParameters = new FresnelParameters();
-        sphereMaterial.reflectionFresnelParameters.power = 3;
+        sphereMaterial.reflectionFresnelParameters.power = 4;
         sphereMaterial.reflectionFresnelParameters.leftColor =
             sphereMaterial.reflectionFresnelParameters.rightColor =
                 Color3.White();
@@ -73,7 +76,7 @@ export class Whisp {
             const trailMaterial = new StandardMaterial("TrailMaterial", scene);
 
             trailMaterial.diffuseColor = new Color3(.8, .8, 1);
-            trailMaterial.alpha = .15;
+            trailMaterial.alpha = .25;
             trailMaterial.alphaMode = Engine.ALPHA_ADD;
             trailMaterial.disableLighting = true;
             trailMaterial.emissiveColor = new Color3(1, 1, 1);
@@ -180,7 +183,8 @@ export class Whisp {
         this.sprite = new Sprite(
             "Avatar",
             spriteManager);
-        this.sprite.width = this.sprite.height = Whisp.RADIUS * 2;
+        this.sprite.width = this.sprite.height = Whisp.RADIUS * 2 * Whisp.AVATAR_SIZE;
+        this.sprite.color.a = Whisp.AVATAR_OPACITY;
 
         this.setSphereInverted(true);
     }
