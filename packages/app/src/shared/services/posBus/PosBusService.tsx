@@ -76,7 +76,10 @@ class PosBusService {
 
   static teleportToWorld(worldId: string) {
     if (this.main.client && this.main.port) {
+      console.log('PosBus teleportToWorld', worldId);
       this.main.client.teleport(worldId);
+    } else {
+      console.error('Cannot teleport: PosBus not connected');
     }
   }
 
