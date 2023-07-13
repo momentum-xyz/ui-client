@@ -66,7 +66,7 @@ const SpawnAsset: FC = () => {
             <Button
               label={t('labels.uploadCustomObject')}
               wide
-              icon="astro"
+              icon="monitor_upload"
               onClick={() => {
                 setActiveTab('upload');
                 selectAsset(null);
@@ -76,23 +76,7 @@ const SpawnAsset: FC = () => {
         </Frame>
         <styled.Separator />
       </styled.ControlsContainer>
-      {/* <styled.Header>
-        <Tabs tabList={TABS_LIST} activeId={activeTab as TabType} onSelect={handleTabSelect} />
-        <Input
-          placeholder={t('labels.search')}
-          isSearch
-          isClearable
-          wide
-          onChange={spawnAssetStore.searchQuery.setQuery}
-          value={spawnAssetStore.searchQuery.query}
-        />
-        <Button
-          label={t('labels.uploadCustomObject')}
-          wide
-          icon="astro"
-          onClick={() => setActiveTab('upload')}
-        />
-      </styled.Header> */}
+
       <styled.Body>
         {selectedAsset ? (
           <SelectedPage />
@@ -100,13 +84,11 @@ const SpawnAsset: FC = () => {
           <>
             {activeTab === 'community' && (
               <styled.AssetsGroupList>
-                {/* <Text text={t('labels.wrappableAssetPack')} size="l" transform="uppercase" /> */}
                 <AssetsPage
                   assetCategory={Asset3dCategoryEnum.BASIC}
                   showPreview
                   assetPageHeader={t('labels.wrappableAssetPack')}
                 />
-                {/* <Text text={t('labels.communityAssetPack')} size="l" transform="uppercase" /> */}
                 <AssetsPage
                   assetCategory={Asset3dCategoryEnum.CUSTOM}
                   isPrivate={false}

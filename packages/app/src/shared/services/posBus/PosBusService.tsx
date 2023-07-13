@@ -29,7 +29,7 @@ class PosBusService {
 
   public static attachNextReceivedObjectToCamera = false;
 
-  public static init(token: string, userId: string) {
+  public static init(token: string, userId: string /*, worldId?: string | null*/) {
     console.log('PosBusService init', token, userId);
     this.userId = userId;
     if (this.main.client) {
@@ -37,6 +37,12 @@ class PosBusService {
       this.connect(this.main.client, token, userId).catch((err) => {
         console.error(err);
       });
+      // temp disable it here - breaks golang client sometimes
+      // .then(() => {
+      //   if (worldId) {
+      //     this.teleportToWorld(worldId);
+      //   }
+      // });
     } else {
       const workerUrl = new URL('@momentum-xyz/posbus-client/worker.mjs', import.meta.url);
       const wasmUrl = new URL('@momentum-xyz/posbus-client/pbc.wasm', import.meta.url);
@@ -46,6 +52,11 @@ class PosBusService {
           this.main.client = client;
           return this.connect(client, token, userId);
         })
+        // .then(() => {
+        //   if (worldId) {
+        //     this.teleportToWorld(worldId);
+        //   }
+        // })
         .catch((err) => {
           console.error(err);
         });
@@ -65,7 +76,10 @@ class PosBusService {
 
   static teleportToWorld(worldId: string) {
     if (this.main.client && this.main.port) {
+      console.log('PosBus teleportToWorld', worldId);
       this.main.client.teleport(worldId);
+    } else {
+      console.error('Cannot teleport: PosBus not connected');
     }
   }
 
@@ -152,6 +166,10 @@ class PosBusService {
             label: 'object_color',
             hash: entries.string.object_color
           });
+        }
+
+        if (entries?.string?.object_effect) {
+          Event3dEmitter.emit('ObjectEffectChanged', id, entries.string.object_effect);
         }
 
         if (entries?.audio?.spatial) {
@@ -334,21 +352,21 @@ class PosBusService {
   }
 
   static addPendingState(
-    transaction_id: string,
-    odyssey_id: string,
+    transaction_hash: string,
+    object_id: string,
     wallet: string,
     comment: string,
     amount: string,
     kind: number // kind = 0 - mom, kind = 1 - dad
   ) {
     this.main.port?.postMessage([
-      MsgType.ADD_PENDING_STAKE,
+      MsgType.USER_STAKED_TO_ODYSSEY,
       {
-        transaction_id,
-        odyssey_id,
+        transaction_hash,
+        object_id,
         wallet,
-        amount,
         comment,
+        amount,
         kind
       }
     ]);

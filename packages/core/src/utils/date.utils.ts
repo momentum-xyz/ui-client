@@ -255,3 +255,14 @@ export const getDayWithMonth = (dateISO: string | undefined | null) => {
   const targetFormat = 'EEEE dd MMMM';
   return dateISO ? format(new Date(dateISO), targetFormat) : '';
 };
+
+/**
+ * Constructs locale string
+ *
+ * @param {string} dateISO is ISO string or empty
+ * @returns {string} String in "2023-01-16" format
+ */
+export const dateWithoutTime = (dateISO: string | undefined | null) => {
+  const targetFormat = 'yyyy-MM-dd';
+  return dateISO ? format(new Date(dateISO), targetFormat) : '';
+};

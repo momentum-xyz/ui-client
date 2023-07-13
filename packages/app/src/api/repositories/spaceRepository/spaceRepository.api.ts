@@ -8,8 +8,14 @@ import {GetSpaceAttributeItemRequest, SpaceAttributeItemResponse} from 'api';
 import {getSpaceAttributeItem} from 'api/repositories/spaceAttributeRepository';
 
 import {
+  ClaimAndCustomizeRequest,
+  CleanCustomizationRequest,
+  AddWorldMemberRequest,
   DeleteSpaceRequest,
+  DeleteWorldMemberRequest,
   FetchSpaceRequest,
+  FetchWorldMembersRequest,
+  FetchWorldMembersResponse,
   PostSpaceRequest,
   PostSpaceResponse
 } from './spaceRepository.api.types';
@@ -60,5 +66,56 @@ export const postSpace: RequestInterface<PostSpaceRequest, PostSpaceResponse> = 
 export const deleteSpace: RequestInterface<DeleteSpaceRequest, DeleteSpaceRequest> = (options) => {
   const {spaceId, ...restOptions} = options;
 
-  return request.delete(generatePath(spaceRepositoryEndpoints().space, {spaceId}), restOptions);
+  return request.delete(
+    generatePath(spaceRepositoryEndpoints().object, {objectId: spaceId}),
+    restOptions
+  );
+};
+
+export const fetchWorldMembers: RequestInterface<
+  FetchWorldMembersRequest,
+  FetchWorldMembersResponse
+> = (options) => {
+  const {worldId, ...restOptions} = options;
+
+  return request.get(
+    generatePath(spaceRepositoryEndpoints().members, {objectId: worldId}),
+    restOptions
+  );
+};
+
+export const addWorldMember: RequestInterface<AddWorldMemberRequest, null> = (options) => {
+  const {worldId, address, role, ...restOptions} = options;
+
+  return request.post(
+    generatePath(spaceRepositoryEndpoints().members, {objectId: worldId}),
+    {
+      wallet: address,
+      role
+    },
+    restOptions
+  );
+};
+
+export const deleteWorldMember: RequestInterface<DeleteWorldMemberRequest, null> = (options) => {
+  const {worldId, userId, ...restOptions} = options;
+
+  return request.delete(
+    generatePath(spaceRepositoryEndpoints().deleteMember, {objectId: worldId, userId}),
+    restOptions
+  );
+};
+
+export const claimAndCustomize: RequestInterface<ClaimAndCustomizeRequest, null> = (options) => {
+  const {text, title, image_hash, objectId, ...rest} = options;
+
+  const url = generatePath(spaceRepositoryEndpoints().claimAndCustomize, {objectId});
+  return request.post(url, {text, title, image_hash}, rest);
+};
+
+export const cleanCustomization: RequestInterface<CleanCustomizationRequest, null> = (options) => {
+  const {objectId, ...rest} = options;
+
+  const url = generatePath(spaceRepositoryEndpoints().cleanCustomization, {objectId});
+  return request.post(url, {}, rest);
 };

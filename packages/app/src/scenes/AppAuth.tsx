@@ -37,9 +37,11 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
     if (sessionStore.token && sessionStore.user?.id) {
       console.log('[AppAuth]: PosBus init for ', sessionStore.user?.id);
       console.log('[AppAuth]: PosBus init for ', sessionStore.token);
-      PosBusService.init(sessionStore.token, sessionStore.user.id);
+      // temp disable passing worldId and teleport - breaks golang client sometimes
+      // it's needed only for Guest -> User transition when inside world to refresh the active users list
+      PosBusService.init(sessionStore.token, sessionStore.user.id); //, universeStore.worldId || null);
     }
-  }, [sessionStore, sessionStore.user?.id]);
+  }, [sessionStore.token, sessionStore.user?.id]); //, universeStore.worldId]);
 
   useEffect(() => {
     if (sessionStore.user && !sessionStore.user.isGuest) {

@@ -25,7 +25,7 @@ const AvatarUpload: FC<AvatarUploadPropsInterface> = ({value, onChange}) => {
       )}
       <styled.FileUploaderContainer>
         <FileUploader
-          label=""
+          label=" "
           iconButton
           dragActiveLabel={t('fileUploader.dragActiveLabel')}
           fileType="image"

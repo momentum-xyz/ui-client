@@ -26,9 +26,15 @@ const Template: Story<RadioPropsInterface> = (args) => {
   return <Radio value={value} {...args} name="radio" onChange={setValue} />;
 };
 
-export const General = Template.bind({});
-General.args = {
+export const Vertical = Template.bind({});
+Vertical.args = {
   options: OPTIONS
+};
+
+export const Horizontal = Template.bind({});
+Horizontal.args = {
+  options: OPTIONS,
+  variant: 'horizontal'
 };
 
 export const HasDisabled = Template.bind({});

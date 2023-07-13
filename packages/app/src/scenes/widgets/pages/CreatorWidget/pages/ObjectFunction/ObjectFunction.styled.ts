@@ -5,6 +5,21 @@ export const Container = styled.div`
   width: 100%;
 `;
 
+export const WarningContainer = styled.div`
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const WarningContainerInner = styled.div`
+  width: 260px;
+
+  p {
+    text-align: center;
+  }
+`;
+
 export const HeadingWrapper = styled.div`
   display: flex;
   justify-content: flex-end;

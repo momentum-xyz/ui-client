@@ -105,7 +105,8 @@ const CreatorStore = types
       worldId: string,
       sourceObjectId: string,
       assetId: string,
-      name: string
+      name: string,
+      objectTypeId: string
     ) {
       PosBusService.attachNextReceivedObjectToCamera = true;
 
@@ -114,9 +115,9 @@ const CreatorStore = types
         {
           parent_id: worldId,
           object_name: name,
-          object_type_id: '4ed3a5bb-53f8-4511-941b-07902982c31c',
+          object_type_id: objectTypeId,
           asset_3d_id: assetId,
-          minimap: false // self.isVisibleInNavigation
+          minimap: false
         }
       );
       const objectId = response?.object_id;

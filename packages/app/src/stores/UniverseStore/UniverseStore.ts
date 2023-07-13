@@ -15,6 +15,11 @@ const UniverseStore = types
   .actions((self) => ({
     init(): void {
       self.universe2dStore.init();
+      // it's called on user change as well, important to refetch stuff
+      if (self.world2dStore) {
+        const worldId = self.world2dStore.worldId;
+        self.world2dStore.init(worldId);
+      }
     },
     enterWorld(worldId: string): void {
       self.world3dStore = World3dStore.create();

@@ -8,6 +8,7 @@ const Stake = types.model('Stake', {
   amount: types.string,
   reward: types.string,
   blockchain_id: types.string,
+  kind: types.number,
   last_comment: types.maybeNull(types.string),
   updated_at: types.string
 });

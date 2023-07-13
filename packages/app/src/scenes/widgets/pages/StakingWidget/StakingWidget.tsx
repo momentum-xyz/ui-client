@@ -53,18 +53,24 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
 
   const onStake = async (comment: string) => {
     try {
-      console.log('onStake', nftStore.selectedWalletId, worldId, amountAtoms);
-      const result = await stake(worldId, amountAtoms);
+      console.log(
+        'onStake',
+        nftStore.selectedWalletId,
+        {kind: nftStore.currentToken},
+        worldId,
+        amountAtoms
+      );
+      const result = await stake(worldId, amountAtoms, nftStore.currentToken);
       console.log('stake success');
 
       if (result?.transactionHash && !!comment) {
         PosBusService.addPendingState(
           result.transactionHash,
           worldId,
-          amountAtoms.toString(),
           selectedWalletId,
           comment,
-          0 // temp
+          amountAtoms.toString(),
+          nftStore.currentToken
         );
       }
 
@@ -127,6 +133,7 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
                 selectedWalletId={nftStore.selectedWalletId}
                 balanceTransferrable={nftStore.balanceTransferrable}
                 tokenSymbol={nftStore.tokenSymbol}
+                showTokenSelector={nftStore.hasDADTokens}
                 isNextDisabled={!amountString || isBalanceTooLow || !isBlockchainReady}
                 onSelectWalletId={nftStore.setSelectedWalletId}
                 onChangeAmountValue={setAmountString}

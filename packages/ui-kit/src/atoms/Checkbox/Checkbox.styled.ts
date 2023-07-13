@@ -13,11 +13,13 @@ export const Label = styled.label`
   display: flex;
   color: ${(props) => props.theme.text};
   line-height: var(--size);
-  align-items: center;
+  align-items: flex-start;
   cursor: pointer;
 
   .label {
     padding: 0 var(--offset);
+    line-height: 22px;
+    letter-spacing: 0.28px;
   }
 
   .inputView {

@@ -24,7 +24,7 @@ export const Item = styled.div`
   margin: 4px;
   width: 6px;
   height: 6px;
-  background: ${(props) => props.theme.accentBg};
+  background: ${(props) => props.theme.text};
   border-radius: 50%;
 
   animation-name: blink;

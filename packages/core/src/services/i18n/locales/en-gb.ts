@@ -279,6 +279,7 @@ export const enGb = {
       accounts: 'Accounts',
       account: 'Account',
       myWallet: 'My Wallet',
+      token: 'Token',
       members: 'Members',
       emoji: 'EMOJI',
       staked: 'Staked',
@@ -388,6 +389,7 @@ export const enGb = {
       changeMusic: 'Change Music (coming soon)',
       tokenGating: 'Token Gating (coming soon)',
       addObject: 'Add Object',
+      coCreators: 'Co-creators',
       spawnPoint: 'Spawn Point',
       skyboxes: 'Skyboxes',
       addCustomSkybox: 'Add Custom Skybox',
@@ -444,6 +446,8 @@ export const enGb = {
       startRecording: 'Start recording and fly around',
       recording: 'Recording',
       wasCreatedBy: 'was created by',
+      flyForSpawning:
+        'You can fly around with the preview of the object until you reached the perfect spawning point and place the object',
       receivedBoost: 'received a boost of {{amount}} {{symbol}} from {{name}}',
       shareThisPost: 'Share this post',
       loading30sec:
@@ -481,7 +485,7 @@ export const enGb = {
       avatarSuccess: 'Avatar saved successfully',
       avatarFailure: 'There was a problem saving the avatar',
       askToUnstake:
-        'You are about to unstake all your MOM from this odyssey, it is currently not possible to unstake portions of your staked MOM. Are you sure you want to do this?',
+        'You are about to unstake all your {{tokenSymbol}} from this odyssey, it is currently not possible to unstake portions of your staked {{tokenSymbol}}. Are you sure you want to do this?',
       spaceEditSuccess: 'Successfully edited space',
       spaceSaveFailure: 'There was an error saving the space',
       spaceDeleteFailure: 'There was an error deleting the space',
@@ -495,6 +499,7 @@ export const enGb = {
       highFiveReceivedText: 'Click on the button to high five back!',
       launchInitiativeNote: 'Feel free to launch your initiative at a later time.',
       launchSpaceNote: 'Launch your initiative in just one minute',
+      allowCustomize: 'Allow visitors to contribute to this object with text, an image or sound',
       maximumParticipants:
         "The maximum number of video participants have been reached. New participants won't be able to stream their webcam.",
       memberAddSuccess: 'The member was successfully added',
@@ -598,7 +603,8 @@ export const enGb = {
         'By embedding a sound to this object; users will also be able to hear this sound played when they fly towards the object. To embed a sound choose a sound from your library.',
       uploadAssetInfoTitle: 'Drag and drop your asset here',
       uploadAssetPictureDescription: 'Drag and drop YOUR CUSTOM image here',
-      uploadAssetInfoDescription: 'We support GLB Models & the max file size cannot exceed 50mb',
+      uploadAssetDesc1: 'We support GLB Models.',
+      uploadAssetDesc2: 'The max file size cannot exceed 50mb.',
       createCustomSkyboxTitle: 'Create Custom Skybox With AI',
       createCustomSkyboxDescription:
         'Create your own unique 360 skybox for your world by entering a prompt and generating it using the Blockade Labs AI. Simply input your desired concept or atmosphere below as a prompt, and let the AI create a stunning skybox to enhance your Odyssey experience.',
@@ -753,6 +759,8 @@ export const enGb = {
       settings: 'Settings',
       publish: 'Publish',
       default: 'Default',
+      preview: 'Preview',
+      spawn: 'Spawn',
       setAsDefault: 'Set as default',
       takeSnapshot: 'Take a snapshot',
       createVideo: 'Create a video',

@@ -8,13 +8,13 @@ import {ErrorsEnum} from '../../enums';
 import * as styled from './FileUploader.styled';
 
 export interface FileUploaderPropsInterface {
-  label: string;
+  label?: string;
   buttonSize?: 'small' | 'normal' | 'medium';
   iconButton?: boolean;
   dragActiveLabel: string;
   onFilesUpload: (file: File | undefined) => void;
   onError?: (error: Error) => void;
-  fileType?: 'image' | 'video' | 'audio';
+  fileType?: 'image' | 'video' | 'audio' | 'asset';
   maxSize?: number;
   enableDragAndDrop?: boolean;
   disabled?: boolean;
@@ -24,7 +24,8 @@ export interface FileUploaderPropsInterface {
 const ALLOWED_EXTENSIONS = {
   image: {'image/*': ['.jpeg', '.png', '.jpg', '.svg', '.gif']},
   video: {'video/*': ['.mp4', '.mov', '.wmv', '.mpeg', '.webm', '.mkv']},
-  audio: {'audio/*': ['.mp3', '.ogg', '.aac', '.webm', '.flac']}
+  audio: {'audio/*': ['.mp3', '.ogg', '.aac', '.webm', '.flac']},
+  asset: {'model/gltf-binary': ['.glb']}
 };
 
 /*
@@ -80,8 +81,11 @@ const FileUploader: FC<FileUploaderPropsInterface> = ({
       ) : (
         <>
           {children}
-          {/* @ts-ignore: FIXME */}
-          <Button variant="secondary" label={label} onClick={onClick} disabled={disabled} />
+
+          {!!label && (
+            /* @ts-ignore: FIXME */
+            <Button variant="secondary" label={label} onClick={onClick} disabled={disabled} />
+          )}
         </>
       )}
     </styled.Container>

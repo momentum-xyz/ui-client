@@ -1,7 +1,7 @@
 import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Button, IconSvg, TabInterface} from '@momentum-xyz/ui-kit';
+import {Button, Frame, IconSvg, TabInterface} from '@momentum-xyz/ui-kit';
 import {useI18n, i18n} from '@momentum-xyz/core';
 
 import {ToastContent} from 'ui-kit';
@@ -118,6 +118,22 @@ const ObjectFunction: FC = () => {
       </styled.PanelBody>
     );
   };
+
+  /* FIXME: TEMP. THIS IS CUSTOMIZABLE OBJECT */
+  if (objectStore.asset2dId === BasicAsset2dIdEnum.CUSTOMIZABLE) {
+    return (
+      <styled.WarningContainer data-testid="ObjectFunction-test">
+        <styled.WarningContainerInner>
+          <Frame>
+            <styled.Text>
+              This object is customizable by visitors and can not be assigned any other custom
+              functions.
+            </styled.Text>
+          </Frame>
+        </styled.WarningContainerInner>
+      </styled.WarningContainer>
+    );
+  }
 
   return (
     <styled.Container data-testid="ObjectFunction-test">

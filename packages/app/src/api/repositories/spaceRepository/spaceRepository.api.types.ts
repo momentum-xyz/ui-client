@@ -1,5 +1,14 @@
+/** COMMON **/
 export interface SpaceInterface {
   name: string;
+}
+
+export interface CustomizableObjectInterface {
+  text: string;
+  title: string;
+  image_hash: string;
+  claimed_by?: string;
+  created_at?: string;
 }
 
 export interface FetchSpaceRequest {
@@ -28,3 +37,39 @@ export interface DeleteSpaceRequest {
 }
 
 export interface DeleteSpaceRequest {}
+
+export interface FetchWorldMembersRequest {
+  worldId: string;
+}
+
+export interface WorldMemberInterface {
+  user_id: string;
+  name: string;
+  avatar_hash: string;
+  role: string;
+}
+
+export interface FetchWorldMembersResponse extends Array<WorldMemberInterface> {}
+
+export interface AddWorldMemberRequest {
+  worldId: string;
+  address: string;
+  role: string;
+}
+
+export interface DeleteWorldMemberRequest {
+  worldId: string;
+  userId: string;
+}
+
+/** CLAIM AND CUSTOMIZE OBJECT **/
+
+export interface ClaimAndCustomizeRequest extends CustomizableObjectInterface {
+  objectId: string;
+}
+
+/** CLEAN CUSTOMIZATION AND UNCLAIM OBJECT **/
+
+export interface CleanCustomizationRequest {
+  objectId: string;
+}

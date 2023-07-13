@@ -94,6 +94,21 @@ SearchClearable.args = {
   opts: stringInputMask
 };
 
+export const WithActionRight = Template.bind({});
+WithActionRight.args = {
+  size: 'normal',
+  placeholder: 'Some text...',
+  actionRight: (
+    <div
+      style={{color: 'white', cursor: 'pointer', fontSize: '1.3em'}}
+      onClick={() => alert('It works')}
+    >
+      +
+    </div>
+  ),
+  opts: stringInputMask
+};
+
 export const ListOfSizes = Template.bind({});
 ListOfSizes.args = {
   placeholder: 'Enter text...',
