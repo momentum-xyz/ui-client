@@ -1,4 +1,4 @@
-import {FC, useMemo, useState} from 'react';
+import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n, i18n} from '@momentum-xyz/core';
 import {TabInterface, Tabs, Panel, SelectOptionInterface, PositionEnum} from '@momentum-xyz/ui-kit';
@@ -36,13 +36,12 @@ const StakingViewWidget: FC = () => {
     }
   ];
 
-  const stakeList = useMemo(() => {
-    if (!nftStore.hasDADTokens) {
-      return stakingViewStore.filteredAndSortedStakeList;
-    }
-    const tokenKind = nftStore.currentToken;
-    return stakingViewStore.filteredAndSortedStakeList.filter((stake) => stake.kind === tokenKind);
-  }, [nftStore.currentToken, nftStore.hasDADTokens, stakingViewStore.filteredAndSortedStakeList]);
+  const stakeList = !nftStore.hasDADTokens
+    ? stakingViewStore.filteredAndSortedStakeList
+    : stakingViewStore.filteredAndSortedStakeList.filter(
+        (stake) => stake.kind === nftStore.currentToken
+      );
+  console.log('[StakingViewWidget]: ', stakeList, stakeList.length);
 
   const onSelectWorld = (worldId: string) => {
     widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id: worldId});
