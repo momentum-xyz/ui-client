@@ -29,20 +29,20 @@ class PosBusService {
 
   public static attachNextReceivedObjectToCamera = false;
 
-  public static init(token: string, userId: string, worldId: string | null) {
+  public static init(token: string, userId: string /*, worldId?: string | null*/) {
     console.log('PosBusService init', token, userId);
     this.userId = userId;
     if (this.main.client) {
       this.main.client.disconnect();
-      this.connect(this.main.client, token, userId)
-        .catch((err) => {
-          console.error(err);
-        })
-        .then(() => {
-          if (worldId) {
-            this.teleportToWorld(worldId);
-          }
-        });
+      this.connect(this.main.client, token, userId).catch((err) => {
+        console.error(err);
+      });
+      // temp disable it here - breaks golang client sometimes
+      // .then(() => {
+      //   if (worldId) {
+      //     this.teleportToWorld(worldId);
+      //   }
+      // });
     } else {
       const workerUrl = new URL('@momentum-xyz/posbus-client/worker.mjs', import.meta.url);
       const wasmUrl = new URL('@momentum-xyz/posbus-client/pbc.wasm', import.meta.url);
@@ -52,11 +52,11 @@ class PosBusService {
           this.main.client = client;
           return this.connect(client, token, userId);
         })
-        .then(() => {
-          if (worldId) {
-            this.teleportToWorld(worldId);
-          }
-        })
+        // .then(() => {
+        //   if (worldId) {
+        //     this.teleportToWorld(worldId);
+        //   }
+        // })
         .catch((err) => {
           console.error(err);
         });
