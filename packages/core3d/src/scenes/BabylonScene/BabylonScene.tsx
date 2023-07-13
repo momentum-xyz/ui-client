@@ -81,6 +81,10 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
         });
       }
 
+      if (window.sessionStorage.getItem('babylon_audio_debug')) {
+        ObjectHelper.enableAnalyzer();
+      }
+
       events.on('SetWorld', (world, userId) => {
         //CameraHelper.spawnPlayer(scene, assetID);
         PlayerHelper.setWorld(world, userId);

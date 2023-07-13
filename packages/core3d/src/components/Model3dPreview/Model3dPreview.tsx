@@ -59,8 +59,6 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
       if (scene) {
         console.log('Model3dPreview unmounting');
         scene.dispose();
-        scene.getEngine().stopRenderLoop();
-        scene.getEngine().dispose();
       }
     };
   }, []);
