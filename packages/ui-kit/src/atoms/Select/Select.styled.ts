@@ -189,7 +189,7 @@ export const GlobalSelectStyle = createGlobalStyle`
 
     .Select__option {
       padding: 10px 40px 10px 20px;
-      background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
+      background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.9)};
       color: ${(props) => props.theme.text};
       font-size: var(--font-size-m);
       font-weight: 400;
@@ -216,12 +216,18 @@ export const GlobalSelectStyle = createGlobalStyle`
     }
 
     .Select__option:nth-child(odd) {
-      background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+      background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 1)};
     }
 
     .Select__option--is-focused {
       color: ${(props) => props.theme.text};
       cursor: pointer;
+    }
+    
+    .Select__menu-list {
+      &::-webkit-scrollbar {
+        background-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+      }
     }
   }
 `;
