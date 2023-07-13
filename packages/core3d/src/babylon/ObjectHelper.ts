@@ -313,7 +313,8 @@ export class ObjectHelper {
   }
 
   static setSpawningMaterial(node: TransformNode) {
-    const myClone = node.clone('clone', PlayerHelper.playerInstance.rootNodes[0]);
+    // const myClone = node.clone('clone', PlayerHelper.playerInstance.rootNodes[0]);
+    const myClone = node.clone('clone', PlayerHelper.getPlayerNode());
     const spawningMat = new PBRMaterial('spawning', this.scene);
     spawningMat.albedoColor = Color3.Gray();
     spawningMat._reflectivityColor = Color3.Gray();

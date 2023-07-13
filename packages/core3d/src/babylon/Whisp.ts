@@ -21,7 +21,7 @@ import pentagon from '../static/Particles/pentagon.png';
 import beam from '../static/Particles/beam.png';
 
 export class Whisp {
-  public static readonly SCALE = 1.5; // Size multiplier
+  public static readonly SCALE = 0.8; //.5; // Size multiplier
   public static readonly RADIUS = 0.24 * Whisp.SCALE;
 
   private static readonly SPHERE_OPACITY = 0.7;
@@ -186,6 +186,7 @@ export class Whisp {
    * @param {Scene} scene The scene
    */
   setAvatar(spriteManager: SpriteManager, scene: Scene) {
+    console.log('setAvatar');
     this.particlesSparks?.stop();
 
     this.sprite = new Sprite('Avatar', spriteManager);
@@ -237,5 +238,13 @@ export class Whisp {
     if (this.sprite) {
       this.sprite.position.copyFrom(this.node.position);
     }
+  }
+
+  getInnerNode() {
+    return this.node;
+  }
+  setInitialPosition(position: Vector3) {
+    this.position.copyFrom(position);
+    this.node.position.copyFrom(position);
   }
 }
