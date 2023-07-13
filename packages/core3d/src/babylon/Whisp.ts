@@ -76,7 +76,7 @@ export class Whisp {
             const trailMaterial = new StandardMaterial("TrailMaterial", scene);
 
             trailMaterial.diffuseColor = new Color3(.8, .8, 1);
-            trailMaterial.alpha = .15;
+            trailMaterial.alpha = .25;
             trailMaterial.alphaMode = Engine.ALPHA_ADD;
             trailMaterial.disableLighting = true;
             trailMaterial.emissiveColor = new Color3(1, 1, 1);
