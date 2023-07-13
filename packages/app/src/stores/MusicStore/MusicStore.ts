@@ -6,7 +6,7 @@ import {api} from 'api';
 import {PluginIdEnum} from 'api/enums';
 import {storage} from 'shared/services';
 import {StorageKeyEnum} from 'core/enums';
-import {MusicPlayer} from 'core/models';
+import {MusicPlayer, TrackInfoModelInterface} from 'core/models';
 
 const DEFAULT_VOLUME_PERCENT = 25;
 
@@ -45,11 +45,25 @@ const MusicStore = types
     })
   }))
   .actions((self) => ({
-    subscribe: () => {
-      Event3dEmitter.on('SoundtrackChanged', self.musicPlayer.refreshTracks);
+    soundChanged(tracks: TrackInfoModelInterface[]): void {
+      /* A new track was added */
+      const isNewTrackAdded = tracks.length > self.musicPlayer.tracks.length;
+
+      self.musicPlayer.refreshTracks(tracks);
+
+      /* Start playing the new track */
+      if (isNewTrackAdded) {
+        const lastTrack = self.musicPlayer.tracks[self.musicPlayer.tracks.length - 1];
+        if (lastTrack) {
+          self.musicPlayer.start(lastTrack.render_hash);
+        }
+      }
     },
-    unsubscribe: () => {
-      Event3dEmitter.off('SoundtrackChanged', self.musicPlayer.refreshTracks);
+    subscribe() {
+      Event3dEmitter.on('SoundtrackChanged', this.soundChanged);
+    },
+    unsubscribe() {
+      Event3dEmitter.off('SoundtrackChanged', this.soundChanged);
     }
   }))
   .actions((self) => ({
