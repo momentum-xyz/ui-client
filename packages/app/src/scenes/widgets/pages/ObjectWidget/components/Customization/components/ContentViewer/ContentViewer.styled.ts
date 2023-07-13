@@ -57,7 +57,9 @@ export const Grid = styled.div`
   gap: 10px;
 `;
 
-export const Description = styled.div``;
+export const Description = styled.div`
+  white-space: pre-line;
+`;
 
 export const Controls = styled.div`
   padding: 20px 0 0 0;
