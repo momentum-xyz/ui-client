@@ -160,7 +160,6 @@ export const Model3dPreview: FC<Model3dPreviewPropsInterface> = ({
             key={filename}
             antialias
             onSceneReady={onSceneReady}
-            sceneOptions={{virtual: true}}
             onRender={onRender}
             style={{width: '100%', height: '100%'}}
           />
