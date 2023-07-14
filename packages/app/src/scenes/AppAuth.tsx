@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {useNavigate} from 'react-router-dom';
 import {PositionEnum} from '@momentum-xyz/ui-kit';
 
-import {useStore} from 'shared/hooks';
+import {usePosBusEvent, useStore} from 'shared/hooks';
 import {PosBusService, storage} from 'shared/services';
 import {ROUTES} from 'core/constants';
 import {StorageKeyEnum, WidgetEnum} from 'core/enums';
@@ -42,6 +42,12 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
       PosBusService.init(sessionStore.token, sessionStore.user.id); //, universeStore.worldId || null);
     }
   }, [sessionStore.token, sessionStore.user?.id]); //, universeStore.worldId]);
+
+  usePosBusEvent('posbus-duplicated-sessions', () => {
+    console.log('POSBUS-DUPLICATED-SESSIONS - leave world!');
+    // PosBusService.leaveWorld(); - it's done in PosBusService - doesn't work here
+    navigate({pathname: ROUTES.system.disconnected});
+  });
 
   useEffect(() => {
     if (sessionStore.user && !sessionStore.user.isGuest) {
