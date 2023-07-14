@@ -65,7 +65,7 @@ const ObjectFunction: FC = () => {
 
     creatorStore.setSelectedTab(null);
     handleSubMenuActiveChange();
-    toast.info(<ToastContent icon="check" text={t('labels.saved')} />);
+    toast.info(<ToastContent icon="check" text={t('messages.saved')} />);
   };
 
   const handleDelete = async () => {
@@ -73,7 +73,7 @@ const ObjectFunction: FC = () => {
 
     creatorStore.setSelectedTab(null);
     handleSubMenuActiveChange();
-    toast.info(<ToastContent icon="check" text={t('labels.deleted')} />);
+    toast.info(<ToastContent icon="check" text={t('messages.deleted')} />);
   };
 
   const renderBody = () => {
@@ -176,11 +176,15 @@ const ObjectFunction: FC = () => {
             />
 
             {currentAssetId && activeType !== 'sound' && (
-              <Button label={t('actions.delete')} onClick={handleDelete} />
+              <Button variant="secondary" label={t('actions.delete')} onClick={handleDelete} />
             )}
 
             {!currentAssetId && activeType !== 'sound' && (
               <Button label={t('actions.embed')} onClick={handleSave} />
+            )}
+
+            {currentAssetId && activeType !== 'sound' && (
+              <Button label={t('actions.edit')} onClick={handleSave} />
             )}
           </styled.ActionBar>
         </>
