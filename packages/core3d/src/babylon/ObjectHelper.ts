@@ -427,6 +427,7 @@ export class ObjectHelper {
   static removeObject(id: string) {
     const objToRemove = this.objectsMap.get(id);
     if (objToRemove) {
+      objToRemove.cloneWithEffect?.dispose();
       objToRemove.objectInstance.dispose();
       objToRemove.container.removeAllFromScene();
       objToRemove.container.dispose();
