@@ -24,6 +24,12 @@ export interface UseBlockchainPropsInterface {
   requiredAccountAddress: string;
 }
 
+export interface BlockchainRewardsInterface {
+  mom_rewards: string;
+  dad_rewards: string;
+  total_rewards: string;
+}
+
 export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterface) => {
   const {nftStore, refreshStakeRelatedData} = useStore();
   const {selectedWalletConf, setWalletIdByAddress, loadMyWallets} = nftStore;
@@ -130,6 +136,27 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
     [account, faucetContract?.methods, isCorrectAccount, loadMyWallets, saveLastAirdropInfo]
   );
 
+  const getRewards = useCallback(
+    async (account: string): Promise<BlockchainRewardsInterface> => {
+      console.log('[REWARDS] Account ', account);
+      const rewardsInfo = await stakingContract?.methods.stakers(account).call();
+      console.log('[REWARDS] Result ', rewardsInfo);
+
+      return rewardsInfo
+        ? {
+            mom_rewards: rewardsInfo.mom_rewards || '0',
+            dad_rewards: rewardsInfo.dad_rewards || '0',
+            total_rewards: rewardsInfo.total_rewards || '0'
+          }
+        : {
+            mom_rewards: '0',
+            dad_rewards: '0',
+            total_rewards: '0'
+          };
+    },
+    [stakingContract]
+  );
+
   const claimRewards = useCallback(async () => {
     console.log('useBlockchain claimRewards');
     if (!isCorrectAccount) {
@@ -176,6 +203,7 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
     stake,
     unstake,
     claimRewards,
-    getTokens
+    getTokens,
+    getRewards
   };
 };
