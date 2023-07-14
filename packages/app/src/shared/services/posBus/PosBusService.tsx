@@ -109,6 +109,10 @@ class PosBusService {
           PosBusEventEmitter.emit('posbus-connected');
         } else if (value === 8) {
           PosBusEventEmitter.emit('posbus-disconnected');
+        } else if (value === 1) {
+          PosBusEventEmitter.emit('posbus-duplicated-sessions');
+          console.log('PosBus duplicated sessions. Leave world!');
+          PosBusService.leaveWorld();
         }
         break;
       }

@@ -13,6 +13,7 @@ import {
 export type PosBusEventType = {
   'posbus-connected': () => void;
   'posbus-disconnected': () => void;
+  'posbus-duplicated-sessions': () => void;
   notification: (type: PosBusMessageStatusEnum, message: string) => void;
   // collaboration: (type: PosBusCollaborationEnum, channel: string, receiverId: string) => void;
   // broadcast: (broadcast: any) => void;
