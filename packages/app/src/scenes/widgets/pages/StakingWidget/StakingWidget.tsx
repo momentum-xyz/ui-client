@@ -77,7 +77,7 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
       toast.info(
         <ToastContent
           icon="alert"
-          text="Your transaction has been processed. You have successfully staked into another odyssey!"
+          text="Your transaction has been processed. You have successfully staked into this Odyssey!"
         />
       );
     } catch (err) {
@@ -86,7 +86,7 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         <ToastContent
           isDanger
           icon="alert"
-          text="Your transaction was not processed. You were unable to successfully stake into another odyssey, please try again."
+          text="Your transaction was not processed. You were unable to successfully stake into this Odyssey, please try again."
         />
       );
     } finally {
