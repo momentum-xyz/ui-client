@@ -73,6 +73,7 @@ export class PlayerHelper {
   static userMap = new Map<string, BabylonUserInterface>();
 
   static wisp?: Whisp;
+  static playerNode?: TransformNode;
 
   static playerInstance?: InstantiatedEntries;
   static playerContainer?: AssetContainer;
@@ -133,6 +134,9 @@ export class PlayerHelper {
       }
     });
 
+    this.playerNode = new TransformNode('PlayerNode');
+    this.playerNode.position = PLAYER_OFFSET;
+
     this.wisp = new WispUniversal(scene, PLAYER_OFFSET); //CAMERA_POS_CREATOR);
     // this.player = new WhispControllable(scene, this.camera);
     // this.player = new WhispControllable(scene);
@@ -142,7 +146,8 @@ export class PlayerHelper {
 
   static getPlayerNode(): TransformNode | null {
     // const myNode = this.playerInstance?.rootNodes[0];
-    const myNode = this.wisp?.getInnerNode();
+    // const myNode = this.wisp?.getInnerNode();
+    const myNode = this.playerNode;
     console.log('PlayerHelper getPlayerNode', myNode);
     if (myNode instanceof TransformNode) {
       return myNode;
@@ -212,7 +217,7 @@ export class PlayerHelper {
     // this.playerContainer = container;
 
     const playerNode = this.getPlayerNode();
-    if (!playerNode) {
+    if (!playerNode || !this.wisp) {
       console.log('Unable to load player model');
       return;
     }
@@ -222,6 +227,7 @@ export class PlayerHelper {
 
     playerNode.name = 'Player';
     playerNode.parent = this.camera;
+    this.wisp.getInnerNode().parent = this.camera;
     if (position) {
       console.log('PlayerHelper playerInstantiate: set position', position);
       this.camera.position = position;
