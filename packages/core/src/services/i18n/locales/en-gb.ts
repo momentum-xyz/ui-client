@@ -218,7 +218,7 @@ export const enGb = {
     },
     errors: {
       wrongAccount: 'This account cannot be used',
-      switchToArbitrum: 'Please switch to Arbitrum network in the wallet',
+      switchToArbitrum: 'Please switch to Arbitrum Nova network in the wallet',
       switchAccount: 'Please switch to selected account in the wallet',
       oidcSession: 'Something wrong with session',
       sessionExpired: 'The login session has expired. Please try again.',
