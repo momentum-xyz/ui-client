@@ -21,11 +21,13 @@ import pentagon from '../static/Particles/pentagon.png';
 import beam from '../static/Particles/beam.png';
 
 export class Whisp {
-  public static readonly SCALE = 0.8; //.5; // Size multiplier
+  //   public static readonly SCALE = 1.5; // Size multiplier
+  public static readonly SCALE = 0.5; // Size multiplier
   public static readonly RADIUS = 0.24 * Whisp.SCALE;
 
   private static readonly SPHERE_OPACITY = 0.7;
-  private static readonly AVATAR_SIZE = 0.8;
+  //   private static readonly AVATAR_SIZE = 0.8;
+  private static readonly AVATAR_SIZE = 0.3;
   private static readonly AVATAR_OPACITY = 0.8;
   private static readonly ANIMATION_SPEED = 0.09;
   private static readonly FLOAT_PHASES = [3, 2, 4];
