@@ -1,5 +1,10 @@
 [
   {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -32,6 +37,33 @@
     "type": "event"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "odyssey_id",
+        "type": "uint256"
+      }
+    ],
+    "name": "claim_rewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "claim_rewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "claim_unstaked_tokens",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -55,6 +87,52 @@
     ],
     "name": "ClaimedUnstaked",
     "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "grantRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_mom_token",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_dad_token",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_odyssey_nfts",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_treasury",
+        "type": "address"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "anonymous": false,
@@ -81,12 +159,64 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "total_rewards_claimed",
+        "name": "total_mom_rewards_claimed",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "total_dad_rewards_claimed",
         "type": "uint256"
       }
     ],
     "name": "OdysseyRewardsClaimed",
     "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "renounceRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "from_odyssey_id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "to_odyssey_id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum Staking.Token",
+        "name": "token",
+        "type": "uint8"
+      }
+    ],
+    "name": "restake",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "anonymous": false,
@@ -138,6 +268,24 @@
     "type": "event"
   },
   {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "revokeRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -149,7 +297,13 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "total_rewards_claimed",
+        "name": "total_mom_rewards_claimed",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "total_dad_rewards_claimed",
         "type": "uint256"
       }
     ],
@@ -251,6 +405,29 @@
     "type": "event"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "odyssey_id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum Staking.Token",
+        "name": "token",
+        "type": "uint8"
+      }
+    ],
+    "name": "stake",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -292,6 +469,49 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "string",
+        "name": "state",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "from",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "to",
+        "type": "uint256"
+      }
+    ],
+    "name": "StateUpdated",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "odyssey_id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum Staking.Token",
+        "name": "token",
+        "type": "uint8"
+      }
+    ],
+    "name": "unstake",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
         "internalType": "address",
         "name": "user",
         "type": "address"
@@ -325,6 +545,80 @@
     "type": "event"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_locking_period",
+        "type": "uint256"
+      }
+    ],
+    "name": "update_locking_period",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "addresses",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "stakers_amount_mom",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "stakers_amount_dad",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "odysseys_ids",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "odysseys_amount_mom",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "odysseys_amount_dad",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "treasury_ammount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "update_rewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_rewards_timeout",
+        "type": "uint256"
+      }
+    ],
+    "name": "update_rewards_timeout",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -338,56 +632,34 @@
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "DEFAULT_ADMIN_ROLE",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
+        "internalType": "address",
+        "name": "newImplementation",
+        "type": "address"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "MANAGER_ROLE",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
+    "name": "upgradeTo",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "odyssey_id",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "newImplementation",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
       }
     ],
-    "name": "claim_rewards",
+    "name": "upgradeToAndCall",
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "claim_rewards",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "claim_unstaked_tokens",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -404,14 +676,8 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      }
-    ],
-    "name": "getRoleAdmin",
+    "inputs": [],
+    "name": "DEFAULT_ADMIN_ROLE",
     "outputs": [
       {
         "internalType": "bytes32",
@@ -461,7 +727,12 @@
           },
           {
             "internalType": "uint256",
-            "name": "effective_timestamp",
+            "name": "effective_timestamp_mom",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "effective_timestamp_dad",
             "type": "uint256"
           }
         ],
@@ -492,16 +763,17 @@
         "internalType": "bytes32",
         "name": "role",
         "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
       }
     ],
-    "name": "grantRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "name": "getRoleAdmin",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -529,29 +801,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_mom_token",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_dad_token",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_odyssey_nfts",
-        "type": "address"
-      }
-    ],
-    "name": "initialize",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "last_rewards_calculation",
     "outputs": [
@@ -572,6 +821,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "MANAGER_ROLE",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -635,6 +897,16 @@
       },
       {
         "internalType": "uint256",
+        "name": "dad_rewards",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "mom_rewards",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "staked_odysseys_index",
         "type": "uint256"
       }
@@ -656,70 +928,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "renounceRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "from_odyssey_id",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "to_odyssey_id",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "enum Staking.Token",
-        "name": "token",
-        "type": "uint8"
-      }
-    ],
-    "name": "restake",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "revokeRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "rewards_timeout",
     "outputs": [
@@ -730,29 +938,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "odyssey_id",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "enum Staking.Token",
-        "name": "token",
-        "type": "uint8"
-      }
-    ],
-    "name": "stake",
-    "outputs": [],
-    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -797,7 +982,12 @@
       },
       {
         "internalType": "uint256",
-        "name": "effective_timestamp",
+        "name": "effective_timestamp_mom",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "effective_timestamp_dad",
         "type": "uint256"
       }
     ],
@@ -869,6 +1059,16 @@
       },
       {
         "internalType": "uint256",
+        "name": "dad_rewards",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "mom_rewards",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "total_staked",
         "type": "uint256"
       },
@@ -919,21 +1119,16 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "treasury",
+    "outputs": [
       {
-        "internalType": "uint256",
-        "name": "odyssey_id",
-        "type": "uint256"
-      },
-      {
-        "internalType": "enum Staking.Token",
-        "name": "token",
-        "type": "uint8"
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
-    "name": "unstake",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -963,140 +1158,11 @@
       },
       {
         "internalType": "uint256",
-        "name": "untaking_timestamp",
+        "name": "unstaking_timestamp",
         "type": "uint256"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_dad_token",
-        "type": "address"
-      }
-    ],
-    "name": "update_dad_token_contract",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_locking_period",
-        "type": "uint256"
-      }
-    ],
-    "name": "update_locking_period",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_mom_token",
-        "type": "address"
-      }
-    ],
-    "name": "update_mom_token_contract",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_odyssey_nfts",
-        "type": "address"
-      }
-    ],
-    "name": "update_odyssey_nfts_contract",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address[]",
-        "name": "addresses",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "stakers_amounts",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "odysseys_ids",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "odysseys_amounts",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "update_rewards",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_rewards_timeout",
-        "type": "uint256"
-      }
-    ],
-    "name": "update_rewards_timeout",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newImplementation",
-        "type": "address"
-      }
-    ],
-    "name": "upgradeTo",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newImplementation",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "upgradeToAndCall",
-    "outputs": [],
-    "stateMutability": "payable",
     "type": "function"
   }
 ]
