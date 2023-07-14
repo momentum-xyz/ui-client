@@ -4,7 +4,7 @@ import SceneComponent from 'babylonjs-hook';
 import {Universe3dEmitterType} from '@momentum-xyz/core';
 import {useMutableCallback} from '@momentum-xyz/ui-kit';
 
-import {PlayerHelper, LightHelper, SkyboxHelper} from '../../babylon';
+import {LightHelper, PlayerHelper, SkyboxHelper} from '../../babylon';
 import {
   CAMERA_POS_EXPLORER,
   CAMERA_TARGET_EXPLORER,
@@ -39,13 +39,52 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
     };
   }, [events]);
 
+  // /* eslint-disable @typescript-eslint/no-unused-vars */
+  // const loadAsset = (scene: Scene) => {
+  //   SceneLoader.LoadAssetContainer(
+  //     lowPolyBunny,
+  //     '',
+  //     scene,
+  //     (container) => {
+  //       PlayerHelper.player?.setAsset(container);
+  //     },
+  //     (event) => {},
+  //     (scene, message) => {}
+  //   );
+  // };
+
+  // /* eslint-disable @typescript-eslint/no-unused-vars */
+  // const loadAvatar = (scene: Scene) => {
+  //   const spriteManager = new SpriteManager(
+  //     'AvatarManager',
+  //     rabbit_round,
+  //     1,
+  //     {
+  //       width: 512,
+  //       height: 512
+  //     },
+  //     scene
+  //   );
+
+  //   console.log('loadAvatar', PlayerHelper.player);
+  //   PlayerHelper.player?.setAvatar(spriteManager, scene);
+  // };
+
   const onSceneReady = async (scene: Scene) => {
     SkyboxHelper.set360Skybox(scene, skyboxWorld);
 
     console.log('onSceneReady', scene);
     const view = scene.getEngine().getRenderingCanvas();
+    console.log('view', view);
     if (view?.id) {
-      PlayerHelper.initialize(scene, view, false);
+      // player = new WhispControllable(scene);
+      console.log('initialize player');
+      PlayerHelper.initialize({scene, canvas: view, rh: false});
+      PlayerHelper.spawnPlayer(scene, CAMERA_POS_EXPLORER, CAMERA_TARGET_EXPLORER);
+      // Example for loading a GLB asset into the whisp, also works for non players
+      // loadAsset(scene);
+      // loadAvatar(scene);
+
       InputHelper.initializeUniverse(scene, onWorldClick, onUserClick, onClickOutside);
       LightHelper.initialize(scene);
       InteractionEffectHelper.initialize(scene);
@@ -72,7 +111,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
 
     onReadyToHandleEvents();
 
-    PlayerHelper.spawnPlayer(scene, CAMERA_POS_EXPLORER, CAMERA_TARGET_EXPLORER);
+    // PlayerHelper.spawnPlayer(scene, CAMERA_POS_EXPLORER, CAMERA_TARGET_EXPLORER);
 
     if (window.sessionStorage.getItem('babylon_debug')) {
       Promise.all([
@@ -85,7 +124,10 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
   };
 
   const onRender = (scene: Scene) => {
-    // console.log('onRender', scene);
+    PlayerHelper.onRender();
+    // if (scene.deltaTime) {
+    // player?.update(Math.min(scene.deltaTime * 0.001, 1));
+    // }
   };
 
   return (

@@ -53,7 +53,13 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
 
     const view = scene.getEngine().getRenderingCanvas();
     if (view?.id) {
-      PlayerHelper.initialize(scene, view, true, onMove, onBumpReady);
+      PlayerHelper.initialize({
+        scene,
+        canvas: view,
+        rh: true,
+        onMove,
+        onSpawnParticles: onBumpReady
+      });
       LightHelper.initialize(scene);
       InputHelper.initializeWorld(scene, onObjectClick, onUserClick, onClickOutside);
       ScreenCaptureHelper.initialize(scene, onScreenshotReady, onVideoReady);
@@ -168,6 +174,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
   /* Will run on every frame render. It is useful for animations */
   const onRender = (scene: Scene) => {
     // console.log(scene.getEngine().getDeltaTime());
+    PlayerHelper.onRender();
   };
 
   return (
