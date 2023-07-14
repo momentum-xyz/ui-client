@@ -65,10 +65,10 @@ const MyWallet: FC<PropsInterface> = ({
   );
 
   useEffect(() => {
-    if (selectedWallet?.wallet_id && isBlockchainReady) {
+    if (selectedWallet?.wallet_id) {
       handleLoadRewards(selectedWallet.wallet_id);
     }
-  }, [handleLoadRewards, selectedWallet?.wallet_id, isBlockchainReady]);
+  }, [handleLoadRewards, selectedWallet, isBlockchainReady]);
 
   const isClaimRewardAvailable = useMemo(() => {
     if (currentToken === TokenEnum.DAD_TOKEN && rewards.dad_rewards !== '0') {
