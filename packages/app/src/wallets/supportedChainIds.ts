@@ -1,4 +1,5 @@
 export const ARBITRUM_ONE = 42161;
+export const ARBITRUM_NOVA = 42170;
 export const OPTIMISM = 10;
 export const ARBITRUM_NITRO = 421611;
 export const ARBITRUM_GOERLI = 421613;
@@ -12,6 +13,7 @@ export const SUPPORTED_CHAIN_IDS = [
   5,
   42,
   ARBITRUM_ONE,
+  ARBITRUM_NOVA,
   ARBITRUM_NITRO,
   ARBITRUM_GOERLI,
   OPTIMISM,
