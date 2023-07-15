@@ -15,7 +15,8 @@ const NormalContent = types
 
       request: types.optional(RequestModel, {}),
       imageUploadRequest: types.optional(RequestModel, {}),
-      updateContentRequest: types.optional(RequestModel, {})
+      updateContentRequest: types.optional(RequestModel, {}),
+      deleteContentRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -59,6 +60,13 @@ const NormalContent = types
       });
 
       yield self.initContent(PluginIdEnum.TEXT, objectId);
+    }),
+    deleteContent: flow(function* (pluginId: string, objectId: string) {
+      yield self.deleteContentRequest.send(api.spaceAttributeRepository.deleteSpaceAttribute, {
+        spaceId: objectId,
+        plugin_id: pluginId,
+        attribute_name: AttributeNameEnum.STATE
+      });
     })
   }))
   .views((self) => ({

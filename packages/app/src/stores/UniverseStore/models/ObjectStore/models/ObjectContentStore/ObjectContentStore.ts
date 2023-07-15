@@ -1,4 +1,4 @@
-import {types} from 'mobx-state-tree';
+import {flow, types} from 'mobx-state-tree';
 import {ResetModel} from '@momentum-xyz/core';
 
 import {AssetTypeEnum} from 'core/enums';
@@ -12,6 +12,7 @@ const ObjectContentStore = types
     types.model('ObjectContentStore', {
       assetType: types.maybe(types.string),
       pluginId: types.maybe(types.string),
+      objectId: types.maybe(types.string),
 
       normalContent: types.optional(NormalContent, {}),
       customizableContent: types.optional(CustomizableContent, {})
@@ -40,6 +41,7 @@ const ObjectContentStore = types
 
       const {meta} = object;
       self.pluginId = meta.pluginId;
+      self.objectId = spaceId;
 
       switch (meta.name) {
         case AssetTypeEnum.TEXT:
@@ -61,7 +63,16 @@ const ObjectContentStore = types
         default:
           break;
       }
-    }
+    },
+    deleteObjectContent: flow(function* () {
+      if (!self.pluginId || !self.objectId) {
+        return;
+      }
+      yield self.normalContent.deleteContent(self.pluginId, self.objectId);
+      self.assetType = undefined;
+      self.pluginId = undefined;
+      self.objectId = undefined;
+    })
   }));
 
 export {ObjectContentStore};
