@@ -31,6 +31,8 @@ export const formatBigInt = (input: string | null | undefined, digits = 6): stri
     return balance.gte(i.value);
   });
 
+  let result = '';
+
   // The number is less than 1000. It will without symbol
   if (!lookupItem) {
     const resultSmallValue = new BN(input).div(new BN('1000000000000000000'));
@@ -41,11 +43,14 @@ export const formatBigInt = (input: string | null | undefined, digits = 6): stri
       valueDigits = `${Array(18 - valueDigits.length + 1).join('0')}${valueDigits}`;
     }
 
-    return `${resultSmallValue.toString()}.${valueDigits.slice(0, digits)}`;
+    result = `${resultSmallValue.toString()}.${valueDigits.slice(0, digits)}`;
+  } else {
+    const resultValue = balance.div(lookupItem.value);
+    const bigValueDigits = input.slice(-18 - lookupItem.value.toString().length + 1);
+    result = `${resultValue}.${bigValueDigits.slice(0, digits)}`;
   }
 
-  const resultValue = balance.div(lookupItem.value);
-  return `${resultValue}.${input.slice(-18).slice(0, digits)}${lookupItem.symbol}`;
+  return `${Number(result)}${lookupItem ? lookupItem.symbol : ''}`;
 };
 
 export const convertUuidToNftId = (worldId: string | undefined | null) => {
