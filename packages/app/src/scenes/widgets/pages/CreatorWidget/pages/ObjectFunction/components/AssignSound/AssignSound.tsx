@@ -25,6 +25,10 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
 
   const {t} = useI18n();
 
+  console.log('[SPATIAL ASSIGN] R (in db)', musicPlayer.distance);
+  console.log('[SPATIAL ASSIGN] Q (in slider)', Math.log(musicPlayer.distance + 1));
+  console.log('[SPATIAL ASSIGN] PERCENT (in slider)', musicPlayer.distancePercent);
+
   useEffect(() => {
     objectSound.init(objectId);
     objectSound.subscribe();
