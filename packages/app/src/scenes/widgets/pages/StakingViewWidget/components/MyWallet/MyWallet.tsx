@@ -127,14 +127,14 @@ const MyWallet: FC<PropsInterface> = ({
         <styled.Title>{t('labels.rewards')}</styled.Title>
         <styled.RewardsContainer>
           <span>{t('labels.totalRewards')}</span>
-          <styled.Amount>
+          <styled.RewardsAmount>
             <SymbolAmount
               tokenSymbol={tokenSymbol}
               stringValue={formatBigInt(
                 currentToken === TokenEnum.DAD_TOKEN ? rewards.dad_rewards : rewards.mom_rewards
               )}
             />
-          </styled.Amount>
+          </styled.RewardsAmount>
           <Button
             icon="wallet"
             label={t('actions.claimRewards')}
