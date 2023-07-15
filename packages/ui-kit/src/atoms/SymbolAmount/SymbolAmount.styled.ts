@@ -3,7 +3,8 @@ import {rgba} from 'polished';
 
 export const ItemValue = styled.div`
   padding: 8px 10px;
-  display: inline-block;
+  display: flex;
+  justify-content: flex-end;
   color: ${(props) => props.theme.text};
   border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
   border-radius: 4px;
