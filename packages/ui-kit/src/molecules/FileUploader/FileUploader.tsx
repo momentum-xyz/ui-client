@@ -8,7 +8,7 @@ import {ErrorsEnum} from '../../enums';
 import * as styled from './FileUploader.styled';
 
 export interface FileUploaderPropsInterface {
-  label: string;
+  label?: string;
   buttonSize?: 'small' | 'normal' | 'medium';
   iconButton?: boolean;
   dragActiveLabel: string;
@@ -81,8 +81,11 @@ const FileUploader: FC<FileUploaderPropsInterface> = ({
       ) : (
         <>
           {children}
-          {/* @ts-ignore: FIXME */}
-          <Button variant="secondary" label={label} onClick={onClick} disabled={disabled} />
+
+          {!!label && (
+            /* @ts-ignore: FIXME */
+            <Button variant="secondary" label={label} onClick={onClick} disabled={disabled} />
+          )}
         </>
       )}
     </styled.Container>

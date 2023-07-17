@@ -218,7 +218,7 @@ export const enGb = {
     },
     errors: {
       wrongAccount: 'This account cannot be used',
-      switchToArbitrum: 'Please switch to Arbitrum network in the wallet',
+      switchToArbitrum: 'Please switch to Arbitrum Nova network in the wallet',
       switchAccount: 'Please switch to selected account in the wallet',
       oidcSession: 'Something wrong with session',
       sessionExpired: 'The login session has expired. Please try again.',
@@ -485,7 +485,7 @@ export const enGb = {
       avatarSuccess: 'Avatar saved successfully',
       avatarFailure: 'There was a problem saving the avatar',
       askToUnstake:
-        'You are about to unstake all your MOM from this odyssey, it is currently not possible to unstake portions of your staked MOM. Are you sure you want to do this?',
+        'You are about to unstake all your {{tokenSymbol}} from this odyssey, it is currently not possible to unstake portions of your staked {{tokenSymbol}}. Are you sure you want to do this?',
       spaceEditSuccess: 'Successfully edited space',
       spaceSaveFailure: 'There was an error saving the space',
       spaceDeleteFailure: 'There was an error deleting the space',

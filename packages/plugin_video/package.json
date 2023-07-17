@@ -47,7 +47,6 @@
     "@types/react-beautiful-dnd": "^13.0.0",
     "@types/react-datepicker": "^4.3.4",
     "@types/react-dom": "^16.9.11",
-    "@types/react-linkify": "^1.0.1",
     "@types/react-router-dom": "^5.1.7",
     "@types/styled-components": "^5.1.23",
     "@types/uuid": "^8.3.0",

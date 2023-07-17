@@ -1,12 +1,14 @@
 import {FC, MutableRefObject, useEffect, useState} from 'react';
-import {Frame, Input, FileUploader} from '@momentum-xyz/ui-kit';
+import {Frame, Input, FileUploader, ErrorsEnum} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
+import {toast} from 'react-toastify';
 
 import {ImageObjectInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
+import {ToastContent} from 'ui-kit';
 
 import * as styled from './AssignImage.styled';
 
@@ -32,7 +34,8 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
     handleSubmit,
     control,
     formState: {errors},
-    setValue
+    setValue,
+    setError
   } = useForm<ImageObjectInterface>({});
 
   useEffect(() => {
@@ -57,6 +60,17 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
     }
 
     await normalContent.postNewImage(objectId, data.image, data.title);
+  };
+
+  const handleUploadError = (err: Error): void => {
+    console.log('File upload error:', err);
+    const message =
+      err.message === ErrorsEnum.FileSizeTooLarge
+        ? t('assetsUploader.errorTooLargeFile', {size: MAX_ASSET_SIZE_MB})
+        : t('assetsUploader.errorSave');
+
+    toast.error(<ToastContent isDanger icon="alert" text={message} />);
+    setError('image', {message: 'upload'});
   };
 
   // TEMP
@@ -103,6 +117,7 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
                     dragActiveLabel={t('actions.dropItHere')}
                     maxSize={MAX_ASSET_SIZE_B}
                     fileType="image"
+                    onError={handleUploadError}
                     onFilesUpload={(d) => {
                       setHasImage(true);
                       onChange(d);

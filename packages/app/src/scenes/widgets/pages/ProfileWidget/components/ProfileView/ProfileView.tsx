@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Image, Frame, ProfileLine, WalletHash} from '@momentum-xyz/ui-kit';
+import {Image, Frame, ProfileLine, WalletHash, TextCut} from '@momentum-xyz/ui-kit';
 import {absoluteLink, withoutProtocol, useI18n, signUpDateString} from '@momentum-xyz/core';
 
 import {WalletInterface} from 'api';
@@ -35,7 +35,7 @@ const ProfileView: FC<PropsInterface> = ({
         <styled.NameContainer>{user.name}</styled.NameContainer>
 
         <styled.GeneralInfo>
-          {user.profile?.bio && <div>{user.profile?.bio}</div>}
+          {user.profile?.bio && <TextCut text={user.profile?.bio} />}
           {user.profile.profileLink && (
             <ProfileLine
               icon="link"

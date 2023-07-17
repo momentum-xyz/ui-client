@@ -16,7 +16,7 @@ export const Filters = styled.div`
   padding: 12px 0 10px 0;
   display: grid;
   gap: 10px;
-  grid-template-columns: 120px 1fr;
+  grid-template-columns: 110px 1fr;
   align-items: center;
 `;
 
@@ -36,10 +36,17 @@ export const AirdropContainer = styled.div`
   align-items: center;
 `;
 
+export const RewardsAmount = styled.div`
+  > div {
+    padding: 8px 12px;
+    width: 140px;
+  }
+`;
+
 export const Amount = styled.div`
   > div {
-    padding: 7px 20px;
-    min-width: 120px;
+    padding: 7px 12px;
+    min-width: 150px;
   }
 `;
 

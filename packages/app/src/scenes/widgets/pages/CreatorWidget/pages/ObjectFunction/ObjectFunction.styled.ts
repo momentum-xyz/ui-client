@@ -33,14 +33,14 @@ export const PanelBody = styled.div`
 
 export const ActionBar = styled.div`
   padding: 10px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  justify-content: center;
+  display: flex;
+  justify-content: space-between;
   gap: 40px;
 
   & > button {
     flex: 1;
     justify-content: center;
+    max-width: 156px;
   }
 `;
 

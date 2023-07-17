@@ -87,7 +87,8 @@ export class InteractionEffectHelper {
     customEmitter.visibility = 0;
     const particleSet = this.initializeWispIdleParticle();
     particleSet.emitterNode = customEmitter;
-    customEmitter.setParent(PlayerHelper.playerInstance.rootNodes[0]);
+    // customEmitter.setParent(PlayerHelper.playerInstance.rootNodes[0]);
+    customEmitter.setParent(PlayerHelper.getPlayerNode());
     customEmitter.position = new Vector3(0, 0.2, -0); // Emitter at center of parent.
 
     this.scene.registerBeforeRender(() => {

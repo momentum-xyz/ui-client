@@ -70,6 +70,9 @@ const ObjectSound = types
         if (activeTrack) {
           self.musicPlayer.start(activeTrack.render_hash);
         }
+      } else {
+        self.musicPlayer.setVolume(DEFAULT_VOLUME_PERCENT);
+        self.musicPlayer.setDistance(DEFAULT_DISTANCE);
       }
     }),
     publishSpacialSound: flow(function* (form: SoundFormInterface) {
@@ -111,9 +114,20 @@ const ObjectSound = types
   .actions((self) => ({
     soundChanged(objectId: string, data: ObjectSoundInterface): void {
       if (objectId === self.objectId) {
+        /* A new track was added */
+        const isNewTrackAdded = data.tracks.length > self.musicPlayer.tracks.length;
+
         self.musicPlayer.refreshTracks(data.tracks);
         self.musicPlayer.setDistance(data.distance);
         self.musicPlayer.setVolume(data.volume);
+
+        /* Start playing the new track */
+        if (isNewTrackAdded) {
+          const lastTrack = self.musicPlayer.tracks[self.musicPlayer.tracks.length - 1];
+          if (lastTrack) {
+            self.updateActiveTrack(lastTrack.render_hash);
+          }
+        }
       }
     },
     subscribe() {

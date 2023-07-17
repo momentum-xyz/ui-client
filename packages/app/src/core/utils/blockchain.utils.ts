@@ -19,7 +19,7 @@ const LOOKUP = [
   {value: new BN('1000000000000000000000000000000'), symbol: 'Q'} // quetta
 ].reverse();
 
-export const formatBigInt = (input: string | null | undefined, digits = 2): string => {
+export const formatBigInt = (input: string | null | undefined, digits = 6): string => {
   if (!input || input === '0') {
     return '0';
   }
@@ -31,11 +31,26 @@ export const formatBigInt = (input: string | null | undefined, digits = 2): stri
     return balance.gte(i.value);
   });
 
+  let result = '';
+
+  // The number is less than 1000. It will without symbol
   if (!lookupItem) {
-    return balance.toString();
+    const resultSmallValue = new BN(input).div(new BN('1000000000000000000'));
+
+    let valueDigits = input.slice(-18);
+    if (valueDigits.length < 18) {
+      // Digits value must have 18 characters, but may contain less.
+      valueDigits = `${Array(18 - valueDigits.length + 1).join('0')}${valueDigits}`;
+    }
+
+    result = `${resultSmallValue.toString()}.${valueDigits.slice(0, digits)}`;
+  } else {
+    const resultValue = balance.div(lookupItem.value);
+    const bigValueDigits = input.slice(-18 - lookupItem.value.toString().length + 1);
+    result = `${resultValue}.${bigValueDigits.slice(0, digits)}`;
   }
 
-  return balance.div(lookupItem.value).toNumber().toFixed(digits) + lookupItem.symbol;
+  return `${Number(result)}${lookupItem ? lookupItem.symbol : ''}`;
 };
 
 export const convertUuidToNftId = (worldId: string | undefined | null) => {

@@ -15,6 +15,10 @@ export const Uploader = styled.div`
 `;
 
 export const Container = styled.div`
+  > div {
+    padding: 0 20px;
+  }
+
   button {
     margin: 0 20px -90px 20px;
     width: 100%;

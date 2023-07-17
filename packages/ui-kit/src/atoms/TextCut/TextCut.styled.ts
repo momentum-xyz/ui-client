@@ -7,6 +7,7 @@ export const Text = styled.div<{lines: number}>`
   -webkit-line-clamp: ${(props) => props.lines};
   -webkit-box-orient: vertical;
   overflow: hidden;
+  white-space: pre-line;
 `;
 
 export const Link = styled.a`

@@ -5,6 +5,7 @@ import {useI18n} from '@momentum-xyz/core';
 
 import {useBlockchain} from 'shared/hooks';
 import {StakeModelInterface} from 'core/models';
+import {tokenKindToSymbol} from 'core/utils';
 import {TOAST_NOT_AUTO_CLOSE_OPTIONS, ToastContent} from 'ui-kit';
 
 import * as styled from './UnstakeWorld.styled';
@@ -59,9 +60,10 @@ const UnstakeWorld: FC<PropsInterface> = ({targetStake, onUnStaked, onCanceled})
       toast.info(
         <ToastContent
           icon="alert"
-          text={t('messages.askToUnstake')}
+          text={t('messages.askToUnstake', {tokenSymbol: tokenKindToSymbol(targetStake.kind)})}
           approveInfo={{title: t('actions.yes'), onClick: handleUnstake}}
           declineInfo={{title: t('actions.no'), onClick: onCanceled}}
+          onClose={onCanceled}
         />,
         TOAST_NOT_AUTO_CLOSE_OPTIONS
       );

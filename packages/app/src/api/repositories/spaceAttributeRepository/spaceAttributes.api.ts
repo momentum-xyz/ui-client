@@ -61,7 +61,7 @@ export const deleteSpaceAttribute: RequestInterface<DeleteSpaceAttributeRequest,
 ) => {
   const {spaceId, plugin_id, attribute_name, ...restOptions} = options;
 
-  restOptions.data = {
+  restOptions.params = {
     plugin_id,
     attribute_name
   };

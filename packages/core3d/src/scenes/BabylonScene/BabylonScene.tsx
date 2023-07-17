@@ -30,6 +30,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       events.off('AddObject');
       events.off('ObjectTextureChanged');
       events.off('ObjectSoundChanged');
+      events.off('ObjectEffectChanged');
       events.off('ObjectTransform');
       events.off('UserAdded');
       events.off('UserRemoved');
@@ -52,7 +53,13 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
 
     const view = scene.getEngine().getRenderingCanvas();
     if (view?.id) {
-      PlayerHelper.initialize(scene, view, true, onMove, onBumpReady);
+      PlayerHelper.initialize({
+        scene,
+        canvas: view,
+        rh: true,
+        onMove,
+        onSpawnParticles: onBumpReady
+      });
       LightHelper.initialize(scene);
       InputHelper.initializeWorld(scene, onObjectClick, onUserClick, onClickOutside);
       ScreenCaptureHelper.initialize(scene, onScreenshotReady, onVideoReady);
@@ -80,6 +87,10 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
         });
       }
 
+      if (window.sessionStorage.getItem('babylon_audio_debug')) {
+        ObjectHelper.enableAnalyzer();
+      }
+
       events.on('SetWorld', (world, userId) => {
         //CameraHelper.spawnPlayer(scene, assetID);
         PlayerHelper.setWorld(world, userId);
@@ -100,6 +111,10 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
 
       events.on('ObjectSoundChanged', (objectId: string, soundData: ObjectSoundInterface) => {
         ObjectHelper.objectSoundChange(scene, objectId, soundData);
+      });
+
+      events.on('ObjectEffectChanged', (objectId: string, effect: string) => {
+        ObjectHelper.objectEffectChange(objectId, effect);
       });
 
       events.on('ObjectTransform', (id, object) => {
@@ -159,6 +174,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
   /* Will run on every frame render. It is useful for animations */
   const onRender = (scene: Scene) => {
     // console.log(scene.getEngine().getDeltaTime());
+    PlayerHelper.onRender();
   };
 
   return (
