@@ -17,7 +17,7 @@ import {appVariables} from 'api/constants';
 import {PosBusService} from 'shared/services';
 import {subMenuKeyWidgetEnumMap} from 'core/constants';
 import {usePosBusEvent, useStore} from 'shared/hooks';
-import {HighFiveContent, TOAST_BASE_OPTIONS} from 'ui-kit';
+import {HighFiveContent, TOAST_BASE_OPTIONS, ToastContent} from 'ui-kit';
 
 const World3dPage: FC = () => {
   const {universeStore, widgetManagerStore, sessionStore, widgetStore} = useStore();
@@ -71,8 +71,14 @@ const World3dPage: FC = () => {
   const handleObjectClick = (objectId: string, clickPos: ClickPositionInterface) => {
     if (universeStore.isCreatorMode) {
       console.log('[World3dPage]: Handle object click in creator mode', objectId);
-      world3dStore?.handleClick(objectId, clickPos);
-      handleLevel2MenuOpen();
+      world3dStore
+        ?.handleClick(objectId, clickPos)
+        .then(() => {
+          handleLevel2MenuOpen();
+        })
+        .catch((error) => {
+          toast.error(<ToastContent icon="alert" text={error.message || ''} />);
+        });
     } else if (!universeStore.isScreenRecording) {
       console.log('[World3dPage]: Handle object click, NOT creator mode', objectId);
       widgetManagerStore.open(WidgetEnum.OBJECT, PositionEnum.RIGHT, {id: objectId});

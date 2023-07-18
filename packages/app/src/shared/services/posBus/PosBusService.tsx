@@ -236,14 +236,10 @@ class PosBusService {
       }
 
       case MsgType.LOCK_OBJECT_RESPONSE: {
-        console.log('Temp ignore posbus message lock_object_response', message.data);
-        // console.log('Handle posbus message lock_object_response', message.data);
-        // const {
-        //   id,
-        //   result
-        //   //  owner - todo check if we need this
-        // } = data;
-        // Event3dEmitter.emit('ObjectLockChanged', id, result === 1);
+        // console.log('Temp ignore posbus message lock_object_response', message.data);
+        console.log('Handle posbus message lock_object_response', message.data);
+        const {id, result, lock_owner} = data;
+        PosBusEventEmitter.emit('lock-object-response', id, result === 1, lock_owner);
         break;
       }
 
@@ -332,16 +328,41 @@ class PosBusService {
     ]);
   }
 
-  static requestObjectLock(objectId: string, lock: boolean) {
-    if (this.isConnected()) {
+  static async requestObjectLock(objectId: string) {
+    console.log('PosBus requestObjectLock', objectId);
+    return new Promise<void>((resolve, reject) => {
+      if (!this.isConnected()) {
+        reject(new Error('PosBus not connected'));
+      }
       this.main.port?.postMessage([
         MsgType.LOCK_OBJECT,
         {
           id: objectId
         }
       ]);
+      const onResp = (id: string, result: boolean) => {
+        if (id === objectId) {
+          if (result) {
+            resolve();
+          } else {
+            reject(new Error('Object is locked'));
+          }
+          PosBusEventEmitter.off('lock-object-response', onResp);
+        }
+      };
+      PosBusEventEmitter.on('lock-object-response', onResp);
+    });
+  }
+  static requestObjectUnlock(objectId: string) {
+    if (this.isConnected()) {
+      console.log('PosBus requestObjectUnlock', objectId);
+      this.main.port?.postMessage([
+        MsgType.UNLOCK_OBJECT,
+        {
+          id: objectId
+        }
+      ]);
     }
-    // else what? TODO
   }
 
   static sendHighFive(sender_id: string, receiver_id: string) {

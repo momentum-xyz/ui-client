@@ -15,6 +15,7 @@ export type PosBusEventType = {
   'posbus-disconnected': () => void;
   'posbus-duplicated-sessions': () => void;
   notification: (type: PosBusMessageStatusEnum, message: string) => void;
+  'lock-object-response': (objectId: string, result: boolean, lock_owner: string) => void;
   // collaboration: (type: PosBusCollaborationEnum, channel: string, receiverId: string) => void;
   // broadcast: (broadcast: any) => void;
   // 'notify-gathering-start': (message: PosBusGatheringMessageType) => void;

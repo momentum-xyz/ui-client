@@ -30,6 +30,19 @@ const World3dStore = types
     }
   }))
   .actions((self) => ({
+    selectObject(objectId: string) {
+      return PosBusService.requestObjectLock(objectId).then(() => {
+        self._selectObject(objectId);
+      });
+    },
+    deselectObject() {
+      if (self.selectedObjectId) {
+        PosBusService.requestObjectUnlock(self.selectedObjectId);
+        self._deselectObject();
+      }
+    }
+  }))
+  .actions((self) => ({
     setIsScreenRecording(isRecording: boolean): void {
       self.isScreenRecording = isRecording;
     },
@@ -50,7 +63,7 @@ const World3dStore = types
 
       widgetManagerStore?.closeSubMenu();
 
-      self._deselectObject();
+      self.deselectObject();
     }
   }))
   .actions((self) => ({
@@ -79,7 +92,7 @@ const World3dStore = types
     handleClick(objectId: string, clickPos?: ClickPositionInterface) {
       console.log('World3dStore : handleClick', objectId);
       if (!self.isCreatorMode) {
-        return;
+        throw new Error('World3dStore : handleClick : not in creator mode');
       }
 
       // TODO move it as child store here??
@@ -90,20 +103,21 @@ const World3dStore = types
       //   console.log('World3dStore : handleClick : already selected', self.selectedObjectId);
       //   return;
       // }
-      self._deselectObject();
+      self.deselectObject();
 
       // self.objectMenuPosition = clickPos || defaultClickPosition;
 
-      self._selectObject(objectId);
-      // self.objectMenu.open();
-      // self.setSelectedTab('inspector');
+      return self.selectObject(objectId).then(() => {
+        // self.objectMenu.open();
+        // self.setSelectedTab('inspector');
 
-      // TODO move it as child store here??
-      creatorStore.setSelectedObjectId(objectId);
+        // TODO move it as child store here??
+        creatorStore.setSelectedObjectId(objectId);
 
-      if (creatorStore.selectedTab === null) {
-        creatorStore.setSelectedTab('gizmo');
-      }
+        if (creatorStore.selectedTab === null) {
+          creatorStore.setSelectedTab('gizmo');
+        }
+      });
     },
     setAttachedToCamera(objectId: string | null) {
       const {
