@@ -192,7 +192,6 @@ const World3dPage: FC = () => {
   const handleUserMove = useDebouncedCallback(
     (transform: TransformNoScaleInterface) => {
       console.log('BabylonPage: onMove', transform);
-      world3dStore?.handleUserMove(transform);
       PosBusService.sendMyTransform(transform); // move this to world3dStore??
     },
     250,
