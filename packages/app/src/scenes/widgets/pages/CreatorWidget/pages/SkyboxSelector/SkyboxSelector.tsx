@@ -97,7 +97,7 @@ const SkyboxSelector: FC = () => {
             <Button
               label={t('actions.uploadCustomSkybox')}
               wide
-              icon="astronaut"
+              icon="monitor_upload"
               onClick={() => {
                 setMode('upload');
                 setPreviewSkybox(null);
