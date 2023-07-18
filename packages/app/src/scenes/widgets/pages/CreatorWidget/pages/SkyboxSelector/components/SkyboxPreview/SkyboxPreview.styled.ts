@@ -22,7 +22,7 @@ export const SkyboxTitle = styled.div`
   width: 100%;
   font-weight: 700;
   font-size: 16px;
-  margin: 10px 0 42px;
+  margin: 10px 0 0 0;
   letter-spacing: 0.2em;
   color: ${(props) => props.theme.text};
   letter-spacing: 0.08em;

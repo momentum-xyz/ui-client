@@ -1,21 +1,10 @@
 import {FC, useEffect, useState} from 'react';
-import {
-  Button,
-  Input,
-  Radio,
-  // FileUploader,
-  // ErrorsEnum,
-  Loader,
-  Textarea,
-  Select,
-  Image
-} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
-import {useI18n} from '@momentum-xyz/core';
-import {useSkyboxPreview} from '@momentum-xyz/core3d';
-// import cn from 'classnames';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {toast} from 'react-toastify';
+import {Button, Input, Loader, Textarea, Select, Image} from '@momentum-xyz/ui-kit';
+import {useSkyboxPreview} from '@momentum-xyz/core3d';
+import {useI18n} from '@momentum-xyz/core';
 
 import {BlockadeLabs, ToastContent} from 'ui-kit';
 import {usePosBusEvent, useStore} from 'shared/hooks';
@@ -114,10 +103,10 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
   });
   console.log('CustomSkyboxWithAI errors', {errors, errorsAI}); // TODO show them visually
 
-  const options = [
+  /*const options = [
     {value: 'COMMUNITY', label: 'Community Library'},
     {value: 'PRIVATE', label: 'Private Library'}
-  ];
+  ];*/
 
   const formSubmitHandler: SubmitHandler<SkyboxInfoInterface> = async ({name, type}) => {
     if (!user || !generatedSkyboxFile) {
@@ -198,7 +187,7 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
               />
             )}
           />
-          <br />
+
           <styled.ControlsRow>
             <Button label={t('actions.goBack')} variant="secondary" onClick={onBack} />
             <Button
@@ -247,28 +236,27 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
                       />
                     )}
                   />
-                  {/* TODO implement disabled prop for Radio */}
-                  {!isUploadPending && (
-                    <Controller
-                      name="type"
-                      control={control}
-                      render={({field: {value, onChange}}) => (
-                        <Radio
-                          name="type"
-                          value={value}
-                          onChange={(value: string) => {
-                            onChange(value);
-                          }}
-                          options={options}
-                          // disabled={isUploadPending}
-                        />
-                      )}
-                    />
-                  )}
+                  {/* TODO: implementation
+                  <Controller
+                    name="type"
+                    control={control}
+                    render={({field: {value, onChange}}) => (
+                      <Radio
+                        name="type"
+                        value={value}
+                        onChange={(value: string) => {
+                          onChange(value);
+                        }}
+                        options={options}
+                        // disabled={isUploadPending}
+                      />
+                    )}
+                  />*/}
                 </styled.InputsContainer>
               </styled.FormContainer>
             </>
           )}
+
           {isSkyboxGenerationPending && (
             <styled.SkyboxGenerationLoaderContainer>
               <styled.Separator />
@@ -276,7 +264,7 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
               <Loader />
             </styled.SkyboxGenerationLoaderContainer>
           )}
-          {isUploadPending && <Loader />}
+
           <styled.ControlsRow>
             <Button
               label={t('actions.goBack')}
@@ -286,7 +274,7 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
             />
             <Button
               label="Save skybox"
-              disabled={isUploadPending}
+              disabled={isUploadPending || isSkyboxGenerationPending}
               onClick={() => {
                 handleSubmit(formSubmitHandler)();
               }}

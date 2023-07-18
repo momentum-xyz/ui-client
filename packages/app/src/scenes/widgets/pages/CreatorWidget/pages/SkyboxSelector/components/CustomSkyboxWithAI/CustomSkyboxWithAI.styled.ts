@@ -39,7 +39,6 @@ export const FormContainer = styled.div`
   gap: 12px;
   flex-direction: column;
   align-items: stretch;
-  margin-bottom: 20px;
 `;
 
 export const InputsContainer = styled.div`
@@ -47,10 +46,10 @@ export const InputsContainer = styled.div`
   gap: 12px;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
 `;
 
 export const ControlsRow = styled.div`
+  padding: 10px 0 10px 0;
   display: flex;
   width: 100%;
   justify-content: space-between;

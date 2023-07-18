@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Button, Input, Radio, FileUploader, ErrorsEnum, Loader} from '@momentum-xyz/ui-kit';
+import {Button, Input, FileUploader, ErrorsEnum} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import cn from 'classnames';
@@ -43,14 +43,14 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
   } = useForm<SkyboxInfoInterface>({
     defaultValues: {
       name: '',
-      type: 'COMMUNITY'
+      type: 'PRIVATE'
     }
   });
 
-  const options = [
+  /*const options = [
     {value: 'COMMUNITY', label: 'Available for Community'},
     {value: 'PRIVATE', label: 'Private Asset'}
-  ];
+  ];*/
 
   const formSubmitHandler: SubmitHandler<SkyboxInfoInterface> = async ({
     file,
@@ -129,7 +129,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
             rules={{required: true}}
             render={({field: {value, onChange}}) => (
               <Input
-                placeholder={'Name your Asset*' || ''}
+                placeholder="Name your Asset*"
                 value={value}
                 wide
                 onChange={(value: string) => {
@@ -144,7 +144,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
             control={control}
             render={({field: {value, onChange}}) => (
               <Input
-                placeholder={'Name the Artist' || ''}
+                placeholder="Name the Artist"
                 value={value}
                 wide
                 onChange={(value: string) => {
@@ -154,23 +154,23 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
               />
             )}
           />
-          <Controller
+          {/* TODO: Implementation
+           <Controller
             name="type"
             control={control}
             render={({field: {value, onChange}}) => (
               <Radio
                 name="type"
                 value={value}
-                onChange={(value: string) => {
-                  onChange(value);
-                }}
+                variant="horizontal"
+                onChange={onChange}
                 options={options}
               />
             )}
-          />
+          /> */}
         </styled.InputsContainer>
       </styled.FormContainer>
-      {isUploadPending && <Loader />}
+
       <styled.ControlsRow>
         <Button
           label={t('actions.goBack')}

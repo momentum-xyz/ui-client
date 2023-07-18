@@ -1,10 +1,8 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding: 10px 0 20px 0;
-  margin: 0 auto;
+  padding: 10px 10px 20px 10px;
   display: flex;
-  width: 390px;
   flex-direction: column;
   justify-content: space-between;
 `;
@@ -23,6 +21,11 @@ export const ControlsRow = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+
+  > button {
+    width: 160px;
+    justify-content: center;
+  }
 `;
 
 export const ImageUploadContainer = styled.div`
@@ -32,8 +35,7 @@ export const ImageUploadContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   border-radius: 6px;
-  width: 390px;
-  height: 390px;
+  height: 330px;
   padding-top: 0px;
   margin-top: 0px;
 
@@ -75,11 +77,12 @@ export const SkyboxInformation = styled.div`
 `;
 
 export const PreviewImageHolder = styled.div`
-  height: 360px;
-  width: 360px;
+  height: 100%;
+  width: 100%;
   background-position: center center;
   background-size: cover;
   position: absolute;
+  border-radius: 8px;
 `;
 
 export const Image = styled.img`
