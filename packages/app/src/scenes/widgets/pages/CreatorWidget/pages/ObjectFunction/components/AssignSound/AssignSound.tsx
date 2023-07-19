@@ -12,9 +12,10 @@ import * as styled from './AssignSound.styled';
 
 interface PropsInterface {
   objectId: string;
+  onBack: () => void;
 }
 
-const AssignSound: FC<PropsInterface> = ({objectId}) => {
+const AssignSound: FC<PropsInterface> = ({objectId, onBack}) => {
   const {widgetStore} = useStore();
   const {creatorStore} = widgetStore;
   const {objectFunctionalityStore} = creatorStore;
@@ -105,6 +106,10 @@ const AssignSound: FC<PropsInterface> = ({objectId}) => {
           ))}
         </styled.TrackList>
       </styled.TracksContainer>
+
+      <styled.ActionBar>
+        <Button variant="secondary" label={t('actions.back')} onClick={onBack} />
+      </styled.ActionBar>
     </styled.Container>
   );
 };

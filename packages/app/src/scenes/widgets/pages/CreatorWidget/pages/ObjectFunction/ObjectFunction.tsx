@@ -1,4 +1,4 @@
-import {FC, useEffect, useRef, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {Button, Frame, IconSvg, TabInterface} from '@momentum-xyz/ui-kit';
@@ -24,10 +24,10 @@ const ObjectFunction: FC = () => {
   const {selectedTab, objectFunctionalityStore, selectedObjectId} = creatorStore;
   const {currentAssetId} = objectFunctionalityStore;
   const {objectStore} = universeStore;
-  const {pluginLoader} = objectStore;
+  const {pluginLoader, objectContentStore} = objectStore;
+  const {normalContent} = objectContentStore;
 
   const [activeType, setActiveType] = useState<string | null>(null);
-  const actionRef = useRef<{doSave: () => void}>({doSave: () => {}});
 
   const {t} = useI18n();
 
@@ -55,9 +55,7 @@ const ObjectFunction: FC = () => {
     }
   };
 
-  const handleSave = async () => {
-    actionRef.current?.doSave();
-
+  const handleSaved = async () => {
     if (activeType) {
       objectFunctionalityStore.selectAsset(activeType);
       await objectFunctionalityStore.updateObject();
@@ -85,12 +83,34 @@ const ObjectFunction: FC = () => {
       <styled.PanelBody>
         {/* ASSIGN IMAGE */}
         {activeType === BasicAsset2dIdEnum.IMAGE && (
-          <AssignImage actionRef={actionRef} objectId={selectedObjectId} />
+          <AssignImage
+            initialTitle={normalContent.title}
+            initialImageSrc={normalContent.imageSrc}
+            isEditing={!!currentAssetId}
+            isPending={normalContent.isPending}
+            onSave={async (file, title) => {
+              await normalContent.postNewImage(selectedObjectId, file, title);
+              await handleSaved();
+            }}
+            onBack={() => setActiveType(null)}
+            onDelete={handleDelete}
+          />
         )}
 
         {/* ASSIGN TEXT */}
         {activeType === BasicAsset2dIdEnum.TEXT && (
-          <AssignText actionRef={actionRef} objectId={selectedObjectId} />
+          <AssignText
+            initialTitle={normalContent.content?.title}
+            initialText={normalContent.content?.content}
+            isEditing={!!currentAssetId}
+            isPending={normalContent.isPending}
+            onSave={async (title, content) => {
+              await normalContent.postNewContent(selectedObjectId, {title, content});
+              await handleSaved();
+            }}
+            onBack={() => setActiveType(null)}
+            onDelete={handleDelete}
+          />
         )}
 
         {/* ASSIGN VIDEO */}
@@ -98,10 +118,13 @@ const ObjectFunction: FC = () => {
           <>
             {pluginLoader?.plugin ? (
               <AssignVideo
-                actionRef={actionRef}
                 plugin={pluginLoader.plugin}
                 pluginLoader={pluginLoader}
                 objectId={selectedObjectId}
+                isEditing={!!currentAssetId}
+                onSaved={handleSaved}
+                onBack={() => setActiveType(null)}
+                onDelete={handleDelete}
               />
             ) : (
               <div>
@@ -114,7 +137,9 @@ const ObjectFunction: FC = () => {
 
         {/* ASSIGN SOUND */}
         {/* FIXME: Temp solutions. It will be moved to the new Inspector */}
-        {activeType === 'sound' && <AssignSound objectId={selectedObjectId} />}
+        {activeType === 'sound' && (
+          <AssignSound objectId={selectedObjectId} onBack={() => setActiveType(null)} />
+        )}
       </styled.PanelBody>
     );
   };
@@ -168,7 +193,7 @@ const ObjectFunction: FC = () => {
         <>
           {renderBody()}
 
-          <styled.ActionBar>
+          {/*<styled.ActionBar>
             <Button
               variant="secondary"
               label={t('actions.back')}
@@ -180,13 +205,13 @@ const ObjectFunction: FC = () => {
             )}
 
             {!currentAssetId && activeType !== 'sound' && (
-              <Button label={t('actions.embed')} onClick={handleSave} />
+              <Button label={t('actions.embed')} onClick={handleSaved} />
             )}
 
             {currentAssetId && activeType !== 'sound' && (
-              <Button label={t('actions.edit')} onClick={handleSave} />
+              <Button label={t('actions.edit')} onClick={handleSaved} />
             )}
-          </styled.ActionBar>
+          </styled.ActionBar>*/}
         </>
       )}
     </styled.Container>

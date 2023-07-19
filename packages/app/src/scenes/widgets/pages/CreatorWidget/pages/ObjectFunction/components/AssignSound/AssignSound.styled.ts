@@ -35,3 +35,13 @@ export const TrackList = styled.div`
   flex-direction: column;
   gap: 10px;
 `;
+
+export const ActionBar = styled.div`
+  padding: 10px;
+
+  > button {
+    flex: 1;
+    justify-content: center;
+    width: 156px;
+  }
+`;

@@ -151,6 +151,7 @@ const usePlugin: UsePluginHookType = (props) => {
       <p>To embed a video; add the url to the video in the input field below.</p>
       <div style={{backgroundColor: theme.accentText, height: 1}} />
       <Input
+        wide
         // type="text"
         // label={t('plugin_video.labels.videoUrl')}
         placeholder={t('plugin_video.messages.pasteUrl')}
@@ -181,6 +182,7 @@ const usePlugin: UsePluginHookType = (props) => {
       )}
       <div style={{backgroundColor: theme.accentText, height: 1}} />
       <Input
+        wide
         // type="text"
         // label={t('plugin_video.labels.title')}
         placeholder={t('plugin_video.messages.name')}
