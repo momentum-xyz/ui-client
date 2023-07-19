@@ -56,7 +56,8 @@ const ObjectFunction: FC = () => {
   };
 
   const handleSaved = async () => {
-    if (activeType) {
+    // Update only when asset_2d was changed
+    if (activeType && activeType !== objectFunctionalityStore.currentAssetId) {
       objectFunctionalityStore.selectAsset(activeType);
       await objectFunctionalityStore.updateObject();
     }

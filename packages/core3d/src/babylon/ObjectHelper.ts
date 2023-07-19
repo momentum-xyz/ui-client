@@ -433,8 +433,13 @@ export class ObjectHelper {
       objToRemove.container.dispose();
 
       this.objectsMap.delete(id);
-      this.objectsSoundMap.get(id)?.dispose();
-      console.log('[SOUND] Dispose', id);
+
+      const objSoundToRemove = this.objectsSoundMap.get(id);
+      if (objSoundToRemove) {
+        objSoundToRemove.dispose();
+        this.objectsSoundMap.delete(id);
+        console.log('[SOUND] Dispose', id);
+      }
     } else {
       console.log("unable to delete object, as the id doesn't exist in the map, " + id);
     }
