@@ -92,8 +92,11 @@ const MyWallet: FC<PropsInterface> = ({
   const handleClaimRewards = async () => {
     try {
       await claimRewards();
-
       console.log('Claim rewards success');
+
+      setTimeout(() => {
+        handleLoadRewards(selectedWallet?.wallet_id || '');
+      }, 1000);
     } catch (err) {
       console.log('Error claiming rewards:', err);
     }
