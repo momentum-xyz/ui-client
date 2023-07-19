@@ -1,27 +1,38 @@
-import React, {FC, MutableRefObject} from 'react';
-import {ErrorBoundary} from '@momentum-xyz/ui-kit';
+import {FC} from 'react';
+import {Button, ErrorBoundary} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
+import {observer} from 'mobx-react-lite';
+import {useTheme} from 'styled-components';
 import {
   PluginInterface,
   PluginPropsInterface,
   ObjectGlobalPropsContextProvider
 } from '@momentum-xyz/sdk';
-import {observer} from 'mobx-react-lite';
-import {useTheme} from 'styled-components';
 
-import {PluginLoaderModelType} from 'core/models';
 import {useStore} from 'shared/hooks';
+import {PluginLoaderModelType} from 'core/models';
 
 import * as styled from './AssignVideo.styled';
 
 interface PropsInterface {
-  actionRef: MutableRefObject<{doSave: () => void}>;
   objectId: string;
   plugin: PluginInterface;
   pluginLoader: PluginLoaderModelType;
+  isEditing: boolean;
+  onDelete: () => void;
+  onBack: () => void;
+  onSaved: () => void;
 }
 
-const AssignVideo: FC<PropsInterface> = ({actionRef, objectId, plugin, pluginLoader}) => {
+const AssignVideo: FC<PropsInterface> = ({
+  objectId,
+  isEditing,
+  plugin,
+  pluginLoader,
+  onSaved,
+  onDelete,
+  onBack
+}) => {
   const {universeStore} = useStore();
   const {attributesManager} = pluginLoader;
 
@@ -35,7 +46,6 @@ const AssignVideo: FC<PropsInterface> = ({actionRef, objectId, plugin, pluginLoa
   }
 
   const pluginProps: PluginPropsInterface = {
-    // @ts-ignore: FIXME
     theme,
     isAdmin,
     isExpanded: pluginLoader.isExpanded,
@@ -51,7 +61,14 @@ const AssignVideo: FC<PropsInterface> = ({actionRef, objectId, plugin, pluginLoa
       <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>
         <ObjectGlobalPropsContextProvider props={pluginProps}>
           {!pluginLoader?.isError ? (
-            <PluginInnerWrapper pluginProps={pluginProps} plugin={plugin} actionRef={actionRef} />
+            <PluginInnerWrapper
+              pluginProps={pluginProps}
+              plugin={plugin}
+              isEditing={isEditing}
+              onDelete={onDelete}
+              onSaved={onSaved}
+              onBack={onBack}
+            />
           ) : (
             t('errors.errorWhileLoadingPlugin')
           )}
@@ -64,29 +81,51 @@ const AssignVideo: FC<PropsInterface> = ({actionRef, objectId, plugin, pluginLoa
 const PluginInnerWrapper = ({
   pluginProps,
   plugin,
-  actionRef
+  isEditing,
+  onSaved,
+  onDelete,
+  onBack
 }: {
   pluginProps: PluginPropsInterface;
   plugin: PluginInterface;
-  actionRef: React.MutableRefObject<{doSave: () => void}>;
+  onSaved: () => void;
+  isEditing: boolean;
+  onDelete: () => void;
+  onBack: () => void;
 }) => {
   const {objectView} = plugin.usePlugin(pluginProps);
   const {editModeContent, saveChanges} = objectView || {};
 
-  actionRef.current = {
-    doSave: () =>
-      saveChanges &&
-      saveChanges().catch((err) => {
-        console.error(err);
-      })
-  };
+  const {t} = useI18n();
 
   return (
     <>
-      {editModeContent || (
+      {!editModeContent ? (
         <div>
           This version of <strong>plugin_video</strong> doesn't support edit
         </div>
+      ) : (
+        <>
+          {editModeContent}
+
+          <styled.ActionBar>
+            <Button variant="secondary" label={t('actions.back')} onClick={onBack} />
+
+            {isEditing && (
+              <Button variant="secondary" label={t('actions.delete')} onClick={onDelete} />
+            )}
+
+            <Button
+              label={isEditing ? t('actions.edit') : t('actions.embed')}
+              onClick={() => {
+                saveChanges?.().catch((err) => {
+                  console.error(err);
+                });
+                onSaved();
+              }}
+            />
+          </styled.ActionBar>
+        </>
       )}
     </>
   );

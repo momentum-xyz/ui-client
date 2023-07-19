@@ -1,4 +1,4 @@
-import {FC, useEffect, useRef, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {Button, Frame, IconSvg, TabInterface} from '@momentum-xyz/ui-kit';
@@ -28,7 +28,6 @@ const ObjectFunction: FC = () => {
   const {normalContent} = objectContentStore;
 
   const [activeType, setActiveType] = useState<string | null>(null);
-  const actionRef = useRef<{doSave: () => void}>({doSave: () => {}});
 
   const {t} = useI18n();
 
@@ -57,8 +56,6 @@ const ObjectFunction: FC = () => {
   };
 
   const handleSaved = async () => {
-    //actionRef.current?.doSave();
-
     if (activeType) {
       objectFunctionalityStore.selectAsset(activeType);
       await objectFunctionalityStore.updateObject();
@@ -121,10 +118,13 @@ const ObjectFunction: FC = () => {
           <>
             {pluginLoader?.plugin ? (
               <AssignVideo
-                actionRef={actionRef}
                 plugin={pluginLoader.plugin}
                 pluginLoader={pluginLoader}
                 objectId={selectedObjectId}
+                isEditing={!!currentAssetId}
+                onSaved={handleSaved}
+                onBack={() => setActiveType(null)}
+                onDelete={handleDelete}
               />
             ) : (
               <div>
