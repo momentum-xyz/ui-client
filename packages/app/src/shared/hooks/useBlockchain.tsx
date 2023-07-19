@@ -194,8 +194,11 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
   const canRequestAirdrop = account ? checkIfCanRequestAirdrop(account) : null;
   const dateOfNextAllowedAirdrop = account ? getDateOfNextAllowedAirdrop(account) : null;
 
+  const contractsCreated = !!stakingContract && !!momContract && !!dadContract && !!faucetContract;
+
   return {
-    isBlockchainReady: isWalletActive && isCorrectAccount && !isWrongNetwork,
+    isBlockchainReady:
+      !!library && contractsCreated && isWalletActive && isCorrectAccount && !isWrongNetwork,
     account,
     walletSelectContent,
     canRequestAirdrop,

@@ -65,7 +65,7 @@ const MyWallet: FC<PropsInterface> = ({
   );
 
   useEffect(() => {
-    if (selectedWallet?.wallet_id) {
+    if (selectedWallet?.wallet_id && isBlockchainReady) {
       handleLoadRewards(selectedWallet.wallet_id);
     }
   }, [handleLoadRewards, selectedWallet, isBlockchainReady]);
@@ -92,8 +92,11 @@ const MyWallet: FC<PropsInterface> = ({
   const handleClaimRewards = async () => {
     try {
       await claimRewards();
-
       console.log('Claim rewards success');
+
+      setTimeout(() => {
+        handleLoadRewards(selectedWallet?.wallet_id || '');
+      }, 1000);
     } catch (err) {
       console.log('Error claiming rewards:', err);
     }
