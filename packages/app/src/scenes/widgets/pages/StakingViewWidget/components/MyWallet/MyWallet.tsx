@@ -65,7 +65,7 @@ const MyWallet: FC<PropsInterface> = ({
   );
 
   useEffect(() => {
-    if (selectedWallet?.wallet_id) {
+    if (selectedWallet?.wallet_id && isBlockchainReady) {
       handleLoadRewards(selectedWallet.wallet_id);
     }
   }, [handleLoadRewards, selectedWallet, isBlockchainReady]);
