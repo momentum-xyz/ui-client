@@ -1,14 +1,13 @@
-import {FC, MutableRefObject, useEffect, useState} from 'react';
-import {Frame, Input, FileUploader, ErrorsEnum} from '@momentum-xyz/ui-kit';
+import {FC, useEffect} from 'react';
+import {Frame, Input, FileUploader, ErrorsEnum, Button} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
-import cn from 'classnames';
 import {toast} from 'react-toastify';
+import cn from 'classnames';
 
-import {ImageObjectInterface} from 'core/interfaces';
-import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
+import {ImageObjectInterface} from 'core/interfaces';
 
 import * as styled from './AssignImage.styled';
 
@@ -16,50 +15,45 @@ const MAX_ASSET_SIZE_MB = 8;
 const MAX_ASSET_SIZE_B = MAX_ASSET_SIZE_MB * Math.pow(1024, 2);
 
 interface PropsInterface {
-  actionRef: MutableRefObject<{doSave: () => void}>;
   objectId: string;
+  initialTitle: string | null;
+  initialImageSrc: string | null;
+  isEditing: boolean;
+  isPending: boolean;
+  onDelete: () => void;
+  onSave: (objectId: string, file: File | undefined, title: string) => void;
+  onBack: () => void;
 }
 
-const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
-  const {universeStore} = useStore();
-  const {objectStore} = universeStore;
-  const {objectContentStore} = objectStore;
-  const {normalContent} = objectContentStore;
-
-  const [hasImage, setHasImage] = useState<boolean>(!!normalContent.imageSrc);
-
+const AssignImage: FC<PropsInterface> = ({
+  objectId,
+  initialTitle,
+  initialImageSrc,
+  isEditing,
+  isPending,
+  onDelete,
+  onSave,
+  onBack
+}) => {
   const {t} = useI18n();
 
   const {
-    handleSubmit,
+    watch,
     control,
-    formState: {errors},
     setValue,
-    setError
+    setError,
+    handleSubmit,
+    formState: {errors, isValid}
   } = useForm<ImageObjectInterface>({});
 
   useEffect(() => {
-    const sameValues = hasImage && !!normalContent.imageSrc;
-    if (sameValues) {
-      return;
+    if (initialTitle) {
+      setValue('title', initialTitle);
     }
-    setHasImage(!!normalContent.imageSrc);
-  }, [normalContent.imageSrc, setHasImage]);
+  }, [initialTitle, setValue]);
 
-  useEffect(() => {
-    if (normalContent.title) {
-      setValue('title', normalContent.title);
-    }
-  }, [normalContent, normalContent.title]);
-
-  const formSubmitHandler: SubmitHandler<ImageObjectInterface> = async (
-    data: ImageObjectInterface
-  ) => {
-    if (!data.image) {
-      return;
-    }
-
-    await normalContent.postNewImage(objectId, data.image, data.title);
+  const formSubmitHandler: SubmitHandler<ImageObjectInterface> = async (data) => {
+    await onSave(objectId, data.image, data.title || '');
   };
 
   const handleUploadError = (err: Error): void => {
@@ -73,10 +67,7 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
     setError('image', {message: 'upload'});
   };
 
-  // TEMP
-  actionRef.current = {
-    doSave: handleSubmit(formSubmitHandler)
-  };
+  const [imageValue] = watch(['image']);
 
   return (
     <styled.Container data-testid="AssignImage-test">
@@ -87,54 +78,40 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
       <styled.Wrapper>
         <Frame>
           <Controller
-            control={control}
             name="image"
-            rules={{required: true}}
-            render={({field: {value, onChange}}) => (
-              <styled.ImageUploadContainer
-                className={cn(
-                  'test',
-                  !!errors.image && 'error',
-                  (value || normalContent.imageSrc) && 'has-image'
-                )}
-              >
-                {value ? (
-                  <styled.PreviewImageHolder
-                    style={{backgroundImage: `url(${URL.createObjectURL(value)})`}}
-                  />
-                ) : (
-                  normalContent.imageSrc && (
-                    <styled.PreviewImageHolder
-                      style={{backgroundImage: `url(${normalContent.imageSrc ?? undefined})`}}
-                    />
-                  )
-                )}
+            control={control}
+            render={({field: {value, onChange}}) => {
+              const imageUrl = value ? URL.createObjectURL(value) : initialImageSrc;
 
-                <styled.Uploader>
-                  <FileUploader
-                    enableDragAndDrop
-                    label={t('actions.uploadYourAsset')}
-                    dragActiveLabel={t('actions.dropItHere')}
-                    maxSize={MAX_ASSET_SIZE_B}
-                    fileType="image"
-                    onError={handleUploadError}
-                    onFilesUpload={(d) => {
-                      setHasImage(true);
-                      onChange(d);
-                    }}
-                  >
-                    <>
-                      {!(value || normalContent.imageSrc) && (
+              return (
+                <styled.ImageUploadContainer
+                  className={cn(!!errors.image && 'error', !!imageUrl && 'has-image')}
+                >
+                  {!!imageUrl && (
+                    <styled.PreviewImageHolder style={{backgroundImage: `url(${imageUrl})`}} />
+                  )}
+
+                  <styled.Uploader>
+                    <FileUploader
+                      fileType="image"
+                      enableDragAndDrop
+                      label={t('actions.uploadYourAsset')}
+                      dragActiveLabel={t('actions.dropItHere')}
+                      maxSize={MAX_ASSET_SIZE_B}
+                      onError={handleUploadError}
+                      onFilesUpload={onChange}
+                    >
+                      {!(value || !!initialImageSrc) && (
                         <styled.DragAndDropPrompt>
                           <span>{t('messages.uploadAssetPictureDescription')}</span>
                           <span>{t('labels.or')}</span>
                         </styled.DragAndDropPrompt>
                       )}
-                    </>
-                  </FileUploader>
-                </styled.Uploader>
-              </styled.ImageUploadContainer>
-            )}
+                    </FileUploader>
+                  </styled.Uploader>
+                </styled.ImageUploadContainer>
+              );
+            }}
           />
         </Frame>
 
@@ -146,16 +123,37 @@ const AssignImage: FC<PropsInterface> = ({actionRef, objectId}) => {
             render={({field: {value, onChange}}) => (
               <Input
                 wide
-                placeholder={t('placeholders.nameYourImage')}
                 value={value}
-                onChange={(value: string) => {
-                  onChange(value);
-                }}
-                disabled={!hasImage}
+                placeholder={`${t('placeholders.nameYourImage')}*`}
+                onChange={onChange}
               />
             )}
           />
         </styled.InputContainer>
+
+        <styled.ActionBar>
+          <Button
+            variant="secondary"
+            label={t('actions.back')}
+            disabled={isPending}
+            onClick={onBack}
+          />
+
+          {isEditing && (
+            <Button
+              variant="secondary"
+              label={t('actions.delete')}
+              disabled={isPending}
+              onClick={onDelete}
+            />
+          )}
+
+          <Button
+            label={isEditing ? t('actions.edit') : t('actions.embed')}
+            disabled={!isValid || (!imageValue && !initialImageSrc) || isPending}
+            onClick={() => handleSubmit(formSubmitHandler)()}
+          />
+        </styled.ActionBar>
       </styled.Wrapper>
     </styled.Container>
   );

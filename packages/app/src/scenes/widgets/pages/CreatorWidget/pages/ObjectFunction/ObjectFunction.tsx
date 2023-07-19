@@ -24,7 +24,8 @@ const ObjectFunction: FC = () => {
   const {selectedTab, objectFunctionalityStore, selectedObjectId} = creatorStore;
   const {currentAssetId} = objectFunctionalityStore;
   const {objectStore} = universeStore;
-  const {pluginLoader} = objectStore;
+  const {pluginLoader, objectContentStore} = objectStore;
+  const {normalContent} = objectContentStore;
 
   const [activeType, setActiveType] = useState<string | null>(null);
   const actionRef = useRef<{doSave: () => void}>({doSave: () => {}});
@@ -55,8 +56,8 @@ const ObjectFunction: FC = () => {
     }
   };
 
-  const handleSave = async () => {
-    actionRef.current?.doSave();
+  const handleSaved = async () => {
+    //actionRef.current?.doSave();
 
     if (activeType) {
       objectFunctionalityStore.selectAsset(activeType);
@@ -85,7 +86,19 @@ const ObjectFunction: FC = () => {
       <styled.PanelBody>
         {/* ASSIGN IMAGE */}
         {activeType === BasicAsset2dIdEnum.IMAGE && (
-          <AssignImage actionRef={actionRef} objectId={selectedObjectId} />
+          <AssignImage
+            objectId={selectedObjectId}
+            initialTitle={normalContent.title}
+            initialImageSrc={normalContent.imageSrc}
+            isEditing={!!currentAssetId}
+            isPending={normalContent.isPending}
+            onSave={async (objectId, file, title) => {
+              await normalContent.postNewImage(objectId, file, title);
+              await handleSaved();
+            }}
+            onBack={() => setActiveType(null)}
+            onDelete={handleDelete}
+          />
         )}
 
         {/* ASSIGN TEXT */}
@@ -168,7 +181,7 @@ const ObjectFunction: FC = () => {
         <>
           {renderBody()}
 
-          <styled.ActionBar>
+          {/*<styled.ActionBar>
             <Button
               variant="secondary"
               label={t('actions.back')}
@@ -180,13 +193,13 @@ const ObjectFunction: FC = () => {
             )}
 
             {!currentAssetId && activeType !== 'sound' && (
-              <Button label={t('actions.embed')} onClick={handleSave} />
+              <Button label={t('actions.embed')} onClick={handleSaved} />
             )}
 
             {currentAssetId && activeType !== 'sound' && (
-              <Button label={t('actions.edit')} onClick={handleSave} />
+              <Button label={t('actions.edit')} onClick={handleSaved} />
             )}
-          </styled.ActionBar>
+          </styled.ActionBar>*/}
         </>
       )}
     </styled.Container>

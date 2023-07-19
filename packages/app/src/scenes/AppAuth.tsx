@@ -23,7 +23,11 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
   }, [isSignUpInProgress, navigate, widgetManagerStore]);
 
   useEffect(() => {
-    if (sessionStore.isGuest && !storage.get(StorageKeyEnum.HasSeenWelcome) && location.pathname !== ROUTES.welcome) {
+    if (
+      sessionStore.isGuest &&
+      !storage.get(StorageKeyEnum.HasSeenWelcome) &&
+      location.pathname !== ROUTES.welcome
+    ) {
       storage.setString(StorageKeyEnum.RedirectOnLogin, location.pathname);
       navigate(ROUTES.welcome);
     }

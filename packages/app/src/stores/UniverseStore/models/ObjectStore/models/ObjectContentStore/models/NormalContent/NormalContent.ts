@@ -34,12 +34,17 @@ const NormalContent = types
     })
   }))
   .actions((self) => ({
-    postNewImage: flow(function* (objectId: string, file: File, title?: string) {
-      const userResponse: UploadFileResponse = yield self.imageUploadRequest.send(
-        api.mediaRepository.uploadImage,
-        {file}
-      );
-      const imageHash = userResponse?.hash;
+    postNewImage: flow(function* (objectId: string, file?: File, title?: string) {
+      let imageHash = self.content?.render_hash;
+
+      if (file) {
+        const userResponse: UploadFileResponse = yield self.imageUploadRequest.send(
+          api.mediaRepository.uploadImage,
+          {file}
+        );
+
+        imageHash = userResponse?.hash;
+      }
 
       yield self.updateContentRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
         spaceId: objectId,
@@ -62,6 +67,9 @@ const NormalContent = types
     })
   }))
   .views((self) => ({
+    get isPending(): boolean {
+      return self.imageUploadRequest.isPending || self.updateContentRequest.isPending;
+    },
     get imageSrc(): string | null {
       return getImageAbsoluteUrl(self.content?.render_hash, ImageSizeEnum.S5);
     },

@@ -26,11 +26,7 @@ export const InfoContainer = styled.div`
   }
 `;
 
-export const Wrapper = styled.div`
-  & > div {
-    padding: 20px;
-  }
-`;
+export const Wrapper = styled.div``;
 
 export const InputContainer = styled.div`
   border-top: 1px solid ${(props) => props.theme.accentText};
@@ -44,9 +40,6 @@ export const ImageUploadContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   border-radius: 6px;
-  padding-top: 0px;
-  margin: -20px;
-
   padding: 45px;
   border: 1px dashed ${(props) => props.theme.text};
   border-radius: 8px;
@@ -85,18 +78,19 @@ export const Uploader = styled.div`
 
 export const DragAndDropPrompt = styled.div`
   margin: -40px 0 0 0;
+  padding: 0 40px;
   display: flex;
   flex-direction: column;
   text-align: left;
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
-  gap: 30px;
+  text-align: center;
+  gap: 15px;
   font-weight: 500;
   font-size: 13px;
   line-height: 21px;
   letter-spacing: 0.08em;
-  font-family: 'Poppins';
   position: absolute;
   top: 110px;
   width: 100%;
@@ -110,4 +104,17 @@ export const PreviewImageHolder = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 8px;
+`;
+
+export const ActionBar = styled.div`
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+
+  & > button {
+    flex: 1;
+    justify-content: center;
+    max-width: 156px;
+  }
 `;
