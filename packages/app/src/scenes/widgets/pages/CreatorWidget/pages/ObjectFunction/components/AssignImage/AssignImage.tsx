@@ -147,7 +147,7 @@ const AssignImage: FC<PropsInterface> = ({
           )}
 
           <Button
-            label={isEditing ? t('actions.edit') : t('actions.embed')}
+            label={isEditing ? t('actions.save') : t('actions.embed')}
             disabled={!isValid || (!imageValue && !initialImageSrc) || isPending}
             onClick={() => handleSubmit(formSubmitHandler)()}
           />

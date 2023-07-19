@@ -104,7 +104,7 @@ const AssignText: FC<PropsInterface> = ({
         )}
 
         <Button
-          label={isEditing ? t('actions.edit') : t('actions.embed')}
+          label={isEditing ? t('actions.save') : t('actions.embed')}
           disabled={!isValid || isPending}
           onClick={() => handleSubmit(formSubmitHandler)()}
         />
