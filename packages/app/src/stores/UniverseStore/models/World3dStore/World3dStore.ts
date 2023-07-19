@@ -1,25 +1,13 @@
-import {cast, types} from 'mobx-state-tree';
+import {types} from 'mobx-state-tree';
 import {MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
-import {
-  RequestModel,
-  Event3dEmitter,
-  MediaInterface,
-  ClickPositionInterface,
-  TransformNoScaleInterface
-} from '@momentum-xyz/core';
+import {Event3dEmitter, MediaInterface, ClickPositionInterface} from '@momentum-xyz/core';
 
 import {getRootStore} from 'core/utils';
-import {GizmoTypeEnum, WidgetEnum} from 'core/enums';
-
-const DEFAULT_UNITY_VOLUME = 0.75;
+import {WidgetEnum} from 'core/enums';
+import {PosBusService} from 'shared/services';
 
 const World3dStore = types
   .model('World3dStore', {
-    userCurrentTransform: types.maybeNull(types.frozen<TransformNoScaleInterface>()),
-    muted: false,
-    volume: types.optional(types.number, DEFAULT_UNITY_VOLUME),
-    nodeRequest: types.optional(RequestModel, {}),
-
     isCreatorMode: false,
     selectedObjectId: types.maybeNull(types.string),
     attachedToCameraObjectId: types.maybeNull(types.string),
@@ -27,12 +15,7 @@ const World3dStore = types
     waitingForBumpEffectReadyUserId: types.maybeNull(types.string),
 
     isScreenRecording: false,
-    screenshotOrVideo: types.maybeNull(types.frozen<MediaInterface>()),
-
-    gizmoMode: types.optional(
-      types.enumeration(Object.values(GizmoTypeEnum)),
-      GizmoTypeEnum.POSITION
-    )
+    screenshotOrVideo: types.maybeNull(types.frozen<MediaInterface>())
   })
   .actions((self) => ({
     _selectObject(objectId: string): void {
@@ -43,6 +26,19 @@ const World3dStore = types
       if (self.selectedObjectId) {
         // Event3dEmitter.emit('ObjectEditModeChanged', self.selectedObjectId, false);
         self.selectedObjectId = null;
+      }
+    }
+  }))
+  .actions((self) => ({
+    selectObject(objectId: string) {
+      return PosBusService.requestObjectLock(objectId).then(() => {
+        self._selectObject(objectId);
+      });
+    },
+    deselectObject() {
+      if (self.selectedObjectId) {
+        PosBusService.requestObjectUnlock(self.selectedObjectId);
+        self._deselectObject();
       }
     }
   }))
@@ -58,11 +54,6 @@ const World3dStore = types
     }
   }))
   .actions((self) => ({
-    changeGizmoType(mode: GizmoTypeEnum) {
-      self.gizmoMode = cast(mode);
-      // TODO notify babylon
-      // UnityService.changeGizmoType(mode);
-    },
     closeAndResetObjectMenu() {
       console.log('closeAndResetObjectMenu', self.selectedObjectId);
       const {widgetStore, widgetManagerStore} = getRootStore(self);
@@ -72,16 +63,10 @@ const World3dStore = types
 
       widgetManagerStore?.closeSubMenu();
 
-      self._deselectObject();
-      self.gizmoMode = GizmoTypeEnum.POSITION;
+      self.deselectObject();
     }
   }))
   .actions((self) => ({
-    handleUserMove(transform: TransformNoScaleInterface): void {
-      // FIXME storing it here changes the structure and breaks stuff
-      // maybe deep-copy it or something?
-      // self.userCurrentTransform = cast(transform);
-    },
     sendHighFive(receiverId: string): void {
       console.log('World3dStore: sendHighFive', receiverId);
       if (self.waitingForBumpEffectReadyUserId) {
@@ -107,7 +92,7 @@ const World3dStore = types
     handleClick(objectId: string, clickPos?: ClickPositionInterface) {
       console.log('World3dStore : handleClick', objectId);
       if (!self.isCreatorMode) {
-        return;
+        throw new Error('World3dStore : handleClick : not in creator mode');
       }
 
       // TODO move it as child store here??
@@ -118,20 +103,21 @@ const World3dStore = types
       //   console.log('World3dStore : handleClick : already selected', self.selectedObjectId);
       //   return;
       // }
-      self._deselectObject();
+      self.deselectObject();
 
       // self.objectMenuPosition = clickPos || defaultClickPosition;
 
-      self._selectObject(objectId);
-      // self.objectMenu.open();
-      // self.setSelectedTab('inspector');
+      return self.selectObject(objectId).then(() => {
+        // self.objectMenu.open();
+        // self.setSelectedTab('inspector');
 
-      // TODO move it as child store here??
-      creatorStore.setSelectedObjectId(objectId);
+        // TODO move it as child store here??
+        creatorStore.setSelectedObjectId(objectId);
 
-      if (creatorStore.selectedTab === null) {
-        creatorStore.setSelectedTab('gizmo');
-      }
+        if (creatorStore.selectedTab === null) {
+          creatorStore.setSelectedTab('gizmo');
+        }
+      });
     },
     setAttachedToCamera(objectId: string | null) {
       const {
