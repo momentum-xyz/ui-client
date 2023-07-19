@@ -87,13 +87,12 @@ const ObjectFunction: FC = () => {
         {/* ASSIGN IMAGE */}
         {activeType === BasicAsset2dIdEnum.IMAGE && (
           <AssignImage
-            objectId={selectedObjectId}
             initialTitle={normalContent.title}
             initialImageSrc={normalContent.imageSrc}
             isEditing={!!currentAssetId}
             isPending={normalContent.isPending}
-            onSave={async (objectId, file, title) => {
-              await normalContent.postNewImage(objectId, file, title);
+            onSave={async (file, title) => {
+              await normalContent.postNewImage(selectedObjectId, file, title);
               await handleSaved();
             }}
             onBack={() => setActiveType(null)}
@@ -103,7 +102,18 @@ const ObjectFunction: FC = () => {
 
         {/* ASSIGN TEXT */}
         {activeType === BasicAsset2dIdEnum.TEXT && (
-          <AssignText actionRef={actionRef} objectId={selectedObjectId} />
+          <AssignText
+            initialTitle={normalContent.content?.title}
+            initialText={normalContent.content?.content}
+            isEditing={!!currentAssetId}
+            isPending={normalContent.isPending}
+            onSave={async (title, content) => {
+              await normalContent.postNewContent(selectedObjectId, {title, content});
+              await handleSaved();
+            }}
+            onBack={() => setActiveType(null)}
+            onDelete={handleDelete}
+          />
         )}
 
         {/* ASSIGN VIDEO */}
@@ -127,7 +137,9 @@ const ObjectFunction: FC = () => {
 
         {/* ASSIGN SOUND */}
         {/* FIXME: Temp solutions. It will be moved to the new Inspector */}
-        {activeType === 'sound' && <AssignSound objectId={selectedObjectId} />}
+        {activeType === 'sound' && (
+          <AssignSound objectId={selectedObjectId} onBack={() => setActiveType(null)} />
+        )}
       </styled.PanelBody>
     );
   };

@@ -15,18 +15,16 @@ const MAX_ASSET_SIZE_MB = 8;
 const MAX_ASSET_SIZE_B = MAX_ASSET_SIZE_MB * Math.pow(1024, 2);
 
 interface PropsInterface {
-  objectId: string;
   initialTitle: string | null;
   initialImageSrc: string | null;
   isEditing: boolean;
   isPending: boolean;
   onDelete: () => void;
-  onSave: (objectId: string, file: File | undefined, title: string) => void;
+  onSave: (file: File | undefined, title: string) => void;
   onBack: () => void;
 }
 
 const AssignImage: FC<PropsInterface> = ({
-  objectId,
   initialTitle,
   initialImageSrc,
   isEditing,
@@ -53,7 +51,7 @@ const AssignImage: FC<PropsInterface> = ({
   }, [initialTitle, setValue]);
 
   const formSubmitHandler: SubmitHandler<ImageObjectInterface> = async (data) => {
-    await onSave(objectId, data.image, data.title || '');
+    await onSave(data.image, data.title || '');
   };
 
   const handleUploadError = (err: Error): void => {

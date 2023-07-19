@@ -20,3 +20,16 @@ export const Section = styled.div`
   padding: 20px 0 16px 0;
   border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
 `;
+
+export const ActionBar = styled.div`
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+
+  & > button {
+    flex: 1;
+    justify-content: center;
+    max-width: 156px;
+  }
+`;

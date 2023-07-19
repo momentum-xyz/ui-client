@@ -1,66 +1,48 @@
-import {FC, MutableRefObject, useMemo} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import {Input, Textarea} from '@momentum-xyz/ui-kit';
+import {Button, Input, Textarea} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
-import {useStore} from 'shared/hooks';
 import {TextObjectInterface} from 'core/interfaces';
 
 import * as styled from './AssignText.styled';
 
 interface PropsInterface {
-  objectId: string;
-  actionRef: MutableRefObject<{doSave: () => void}>;
+  initialTitle: string | undefined;
+  initialText: string | undefined;
+  isEditing: boolean;
+  isPending: boolean;
+  onDelete: () => void;
+  onSave: (title: string, text: string) => void;
+  onBack: () => void;
 }
 
-const AssignText: FC<PropsInterface> = ({actionRef, objectId}) => {
-  const {universeStore} = useStore();
-  const {objectStore} = universeStore;
-  const {objectContentStore} = objectStore;
-  const {normalContent} = objectContentStore;
-
+const AssignText: FC<PropsInterface> = ({
+  initialTitle,
+  initialText,
+  isEditing,
+  isPending,
+  onSave,
+  onDelete,
+  onBack
+}) => {
   const {t} = useI18n();
 
   const {
-    handleSubmit,
     control,
-    formState: {errors}
+    handleSubmit,
+    formState: {errors, isValid}
   } = useForm<TextObjectInterface>({
     defaultValues: {
-      title: normalContent.content?.title,
-      content: normalContent.content?.content
+      title: initialTitle,
+      content: initialText
     }
   });
 
-  const formSubmitHandler: SubmitHandler<TextObjectInterface> = async (
-    data: TextObjectInterface
-  ) => {
-    await normalContent.postNewContent(objectId, data);
+  const formSubmitHandler: SubmitHandler<TextObjectInterface> = async (data) => {
+    await onSave(data.title, data.content);
   };
-
-  // TEMP
-  actionRef.current = {
-    doSave: handleSubmit(formSubmitHandler)
-  };
-
-  const titleErrorMessage = useMemo(() => {
-    switch (errors.title?.type) {
-      case 'required':
-        return t('errors.requiredField');
-      default:
-        return undefined;
-    }
-  }, [errors.title?.type, t]);
-
-  const contentErrorMessage = useMemo(() => {
-    switch (errors.content?.type) {
-      case 'required':
-        return t('errors.requiredField');
-      default:
-        return undefined;
-    }
-  }, [errors.content?.type, t]);
 
   return (
     <styled.Container data-testid="AssignText-test">
@@ -72,15 +54,14 @@ const AssignText: FC<PropsInterface> = ({actionRef, objectId}) => {
 
       <styled.Section>
         <Controller
-          control={control}
           name="content"
+          control={control}
           rules={{required: true}}
           render={({field: {value, onChange}}) => (
             <Textarea
               value={value}
-              danger={!!contentErrorMessage}
+              danger={!!errors.content}
               placeholder="Enter Text Here"
-              //errorMessage={contentErrorMessage}
               onChange={onChange}
               lines={8}
             />
@@ -90,21 +71,44 @@ const AssignText: FC<PropsInterface> = ({actionRef, objectId}) => {
 
       <styled.Section>
         <Controller
-          control={control}
           name="title"
+          control={control}
           rules={{required: true}}
           render={({field: {value, onChange}}) => (
             <Input
               wide
               value={value}
-              danger={!!titleErrorMessage}
+              danger={!!errors.title}
               placeholder="Name your Text"
-              //errorMessage={titleErrorMessage}
               onChange={onChange}
             />
           )}
         />
       </styled.Section>
+
+      <styled.ActionBar>
+        <Button
+          variant="secondary"
+          label={t('actions.back')}
+          disabled={isPending}
+          onClick={onBack}
+        />
+
+        {isEditing && (
+          <Button
+            variant="secondary"
+            label={t('actions.delete')}
+            disabled={isPending}
+            onClick={onDelete}
+          />
+        )}
+
+        <Button
+          label={isEditing ? t('actions.edit') : t('actions.embed')}
+          disabled={!isValid || isPending}
+          onClick={() => handleSubmit(formSubmitHandler)()}
+        />
+      </styled.ActionBar>
     </styled.Container>
   );
 };
