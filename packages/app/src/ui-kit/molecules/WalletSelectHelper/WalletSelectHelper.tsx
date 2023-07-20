@@ -1,5 +1,6 @@
 import {FC, useEffect} from 'react';
 import {useI18n} from '@momentum-xyz/core';
+import {Warning} from '@momentum-xyz/ui-kit';
 
 import {appVariables} from 'api/constants';
 import {WalletConfigInterface} from 'wallets';
@@ -69,7 +70,7 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
   if (isActive && !web3Library) {
     return (
       <styled.Message data-testid="WalletSelectHelper-test">
-        {t('errors.wrongAccount')}
+        <Warning message={t('errors.wrongAccount')} wide />
       </styled.Message>
     );
   }
@@ -82,7 +83,7 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
     });
     return (
       <styled.Message data-testid="WalletSelectHelper-test">
-        {t('errors.switchToArbitrum')}
+        <Warning message={t('errors.switchToArbitrum')} wide />
       </styled.Message>
     );
   }
@@ -90,7 +91,7 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
   if (account && account !== requiredAccountAddress) {
     return (
       <styled.Message data-testid="WalletSelectHelper-test">
-        {t('errors.switchAccount')}
+        <Warning message={t('errors.switchAccount')} wide />
       </styled.Message>
     );
   }

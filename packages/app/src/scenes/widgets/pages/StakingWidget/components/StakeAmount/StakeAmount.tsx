@@ -68,14 +68,14 @@ const StakeAmount: FC<PropsInterface> = ({
           />
         </styled.SectionGrid>
 
-        <styled.WalletContent>{walletSelectContent}</styled.WalletContent>
-
         {showTokenSelector && (
           <styled.SectionGrid>
             <div>Token</div>
             <TokenSelector />
           </styled.SectionGrid>
         )}
+
+        <styled.WalletContent>{walletSelectContent}</styled.WalletContent>
       </styled.Section>
 
       {/* Balance */}
