@@ -6,7 +6,7 @@ export const Container = styled.div`
   display: flex;
   width: 320px;
   border-radius: 4px;
-  background: ${(props) => props.theme.danger && rgba(props.theme.danger, 0.4)};
+  background: ${(props) => props.theme.danger && rgba(props.theme.danger, 0.6)};
   color: ${(props) => props.theme.text};
   font-size: var(--font-size-s);
   letter-spacing: 0.02em;
@@ -15,5 +15,9 @@ export const Container = styled.div`
 
   &.wide {
     width: 100%;
+  }
+
+  svg {
+    margin: 1px 0 0 0;
   }
 `;
