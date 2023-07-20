@@ -187,6 +187,13 @@ export class PlayerHelper {
     node.position = pos;
   }
 
+  static setInitialPosition(transform: TransformNoScaleInterface) {
+    if (this.camera) {
+      this.camera.position = posToVec3(transform.position);
+      this.camera.rotation = posToVec3(transform.rotation);
+    }
+  }
+
   // TODO: Consider merging the different spawning functions
   static spawnPlayer(scene: Scene, position?: Vector3, target?: Vector3) {
     // //const assetUrl = getAssetFileName(PlayerHelper.playerAvatar3D);

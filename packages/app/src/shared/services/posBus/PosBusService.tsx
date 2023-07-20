@@ -193,6 +193,13 @@ class PosBusService {
         break;
       }
 
+      case MsgType.MY_TRANSFORM: {
+        console.log('Handle posbus message my_transform', data);
+
+        Event3dEmitter.emit('MyInitialTransform', data);
+        break;
+      }
+
       case MsgType.ADD_OBJECTS: {
         console.log('Handle posbus message add_object', message.data);
 
