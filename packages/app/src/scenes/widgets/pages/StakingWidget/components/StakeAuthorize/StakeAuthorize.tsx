@@ -14,6 +14,8 @@ interface PropsInterface {
   onBackClick: () => void;
 }
 
+// FIXME: Max value is less then Number.SAFE_MAX_VALUE
+// because of multiplication by 100000 to convert to BN
 const MAX_TOKEN_VALUE = 9999999999;
 
 const StakeAuthorize: FC<PropsInterface> = ({
