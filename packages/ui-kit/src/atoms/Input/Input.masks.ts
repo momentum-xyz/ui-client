@@ -36,13 +36,15 @@ export const numberInputPrefixMask = (
 export const numberInputSuffixMask = (
   suffix: string,
   scale = 0,
-  signed = false
+  signed = false,
+  max = Number.MAX_SAFE_INTEGER
 ): IMask.AnyMaskedOptions => {
   return IMask.createMask({
     mask: `unit ${suffix}`,
     blocks: {
       unit: {
         mask: Number,
+        max: max,
         scale: scale,
         signed: signed,
         radix: '.',

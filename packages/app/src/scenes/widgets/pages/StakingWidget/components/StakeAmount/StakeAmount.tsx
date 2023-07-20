@@ -29,6 +29,8 @@ interface PropsInterface {
   onNextClick: () => void;
 }
 
+const MAX_TOKEN_VALUE = 9999999999;
+
 const StakeAmount: FC<PropsInterface> = ({
   worldName,
   amountValue,
@@ -95,7 +97,7 @@ const StakeAmount: FC<PropsInterface> = ({
           <Input
             wide
             value={amountValue}
-            opts={numberInputSuffixMask(tokenSymbol, amountPrecisionDigits)}
+            opts={numberInputSuffixMask(tokenSymbol, amountPrecisionDigits, false, MAX_TOKEN_VALUE)}
             onChange={onChangeAmountValue}
           />
         </styled.SectionGrid>
