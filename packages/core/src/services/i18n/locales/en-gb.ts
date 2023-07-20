@@ -221,6 +221,7 @@ export const enGb = {
       switchToArbitrum: 'Please switch to Arbitrum Nova network in the wallet',
       switchAccount: 'Please switch to selected account in the wallet',
       oidcSession: 'Something wrong with session',
+      addImageBeforeContribution: 'You can add your contribution after adding an image',
       sessionExpired: 'The login session has expired. Please try again.',
       unknownError: 'Could not login please try again.',
       noAccounts:

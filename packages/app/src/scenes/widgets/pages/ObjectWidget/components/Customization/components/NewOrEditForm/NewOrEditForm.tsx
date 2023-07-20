@@ -390,7 +390,7 @@ const NewOrEditForm: FC<PropsInterface> = ({
 
       {selectedImageType === 'ai' && generatedImages.length === 0 && !isGenerating && (
         <styled.Warning>
-          <Warning message="You can add your contribution after adding an image" wide />
+          <Warning message={t('errors.addImageBeforeContribution')} wide />
         </styled.Warning>
       )}
 
