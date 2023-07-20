@@ -9,6 +9,7 @@ import {
   SetWorldInterface,
   SoundItemInterface,
   Texture3dInterface,
+  TransformNoScaleInterface,
   WorldInfoInterface
 } from '../interfaces';
 import {ActivityUpdateEnum} from '../enums';
@@ -26,6 +27,7 @@ export type Event3dType = {
   RemoveObject: (objectId: string) => void;
   ObjectTransform: (objectId: string, transform: ObjectTransformInterface) => void;
   SetWorld: (world: SetWorldInterface, userId: string) => void;
+  MyInitialTransform: (transform: TransformNoScaleInterface) => void;
   ObjectTextureChanged: (texture: Texture3dInterface) => void;
   ObjectEffectChanged: (objectId: string, effect: string) => void;
 

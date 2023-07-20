@@ -97,6 +97,10 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
         ObjectHelper.setWorld(world);
       });
 
+      events.on('MyInitialTransform', (transform) => {
+        PlayerHelper.setInitialPosition(transform);
+      });
+
       events.on('AddObject', async (object, attachToCamera = false) => {
         await ObjectHelper.spawnObjectAsync(scene, object, attachToCamera);
       });
