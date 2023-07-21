@@ -11,7 +11,9 @@ import {
   Texture,
   TransformNode,
   SpriteManager,
-  ArcRotateCamera
+  ArcRotateCamera,
+  Sprite,
+  StandardMaterial
 } from '@babylonjs/core';
 import {
   Odyssey3dUserInterface,
@@ -142,6 +144,7 @@ export class PlayerHelper {
     // this.player = new WhispControllable(scene);
     // this.player = new Whisp(scene, true, true);
     // this.camera = (this.player as WhispControllable).camera;
+    this.updatePlayerAvatar();
   }
 
   static getPlayerNode(): TransformNode | null {
@@ -321,6 +324,75 @@ export class PlayerHelper {
     // this.wisp?.setAvatar(spriteManager);
   }
 
+  static setAvatarTexture(textureUrl: string, node: TransformNode) {
+    const avatarTexture = new Texture(
+      textureUrl,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      (message) => {
+        console.log('Error when loading texture', textureUrl, 'Error:', message);
+      }
+    );
+    const meshes = node.getChildMeshes();
+    const mat = meshes[0].material;
+    if (mat instanceof StandardMaterial) {
+      mat.ambientTexture = avatarTexture;
+      mat.diffuseTexture = avatarTexture;
+      mat.emissiveTexture = avatarTexture;
+      mat.specularTexture = avatarTexture;
+    }
+    console.log('updatePlayerAvatar', {
+      textureUrl,
+      avatarTexture
+    });
+  }
+
+  static setAvatarSprite(textureUrl: string, node: TransformNode) {
+    console.log('setAvatarSprite', textureUrl, 'instanciate sprite manager');
+    const spriteManager = new SpriteManager(
+      'AvatarManager',
+      // rabbit_round,
+      textureUrl,
+      1,
+      {
+        width: 128,
+        height: 128
+        // width: 512,
+        // height: 512
+      },
+      this.scene
+    );
+    console.log('loadAvatar', PlayerHelper.wisp, spriteManager);
+    this.wisp?.setAvatar(spriteManager);
+  }
+
+  static updatePlayerAvatar() {
+    if (!this.wisp || !this.playerInterface) {
+      console.log('updatePlayerAvatar: wisp or playerInterface is null');
+      return;
+    }
+    const user = this.playerInterface;
+    console.log('updatePlayerAvatar', user);
+
+    if (user.avatar) {
+      let textureUrl = '';
+      // let textureUrl = rabbit_round;
+      if (user.avatar.startsWith('http')) {
+        textureUrl = user.avatar;
+      } else {
+        textureUrl = ObjectHelper.textureRootUrl + ObjectHelper.textureDefaultSize + user.avatar;
+      }
+
+      console.log('updateUserAvatar', textureUrl);
+
+      this.setAvatarTexture(textureUrl, this.wisp.getInnerNode());
+      this.setAvatarSprite(textureUrl, this.wisp.getInnerNode());
+    }
+  }
+
   static async userEnteredAsync(user: Odyssey3dUserInterface) {
     await this.spawnUserAsync(this.scene, user);
   }
@@ -344,6 +416,7 @@ export class PlayerHelper {
     if (user.id === this.playerId) {
       console.log('PlayerHelper userInstantiate: user is player', user, this.wisp);
       this.playerInterface = user;
+      this.updatePlayerAvatar();
       // if (this.playerInstance) {
       // if (this.wisp) {
       //   this.updateUserAvatar(user, this.playerInstance);

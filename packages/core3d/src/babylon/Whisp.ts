@@ -187,7 +187,7 @@ export class Whisp {
    * @param {SpriteManager} spriteManager The avatar sprite manager
    * @param {Scene} scene The scene
    */
-  setAvatar(spriteManager: SpriteManager, scene: Scene) {
+  setAvatar(spriteManager: SpriteManager) {
     console.log('setAvatar');
     this.particlesSparks?.stop();
 
@@ -195,6 +195,7 @@ export class Whisp {
     this.sprite.width = this.sprite.height = Whisp.RADIUS * 2 * Whisp.AVATAR_SIZE;
     this.sprite.color.a = Whisp.AVATAR_OPACITY;
 
+    // need this?
     this.setSphereInverted(true);
   }
 
@@ -238,7 +239,8 @@ export class Whisp {
     }
 
     if (this.sprite) {
-      this.sprite.position.copyFrom(this.node.position);
+      // this.sprite.position.copyFrom(this.node.position);
+      this.sprite.position.copyFrom(this.node.getAbsolutePosition().add(new Vector3(0, 0, 0.1)));
     }
   }
 
