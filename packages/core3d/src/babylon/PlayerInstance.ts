@@ -70,7 +70,7 @@ export class PlayerInstance {
         const childNodes = userNode.getChildTransformNodes();
         if (childNodes.length > 0) {
           childNodes[0].position = PLAYER_OFFSET_RH;
-          childNodes[0].rotation = new Vector3(0, Math.PI, Math.PI);
+          // childNodes[0].rotation = new Vector3(0, Math.PI, Math.PI);
         }
 
         const {id, name, transform} = this.userDefinition;
@@ -85,6 +85,7 @@ export class PlayerInstance {
         const customNodeMat = NodeMaterial.Parse(wispNodeMaterial, this.scene);
         const textures = customNodeMat.getTextureBlocks();
         const defaultTexture = new Texture(defaultAvatar);
+        defaultTexture.vScale = -1;
         textures[2].texture = defaultTexture;
         meshes[0].material = customNodeMat;
       })
@@ -113,6 +114,7 @@ export class PlayerInstance {
         //   );
         // }
       );
+      avatarTexture.vScale = -1;
       textureBlocks[2].texture = avatarTexture;
     } else if (this.wisp) {
       this.wisp.setAvatarTexture(url);

@@ -356,8 +356,9 @@ export class PlayerHelper {
         scene: this.scene,
         user
       });
-      // await babylonUser.createFromModelUrl(wisp);
       await babylonUser.create();
+      // await babylonUser.createFromModelUrl(wisp);
+      // await babylonUser.createFromModelUrl('https://models.babylonjs.com/alien.glb');
     }
 
     this.userMap.set(user.id, babylonUser);
