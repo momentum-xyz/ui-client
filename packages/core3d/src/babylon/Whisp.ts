@@ -219,6 +219,7 @@ export class Whisp {
       },
       this.node.getScene()
     );
+    this.avatarDisc.rotation.z = Math.PI;
 
     const avatarTexture = new Texture(
       url,
