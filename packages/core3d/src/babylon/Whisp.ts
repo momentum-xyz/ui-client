@@ -161,6 +161,18 @@ export class Whisp {
   }
 
   /**
+   *  Dispose of the whisp
+   */
+  dispose() {
+    this.sphere.dispose();
+    this.trail?.dispose();
+    this.particlesBeams?.dispose();
+    this.particlesSparks?.dispose();
+    this.assets?.dispose();
+    this.avatarDisc?.dispose();
+  }
+
+  /**
    * Set the sphere to inverted or not inverted
    * @param {boolean} inverted True if the sphere should be inverted
    */

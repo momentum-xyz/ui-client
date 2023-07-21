@@ -40,6 +40,7 @@ import {InputHelper} from './InputHelper';
 import {WhispControllable} from './WhispControllable';
 import {Whisp} from './Whisp';
 import {WispUniversal} from './WispUniversal';
+import {PlayerInstance} from './PlayerInstance';
 
 //const NORMAL_SPEED = 0.5;
 //const FAST_SPEED = 1.5;
@@ -48,6 +49,14 @@ export const PLAYER_OFFSET_RH = new Vector3(0, -0.5, -3);
 
 // TODO: Set this from PosBusSelfPosMsg
 const CAMERA_POS_CREATOR = new Vector3(50, 50, 150);
+
+export const getAvatarAbsoluteUrl = (avatarHash: string) => {
+  if (avatarHash.startsWith('http')) {
+    return avatarHash;
+  } else {
+    return ObjectHelper.textureRootUrl + ObjectHelper.textureDefaultSize + avatarHash;
+  }
+};
 
 interface BabylonUserInterface {
   container: AssetContainer;
@@ -72,7 +81,7 @@ const enum KeysEnum {
 export class PlayerHelper {
   static camera: UniversalCamera;
   static scene: Scene;
-  static userMap = new Map<string, BabylonUserInterface>();
+  static userMap = new Map<string, PlayerInstance>();
 
   static wisp?: Whisp;
   static playerNode?: TransformNode;
@@ -162,10 +171,10 @@ export class PlayerHelper {
   static getUserNode(userId: string): TransformNode | null {
     const userObj = this.userMap.get(userId);
     if (userObj) {
-      const userNode = userObj.userInstance.rootNodes[0];
-      if (userNode instanceof TransformNode) {
-        return userNode;
-      }
+      const userNode = userObj.getNode();
+      // if (userNode instanceof TransformNode) {
+      return userNode;
+      // }
     }
     console.log('PlayerHelper getUserNode: node is null or wrong type');
     return null;
@@ -284,17 +293,10 @@ export class PlayerHelper {
     const meshes = instance.rootNodes[0].getChildMeshes();
     const myNodeMat = meshes[0].material as NodeMaterial;
     const textureBlocks = myNodeMat.getTextureBlocks();
-    let textureUrl = '';
-    // let textureUrl = rabbit_round;
-    if (user.avatar) {
-      if (user.avatar.startsWith('http')) {
-        textureUrl = user.avatar;
-      } else {
-        textureUrl = ObjectHelper.textureRootUrl + ObjectHelper.textureDefaultSize + user.avatar;
-      }
 
+    if (user.avatar) {
       const avatarTexture = new Texture(
-        textureUrl,
+        getAvatarAbsoluteUrl(user.avatar),
         undefined,
         undefined,
         undefined,
@@ -308,39 +310,6 @@ export class PlayerHelper {
       );
       textureBlocks[2].texture = avatarTexture;
     }
-    // console.log('updateUserAvatar', textureUrl);
-    // const spriteManager = new SpriteManager(
-    //   'AvatarManager',
-    //   // rabbit_round,
-    //   textureUrl,
-    //   1,
-    //   {
-    //     width: 512,
-    //     height: 512
-    //   },
-    //   this.scene
-    // );
-    // console.log('loadAvatar', PlayerHelper.wisp);
-    // this.wisp?.setAvatar(spriteManager);
-  }
-
-  static setAvatarSprite(textureUrl: string, node: TransformNode) {
-    console.log('setAvatarSprite', textureUrl, 'instanciate sprite manager');
-    const spriteManager = new SpriteManager(
-      'AvatarManager',
-      // rabbit_round,
-      textureUrl,
-      1,
-      {
-        width: 128,
-        height: 128
-        // width: 512,
-        // height: 512
-      },
-      this.scene
-    );
-    console.log('loadAvatar', PlayerHelper.wisp, spriteManager);
-    this.wisp?.setAvatar(spriteManager);
   }
 
   static updatePlayerAvatar() {
@@ -368,27 +337,9 @@ export class PlayerHelper {
   }
 
   static async userEnteredAsync(user: Odyssey3dUserInterface) {
-    await this.spawnUserAsync(this.scene, user);
-  }
-
-  // TODO: Consider merging the different spawning functions
-  static async spawnUserAsync(scene: Scene, user: Odyssey3dUserInterface) {
-    //const assetUrl = getAssetFileName(this.playerAvatar3D);
-    await SceneLoader.LoadAssetContainerAsync(
-      wisp, //ObjectHelper.assetRootUrl,
-      '', //assetUrl,
-      scene,
-      (event) => {},
-      '.glb'
-    ).then((container) => {
-      this.userInstantiate(container, user);
-    });
-  }
-
-  static userInstantiate(container: AssetContainer, user: Odyssey3dUserInterface) {
-    console.log('PlayerHelper userInstantiate', user);
+    console.log('PlayerHelper userEnteredAsync', user);
     if (user.id === this.playerId) {
-      console.log('PlayerHelper userInstantiate: user is player', user, this.wisp);
+      console.log('PlayerHelper userEnteredAsync: user is player', user, this.wisp);
       this.playerInterface = user;
       this.updatePlayerAvatar();
       // if (this.playerInstance) {
@@ -396,38 +347,21 @@ export class PlayerHelper {
       //   this.updateUserAvatar(user, this.playerInstance);
       // }
       return;
-    } else {
-      const instance = container.instantiateModelsToScene();
-      const userNode = instance.rootNodes[0];
-      if (!(userNode instanceof TransformNode)) {
-        console.log('Unable to instantiate user');
-        return;
-      }
-
-      this.setUserAvatar(userNode);
-
-      userNode.scaling = new Vector3(0.5, 0.5, -0.5);
-      const childNodes = userNode.getChildTransformNodes();
-      if (childNodes.length > 0) {
-        childNodes[0].position = PLAYER_OFFSET_RH;
-        childNodes[0].rotation = new Vector3(0, Math.PI, Math.PI);
-      }
-
-      userNode.name = user.name;
-      if (user.transform?.position) {
-        userNode.position = posToVec3(user.transform.position);
-      }
-
-      userNode.metadata = user.id;
-
-      const babylonUser = {
-        container: container,
-        userDefinition: user,
-        userInstance: instance
-      };
-      this.userMap.set(user.id, babylonUser);
-      this.updateUserAvatar(user, instance);
     }
+
+    let babylonUser = this.userMap.get(user.id);
+
+    if (!babylonUser) {
+      babylonUser = new PlayerInstance({
+        scene: this.scene,
+        user
+      });
+      // await babylonUser.createFromModelUrl(wisp);
+      await babylonUser.create();
+    }
+
+    this.userMap.set(user.id, babylonUser);
+    babylonUser.updateAvatar(user.avatar ? getAvatarAbsoluteUrl(user.avatar) : rabbit_round);
   }
 
   static setUserTransforms(users: Odyssey3dUserTransformInterface[]) {
@@ -488,9 +422,10 @@ export class PlayerHelper {
   static userRemove(id: string) {
     const userToRemove = this.userMap.get(id);
     if (userToRemove) {
-      userToRemove.userInstance.dispose();
-      userToRemove.container.removeAllFromScene();
-      userToRemove.container.dispose();
+      userToRemove.dispose();
+      // userToRemove.userInstance.dispose();
+      // userToRemove.container.removeAllFromScene();
+      // userToRemove.container.dispose();
 
       this.userMap.delete(id);
     } else {
@@ -499,10 +434,11 @@ export class PlayerHelper {
   }
 
   static disposeAllUsers() {
-    for (const mapObj of this.userMap) {
-      mapObj[1].userInstance.dispose();
-      mapObj[1].container.removeFromScene();
-      mapObj[1].container.dispose();
+    for (const [, userToRemove] of this.userMap) {
+      // mapObj[1].userInstance.dispose();
+      // mapObj[1].container.removeFromScene();
+      // mapObj[1].container.dispose();
+      userToRemove.dispose();
     }
     this.userMap.clear();
   }
