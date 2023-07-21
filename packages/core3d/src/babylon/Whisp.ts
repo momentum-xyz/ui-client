@@ -14,7 +14,8 @@ import {
   AssetContainer,
   InstantiatedEntries,
   Sprite,
-  SpriteManager
+  SpriteManager,
+  Mesh
 } from '@babylonjs/core';
 
 import pentagon from '../static/Particles/pentagon.png';
@@ -46,6 +47,7 @@ export class Whisp {
   protected readonly sphere;
   protected readonly position = new Vector3(2, 2, 2);
   protected sprite?: Sprite;
+  protected avatarDisc?: Mesh;
   protected animationPhase = Math.random();
 
   /**
@@ -208,6 +210,16 @@ export class Whisp {
     console.log('setAvatar');
     this.particlesSparks?.stop();
 
+    this.avatarDisc?.dispose();
+
+    this.avatarDisc = MeshBuilder.CreateDisc(
+      'AvatarDisc',
+      {
+        radius: Whisp.RADIUS * 2 * Whisp.AVATAR_SIZE
+      },
+      this.node.getScene()
+    );
+
     const avatarTexture = new Texture(
       url,
       undefined,
@@ -219,13 +231,16 @@ export class Whisp {
         console.log('Error when loading texture', url, 'Error:', message);
       }
     );
-    const mat = this.sphere.material;
-    if (mat instanceof StandardMaterial) {
-      mat.ambientTexture = avatarTexture;
-      mat.diffuseTexture = avatarTexture;
-      mat.emissiveTexture = avatarTexture;
-      mat.specularTexture = avatarTexture;
-    }
+    const mat = new StandardMaterial('AvatarMaterial', this.node.getScene());
+    mat.ambientTexture = avatarTexture;
+    mat.diffuseTexture = avatarTexture;
+    mat.emissiveTexture = avatarTexture;
+    mat.specularTexture = avatarTexture;
+    mat.alpha = Whisp.AVATAR_OPACITY;
+
+    this.avatarDisc.material = mat;
+    this.avatarDisc.parent = this.node;
+    this.avatarDisc.billboardMode = Mesh.BILLBOARDMODE_ALL;
   }
 
   /**
