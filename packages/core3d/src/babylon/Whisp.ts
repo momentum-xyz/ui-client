@@ -200,6 +200,35 @@ export class Whisp {
   }
 
   /**
+   * Set the avatar image for this whisp
+   * @param {SpriteManager} spriteManager The avatar sprite manager
+   * @param {Scene} scene The scene
+   */
+  setAvatarTexture(url: string) {
+    console.log('setAvatar');
+    this.particlesSparks?.stop();
+
+    const avatarTexture = new Texture(
+      url,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      (message) => {
+        console.log('Error when loading texture', url, 'Error:', message);
+      }
+    );
+    const mat = this.sphere.material;
+    if (mat instanceof StandardMaterial) {
+      mat.ambientTexture = avatarTexture;
+      mat.diffuseTexture = avatarTexture;
+      mat.emissiveTexture = avatarTexture;
+      mat.specularTexture = avatarTexture;
+    }
+  }
+
+  /**
    * Update the state
    * @param {number} delta The time delta in seconds
    */

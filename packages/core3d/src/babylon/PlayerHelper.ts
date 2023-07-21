@@ -324,32 +324,6 @@ export class PlayerHelper {
     // this.wisp?.setAvatar(spriteManager);
   }
 
-  static setAvatarTexture(textureUrl: string, node: TransformNode) {
-    const avatarTexture = new Texture(
-      textureUrl,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      (message) => {
-        console.log('Error when loading texture', textureUrl, 'Error:', message);
-      }
-    );
-    const meshes = node.getChildMeshes();
-    const mat = meshes[0].material;
-    if (mat instanceof StandardMaterial) {
-      mat.ambientTexture = avatarTexture;
-      mat.diffuseTexture = avatarTexture;
-      mat.emissiveTexture = avatarTexture;
-      mat.specularTexture = avatarTexture;
-    }
-    console.log('updatePlayerAvatar', {
-      textureUrl,
-      avatarTexture
-    });
-  }
-
   static setAvatarSprite(textureUrl: string, node: TransformNode) {
     console.log('setAvatarSprite', textureUrl, 'instanciate sprite manager');
     const spriteManager = new SpriteManager(
@@ -388,8 +362,8 @@ export class PlayerHelper {
 
       console.log('updateUserAvatar', textureUrl);
 
-      this.setAvatarTexture(textureUrl, this.wisp.getInnerNode());
-      this.setAvatarSprite(textureUrl, this.wisp.getInnerNode());
+      this.wisp.setAvatarTexture(textureUrl);
+      // this.setAvatarSprite(textureUrl, this.wisp.getInnerNode());
     }
   }
 
