@@ -349,7 +349,11 @@ class PosBusService {
       ]);
       const onResp = (id: string, result: boolean, lockOwner: string) => {
         if (id === objectId) {
-          if (result && lockOwner === this.userId) {
+          if (
+            // temp ignore result to make up for the case of object locked by us and us not knowing
+            //result &&
+            lockOwner === this.userId
+          ) {
             resolve();
           } else {
             reject(new Error('Object is locked'));
