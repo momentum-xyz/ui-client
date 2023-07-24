@@ -219,6 +219,11 @@ class PosBusService {
             },
             PosBusService.attachNextReceivedObjectToCamera
           );
+          if (PosBusService.attachNextReceivedObjectToCamera) {
+            PosBusService.requestObjectLock(object.id).catch((err) => {
+              console.log('Cannot lock object after spawning?!?!', err);
+            });
+          }
 
           PosBusService.attachNextReceivedObjectToCamera = false;
         }
