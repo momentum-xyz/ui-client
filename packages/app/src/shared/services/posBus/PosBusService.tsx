@@ -347,9 +347,9 @@ class PosBusService {
           id: objectId
         }
       ]);
-      const onResp = (id: string, result: boolean) => {
+      const onResp = (id: string, result: boolean, lockOwner: string) => {
         if (id === objectId) {
-          if (result) {
+          if (result && lockOwner === this.userId) {
             resolve();
           } else {
             reject(new Error('Object is locked'));
