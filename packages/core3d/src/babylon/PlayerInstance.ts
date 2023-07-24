@@ -13,8 +13,8 @@ import {Odyssey3dUserInterface} from '@momentum-xyz/core';
 
 import defaultAvatar from '../static/Rabbit.png';
 import wispNodeMaterial from '../static/nodeMaterialWisp.json';
+import wispGlb from '../static/Wisp.glb';
 
-import {posToVec3} from './TransformHelper';
 import {PLAYER_OFFSET_RH} from './PlayerHelper';
 import {Whisp} from './Whisp';
 
@@ -42,19 +42,17 @@ export class PlayerInstance {
     return myNode as TransformNode;
   }
 
-  create() {
+  createClassic() {
     this.wisp = new Whisp(this.scene);
+    this.initInstMetadata();
   }
 
-  async createFromModelUrl(modelUrl: string) {
-    return SceneLoader.LoadAssetContainerAsync(
-      modelUrl,
-      // wisp, //ObjectHelper.assetRootUrl,
-      '',
-      this.scene,
-      (event) => {},
-      '.glb'
-    )
+  async createFromModelUrl(
+    modelUrl: string,
+    rotation?: Vector3,
+    scaling = new Vector3(0.5, 0.5, -0.5)
+  ) {
+    return SceneLoader.LoadAssetContainerAsync(modelUrl, '', this.scene, (event) => {}, '.glb')
       .then((container) => {
         this.container = container;
 
@@ -66,32 +64,37 @@ export class PlayerInstance {
         this.userInstance = instance;
 
         // setup position and rotation
-        userNode.scaling = new Vector3(0.5, 0.5, -0.5);
+
+        userNode.scaling = scaling;
         const childNodes = userNode.getChildTransformNodes();
         if (childNodes.length > 0) {
           childNodes[0].position = PLAYER_OFFSET_RH;
-          // childNodes[0].rotation = new Vector3(0, Math.PI, Math.PI);
+          if (rotation) {
+            childNodes[0].rotation = rotation;
+            // childNodes[0].rotation = new Vector3(0, Math.PI, Math.PI);
+          }
         }
 
-        const {id, name, transform} = this.userDefinition;
-        userNode.name = name;
-        if (transform?.position) {
-          userNode.position = posToVec3(transform.position);
-        }
-
-        userNode.metadata = id;
-
-        const meshes = userNode.getChildMeshes();
-        const customNodeMat = NodeMaterial.Parse(wispNodeMaterial, this.scene);
-        const textures = customNodeMat.getTextureBlocks();
-        const defaultTexture = new Texture(defaultAvatar);
-        defaultTexture.vScale = -1;
-        textures[2].texture = defaultTexture;
-        meshes[0].material = customNodeMat;
+        this.initInstMetadata();
       })
       .catch((err) => {
         console.log('PlayerHelper userInstantiate: error', err);
       });
+  }
+
+  async createModern() {
+    await this.createFromModelUrl(wispGlb);
+
+    this.initInstMetadata();
+
+    const userNode = this.getNode();
+    const meshes = userNode.getChildMeshes();
+    const customNodeMat = NodeMaterial.Parse(wispNodeMaterial, this.scene);
+    const textures = customNodeMat.getTextureBlocks();
+    const defaultTexture = new Texture(defaultAvatar);
+    defaultTexture.vScale = -1;
+    textures[2].texture = defaultTexture;
+    meshes[0].material = customNodeMat;
   }
 
   updateAvatar(url: string) {
@@ -139,5 +142,12 @@ export class PlayerInstance {
     );
     console.log('loadAvatar', this.wisp, spriteManager);
     this.wisp?.setAvatar(spriteManager);
+  }
+
+  private initInstMetadata() {
+    const userNode = this.getNode();
+    const {id, name} = this.userDefinition;
+    userNode.name = name;
+    userNode.metadata = id;
   }
 }

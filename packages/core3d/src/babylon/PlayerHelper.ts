@@ -22,7 +22,6 @@ import {
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
 
-import wisp from '../static/Wisp.glb';
 import defaultAvatar from '../static/Rabbit.png';
 import wispNodeMaterial from '../static/nodeMaterialWisp.json';
 import rabbit_round from '../static/rabbit_round.png';
@@ -356,12 +355,13 @@ export class PlayerHelper {
         scene: this.scene,
         user
       });
-      await babylonUser.create();
-      // await babylonUser.createFromModelUrl(wisp);
+      await babylonUser.createClassic();
+      // await babylonUser.createModern();
       // await babylonUser.createFromModelUrl('https://models.babylonjs.com/alien.glb');
+
+      this.userMap.set(user.id, babylonUser);
     }
 
-    this.userMap.set(user.id, babylonUser);
     babylonUser.updateAvatar(user.avatar ? getAvatarAbsoluteUrl(user.avatar) : rabbit_round);
   }
 
