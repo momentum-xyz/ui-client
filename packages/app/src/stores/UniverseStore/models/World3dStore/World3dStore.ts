@@ -127,6 +127,7 @@ const World3dStore = types
 
       if (!objectId && self.attachedToCameraObjectId) {
         Event3dEmitter.emit('DetachObjectFromCamera', self.attachedToCameraObjectId);
+        PosBusService.requestObjectUnlock(self.attachedToCameraObjectId);
         const isDuplicatedObject = creatorStore.isDuplicatedObject(self.attachedToCameraObjectId);
         if (isDuplicatedObject) {
           creatorStore.updateDuplicatedObject();
