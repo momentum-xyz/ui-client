@@ -219,6 +219,11 @@ class PosBusService {
             },
             PosBusService.attachNextReceivedObjectToCamera
           );
+          if (PosBusService.attachNextReceivedObjectToCamera) {
+            PosBusService.requestObjectLock(object.id).catch((err) => {
+              console.log('Cannot lock object after spawning?!?!', err);
+            });
+          }
 
           PosBusService.attachNextReceivedObjectToCamera = false;
         }
@@ -347,9 +352,13 @@ class PosBusService {
           id: objectId
         }
       ]);
-      const onResp = (id: string, result: boolean) => {
+      const onResp = (id: string, result: boolean, lockOwner: string) => {
         if (id === objectId) {
-          if (result) {
+          if (
+            // temp ignore result to make up for the case of object locked by us and us not knowing
+            //result &&
+            lockOwner === this.userId
+          ) {
             resolve();
           } else {
             reject(new Error('Object is locked'));
