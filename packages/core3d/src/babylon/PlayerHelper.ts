@@ -36,9 +36,7 @@ import {
 import {ObjectHelper} from './ObjectHelper';
 // import {InteractionEffectHelper} from './InteractionEffectHelper';
 import {InputHelper} from './InputHelper';
-import {WhispControllable} from './WhispControllable';
 import {Whisp} from './Whisp';
-import {WispUniversal} from './WispUniversal';
 import {PlayerInstance} from './PlayerInstance';
 
 //const NORMAL_SPEED = 0.5;
@@ -147,7 +145,7 @@ export class PlayerHelper {
     this.playerNode = new TransformNode('PlayerNode');
     this.playerNode.position = PLAYER_OFFSET;
 
-    this.wisp = new WispUniversal(scene, PLAYER_OFFSET); //CAMERA_POS_CREATOR);
+    this.wisp = new Whisp(scene, true, true, true, true, PLAYER_OFFSET); //CAMERA_POS_CREATOR);
     // this.player = new WhispControllable(scene, this.camera);
     // this.player = new WhispControllable(scene);
     // this.player = new Whisp(scene, true, true);
@@ -352,12 +350,13 @@ export class PlayerHelper {
 
     if (!babylonUser) {
       babylonUser = new PlayerInstance({
-        scene: this.scene,
-        user
+        scene: this.scene
       });
       await babylonUser.createClassic();
       // await babylonUser.createModern();
       // await babylonUser.createFromModelUrl('https://models.babylonjs.com/alien.glb');
+
+      babylonUser.setUserMetadata(user);
 
       this.userMap.set(user.id, babylonUser);
     }

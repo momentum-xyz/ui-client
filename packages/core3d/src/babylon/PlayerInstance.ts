@@ -20,14 +20,12 @@ import {Whisp} from './Whisp';
 
 export class PlayerInstance {
   scene: Scene;
-  userDefinition: Odyssey3dUserInterface;
   container?: AssetContainer;
   userInstance?: InstantiatedEntries;
   wisp?: Whisp;
 
-  constructor({scene, user}: {scene: Scene; user: Odyssey3dUserInterface}) {
+  constructor({scene}: {scene: Scene}) {
     this.scene = scene;
-    this.userDefinition = user;
   }
 
   dispose() {
@@ -42,9 +40,20 @@ export class PlayerInstance {
     return myNode as TransformNode;
   }
 
-  createClassic() {
-    this.wisp = new Whisp(this.scene);
-    this.initInstMetadata();
+  createClassic({
+    initialPosition,
+    beams = false,
+    sparks = false,
+    floating = false,
+    trail = false
+  }: {
+    initialPosition?: Vector3;
+    beams?: boolean;
+    sparks?: boolean;
+    floating?: boolean;
+    trail?: boolean;
+  } = {}) {
+    this.wisp = new Whisp(this.scene, trail, floating, beams, sparks, initialPosition);
   }
 
   async createFromModelUrl(
@@ -74,8 +83,6 @@ export class PlayerInstance {
             // childNodes[0].rotation = new Vector3(0, Math.PI, Math.PI);
           }
         }
-
-        this.initInstMetadata();
       })
       .catch((err) => {
         console.log('PlayerHelper userInstantiate: error', err);
@@ -84,8 +91,6 @@ export class PlayerInstance {
 
   async createModern() {
     await this.createFromModelUrl(wispGlb);
-
-    this.initInstMetadata();
 
     const userNode = this.getNode();
     const meshes = userNode.getChildMeshes();
@@ -144,9 +149,9 @@ export class PlayerInstance {
     this.wisp?.setAvatar(spriteManager);
   }
 
-  private initInstMetadata() {
+  setUserMetadata(userDefinition: Odyssey3dUserInterface) {
     const userNode = this.getNode();
-    const {id, name} = this.userDefinition;
+    const {id, name} = userDefinition;
     userNode.name = name;
     userNode.metadata = id;
   }

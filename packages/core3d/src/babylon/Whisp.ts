@@ -56,7 +56,14 @@ export class Whisp {
    * @param {boolean} [trail] True if the whisp should have a trail
    * @param {boolean} [float] True if the whisp should have float motion
    */
-  constructor(scene: Scene, trail = false, float = false) {
+  constructor(
+    scene: Scene,
+    trail = false,
+    float = false,
+    beams = false,
+    sparks = false,
+    initialPosition?: Vector3
+  ) {
     this.float = float;
     this.sphere = MeshBuilder.CreateIcoSphere(
       'Sphere',
@@ -93,6 +100,19 @@ export class Whisp {
       trailMaterial.emissiveColor = new Color3(1, 1, 1);
 
       this.trail.material = trailMaterial;
+    }
+
+    if (beams) {
+      this.createParticlesBeams(scene);
+    }
+
+    if (sparks) {
+      this.createParticlesSparks(scene);
+    }
+
+    if (initialPosition) {
+      this.node.position.copyFrom(initialPosition);
+      this.position.copyFrom(initialPosition);
     }
   }
 
