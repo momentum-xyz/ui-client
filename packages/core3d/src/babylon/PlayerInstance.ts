@@ -56,11 +56,17 @@ export class PlayerInstance {
     this.wisp = new Whisp(this.scene, trail, floating, beams, sparks, initialPosition);
   }
 
-  async createFromModelUrl(
-    modelUrl: string,
-    rotation?: Vector3,
-    scaling = new Vector3(0.5, 0.5, -0.5)
-  ) {
+  async createFromModelUrl({
+    modelUrl,
+    rotation,
+    scaling = new Vector3(0.5, 0.5, -0.5),
+    playAnimations = false
+  }: {
+    modelUrl: string;
+    rotation?: Vector3;
+    scaling?: Vector3;
+    playAnimations?: boolean;
+  }) {
     return SceneLoader.LoadAssetContainerAsync(modelUrl, '', this.scene, (event) => {}, '.glb')
       .then((container) => {
         this.container = container;
@@ -83,6 +89,12 @@ export class PlayerInstance {
             // childNodes[0].rotation = new Vector3(0, Math.PI, Math.PI);
           }
         }
+
+        // setup animations
+        if (playAnimations) {
+          const animations = instance.animationGroups;
+          animations[0]?.play(true);
+        }
       })
       .catch((err) => {
         console.log('PlayerHelper userInstantiate: error', err);
@@ -90,7 +102,7 @@ export class PlayerInstance {
   }
 
   async createModern() {
-    await this.createFromModelUrl(wispGlb);
+    await this.createFromModelUrl({modelUrl: wispGlb});
 
     const userNode = this.getNode();
     const meshes = userNode.getChildMeshes();
@@ -154,5 +166,18 @@ export class PlayerInstance {
     const {id, name} = userDefinition;
     userNode.name = name;
     userNode.metadata = id;
+  }
+
+  setPosition(position: Vector3) {
+    if (this.wisp) {
+      this.wisp.setInitialPosition(position);
+    } else {
+      const userNode = this.getNode();
+      userNode.position.copyFrom(position);
+    }
+  }
+
+  onRender() {
+    this.wisp?.update(Math.min(this.scene.deltaTime * 0.001, 1));
   }
 }

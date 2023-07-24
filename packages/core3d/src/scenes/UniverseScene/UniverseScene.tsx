@@ -80,7 +80,7 @@ export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbac
       // player = new WhispControllable(scene);
       console.log('initialize player');
       PlayerHelper.initialize({scene, canvas: view, rh: false});
-      PlayerHelper.spawnPlayer(scene, CAMERA_POS_EXPLORER, CAMERA_TARGET_EXPLORER);
+      PlayerHelper.spawnPlayer(CAMERA_POS_EXPLORER, CAMERA_TARGET_EXPLORER);
       // Example for loading a GLB asset into the whisp, also works for non players
       // loadAsset(scene);
       // loadAvatar(scene);
