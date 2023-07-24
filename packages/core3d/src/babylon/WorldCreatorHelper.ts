@@ -286,7 +286,7 @@ export class WorldCreatorHelper {
 
       if (spawn) {
         posToSend = node.absolutePosition;
-        rotToSend = new Vector3(0, 0, 0);
+        rotToSend = node.absoluteRotationQuaternion.toEulerAngles();
         scaleToSend = new Vector3(1, 1, 1);
       } else {
         posToSend = node.position;
