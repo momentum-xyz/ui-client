@@ -254,9 +254,10 @@ const MyWallet: FC<PropsInterface> = ({
                 stringValue={formatBigInt(unbondingInfo?.totalClaimable)}
               />
             </styled.Amount>
+            <span />
             <Button
               icon="wallet"
-              label="Claim unstaked"
+              label="Claim"
               onClick={handleClaimUnstakedTokens}
               disabled={!unbondingInfo?.totalClaimable || unbondingInfo.totalClaimable === '0'}
             />
