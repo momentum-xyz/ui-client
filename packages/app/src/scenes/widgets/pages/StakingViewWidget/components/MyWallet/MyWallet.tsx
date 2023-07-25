@@ -5,7 +5,12 @@ import {Button, Frame, Select, SelectOptionInterface, SymbolAmount} from '@momen
 
 import {formatBigInt} from 'core/utils';
 import {WalletModelInterface} from 'core/models';
-import {BlockchainRewardsInterface, useBlockchain} from 'shared/hooks';
+import {
+  BlockchainRewardsInterface,
+  UNBONDING_PERIOD_DAYS,
+  UnbondingInfoInterface,
+  useBlockchain
+} from 'shared/hooks';
 import {TokenSelector} from 'ui-kit';
 import {appVariables} from 'api/constants';
 
@@ -49,9 +54,11 @@ const MyWallet: FC<PropsInterface> = ({
     walletSelectContent,
     canRequestAirdrop,
     dateOfNextAllowedAirdrop,
-    claimRewards,
     getTokens,
-    getRewards
+    getRewards,
+    claimRewards,
+    getUnstakes,
+    claimUnstakedTokens
   } = useBlockchain({
     requiredAccountAddress
   });
@@ -69,6 +76,20 @@ const MyWallet: FC<PropsInterface> = ({
       handleLoadRewards(selectedWallet.wallet_id);
     }
   }, [handleLoadRewards, selectedWallet, isBlockchainReady]);
+
+  const [unbondingInfo, setUnbondingInfo] = useState<UnbondingInfoInterface>();
+  useEffect(() => {
+    if (selectedWallet?.wallet_id && isBlockchainReady) {
+      getUnstakes(selectedWallet.wallet_id, currentToken)
+        .then((unstakes) => {
+          console.log('Unstakes', unstakes);
+          setUnbondingInfo(unstakes);
+        })
+        .catch((err) => {
+          console.log('Error getting unstakes:', err);
+        });
+    }
+  }, [getUnstakes, selectedWallet, currentToken, isBlockchainReady, setUnbondingInfo]);
 
   const isClaimRewardAvailable = useMemo(() => {
     if (currentToken === TokenEnum.DAD_TOKEN && rewards.dad_rewards !== '0') {
@@ -99,6 +120,15 @@ const MyWallet: FC<PropsInterface> = ({
       }, 1000);
     } catch (err) {
       console.log('Error claiming rewards:', err);
+    }
+  };
+
+  const handleClaimUnstakedTokens = async () => {
+    try {
+      await claimUnstakedTokens();
+      console.log('Claim unstaked tokens success');
+    } catch (err) {
+      console.log('Error claiming unstaked tokens:', err);
     }
   };
 
@@ -211,14 +241,30 @@ const MyWallet: FC<PropsInterface> = ({
           <styled.TokenBlockData>
             <span>
               Total amount of MOM tokens that will be available to be redeemed from previous
-              unstakings
+              unstakings {UNBONDING_PERIOD_DAYS} days after the unstaking.
             </span>
             <styled.Amount>
               <SymbolAmount
                 tokenSymbol={tokenSymbol}
-                stringValue={formatBigInt(selectedWallet?.unbonding)}
+                stringValue={formatBigInt(unbondingInfo?.totalUnstaked)}
               />
             </styled.Amount>
+          </styled.TokenBlockData>
+
+          <styled.TokenBlockData>
+            <span>Available to claim</span>
+            <styled.Amount>
+              <SymbolAmount
+                tokenSymbol={tokenSymbol}
+                stringValue={formatBigInt(unbondingInfo?.totalClaimable)}
+              />
+            </styled.Amount>
+            <Button
+              icon="wallet"
+              label="Claim unstaked"
+              onClick={handleClaimUnstakedTokens}
+              disabled={!unbondingInfo?.totalClaimable || unbondingInfo.totalClaimable === '0'}
+            />
           </styled.TokenBlockData>
         </styled.TokenBlock>
       </Frame>

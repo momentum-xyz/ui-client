@@ -2,6 +2,7 @@ import {useCallback, useMemo, useState} from 'react';
 import Web3 from 'web3';
 import BN from 'bn.js';
 import {TokenEnum} from '@momentum-xyz/core';
+import dayjs from 'dayjs';
 
 import {useStore} from 'shared/hooks';
 import {dummyWalletConf} from 'wallets';
@@ -20,6 +21,8 @@ import faucetABI from './contract_faucet.ABI.json';
 
 const DELAY_REFRESH_DATA_MS = 2000;
 
+export const UNBONDING_PERIOD_DAYS = 7;
+
 export interface UseBlockchainPropsInterface {
   requiredAccountAddress: string;
 }
@@ -28,6 +31,21 @@ export interface BlockchainRewardsInterface {
   mom_rewards: string;
   dad_rewards: string;
   total_rewards: string;
+}
+
+export interface UnstakeInterface {
+  dad_amount: string;
+  mom_amount: string;
+  unstaking_timestamp: string;
+}
+export interface ResolvedUnstakeInterface {
+  value: string;
+  unblockTimestamp: string;
+}
+export interface UnbondingInfoInterface {
+  totalUnstaked: string;
+  totalClaimable: string;
+  unstakes: ResolvedUnstakeInterface[];
 }
 
 export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterface) => {
@@ -136,6 +154,78 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
     [account, faucetContract?.methods, isCorrectAccount, loadMyWallets, saveLastAirdropInfo]
   );
 
+  const getUnstakes = useCallback(
+    async (account: string, tokenKind: TokenEnum): Promise<UnbondingInfoInterface> => {
+      console.log('[UNSTAKES] Account ', account);
+      const latestUnblockedUnstakeTimestamp = dayjs().subtract(UNBONDING_PERIOD_DAYS, 'day').unix();
+      console.log('[UNSTAKES] latestUnblockedUnstakeTimestamp ', latestUnblockedUnstakeTimestamp);
+
+      const unstakes: ResolvedUnstakeInterface[] = [];
+      // there's no way to know how many unstakes there are,
+      // so we just try to get them one by one until we get an error
+      for (let i = 0; ; i++) {
+        try {
+          console.log('[UNSTAKES] Account ', account, i);
+          const unstakeInfo: UnstakeInterface = await stakingContract?.methods
+            .unstakes(account, i)
+            .call();
+          console.log('[UNSTAKES] unstakeInfo ', unstakeInfo);
+          if (!unstakeInfo) {
+            break;
+          }
+
+          const {dad_amount, mom_amount, unstaking_timestamp} = unstakeInfo;
+
+          if (tokenKind === TokenEnum.DAD_TOKEN && dad_amount !== '0') {
+            unstakes.push({
+              value: dad_amount,
+              unblockTimestamp: unstaking_timestamp
+            });
+          } else if (tokenKind === TokenEnum.MOM_TOKEN && mom_amount !== '0') {
+            unstakes.push({
+              value: mom_amount,
+              unblockTimestamp: unstaking_timestamp
+            });
+          }
+        } catch (e) {
+          break;
+        }
+      }
+      console.log('[UNSTAKES] Result ', unstakes);
+
+      const totalUnstaked = unstakes.reduce(
+        (acc, unstake) => acc.add(new BN(unstake.value)),
+        new BN(0)
+      );
+      console.log('[UNSTAKES] totalUnstaked ', totalUnstaked.toString());
+
+      const totalClaimable = unstakes
+        .filter((unstake) => Number(unstake.unblockTimestamp) < latestUnblockedUnstakeTimestamp)
+        .reduce((acc, unstake) => acc.add(new BN(unstake.value)), new BN(0));
+      console.log('[UNSTAKES] totalClaimable ', totalClaimable.toString());
+
+      return {
+        totalUnstaked: totalUnstaked.toString(),
+        totalClaimable: totalClaimable.toString(),
+        unstakes
+      };
+    },
+    [stakingContract]
+  );
+
+  const claimUnstakedTokens = useCallback(async () => {
+    console.log('useBlockchain claimUnstaked');
+    if (!isCorrectAccount) {
+      console.log('Incorrect account selected');
+      return;
+    }
+
+    const result = await stakingContract?.methods.claim_unstaked_tokens().send({from: account});
+    console.log('useBlockchain claimUnstaked result', result);
+
+    setTimeout(() => loadMyWallets().catch(console.error), DELAY_REFRESH_DATA_MS);
+  }, [stakingContract, account, isCorrectAccount, loadMyWallets]);
+
   const getRewards = useCallback(
     async (account: string): Promise<BlockchainRewardsInterface> => {
       console.log('[REWARDS] Account ', account);
@@ -205,8 +295,10 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
     dateOfNextAllowedAirdrop,
     stake,
     unstake,
-    claimRewards,
     getTokens,
-    getRewards
+    getRewards,
+    claimRewards,
+    getUnstakes,
+    claimUnstakedTokens
   };
 };
