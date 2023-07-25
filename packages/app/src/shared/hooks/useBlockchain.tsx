@@ -21,8 +21,6 @@ import faucetABI from './contract_faucet.ABI.json';
 
 const DELAY_REFRESH_DATA_MS = 2000;
 
-export const UNBONDING_PERIOD_DAYS = 7;
-
 export interface UseBlockchainPropsInterface {
   requiredAccountAddress: string;
 }
@@ -43,6 +41,7 @@ export interface ResolvedUnstakeInterface {
   unblockTimestamp: string;
 }
 export interface UnbondingInfoInterface {
+  unbondingPeriodDays: number;
   totalUnstaked: string;
   totalClaimable: string;
   unstakes: ResolvedUnstakeInterface[];
@@ -157,7 +156,11 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
   const getUnstakes = useCallback(
     async (account: string, tokenKind: TokenEnum): Promise<UnbondingInfoInterface> => {
       console.log('[UNSTAKES] Account ', account);
-      const latestUnblockedUnstakeTimestamp = dayjs().subtract(UNBONDING_PERIOD_DAYS, 'day').unix();
+
+      const lockingPeriodSec = await stakingContract?.methods.locking_period().call();
+      const unbondingPeriodDays = Number(lockingPeriodSec) / 60 / 60 / 24;
+
+      const latestUnblockedUnstakeTimestamp = dayjs().subtract(unbondingPeriodDays, 'day').unix();
       console.log('[UNSTAKES] latestUnblockedUnstakeTimestamp ', latestUnblockedUnstakeTimestamp);
 
       const unstakes: ResolvedUnstakeInterface[] = [];
@@ -205,6 +208,7 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
       console.log('[UNSTAKES] totalClaimable ', totalClaimable.toString());
 
       return {
+        unbondingPeriodDays,
         totalUnstaked: totalUnstaked.toString(),
         totalClaimable: totalClaimable.toString(),
         unstakes

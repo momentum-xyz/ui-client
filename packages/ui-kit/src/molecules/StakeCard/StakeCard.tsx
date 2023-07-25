@@ -44,9 +44,13 @@ const StakeCard: FC<StakeCardPropsInterface> = ({
 
           {reward && (
             <styled.TotalLine>
-              <span>{t('labels.reward')}</span>
+              <span>
+                {/* {t('labels.reward')} */}
+                &nbsp;
+              </span>
               <styled.TokensAmount>
-                <span>{reward}</span> {tokenSymbol}
+                {/* <span>{reward}</span> {tokenSymbol} */}
+                &nbsp;
               </styled.TokensAmount>
             </styled.TotalLine>
           )}
