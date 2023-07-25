@@ -161,7 +161,9 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
       console.log('[UNSTAKES] latestUnblockedUnstakeTimestamp ', latestUnblockedUnstakeTimestamp);
 
       const unstakes: ResolvedUnstakeInterface[] = [];
-      for (let i = 0; i < 1000; i++) {
+      // there's no way to know how many unstakes there are,
+      // so we just try to get them one by one until we get an error
+      for (let i = 0; ; i++) {
         try {
           console.log('[UNSTAKES] Account ', account, i);
           const unstakeInfo: UnstakeInterface = await stakingContract?.methods
