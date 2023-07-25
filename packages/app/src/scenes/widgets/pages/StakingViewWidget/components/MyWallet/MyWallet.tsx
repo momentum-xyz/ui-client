@@ -5,12 +5,7 @@ import {Button, Frame, Select, SelectOptionInterface, SymbolAmount} from '@momen
 
 import {formatBigInt} from 'core/utils';
 import {WalletModelInterface} from 'core/models';
-import {
-  BlockchainRewardsInterface,
-  UNBONDING_PERIOD_DAYS,
-  UnbondingInfoInterface,
-  useBlockchain
-} from 'shared/hooks';
+import {BlockchainRewardsInterface, UnbondingInfoInterface, useBlockchain} from 'shared/hooks';
 import {TokenSelector} from 'ui-kit';
 import {appVariables} from 'api/constants';
 
@@ -241,7 +236,7 @@ const MyWallet: FC<PropsInterface> = ({
           <styled.TokenBlockData>
             <span>
               Total amount of MOM tokens that will be available to be redeemed from previous
-              unstakings {UNBONDING_PERIOD_DAYS} days after the unstaking.
+              unstakings {unbondingInfo?.unbondingPeriodDays ?? 7} days after the unstaking.
             </span>
             <styled.Amount>
               <SymbolAmount
