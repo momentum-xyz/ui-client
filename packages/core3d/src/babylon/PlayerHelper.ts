@@ -1,18 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Scene,
-  UniversalCamera,
-  Vector3,
-  Quaternion,
-  SceneLoader,
-  AssetContainer,
-  InstantiatedEntries,
-  NodeMaterial,
-  Texture,
-  TransformNode,
-  SpriteManager,
-  ArcRotateCamera
-} from '@babylonjs/core';
+import {Scene, UniversalCamera, Vector3, Quaternion, TransformNode} from '@babylonjs/core';
 import {
   Odyssey3dUserInterface,
   Odyssey3dUserTransformInterface,
@@ -20,9 +6,6 @@ import {
   TransformNoScaleInterface
 } from '@momentum-xyz/core';
 
-import wisp from '../static/Wisp.glb';
-import defaultAvatar from '../static/Rabbit.png';
-import wispNodeMaterial from '../static/nodeMaterialWisp.json';
 import rabbit_round from '../static/rabbit_round.png';
 
 import {
@@ -35,9 +18,7 @@ import {
 import {ObjectHelper} from './ObjectHelper';
 // import {InteractionEffectHelper} from './InteractionEffectHelper';
 import {InputHelper} from './InputHelper';
-import {WhispControllable} from './WhispControllable';
-import {Whisp} from './Whisp';
-import {WispUniversal} from './WispUniversal';
+import {PlayerInstance} from './PlayerInstance';
 
 //const NORMAL_SPEED = 0.5;
 //const FAST_SPEED = 1.5;
@@ -47,11 +28,13 @@ export const PLAYER_OFFSET_RH = new Vector3(0, -0.5, -3);
 // TODO: Set this from PosBusSelfPosMsg
 const CAMERA_POS_CREATOR = new Vector3(50, 50, 150);
 
-interface BabylonUserInterface {
-  container: AssetContainer;
-  userDefinition: Odyssey3dUserInterface;
-  userInstance: InstantiatedEntries;
-}
+export const getAvatarAbsoluteUrl = (avatarHash: string) => {
+  if (avatarHash.startsWith('http')) {
+    return avatarHash;
+  } else {
+    return ObjectHelper.textureRootUrl + ObjectHelper.textureDefaultSize + avatarHash;
+  }
+};
 
 const enum KeysEnum {
   LEFT = 37,
@@ -70,14 +53,11 @@ const enum KeysEnum {
 export class PlayerHelper {
   static camera: UniversalCamera;
   static scene: Scene;
-  static userMap = new Map<string, BabylonUserInterface>();
+  static userMap = new Map<string, PlayerInstance>();
 
-  static wisp?: Whisp;
+  static playerInstance?: PlayerInstance;
   static playerNode?: TransformNode;
 
-  static playerInstance?: InstantiatedEntries;
-  static playerContainer?: AssetContainer;
-  static playerAvatar3D: string;
   static playerId: string;
   static playerInterface: Odyssey3dUserInterface;
   static rightHanded = false;
@@ -99,6 +79,7 @@ export class PlayerHelper {
     onMove?: (transform: TransformNoScaleInterface) => void;
     onSpawnParticles?: () => void;
   }) {
+    console.log('PlayerHelper initialize');
     this.scene = scene;
     this.rightHanded = rh;
     this.onSpawnParticles = onSpawnParticles;
@@ -133,55 +114,40 @@ export class PlayerHelper {
         onMove(playerTransform);
       }
     });
-
-    this.playerNode = new TransformNode('PlayerNode');
-    this.playerNode.position = PLAYER_OFFSET;
-
-    this.wisp = new WispUniversal(scene, PLAYER_OFFSET); //CAMERA_POS_CREATOR);
-    // this.player = new WhispControllable(scene, this.camera);
-    // this.player = new WhispControllable(scene);
-    // this.player = new Whisp(scene, true, true);
-    // this.camera = (this.player as WhispControllable).camera;
   }
 
   static getPlayerNode(): TransformNode | null {
-    // const myNode = this.playerInstance?.rootNodes[0];
-    // const myNode = this.wisp?.getInnerNode();
     const myNode = this.playerNode;
     console.log('PlayerHelper getPlayerNode', myNode);
-    if (myNode instanceof TransformNode) {
-      return myNode;
-    }
-    console.log('PlayerHelper getPlayerNode: node is null or wrong type');
-    return null;
+
+    return myNode || null;
   }
 
   static getUserNode(userId: string): TransformNode | null {
     const userObj = this.userMap.get(userId);
     if (userObj) {
-      const userNode = userObj.userInstance.rootNodes[0];
-      if (userNode instanceof TransformNode) {
-        return userNode;
-      }
+      return userObj.getNode();
     }
     console.log('PlayerHelper getUserNode: node is null or wrong type');
     return null;
   }
 
   static setWorld(world: SetWorldInterface, userId: string) {
+    console.log('PlayerHelper setWorld', world, userId);
     this.disposeAllUsers();
+    this.playerNode?.dispose();
+    this.playerNode = undefined;
     this.playerInstance?.dispose();
-    this.playerContainer?.removeAllFromScene();
-    this.playerContainer?.dispose();
+    this.playerInstance = undefined;
 
-    this.playerAvatar3D = world.avatar_3d_asset_id;
     this.playerId = userId;
-    this.spawnPlayer(PlayerHelper.scene);
+    // this.spawnPlayer();
   }
 
   static setSelfPos(pos: Vector3) {
     const node = this.getPlayerNode();
     if (!node) {
+      console.log('PlayerHelper setSelfPos: node is null or wrong type');
       return;
     }
     node.position = pos;
@@ -194,47 +160,48 @@ export class PlayerHelper {
     }
   }
 
-  // TODO: Consider merging the different spawning functions
-  static spawnPlayer(scene: Scene, position?: Vector3, target?: Vector3) {
-    // //const assetUrl = getAssetFileName(PlayerHelper.playerAvatar3D);
-    // SceneLoader.LoadAssetContainer(
-    //   wisp, //ObjectHelper.assetRootUrl,
-    //   '', //assetUrl,
-    //   scene,
-    //   (container) => {
-    //     this.playerInstantiate(container, position, target);
-    //   },
-    //   //on progress
-    //   (event) => {},
-    //   (scene, message) => {
-    //     // On error callback
-    //     console.log(PlayerHelper.playerAvatar3D + ' failed loading!: ' + message);
-    //   },
-    //   '.glb'
-    // );
-    this.playerInstantiate(undefined, position, target);
-  }
+  static async spawnPlayer(position?: Vector3, target?: Vector3, avatarHash?: string) {
+    console.log('PlayerHelper spawnPlayer', position, target);
 
-  // TODO: Consider merging the different instantiating functions
-  static playerInstantiate(container?: AssetContainer, position?: Vector3, target?: Vector3) {
-    const instance = container?.instantiateModelsToScene();
+    // init
+    const playerNode = (this.playerNode = new TransformNode('Player'));
 
-    console.log('PlayerHelper store instance', instance, container);
-    // this.playerInstance = instance;
-    // this.playerContainer = container;
-
-    const playerNode = this.getPlayerNode();
-    if (!playerNode || !this.wisp) {
-      console.log('Unable to load player model');
-      return;
+    const playerInstance = (this.playerInstance = new PlayerInstance({
+      scene: this.scene
+    }));
+    // classic wisp
+    await playerInstance.createClassic({
+      initialPosition: position,
+      beams: true,
+      sparks: true,
+      floating: true,
+      trail: true
+    });
+    if (avatarHash) {
+      this.setPlayerAvatar(avatarHash);
     }
 
-    // TODO: Set camera pos
-    // this.setUserAvatar(playerNode);
+    // await player.createModern();
+    // player.getNode().rotation.copyFrom(new Vector3(Math.PI / 16, Math.PI, Math.PI));
+    // InteractionEffectHelper.setupWispTail();
+    // if (avatarHash) {
+    //   this.setPlayerAvatar(avatarHash);
+    // }
 
-    playerNode.name = 'Player';
+    // 3D model wisp, TODO scale
+    // PLAYER_OFFSET_RH.z = -8;
+    // await player.createFromModelUrl({
+    //   modelUrl: 'https://models.babylonjs.com/alien.glb',
+    //   // modelUrl: 'https://dev.odyssey.ninja/api/v3/render/asset/76b66cc92edda760beeab10efafd3e4a',
+    //   // modelUrl: 'https://dev.odyssey.ninja/api/v3/render/asset/0765c2a0b76d19d325a2276a5fa9e19d',
+    //   playAnimations: true
+    // });
+
+    // attach to camera
     playerNode.parent = this.camera;
-    this.wisp.getInnerNode().parent = this.camera;
+    playerInstance.getNode().parent = this.camera;
+
+    // adjust position
     if (position) {
       console.log('PlayerHelper playerInstantiate: set position', position);
       this.camera.position = position;
@@ -243,144 +210,66 @@ export class PlayerHelper {
       console.log('PlayerHelper playerInstantiate: set target', target);
       this.camera.target = target;
     }
-    // playerNode.rotation = new Vector3(0, 0, 0);
-    // playerNode.scaling = new Vector3(0.5, 0.5, 0.5);
 
     if (this.rightHanded) {
       // manually account for RH
       playerNode.scaling = new Vector3(0.5, 0.5, -0.5);
-      playerNode.position = PLAYER_OFFSET_RH;
-      this.wisp?.setInitialPosition(PLAYER_OFFSET_RH);
+      // this.playerInstance.wisp?.setInitialPosition(PLAYER_OFFSET_RH);
+      this.playerInstance.setPosition(PLAYER_OFFSET_RH);
       playerNode.rotation = new Vector3(Math.PI / 16, Math.PI, Math.PI);
     } else {
+      // this.playerInstance.wisp?.setInitialPosition(PLAYER_OFFSET);
+      this.playerInstance.setPosition(PLAYER_OFFSET);
       playerNode.position = PLAYER_OFFSET;
-      this.wisp?.setInitialPosition(PLAYER_OFFSET);
       playerNode.rotation = new Vector3(-Math.PI / 16, Math.PI, Math.PI);
     }
-    // TODO: Animations
-
-    // InteractionEffectHelper.setupWispTail();
+  }
+  static setPlayerAvatar(avatarHash: string) {
+    console.log('PlayerHelper setPlayerAvatar', avatarHash);
+    this.playerInstance?.updateAvatar(getAvatarAbsoluteUrl(avatarHash));
   }
 
   static onRender() {
     if (this.scene.deltaTime) {
-      this.wisp?.update(Math.min(this.scene.deltaTime * 0.001, 1));
+      this.playerInstance?.onRender();
     }
-  }
-
-  static setUserAvatar(node: TransformNode) {
-    const meshes = node.getChildMeshes();
-    const customNodeMat = NodeMaterial.Parse(wispNodeMaterial, this.scene);
-    const textures = customNodeMat.getTextureBlocks();
-    const defaultTexture = new Texture(defaultAvatar);
-    textures[2].texture = defaultTexture;
-    meshes[0].material = customNodeMat;
-  }
-
-  static updateUserAvatar(user: Odyssey3dUserInterface, instance: InstantiatedEntries) {
-    const meshes = instance.rootNodes[0].getChildMeshes();
-    const myNodeMat = meshes[0].material as NodeMaterial;
-    const textureBlocks = myNodeMat.getTextureBlocks();
-    let textureUrl = '';
-    // let textureUrl = rabbit_round;
-    if (user.avatar) {
-      if (user.avatar.startsWith('http')) {
-        textureUrl = user.avatar;
-      } else {
-        textureUrl = ObjectHelper.textureRootUrl + ObjectHelper.textureDefaultSize + user.avatar;
-      }
-
-      const avatarTexture = new Texture(
-        textureUrl,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        (message) => {
-          console.log(
-            'Error when loading a texture for user: ' + user.name + ', error: ' + message
-          );
-        }
-      );
-      textureBlocks[2].texture = avatarTexture;
-    }
-    // console.log('updateUserAvatar', textureUrl);
-    // const spriteManager = new SpriteManager(
-    //   'AvatarManager',
-    //   // rabbit_round,
-    //   textureUrl,
-    //   1,
-    //   {
-    //     width: 512,
-    //     height: 512
-    //   },
-    //   this.scene
-    // );
-    // console.log('loadAvatar', PlayerHelper.wisp);
-    // this.wisp?.setAvatar(spriteManager);
   }
 
   static async userEnteredAsync(user: Odyssey3dUserInterface) {
-    await this.spawnUserAsync(this.scene, user);
-  }
-
-  // TODO: Consider merging the different spawning functions
-  static async spawnUserAsync(scene: Scene, user: Odyssey3dUserInterface) {
-    //const assetUrl = getAssetFileName(this.playerAvatar3D);
-    await SceneLoader.LoadAssetContainerAsync(
-      wisp, //ObjectHelper.assetRootUrl,
-      '', //assetUrl,
-      scene,
-      (event) => {},
-      '.glb'
-    ).then((container) => {
-      this.userInstantiate(container, user);
-    });
-  }
-
-  static userInstantiate(container: AssetContainer, user: Odyssey3dUserInterface) {
-    console.log('PlayerHelper userInstantiate', user);
+    console.log('PlayerHelper userEnteredAsync', user);
     if (user.id === this.playerId) {
-      console.log('PlayerHelper userInstantiate: user is player', user, this.wisp);
-      this.playerInterface = user;
-      // if (this.playerInstance) {
-      // if (this.wisp) {
-      //   this.updateUserAvatar(user, this.playerInstance);
-      // }
+      console.log('PlayerHelper userEnteredAsync: user is player', user);
+      if (!this.playerInstance) {
+        await this.spawnPlayer(undefined, undefined, user.avatar);
+      }
       return;
-    } else {
-      const instance = container.instantiateModelsToScene();
-      const userNode = instance.rootNodes[0];
-      if (!(userNode instanceof TransformNode)) {
-        console.log('Unable to instantiate user');
-        return;
-      }
-
-      this.setUserAvatar(userNode);
-
-      userNode.scaling = new Vector3(0.5, 0.5, -0.5);
-      const childNodes = userNode.getChildTransformNodes();
-      if (childNodes.length > 0) {
-        childNodes[0].position = PLAYER_OFFSET_RH;
-        childNodes[0].rotation = new Vector3(0, Math.PI, Math.PI);
-      }
-
-      userNode.name = user.name;
-      if (user.transform?.position) {
-        userNode.position = posToVec3(user.transform.position);
-      }
-
-      userNode.metadata = user.id;
-
-      const babylonUser = {
-        container: container,
-        userDefinition: user,
-        userInstance: instance
-      };
-      this.userMap.set(user.id, babylonUser);
-      this.updateUserAvatar(user, instance);
     }
+
+    let babylonUser = this.userMap.get(user.id);
+
+    if (!babylonUser) {
+      babylonUser = new PlayerInstance({
+        scene: this.scene
+      });
+      await babylonUser.createClassic({
+        // floating: true,
+        // trail: true
+        beams: true
+        // sparks: true
+      });
+      // await babylonUser.createModern();
+      // await babylonUser.createFromModelUrl({modelUrl: 'https://models.babylonjs.com/alien.glb'});
+
+      babylonUser.setUserMetadata(user);
+
+      this.userMap.set(user.id, babylonUser);
+
+      if (user.transform) {
+        babylonUser.setPosition(posToVec3(user.transform.position));
+      }
+    }
+
+    babylonUser.updateAvatar(user.avatar ? getAvatarAbsoluteUrl(user.avatar) : rabbit_round);
   }
 
   static setUserTransforms(users: Odyssey3dUserTransformInterface[]) {
@@ -441,10 +330,7 @@ export class PlayerHelper {
   static userRemove(id: string) {
     const userToRemove = this.userMap.get(id);
     if (userToRemove) {
-      userToRemove.userInstance.dispose();
-      userToRemove.container.removeAllFromScene();
-      userToRemove.container.dispose();
-
+      userToRemove.dispose();
       this.userMap.delete(id);
     } else {
       console.log("unable to delete object, as the id doesn't exist in the map, " + id);
@@ -452,10 +338,8 @@ export class PlayerHelper {
   }
 
   static disposeAllUsers() {
-    for (const mapObj of this.userMap) {
-      mapObj[1].userInstance.dispose();
-      mapObj[1].container.removeFromScene();
-      mapObj[1].container.dispose();
+    for (const [, userToRemove] of this.userMap) {
+      userToRemove.dispose();
     }
     this.userMap.clear();
   }

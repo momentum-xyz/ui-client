@@ -14,7 +14,8 @@ import {
   AssetContainer,
   InstantiatedEntries,
   Sprite,
-  SpriteManager
+  SpriteManager,
+  Mesh
 } from '@babylonjs/core';
 
 import pentagon from '../static/Particles/pentagon.png';
@@ -46,6 +47,7 @@ export class Whisp {
   protected readonly sphere;
   protected readonly position = new Vector3(2, 2, 2);
   protected sprite?: Sprite;
+  protected avatarDisc?: Mesh;
   protected animationPhase = Math.random();
 
   /**
@@ -54,7 +56,14 @@ export class Whisp {
    * @param {boolean} [trail] True if the whisp should have a trail
    * @param {boolean} [float] True if the whisp should have float motion
    */
-  constructor(scene: Scene, trail = false, float = false) {
+  constructor(
+    scene: Scene,
+    trail = false,
+    float = false,
+    beams = false,
+    sparks = false,
+    initialPosition?: Vector3
+  ) {
     this.float = float;
     this.sphere = MeshBuilder.CreateIcoSphere(
       'Sphere',
@@ -91,6 +100,19 @@ export class Whisp {
       trailMaterial.emissiveColor = new Color3(1, 1, 1);
 
       this.trail.material = trailMaterial;
+    }
+
+    if (beams) {
+      this.createParticlesBeams(scene);
+    }
+
+    if (sparks) {
+      this.createParticlesSparks(scene);
+    }
+
+    if (initialPosition) {
+      this.node.position.copyFrom(initialPosition);
+      this.position.copyFrom(initialPosition);
     }
   }
 
@@ -159,6 +181,18 @@ export class Whisp {
   }
 
   /**
+   *  Dispose of the whisp
+   */
+  dispose() {
+    this.sphere.dispose();
+    this.trail?.dispose();
+    this.particlesBeams?.dispose();
+    this.particlesSparks?.dispose();
+    this.assets?.dispose();
+    this.avatarDisc?.dispose();
+  }
+
+  /**
    * Set the sphere to inverted or not inverted
    * @param {boolean} inverted True if the sphere should be inverted
    */
@@ -187,7 +221,7 @@ export class Whisp {
    * @param {SpriteManager} spriteManager The avatar sprite manager
    * @param {Scene} scene The scene
    */
-  setAvatar(spriteManager: SpriteManager, scene: Scene) {
+  setAvatar(spriteManager: SpriteManager) {
     console.log('setAvatar');
     this.particlesSparks?.stop();
 
@@ -195,7 +229,51 @@ export class Whisp {
     this.sprite.width = this.sprite.height = Whisp.RADIUS * 2 * Whisp.AVATAR_SIZE;
     this.sprite.color.a = Whisp.AVATAR_OPACITY;
 
+    // need this?
     this.setSphereInverted(true);
+  }
+
+  /**
+   * Set the avatar image for this whisp
+   * @param {SpriteManager} spriteManager The avatar sprite manager
+   * @param {Scene} scene The scene
+   */
+  setAvatarTexture(url: string) {
+    console.log('setAvatar');
+    this.particlesSparks?.stop();
+
+    this.avatarDisc?.dispose();
+
+    this.avatarDisc = MeshBuilder.CreateDisc(
+      'AvatarDisc',
+      {
+        radius: Whisp.RADIUS * 2 * Whisp.AVATAR_SIZE
+      },
+      this.node.getScene()
+    );
+    this.avatarDisc.rotation.z = Math.PI;
+
+    const avatarTexture = new Texture(
+      url,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      (message) => {
+        console.log('Error when loading texture', url, 'Error:', message);
+      }
+    );
+    const mat = new StandardMaterial('AvatarMaterial', this.node.getScene());
+    mat.ambientTexture = avatarTexture;
+    mat.diffuseTexture = avatarTexture;
+    mat.emissiveTexture = avatarTexture;
+    mat.specularTexture = avatarTexture;
+    mat.alpha = Whisp.AVATAR_OPACITY;
+
+    this.avatarDisc.material = mat;
+    this.avatarDisc.parent = this.node;
+    this.avatarDisc.billboardMode = Mesh.BILLBOARDMODE_ALL;
   }
 
   /**
@@ -238,7 +316,8 @@ export class Whisp {
     }
 
     if (this.sprite) {
-      this.sprite.position.copyFrom(this.node.position);
+      // this.sprite.position.copyFrom(this.node.position);
+      this.sprite.position.copyFrom(this.node.getAbsolutePosition().add(new Vector3(0, 0, 0.1)));
     }
   }
 
