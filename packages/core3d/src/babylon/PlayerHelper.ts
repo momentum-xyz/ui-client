@@ -144,15 +144,6 @@ export class PlayerHelper {
     // this.spawnPlayer();
   }
 
-  static setSelfPos(pos: Vector3) {
-    const node = this.getPlayerNode();
-    if (!node) {
-      console.log('PlayerHelper setSelfPos: node is null or wrong type');
-      return;
-    }
-    node.position = pos;
-  }
-
   static setInitialPosition(transform: TransformNoScaleInterface) {
     if (this.camera) {
       this.camera.position = posToVec3(transform.position);
