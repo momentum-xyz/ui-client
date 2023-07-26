@@ -289,7 +289,7 @@ export class ObjectHelper {
       console.log('size:', size);
 
       // node.position = new Vector3(0, -0.5, -3);
-      node.position = new Vector3(0, 0, -size * 2);
+      node.position = new Vector3(0, size / 2, -size * 2 - 3);
 
       this.setSpawningMaterial(node);
 
@@ -322,8 +322,6 @@ export class ObjectHelper {
     }
 
     this.selectedObjectFromSpawn = '';
-
-    PlayerHelper.setSelfPos(new Vector3(0, -0.5, -3));
   }
 
   static setSpawningMaterial(node: TransformNode) {
