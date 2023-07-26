@@ -263,6 +263,10 @@ export class PlayerHelper {
       babylonUser.setUserMetadata(user);
 
       this.userMap.set(user.id, babylonUser);
+
+      if (user.transform) {
+        babylonUser.setPosition(posToVec3(user.transform.position));
+      }
     }
 
     babylonUser.updateAvatar(user.avatar ? getAvatarAbsoluteUrl(user.avatar) : rabbit_round);
