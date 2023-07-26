@@ -254,7 +254,7 @@ export class PlayerHelper {
       await babylonUser.createClassic({
         // floating: true,
         // trail: true
-        // beams: true,
+        beams: true
         // sparks: true
       });
       // await babylonUser.createModern();
