@@ -1,11 +1,22 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.div<{fill?: boolean}>`
   display: flex;
   width: 100%;
   height: 100%;
   justify-content: center;
   align-items: center;
+
+  ${(props) =>
+    props.fill &&
+    `
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    border-radius: inherit;
+    background-color: rgba(0, 0, 0, 0.5);
+  `}
 
   @keyframes blink {
     0% {

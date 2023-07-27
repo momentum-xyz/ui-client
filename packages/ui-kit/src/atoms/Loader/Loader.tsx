@@ -1,12 +1,14 @@
 import {FC} from 'react';
 
-import {PropsWithThemeInterface} from '../../interfaces';
-
 import * as styled from './Loader.styled';
 
-const Loader: FC<PropsWithThemeInterface> = () => {
+export interface LoaderPropsInterface {
+  fill?: boolean;
+}
+
+const Loader: FC<LoaderPropsInterface> = ({fill}) => {
   return (
-    <styled.Container data-testid="Loader-test">
+    <styled.Container data-testid="Loader-test" fill={fill}>
       <styled.Item />
       <styled.Item />
       <styled.Item />
