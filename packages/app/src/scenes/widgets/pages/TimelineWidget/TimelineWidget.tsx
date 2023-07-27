@@ -27,6 +27,10 @@ const TimelineWidget: FC = () => {
   const {timelineStore} = widgetStore;
   const {user} = sessionStore;
 
+  // it's important to extract it here,
+  // using isPending={timelineStore.isPending} below in the components doesn't lead to re-render
+  const {isPending} = timelineStore;
+
   const infiniteRef = useRef(null);
   const scrollListRef = useRef<VariableSizeList | null>();
   const entityHeightsRef = useRef({});
@@ -182,7 +186,7 @@ const TimelineWidget: FC = () => {
                           avatarSrc: user.avatarSrc || null,
                           isItMe: true
                         }}
-                        isPending={timelineStore.isPending}
+                        isPending={isPending}
                         screenshot={world3dStore?.screenshotOrVideo?.file}
                         onMakeScreenshot={handleMakeScreenshot}
                         onCreateOrUpdate={(form) => handleCreatePost(form, postTypeIntent)}
@@ -205,7 +209,7 @@ const TimelineWidget: FC = () => {
                           avatarSrc: user.avatarSrc || null,
                           isItMe: true
                         }}
-                        isPending={timelineStore.isPending}
+                        isPending={isPending}
                         video={world3dStore?.screenshotOrVideo?.file}
                         isScreenRecording={universeStore.isScreenRecording}
                         onStartRecording={handleStartRecording}
@@ -239,7 +243,7 @@ const TimelineWidget: FC = () => {
                           created: selectedPost.created_at,
                           hashSrc: getImageAbsoluteUrl(selectedPost.data.hash, ImageSizeEnum.S5)
                         }}
-                        isPending={timelineStore.isPending}
+                        isPending={isPending}
                         screenshot={world3dStore?.screenshotOrVideo?.file}
                         onMakeScreenshot={handleMakeScreenshot}
                         onCreateOrUpdate={(form) => handleUpdatePost(form, selectedPost)}
@@ -272,7 +276,7 @@ const TimelineWidget: FC = () => {
                           created: selectedPost.created_at,
                           hashSrc: getVideoAbsoluteUrl(selectedPost.data.hash)
                         }}
-                        isPending={timelineStore.isPending}
+                        isPending={isPending}
                         video={world3dStore?.screenshotOrVideo?.file}
                         isScreenRecording={universeStore.isScreenRecording}
                         onStartRecording={handleStartRecording}
