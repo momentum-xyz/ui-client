@@ -3,7 +3,7 @@ import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import BN from 'bn.js';
 import {useI18n} from '@momentum-xyz/core';
-import {Frame, Panel, StepInterface, Steps} from '@momentum-xyz/ui-kit';
+import {Frame, Loader, Panel, StepInterface, Steps} from '@momentum-xyz/ui-kit';
 
 import {WidgetEnum} from 'core/enums';
 import {PosBusService} from 'shared/services';
@@ -33,6 +33,7 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {isBlockchainReady, walletSelectContent, account, stake} = useBlockchain({
     requiredAccountAddress: selectedWalletId
   });
+  const [inProgress, setInProgress] = useState(false);
 
   const worldId = data?.id?.toString() || universeStore.worldId;
   const worldName = world2dStore?.worldDetails?.world?.name || '';
@@ -60,6 +61,7 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         worldId,
         amountAtoms
       );
+      setInProgress(true);
       const result = await stake(worldId, amountAtoms, nftStore.currentToken);
       console.log('stake success');
 
@@ -90,6 +92,7 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         />
       );
     } finally {
+      setInProgress(false);
       handleOnClose();
     }
   };
@@ -112,6 +115,7 @@ const StakingWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         title={t('staking.label')}
         onClose={handleOnClose}
       >
+        {inProgress && <Loader fill />}
         <styled.Wrapper>
           <styled.Steps>
             <Steps stepList={stepList} />
