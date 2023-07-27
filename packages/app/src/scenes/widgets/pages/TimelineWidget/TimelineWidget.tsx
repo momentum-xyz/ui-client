@@ -10,7 +10,8 @@ import {
   ImageSizeEnum,
   PostImageForm,
   PostVideoForm,
-  PostFormInterface
+  PostFormInterface,
+  Loader
 } from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
@@ -130,6 +131,7 @@ const TimelineWidget: FC = () => {
         onClose={() => widgetManagerStore.close(WidgetEnum.TIMELINE)}
       >
         <styled.Wrapper>
+          {isPending && <Loader fill />}
           <AutoSizer>
             {({height, width}: Size) => {
               return (
