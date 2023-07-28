@@ -55,7 +55,12 @@ const ObjectFunction: FC = () => {
     }
   };
 
-  const handleSaved = async () => {
+  const handleSaved = async (success = true) => {
+    if (!success) {
+      toast.error(<ToastContent isDanger icon="alert" text={t('assetsUploader.errorSave')} />);
+      return;
+    }
+
     // Update only when asset_2d was changed
     if (activeType && activeType !== objectFunctionalityStore.currentAssetId) {
       objectFunctionalityStore.selectAsset(activeType);
@@ -65,6 +70,31 @@ const ObjectFunction: FC = () => {
     creatorStore.setSelectedTab(null);
     handleSubMenuActiveChange();
     toast.info(<ToastContent icon="check" text={t('messages.saved')} />);
+  };
+
+  const handleImageSave = async (file: File | undefined, title: string): Promise<void> => {
+    if (!selectedObjectId) {
+      return;
+    }
+    try {
+      await normalContent.postNewImage(selectedObjectId, file, title);
+      await handleSaved();
+    } catch (err) {
+      toast.error(<ToastContent isDanger icon="alert" text={t('assetsUploader.errorSave')} />);
+    }
+  };
+
+  const handleTextSave = async (title: string, content: string): Promise<void> => {
+    if (!selectedObjectId) {
+      return;
+    }
+
+    try {
+      await normalContent.postNewContent(selectedObjectId, {title, content});
+      await handleSaved();
+    } catch (err) {
+      toast.error(<ToastContent isDanger icon="alert" text={t('assetsUploader.errorSave')} />);
+    }
   };
 
   const handleDelete = async () => {
@@ -89,10 +119,7 @@ const ObjectFunction: FC = () => {
             initialImageSrc={normalContent.imageSrc}
             isEditing={!!currentAssetId}
             isPending={normalContent.isPending}
-            onSave={async (file, title) => {
-              await normalContent.postNewImage(selectedObjectId, file, title);
-              await handleSaved();
-            }}
+            onSave={handleImageSave}
             onBack={() => setActiveType(null)}
             onDelete={handleDelete}
           />
@@ -105,10 +132,7 @@ const ObjectFunction: FC = () => {
             initialText={normalContent.content?.content}
             isEditing={!!currentAssetId}
             isPending={normalContent.isPending}
-            onSave={async (title, content) => {
-              await normalContent.postNewContent(selectedObjectId, {title, content});
-              await handleSaved();
-            }}
+            onSave={handleTextSave}
             onBack={() => setActiveType(null)}
             onDelete={handleDelete}
           />

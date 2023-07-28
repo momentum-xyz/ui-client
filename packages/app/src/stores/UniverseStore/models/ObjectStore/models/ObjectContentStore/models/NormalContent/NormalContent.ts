@@ -44,6 +44,10 @@ const NormalContent = types
         );
 
         imageHash = userResponse?.hash;
+
+        if (!imageHash) {
+          throw new Error('Image Upload failed');
+        }
       }
 
       yield self.updateContentRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
