@@ -111,13 +111,9 @@ const CreatorStore = types
       PosBusService.attachNextReceivedObjectToCamera = true;
 
       const response: PostSpaceResponse | undefined = yield self.duplicateObjectRequest.send(
-        api.spaceRepository.postSpace,
+        api.spaceRepository.cloneObject,
         {
-          parent_id: worldId,
-          object_name: name,
-          object_type_id: objectTypeId,
-          asset_3d_id: assetId,
-          minimap: false
+          objectId: sourceObjectId
         }
       );
       const objectId = response?.object_id;
