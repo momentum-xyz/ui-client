@@ -7,7 +7,6 @@ import {PluginIdEnum} from 'api/enums';
 import {CreatorTabsEnum} from 'core/enums';
 import {getRootStore} from 'core/utils';
 import {PosBusService} from 'shared/services';
-import {ObjectColorAttributeInterface} from 'api/interfaces';
 
 import {
   SkyboxSelectorStore,
@@ -37,9 +36,6 @@ const CreatorStore = types
       objectInfo: types.maybeNull(types.frozen<GetSpaceInfoResponse>()),
       getObjectInfoRequest: types.optional(RequestModel, {}),
       getObjectNameRequest: types.optional(RequestModel, {}),
-
-      duplicateSourceId: types.maybeNull(types.string),
-      duplicateId: types.maybeNull(types.string),
 
       duplicateObjectRequest: types.optional(RequestModel, {}),
       removeObjectDialog: types.optional(Dialog, {}),
@@ -101,86 +97,22 @@ const CreatorStore = types
       // TODO merge these stores??
       getRootStore(self).universeStore.world3dStore?.closeAndResetObjectMenu();
     }),
-    duplicateObject: flow(function* (
-      worldId: string,
-      sourceObjectId: string,
-      assetId: string,
-      name: string,
-      objectTypeId: string
-    ) {
+    duplicateObject: flow(function* (objectId: string) {
       PosBusService.attachNextReceivedObjectToCamera = true;
 
       const response: PostSpaceResponse | undefined = yield self.duplicateObjectRequest.send(
         api.spaceRepository.cloneObject,
         {
-          objectId: sourceObjectId
+          objectId
         }
       );
-      const objectId = response?.object_id;
+      const clonedObjectId = response?.object_id;
 
-      if (objectId) {
-        self.duplicateSourceId = sourceObjectId;
-        self.duplicateId = objectId;
-        getRootStore(self).universeStore.world3dStore?.setAttachedToCamera(objectId);
+      if (clonedObjectId) {
+        getRootStore(self).universeStore.world3dStore?.setAttachedToCamera(clonedObjectId);
       }
 
-      return objectId;
-    }),
-    isDuplicatedObject: (id: string) => self.duplicateId === id,
-    updateDuplicatedObject: flow(function* () {
-      const duplicateSourceId = self.duplicateSourceId;
-      const duplicateId = self.duplicateId;
-
-      if (!duplicateSourceId || !duplicateId) {
-        return;
-      }
-
-      const sourceObjectInfo = yield self.getObjectInfoRequest.send(
-        api.spaceInfoRepository.getSpaceInfo,
-        {
-          spaceId: duplicateSourceId
-        }
-      );
-      const duplicateObjectInfo = yield self.getObjectInfoRequest.send(
-        api.spaceInfoRepository.getSpaceInfo,
-        {
-          spaceId: duplicateId
-        }
-      );
-
-      if (!duplicateObjectInfo || !sourceObjectInfo) {
-        self.duplicateId = null;
-        self.duplicateSourceId = null;
-        return;
-      }
-
-      // 1. Transform data
-      const transform = {
-        position: duplicateObjectInfo.transform.position,
-        rotation: sourceObjectInfo.transform.rotation,
-        scale: sourceObjectInfo.transform.scale
-      };
-      PosBusService.sendObjectTransform(duplicateId, transform);
-
-      // 2. Color
-      const colorResponse: ObjectColorAttributeInterface = yield self.duplicateObjectRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
-        {
-          spaceId: duplicateSourceId,
-          plugin_id: PluginIdEnum.CORE,
-          attribute_name: AttributeNameEnum.OBJECT_COLOR
-        }
-      );
-
-      if (colorResponse && colorResponse.value) {
-        const colorHex = colorResponse.value;
-        setTimeout(() => {
-          self.objectColorStore.updateObjectColor(duplicateId, colorHex.replace(/-/g, ''));
-        }, 100);
-      }
-      self.duplicateId = null;
-      self.duplicateSourceId = null;
-      // 3. Functionality --- skip this
+      return clonedObjectId;
     })
   }));
 
