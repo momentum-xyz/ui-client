@@ -21,7 +21,7 @@ interface PropsInterface {
   isEditing: boolean;
   onDelete: () => void;
   onBack: () => void;
-  onSaved: () => void;
+  onSaved: (success: boolean) => void;
 }
 
 const AssignVideo: FC<PropsInterface> = ({
@@ -88,7 +88,7 @@ const PluginInnerWrapper = ({
 }: {
   pluginProps: PluginPropsInterface;
   plugin: PluginInterface;
-  onSaved: () => void;
+  onSaved: (success: boolean) => void;
   isEditing: boolean;
   onDelete: () => void;
   onBack: () => void;
@@ -117,11 +117,17 @@ const PluginInnerWrapper = ({
 
             <Button
               label={isEditing ? t('actions.save') : t('actions.embed')}
-              onClick={() => {
-                saveChanges?.().catch((err) => {
-                  console.error(err);
-                });
-                onSaved();
+              onClick={async () => {
+                try {
+                  if (!saveChanges) {
+                    throw new Error('plugin_video error: saveChanges method is not defined');
+                  }
+
+                  await saveChanges();
+                  onSaved(true);
+                } catch (err) {
+                  onSaved(false);
+                }
               }}
             />
           </styled.ActionBar>
