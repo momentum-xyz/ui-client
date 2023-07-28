@@ -26,6 +26,7 @@ class PosBusService {
   private client: Client | null = null;
   private port: PosbusPort | null = null;
   private static userId: string;
+  private static worldId?: string;
 
   public static attachNextReceivedObjectToCamera = false;
 
@@ -77,6 +78,7 @@ class PosBusService {
   static teleportToWorld(worldId: string) {
     if (this.main.client && this.main.port) {
       console.log('PosBus teleportToWorld', worldId);
+      this.worldId = worldId;
       this.main.client.teleport(worldId);
     } else {
       console.error('Cannot teleport: PosBus not connected');
@@ -84,6 +86,7 @@ class PosBusService {
   }
 
   static leaveWorld() {
+    this.worldId = undefined;
     this.main.port?.postMessage([
       MsgType.SIGNAL,
       {
@@ -205,6 +208,10 @@ class PosBusService {
 
         const {objects} = data;
         for (const object of objects) {
+          if (object.id === this.worldId) {
+            continue;
+          }
+
           console.log(
             'Add object',
             object,
