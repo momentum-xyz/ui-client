@@ -17,7 +17,9 @@ import {
   FetchWorldMembersRequest,
   FetchWorldMembersResponse,
   PostSpaceRequest,
-  PostSpaceResponse
+  PostSpaceResponse,
+  CloneObjectRequest,
+  CloneObjectResponse
 } from './spaceRepository.api.types';
 import {spaceRepositoryEndpoints} from './spaceRepository.api.endpoints';
 
@@ -70,6 +72,12 @@ export const deleteSpace: RequestInterface<DeleteSpaceRequest, DeleteSpaceReques
     generatePath(spaceRepositoryEndpoints().object, {objectId: spaceId}),
     restOptions
   );
+};
+
+export const cloneObject: RequestInterface<CloneObjectRequest, CloneObjectResponse> = (options) => {
+  const {objectId, ...restOptions} = options;
+
+  return request.post(generatePath(spaceRepositoryEndpoints().clone, {objectId}), {}, restOptions);
 };
 
 export const fetchWorldMembers: RequestInterface<

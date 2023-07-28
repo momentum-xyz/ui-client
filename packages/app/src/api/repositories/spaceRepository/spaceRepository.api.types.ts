@@ -42,6 +42,14 @@ export interface FetchWorldMembersRequest {
   worldId: string;
 }
 
+export interface CloneObjectRequest {
+  objectId: string;
+}
+
+export interface CloneObjectResponse {
+  object_id: string;
+}
+
 export interface WorldMemberInterface {
   user_id: string;
   name: string;

@@ -4,6 +4,7 @@ export const spaceRepositoryEndpoints = () => {
   return {
     base: `${BASE_URL}`,
     object: `${BASE_URL}/:objectId`,
+    clone: `${BASE_URL}/:objectId/clone`,
     members: `${BASE_URL}/:objectId/members`,
     deleteMember: `${BASE_URL}/:objectId/members/:userId`,
     claimAndCustomize: `${BASE_URL}/:objectId/claim-and-customise`,
