@@ -10,6 +10,7 @@ import {
 // import {hexlify} from '@ethersproject/bytes';
 // import {toUtf8Bytes} from '@ethersproject/strings';
 import {useWeb3React} from '@web3-react/core';
+import {useMutableCallback} from '@momentum-xyz/ui-kit';
 
 import {UseWalletType} from 'wallets';
 import {SUPPORTED_CHAIN_IDS} from 'wallets/supportedChainIds';
@@ -32,7 +33,7 @@ const talismanConnector = new TalismanConnector({
 //   }
 // };
 
-export const useWallet: UseWalletType = ({appVariables}) => {
+export const useWallet: UseWalletType = ({appVariables, onActivationDone}) => {
   const {library, chainId, account, activate, deactivate, active} = useWeb3React();
   console.log('Talisman useWallet', {library, account, activate, active});
 
@@ -43,6 +44,8 @@ export const useWallet: UseWalletType = ({appVariables}) => {
 
   const talismanEth = (window as any)?.talismanEth;
   const isInstalled = !!talismanEth;
+
+  const onActivationDoneCallback = useMutableCallback(onActivationDone);
 
   const activateWallet = useCallback(async () => {
     // const enable = async () => {
@@ -65,6 +68,7 @@ export const useWallet: UseWalletType = ({appVariables}) => {
         activate(talismanConnector)
           .then((res) => {
             console.log('Talisman useWallet activated res', res);
+            onActivationDoneCallback(true);
             resolve();
             // talismanEth
             //   .request({method: 'eth_requestAccounts'})
@@ -77,11 +81,12 @@ export const useWallet: UseWalletType = ({appVariables}) => {
           })
           .catch((err) => {
             console.log('Talisman useWallet activate err', err);
+            onActivationDoneCallback(false);
             reject(err);
           });
       }, 500);
     });
-  }, [activate]);
+  }, [activate, onActivationDoneCallback]);
 
   useEffect(() => {
     if (!isInstalled) {

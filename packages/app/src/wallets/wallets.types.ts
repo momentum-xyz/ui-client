@@ -14,6 +14,7 @@ export interface UseWalletHookReturnInterface {
 }
 export interface UseWalletPropsInterface {
   appVariables: {[key: string]: string};
+  onActivationDone: (success: boolean) => void;
 }
 
 export type UseWalletType = (props: UseWalletPropsInterface) => UseWalletHookReturnInterface;

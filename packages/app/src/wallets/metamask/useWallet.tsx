@@ -1,6 +1,7 @@
 import {useEffect, useCallback} from 'react';
 import {useWeb3React} from '@web3-react/core';
 import {InjectedConnector} from '@web3-react/injected-connector';
+import {useMutableCallback} from '@momentum-xyz/ui-kit';
 
 import {UseWalletType} from 'wallets';
 import {SUPPORTED_CHAIN_IDS} from 'wallets/supportedChainIds';
@@ -9,7 +10,7 @@ const connector = new InjectedConnector({
   supportedChainIds: SUPPORTED_CHAIN_IDS
 });
 
-export const useWallet: UseWalletType = () => {
+export const useWallet: UseWalletType = ({onActivationDone}) => {
   const {library, chainId, account, activate, deactivate, active} = useWeb3React();
   console.log('MetaMask useWallet', {library, account, activate, active});
 
@@ -27,6 +28,8 @@ export const useWallet: UseWalletType = () => {
     },
     [account, library]
   );
+
+  const onActivationDoneCallback = useMutableCallback(onActivationDone);
 
   const activateWallet = useCallback(async () => {
     console.log('MetaMask useWallet activate');
@@ -49,15 +52,17 @@ export const useWallet: UseWalletType = () => {
         activate(connector)
           .then((res) => {
             console.log('MetaMask useWallet activated res', res);
+            onActivationDoneCallback(true);
             resolve();
           })
           .catch((err) => {
             console.log('MetaMask useWallet activate err', err);
+            onActivationDoneCallback(false);
             reject(err);
           });
       }, 500);
     });
-  }, [activate, ethereum, metamaskProvider]);
+  }, [activate, ethereum, metamaskProvider, onActivationDoneCallback]);
 
   useEffect(() => {
     if (!isInstalled) {
