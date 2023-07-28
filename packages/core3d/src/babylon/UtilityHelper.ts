@@ -8,7 +8,7 @@ export function getAssetFileName(id: string): string {
 
 export function getNodeFromId(id: string): TransformNode | undefined {
   const obj = ObjectHelper.objectsMap.get(id);
-  const myNode = obj?.cloneWithEffect || obj?.objectInstance.rootNodes[0];
+  const myNode = obj?.getNode();
   if (myNode instanceof TransformNode) {
     return myNode;
   } else {
