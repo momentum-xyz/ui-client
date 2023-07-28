@@ -25,7 +25,7 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
   onNetworkStatusChanged
 }) => {
   const {useWallet} = walletConf;
-  const walletProps = {appVariables: appVariables as any};
+  const walletProps = {appVariables: appVariables as any, onActivationDone};
 
   const {t} = useI18n();
   const {web3Library, chainId, account, activate, isActive} = useWallet(walletProps);
@@ -50,15 +50,6 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
       onLibraryLoaded(web3Library);
     }
   }, [web3Library, onLibraryLoaded]);
-
-  useEffect(() => {
-    activate()
-      .catch((err) => {
-        console.log('WalletSelectHelper activate err', err);
-        onActivationDone(false);
-      })
-      .finally(() => onActivationDone(true));
-  }, [activate, onActivationDone]);
 
   const isWrongNetwork = !!chainId && chainId !== +appVariables.BLOCKCHAIN_ID;
 

@@ -28,7 +28,10 @@ const WalletLogin: FC<PropsInterface> = ({
   const {t} = useI18n();
 
   const {signChallenge, content, account, isInstalled, accountHex} = useWallet({
-    appVariables: appVariables as any
+    appVariables: appVariables as any,
+    onActivationDone: (success) => {
+      console.log('WalletLogin onActivationDone, success:', success);
+    }
   });
   console.log('WalletLogin', {name, signChallenge, content, account, accountHex});
 

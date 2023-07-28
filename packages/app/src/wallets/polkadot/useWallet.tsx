@@ -3,17 +3,19 @@ import type {InjectedAccountWithMeta} from '@polkadot/extension-inject/types';
 import {useCallback, useEffect, useState} from 'react';
 import {decodeAddress} from '@polkadot/util-crypto';
 import {stringToHex, u8aToHex} from '@polkadot/util';
-import {Select} from '@momentum-xyz/ui-kit';
+import {Select, useMutableCallback} from '@momentum-xyz/ui-kit';
 
 import {UseWalletType} from 'wallets';
 
-export const useWallet: UseWalletType = ({appVariables}) => {
+export const useWallet: UseWalletType = ({appVariables, onActivationDone}) => {
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
   const [_selectedAccount, setSelectedAccount] = useState<string | null>(null);
   const selectedAccount = accounts.find((account) => account.address === _selectedAccount);
   console.log('useWallet', {accounts, selectedAccount});
 
   const isInstalled = !!(window as any)?.injectedWeb3?.['polkadot-js'];
+
+  const onActivationDoneCallback = useMutableCallback(onActivationDone);
 
   const activate = useCallback(async () => {
     console.log('web3Enable start');
@@ -30,8 +32,13 @@ export const useWallet: UseWalletType = ({appVariables}) => {
       return;
     }
 
-    activate();
-  }, [activate, isInstalled]);
+    activate()
+      .then(() => onActivationDoneCallback(true))
+      .catch((err) => {
+        console.log('WalletSelectHelper activate err', err);
+        onActivationDone(false);
+      });
+  }, [activate, isInstalled, onActivationDoneCallback]);
 
   const signChallenge = async (challenge: string): Promise<string> => {
     if (!selectedAccount) {
