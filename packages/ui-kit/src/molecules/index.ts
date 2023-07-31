@@ -23,3 +23,4 @@ export * from './SoundItem';
 export * from './PostHeading';
 export * from './PostTypeSelector';
 export * from './PostSharing';
+export * from './Voting';
