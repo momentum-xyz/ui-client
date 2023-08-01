@@ -9,6 +9,8 @@ import {
   DeleteSpaceUserAttributeResponse,
   GetAllSpaceUserAttributesForSpaceRequest,
   GetAllSpaceUserAttributesForSpaceResponse,
+  GetSpaceUserAttributeCountRequest,
+  GetSpaceUserAttributeCountResponse,
   GetSpaceUserAttributeRequest,
   GetSpaceUserAttributeResponse,
   SetSpaceUserAttributeRequest,
@@ -64,6 +66,28 @@ export const deleteSpaceUserAttribute: RequestInterface<
   };
 
   return request.delete(url, restOptions);
+};
+
+export const getSpaceUserAttributeCount: RequestInterface<
+  GetSpaceUserAttributeCountRequest,
+  GetSpaceUserAttributeCountResponse
+> = (options) => {
+  const {spaceId, userId, pluginId, attributeName, sinceDateIsoUtc, ...restOptions} = options;
+
+  const url = generatePath(spaceUserAttributeRepositoryEndpoints().attributeCount, {
+    spaceId,
+    userId,
+    pluginId,
+    attributeName
+  });
+
+  if (sinceDateIsoUtc) {
+    restOptions.params = {
+      since: sinceDateIsoUtc
+    };
+  }
+
+  return request.get(url, restOptions);
 };
 
 export const getAllSpaceUserAttributesForSpace: RequestInterface<

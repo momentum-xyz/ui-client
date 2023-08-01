@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button, PositionEnum} from '@momentum-xyz/ui-kit';
 
@@ -14,8 +14,14 @@ const Customization: FC = () => {
   const {objectStore} = universeStore;
   const {objectContentStore} = objectStore;
   const {customizableContent} = objectContentStore;
+  const {userId} = sessionStore;
 
-  const canUserEdit = customizableContent.content?.claimed_by === sessionStore.userId;
+  const canUserEdit = customizableContent.content?.claimed_by === userId;
+
+  useEffect(() => {
+    customizableContent.fetchVoteCount(userId);
+    customizableContent.checkVote(userId);
+  }, [customizableContent, userId]);
 
   const handleSignUp = () => {
     widgetManagerStore.closeAll();
@@ -74,11 +80,16 @@ const Customization: FC = () => {
 
       {customizableContent.isViewForm && !!customizableContent.content && (
         <ContentViewer
+          hasVote={customizableContent.hasVote}
+          voteCount={customizableContent.voteCount}
           content={customizableContent.content}
           authorName={customizableContent.author?.name}
           authorAvatarHash={customizableContent.author?.profile.avatarHash}
           onDelete={canUserEdit ? handleDelete : undefined}
           onEdit={canUserEdit ? handleEdit : undefined}
+          onVote={() => customizableContent.toggleVote(userId)}
+          onAddComment={() => {}} // TODO
+          onDeleteComment={() => {}} // TODO
         />
       )}
     </styled.Container>

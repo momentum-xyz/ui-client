@@ -756,6 +756,7 @@ export const enGb = {
       sort: 'Sort',
       logOut: 'Log out',
       embed: 'Embed',
+      comment: 'Comment',
       manageWallet: 'Manage wallet',
       settings: 'Settings',
       publish: 'Publish',

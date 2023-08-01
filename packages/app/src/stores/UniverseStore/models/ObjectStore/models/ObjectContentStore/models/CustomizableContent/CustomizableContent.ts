@@ -4,14 +4,16 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {IconNameType} from '@momentum-xyz/ui-kit';
 import {EffectsEnum} from '@momentum-xyz/core3d';
 
+import {PluginIdEnum} from 'api/enums';
 import {LeonardoModelIdEnum} from 'core/enums';
 import {MediaUploader, User} from 'core/models';
 import {CustomizableObjectFormInterface} from 'core/interfaces';
 import {
   api,
+  GenerateAIImagesResponse,
   CustomizableObjectInterface,
   FetchAIGeneratedImagesResponse,
-  GenerateAIImagesResponse
+  GetSpaceUserAttributeCountResponse
 } from 'api';
 
 const CustomizableContent = types
@@ -29,6 +31,9 @@ const CustomizableContent = types
       content: types.maybe(types.frozen<CustomizableObjectInterface>()),
       author: types.maybe(User),
 
+      hasVote: false,
+      voteCount: 0,
+
       mediaUploader: types.optional(MediaUploader, {}),
       fetchRequest: types.optional(RequestModel, {}),
       authorRequest: types.optional(RequestModel, {}),
@@ -36,7 +41,9 @@ const CustomizableContent = types
       setEffectAttrRequest: types.optional(RequestModel, {}),
       generateRequest: types.optional(RequestModel, {}),
       fetchGeneratedRequest: types.optional(RequestModel, {}),
-      cleanRequest: types.optional(RequestModel, {})
+      cleanRequest: types.optional(RequestModel, {}),
+      voteRequest: types.optional(RequestModel, {}),
+      voteCountRequest: types.optional(RequestModel, {})
     })
   )
   .volatile<{watcher: NodeJS.Timer | null}>(() => ({
@@ -176,6 +183,68 @@ const CustomizableContent = types
     clearGeneratedImages(): void {
       self.generatedImages = cast([]);
     }
+  }))
+  .actions((self) => ({
+    fetchVoteCount: flow(function* (userId: string) {
+      const response: GetSpaceUserAttributeCountResponse = yield self.voteCountRequest.send(
+        api.spaceUserAttributeRepository.getSpaceUserAttributeCount,
+        {
+          userId: userId,
+          spaceId: self.objectId,
+          pluginId: PluginIdEnum.CORE,
+          attributeName: AttributeNameEnum.VOTE
+        }
+      );
+
+      self.voteCount = response ? response.count : 0;
+    }),
+    checkVote: flow(function* (userId: string) {
+      const response = yield self.voteRequest.send(
+        api.spaceUserAttributeRepository.getSpaceUserAttribute,
+        {
+          userId: userId,
+          spaceId: self.objectId,
+          pluginId: PluginIdEnum.CORE,
+          attributeName: AttributeNameEnum.VOTE
+        }
+      );
+
+      self.hasVote = !!response;
+    }),
+    async toggleVote(userId: string) {
+      if (self.hasVote) {
+        await this.removeVote(userId);
+      } else {
+        await this.addVote(userId);
+      }
+
+      this.fetchVoteCount(userId);
+    },
+    addVote: flow(function* (userId: string) {
+      yield self.voteRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
+        userId: userId,
+        spaceId: self.objectId,
+        pluginId: PluginIdEnum.CORE,
+        attributeName: AttributeNameEnum.VOTE,
+        value: {}
+      });
+
+      if (self.voteRequest.isDone) {
+        self.hasVote = true;
+      }
+    }),
+    removeVote: flow(function* (userId: string) {
+      yield self.voteRequest.send(api.spaceUserAttributeRepository.deleteSpaceUserAttribute, {
+        userId: userId,
+        spaceId: self.objectId,
+        pluginId: PluginIdEnum.CORE,
+        attributeName: AttributeNameEnum.VOTE
+      });
+
+      if (self.voteRequest.isDone) {
+        self.hasVote = false;
+      }
+    })
   }))
   .views((self) => ({
     get wasClaimed(): boolean {

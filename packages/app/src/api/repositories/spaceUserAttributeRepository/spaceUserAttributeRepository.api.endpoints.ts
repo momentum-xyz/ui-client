@@ -3,6 +3,7 @@ export const spaceUserAttributeRepositoryEndpoints = () => {
 
   return {
     attribute: `${BASE_URL}/:spaceId/:userId/attributes`,
-    allUsers: `${BASE_URL}/:spaceId/all-users/attributes`
+    allUsers: `${BASE_URL}/:spaceId/all-users/attributes`,
+    attributeCount: `${BASE_URL}/:spaceId/:userId/attributes/:pluginId/:attributeName/count`
   };
 };

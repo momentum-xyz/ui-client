@@ -27,6 +27,16 @@ export interface DeleteSpaceUserAttributeRequest extends SpaceUserAttributeReque
 
 export interface DeleteSpaceUserAttributeResponse extends AttributeValueInterface {}
 
+/** GET SPACE USER ATTRIBUTE COUNT **/
+
+export interface GetSpaceUserAttributeCountRequest extends SpaceUserAttributeRequest {
+  sinceDateIsoUtc?: string;
+}
+
+export interface GetSpaceUserAttributeCountResponse {
+  count: number;
+}
+
 /** GET ALL SPACE-USER ATTRIBUTES FOR GIVEN SPACE **/
 
 export interface GetAllSpaceUserAttributesForSpaceRequest

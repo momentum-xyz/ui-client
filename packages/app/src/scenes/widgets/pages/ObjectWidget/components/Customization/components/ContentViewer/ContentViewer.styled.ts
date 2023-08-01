@@ -57,6 +57,12 @@ export const Grid = styled.div`
   gap: 10px;
 `;
 
+export const Opinion = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
 export const Description = styled.div`
   white-space: pre-line;
 `;

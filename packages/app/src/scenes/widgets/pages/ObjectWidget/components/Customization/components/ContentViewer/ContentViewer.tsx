@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {ButtonEllipse, Frame, Hexagon, Image, ImageSizeEnum} from '@momentum-xyz/ui-kit';
+import {ButtonEllipse, Frame, Hexagon, Image, ImageSizeEnum, Voting} from '@momentum-xyz/ui-kit';
 import {dateWithoutTime, useI18n} from '@momentum-xyz/core';
 import Linkify from 'react-linkify';
 
@@ -13,16 +13,26 @@ interface PropsInterface {
   authorName: string | null | undefined;
   authorAvatarHash?: string | null | undefined;
   content: CustomizableObjectInterface;
+  hasVote: boolean;
+  voteCount: number;
   onDelete?: () => void;
   onEdit?: () => void;
+  onVote: () => void;
+  onAddComment: () => void;
+  onDeleteComment: () => void;
 }
 
 const ContentViewer: FC<PropsInterface> = ({
   content,
   authorName,
   authorAvatarHash,
+  hasVote,
+  voteCount,
   onDelete,
-  onEdit
+  onEdit,
+  onVote,
+  onAddComment,
+  onDeleteComment
 }) => {
   const {t} = useI18n();
 
@@ -54,6 +64,12 @@ const ContentViewer: FC<PropsInterface> = ({
               errorIcon="photo_camera"
               src={getImageAbsoluteUrl(content.image_hash, ImageSizeEnum.S5)}
             />
+
+            <styled.Opinion>
+              <Voting count={voteCount} isActive={hasVote} onClick={onVote} />
+              <ButtonEllipse icon="comment" label={t('actions.comment')} />
+            </styled.Opinion>
+
             <Linkify
               componentDecorator={(decoratedHref: string, decoratedText: string, key: number) => (
                 <a href={decoratedHref} key={key} target="_blank" rel="noreferrer">
