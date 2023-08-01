@@ -17,7 +17,7 @@ export const Title = styled.div`
 
 export const Grid = styled.div`
   margin: 0 0 20px 0;
-  padding: 0 0 16px 0;
+  padding: 0 0 20px 0;
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
@@ -38,3 +38,5 @@ export const Description = styled.div`
 `;
 
 export const Controls = styled.div``;
+
+export const CommentsContainer = styled.div``;

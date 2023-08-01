@@ -1,6 +1,13 @@
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {ButtonEllipse, Frame, Image, ImageSizeEnum, Voting} from '@momentum-xyz/ui-kit';
+import {
+  ButtonEllipse,
+  CommentForm,
+  Frame,
+  Image,
+  ImageSizeEnum,
+  Voting
+} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 import Linkify from 'react-linkify';
 
@@ -10,17 +17,21 @@ import {getImageAbsoluteUrl} from 'core/utils';
 import * as styled from './ContentViewer.styled';
 
 interface PropsInterface {
+  currentUserName: string;
+  currentUserImageUrl: string;
   content: CustomizableObjectInterface;
   hasVote: boolean;
   voteCount: number;
   onDelete?: () => void;
   onEdit?: () => void;
   onVote: () => void;
-  onAddComment: () => void;
+  onAddComment: (message: string) => void;
   onDeleteComment: () => void;
 }
 
 const ContentViewer: FC<PropsInterface> = ({
+  currentUserName,
+  currentUserImageUrl,
   content,
   hasVote,
   voteCount,
@@ -30,6 +41,8 @@ const ContentViewer: FC<PropsInterface> = ({
   onAddComment,
   onDeleteComment
 }) => {
+  const [isNewCommentShown, setIsNewCommentShown] = useState(false);
+
   const {t} = useI18n();
 
   return (
@@ -46,7 +59,11 @@ const ContentViewer: FC<PropsInterface> = ({
 
             <styled.Opinion>
               <Voting count={voteCount} isActive={hasVote} onClick={onVote} />
-              <ButtonEllipse icon="comment" label={t('actions.comment')} />
+              <ButtonEllipse
+                icon="comment"
+                label={t('actions.comment')}
+                onClick={() => setIsNewCommentShown(!isNewCommentShown)}
+              />
             </styled.Opinion>
 
             <Linkify
@@ -70,6 +87,17 @@ const ContentViewer: FC<PropsInterface> = ({
               }
             </styled.Controls>
           </styled.Grid>
+
+          <styled.CommentsContainer>
+            {isNewCommentShown && (
+              <CommentForm
+                author={currentUserName}
+                authorImageSrc={currentUserImageUrl}
+                onCancel={() => setIsNewCommentShown(false)}
+                onComment={onAddComment}
+              />
+            )}
+          </styled.CommentsContainer>
         </styled.Wrapper>
       </Frame>
     </styled.Container>

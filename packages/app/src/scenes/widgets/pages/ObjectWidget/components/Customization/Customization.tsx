@@ -83,10 +83,12 @@ const Customization: FC = () => {
           hasVote={customizableContent.hasVote}
           voteCount={customizableContent.voteCount}
           content={customizableContent.content}
+          currentUserName={sessionStore.userName}
+          currentUserImageUrl={sessionStore.userImageUrl}
           onDelete={canUserEdit ? handleDelete : undefined}
           onEdit={canUserEdit ? handleEdit : undefined}
           onVote={() => customizableContent.toggleVote(userId)}
-          onAddComment={() => {}} // TODO
+          onAddComment={(message: string) => {}} // TODO
           onDeleteComment={() => {}} // TODO
         />
       )}
