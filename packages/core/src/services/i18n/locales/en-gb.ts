@@ -370,6 +370,7 @@ export const enGb = {
       communityAssetPack: 'Community Assets',
       customObjectLibrary: 'Custom Object Library',
       uploadCustomObject: 'Upload Custom Object',
+      sceneExplorer: 'Scene Explorer',
       changeVideo: 'Change Video',
       video: 'Video',
       changeText: 'Change Text',

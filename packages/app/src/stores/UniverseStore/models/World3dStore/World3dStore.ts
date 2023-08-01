@@ -1,18 +1,28 @@
-import {types} from 'mobx-state-tree';
+import {Instance, flow, types} from 'mobx-state-tree';
 import {MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
-import {Event3dEmitter, MediaInterface, ClickPositionInterface} from '@momentum-xyz/core';
+import {
+  Event3dEmitter,
+  MediaInterface,
+  ClickPositionInterface,
+  RequestModel
+} from '@momentum-xyz/core';
 
 import {getRootStore} from 'core/utils';
 import {WidgetEnum} from 'core/enums';
 import {PosBusService} from 'shared/services';
+import {FetchWorldTreeResponse, api} from 'api';
 
 const World3dStore = types
   .model('World3dStore', {
+    worldId: types.string,
     isCreatorMode: false,
     selectedObjectId: types.maybeNull(types.string),
     attachedToCameraObjectId: types.maybeNull(types.string),
 
     waitingForBumpEffectReadyUserId: types.maybeNull(types.string),
+
+    worldTree: types.maybeNull(types.frozen<FetchWorldTreeResponse>()),
+    fetchWorldTreeRequest: types.optional(RequestModel, {}),
 
     isScreenRecording: false,
     screenshotOrVideo: types.maybeNull(types.frozen<MediaInterface>())
@@ -169,6 +179,15 @@ const World3dStore = types
     }
   }))
   .actions((self) => ({
+    fetchWorldTree: flow(function* () {
+      const response = yield self.fetchWorldTreeRequest.send(api.spaceRepository.fetchWorldTree, {
+        worldId: self.worldId
+      });
+      console.log('fetchWorldTree', response);
+      self.worldTree = response;
+    })
+  }))
+  .actions((self) => ({
     enableCreatorMode() {
       self.isCreatorMode = true;
     },
@@ -177,5 +196,7 @@ const World3dStore = types
       self.closeAndResetObjectMenu();
     }
   }));
+
+export interface World3dStoreModelInterface extends Instance<typeof World3dStore> {}
 
 export {World3dStore};

@@ -19,7 +19,9 @@ import {
   PostSpaceRequest,
   PostSpaceResponse,
   CloneObjectRequest,
-  CloneObjectResponse
+  CloneObjectResponse,
+  FetchWorldTreeRequest,
+  FetchWorldTreeResponse
 } from './spaceRepository.api.types';
 import {spaceRepositoryEndpoints} from './spaceRepository.api.endpoints';
 
@@ -110,6 +112,17 @@ export const deleteWorldMember: RequestInterface<DeleteWorldMemberRequest, null>
 
   return request.delete(
     generatePath(spaceRepositoryEndpoints().deleteMember, {objectId: worldId, userId}),
+    restOptions
+  );
+};
+
+export const fetchWorldTree: RequestInterface<FetchWorldTreeRequest, FetchWorldTreeResponse> = (
+  options
+) => {
+  const {worldId, ...restOptions} = options;
+
+  return request.get(
+    generatePath(spaceRepositoryEndpoints().tree, {objectId: worldId}),
     restOptions
   );
 };

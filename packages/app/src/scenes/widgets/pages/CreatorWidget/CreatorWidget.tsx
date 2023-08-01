@@ -16,7 +16,8 @@ import {
   ObjectInspector,
   AssetCustomising,
   ObjectFunction,
-  MusicManager
+  MusicManager,
+  SceneExplorer
 } from './pages';
 
 type MenuItemType = keyof typeof CreatorTabsEnum;
@@ -105,9 +106,10 @@ const CreatorWidget: FC = () => {
       // case 'spawnPoint':
       //   return <SpawnPointPage />;
       default:
+        return world3dStore ? <SceneExplorer world3dStore={world3dStore} /> : null;
     }
     return null;
-  }, [selectedTab]);
+  }, [selectedTab, world3dStore]);
 
   const panel = allPanels.find((panel) => panel.id === selectedTab);
   const menuItem = sideMenuItems.find((item) => item.id === selectedTab);
@@ -139,18 +141,30 @@ const CreatorWidget: FC = () => {
         />
       </div>
 
-      {!!selectedTab && !!content && (
-        <Panel
-          isFullHeight
-          size={['sound', 'functionality'].includes(selectedTab) ? 'normal' : 'large'}
-          variant="primary"
-          title={panel?.label || ''}
-          icon={panel?.iconName as IconNameType}
-          onClose={() => handleTabChange()}
-        >
-          {content}
-        </Panel>
-      )}
+      {!!content &&
+        (selectedTab ? (
+          <Panel
+            isFullHeight
+            size={['sound', 'functionality'].includes(selectedTab) ? 'normal' : 'large'}
+            variant="primary"
+            title={panel?.label || ''}
+            icon={panel?.iconName as IconNameType}
+            onClose={() => handleTabChange()}
+          >
+            {content}
+          </Panel>
+        ) : (
+          <Panel
+            isFullHeight
+            size="large"
+            variant="primary"
+            title={t('labels.sceneExplorer')}
+            icon="cubicles"
+            isCloseDisabled
+          >
+            {content}
+          </Panel>
+        ))}
 
       {removeObjectDialog.isOpen && (
         <Dialog
