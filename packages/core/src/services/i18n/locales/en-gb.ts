@@ -708,6 +708,7 @@ export const enGb = {
     },
     placeholders: {
       search: 'Search',
+      addComment: 'Add a comment',
       searchForPeople: 'Search for people...',
       searchForSpaces: 'Search for spaces...',
       searchForAssets: 'Search for assets...',
@@ -759,6 +760,7 @@ export const enGb = {
       logOut: 'Log out',
       embed: 'Embed',
       comment: 'Comment',
+      addComment: 'Add comment',
       manageWallet: 'Manage wallet',
       settings: 'Settings',
       publish: 'Publish',

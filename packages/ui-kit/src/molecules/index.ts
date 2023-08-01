@@ -25,3 +25,4 @@ export * from './PostTypeSelector';
 export * from './PostSharing';
 export * from './Voting';
 export * from './Comment';
+export * from './CommentForm';
