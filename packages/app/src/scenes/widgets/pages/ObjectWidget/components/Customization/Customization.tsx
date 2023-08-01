@@ -83,8 +83,6 @@ const Customization: FC = () => {
           hasVote={customizableContent.hasVote}
           voteCount={customizableContent.voteCount}
           content={customizableContent.content}
-          authorName={customizableContent.author?.name}
-          authorAvatarHash={customizableContent.author?.profile.avatarHash}
           onDelete={canUserEdit ? handleDelete : undefined}
           onEdit={canUserEdit ? handleEdit : undefined}
           onVote={() => customizableContent.toggleVote(userId)}

@@ -634,6 +634,8 @@ export const enGb = {
       create: 'create',
       by: 'By',
       stage: 'Stage mode',
+      objectInfo: 'Object info',
+      customizeObject: 'Customize object',
       odysseySoundtrack: 'Odyssey soundtrack',
       objectSound: 'Embed a sound',
       creatorEnabled: 'Odyssey Creator Mode Enabled',

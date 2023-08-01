@@ -1,6 +1,6 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {RequestModel, ResetModel, i18n} from '@momentum-xyz/core';
 import {IconNameType} from '@momentum-xyz/ui-kit';
 import {EffectsEnum} from '@momentum-xyz/core3d';
 
@@ -267,10 +267,12 @@ const CustomizableContent = types
   }))
   .views((self) => ({
     get widgetTitle(): string {
-      return !self.isEditing && self.wasClaimed ? 'Contribution' : 'Customize object';
+      return !self.isEditing && self.wasClaimed
+        ? i18n.t('titles.objectInfo')
+        : i18n.t('titles.customizeObject');
     },
     get widgetIcon(): IconNameType {
-      return !self.isEditing && self.wasClaimed ? 'alert' : 'settings-slider';
+      return !self.isEditing && self.wasClaimed ? 'cubicle' : 'settings-slider';
     }
   }));
 
