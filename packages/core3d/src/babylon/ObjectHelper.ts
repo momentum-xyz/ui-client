@@ -1,9 +1,7 @@
 import {
   Scene,
   PBRMaterial,
-  TransformNode,
   Color3,
-  Nullable,
   Vector3,
   Texture,
   Sound,
@@ -17,6 +15,8 @@ import {
   ObjectSoundInterface,
   SoundItemInterface
 } from '@momentum-xyz/core';
+
+import {EffectsEnum} from '../core/enums';
 
 import {PlayerHelper} from './PlayerHelper';
 import {SkyboxHelper} from './SkyboxHelper';
@@ -42,11 +42,8 @@ export class ObjectHelper {
   static objectsSoundMap = new Map<string, Sound>();
   static scene: Scene;
   static analyser: Analyser;
-  static attachedNode: TransformNode;
   static transformSubscription: {unsubscribe: () => void} | undefined;
   static selectedObjectFromSpawn = '';
-  static spawningMaterial: PBRMaterial;
-  static mySpawningClone: Nullable<TransformNode>;
   static awaitingTexturesMap: AwaitingTexturesType = new Map();
   static awaitingSoundMap: AwaitingSoundType = new Map();
   static awaitingEffectsMap = new Map<string, string>();
@@ -92,12 +89,12 @@ export class ObjectHelper {
 
       const effect = this.awaitingEffectsMap.get(object.id);
       if (effect) {
-        this.setObjectEffect(object.id, effect);
+        objectInstance.setEffect(effect);
         this.awaitingEffectsMap.delete(object.id);
       }
 
       if (attachToCam) {
-        this.attachToCamera(object.id, objectInstance.getNode());
+        this.attachToCamera(object.id, objectInstance);
       }
     } catch (e) {
       console.log('Error when loading object: ' + object.id, e);
@@ -147,13 +144,12 @@ export class ObjectHelper {
   ): void {
     // Handle object color
     if (label === 'object_color') {
-      // const childMeshes = obj.objectInstance.rootNodes[0].getChildMeshes();
-      const childMeshes = obj.getNode().getChildMeshes();
+      const childMeshes = obj.getNode(true).getChildMeshes();
       const basicShapeMat = childMeshes[0].material as PBRMaterial;
       basicShapeMat.albedoColor = Color3.FromHexString(texture.hash);
     } else if (label === 'object_texture') {
       if (obj.objectDefinition.asset_format.toString() === '2') {
-        const childMeshes = obj.getNode().getChildMeshes();
+        const childMeshes = obj.getNode(true).getChildMeshes();
         const textureUrl = this.textureRootUrl + this.textureDefaultSize + texture.hash;
         const newTexture = new Texture(
           textureUrl,
@@ -179,7 +175,7 @@ export class ObjectHelper {
         childMeshes[0].material = basicShapeMat;
       }
     } else if (label === 'object_effect') {
-      this.setObjectEffect(obj.objectDefinition.id, texture.hash);
+      obj.setEffect(texture.hash);
     } else if (label === 'name') {
       // noop
     } else {
@@ -223,28 +219,30 @@ export class ObjectHelper {
         }
       );
 
-      sound.attachToMesh(obj.getNode());
+      sound.attachToMesh(obj.getNode(true));
 
       this.appendObjectSound(obj.objectDefinition.id, sound);
       console.log('[SOUND] MAP', this.objectsSoundMap);
     }
   }
 
-  static attachToCamera(objectId: string, node: TransformNode) {
+  static attachToCamera(objectId: string, obj: ObjectInstance) {
     if (this.selectedObjectFromSpawn === '') {
-      this.attachedNode = node;
-      node.setParent(PlayerHelper.getPlayerNode());
+      const node = obj.getNode();
+
+      obj.setParent(PlayerHelper.getPlayerNode());
 
       console.log('node bounding box:', node.getHierarchyBoundingVectors());
       const {size} = getBoundingInfo(node);
       console.log('size:', size);
 
       // node.position = new Vector3(0, -0.5, -3);
-      node.position = new Vector3(0, 0, -size * 2);
+      obj.setPosition(new Vector3(0, 0, -size * 2));
 
-      this.setSpawningMaterial(node);
+      obj.setEffect(EffectsEnum.SPAWN_PREVIEW, false);
 
       this.selectedObjectFromSpawn = objectId;
+
       this.transformSubscription = WorldCreatorHelper.subscribeForTransformUpdates(
         objectId,
         node,
@@ -256,64 +254,21 @@ export class ObjectHelper {
   static detachFromCamera() {
     this.transformSubscription?.unsubscribe();
 
-    if (this.attachedNode) {
-      this.attachedNode.setParent(null, undefined, true);
-      const attachedNodeChildren = this.attachedNode.getChildMeshes();
-      attachedNodeChildren.forEach((element) => {
-        element.setEnabled(true);
-      });
-      this.attachedNode.setEnabled(true);
-    }
-
-    this.mySpawningClone?.dispose();
-
-    // const obj = this.objectsMap.get(this.selectedObjectFromSpawn);
-    // if (obj && obj.effect && obj.effect !== EffectsEnum.NONE) {
-    //   this.setObjectEffect(this.selectedObjectFromSpawn, obj.effect, true);
-    // }
+    const obj = this.objectsMap.get(this.selectedObjectFromSpawn);
+    obj?.setParent(null);
+    obj?.setEffect(EffectsEnum.NONE);
 
     this.selectedObjectFromSpawn = '';
 
     PlayerHelper.setSelfPos(new Vector3(0, -0.5, -3));
   }
 
-  static setSpawningMaterial(node: TransformNode) {
-    // const myClone = node.clone('clone', PlayerHelper.playerInstance.rootNodes[0]);
-    const myClone = node.clone('clone', PlayerHelper.getPlayerNode());
-    const spawningMat = new PBRMaterial('spawning', this.scene);
-    spawningMat.albedoColor = Color3.Gray();
-    spawningMat._reflectivityColor = Color3.Gray();
-    spawningMat.alpha = 0.3;
-
-    if (myClone) {
-      const cloneChildren = myClone.getChildMeshes();
-      cloneChildren.forEach((element) => {
-        element.material = spawningMat;
-      });
-    }
-    this.mySpawningClone = myClone;
-
-    const childMeshes = node.getChildMeshes();
-    childMeshes.forEach((element) => {
-      element.setEnabled(false);
-    });
-  }
-
   static objectEffectChange(objectId: string, effect: string) {
     const obj = this.objectsMap.get(objectId);
     if (obj) {
-      this.setObjectEffect(objectId, effect);
+      obj.setEffect(effect);
     } else if (effect) {
       this.awaitingEffectsMap.set(objectId, effect);
-    }
-  }
-
-  static setObjectEffect(objectId: string, effect: string, force = false) {
-    console.log('setObjectEffect', objectId, effect);
-    const obj = this.objectsMap.get(objectId);
-    if (!obj) {
-      console.log('setObjectEffect: object not found:', objectId, this.objectsMap);
-      return;
     }
   }
 

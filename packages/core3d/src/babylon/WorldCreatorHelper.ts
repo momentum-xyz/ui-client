@@ -25,7 +25,6 @@ import yScale_red from '../static/Gizmo/scale_red.glb';
 import zScale_green from '../static/Gizmo/scale_green.glb';
 import scale_uniform from '../static/Gizmo/scale_origin.glb';
 
-import {getNodeFromId} from './UtilityHelper';
 import {vec3ToPos} from './TransformHelper';
 import {ObjectHelper} from './ObjectHelper';
 
@@ -335,8 +334,7 @@ export class WorldCreatorHelper {
       this.setGizmoType(GizmoTypesEnum.Rotation);
       this.setGizmoType(GizmoTypesEnum.Scale);
 
-      // TODO remove this helper?
-      const node = getNodeFromId(objectId);
+      const node = ObjectHelper.objectsMap.get(objectId)?.getNode();
 
       if (node) {
         this.gizmoManager.attachToNode(node);
@@ -357,8 +355,7 @@ export class WorldCreatorHelper {
     const id = on ? objectId : this.selectedObjectId;
     this.selectedObjectId = id;
 
-    // TODO remove this helper?
-    const node = getNodeFromId(id);
+    const node = ObjectHelper.objectsMap.get(id)?.getNode();
     console.log('toggleHightlightObject', {objectId, on, node});
 
     const meshes = node?.getChildMeshes();

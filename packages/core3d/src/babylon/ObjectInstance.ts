@@ -9,20 +9,35 @@ import {
 } from '@babylonjs/core';
 import {Object3dInterface, ObjectTransformInterface} from '@momentum-xyz/core';
 
-import {EffectsEnum} from '../index.pkg';
+import {EffectsEnum} from '../core/enums';
 
 import {getAssetFileName} from './UtilityHelper';
 import {ObjectHelper} from './ObjectHelper';
 import {posToVec3} from './TransformHelper';
 
+const validateEffect = (effect: string): EffectsEnum => {
+  if (Object.values(EffectsEnum).includes(effect as EffectsEnum)) {
+    return effect as EffectsEnum;
+  }
+  throw new Error('Invalid effect');
+};
+
 export class ObjectInstance {
   scene: Scene;
+  objectDefinition: Object3dInterface;
 
   protected container?: AssetContainer;
-  objectDefinition: Object3dInterface;
-  protected objectInstance?: InstantiatedEntries;
+  protected instance?: InstantiatedEntries;
+
+  // Cloned instance with applied effect like transparency
+  // It allows to keep the original instance unchanged but could lead to some unexpected behavior
+  // when switching when setting/clearing the effect
+  // An alternative could be having different sets of materials applied to the object meshes
+  // while having only one instance of the object
   protected cloneWithEffect?: TransformNode;
   protected effect?: EffectsEnum;
+
+  protected effectsStack: EffectsEnum[] = [];
 
   constructor(scene: Scene, objectDefinition: Object3dInterface) {
     this.scene = scene;
@@ -43,7 +58,6 @@ export class ObjectInstance {
       },
       '.glb'
     );
-    // this.instantiateObject(container, object, attachToCam);
 
     const instance = this.container.instantiateModelsToScene();
     const node = instance.rootNodes[0];
@@ -53,6 +67,7 @@ export class ObjectInstance {
       );
       throw new Error('Unable to load the object');
     }
+    this.instance = instance;
 
     node.name = object.name;
 
@@ -68,84 +83,152 @@ export class ObjectInstance {
   }
 
   dispose(): void {
-    this.objectInstance?.dispose();
+    this.instance?.dispose();
     this.container?.removeFromScene();
     this.container?.dispose();
     this.cloneWithEffect?.dispose();
   }
 
-  getNode(): TransformNode {
-    return this.cloneWithEffect || (this.objectInstance?.rootNodes[0] as TransformNode);
+  getNode(rootNode = false): TransformNode {
+    return (!rootNode && this.cloneWithEffect) || (this.instance?.rootNodes[0] as TransformNode);
   }
 
   setTransform(transform: ObjectTransformInterface): void {
-    const node = this.getNode();
+    const node = this.instance?.rootNodes[0] as TransformNode;
     node.position = posToVec3(transform.position);
     node.rotation = posToVec3(transform.rotation);
     node.scaling = posToVec3(transform.scale);
+    if (this.cloneWithEffect) {
+      this.cloneWithEffect.position = posToVec3(transform.position);
+      this.cloneWithEffect.rotation = posToVec3(transform.rotation);
+      this.cloneWithEffect.scaling = posToVec3(transform.scale);
+    }
   }
 
-  setEffect(effect: EffectsEnum, force = false): void {
-    if (!this.objectInstance) {
+  setPosition(position: ObjectTransformInterface['position']): void {
+    const node = this.instance?.rootNodes[0] as TransformNode;
+    node.position = posToVec3(position);
+    if (this.cloneWithEffect) {
+      this.cloneWithEffect.position = posToVec3(position);
+    }
+  }
+
+  setParent(parent: TransformNode | null): void {
+    const node = this.instance?.rootNodes[0] as TransformNode;
+    node.setParent(parent, undefined, true);
+    if (this.cloneWithEffect) {
+      this.cloneWithEffect.setParent(parent, undefined, true);
+    }
+  }
+
+  setEffect(effect: string, stackable = true): void {
+    let eff = validateEffect(effect);
+
+    if (this.effect) {
+      if (eff === EffectsEnum.NONE) {
+        if (this.effectsStack.length > 0) {
+          eff = this.effectsStack.pop() as EffectsEnum;
+          console.log('setObjectEffect: restoring effect', eff);
+        }
+      } else {
+        if (stackable) {
+          console.log('setObjectEffect: stacking effect', eff);
+          this.effectsStack.push(eff);
+          return;
+        } else {
+          console.log('setObjectEffect: replacing effect', eff);
+          this.effectsStack.push(this.effect);
+        }
+      }
+    }
+    this._setEffect(eff);
+  }
+
+  private _setEffect(effect: string): void {
+    if (!this.instance) {
       throw new Error('ObjectInstance not loaded');
     }
+    console.log('setObjectEffect', this.objectDefinition.id, effect);
 
-    if (effect === EffectsEnum.NONE) {
-      if (!this.cloneWithEffect) {
-        return;
-      }
-      console.log('setObjectEffect: removing effect');
-      this.cloneWithEffect.dispose();
-      this.cloneWithEffect = undefined;
-      this.effect = undefined;
+    switch (effect) {
+      case EffectsEnum.NONE: {
+        if (!this.cloneWithEffect) {
+          return;
+        }
 
-      // make sure the object is visible
-      const childMeshes = this.objectInstance.rootNodes[0].getChildMeshes();
-      childMeshes.forEach((element) => {
-        element.setEnabled(true);
-      });
-      console.log('setObjectEffect: original object is visible');
-    } else if (effect === EffectsEnum.TRANSPARENT) {
-      if (this.effect === effect && !force) {
-        return;
-      }
-      if (this.cloneWithEffect) {
+        const parent = this.getNode().parent;
+
+        console.log('setObjectEffect: removing effect');
         this.cloneWithEffect.dispose();
+        this.cloneWithEffect = undefined;
+        this.effect = undefined;
+
+        this.getNode().setParent(parent);
+
+        // make sure the object is visible
+        this.setMeshesVisibility(true);
+        break;
       }
+      case EffectsEnum.TRANSPARENT:
+      case EffectsEnum.SPAWN_PREVIEW: {
+        if (this.effect === effect) {
+          return;
+        }
 
-      const node = this.objectInstance.rootNodes[0];
-      const clone = node.clone('clone', node.parent);
-      if (!(clone instanceof TransformNode)) {
-        console.log('setObjectEffect: clone is not a TransformNode');
-        return;
+        const parent = this.getNode().parent;
+
+        if (this.cloneWithEffect) {
+          this.cloneWithEffect.dispose();
+        }
+
+        const node = this.instance.rootNodes[0];
+        const clone = node.clone(`${node.name} - Effect Clone`, parent);
+        if (!(clone instanceof TransformNode)) {
+          console.log('setObjectEffect: clone is not a TransformNode');
+          return;
+        }
+
+        const effectMat = new PBRMaterial('effect', this.scene);
+
+        if (effect === EffectsEnum.TRANSPARENT) {
+          effectMat.albedoColor = Color3.Teal();
+          effectMat.emissiveColor = Color3.White();
+          effectMat.reflectivityColor = Color3.Green();
+          effectMat.alpha = 0.7;
+        } else if (effect === EffectsEnum.SPAWN_PREVIEW) {
+          effectMat.albedoColor = Color3.Gray();
+          effectMat._reflectivityColor = Color3.Gray();
+          effectMat.alpha = 0.3;
+        } else {
+          console.log('WTF! setObjectEffect: unknown effect:', effect);
+        }
+
+        const cloneChildren = clone.getChildMeshes();
+        cloneChildren.forEach((element) => {
+          element.material = effectMat;
+          element.setEnabled(true);
+        });
+        console.log('setObjectEffect: effect added:', effect);
+
+        this.cloneWithEffect = clone;
+        this.effect = effect;
+
+        this.setMeshesVisibility(false);
+        break;
       }
-      // const effectMat = new StandardMaterial('effect', this.scene);
-      const effectMat = new PBRMaterial('effect', this.scene);
-      effectMat.albedoColor = Color3.Teal();
-      effectMat.emissiveColor = Color3.White();
-      effectMat.reflectivityColor = Color3.Green();
-      effectMat.alpha = 0.7;
-
-      const cloneChildren = clone.getChildMeshes();
-      cloneChildren.forEach((element) => {
-        element.material = effectMat;
-        // console.log('setObjectEffect:', objectId, 'element', element, element.material);
-        // if (element.material) {
-        //   element.material.alpha = 0.4;
-        // }
-      });
-      console.log('setObjectEffect: effect added');
-
-      this.cloneWithEffect = clone;
-      this.effect = effect;
-
-      const childMeshes = node.getChildMeshes();
-      childMeshes.forEach((element) => {
-        element.setEnabled(false);
-      });
-      console.log('setObjectEffect: original object is hidden');
-    } else {
-      console.log('setObjectEffect: unknown effect:', effect);
+      default:
+        console.log('setObjectEffect: unknown effect:', effect);
     }
+  }
+
+  private setMeshesVisibility(visible: boolean): void {
+    if (!this.instance) {
+      throw new Error('ObjectInstance not loaded');
+    }
+    const node = this.instance.rootNodes[0];
+    const childMeshes = node.getChildMeshes();
+    childMeshes.forEach((element) => {
+      element.setEnabled(visible);
+    });
   }
 }
