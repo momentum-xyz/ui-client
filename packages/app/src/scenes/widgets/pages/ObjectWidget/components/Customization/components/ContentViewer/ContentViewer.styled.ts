@@ -31,12 +31,6 @@ export const Opinion = styled.div`
   gap: 10px;
 `;
 
-export const Description = styled.div`
-  white-space: pre-line;
-  line-height: 20px;
-  letter-spacing: 0.56px;
-`;
-
 export const Controls = styled.div``;
 
 export const CommentsContainer = styled.div`

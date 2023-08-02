@@ -287,7 +287,11 @@ const CustomizableContent = types
   .actions((self) => ({
     addComment: flow(function* (userId: string, comment: string) {
       const uuid: string = uuidv4();
-      const value: ObjectCommentInterface = {id: uuid, date: new Date().toISOString(), comment};
+      const value: ObjectCommentInterface = {
+        uuid: uuid,
+        created: new Date().toISOString(),
+        content: comment
+      };
 
       yield self.commentRequest.send(api.spaceUserAttributeRepository.setSpaceUserSubAttribute, {
         userId: userId,

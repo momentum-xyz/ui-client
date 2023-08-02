@@ -1,5 +1,5 @@
 export interface ObjectCommentInterface {
-  id: string;
-  date: string;
-  comment: string;
+  uuid: string;
+  created: string;
+  content: string;
 }

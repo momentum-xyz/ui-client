@@ -23,6 +23,7 @@
   "dependencies": {
     "@headlessui/react": "^1.2.0",
     "@momentum-xyz/core": "^0.1.2",
+    "@types/react-linkify": "^1.0.1",
     "classnames": "^2.3.2",
     "lodash-es": "^4.17.21",
     "polished": "^4.1.4",
@@ -31,6 +32,7 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.42.1",
     "react-imask": "^6.4.3",
+    "react-linkify": "^1.0.0-alpha",
     "react-multi-carousel": "^2.8.3",
     "react-number-format": "^5.1.4",
     "react-player": "^2.12.0",

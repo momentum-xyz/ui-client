@@ -1,15 +1,15 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import Linkify from 'react-linkify';
 import {
   Frame,
   Image,
   Voting,
+  Comment,
+  TextLinkify,
   CommentForm,
   ButtonEllipse,
-  ImageSizeEnum,
-  Comment
+  ImageSizeEnum
 } from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -70,15 +70,7 @@ const ContentViewer: FC<PropsInterface> = ({
               />
             </styled.Opinion>
 
-            <Linkify
-              componentDecorator={(decoratedHref: string, decoratedText: string, key: number) => (
-                <a href={decoratedHref} key={key} target="_blank" rel="noreferrer">
-                  {decoratedText}
-                </a>
-              )}
-            >
-              <styled.Description>{content.text}</styled.Description>
-            </Linkify>
+            <TextLinkify text={content.text} />
 
             <styled.Controls>
               {!!onDelete && (
@@ -105,14 +97,14 @@ const ContentViewer: FC<PropsInterface> = ({
               />
             )}
 
-            {commentList.map(({id, date, comment}) => (
+            {commentList.map(({uuid, created, content}) => (
               <Comment
-                key={id}
-                dateISO={date}
-                author={id} // TODO
+                key={uuid}
+                dateISO={created}
+                author={uuid} // TODO
                 authorImageSrc="" // TODO
-                message={comment}
-                onDelete={() => onDeleteComment(id)}
+                message={content}
+                onDelete={() => onDeleteComment(uuid)}
               />
             ))}
           </styled.CommentsContainer>
