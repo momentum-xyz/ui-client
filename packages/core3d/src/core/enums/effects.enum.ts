@@ -1,4 +1,5 @@
 export enum EffectsEnum {
   NONE = 'none',
-  TRANSPARENT = 'transparent'
+  TRANSPARENT = 'transparent',
+  SPAWN_PREVIEW = 'spawn-preview'
 }

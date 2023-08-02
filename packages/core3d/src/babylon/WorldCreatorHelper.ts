@@ -25,8 +25,7 @@ import yScale_red from '../static/Gizmo/scale_red.glb';
 import zScale_green from '../static/Gizmo/scale_green.glb';
 import scale_uniform from '../static/Gizmo/scale_origin.glb';
 
-import {getNodeFromId} from './UtilityHelper';
-import {vec3ToPos, posToVec3} from './TransformHelper';
+import {vec3ToPos} from './TransformHelper';
 import {ObjectHelper} from './ObjectHelper';
 
 export enum GizmoTypesEnum {
@@ -315,12 +314,7 @@ export class WorldCreatorHelper {
       return;
     }
 
-    const transformNode = ObjectHelper.objectsMap.get(id)?.objectInstance.rootNodes[0];
-    if (transformNode instanceof TransformNode) {
-      transformNode.position = posToVec3(transform.position);
-      transformNode.rotation = posToVec3(transform.rotation);
-      transformNode.scaling = posToVec3(transform.scale);
-    }
+    ObjectHelper.objectsMap.get(id)?.setTransform(transform);
   }
 
   static toggleCreatorMode() {
@@ -340,7 +334,7 @@ export class WorldCreatorHelper {
       this.setGizmoType(GizmoTypesEnum.Rotation);
       this.setGizmoType(GizmoTypesEnum.Scale);
 
-      const node = getNodeFromId(objectId);
+      const node = ObjectHelper.objectsMap.get(objectId)?.getNode();
 
       if (node) {
         this.gizmoManager.attachToNode(node);
@@ -361,7 +355,7 @@ export class WorldCreatorHelper {
     const id = on ? objectId : this.selectedObjectId;
     this.selectedObjectId = id;
 
-    const node = getNodeFromId(id);
+    const node = ObjectHelper.objectsMap.get(id)?.getNode();
     console.log('toggleHightlightObject', {objectId, on, node});
 
     const meshes = node?.getChildMeshes();
