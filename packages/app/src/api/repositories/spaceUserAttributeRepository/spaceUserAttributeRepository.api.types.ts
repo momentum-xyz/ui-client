@@ -29,9 +29,8 @@ export interface DeleteSpaceUserAttributeResponse extends AttributeValueInterfac
 
 /** GET SPACE USER ATTRIBUTE COUNT **/
 
-export interface GetSpaceUserAttributeCountRequest extends SpaceUserAttributeRequest {
-  sinceDateIsoUtc?: string;
-}
+export interface GetSpaceUserAttributeCountRequest
+  extends Omit<SpaceUserAttributeRequest, 'userId'> {}
 
 export interface GetSpaceUserAttributeCountResponse {
   count: number;

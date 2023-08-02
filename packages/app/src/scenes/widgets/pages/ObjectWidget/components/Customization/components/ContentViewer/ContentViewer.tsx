@@ -1,18 +1,20 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {
-  ButtonEllipse,
-  CommentForm,
-  Frame,
-  Image,
-  ImageSizeEnum,
-  Voting
-} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 import Linkify from 'react-linkify';
+import {
+  Frame,
+  Image,
+  Voting,
+  CommentForm,
+  ButtonEllipse,
+  ImageSizeEnum,
+  Comment
+} from '@momentum-xyz/ui-kit';
 
-import {CustomizableObjectInterface} from 'api';
 import {getImageAbsoluteUrl} from 'core/utils';
+import {CustomizableObjectInterface} from 'api';
+import {ObjectCommentInterface} from 'core/interfaces';
 
 import * as styled from './ContentViewer.styled';
 
@@ -22,11 +24,12 @@ interface PropsInterface {
   content: CustomizableObjectInterface;
   hasVote: boolean;
   voteCount: number;
+  commentList: ObjectCommentInterface[];
   onDelete?: () => void;
   onEdit?: () => void;
   onVote: () => void;
   onAddComment: (message: string) => void;
-  onDeleteComment: () => void;
+  onDeleteComment: (commentId: string) => void;
 }
 
 const ContentViewer: FC<PropsInterface> = ({
@@ -35,6 +38,7 @@ const ContentViewer: FC<PropsInterface> = ({
   content,
   hasVote,
   voteCount,
+  commentList,
   onDelete,
   onEdit,
   onVote,
@@ -94,9 +98,23 @@ const ContentViewer: FC<PropsInterface> = ({
                 author={currentUserName}
                 authorImageSrc={currentUserImageUrl}
                 onCancel={() => setIsNewCommentShown(false)}
-                onComment={onAddComment}
+                onComment={(comment) => {
+                  onAddComment(comment);
+                  setIsNewCommentShown(false);
+                }}
               />
             )}
+
+            {commentList.map(({id, date, comment}) => (
+              <Comment
+                key={id}
+                dateISO={date}
+                author={id} // TODO
+                authorImageSrc="" // TODO
+                message={comment}
+                onDelete={() => onDeleteComment(id)}
+              />
+            ))}
           </styled.CommentsContainer>
         </styled.Wrapper>
       </Frame>

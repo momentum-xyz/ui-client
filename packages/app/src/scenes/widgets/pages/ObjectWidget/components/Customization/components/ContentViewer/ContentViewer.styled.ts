@@ -39,4 +39,8 @@ export const Description = styled.div`
 
 export const Controls = styled.div``;
 
-export const CommentsContainer = styled.div``;
+export const CommentsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+`;

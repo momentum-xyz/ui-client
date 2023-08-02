@@ -72,20 +72,14 @@ export const getSpaceUserAttributeCount: RequestInterface<
   GetSpaceUserAttributeCountRequest,
   GetSpaceUserAttributeCountResponse
 > = (options) => {
-  const {spaceId, userId, pluginId, attributeName, sinceDateIsoUtc, ...restOptions} = options;
+  const {spaceId, pluginId, attributeName, ...restOptions} = options;
 
-  const url = generatePath(spaceUserAttributeRepositoryEndpoints().attributeCount, {
-    spaceId,
-    userId,
-    pluginId,
-    attributeName
-  });
+  const url = generatePath(spaceUserAttributeRepositoryEndpoints().attributeCount, {spaceId});
 
-  if (sinceDateIsoUtc) {
-    restOptions.params = {
-      since: sinceDateIsoUtc
-    };
-  }
+  restOptions.params = {
+    plugin_id: pluginId,
+    attribute_name: attributeName
+  };
 
   return request.get(url, restOptions);
 };

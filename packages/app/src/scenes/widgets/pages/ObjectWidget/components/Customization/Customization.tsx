@@ -19,8 +19,7 @@ const Customization: FC = () => {
   const canUserEdit = customizableContent.content?.claimed_by === userId;
 
   useEffect(() => {
-    customizableContent.fetchVoteCount(userId);
-    customizableContent.checkVote(userId);
+    customizableContent.initSocial(userId);
   }, [customizableContent, userId]);
 
   const handleSignUp = () => {
@@ -85,11 +84,18 @@ const Customization: FC = () => {
           content={customizableContent.content}
           currentUserName={sessionStore.userName}
           currentUserImageUrl={sessionStore.userImageUrl}
+          commentList={customizableContent.commentList}
           onDelete={canUserEdit ? handleDelete : undefined}
           onEdit={canUserEdit ? handleEdit : undefined}
           onVote={() => customizableContent.toggleVote(userId)}
-          onAddComment={(message: string) => {}} // TODO
-          onDeleteComment={() => {}} // TODO
+          onAddComment={async (message) => {
+            await customizableContent.addComment(userId, message);
+            await customizableContent.fetchAllComments(userId);
+          }}
+          onDeleteComment={async (commentId) => {
+            await customizableContent.deleteComment(userId, commentId);
+            await customizableContent.fetchAllComments(userId);
+          }}
         />
       )}
     </styled.Container>
