@@ -286,53 +286,26 @@ const CustomizableContent = types
   }))
   .actions((self) => ({
     addComment: flow(function* (userId: string, comment: string) {
-      const prevComments = yield self.fetchMyComments(userId);
-
       const uuid: string = uuidv4();
+      const value: ObjectCommentInterface = {id: uuid, date: new Date().toISOString(), comment};
 
-      const value: Record<string, ObjectCommentInterface> = {
-        ...prevComments,
-        [uuid]: {id: uuid, date: new Date().toISOString(), comment}
-      };
-
-      yield self.commentRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
+      yield self.commentRequest.send(api.spaceUserAttributeRepository.setSpaceUserSubAttribute, {
         userId: userId,
         spaceId: self.objectId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.COMMENTS,
-        value
+        sub_attribute_key: uuid,
+        sub_attribute_value: value
       });
-
-      return self.commentRequest.isDone;
     }),
     deleteComment: flow(function* (userId: string, commentId: string) {
-      const commentsObj: Record<string, ObjectCommentInterface> = yield self.fetchMyComments(
-        userId
-      );
-
-      if (!commentsObj) {
-        return;
-      }
-
-      const commentsMap = new Map(Object.entries(commentsObj));
-      commentsMap.delete(commentId);
-
-      if (commentsMap.size === 0) {
-        yield self.commentRequest.send(api.spaceUserAttributeRepository.deleteSpaceUserAttribute, {
-          userId: userId,
-          spaceId: self.objectId,
-          pluginId: PluginIdEnum.CORE,
-          attributeName: AttributeNameEnum.COMMENTS
-        });
-      } else {
-        yield self.commentRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
-          userId: userId,
-          spaceId: self.objectId,
-          pluginId: PluginIdEnum.CORE,
-          attributeName: AttributeNameEnum.COMMENTS,
-          value: Object.fromEntries(commentsMap)
-        });
-      }
+      yield self.commentRequest.send(api.spaceUserAttributeRepository.deleteSpaceUserSubAttribute, {
+        userId: userId,
+        spaceId: self.objectId,
+        pluginId: PluginIdEnum.CORE,
+        attributeName: AttributeNameEnum.COMMENTS,
+        sub_attribute_key: commentId
+      });
     })
   }))
   .actions((self) => ({

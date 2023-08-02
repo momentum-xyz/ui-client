@@ -7,6 +7,14 @@ export interface SpaceUserAttributeRequest {
   pluginId: string;
 }
 
+export interface SpaceUserSubAttributeRequest {
+  spaceId: string;
+  userId: string;
+  attributeName: string;
+  pluginId: string;
+  sub_attribute_key: string;
+}
+
 /** GET SPACE USER ATTRIBUTE **/
 
 export interface GetSpaceUserAttributeRequest extends SpaceUserAttributeRequest {}
@@ -44,3 +52,15 @@ export interface GetAllSpaceUserAttributesForSpaceRequest
 export interface GetAllSpaceUserAttributesForSpaceResponse {
   [userId: string]: AttributeValueInterface;
 }
+
+/** SET SPACE USER SUB ATTRIBUTE REQUEST */
+
+export interface SetSpaceUserSubAttributeRequest extends SpaceUserSubAttributeRequest {
+  sub_attribute_value: unknown;
+}
+
+export interface SetSpaceUserSubAttributeResponse extends AttributeValueInterface {}
+
+/** DELETE SPACE USER SUB ATTRIBUTE REQUEST */
+
+export interface DeleteSpaceUserSubAttributeRequest extends SpaceUserSubAttributeRequest {}
