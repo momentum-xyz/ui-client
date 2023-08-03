@@ -14,10 +14,15 @@ export const List = styled.div`
   flex-direction: column;
 `;
 
+export const IconButtonPlaceholder = styled.div`
+  width: 14px;
+  height: 14px;
+`;
+
 export const Item = styled.div`
   display: flex;
   align-items: center;
-  padding: 0 0 0 16px;
+  padding: 0 10px;
   height: 40px;
   min-width: 250px;
   transition: all var(--tr-150-ei);
@@ -28,6 +33,10 @@ export const Item = styled.div`
   &:nth-child(even) {
     background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
   }
+  &:first-child {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
 
   gap: 10px;
 `;
@@ -37,5 +46,4 @@ export const ItemActions = styled.div`
   align-items: center;
   gap: 10px;
   margin-left: auto;
-  padding-right: 10px;
 `;

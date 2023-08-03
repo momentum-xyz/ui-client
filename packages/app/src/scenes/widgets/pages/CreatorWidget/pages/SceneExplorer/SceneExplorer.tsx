@@ -1,4 +1,4 @@
-import {FC, useEffect, Fragment} from 'react';
+import {FC, useEffect, Fragment, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {IconButton, IconSvg} from '@momentum-xyz/ui-kit';
 import {Event3dEmitter} from '@momentum-xyz/core';
@@ -31,6 +31,8 @@ const SceneExplorer: FC<PropsInterface> = ({world3dStore}) => {
     };
   }, [fetchWorldTree]);
 
+  const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({});
+
   if (!worldTree) {
     return null;
   }
@@ -39,10 +41,26 @@ const SceneExplorer: FC<PropsInterface> = ({world3dStore}) => {
     return Object.values(object.children)
       .sort(sortByName)
       .map((child) => {
+        const hasChildren = Object.keys(child.children).length > 0;
+        const isExpanded = !!expandedNodes[child.id];
+        const expandIcon = (
+          <IconButton
+            name={isExpanded ? 'chevron_down' : 'chevron_right'}
+            isWhite
+            size="s"
+            onClick={() => {
+              setExpandedNodes((prev) => ({
+                ...prev,
+                [child.id]: !isExpanded
+              }));
+            }}
+          />
+        );
+
         return (
           <Fragment key={child.id}>
-            <styled.Item style={{marginLeft: depth * 32}}>
-              <span>&nbsp;</span>
+            <styled.Item style={{marginLeft: depth * 30}}>
+              {hasChildren ? expandIcon : <styled.IconButtonPlaceholder />}
               <IconSvg name="cube" isWhite />
               {child.name}
               <styled.ItemActions>
@@ -69,7 +87,7 @@ const SceneExplorer: FC<PropsInterface> = ({world3dStore}) => {
                 />
               </styled.ItemActions>
             </styled.Item>
-            {Object.keys(child.children).length > 0 && <>{renderChildren(child, depth + 1)}</>}
+            {hasChildren && isExpanded && <>{renderChildren(child, depth + 1)}</>}
           </Fragment>
         );
       });
@@ -81,8 +99,10 @@ const SceneExplorer: FC<PropsInterface> = ({world3dStore}) => {
         Below is a list of all the 3d assets currently present in your odyssey. From here you can
         quickly fly to an object, delete and object, or make an object visible or invisible.
       </styled.Description>
-      <styled.Item>{worldTree.name}</styled.Item>
-      <styled.List>{renderChildren(worldTree)}</styled.List>
+      <styled.List>
+        <styled.Item>{worldTree.name}</styled.Item>
+        {renderChildren(worldTree)}
+      </styled.List>
     </styled.Container>
   );
 };
