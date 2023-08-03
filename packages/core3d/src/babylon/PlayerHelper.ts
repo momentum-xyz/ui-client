@@ -19,6 +19,7 @@ import {ObjectHelper} from './ObjectHelper';
 // import {InteractionEffectHelper} from './InteractionEffectHelper';
 import {InputHelper} from './InputHelper';
 import {PlayerInstance} from './PlayerInstance';
+import {InteractionEffectHelper} from './InteractionEffectHelper';
 
 //const NORMAL_SPEED = 0.5;
 //const FAST_SPEED = 1.5;
@@ -301,7 +302,7 @@ export class PlayerHelper {
     }
     smoothCameraTransform(
       this.camera.target,
-      userNodeToFollow,
+      userNodeToFollow.position,
       TransformTypesEnum.Rotation,
       1000,
       this.scene
@@ -309,12 +310,17 @@ export class PlayerHelper {
 
     smoothCameraTransform(
       this.camera.position,
-      userNodeToFollow,
+      userNodeToFollow.position,
       TransformTypesEnum.Position,
       2000,
       this.scene,
-      true,
-      true
+      0.98
+    ).then(() => {
+      PlayerHelper.onSpawnParticles?.();
+
+      InteractionEffectHelper.startHi5ParticlesForPlayer();
+    });
+  }
     );
   }
 

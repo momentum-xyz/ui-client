@@ -2,7 +2,6 @@ import {AbstractMesh, Scene, TransformNode, Vector3} from '@babylonjs/core';
 import {PositionInterface} from '@momentum-xyz/core';
 
 import {PlayerHelper} from './PlayerHelper';
-import {InteractionEffectHelper} from './InteractionEffectHelper';
 
 export enum TransformTypesEnum {
   Position,
@@ -48,49 +47,44 @@ export function smoothUserNodeTransform(
 
 export function smoothCameraTransform(
   startVec: Vector3,
-  targetUser: TransformNode,
+  targetVec: Vector3,
   transformType: TransformTypesEnum,
   totalTime: number,
   scene: Scene,
-  spawnParticles = false,
-  lerp = false
+  lerp = 0
 ) {
-  const slerpPos = Vector3.Zero();
-  let lerpedTarget = Vector3.Zero();
-  let elapsedTime = 0;
+  return new Promise<void>((resolve) => {
+    const slerpPos = Vector3.Zero();
+    let lerpedTarget = Vector3.Zero();
+    let elapsedTime = 0;
 
-  if (lerp) {
-    lerpedTarget = Vector3.Lerp(startVec, targetUser.position, 0.98);
-  } else {
-    lerpedTarget = targetUser.position;
-  }
-
-  const observable = scene.onBeforeRenderObservable.add(() => {
-    elapsedTime += scene.getEngine().getDeltaTime();
-
-    Vector3.SmoothToRef(startVec, lerpedTarget, elapsedTime, totalTime, slerpPos);
-
-    switch (transformType) {
-      case TransformTypesEnum.Position:
-        PlayerHelper.camera.position = slerpPos;
-        break;
-      case TransformTypesEnum.Rotation:
-        PlayerHelper.camera.target = slerpPos;
-        break;
+    if (lerp) {
+      lerpedTarget = Vector3.Lerp(startVec, targetVec, lerp);
+    } else {
+      lerpedTarget = targetVec;
     }
 
-    if (elapsedTime > totalTime) {
-      // Chase finished
-      if (PlayerHelper.onSpawnParticles) {
-        PlayerHelper.onSpawnParticles();
+    const observable = scene.onBeforeRenderObservable.add(() => {
+      elapsedTime += scene.getEngine().getDeltaTime();
+
+      Vector3.SmoothToRef(startVec, lerpedTarget, elapsedTime, totalTime, slerpPos);
+
+      switch (transformType) {
+        case TransformTypesEnum.Position:
+          PlayerHelper.camera.position = slerpPos;
+          break;
+        case TransformTypesEnum.Rotation:
+          PlayerHelper.camera.target = slerpPos;
+          break;
       }
 
-      if (spawnParticles) {
-        InteractionEffectHelper.startHi5ParticlesForPlayer();
-      }
+      if (elapsedTime > totalTime) {
+        // Chase finished
 
-      scene.onBeforeRenderObservable.remove(observable);
-    }
+        scene.onBeforeRenderObservable.remove(observable);
+        resolve();
+      }
+    });
   });
 }
 
