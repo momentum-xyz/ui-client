@@ -75,6 +75,7 @@ const SceneExplorer: FC<PropsInterface> = ({world3dStore}) => {
                   name="info"
                   isWhite
                   onClick={() => {
+                    goToObject(child.id);
                     handleClick(child.id, 'inspector');
                   }}
                 />

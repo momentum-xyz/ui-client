@@ -37,6 +37,11 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     id: 'sound',
     iconName: 'music',
     label: i18n.t('labels.sound')
+  },
+  {
+    id: 'sceneExplorer',
+    iconName: 'cubicles',
+    label: i18n.t('labels.sceneExplorer')
   }
 ];
 
@@ -103,10 +108,12 @@ const CreatorWidget: FC = () => {
         return <ObjectFunction />;
       case 'customise':
         return <AssetCustomising />;
+      case 'sceneExplorer':
+        return world3dStore ? <SceneExplorer world3dStore={world3dStore} /> : null;
       // case 'spawnPoint':
       //   return <SpawnPointPage />;
       default:
-        return world3dStore ? <SceneExplorer world3dStore={world3dStore} /> : null;
+        return null;
     }
     return null;
   }, [selectedTab, world3dStore]);
@@ -141,30 +148,20 @@ const CreatorWidget: FC = () => {
         />
       </div>
 
-      {!!content &&
-        (selectedTab ? (
-          <Panel
-            isFullHeight
-            size={['sound', 'functionality'].includes(selectedTab) ? 'normal' : 'large'}
-            variant="primary"
-            title={panel?.label || ''}
-            icon={panel?.iconName as IconNameType}
-            onClose={() => handleTabChange()}
-          >
-            {content}
-          </Panel>
-        ) : (
-          <Panel
-            isFullHeight
-            size="normal"
-            variant="primary"
-            title={t('labels.sceneExplorer')}
-            icon="cubicles"
-            isCloseDisabled
-          >
-            {content}
-          </Panel>
-        ))}
+      {!!content && selectedTab && (
+        <Panel
+          isFullHeight
+          size={
+            ['sound', 'functionality', 'sceneExplorer'].includes(selectedTab) ? 'normal' : 'large'
+          }
+          variant="primary"
+          title={panel?.label || ''}
+          icon={panel?.iconName as IconNameType}
+          onClose={() => handleTabChange()}
+        >
+          {content}
+        </Panel>
+      )}
 
       {removeObjectDialog.isOpen && (
         <Dialog

@@ -119,8 +119,10 @@ const World3dStore = types
         // TODO move it as child store here??
         creatorStore.setSelectedObjectId(objectId);
 
-        if (creatorStore.selectedTab === null) {
-          creatorStore.setSelectedTab(tabToSelect || 'gizmo');
+        if (tabToSelect) {
+          creatorStore.setSelectedTab(tabToSelect);
+        } else if (creatorStore.selectedTab === null) {
+          creatorStore.setSelectedTab('gizmo');
         }
       });
     },
