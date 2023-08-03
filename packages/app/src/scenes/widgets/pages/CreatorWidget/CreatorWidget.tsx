@@ -156,7 +156,7 @@ const CreatorWidget: FC = () => {
         ) : (
           <Panel
             isFullHeight
-            size="large"
+            size="normal"
             variant="primary"
             title={t('labels.sceneExplorer')}
             icon="cubicles"
