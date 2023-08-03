@@ -10,6 +10,7 @@ import {WorldCreatorHelper} from '../../babylon/WorldCreatorHelper';
 import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 import {ScreenCaptureHelper} from '../../babylon/ScreenCaptureHelper';
 import {InputHelper} from '../../babylon/InputHelper';
+import {ShaderEffectsHelper} from '../../babylon/ShaderEffectsHelper';
 
 const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callbacks}) => {
   const onObjectClick = useMutableCallback(callbacks.onObjectClick);
@@ -61,6 +62,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
         onSpawnParticles: onBumpReady
       });
       LightHelper.initialize(scene);
+      ShaderEffectsHelper.initialize(scene);
       InputHelper.initializeWorld(scene, onObjectClick, onUserClick, onClickOutside);
       ScreenCaptureHelper.initialize(scene, onScreenshotReady, onVideoReady);
       InteractionEffectHelper.initialize(scene);

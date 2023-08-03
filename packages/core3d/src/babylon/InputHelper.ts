@@ -39,7 +39,6 @@ export class InputHelper {
       if (hit) {
         if (hit.pickedMesh) {
           const pickedId = hit.pickedMesh.metadata;
-
           // Currently worldIds === userIds, so every click on mesh will be userClick.
           if (UniverseBuilderHelper.accountsMap.has(pickedId)) {
             UniverseBuilderHelper.goToOrb(pickedId, true);
@@ -81,10 +80,12 @@ export class InputHelper {
         if (hit.pickedMesh) {
           // get the root parent of the picked mesh
           let parent = hit.pickedMesh;
+
           while (parent.parent) {
             parent = parent.parent as AbstractMesh;
           }
           console.log('clicked on object with id: ' + parent.metadata);
+
           if (ObjectHelper.objectsMap.has(parent.metadata)) {
             onObjectClick(parent.metadata, lastClick);
           } else if (
