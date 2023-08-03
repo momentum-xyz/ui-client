@@ -193,11 +193,9 @@ const World3dStore = types
   }))
   .actions((self) => ({
     fetchWorldTree: flow(function* () {
-      const response = yield self.fetchWorldTreeRequest.send(api.spaceRepository.fetchWorldTree, {
+      self.worldTree = yield self.fetchWorldTreeRequest.send(api.spaceRepository.fetchWorldTree, {
         worldId: self.worldId
       });
-      console.log('fetchWorldTree', response);
-      self.worldTree = response;
     })
   }))
   .actions((self) => ({

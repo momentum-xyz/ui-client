@@ -113,7 +113,6 @@ const CreatorWidget: FC = () => {
       // case 'spawnPoint':
       //   return <SpawnPointPage />;
       default:
-        return null;
     }
     return null;
   }, [selectedTab, world3dStore]);
@@ -148,7 +147,7 @@ const CreatorWidget: FC = () => {
         />
       </div>
 
-      {!!content && selectedTab && (
+      {!!selectedTab && !!content && (
         <Panel
           isFullHeight
           size={
