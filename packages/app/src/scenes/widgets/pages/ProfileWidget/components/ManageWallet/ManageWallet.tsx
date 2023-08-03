@@ -13,6 +13,7 @@ interface PropsInterface {
   defaultWalletId: string;
   wallets: WalletInterface[];
   onChangeDefaultWallet: (walletId: string) => void;
+  onRemoveWallet: (address: string) => void;
   onReloadWallets: () => void;
 }
 
@@ -20,6 +21,7 @@ const ManageWallet: FC<PropsInterface> = ({
   wallets,
   defaultWalletId,
   onChangeDefaultWallet,
+  onRemoveWallet,
   onReloadWallets
 }) => {
   const [selectedWallet, setSelectedWallet] = useState<WalletConfigInterface | null>(null);
@@ -54,8 +56,9 @@ const ManageWallet: FC<PropsInterface> = ({
                   <ButtonEllipse
                     icon="bin"
                     variant="secondary"
-                    label={t('actions.remove')}
                     disabled={isDefault}
+                    label={t('actions.remove')}
+                    onClick={() => onRemoveWallet(wallet_id)}
                   />
                 </styled.WalletActions>
               </styled.Wallet>

@@ -47,6 +47,7 @@ export type IconNameType =
   | 'collaboration'
   | 'collapse'
   | 'collect'
+  | 'comment'
   | 'connect'
   | 'controls'
   | 'copy'

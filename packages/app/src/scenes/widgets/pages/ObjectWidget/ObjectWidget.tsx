@@ -107,8 +107,8 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
           isFullHeight
           size="normal"
           variant="primary"
-          icon={customizableContent?.widgetIcon || 'alert'}
-          title={customizableContent?.widgetTitle || ''}
+          icon={customizableContent.widgetIcon}
+          title={customizableContent.widgetTitle}
           onClose={onClose}
         >
           <Customization />

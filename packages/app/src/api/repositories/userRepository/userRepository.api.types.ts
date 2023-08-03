@@ -126,3 +126,9 @@ export interface FetchUserStakedWorldListRequest {
 }
 
 export interface FetchUserStakedWorldListResponse extends Array<WorldInfoInterface> {}
+
+/** REMOVE WALLET **/
+
+export interface RemoveWalletRequest {
+  wallet: string;
+}

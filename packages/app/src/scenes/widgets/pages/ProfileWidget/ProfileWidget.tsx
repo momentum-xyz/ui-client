@@ -146,6 +146,10 @@ const ProfileWidget: FC = () => {
                   wallets={nftStore.wallets}
                   defaultWalletId={nftStore.defaultWalletId}
                   onChangeDefaultWallet={nftStore.setDefaultWalletId}
+                  onRemoveWallet={async (wallet: string) => {
+                    await profileStore.removeWallet(wallet);
+                    await nftStore.loadMyWallets();
+                  }}
                   onReloadWallets={nftStore.loadMyWallets}
                 />
               )}

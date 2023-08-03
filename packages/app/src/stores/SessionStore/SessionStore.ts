@@ -202,6 +202,9 @@ const SessionStore = types
     get userId(): string {
       return self.user?.id || '';
     },
+    get userName(): string {
+      return self.user?.name || '';
+    },
     get userImageUrl(): string {
       return getImageAbsoluteUrl(self.user?.profile.avatarHash) || '';
     },

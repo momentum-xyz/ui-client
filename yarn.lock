@@ -5611,7 +5611,7 @@
 
 "@types/react-linkify@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.npmjs.org/@types/react-linkify/-/react-linkify-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/@types/react-linkify/-/react-linkify-1.0.1.tgz#4ece351faef22bfde1280b6d9ace5e88683a74d4"
   integrity sha512-qPxYwjB41ezoKdLXs0MrQ1FnhF3apyyxf3J7WVQQCBu/GyZQAW7Y3TY4317jdh0450QJ4fLqj0rnhIJvFZOamQ==
   dependencies:
     "@types/react" "*"
@@ -17994,7 +17994,7 @@ react-lifecycles-compat@^3.0.4:
 
 react-linkify@^1.0.0-alpha:
   version "1.0.0-alpha"
-  resolved "https://registry.npmjs.org/react-linkify/-/react-linkify-1.0.0-alpha.tgz"
+  resolved "https://registry.yarnpkg.com/react-linkify/-/react-linkify-1.0.0-alpha.tgz#b391c7b88e3443752fafe76a95ca4434e82e70d5"
   integrity sha512-7gcIUvJkAXXttt1fmBK9cwn+1jTa4hbKLGCZ9J1U6EOkyb2/+LKL1Z28d9rtDLMnpvImlNlLPdTPooorl5cpmg==
   dependencies:
     linkify-it "^2.0.3"

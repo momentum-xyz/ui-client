@@ -21,5 +21,7 @@ export enum AttributeNameEnum {
   SOUNDTRACK = 'soundtrack',
   SPATIAL_AUDIO = 'spatial_audio',
   OBJECT_EFFECT = 'object_effect',
-  USER_CUSTOMISABLE_DATA = 'user_customisable_data'
+  USER_CUSTOMISABLE_DATA = 'user_customisable_data',
+  COMMENTS = 'comments',
+  VOTE = 'vote'
 }

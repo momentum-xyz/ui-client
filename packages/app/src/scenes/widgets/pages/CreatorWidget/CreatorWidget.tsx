@@ -36,7 +36,7 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
   {
     id: 'sound',
     iconName: 'music',
-    label: i18n.t('labels.sound')
+    label: i18n.t('labels.soundtrack')
   },
   {
     id: 'sceneExplorer',
