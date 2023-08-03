@@ -21,8 +21,8 @@ const MusicWidget: FC = () => {
         size="normal"
         isFullHeight
         variant="primary"
-        icon="music"
-        title={t('labels.sound')}
+        icon="sound_louder"
+        title={t('labels.soundtrackPlayer')}
         onClose={() => widgetManagerStore.close(WidgetEnum.MUSIC)}
       >
         <styled.TracksContainer>

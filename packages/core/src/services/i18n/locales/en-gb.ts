@@ -384,6 +384,8 @@ export const enGb = {
       flyToMe: 'Fly to me',
       bio: 'Bio',
       sound: 'Sound',
+      soundtrack: 'Soundtrack',
+      soundtrackPlayer: 'Soundtrack player',
       discoverMore: 'Discover more',
       connections: 'Connections',
       newsfeed: 'Newsfeed',

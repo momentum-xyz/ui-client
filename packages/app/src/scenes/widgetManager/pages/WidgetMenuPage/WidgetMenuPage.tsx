@@ -130,9 +130,9 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       key: WidgetEnum.MUSIC,
       position: PositionEnum.RIGHT,
       viewPosition: PositionEnum.RIGHT,
-      iconName: 'music',
+      iconName: 'sound_louder',
       isHidden: !isWorld || !musicStore.isAvailable,
-      tooltip: t('labels.sound'),
+      tooltip: t('labels.soundtrackPlayer'),
       isDisabled: universeStore.isScreenRecording,
       onClick: handleToggle
     },
