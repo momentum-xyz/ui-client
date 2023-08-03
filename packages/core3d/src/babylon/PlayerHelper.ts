@@ -323,7 +323,7 @@ export class PlayerHelper {
     });
   }
 
-  static goToObject(targetNode: TransformNode) {
+  static flyToObject(targetNode: TransformNode) {
     const {size} = getBoundingInfo(targetNode);
     // Calculate a comfortable distance from the object from certain direction
     const direction = new Vector3(0, 0, -1); // Example direction

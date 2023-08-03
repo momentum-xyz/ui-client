@@ -162,7 +162,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       events.on('GoToObject', (objectId) => {
         const node = ObjectHelper.objectsMap.get(objectId)?.getNode();
         if (node) {
-          PlayerHelper.goToObject(node);
+          PlayerHelper.flyToObject(node);
         }
       });
 
