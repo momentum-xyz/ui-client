@@ -1,14 +1,9 @@
 import {Instance, flow, types} from 'mobx-state-tree';
 import {MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
-import {
-  Event3dEmitter,
-  MediaInterface,
-  ClickPositionInterface,
-  RequestModel
-} from '@momentum-xyz/core';
+import {Event3dEmitter, MediaInterface, RequestModel} from '@momentum-xyz/core';
 
 import {getRootStore} from 'core/utils';
-import {WidgetEnum} from 'core/enums';
+import {CreatorTabsEnum, WidgetEnum} from 'core/enums';
 import {PosBusService} from 'shared/services';
 import {FetchWorldTreeResponse, api} from 'api';
 
@@ -99,7 +94,7 @@ const World3dStore = types
         Event3dEmitter.emit('TriggerBump', receiverId);
       }
     },
-    handleClick(objectId: string, clickPos?: ClickPositionInterface) {
+    handleClick(objectId: string, tabToSelect?: keyof typeof CreatorTabsEnum) {
       console.log('World3dStore : handleClick', objectId);
       if (!self.isCreatorMode) {
         throw new Error('World3dStore : handleClick : not in creator mode');
@@ -125,7 +120,7 @@ const World3dStore = types
         creatorStore.setSelectedObjectId(objectId);
 
         if (creatorStore.selectedTab === null) {
-          creatorStore.setSelectedTab('gizmo');
+          creatorStore.setSelectedTab(tabToSelect || 'gizmo');
         }
       });
     },
@@ -176,6 +171,19 @@ const World3dStore = types
     colorPickedPreview(objectId: string, colorHex: string) {
       // TODO notify babylon
       // UnityService.colorPickedPreview(objectId, colorHex);
+    }
+  }))
+  .actions((self) => ({
+    openDeleteObjectDialog(objectId: string) {
+      const {
+        widgetStore: {creatorStore}
+      } = getRootStore(self);
+      // temp, we use currently selected object id for delete - it'd be better to use deleteObjectId or smt
+      self.handleClick(objectId).then(() => {
+        if (creatorStore.selectedObjectId === objectId) {
+          creatorStore.removeObjectDialog.open();
+        }
+      });
     }
   }))
   .actions((self) => ({

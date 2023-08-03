@@ -12,7 +12,6 @@ export const Description = styled.div`
 export const List = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
 `;
 
 export const Item = styled.div`
@@ -20,10 +19,22 @@ export const Item = styled.div`
   align-items: center;
   padding: 0 0 0 16px;
   height: 40px;
+  min-width: 250px;
 
-  border: 1px solid transparent;
-  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
-  box-shadow: -1px -1px 2px 0px rgba(158, 238, 255, 0.1);
-  border-radius: 4px;
+  border-bottom: 0.6px solid #fff;
+
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+  &:nth-child(even) {
+    background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
+  }
+
   gap: 10px;
+`;
+
+export const ItemActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  padding-right: 10px;
 `;

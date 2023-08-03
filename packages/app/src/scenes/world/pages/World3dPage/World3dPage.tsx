@@ -72,7 +72,7 @@ const World3dPage: FC = () => {
     if (universeStore.isCreatorMode) {
       console.log('[World3dPage]: Handle object click in creator mode', objectId);
       world3dStore
-        ?.handleClick(objectId, clickPos)
+        ?.handleClick(objectId)
         .then(() => {
           handleLevel2MenuOpen();
         })
