@@ -27,3 +27,4 @@ export * from './MediaPlayerTrack';
 export * from './MediaPlayerTime';
 export * from './SoundPlayerTrack';
 export * from './SoundPlayerTime';
+export * from './TextLinkify';
