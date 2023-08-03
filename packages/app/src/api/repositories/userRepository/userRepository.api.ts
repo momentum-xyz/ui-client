@@ -21,7 +21,8 @@ import {
   FetchUserWorldListRequest,
   FetchUserWorldListResponse,
   PostPendingStakeRequest,
-  PostPendingStakeResponse
+  PostPendingStakeResponse,
+  RemoveWalletRequest
 } from './userRepository.api.types';
 import {userRepositoryEndpoints} from './userRepository.api.endpoints';
 
@@ -94,4 +95,14 @@ export const fetchStakedWorldList: RequestInterface<
   const {userId, ...restOptions} = options;
   const url = generatePath(userRepositoryEndpoints().stakedWorldList, {userId});
   return request.get(url, restOptions);
+};
+
+export const removeWallet: RequestInterface<RemoveWalletRequest, null> = (options) => {
+  const {wallet, ...restOptions} = options;
+
+  restOptions.data = {
+    wallet
+  };
+
+  return request.delete(userRepositoryEndpoints().removeWallet, restOptions);
 };

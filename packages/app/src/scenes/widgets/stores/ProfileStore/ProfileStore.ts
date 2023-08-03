@@ -11,7 +11,8 @@ const ProfileStore = types.compose(
     .model('ProfileStore', {
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), []),
       editRequest: types.optional(RequestModel, {}),
-      editAvatarRequest: types.optional(RequestModel, {})
+      editAvatarRequest: types.optional(RequestModel, {}),
+      removeWalletRequest: types.optional(RequestModel, {})
     })
     .actions((self) => ({
       editProfile: flow(function* (form: ProfileFormInterface, previousImageHash?: string) {
@@ -52,6 +53,11 @@ const ProfileStore = types.compose(
         }
 
         return {jobId: response?.job_id, isDone: self.editRequest.isDone};
+      }),
+      removeWallet: flow(function* (address: string) {
+        yield self.removeWalletRequest.send(api.userRepository.removeWallet, {
+          wallet: address
+        });
       })
     }))
     .views((self) => ({
