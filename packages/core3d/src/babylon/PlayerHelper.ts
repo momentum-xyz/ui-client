@@ -331,15 +331,17 @@ export class PlayerHelper {
     direction.scaleInPlace(size);
     console.log('PlayerHelper goToObject', {size, direction});
 
+    this.camera.lockedTarget = targetNode.position;
+
     smoothCameraTransform(
       this.camera.position,
       targetNode.position.add(direction),
       TransformTypesEnum.Position,
       1500,
       this.scene
-    );
-
-    this.camera.lockedTarget = targetNode.position;
+    ).then(() => {
+      this.camera.lockedTarget = null;
+    });
   }
 
   static userRemove(id: string) {
