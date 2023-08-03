@@ -14,17 +14,18 @@ import {
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {CustomizableObjectInterface} from 'api';
-import {ObjectCommentInterface} from 'core/interfaces';
+import {ObjectCommentWithUserInterface} from 'core/interfaces';
 
 import * as styled from './ContentViewer.styled';
 
 interface PropsInterface {
+  currentUserId: string;
   currentUserName: string;
   currentUserImageUrl: string;
   content: CustomizableObjectInterface;
   hasVote: boolean;
   voteCount: number;
-  commentList: ObjectCommentInterface[];
+  commentList: ObjectCommentWithUserInterface[];
   onDelete?: () => void;
   onEdit?: () => void;
   onVote: () => void;
@@ -33,6 +34,7 @@ interface PropsInterface {
 }
 
 const ContentViewer: FC<PropsInterface> = ({
+  currentUserId,
   currentUserName,
   currentUserImageUrl,
   content,
@@ -97,14 +99,14 @@ const ContentViewer: FC<PropsInterface> = ({
               />
             )}
 
-            {commentList.map(({uuid, created, content}) => (
+            {commentList.map(({uuid, created, content, _user}) => (
               <Comment
                 key={uuid}
-                dateISO={created}
-                author={uuid} // TODO
-                authorImageSrc="" // TODO
                 message={content}
-                onDelete={() => onDeleteComment(uuid)}
+                dateISO={created}
+                author={_user.profile.name}
+                authorImageSrc={getImageAbsoluteUrl(_user.profile.avatar_hash)}
+                onDelete={currentUserId === _user.user_id ? () => onDeleteComment(uuid) : undefined}
               />
             ))}
           </styled.CommentsContainer>

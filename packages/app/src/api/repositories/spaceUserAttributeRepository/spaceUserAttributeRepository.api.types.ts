@@ -53,6 +53,24 @@ export interface GetAllSpaceUserAttributesForSpaceResponse {
   [userId: string]: AttributeValueInterface;
 }
 
+/** GET ALL SPACE-USER ATTRIBUTES LIST **/
+
+export interface GetAllSpaceUserAttributeListRequest
+  extends Omit<SpaceUserAttributeRequest, 'userId'> {
+  fields?: string[];
+  limit?: number;
+  offset?: number;
+  order?: string;
+  orderDirection?: 'ASK' | 'DESC';
+}
+
+export interface GetAllSpaceUserAttributeListResponse {
+  count: number;
+  limit: number;
+  offset: number;
+  items: unknown[] | null;
+}
+
 /** SET SPACE USER SUB ATTRIBUTE REQUEST */
 
 export interface SetSpaceUserSubAttributeRequest extends SpaceUserSubAttributeRequest {

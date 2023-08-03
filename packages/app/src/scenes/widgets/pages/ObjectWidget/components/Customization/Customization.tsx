@@ -82,6 +82,7 @@ const Customization: FC = () => {
           hasVote={customizableContent.hasVote}
           voteCount={customizableContent.voteCount}
           content={customizableContent.content}
+          currentUserId={userId}
           currentUserName={sessionStore.userName}
           currentUserImageUrl={sessionStore.userImageUrl}
           commentList={customizableContent.commentList}
@@ -90,11 +91,11 @@ const Customization: FC = () => {
           onVote={() => customizableContent.toggleVote(userId)}
           onAddComment={async (message) => {
             await customizableContent.addComment(userId, message);
-            await customizableContent.fetchAllComments(userId);
+            await customizableContent.fetchAllComments();
           }}
           onDeleteComment={async (commentId) => {
             await customizableContent.deleteComment(userId, commentId);
-            await customizableContent.fetchAllComments(userId);
+            await customizableContent.fetchAllComments();
           }}
         />
       )}

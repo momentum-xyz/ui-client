@@ -8,14 +8,18 @@ import {EffectsEnum} from '@momentum-xyz/core3d';
 import {PluginIdEnum} from 'api/enums';
 import {LeonardoModelIdEnum} from 'core/enums';
 import {MediaUploader, User} from 'core/models';
-import {mapper} from 'api/mapper';
-import {CustomizableObjectFormInterface, ObjectCommentInterface} from 'core/interfaces';
+import {
+  ObjectCommentInterface,
+  ObjectCommentWithUserInterface,
+  CustomizableObjectFormInterface
+} from 'core/interfaces';
 import {
   api,
   GenerateAIImagesResponse,
   CustomizableObjectInterface,
   FetchAIGeneratedImagesResponse,
-  GetSpaceUserAttributeCountResponse
+  GetSpaceUserAttributeCountResponse,
+  GetAllSpaceUserAttributeListResponse
 } from 'api';
 
 const CustomizableContent = types
@@ -36,7 +40,7 @@ const CustomizableContent = types
       voteCount: 0,
       hasVote: false,
 
-      commentList: types.optional(types.array(types.frozen<ObjectCommentInterface>()), []),
+      commentList: types.optional(types.array(types.frozen<ObjectCommentWithUserInterface>()), []),
 
       mediaUploader: types.optional(MediaUploader, {}),
       fetchRequest: types.optional(RequestModel, {}),
@@ -252,39 +256,26 @@ const CustomizableContent = types
     })
   }))
   .actions((self) => ({
-    fetchAllComments: flow(function* (userId: string) {
-      // TODO: New EP
-      const response: Record<string, ObjectCommentInterface> = yield self.commentListRequest.send(
-        api.spaceUserAttributeRepository.getSpaceUserAttribute,
+    fetchAllComments: flow(function* () {
+      const response: GetAllSpaceUserAttributeListResponse = yield self.commentListRequest.send(
+        api.spaceUserAttributeRepository.getAllSpaceUserAttributeList,
         {
-          userId: userId,
           spaceId: self.objectId,
           pluginId: PluginIdEnum.CORE,
-          attributeName: AttributeNameEnum.COMMENTS
+          attributeName: AttributeNameEnum.COMMENTS,
+          orderDirection: 'DESC',
+          // Fields of ObjectCommentInterface
+          fields: ['uuid', 'created', 'content'],
+          order: 'created'
         }
       );
 
       if (response) {
-        self.commentList = cast(mapper.mapSpaceAttributeValues<ObjectCommentInterface>(response));
-      } else {
-        self.commentList = cast([]);
+        self.commentList = cast(
+          response.items ? (response.items as ObjectCommentWithUserInterface[]) : []
+        );
       }
     }),
-    fetchMyComments: flow(function* (userId: string) {
-      const response = yield self.commentRequest.send(
-        api.spaceUserAttributeRepository.getSpaceUserAttribute,
-        {
-          userId: userId,
-          spaceId: self.objectId,
-          pluginId: PluginIdEnum.CORE,
-          attributeName: AttributeNameEnum.COMMENTS
-        }
-      );
-
-      return response || null;
-    })
-  }))
-  .actions((self) => ({
     addComment: flow(function* (userId: string, comment: string) {
       const uuid: string = uuidv4();
       const value: ObjectCommentInterface = {
@@ -316,7 +307,7 @@ const CustomizableContent = types
     initSocial(userId: string) {
       self.fetchVoteCount();
       self.checkVote(userId);
-      self.fetchAllComments(userId);
+      self.fetchAllComments();
     }
   }))
   .views((self) => ({

@@ -8,6 +8,8 @@ import {
   DeleteSpaceUserAttributeRequest,
   DeleteSpaceUserAttributeResponse,
   DeleteSpaceUserSubAttributeRequest,
+  GetAllSpaceUserAttributeListRequest,
+  GetAllSpaceUserAttributeListResponse,
   GetAllSpaceUserAttributesForSpaceRequest,
   GetAllSpaceUserAttributesForSpaceResponse,
   GetSpaceUserAttributeCountRequest,
@@ -98,6 +100,35 @@ export const getAllSpaceUserAttributesForSpace: RequestInterface<
   restOptions.params = {
     plugin_id: pluginId,
     attribute_name: attributeName
+  };
+
+  return request.get(url, restOptions);
+};
+
+export const getAllSpaceUserAttributeList: RequestInterface<
+  GetAllSpaceUserAttributeListRequest,
+  GetAllSpaceUserAttributeListResponse
+> = (options) => {
+  const {
+    spaceId,
+    pluginId,
+    attributeName,
+    fields,
+    limit,
+    offset,
+    order,
+    orderDirection,
+    ...restOptions
+  } = options;
+
+  const baseUrl = spaceUserAttributeRepositoryEndpoints().attributeList;
+  const url = generatePath(baseUrl, {spaceId, pluginId, attributeName});
+
+  restOptions.params = {
+    fields,
+    limit,
+    offset,
+    ...(order && {order: orderDirection === 'DESC' ? `-${order}` : order})
   };
 
   return request.get(url, restOptions);
