@@ -20,6 +20,7 @@ export const Item = styled.div`
   padding: 0 0 0 16px;
   height: 40px;
   min-width: 250px;
+  transition: all var(--tr-150-ei);
 
   border-bottom: 0.6px solid #fff;
 

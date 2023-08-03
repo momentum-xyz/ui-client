@@ -1,6 +1,7 @@
 import {FC, useEffect, Fragment} from 'react';
 import {observer} from 'mobx-react-lite';
 import {IconButton, IconSvg} from '@momentum-xyz/ui-kit';
+import {Event3dEmitter} from '@momentum-xyz/core';
 
 import {World3dStoreModelInterface} from 'stores/UniverseStore/models';
 import {WorldObjectWithChildrenInterface} from 'api';
@@ -16,10 +17,18 @@ interface PropsInterface {
 }
 
 const SceneExplorer: FC<PropsInterface> = ({world3dStore}) => {
-  const {fetchWorldTree, worldTree, handleClick, goToObject} = world3dStore;
+  const {fetchWorldTree, worldTree, handleClick, openDeleteObjectDialog, goToObject} = world3dStore;
 
   useEffect(() => {
     fetchWorldTree();
+
+    Event3dEmitter.on('AddObject', fetchWorldTree);
+    Event3dEmitter.on('RemoveObject', fetchWorldTree);
+
+    return () => {
+      Event3dEmitter.off('AddObject', fetchWorldTree);
+      Event3dEmitter.off('RemoveObject', fetchWorldTree);
+    };
   }, [fetchWorldTree]);
 
   if (!worldTree) {
@@ -55,7 +64,7 @@ const SceneExplorer: FC<PropsInterface> = ({world3dStore}) => {
                   name="bin"
                   isWhite
                   onClick={() => {
-                    handleClick(child.id);
+                    openDeleteObjectDialog(child.id);
                   }}
                 />
               </styled.ItemActions>
