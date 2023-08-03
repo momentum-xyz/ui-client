@@ -1,19 +1,7 @@
 import {TransformNode, Vector3} from '@babylonjs/core';
 
-import {ObjectHelper} from './ObjectHelper';
-
 export function getAssetFileName(id: string): string {
   return id.replace(/-/g, '');
-}
-
-export function getNodeFromId(id: string): TransformNode | undefined {
-  const obj = ObjectHelper.objectsMap.get(id);
-  const myNode = obj?.cloneWithEffect || obj?.objectInstance.rootNodes[0];
-  if (myNode instanceof TransformNode) {
-    return myNode;
-  } else {
-    return undefined;
-  }
 }
 
 export function getBoundingInfo(node: TransformNode): {
