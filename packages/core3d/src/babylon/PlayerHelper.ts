@@ -19,6 +19,7 @@ import {ObjectHelper} from './ObjectHelper';
 // import {InteractionEffectHelper} from './InteractionEffectHelper';
 import {InputHelper} from './InputHelper';
 import {PlayerInstance} from './PlayerInstance';
+import {getBoundingInfo} from './UtilityHelper';
 import {InteractionEffectHelper} from './InteractionEffectHelper';
 
 //const NORMAL_SPEED = 0.5;
@@ -321,7 +322,24 @@ export class PlayerHelper {
       InteractionEffectHelper.startHi5ParticlesForPlayer();
     });
   }
+
+  static goToObject(targetNode: TransformNode) {
+    const {size} = getBoundingInfo(targetNode);
+    // Calculate a comfortable distance from the object from certain direction
+    const direction = new Vector3(0, 0, -1); // Example direction
+    direction.normalize();
+    direction.scaleInPlace(size);
+    console.log('PlayerHelper goToObject', {size, direction});
+
+    smoothCameraTransform(
+      this.camera.position,
+      targetNode.position.add(direction),
+      TransformTypesEnum.Position,
+      1500,
+      this.scene
     );
+
+    this.camera.lockedTarget = targetNode.position;
   }
 
   static userRemove(id: string) {

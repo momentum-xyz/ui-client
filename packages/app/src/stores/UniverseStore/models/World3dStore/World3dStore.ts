@@ -162,6 +162,9 @@ const World3dStore = types
     setWaitingForBumpEffectReadyUserId(userId: string | null) {
       self.waitingForBumpEffectReadyUserId = userId;
     },
+    goToObject(objectId: string) {
+      Event3dEmitter.emit('GoToObject', objectId);
+    },
     undo() {
       // UnityService.undo();
     },
