@@ -9,6 +9,7 @@ export const userRepositoryEndpoints = () => {
     bigStakers: `${BASE_URL}/top-stakers`,
     profile: `${BASE_URL}/:userId`,
     ownedWorldList: `${BASE_URL}/:userId/worlds`,
-    stakedWorldList: `${BASE_URL}/:userId/staked-worlds`
+    stakedWorldList: `${BASE_URL}/:userId/staked-worlds`,
+    removeWallet: `${BASE_URL}/me/remove-wallet`
   };
 };
