@@ -68,10 +68,15 @@ const MusicPlayer = types
     },
     setIsSeeking(isSeeking: boolean): void {
       self.isSeeking = isSeeking;
+      if (!self.isSeeking) {
+        self.player?.seek(self.playedSec);
+      }
     },
     setHowlerSeek(sec: number): void {
-      self.player?.seek(sec);
       self.playedSec = sec;
+      if (!self.isSeeking) {
+        self.player?.seek(sec);
+      }
     },
     setSeekPosition(): void {
       if (!self.isSeeking && self.isPlaying) {
