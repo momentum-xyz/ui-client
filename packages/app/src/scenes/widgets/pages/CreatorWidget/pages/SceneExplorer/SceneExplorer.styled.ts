@@ -27,7 +27,7 @@ export const Item = styled.div`
   min-width: 250px;
   transition: all var(--tr-150-ei);
 
-  border-bottom: 0.6px solid #fff;
+  border-bottom: 1px solid var(--white);
 
   background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
   &:nth-child(even) {
