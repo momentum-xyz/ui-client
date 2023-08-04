@@ -237,7 +237,7 @@ export class ObjectHelper {
       console.log('size:', size);
 
       // node.position = new Vector3(0, -0.5, -3);
-      obj.setPosition(new Vector3(0, 0, -size * 2));
+      node.position = new Vector3(0, size / 2, -size * 2 - 3);
 
       obj.setEffect(EffectsEnum.SPAWN_PREVIEW, false);
 
@@ -259,8 +259,6 @@ export class ObjectHelper {
     obj?.setEffect(EffectsEnum.NONE);
 
     this.selectedObjectFromSpawn = '';
-
-    PlayerHelper.setSelfPos(new Vector3(0, -0.5, -3));
   }
 
   static objectEffectChange(objectId: string, effect: string) {

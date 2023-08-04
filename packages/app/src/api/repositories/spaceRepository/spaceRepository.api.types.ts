@@ -70,6 +70,22 @@ export interface DeleteWorldMemberRequest {
   userId: string;
 }
 
+export interface WorldObjectWithChildrenInterface {
+  id: string;
+  name: string;
+  object_type_id: string;
+  object_type_name: string;
+  total_direct_children: number;
+  children: Record<string, WorldObjectWithChildrenInterface>;
+}
+
+export interface FetchWorldTreeRequest {
+  worldId: string;
+}
+export interface FetchWorldTreeResponse extends WorldObjectWithChildrenInterface {
+  max_depth: number;
+}
+
 /** CLAIM AND CUSTOMIZE OBJECT **/
 
 export interface ClaimAndCustomizeRequest extends CustomizableObjectInterface {

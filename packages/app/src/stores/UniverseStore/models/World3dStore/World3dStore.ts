@@ -1,18 +1,23 @@
-import {types} from 'mobx-state-tree';
+import {Instance, flow, types} from 'mobx-state-tree';
 import {MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
-import {Event3dEmitter, MediaInterface, ClickPositionInterface} from '@momentum-xyz/core';
+import {Event3dEmitter, MediaInterface, RequestModel} from '@momentum-xyz/core';
 
 import {getRootStore} from 'core/utils';
-import {WidgetEnum} from 'core/enums';
+import {CreatorTabsEnum, WidgetEnum} from 'core/enums';
 import {PosBusService} from 'shared/services';
+import {FetchWorldTreeResponse, api} from 'api';
 
 const World3dStore = types
   .model('World3dStore', {
+    worldId: types.string,
     isCreatorMode: false,
     selectedObjectId: types.maybeNull(types.string),
     attachedToCameraObjectId: types.maybeNull(types.string),
 
     waitingForBumpEffectReadyUserId: types.maybeNull(types.string),
+
+    worldTree: types.maybeNull(types.frozen<FetchWorldTreeResponse>()),
+    fetchWorldTreeRequest: types.optional(RequestModel, {}),
 
     isScreenRecording: false,
     screenshotOrVideo: types.maybeNull(types.frozen<MediaInterface>())
@@ -89,7 +94,7 @@ const World3dStore = types
         Event3dEmitter.emit('TriggerBump', receiverId);
       }
     },
-    handleClick(objectId: string, clickPos?: ClickPositionInterface) {
+    handleClick(objectId: string, tabToSelect?: keyof typeof CreatorTabsEnum) {
       console.log('World3dStore : handleClick', objectId);
       if (!self.isCreatorMode) {
         throw new Error('World3dStore : handleClick : not in creator mode');
@@ -114,7 +119,9 @@ const World3dStore = types
         // TODO move it as child store here??
         creatorStore.setSelectedObjectId(objectId);
 
-        if (creatorStore.selectedTab === null) {
+        if (tabToSelect) {
+          creatorStore.setSelectedTab(tabToSelect);
+        } else if (creatorStore.selectedTab === null) {
           creatorStore.setSelectedTab('gizmo');
         }
       });
@@ -157,6 +164,9 @@ const World3dStore = types
     setWaitingForBumpEffectReadyUserId(userId: string | null) {
       self.waitingForBumpEffectReadyUserId = userId;
     },
+    goToObject(objectId: string) {
+      Event3dEmitter.emit('GoToObject', objectId);
+    },
     undo() {
       // UnityService.undo();
     },
@@ -169,6 +179,26 @@ const World3dStore = types
     }
   }))
   .actions((self) => ({
+    openDeleteObjectDialog(objectId: string) {
+      const {
+        widgetStore: {creatorStore}
+      } = getRootStore(self);
+      // temp, we use currently selected object id for delete - it'd be better to use deleteObjectId or smt
+      self.handleClick(objectId).then(() => {
+        if (creatorStore.selectedObjectId === objectId) {
+          creatorStore.removeObjectDialog.open();
+        }
+      });
+    }
+  }))
+  .actions((self) => ({
+    fetchWorldTree: flow(function* () {
+      self.worldTree = yield self.fetchWorldTreeRequest.send(api.spaceRepository.fetchWorldTree, {
+        worldId: self.worldId
+      });
+    })
+  }))
+  .actions((self) => ({
     enableCreatorMode() {
       self.isCreatorMode = true;
     },
@@ -177,5 +207,7 @@ const World3dStore = types
       self.closeAndResetObjectMenu();
     }
   }));
+
+export interface World3dStoreModelInterface extends Instance<typeof World3dStore> {}
 
 export {World3dStore};

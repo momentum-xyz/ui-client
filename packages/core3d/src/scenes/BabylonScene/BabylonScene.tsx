@@ -37,6 +37,7 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       events.off('UsersTransformChanged');
       events.off('ObjectEditModeChanged');
       events.off('TriggerBump');
+      events.off('GoToObject');
       events.off('StartRecordingVideo');
       events.off('StopRecordingVideo');
       events.off('MakeScreenshot');
@@ -156,6 +157,13 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
       // Received by user1 to start chasing
       events.on('TriggerBump', (userId) => {
         PlayerHelper.followPlayer(userId);
+      });
+
+      events.on('GoToObject', (objectId) => {
+        const node = ObjectHelper.objectsMap.get(objectId)?.getNode();
+        if (node) {
+          PlayerHelper.flyToObject(node);
+        }
       });
 
       events.on('MakeScreenshot', () => {

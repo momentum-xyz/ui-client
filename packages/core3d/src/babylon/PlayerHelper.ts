@@ -19,6 +19,8 @@ import {ObjectHelper} from './ObjectHelper';
 // import {InteractionEffectHelper} from './InteractionEffectHelper';
 import {InputHelper} from './InputHelper';
 import {PlayerInstance} from './PlayerInstance';
+import {getBoundingInfo} from './UtilityHelper';
+import {InteractionEffectHelper} from './InteractionEffectHelper';
 
 //const NORMAL_SPEED = 0.5;
 //const FAST_SPEED = 1.5;
@@ -142,15 +144,6 @@ export class PlayerHelper {
 
     this.playerId = userId;
     // this.spawnPlayer();
-  }
-
-  static setSelfPos(pos: Vector3) {
-    const node = this.getPlayerNode();
-    if (!node) {
-      console.log('PlayerHelper setSelfPos: node is null or wrong type');
-      return;
-    }
-    node.position = pos;
   }
 
   static setInitialPosition(transform: TransformNoScaleInterface) {
@@ -310,7 +303,7 @@ export class PlayerHelper {
     }
     smoothCameraTransform(
       this.camera.target,
-      userNodeToFollow,
+      userNodeToFollow.position,
       TransformTypesEnum.Rotation,
       1000,
       this.scene
@@ -318,13 +311,37 @@ export class PlayerHelper {
 
     smoothCameraTransform(
       this.camera.position,
-      userNodeToFollow,
+      userNodeToFollow.position,
       TransformTypesEnum.Position,
       2000,
       this.scene,
-      true,
-      true
-    );
+      0.98
+    ).then(() => {
+      PlayerHelper.onSpawnParticles?.();
+
+      InteractionEffectHelper.startHi5ParticlesForPlayer();
+    });
+  }
+
+  static flyToObject(targetNode: TransformNode) {
+    const {size} = getBoundingInfo(targetNode);
+    // Calculate a comfortable distance from the object from certain direction
+    const direction = new Vector3(0, 0, -1); // Example direction
+    direction.normalize();
+    direction.scaleInPlace(size);
+    console.log('PlayerHelper goToObject', {size, direction});
+
+    this.camera.lockedTarget = targetNode.position;
+
+    smoothCameraTransform(
+      this.camera.position,
+      targetNode.position.add(direction),
+      TransformTypesEnum.Position,
+      1500,
+      this.scene
+    ).then(() => {
+      this.camera.lockedTarget = null;
+    });
   }
 
   static userRemove(id: string) {

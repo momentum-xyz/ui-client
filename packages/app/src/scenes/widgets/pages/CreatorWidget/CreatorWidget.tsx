@@ -16,7 +16,8 @@ import {
   ObjectInspector,
   AssetCustomising,
   ObjectFunction,
-  MusicManager
+  MusicManager,
+  SceneExplorer
 } from './pages';
 
 type MenuItemType = keyof typeof CreatorTabsEnum;
@@ -36,6 +37,11 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     id: 'sound',
     iconName: 'music',
     label: i18n.t('labels.soundtrack')
+  },
+  {
+    id: 'sceneExplorer',
+    iconName: 'cubicles',
+    label: i18n.t('labels.sceneExplorer')
   }
 ];
 
@@ -102,12 +108,14 @@ const CreatorWidget: FC = () => {
         return <ObjectFunction />;
       case 'customise':
         return <AssetCustomising />;
+      case 'sceneExplorer':
+        return world3dStore ? <SceneExplorer world3dStore={world3dStore} /> : null;
       // case 'spawnPoint':
       //   return <SpawnPointPage />;
       default:
     }
     return null;
-  }, [selectedTab]);
+  }, [selectedTab, world3dStore]);
 
   const panel = allPanels.find((panel) => panel.id === selectedTab);
   const menuItem = sideMenuItems.find((item) => item.id === selectedTab);
@@ -142,7 +150,9 @@ const CreatorWidget: FC = () => {
       {!!selectedTab && !!content && (
         <Panel
           isFullHeight
-          size={['sound', 'functionality'].includes(selectedTab) ? 'normal' : 'large'}
+          size={
+            ['sound', 'functionality', 'sceneExplorer'].includes(selectedTab) ? 'normal' : 'large'
+          }
           variant="primary"
           title={panel?.label || ''}
           icon={panel?.iconName as IconNameType}
