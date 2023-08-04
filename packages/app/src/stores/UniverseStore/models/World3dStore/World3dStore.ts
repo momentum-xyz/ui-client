@@ -127,18 +127,11 @@ const World3dStore = types
       });
     },
     setAttachedToCamera(objectId: string | null) {
-      const {
-        widgetManagerStore,
-        widgetStore: {creatorStore}
-      } = getRootStore(self);
+      const {widgetManagerStore} = getRootStore(self);
 
       if (!objectId && self.attachedToCameraObjectId) {
         Event3dEmitter.emit('DetachObjectFromCamera', self.attachedToCameraObjectId);
         PosBusService.requestObjectUnlock(self.attachedToCameraObjectId);
-        const isDuplicatedObject = creatorStore.isDuplicatedObject(self.attachedToCameraObjectId);
-        if (isDuplicatedObject) {
-          creatorStore.updateDuplicatedObject();
-        }
       }
 
       const submenuItems: MenuItemInterface<WidgetEnum>[] = [

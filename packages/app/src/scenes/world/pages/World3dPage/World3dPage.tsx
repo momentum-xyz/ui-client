@@ -102,21 +102,17 @@ const World3dPage: FC = () => {
   };
 
   const handleObjectDuplicate = () => {
-    const {selectedObjectId, objectName, objectInfo} = creatorStore;
+    const {selectedObjectId} = creatorStore;
 
-    if (!objectInfo || !objectName || !selectedObjectId) {
+    if (!selectedObjectId) {
       return;
     }
 
     world3dStore?.closeAndResetObjectMenu();
 
-    const {asset_3d_id, object_type_id} = objectInfo;
-
-    creatorStore
-      .duplicateObject(worldId, selectedObjectId, asset_3d_id, objectName, object_type_id)
-      .then((objectId) => {
-        console.log('Duplicated object', objectId);
-      });
+    creatorStore.duplicateObject(selectedObjectId).then((objectId) => {
+      console.log('Duplicated object', objectId);
+    });
   };
 
   const handleLevel2MenuOpen = () => {
