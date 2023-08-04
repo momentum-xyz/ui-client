@@ -264,6 +264,26 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
     setTimeout(() => loadMyWallets().catch(console.error), DELAY_REFRESH_DATA_MS);
   }, [stakingContract, account, isCorrectAccount, loadMyWallets]);
 
+  const sendEthers = useCallback(
+    async (to: string, amount: BN) => {
+      const amountStr = amount.toString();
+      console.log('useBlockchain sendEthers', {to, amount, amountStr});
+      if (!isCorrectAccount) {
+        console.log('Incorrect account selected');
+        return;
+      }
+
+      const result = await library?.getSigner(account).sendTransaction({
+        to,
+        value: amountStr
+      });
+      console.log('Transaction sent:', result);
+      await result.wait();
+      console.log('useBlockchain sendEthers done');
+    },
+    [library, account, isCorrectAccount]
+  );
+
   const walletSelectContent =
     selectedWalletConf === dummyWalletConf ? (
       <WalletSelector
@@ -297,6 +317,7 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
     walletSelectContent,
     canRequestAirdrop,
     dateOfNextAllowedAirdrop,
+    sendEthers,
     stake,
     unstake,
     getTokens,

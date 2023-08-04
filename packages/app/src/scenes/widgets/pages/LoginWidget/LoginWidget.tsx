@@ -1,6 +1,6 @@
 import {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Panel, PositionEnum, Steps} from '@momentum-xyz/ui-kit';
+import {Frame, Panel, PositionEnum, Steps} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
@@ -63,7 +63,9 @@ const LoginWidget: FC = () => {
                   }}
                 />
               ) : (
-                <SignIn />
+                <Frame>
+                  <SignIn />
+                </Frame>
               )}
             </>
           )}

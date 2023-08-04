@@ -38,6 +38,10 @@ const WelcomePage: FC = () => {
     [navigate, widgetManagerStore]
   );
 
+  const handleBuyNft = useCallback(() => {
+    navigate(ROUTES.buyNft);
+  }, [navigate]);
+
   useEffect(() => {
     if (!isGuest) {
       handleNavigation(WidgetEnum.EXPLORE);
@@ -60,11 +64,28 @@ const WelcomePage: FC = () => {
         />
       </styled.Card>
 
+      <styled.Card>
+        <styled.CardHexContainer>
+          <Hexagon type="primary-borderless" iconName="rocket" />
+        </styled.CardHexContainer>
+        <styled.CardTitle>{t('labels.welcomePageGuestTitle')}</styled.CardTitle>
+        <styled.CardDescription>{t('labels.welcomePageGuestDescription')}</styled.CardDescription>
+        <styled.CardButtonContainer>
+          <Button
+            wide
+            icon="rocket"
+            variant="secondary"
+            label={t('actions.startJourney')}
+            onClick={() => handleNavigation(WidgetEnum.EXPLORE)}
+          />
+        </styled.CardButtonContainer>
+      </styled.Card>
+
       <styled.Card className="light">
         <styled.CardHexContainer className="light">
           <Hexagon type="primary-borderless" iconName="rocket" />
         </styled.CardHexContainer>
-        <styled.CardTitle className="light">{t('labels.welcomePageGuestTitle')}</styled.CardTitle>
+        <styled.CardTitle className="light">{t('labels.welcomePageBuyNftTitle')}</styled.CardTitle>
         <styled.CardDescription className="light">
           {t('labels.welcomePageGuestDescription')}
         </styled.CardDescription>
@@ -73,8 +94,8 @@ const WelcomePage: FC = () => {
             wide
             icon="rocket"
             variant="secondary"
-            label={t('actions.startJourney')}
-            onClick={() => handleNavigation(WidgetEnum.EXPLORE)}
+            label={t('actions.buyNft')}
+            onClick={handleBuyNft}
           />
         </styled.CardButtonContainer>
       </styled.Card>

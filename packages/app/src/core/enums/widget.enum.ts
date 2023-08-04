@@ -1,6 +1,7 @@
 export enum WidgetEnum {
   LOGIN = 'LOGIN',
   EXPLORE = 'EXPLORE',
+  BUY_NFT = 'BUY_NFT',
   GO_TO = 'GO_TO', // TODO rename to ACTION_BUTTON
   MY_PROFILE = 'MY_PROFILE',
   CREATOR = 'CREATOR',
