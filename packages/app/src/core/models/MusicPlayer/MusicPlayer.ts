@@ -18,9 +18,11 @@ const MusicPlayer = types
       isActiveTrackShown: true,
       isSeeking: false,
       isPlaying: false,
+      isDistanceSeeking: false,
       durationSec: 0,
       playedSec: 0,
       distance: 0,
+      isVolumeSeeking: false,
       volume: 0
     })
   )
@@ -34,6 +36,12 @@ const MusicPlayer = types
     },
     setVolume(volumePercent: number): void {
       self.volume = volumePercent;
+    },
+    setIsVolumeSeeking(isVolumeSeeking: boolean): void {
+      self.isVolumeSeeking = isVolumeSeeking;
+    },
+    setIsDistanceSeeking(isDistanceSeeking: boolean): void {
+      self.isDistanceSeeking = isDistanceSeeking;
     },
     setDistance(distance: number): void {
       self.distance = distance;
@@ -68,10 +76,15 @@ const MusicPlayer = types
     },
     setIsSeeking(isSeeking: boolean): void {
       self.isSeeking = isSeeking;
+      if (!self.isSeeking) {
+        self.player?.seek(self.playedSec);
+      }
     },
     setHowlerSeek(sec: number): void {
-      self.player?.seek(sec);
       self.playedSec = sec;
+      if (!self.isSeeking) {
+        self.player?.seek(sec);
+      }
     },
     setSeekPosition(): void {
       if (!self.isSeeking && self.isPlaying) {

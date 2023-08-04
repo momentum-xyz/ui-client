@@ -10,6 +10,7 @@ export interface SoundRangePropsInterface {
   leftIcon?: IconNameType;
   rightIcon?: IconNameType;
   onChange: (percent: number) => void;
+  onIsSeeking?: (isSeeking: boolean) => void;
 }
 
 const RANGE_STEP = 10;
@@ -18,7 +19,8 @@ const SoundRange: FC<SoundRangePropsInterface> = ({
   percent,
   leftIcon = 'sound',
   rightIcon = 'sound_louder',
-  onChange
+  onChange,
+  onIsSeeking
 }) => {
   const handleDown = () => {
     onChange(percent <= RANGE_STEP ? 0 : percent - RANGE_STEP);
@@ -38,7 +40,7 @@ const SoundRange: FC<SoundRangePropsInterface> = ({
         isDisabled={percent === 0}
       />
 
-      <SoundPlayerTrack percent={percent} onChange={onChange} />
+      <SoundPlayerTrack percent={percent} onChange={onChange} onIsSeeking={onIsSeeking} />
 
       <IconButton
         isAccent
