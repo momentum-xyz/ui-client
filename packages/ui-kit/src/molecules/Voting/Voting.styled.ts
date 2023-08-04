@@ -29,7 +29,10 @@ export const Button = styled.button`
   --primary-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
 
   --primary-label-color: ${(props) => props.theme.text};
+  --primary-label-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
   --primary-label-border-color: ${(props) => props.theme.accentText};
+  --primary-label-border-color-disabled: ${(props) =>
+    props.theme.accentText && rgba(props.theme.accentText, 0.2)};
   --primary-label-bg-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
   --primary-label-bg-active-color: ${(props) =>
     props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
@@ -109,6 +112,11 @@ export const Button = styled.button`
       border-radius: var(--radius);
       transition: all var(--tr-150-ei);
       right: -1px;
+
+      &.isDisabled {
+        border: 1px solid var(--primary-label-border-color-disabled);
+        color: var(--primary-label-color-disabled);
+      }
     }
   }
 

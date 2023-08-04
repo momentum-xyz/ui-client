@@ -85,6 +85,7 @@ const Customization: FC = () => {
           currentUserId={userId}
           currentUserName={sessionStore.userName}
           currentUserImageUrl={sessionStore.userImageUrl}
+          currentUserIsGuest={sessionStore.isGuest}
           commentList={customizableContent.commentList}
           onDelete={canUserEdit ? handleDelete : undefined}
           onEdit={canUserEdit ? handleEdit : undefined}
