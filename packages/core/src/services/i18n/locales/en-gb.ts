@@ -486,6 +486,8 @@ export const enGb = {
       saved: 'Saved',
       errorSaving: 'Error saving',
       removeEventSuccess: 'Removed event successfully.',
+      sceneExplorerDescription:
+        'Below is a list of all the 3d assets currently present in your odyssey. From here you can quickly fly to an object, delete and object, or make an object visible or invisible.',
       avatarSuccess: 'Avatar saved successfully',
       avatarFailure: 'There was a problem saving the avatar',
       askToUnstake:

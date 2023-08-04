@@ -1,7 +1,7 @@
 import {FC, useEffect, Fragment, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {IconButton, IconSvg} from '@momentum-xyz/ui-kit';
-import {Event3dEmitter} from '@momentum-xyz/core';
+import {Event3dEmitter, useI18n} from '@momentum-xyz/core';
 
 import {World3dStoreModelInterface} from 'stores/UniverseStore/models';
 import {WorldObjectWithChildrenInterface} from 'api';
@@ -30,6 +30,8 @@ const SceneExplorer: FC<PropsInterface> = ({world3dStore}) => {
       Event3dEmitter.off('RemoveObject', fetchWorldTree);
     };
   }, [fetchWorldTree]);
+
+  const {t} = useI18n();
 
   const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({});
 
@@ -96,10 +98,7 @@ const SceneExplorer: FC<PropsInterface> = ({world3dStore}) => {
 
   return (
     <styled.Container>
-      <styled.Description>
-        Below is a list of all the 3d assets currently present in your odyssey. From here you can
-        quickly fly to an object, delete and object, or make an object visible or invisible.
-      </styled.Description>
+      <styled.Description>{t('messages.sceneExplorerDescription')}</styled.Description>
       <styled.List>
         <styled.Item>{worldTree.name}</styled.Item>
         {renderChildren(worldTree)}
