@@ -99,6 +99,7 @@ const ObjectFunction: FC = () => {
 
   const handleDelete = async () => {
     await objectFunctionalityStore.removeObjectFunctionality();
+    await objectStore.objectContentStore.deleteObjectContent();
 
     creatorStore.setSelectedTab(null);
     handleSubMenuActiveChange();
