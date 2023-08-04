@@ -22,6 +22,7 @@ interface PropsInterface {
   currentUserId: string;
   currentUserName: string;
   currentUserImageUrl: string;
+  currentUserIsGuest: boolean;
   content: CustomizableObjectInterface;
   hasVote: boolean;
   voteCount: number;
@@ -37,6 +38,7 @@ const ContentViewer: FC<PropsInterface> = ({
   currentUserId,
   currentUserName,
   currentUserImageUrl,
+  currentUserIsGuest,
   content,
   hasVote,
   voteCount,
@@ -64,10 +66,16 @@ const ContentViewer: FC<PropsInterface> = ({
             />
 
             <styled.Opinion>
-              <Voting count={voteCount} isActive={hasVote} onClick={onVote} />
+              <Voting
+                count={voteCount}
+                isActive={hasVote}
+                disabled={currentUserIsGuest}
+                onClick={onVote}
+              />
               <ButtonEllipse
                 icon="comment"
                 label={t('actions.comment')}
+                disabled={currentUserIsGuest}
                 onClick={() => setIsNewCommentShown(!isNewCommentShown)}
               />
             </styled.Opinion>

@@ -27,3 +27,8 @@ const Template: Story<VotingPropsInterface> = (args) => {
 
 export const General = Template.bind({});
 General.args = {};
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+  disabled: true
+};
