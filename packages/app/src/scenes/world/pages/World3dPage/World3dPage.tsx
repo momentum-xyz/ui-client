@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {useDebouncedCallback, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
@@ -71,51 +71,46 @@ const World3dPage: FC = () => {
   const handleObjectClick = (objectId: string, clickPos: ClickPositionInterface) => {
     if (universeStore.isCreatorMode) {
       console.log('[World3dPage]: Handle object click in creator mode', objectId);
-      world3dStore
-        ?.handleClick(objectId)
-        .then(() => {
-          handleLevel2MenuOpen();
-        })
-        .catch((error) => {
-          toast.error(<ToastContent icon="alert" text={error.message || ''} />);
-        });
+      world3dStore?.handleClick(objectId).catch((error) => {
+        toast.error(<ToastContent icon="alert" text={error.message || ''} />);
+      });
     } else if (!universeStore.isScreenRecording) {
       console.log('[World3dPage]: Handle object click, NOT creator mode', objectId);
       widgetManagerStore.open(WidgetEnum.OBJECT, PositionEnum.RIGHT, {id: objectId});
     }
   };
 
-  const handleSubMenuActiveChange = (tab: keyof typeof CreatorTabsEnum): void => {
-    const currentTabIsOnSubMenu = selectedTab && subMenuKeyWidgetEnumMap[selectedTab];
-    const correspondingSubMenuWidget = subMenuKeyWidgetEnumMap[tab];
+  const handleLevel2MenuOpen = useCallback(() => {
+    const handleSubMenuActiveChange = (tab: keyof typeof CreatorTabsEnum): void => {
+      const currentTabIsOnSubMenu = selectedTab && subMenuKeyWidgetEnumMap[selectedTab];
+      const correspondingSubMenuWidget = subMenuKeyWidgetEnumMap[tab];
 
-    if (correspondingSubMenuWidget) {
-      widgetManagerStore.setSubMenuActiveKeys([correspondingSubMenuWidget]);
-    } else if (currentTabIsOnSubMenu) {
-      widgetManagerStore.setSubMenuActiveKeys([]);
-    }
-  };
+      if (correspondingSubMenuWidget) {
+        widgetManagerStore.setSubMenuActiveKeys([correspondingSubMenuWidget]);
+      } else if (currentTabIsOnSubMenu) {
+        widgetManagerStore.setSubMenuActiveKeys([]);
+      }
+    };
 
-  const handleTabSelection = (tab: keyof typeof CreatorTabsEnum): void => {
-    creatorStore.setSelectedTab(tab);
-    handleSubMenuActiveChange(tab);
-  };
+    const handleTabSelection = (tab: keyof typeof CreatorTabsEnum): void => {
+      creatorStore.setSelectedTab(tab);
+      handleSubMenuActiveChange(tab);
+    };
 
-  const handleObjectDuplicate = () => {
-    const {selectedObjectId} = creatorStore;
+    const handleObjectDuplicate = () => {
+      const {selectedObjectId} = creatorStore;
 
-    if (!selectedObjectId) {
-      return;
-    }
+      if (!selectedObjectId) {
+        return;
+      }
 
-    world3dStore?.closeAndResetObjectMenu();
+      world3dStore?.closeAndResetObjectMenu();
 
-    creatorStore.duplicateObject(selectedObjectId).then((objectId) => {
-      console.log('Duplicated object', objectId);
-    });
-  };
+      creatorStore.duplicateObject(selectedObjectId).then((objectId) => {
+        console.log('Duplicated object', objectId);
+      });
+    };
 
-  const handleLevel2MenuOpen = () => {
     const submenuItems: MenuItemInterface<WidgetEnum>[] = [
       {
         key: WidgetEnum.ACTION,
@@ -175,7 +170,15 @@ const World3dPage: FC = () => {
       PositionEnum.CENTER,
       activeSubMenuKeys
     );
-  };
+  }, [creatorStore, selectedTab, t, widgetManagerStore, world3dStore]);
+
+  useEffect(() => {
+    if (creatorStore.selectedObjectId) {
+      handleLevel2MenuOpen();
+    } else {
+      widgetManagerStore.closeSubMenu();
+    }
+  }, [creatorStore.selectedObjectId, handleLevel2MenuOpen, widgetManagerStore]);
 
   const handleClickOutside = () => {
     console.log('BabylonPage: handleClickOutside - ignore');
