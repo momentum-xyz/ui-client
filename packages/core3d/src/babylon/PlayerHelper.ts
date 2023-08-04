@@ -329,7 +329,7 @@ export class PlayerHelper {
     const direction = new Vector3(0, 0, -1); // Example direction
     direction.normalize();
     direction.scaleInPlace(size + 2);
-    console.log('PlayerHelper goToObject', {size, direction});
+    console.log('PlayerHelper flyToObject', {size, direction});
 
     this.camera.lockedTarget = targetNode.position;
 

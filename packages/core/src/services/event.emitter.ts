@@ -45,7 +45,7 @@ export type Event3dType = {
   ReceiveHighFive: (fromUserId: string) => void;
 
   TriggerBump: (userId: string) => void;
-  GoToObject: (objectId: string) => void;
+  FlyToObject: (objectId: string) => void;
 
   MakeScreenshot: () => void;
   StartRecordingVideo: (maxDuration: number) => void;

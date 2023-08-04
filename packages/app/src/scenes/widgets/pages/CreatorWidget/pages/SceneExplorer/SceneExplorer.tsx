@@ -17,7 +17,8 @@ interface PropsInterface {
 }
 
 const SceneExplorer: FC<PropsInterface> = ({world3dStore}) => {
-  const {fetchWorldTree, worldTree, handleClick, openDeleteObjectDialog, goToObject} = world3dStore;
+  const {fetchWorldTree, worldTree, handleClick, openDeleteObjectDialog, flyToObject} =
+    world3dStore;
 
   useEffect(() => {
     fetchWorldTree();
@@ -70,14 +71,14 @@ const SceneExplorer: FC<PropsInterface> = ({world3dStore}) => {
                   name="fly-to"
                   isWhite
                   onClick={() => {
-                    goToObject(child.id);
+                    flyToObject(child.id);
                   }}
                 />
                 <IconButton
                   name="info"
                   isWhite
                   onClick={() => {
-                    goToObject(child.id);
+                    flyToObject(child.id);
                     handleClick(child.id, 'inspector');
                   }}
                 />
