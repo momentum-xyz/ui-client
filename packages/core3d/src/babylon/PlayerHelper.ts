@@ -328,7 +328,7 @@ export class PlayerHelper {
     // Calculate a comfortable distance from the object from certain direction
     const direction = new Vector3(0, 0, -1); // Example direction
     direction.normalize();
-    direction.scaleInPlace(size);
+    direction.scaleInPlace(size + 2);
     console.log('PlayerHelper goToObject', {size, direction});
 
     this.camera.lockedTarget = targetNode.position;
