@@ -9,12 +9,13 @@ import * as styled from './MusicPlayerView.styled';
 
 interface PropsInterface {
   musicPlayer: MusicPlayerModelType;
+  isVolumeSeekingEnabled?: boolean;
   setVolume: (volumePercent: number) => void;
   setDistancePercent?: (distancePercent: number) => void;
 }
 
 const MusicPlayerView: FC<PropsInterface> = (props) => {
-  const {musicPlayer, setVolume, setDistancePercent} = props;
+  const {musicPlayer, isVolumeSeekingEnabled, setVolume, setDistancePercent} = props;
   const {activeTrack} = musicPlayer;
 
   const {t} = useI18n();
@@ -38,7 +39,11 @@ const MusicPlayerView: FC<PropsInterface> = (props) => {
 
         <styled.Block>
           <styled.Title>{t('labels.volume')}</styled.Title>
-          <SoundRange percent={musicPlayer.volume} onChange={setVolume} />
+          <SoundRange
+            percent={musicPlayer.volume}
+            onChange={setVolume}
+            onIsSeeking={isVolumeSeekingEnabled ? musicPlayer.setIsVolumeSeeking : undefined}
+          />
         </styled.Block>
 
         {musicPlayer.isDistanceShown && (
@@ -48,6 +53,7 @@ const MusicPlayerView: FC<PropsInterface> = (props) => {
               leftIcon="distance_small"
               rightIcon="distance_large"
               percent={musicPlayer.distancePercent}
+              onIsSeeking={musicPlayer.setIsDistanceSeeking}
               onChange={(percent) => setDistancePercent?.(percent)}
             />
           </styled.Block>

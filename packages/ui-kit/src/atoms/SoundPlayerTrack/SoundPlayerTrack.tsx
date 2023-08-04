@@ -1,4 +1,4 @@
-import {FC, useEffect, useRef} from 'react';
+import {FC, useCallback, useEffect, useRef} from 'react';
 
 import * as styled from './SoundPlayerTrack.styled';
 
@@ -17,15 +17,28 @@ const SoundPlayerTrack: FC<SoundPlayerTrackPropsInterface> = ({percent, onIsSeek
     }
   }, [percent]);
 
+  const handleMouseDown = useCallback(() => {
+    onIsSeeking?.(true);
+
+    // The 'onMouseUp' doesn't work if it happens outside
+    document.addEventListener(
+      'mouseup',
+      () => {
+        onIsSeeking?.(false);
+        onChange(Number(inputRef.current?.value || 0));
+      },
+      {once: true}
+    );
+  }, [onChange, onIsSeeking]);
+
   return (
     <styled.Progress data-testid="SoundPlayerTrack-test">
       <input
-        ref={inputRef}
         type="range"
+        ref={inputRef}
         value={percent}
+        onMouseDown={handleMouseDown}
         onChange={(el) => onChange(Number(el.target.value))}
-        onMouseDown={() => onIsSeeking?.(true)}
-        onMouseUp={() => onIsSeeking?.(false)}
         className="styled-slider slider-progress"
       />
     </styled.Progress>

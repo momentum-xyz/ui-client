@@ -87,6 +87,7 @@ const AssignSound: FC<PropsInterface> = ({objectId, onBack}) => {
       <styled.TracksContainer>
         {/* ACTIVE TRACK. FYI: It will be played by Babylon */}
         <MusicPlayerView
+          isVolumeSeekingEnabled
           musicPlayer={musicPlayer}
           setVolume={objectSound.updateVolume}
           setDistancePercent={objectSound.updateDistance}

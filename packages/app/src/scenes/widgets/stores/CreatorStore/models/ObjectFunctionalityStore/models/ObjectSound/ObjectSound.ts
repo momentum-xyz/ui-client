@@ -96,11 +96,17 @@ const ObjectSound = types
     }),
     updateVolume: flow(function* (volumePercent: number) {
       self.musicPlayer.setVolume(volumePercent);
-      yield self.updateAttribute(self.musicPlayer.tracks);
+
+      if (!self.musicPlayer.isVolumeSeeking) {
+        yield self.updateAttribute(self.musicPlayer.tracks);
+      }
     }),
     updateDistance: flow(function* (distancePercent: number) {
       self.musicPlayer.setDistanceByPercent(distancePercent);
-      yield self.updateAttribute(self.musicPlayer.tracks);
+
+      if (!self.musicPlayer.isDistanceSeeking) {
+        yield self.updateAttribute(self.musicPlayer.tracks);
+      }
     }),
     updateActiveTrack: flow(function* (hash: string | null) {
       if (hash) {
