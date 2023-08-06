@@ -290,6 +290,17 @@ export const useBlockchain = ({
     [library, account, isCorrectAccount]
   );
 
+  const getBalanceEthers = useCallback(async (): Promise<string> => {
+    if (!isCorrectAccount) {
+      throw new Error('Incorrect account selected');
+    }
+
+    console.log('useBlockchain getBalanceEthers', {account});
+    const balance = await library?.getBalance(account);
+    console.log('useBlockchain getBalanceEthers', {balance});
+    return balance.toString();
+  }, [library, account, isCorrectAccount]);
+
   const walletSelectContent =
     selectedWalletConf === dummyWalletConf ? (
       <WalletSelector
@@ -326,6 +337,7 @@ export const useBlockchain = ({
     canRequestAirdrop,
     dateOfNextAllowedAirdrop,
     sendEthers,
+    getBalanceEthers,
     stake,
     unstake,
     getTokens,

@@ -53,6 +53,13 @@ export const formatBigInt = (input: string | null | undefined, digits = 6): stri
   return `${Number(result)}${lookupItem ? lookupItem.symbol : ''}`;
 };
 
+export const ethersToWei = (ethers: string, chainDecimals = 18): BN => {
+  const MULT = 8;
+  const _amount = parseFloat(ethers) * Math.pow(10, chainDecimals - MULT);
+  const amount = new BN(String(_amount)).mul(new BN(10).pow(new BN(MULT)));
+  return amount;
+};
+
 export const convertUuidToNftId = (worldId: string | undefined | null) => {
   return worldId ? '0x' + worldId.replace(/-/g, '') : '';
 };

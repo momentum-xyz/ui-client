@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {FC, useEffect} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {Button, Frame, Panel, Select, Steps, SymbolAmount} from '@momentum-xyz/ui-kit';
@@ -7,6 +7,7 @@ import {BN} from 'bn.js';
 
 import {useBlockchain, useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
+import {ethersToWei, formatBigInt} from 'core/utils';
 import {appVariables} from 'api/constants';
 
 import {SignIn} from '../LoginWidget/components';
@@ -23,7 +24,7 @@ const BuyNftWidget: FC = () => {
     nftStore;
   const requiredAccountAddress = selectedWalletId || 'n/a';
   console.log('BuyNftWidget', {requiredAccountAddress});
-  const {isBlockchainReady, walletSelectContent, sendEthers} = useBlockchain({
+  const {isBlockchainReady, walletSelectContent, sendEthers, getBalanceEthers} = useBlockchain({
     // requiredChainId: 1,
     // wrongChainErrorMessage: 'Please switch to Ethereum Mainnet in the wallet',
     requiredAccountAddress
@@ -34,22 +35,39 @@ const BuyNftWidget: FC = () => {
   const {t} = useI18n();
   const {goToOdysseyHome} = useNavigation();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [balance, setBalance] = useState<string>();
+  useEffect(() => {
+    if (!isBlockchainReady) {
+      return;
+    }
+    getBalanceEthers()
+      .then((result) => {
+        console.log('getBalanceEthers', result);
+        setBalance(result);
+      })
+      .catch((error) => {
+        console.log('getBalanceEthers', error);
+      });
+  }, [isBlockchainReady, requiredAccountAddress, getBalanceEthers]);
+
+  const {MINT_NFT_AMOUNT, MINT_NFT_DEPOSIT_ADDRESS} = appVariables;
+  const price = ethersToWei(MINT_NFT_AMOUNT, chainDecimals);
+  const isEnoughBalance = new BN(balance || '0').gte(price);
+  console.log('[BuyNftWidget]', {
+    MINT_NFT_AMOUNT,
+    price,
+    balance,
+    isEnoughBalance
+  });
+
   const onBuy = () => {
     console.log('onBuy');
-    const {MINT_NFT_AMOUNT, MINT_NFT_DEPOSIT_ADDRESS} = appVariables;
-    const MULT = 8;
-    const _amount = parseFloat(MINT_NFT_AMOUNT) * Math.pow(10, chainDecimals - MULT);
-    const amount = new BN(String(_amount)).mul(new BN(10).pow(new BN(MULT)));
-    console.log('onBuy', {
-      amount,
-      amountStr: amount.toString(),
-      _amount,
-      chainDecimals,
-      MULT,
-      MINT_NFT_AMOUNT
-    });
-    sendEthers(MINT_NFT_DEPOSIT_ADDRESS, amount)
+    if (!isEnoughBalance) {
+      console.log('Not enough balance');
+      return;
+    }
+
+    sendEthers(MINT_NFT_DEPOSIT_ADDRESS, price)
       .then((result) => {
         console.log('onBuy', result);
         // goToOdysseyHome();
@@ -104,6 +122,9 @@ const BuyNftWidget: FC = () => {
                 onSingleChange={setSelectedWalletId}
               />
 
+              <div>{t('labels.balance')}</div>
+              <SymbolAmount stringValue={formatBigInt(balance)} tokenSymbol="ETH" />
+
               <div>{t('labels.price')}</div>
               {/* <Input wide value={appVariables.MINT_NFT_AMOUNT} disabled onChange={() => {}} /> */}
               <SymbolAmount stringValue={appVariables.MINT_NFT_AMOUNT} tokenSymbol="ETH" />
@@ -113,7 +134,7 @@ const BuyNftWidget: FC = () => {
               icon="rabbit"
               variant="secondary"
               wide
-              disabled={!isBlockchainReady}
+              disabled={!isBlockchainReady || !isEnoughBalance}
               onClick={onBuy}
             />
           </styled.BuyForm>
