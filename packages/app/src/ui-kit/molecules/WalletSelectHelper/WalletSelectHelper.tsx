@@ -10,6 +10,8 @@ import * as styled from './WalletSelectHelper.styled';
 interface WalletSelectHelperPropsInterface {
   walletConf: WalletConfigInterface;
   requiredAccountAddress: string;
+  requiredChainId: number;
+  wrongChainErrorMessage?: string;
   onActivationDone: (isSuccess: boolean) => void;
   onSelectedAccountChanged: (account: string) => void;
   onLibraryLoaded: (library: any) => void;
@@ -19,6 +21,8 @@ interface WalletSelectHelperPropsInterface {
 const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
   walletConf,
   requiredAccountAddress,
+  requiredChainId,
+  wrongChainErrorMessage,
   onActivationDone,
   onSelectedAccountChanged,
   onLibraryLoaded,
@@ -51,7 +55,7 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
     }
   }, [web3Library, onLibraryLoaded]);
 
-  const isWrongNetwork = !!chainId && chainId !== +appVariables.BLOCKCHAIN_ID;
+  const isWrongNetwork = !!chainId && chainId !== requiredChainId;
 
   useEffect(() => {
     onNetworkStatusChanged(isWrongNetwork);
@@ -69,12 +73,12 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
   if (isWrongNetwork) {
     console.log('WalletSelectHelper current chainId', {
       chainId,
-      'appVariables.BLOCKCHAIN_ID': appVariables.BLOCKCHAIN_ID,
+      requiredChainId,
       web3Library
     });
     return (
       <styled.Message data-testid="WalletSelectHelper-test">
-        <Warning message={t('errors.switchToArbitrum')} wide />
+        <Warning message={wrongChainErrorMessage || t('errors.switchToArbitrum')} wide />
       </styled.Message>
     );
   }

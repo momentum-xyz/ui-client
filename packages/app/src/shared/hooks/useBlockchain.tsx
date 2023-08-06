@@ -23,6 +23,8 @@ const DELAY_REFRESH_DATA_MS = 2000;
 
 export interface UseBlockchainPropsInterface {
   requiredAccountAddress: string;
+  requiredChainId?: number;
+  wrongChainErrorMessage?: string;
 }
 
 export interface BlockchainRewardsInterface {
@@ -47,7 +49,11 @@ export interface UnbondingInfoInterface {
   unstakes: ResolvedUnstakeInterface[];
 }
 
-export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterface) => {
+export const useBlockchain = ({
+  requiredAccountAddress,
+  requiredChainId,
+  wrongChainErrorMessage
+}: UseBlockchainPropsInterface) => {
   const {nftStore, refreshStakeRelatedData} = useStore();
   const {selectedWalletConf, setWalletIdByAddress, loadMyWallets} = nftStore;
 
@@ -298,6 +304,8 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
         key={selectedWalletConf.id}
         walletConf={selectedWalletConf}
         requiredAccountAddress={requiredAccountAddress}
+        requiredChainId={requiredChainId ?? +appVariables.BLOCKCHAIN_ID}
+        wrongChainErrorMessage={wrongChainErrorMessage}
         onActivationDone={setIsWalletActive}
         onSelectedAccountChanged={setAccount}
         onLibraryLoaded={setLibrary}

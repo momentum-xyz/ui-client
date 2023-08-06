@@ -24,6 +24,8 @@ const BuyNftWidget: FC = () => {
   const requiredAccountAddress = selectedWalletId || 'n/a';
   console.log('BuyNftWidget', {requiredAccountAddress});
   const {isBlockchainReady, walletSelectContent, sendEthers} = useBlockchain({
+    // requiredChainId: 1,
+    // wrongChainErrorMessage: 'Please switch to Ethereum Mainnet in the wallet',
     requiredAccountAddress
   });
 
