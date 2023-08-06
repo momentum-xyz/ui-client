@@ -159,5 +159,6 @@ export const Button = styled.button`
 
   &.wide {
     width: 100%;
+    justify-content: center;
   }
 `;
