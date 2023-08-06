@@ -286,6 +286,7 @@ export const useBlockchain = ({
       console.log('Transaction sent:', result);
       await result.wait();
       console.log('useBlockchain sendEthers done');
+      return result;
     },
     [library, account, isCorrectAccount]
   );

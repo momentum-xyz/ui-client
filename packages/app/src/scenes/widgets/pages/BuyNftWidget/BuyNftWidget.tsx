@@ -1,8 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {FC, useEffect, useState} from 'react';
+import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Button, Frame, Panel, Select, Steps, SymbolAmount} from '@momentum-xyz/ui-kit';
+import {
+  Button,
+  Frame,
+  Loader,
+  Panel,
+  Select,
+  Steps,
+  SymbolAmount,
+  Warning
+} from '@momentum-xyz/ui-kit';
 import {BN} from 'bn.js';
 
 import {useBlockchain, useNavigation, useStore} from 'shared/hooks';
@@ -13,6 +22,8 @@ import {appVariables} from 'api/constants';
 import {SignIn} from '../LoginWidget/components';
 
 import * as styled from './BuyNftWidget.styled';
+
+const TIMEOUT_WAIT_NFT_MINT = 60_000;
 
 const BuyNftWidget: FC = () => {
   const {widgetManagerStore, widgetStore, sessionStore, universeStore, nftStore} = useStore();
@@ -35,6 +46,16 @@ const BuyNftWidget: FC = () => {
   const {t} = useI18n();
   const {goToOdysseyHome} = useNavigation();
 
+  const [currentState, setCurrentState] = useState<
+    'init' | 'sending_eth' | 'waiting_nft' | 'ready' | 'error'
+  >('init');
+  const isStep1 = ['init', 'sending_eth', 'waiting_nft', 'error'].includes(currentState);
+  const isStep2 = 'ready' === currentState;
+  const inProgress = ['sending_eth', 'waiting_nft'].includes(currentState);
+  const isError = 'error' === currentState;
+
+  const refOwnedWorlds = useRef(sessionStore.worldsOwnedList || []);
+
   const [balance, setBalance] = useState<string>();
   useEffect(() => {
     if (!isBlockchainReady) {
@@ -54,6 +75,7 @@ const BuyNftWidget: FC = () => {
   const price = ethersToWei(MINT_NFT_AMOUNT, chainDecimals);
   const isEnoughBalance = new BN(balance || '0').gte(price);
   console.log('[BuyNftWidget]', {
+    currentState,
     MINT_NFT_AMOUNT,
     price,
     balance,
@@ -67,13 +89,50 @@ const BuyNftWidget: FC = () => {
       return;
     }
 
+    setCurrentState('sending_eth');
+
+    refOwnedWorlds.current = sessionStore.worldsOwnedList || [];
+
     sendEthers(MINT_NFT_DEPOSIT_ADDRESS, price)
       .then((result) => {
         console.log('onBuy', result);
-        // goToOdysseyHome();
+        const txHash = result?.hash;
+        setCurrentState('waiting_nft');
+        console.log('TODO send txHash to BE', txHash);
+        // TODO send txHash to BE
+
+        // TEMP
+        setTimeout(() => {
+          setCurrentState('ready');
+        }, 3000);
       })
+      .then(() =>
+        Promise.race([
+          new Promise((resolve) => setTimeout(resolve, TIMEOUT_WAIT_NFT_MINT)),
+          new Promise((resolve) => {
+            const interval = setInterval(async () => {
+              console.log('TODO check if NFT is minted');
+              // TODO check if NFT is minted
+              try {
+                const ownedWorlds = await sessionStore.loadOwnWorlds();
+                for (const world of ownedWorlds) {
+                  if (!refOwnedWorlds.current.some((w) => w.id === world.id)) {
+                    console.log('NFT is minted', world);
+                    clearInterval(interval);
+                    resolve(world);
+                    return;
+                  }
+                }
+              } catch (error) {
+                console.log('onBuy', error);
+              }
+            }, 1000);
+          })
+        ])
+      )
       .catch((error) => {
         console.log('onBuy', error);
+        setCurrentState('error');
       });
   };
 
@@ -93,54 +152,80 @@ const BuyNftWidget: FC = () => {
       onClose={() => widgetManagerStore.close(WidgetEnum.BUY_NFT)}
     >
       <styled.Wrapper>
+        {inProgress && <Loader fill />}
+
         {/* <Frame> */}
         <styled.Steps>
           <Steps
             stepList={[
-              {id: '1', label: '1', variant: !isFinished ? 'active' : 'prev'},
-              {id: '2', label: '2', variant: isFinished ? 'active' : 'next'}
+              {id: '1', label: '1', variant: isStep1 ? 'active' : 'prev'},
+              {id: '2', label: '2', variant: isStep2 ? 'active' : 'next'}
             ]}
           />
         </styled.Steps>
-        <styled.Title>{t('labels.getYourOdysseyTitle')}</styled.Title>
-        <styled.Description>{t('labels.getYourOdysseyDescription')}</styled.Description>
 
         {/* <styled.Separator /> */}
+        {isStep1 && (
+          <>
+            <styled.Title>{t('labels.getYourOdysseyTitle')}</styled.Title>
+            <styled.Description>{t('labels.getYourOdysseyDescription')}</styled.Description>
+            {user.isGuest ? (
+              <SignIn headless />
+            ) : (
+              <styled.BuyForm>
+                {walletSelectContent}
+                <styled.WalletInfo>
+                  <div>{t('labels.account')}</div>
+                  <Select
+                    wide
+                    options={walletOptions}
+                    value={selectedWallet?.wallet_id}
+                    placeholder={t('actions.selectWallet')}
+                    onSingleChange={setSelectedWalletId}
+                  />
 
-        {user.isGuest ? (
-          <SignIn headless />
-        ) : (
-          <styled.BuyForm>
-            {walletSelectContent}
-            <styled.WalletInfo>
-              <div>{t('labels.account')}</div>
-              <Select
-                wide
-                options={walletOptions}
-                value={selectedWallet?.wallet_id}
-                placeholder={t('actions.selectWallet')}
-                onSingleChange={setSelectedWalletId}
-              />
+                  <div>{t('labels.balance')}</div>
+                  <SymbolAmount stringValue={formatBigInt(balance)} tokenSymbol="ETH" />
 
-              <div>{t('labels.balance')}</div>
-              <SymbolAmount stringValue={formatBigInt(balance)} tokenSymbol="ETH" />
+                  <div>{t('labels.price')}</div>
+                  {/* <Input wide value={appVariables.MINT_NFT_AMOUNT} disabled onChange={() => {}} /> */}
+                  <SymbolAmount stringValue={appVariables.MINT_NFT_AMOUNT} tokenSymbol="ETH" />
+                </styled.WalletInfo>
+                <Button
+                  label={t('actions.buyNft')}
+                  icon="rabbit"
+                  variant="secondary"
+                  wide
+                  disabled={!isBlockchainReady || !isEnoughBalance}
+                  onClick={onBuy}
+                />
 
-              <div>{t('labels.price')}</div>
-              {/* <Input wide value={appVariables.MINT_NFT_AMOUNT} disabled onChange={() => {}} /> */}
-              <SymbolAmount stringValue={appVariables.MINT_NFT_AMOUNT} tokenSymbol="ETH" />
-            </styled.WalletInfo>
+                {isError && <Warning message="Error buying NFT" />}
+              </styled.BuyForm>
+            )}
+            <styled.Separator />
+            {/* {user.isGuest ? descr : descr2} */}
+          </>
+        )}
+
+        {isStep2 && (
+          <>
+            <styled.Title>{t('labels.odysseyMintedTitle')}</styled.Title>
+            <styled.Description>{t('labels.odysseyMintedDescription')}</styled.Description>
+            <styled.Separator />
+            {/* TODO Odyssey card */}
+            <styled.Separator />
+            <styled.Description>{t('labels.odysseyMintedDescription2')}</styled.Description>
             <Button
-              label={t('actions.buyNft')}
+              label={t('actions.visitYourOdyssey')}
               icon="rabbit"
               variant="secondary"
               wide
-              disabled={!isBlockchainReady || !isEnoughBalance}
-              onClick={onBuy}
+              onClick={goToOdysseyHome}
             />
-          </styled.BuyForm>
+          </>
         )}
-        <styled.Separator />
-        {/* {user.isGuest ? descr : descr2} */}
+
         {/* </Frame> */}
       </styled.Wrapper>
     </Panel>

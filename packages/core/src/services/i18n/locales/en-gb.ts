@@ -302,6 +302,11 @@ export const enGb = {
       getYourOdysseyTitle: 'How to buy an Odyssey NFT',
       getYourOdysseyDescription:
         'You need to sign in with your wallet to buy an Odyssey NFT. If you already have one, you will see a pop-up asking for the address you would like to use or create. If you do not have a wallet, please install a browser plugins and refresh the page',
+      odysseyMintedTitle: 'Congratulations!',
+      odysseyMintedDescription:
+        'Welcome to our community. You are now the proud owner of an Odyssey.\nStart building your 3D environment and invite people to join you on your journey.',
+      odysseyMintedDescription2:
+        'Visit your Odyssey and start with creating a profile with an image, a short description and your mission. This way other people can search and find your Odyssey and start contributing',
       skyboxName: 'Skybox Name',
       staking: 'Staking',
       minimap: 'Minimap',
@@ -798,6 +803,7 @@ export const enGb = {
       startJourney: 'Start your journey',
       buildOdyssey: 'Build your Odyssey',
       buyNft: 'Buy Odyssey NFT',
+      visitYourOdyssey: 'Visit your Odyssey',
       createOrSignIn: 'Create an account or sign in',
       searchOdysseys: 'Search Odysseys',
       searchMembers: 'Search Members',

@@ -137,6 +137,8 @@ const SessionStore = types
       if (userWorlds) {
         self.worldsOwnedList = cast(userWorlds);
       }
+
+      return userWorlds;
     }),
     loadStakedWorlds: flow(function* () {
       const userWorlds: WorldInfoInterface[] = yield self.worldsRequest.send(
