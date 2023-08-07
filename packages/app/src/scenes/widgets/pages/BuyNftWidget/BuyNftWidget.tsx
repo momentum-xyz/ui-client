@@ -80,10 +80,10 @@ const BuyNftWidget: FC = () => {
     isEnoughBalance
   });
 
-  const onBuy = () => {
-    console.log('onBuy');
+  const handleBuy = () => {
+    console.log('[BuyNftWidget] handleBuy');
     if (!isEnoughBalance) {
-      console.log('Not enough balance');
+      console.log('[BuyNftWidget] Not enough balance');
       return;
     }
 
@@ -93,10 +93,10 @@ const BuyNftWidget: FC = () => {
 
     sendEthers(MINT_NFT_DEPOSIT_ADDRESS, price)
       .then((result) => {
-        console.log('onBuy', result);
+        console.log('[BuyNftWidget] sendEthers', result);
         const txHash = result?.hash;
         setCurrentState('waiting_nft');
-        console.log('TODO send txHash to BE', txHash);
+        console.log('[BuyNftWidget] TODO send txHash to BE', txHash);
         // TODO send txHash to BE when it's supported
         // nftStore.postPendingNftMint({transaction_id: txHash, wallet: selectedWalletId});
       })
@@ -105,34 +105,33 @@ const BuyNftWidget: FC = () => {
           new Promise<void>((resolve) => setTimeout(resolve, TIMEOUT_WAIT_NFT_MINT)),
           new Promise<WorldInfoInterface>((resolve) => {
             const interval = setInterval(async () => {
-              console.log('TODO check if NFT is minted');
               try {
                 const ownedWorlds = await sessionStore.loadOwnWorlds();
                 for (const world of ownedWorlds) {
                   if (!refOwnedWorldIds.current.includes(world.id)) {
-                    console.log('NFT is minted', world);
+                    console.log('[BuyNftWidget] NFT is minted', world);
                     clearInterval(interval);
                     resolve(world);
                     return;
                   }
                 }
               } catch (error) {
-                console.log('Error fetching owned worlds', error);
+                console.log('[BuyNftWidget] Error fetching owned worlds', error);
               }
             }, 1000);
           })
         ])
       )
       .then((world) => {
-        console.log('NFT buy result:', world);
+        console.log('[BuyNftWidget] created world:', world);
         if (!world) {
-          throw new Error('NFT buy failed');
+          throw new Error('[BuyNftWidget] NFT buy failed');
         }
         setMintedWorld(world);
         setCurrentState('ready');
       })
       .catch((error) => {
-        console.log('onBuy', error);
+        console.log('[BuyNftWidget] error:', error);
         setCurrentState('error');
       });
   };
@@ -208,7 +207,7 @@ const BuyNftWidget: FC = () => {
                 variant="primary"
                 wide
                 disabled={!isBlockchainReady || !isEnoughBalance}
-                onClick={onBuy}
+                onClick={handleBuy}
               />
 
               {isError && <Warning message="Error buying NFT" />}
@@ -246,11 +245,8 @@ const BuyNftWidget: FC = () => {
             />
           </>
         )}
-
-        {/* </Frame> */}
       </styled.Wrapper>
     </Panel>
-    // </styled.Container>
   );
 };
 
