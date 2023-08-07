@@ -7,6 +7,7 @@ export const Container = styled.div`
 `;
 
 export const SkyboxContainer = styled.button`
+  position: relative;
   width: 152px;
 `;
 export const SkyboxInnerContainer = styled.div`
@@ -24,4 +25,10 @@ export const SkyboxName = styled.span`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+`;
+
+export const RemoveIcon = styled.div`
+  position: absolute;
+  right: 16px;
+  top: 16px;
 `;

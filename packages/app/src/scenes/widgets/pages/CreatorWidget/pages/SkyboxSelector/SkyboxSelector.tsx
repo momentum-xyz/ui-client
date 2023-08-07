@@ -1,19 +1,13 @@
 import {FC, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Frame, Button, Input} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
+import {Frame, Button, Input} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {Asset3dInterface} from 'core/models';
 
-import {
-  UploadSkybox,
-  SkyboxList,
-  SkyboxPreview,
-  DeleteSkyboxDialog,
-  CustomSkyboxWithAI
-} from './components';
+import {SkyboxList, UploadSkybox, SkyboxPreview, CustomSkyboxWithAI} from './components';
 import * as styled from './SkyboxSelector.styled';
 
 const SkyboxSelector: FC = () => {
@@ -21,7 +15,7 @@ const SkyboxSelector: FC = () => {
   const {creatorStore} = widgetStore;
   const {skyboxSelectorStore} = creatorStore;
   const {saveItem, communitySkyboxesList, userSkyboxesList} = skyboxSelectorStore;
-  const {user} = sessionStore;
+  const {user, userId} = sessionStore;
   const {worldId} = universeStore;
 
   const {t} = useI18n();
@@ -121,13 +115,20 @@ const SkyboxSelector: FC = () => {
               )}
             </span>
             <span>
-              {
-                (skyboxPreviewType === 'COMMUNITY' ? communitySkyboxesList : userSkyboxesList)
-                  .length
-              }
+              {skyboxPreviewType === 'COMMUNITY'
+                ? communitySkyboxesList.length
+                : userSkyboxesList.length}
             </span>
           </styled.SkyboxListHeader>
-          <SkyboxList skyboxes={filteredSkyboxList} onSkyboxSelect={(sb) => setPreviewSkybox(sb)} />
+          <SkyboxList
+            skyboxes={filteredSkyboxList}
+            isMySkyboxes={skyboxPreviewType === 'PRIVATE'}
+            onSkyboxSelect={(sb) => setPreviewSkybox(sb)}
+            onSkyboxDelete={async (skyboxId) => {
+              await skyboxSelectorStore.removeUserSkybox(userId, skyboxId);
+              await skyboxSelectorStore.fetchUserSkyboxes(userId);
+            }}
+          />
         </styled.SkyboxListContainer>
       )}
 
@@ -146,14 +147,9 @@ const SkyboxSelector: FC = () => {
                 toast.error(err.message);
               });
           }}
-          onSkyboxDelete={(sb) => {
-            skyboxSelectorStore.openSkyboxDeletion(sb.id);
-            setPreviewSkybox(null);
-          }}
           onBack={() => setPreviewSkybox(null)}
         />
       )}
-      {skyboxSelectorStore.deleteDialog.isOpen && <DeleteSkyboxDialog />}
     </styled.Container>
   );
 };
