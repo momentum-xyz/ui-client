@@ -98,6 +98,7 @@ const BuyNftWidget: FC = () => {
         setCurrentState('waiting_nft');
         console.log('TODO send txHash to BE', txHash);
         // TODO send txHash to BE
+        // nftStore.postPendingNftMint({transaction_id: txHash, wallet: selectedWalletId});
       })
       .then(() =>
         Promise.race([

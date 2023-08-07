@@ -88,6 +88,13 @@ export interface PostPendingStakeRequest {
 
 export interface PostPendingStakeResponse {}
 
+/** POST PENDING NFT MINT **/
+
+export interface PostPendingNftMintRequest {
+  transaction_id: string;
+  wallet: string;
+}
+
 /** FETCH User **/
 
 export interface FetchUserRequest {

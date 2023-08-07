@@ -20,6 +20,7 @@ import {
   FetchUserStakedWorldListResponse,
   FetchUserWorldListRequest,
   FetchUserWorldListResponse,
+  PostPendingNftMintRequest,
   PostPendingStakeRequest,
   PostPendingStakeResponse,
   RemoveWalletRequest
@@ -56,6 +57,15 @@ export const postPendingStake: RequestInterface<
     kind
   };
   return request.post(userRepositoryEndpoints().myStakes, data, restOptions);
+};
+
+export const postPendingNftMint: RequestInterface<PostPendingNftMintRequest, null> = (options) => {
+  const {transaction_id, wallet, ...restOptions} = options;
+  const data: PostPendingNftMintRequest = {
+    transaction_id,
+    wallet
+  };
+  return request.post(userRepositoryEndpoints().mintNft, data, restOptions);
 };
 
 export const fetchUser: RequestInterface<FetchUserRequest, FetchUserResponse> = (options) => {
