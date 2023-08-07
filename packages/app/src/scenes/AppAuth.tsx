@@ -24,7 +24,12 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
 
   useEffect(() => {
     if (location.pathname === ROUTES.buyNft) {
-      widgetManagerStore.open(WidgetEnum.BUY_NFT, PositionEnum.LEFT);
+      sessionStore.setBuyNftFlow(true);
+      if (sessionStore.isGuest) {
+        widgetManagerStore.open(WidgetEnum.LOGIN, PositionEnum.LEFT);
+      } else {
+        widgetManagerStore.open(WidgetEnum.BUY_NFT, PositionEnum.LEFT);
+      }
     } else if (
       sessionStore.isGuest &&
       !storage.get(StorageKeyEnum.HasSeenWelcome) &&
@@ -33,7 +38,7 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
       storage.setString(StorageKeyEnum.RedirectOnLogin, location.pathname);
       navigate(ROUTES.welcome);
     }
-  }, [sessionStore.isGuest, navigate, location, widgetManagerStore]);
+  }, [sessionStore.isGuest, navigate, location, widgetManagerStore, sessionStore]);
 
   useEffect(() => {
     if (sessionStore.isProfileError) {

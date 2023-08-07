@@ -8,11 +8,7 @@ import {WalletConfigInterface} from 'wallets';
 
 import * as styled from './SignIn.styled';
 
-interface PropsInterface {
-  headless?: boolean;
-}
-
-const SignIn: FC<PropsInterface> = ({headless = false}) => {
+const SignIn: FC = () => {
   const {t} = useI18n();
 
   const [selectedWallet, setSelectedWallet] = useState<WalletConfigInterface | null>(null);
@@ -25,13 +21,6 @@ const SignIn: FC<PropsInterface> = ({headless = false}) => {
 
   return (
     <styled.Container data-testid="SignIn-test">
-      {!headless && (
-        <>
-          <styled.Title>{t('login.howToConnectAsAMemberTitle')}</styled.Title>
-          <styled.Desc>{t('login.howToConnectAsAMemberDescription')}</styled.Desc>
-        </>
-      )}
-
       <styled.SignInMethodsContainer>
         <styled.Title>{t('login.installWalletOrConnect')}</styled.Title>
         <WalletSelector

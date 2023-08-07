@@ -12,8 +12,12 @@ import * as styled from './LoginWidget.styled';
 
 const LoginWidget: FC = () => {
   const {sessionStore, widgetManagerStore, widgetStore} = useStore();
-  const {isSignUpInProgress} = sessionStore;
+  const {isSignUpInProgress, isBuyNftFlow} = sessionStore;
   const {loginStore} = widgetStore;
+
+  const isGuest = !!sessionStore.user?.isGuest;
+  const isFillingUpProfile = !isGuest && isSignUpInProgress;
+  const isReady = !isGuest && !!sessionStore.user && !isSignUpInProgress;
 
   const {t} = useI18n();
 
@@ -27,6 +31,14 @@ const LoginWidget: FC = () => {
     [loginStore, sessionStore]
   );
 
+  const handleCloseWelcome = () => {
+    if (isBuyNftFlow) {
+      widgetManagerStore.open(WidgetEnum.BUY_NFT, PositionEnum.LEFT);
+    } else {
+      widgetManagerStore.open(WidgetEnum.EXPLORE, PositionEnum.LEFT);
+    }
+  };
+
   return (
     <styled.Container data-testid="LoginWidget-test">
       <Panel
@@ -34,7 +46,7 @@ const LoginWidget: FC = () => {
         size="normal"
         icon="astronaut"
         variant="primary"
-        title={t('login.connectAsMember')}
+        title={isBuyNftFlow ? t('labels.getYourOdyssey') : t('login.connectAsMember')}
         onClose={widgetManagerStore.closeAll}
       >
         <styled.Steps>
@@ -47,27 +59,34 @@ const LoginWidget: FC = () => {
         </styled.Steps>
 
         <styled.Content>
-          {isSignUpInProgress ? (
+          {isGuest && (
+            <Frame>
+              {!isBuyNftFlow ? (
+                <>
+                  <styled.Title>{t('login.howToConnectAsAMemberTitle')}</styled.Title>
+                  <styled.Desc>{t('login.howToConnectAsAMemberDescription')}</styled.Desc>
+                </>
+              ) : (
+                <>
+                  <styled.Title>{t('labels.getYourOdysseyTitle')}</styled.Title>
+                  <styled.Desc>{t('labels.getYourOdysseyDescription')}</styled.Desc>
+                </>
+              )}
+
+              <SignIn />
+            </Frame>
+          )}
+
+          {isFillingUpProfile && (
             <SignUp
               isUpdating={loginStore.isUpdating}
               fieldErrors={loginStore.fieldErrors}
               onUpdate={onUpdateProfile}
             />
-          ) : (
-            <>
-              {sessionStore.user && !sessionStore.user.isGuest ? (
-                <Welcome
-                  user={sessionStore.user}
-                  onClose={() => {
-                    widgetManagerStore.open(WidgetEnum.EXPLORE, PositionEnum.LEFT);
-                  }}
-                />
-              ) : (
-                <Frame>
-                  <SignIn />
-                </Frame>
-              )}
-            </>
+          )}
+
+          {isReady && !!sessionStore.user && (
+            <Welcome user={sessionStore.user} onClose={handleCloseWelcome} />
           )}
         </styled.Content>
       </Panel>

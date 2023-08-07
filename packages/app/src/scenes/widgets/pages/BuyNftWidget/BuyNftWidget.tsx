@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {
   Button,
-  Frame,
   ImageSizeEnum,
+  Input,
   ItemCard,
   Loader,
   Panel,
@@ -23,15 +22,12 @@ import {ethersToWei, formatBigInt, getImageAbsoluteUrl} from 'core/utils';
 import {appVariables} from 'api/constants';
 import {WorldInfoInterface} from 'api';
 
-import {SignIn} from '../LoginWidget/components';
-
 import * as styled from './BuyNftWidget.styled';
 
 const TIMEOUT_WAIT_NFT_MINT = 60_000;
 
 const BuyNftWidget: FC = () => {
-  const {widgetManagerStore, widgetStore, sessionStore, universeStore, nftStore} = useStore();
-  // const {worldId} = universeStore;
+  const {widgetManagerStore, sessionStore, nftStore} = useStore();
 
   const {user} = sessionStore;
 
@@ -102,7 +98,7 @@ const BuyNftWidget: FC = () => {
         const txHash = result?.hash;
         setCurrentState('waiting_nft');
         console.log('TODO send txHash to BE', txHash);
-        // TODO send txHash to BE
+        // TODO send txHash to BE when it's supported
         // nftStore.postPendingNftMint({transaction_id: txHash, wallet: selectedWalletId});
       })
       .then(() =>
@@ -111,7 +107,6 @@ const BuyNftWidget: FC = () => {
           new Promise<WorldInfoInterface>((resolve) => {
             const interval = setInterval(async () => {
               console.log('TODO check if NFT is minted');
-              // TODO check if NFT is minted
               try {
                 const ownedWorlds = await sessionStore.loadOwnWorlds();
                 for (const world of ownedWorlds) {
@@ -147,17 +142,16 @@ const BuyNftWidget: FC = () => {
     widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id});
   };
 
-  if (!user) {
+  if (!user || user.isGuest) {
     return <></>;
   }
 
   return (
-    // <styled.Container data-testid="BuyNftWidget-test">
     <Panel
       size="normal"
-      isFullHeight
-      isScrollDisabled
       variant="primary"
+      isFullHeight
+      // isScrollDisabled
       icon="rabbit_fill"
       title={t('labels.getYourOdyssey')}
       onClose={() => widgetManagerStore.close(WidgetEnum.BUY_NFT)}
@@ -165,7 +159,6 @@ const BuyNftWidget: FC = () => {
       <styled.Wrapper>
         {inProgress && <Loader fill />}
 
-        {/* <Frame> */}
         <styled.Steps>
           <Steps
             stepList={[
@@ -175,16 +168,24 @@ const BuyNftWidget: FC = () => {
           />
         </styled.Steps>
 
-        {/* <styled.Separator /> */}
         {isStep1 && (
           <>
-            <styled.Title>{t('labels.getYourOdysseyTitle')}</styled.Title>
+            <styled.Title2>{t('labels.getYourOdysseyTitle')}</styled.Title2>
             <styled.Description>{t('labels.getYourOdysseyDescription')}</styled.Description>
-            {user.isGuest ? (
-              <SignIn headless />
-            ) : (
-              <styled.BuyForm>
+
+            <styled.Separator />
+
+            <styled.Form>
+              <styled.Section>
+                <styled.Title>{t('labels.memberProfile')}</styled.Title>
+                <Input wide value={user.name} disabled onChange={() => {}} />
+              </styled.Section>
+
+              <styled.Section>
+                <styled.Title2>{t('labels.yourWallet')}</styled.Title2>
+
                 {walletSelectContent}
+
                 <styled.WalletInfo>
                   <div>{t('labels.account')}</div>
                   <Select
@@ -199,23 +200,21 @@ const BuyNftWidget: FC = () => {
                   <SymbolAmount stringValue={formatBigInt(balance)} tokenSymbol="ETH" />
 
                   <div>{t('labels.price')}</div>
-                  {/* <Input wide value={appVariables.MINT_NFT_AMOUNT} disabled onChange={() => {}} /> */}
                   <SymbolAmount stringValue={appVariables.MINT_NFT_AMOUNT} tokenSymbol="ETH" />
                 </styled.WalletInfo>
-                <Button
-                  label={t('actions.buyNft')}
-                  icon="rabbit"
-                  variant="secondary"
-                  wide
-                  disabled={!isBlockchainReady || !isEnoughBalance}
-                  onClick={onBuy}
-                />
+              </styled.Section>
 
-                {isError && <Warning message="Error buying NFT" />}
-              </styled.BuyForm>
-            )}
-            <styled.Separator />
-            {/* {user.isGuest ? descr : descr2} */}
+              <Button
+                label={t('actions.buyNft')}
+                icon="rabbit"
+                variant="primary"
+                wide
+                disabled={!isBlockchainReady || !isEnoughBalance}
+                onClick={onBuy}
+              />
+
+              {isError && <Warning message="Error buying NFT" />}
+            </styled.Form>
           </>
         )}
 
@@ -243,7 +242,7 @@ const BuyNftWidget: FC = () => {
             <Button
               label={t('actions.visitYourOdyssey')}
               icon="rabbit"
-              variant="secondary"
+              variant="primary"
               wide
               onClick={() => goToOdysseyHome(mintedWorld.id)}
             />

@@ -307,6 +307,7 @@ export const enGb = {
         'Welcome to our community. You are now the proud owner of an Odyssey.\nStart building your 3D environment and invite people to join you on your journey.',
       odysseyMintedDescription2:
         'Visit your Odyssey and start with creating a profile with an image, a short description and your mission. This way other people can search and find your Odyssey and start contributing',
+      yourWallet: 'Your Wallet',
       skyboxName: 'Skybox Name',
       staking: 'Staking',
       minimap: 'Minimap',
