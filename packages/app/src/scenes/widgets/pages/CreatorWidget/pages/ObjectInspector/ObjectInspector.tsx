@@ -94,7 +94,7 @@ const ObjectInspector: FC = () => {
         />
       )}
       {canChangeColor && (
-        <styled.Section className="margin-top">
+        <styled.Section className="color-picker">
           <styled.Title>{t('titles.colourPicker')}</styled.Title>
           <ObjectColorPicker />
         </styled.Section>

@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Input} from '@momentum-xyz/ui-kit';
+import {Input, numberInputMask} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 
 import * as styled from './ObjectTransformForm.styled';
@@ -56,6 +56,7 @@ const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange
                 return (
                   <Input
                     value={valStr}
+                    opts={numberInputMask(10)}
                     onChange={(d) => {
                       onChange(d);
                       if (d !== valStr) {
@@ -73,7 +74,7 @@ const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange
   );
 
   return (
-    <styled.Container className="ObjectTransformFormContainer">
+    <styled.Container className="ObjectTransformForm-test">
       {row(t('titles.scale'), [
         ['W', 'scaleX'],
         ['H', 'scaleY'],
