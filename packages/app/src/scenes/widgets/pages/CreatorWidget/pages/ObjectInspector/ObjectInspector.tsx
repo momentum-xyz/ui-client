@@ -48,6 +48,7 @@ const ObjectInspector: FC = () => {
       console.log(`ObjectInspectorPage: PosBusService is not connected.`);
       return;
     }
+
     const transform = {
       position: {
         x: data.positionX,

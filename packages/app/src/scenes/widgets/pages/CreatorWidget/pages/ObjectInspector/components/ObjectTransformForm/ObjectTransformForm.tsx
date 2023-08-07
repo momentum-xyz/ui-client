@@ -40,7 +40,11 @@ const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange
     onTransformChange(dataWithNumbers);
   };
 
-  const row = (title: string, inputNames: [string, keyof TransformInterface][]) => (
+  const row = (
+    title: string,
+    inputNames: [string, keyof TransformInterface][],
+    allowNegative: boolean
+  ) => (
     <styled.ControlsRow>
       <styled.ControlsRowTitle>{title}</styled.ControlsRowTitle>
       <styled.ControlsRowInputsContainer>
@@ -56,7 +60,7 @@ const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange
                 return (
                   <Input
                     value={valStr}
-                    opts={numberInputMask(10)}
+                    opts={numberInputMask(10, allowNegative)}
                     onChange={(d) => {
                       onChange(d);
                       if (d !== valStr) {
@@ -75,21 +79,33 @@ const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange
 
   return (
     <styled.Container className="ObjectTransformForm-test">
-      {row(t('titles.scale'), [
-        ['W', 'scaleX'],
-        ['H', 'scaleY'],
-        ['D', 'scaleZ']
-      ])}
-      {row(t('titles.position'), [
-        ['X', 'positionX'],
-        ['Y', 'positionY'],
-        ['Z', 'positionZ']
-      ])}
-      {row(t('titles.rotation'), [
-        ['X', 'rotationX'],
-        ['Y', 'rotationY'],
-        ['Z', 'rotationZ']
-      ])}
+      {row(
+        t('titles.scale'),
+        [
+          ['W', 'scaleX'],
+          ['H', 'scaleY'],
+          ['D', 'scaleZ']
+        ],
+        false
+      )}
+      {row(
+        t('titles.position'),
+        [
+          ['X', 'positionX'],
+          ['Y', 'positionY'],
+          ['Z', 'positionZ']
+        ],
+        true
+      )}
+      {row(
+        t('titles.rotation'),
+        [
+          ['X', 'rotationX'],
+          ['Y', 'rotationY'],
+          ['Z', 'rotationZ']
+        ],
+        true
+      )}
     </styled.Container>
   );
 };
