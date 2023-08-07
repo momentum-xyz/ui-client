@@ -31,8 +31,7 @@ const BuyNftWidget: FC = () => {
 
   const {user} = sessionStore;
 
-  const {selectedWalletId, chainDecimals, walletOptions, selectedWallet, setSelectedWalletId} =
-    nftStore;
+  const {selectedWalletId, walletOptions, selectedWallet, setSelectedWalletId} = nftStore;
   const requiredAccountAddress = selectedWalletId || 'n/a';
   console.log('BuyNftWidget', {requiredAccountAddress});
   const {isBlockchainReady, walletSelectContent, sendEthers, getBalanceEthers} = useBlockchain({
@@ -71,7 +70,7 @@ const BuyNftWidget: FC = () => {
   }, [isBlockchainReady, requiredAccountAddress, getBalanceEthers]);
 
   const {MINT_NFT_AMOUNT, MINT_NFT_DEPOSIT_ADDRESS} = appVariables;
-  const price = ethersToWei(MINT_NFT_AMOUNT, chainDecimals);
+  const price = ethersToWei(MINT_NFT_AMOUNT);
   const isEnoughBalance = new BN(balance || '0').gte(price);
   console.log('[BuyNftWidget]', {
     currentState,
