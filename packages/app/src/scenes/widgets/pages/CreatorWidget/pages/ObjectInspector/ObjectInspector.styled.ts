@@ -4,17 +4,17 @@ import styled from 'styled-components';
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 100%;
 `;
 
 export const Section = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  &.margin-top {
-    margin-top: 30px;
+
+  &.color-picker {
+    padding: 30px 10px 10px 10px;
   }
+
   &.large-gap {
     gap: 30px;
   }

@@ -20,8 +20,9 @@ export const Container = styled.div`
     border-radius: 4px;
 
     &.rcp-light {
-      background-color: transparent;
       padding: 0;
+      width: 100% !important;
+      background-color: transparent;
     }
   }
 

@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Input} from '@momentum-xyz/ui-kit';
+import {Input, numberInputMask} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 
 import * as styled from './ObjectTransformForm.styled';
@@ -40,7 +40,11 @@ const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange
     onTransformChange(dataWithNumbers);
   };
 
-  const row = (title: string, inputNames: [string, keyof TransformInterface][]) => (
+  const row = (
+    title: string,
+    inputNames: [string, keyof TransformInterface][],
+    allowNegative: boolean
+  ) => (
     <styled.ControlsRow>
       <styled.ControlsRowTitle>{title}</styled.ControlsRowTitle>
       <styled.ControlsRowInputsContainer>
@@ -56,6 +60,7 @@ const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange
                 return (
                   <Input
                     value={valStr}
+                    opts={numberInputMask(10, allowNegative)}
                     onChange={(d) => {
                       onChange(d);
                       if (d !== valStr) {
@@ -73,22 +78,34 @@ const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange
   );
 
   return (
-    <styled.Container className="ObjectTransformFormContainer">
-      {row(t('titles.scale'), [
-        ['W', 'scaleX'],
-        ['H', 'scaleY'],
-        ['D', 'scaleZ']
-      ])}
-      {row(t('titles.position'), [
-        ['X', 'positionX'],
-        ['Y', 'positionY'],
-        ['Z', 'positionZ']
-      ])}
-      {row(t('titles.rotation'), [
-        ['X', 'rotationX'],
-        ['Y', 'rotationY'],
-        ['Z', 'rotationZ']
-      ])}
+    <styled.Container className="ObjectTransformForm-test">
+      {row(
+        t('titles.scale'),
+        [
+          ['W', 'scaleX'],
+          ['H', 'scaleY'],
+          ['D', 'scaleZ']
+        ],
+        false
+      )}
+      {row(
+        t('titles.position'),
+        [
+          ['X', 'positionX'],
+          ['Y', 'positionY'],
+          ['Z', 'positionZ']
+        ],
+        true
+      )}
+      {row(
+        t('titles.rotation'),
+        [
+          ['X', 'rotationX'],
+          ['Y', 'rotationY'],
+          ['Z', 'rotationZ']
+        ],
+        true
+      )}
     </styled.Container>
   );
 };
