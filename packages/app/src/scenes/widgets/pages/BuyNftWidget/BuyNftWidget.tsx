@@ -5,8 +5,11 @@ import {useI18n} from '@momentum-xyz/core';
 import {
   Button,
   Frame,
+  ImageSizeEnum,
+  ItemCard,
   Loader,
   Panel,
+  PositionEnum,
   Select,
   Steps,
   SymbolAmount,
@@ -16,8 +19,9 @@ import {BN} from 'bn.js';
 
 import {useBlockchain, useNavigation, useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
-import {ethersToWei, formatBigInt} from 'core/utils';
+import {ethersToWei, formatBigInt, getImageAbsoluteUrl} from 'core/utils';
 import {appVariables} from 'api/constants';
+import {WorldInfoInterface} from 'api';
 
 import {SignIn} from '../LoginWidget/components';
 
@@ -53,6 +57,7 @@ const BuyNftWidget: FC = () => {
   const isError = 'error' === currentState;
 
   const refOwnedWorldIds = useRef<string[]>([]);
+  const [mintedWorld, setMintedWorld] = useState<WorldInfoInterface | null>(null);
 
   const [balance, setBalance] = useState<string>();
   useEffect(() => {
@@ -102,8 +107,8 @@ const BuyNftWidget: FC = () => {
       })
       .then(() =>
         Promise.race([
-          new Promise((resolve) => setTimeout(resolve, TIMEOUT_WAIT_NFT_MINT)),
-          new Promise((resolve) => {
+          new Promise<void>((resolve) => setTimeout(resolve, TIMEOUT_WAIT_NFT_MINT)),
+          new Promise<WorldInfoInterface>((resolve) => {
             const interval = setInterval(async () => {
               console.log('TODO check if NFT is minted');
               // TODO check if NFT is minted
@@ -113,22 +118,33 @@ const BuyNftWidget: FC = () => {
                   if (!refOwnedWorldIds.current.includes(world.id)) {
                     console.log('NFT is minted', world);
                     clearInterval(interval);
-                    setCurrentState('ready');
                     resolve(world);
                     return;
                   }
                 }
               } catch (error) {
-                console.log('onBuy', error);
+                console.log('Error fetching owned worlds', error);
               }
             }, 1000);
           })
         ])
       )
+      .then((world) => {
+        console.log('NFT buy result:', world);
+        if (!world) {
+          throw new Error('NFT buy failed');
+        }
+        setMintedWorld(world);
+        setCurrentState('ready');
+      })
       .catch((error) => {
         console.log('onBuy', error);
         setCurrentState('error');
       });
+  };
+
+  const onInfoClick = (id: string) => {
+    widgetManagerStore.open(WidgetEnum.WORLD_DETAILS, PositionEnum.LEFT, {id});
   };
 
   if (!user) {
@@ -203,20 +219,33 @@ const BuyNftWidget: FC = () => {
           </>
         )}
 
-        {isStep2 && (
+        {isStep2 && !!mintedWorld && (
           <>
             <styled.Title>{t('labels.odysseyMintedTitle')}</styled.Title>
             <styled.Description>{t('labels.odysseyMintedDescription')}</styled.Description>
+
             <styled.Separator />
-            {/* TODO Odyssey card */}
+
+            <ItemCard
+              variant="small"
+              name={mintedWorld.name}
+              imageHeight={95}
+              description={mintedWorld.description}
+              imageErrorIcon="rabbit_fill"
+              imageUrl={getImageAbsoluteUrl(mintedWorld.avatarHash, ImageSizeEnum.S5)}
+              onVisitClick={() => goToOdysseyHome(mintedWorld.id)}
+              onInfoClick={() => onInfoClick(mintedWorld.id)}
+            />
             <styled.Separator />
+
             <styled.Description>{t('labels.odysseyMintedDescription2')}</styled.Description>
+
             <Button
               label={t('actions.visitYourOdyssey')}
               icon="rabbit"
               variant="secondary"
               wide
-              onClick={goToOdysseyHome}
+              onClick={() => goToOdysseyHome(mintedWorld.id)}
             />
           </>
         )}

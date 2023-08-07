@@ -29,7 +29,7 @@ export const Description = styled.div`
 
 export const Separator = styled.div`
   border-bottom: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
-  padding: 10px 0;
+  margin: 20px 0;
 `;
 
 export const Wrapper = styled.div`
