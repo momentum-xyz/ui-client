@@ -41,8 +41,6 @@ const BuyNftWidget: FC = () => {
     requiredAccountAddress
   });
 
-  const isFinished = true;
-
   const {t} = useI18n();
   const {goToOdysseyHome} = useNavigation();
 
@@ -54,7 +52,7 @@ const BuyNftWidget: FC = () => {
   const inProgress = ['sending_eth', 'waiting_nft'].includes(currentState);
   const isError = 'error' === currentState;
 
-  const refOwnedWorlds = useRef(sessionStore.worldsOwnedList || []);
+  const refOwnedWorldIds = useRef<string[]>([]);
 
   const [balance, setBalance] = useState<string>();
   useEffect(() => {
@@ -91,7 +89,7 @@ const BuyNftWidget: FC = () => {
 
     setCurrentState('sending_eth');
 
-    refOwnedWorlds.current = sessionStore.worldsOwnedList || [];
+    refOwnedWorldIds.current = sessionStore.worldsOwnedList?.map((w) => w.id) || [];
 
     sendEthers(MINT_NFT_DEPOSIT_ADDRESS, price)
       .then((result) => {
@@ -100,11 +98,6 @@ const BuyNftWidget: FC = () => {
         setCurrentState('waiting_nft');
         console.log('TODO send txHash to BE', txHash);
         // TODO send txHash to BE
-
-        // TEMP
-        setTimeout(() => {
-          setCurrentState('ready');
-        }, 3000);
       })
       .then(() =>
         Promise.race([
@@ -116,9 +109,10 @@ const BuyNftWidget: FC = () => {
               try {
                 const ownedWorlds = await sessionStore.loadOwnWorlds();
                 for (const world of ownedWorlds) {
-                  if (!refOwnedWorlds.current.some((w) => w.id === world.id)) {
+                  if (!refOwnedWorldIds.current.includes(world.id)) {
                     console.log('NFT is minted', world);
                     clearInterval(interval);
+                    setCurrentState('ready');
                     resolve(world);
                     return;
                   }
