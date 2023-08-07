@@ -8,8 +8,8 @@ export const Container = styled.div`
 
 export const Steps = styled.div`
   position: absolute;
-  right: 20px;
-  top: -20px;
+  right: 0px;
+  top: -32px;
 `;
 
 export const Title = styled.div`
@@ -19,6 +19,8 @@ export const Title = styled.div`
   line-height: 24px;
   letter-spacing: 3.2px;
   text-transform: uppercase;
+
+  margin-bottom: 10px;
 `;
 
 export const Title2 = styled.div`
@@ -27,6 +29,8 @@ export const Title2 = styled.div`
   line-height: 22px;
   letter-spacing: 3px;
   text-transform: uppercase;
+
+  margin-bottom: 10px;
 `;
 
 export const Description = styled.div`
@@ -40,14 +44,14 @@ export const Separator = styled.div`
 `;
 
 export const Section = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;
 
 export const Wrapper = styled.div`
   padding: 0;
   position: relative;
   margin-top: 25px;
-  padding: 20px;
+  padding: 10px;
 `;
 
 export const Form = styled.div`
@@ -59,6 +63,6 @@ export const Form = styled.div`
 export const WalletInfo = styled.div`
   display: grid;
   grid-template-columns: 60px 1fr;
-  gap: 20px;
+  gap: 10px;
   align-items: center;
 `;

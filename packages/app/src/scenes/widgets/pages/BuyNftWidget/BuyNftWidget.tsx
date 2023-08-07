@@ -155,9 +155,8 @@ const BuyNftWidget: FC = () => {
       title={t('labels.getYourOdyssey')}
       onClose={() => widgetManagerStore.close(WidgetEnum.BUY_NFT)}
     >
+      {inProgress && <Loader fill />}
       <styled.Wrapper>
-        {inProgress && <Loader fill />}
-
         <styled.Steps>
           <Steps
             stepList={[
@@ -169,14 +168,14 @@ const BuyNftWidget: FC = () => {
 
         {isStep1 && (
           <>
-            <styled.Title2>{t('labels.getYourOdysseyTitle')}</styled.Title2>
+            <styled.Title>{t('labels.getYourOdysseyTitle')}</styled.Title>
             <styled.Description>{t('labels.getYourOdysseyDescription')}</styled.Description>
 
             <styled.Separator />
 
             <styled.Form>
               <styled.Section>
-                <styled.Title>{t('labels.memberProfile')}</styled.Title>
+                <styled.Title2>{t('labels.memberProfile')}</styled.Title2>
                 <Input wide value={user.name} disabled onChange={() => {}} />
               </styled.Section>
 
