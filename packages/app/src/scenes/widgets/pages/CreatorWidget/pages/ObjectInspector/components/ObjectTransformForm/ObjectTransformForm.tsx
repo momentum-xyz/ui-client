@@ -1,8 +1,12 @@
 import {FC} from 'react';
+import IMask from 'imask';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {Input, numberInputMask, numberInputSuffixMask} from '@momentum-xyz/ui-kit';
+
+import {MathUtils} from 'core/utils';
+import {ObjectTransformFormInterface} from 'core/interfaces';
 
 import * as styled from './ObjectTransformForm.styled';
 
@@ -28,37 +32,87 @@ const DECIMALS = 3;
 const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange}) => {
   const {t} = useI18n();
 
-  const {control, handleSubmit} = useForm<TransformInterface>({defaultValues: initialData});
+  const {
+    control,
+    setError,
+    handleSubmit,
+    formState: {errors}
+  } = useForm<ObjectTransformFormInterface>({
+    defaultValues: {
+      ...initialData,
+      rotationX: MathUtils.radiansToDegrees(initialData.rotationX),
+      rotationY: MathUtils.radiansToDegrees(initialData.rotationY),
+      rotationZ: MathUtils.radiansToDegrees(initialData.rotationZ)
+    }
+  });
 
-  const handleChange: SubmitHandler<TransformInterface> = (data) => {
-    console.log('ObjectInspector handleChange', data);
-
-    const dataWithNumbers = Object.keys(data).reduce((acc, key) => {
-      // @ts-ignore
-      acc[key] = parseFloat(data[key]);
-      return acc;
-    }, {} as TransformInterface);
-
-    onTransformChange(dataWithNumbers);
-  };
-
-  const scaleInputs: [string, keyof TransformInterface][] = [
+  const scaleInputs: [string, keyof ObjectTransformFormInterface][] = [
     ['W', 'scaleX'],
     ['H', 'scaleY'],
     ['D', 'scaleZ']
   ];
 
-  const positionInputs: [string, keyof TransformInterface][] = [
+  const positionInputs: [string, keyof ObjectTransformFormInterface][] = [
     ['X', 'positionX'],
     ['Y', 'positionY'],
     ['Z', 'positionZ']
   ];
 
-  const rotationInputs: [string, keyof TransformInterface][] = [
+  const rotationInputs: [string, keyof ObjectTransformFormInterface][] = [
     ['X', 'rotationX'],
     ['Y', 'rotationY'],
     ['Z', 'rotationZ']
   ];
+
+  const handleChange: SubmitHandler<ObjectTransformFormInterface> = (form) => {
+    console.log('[ObjectInspector] HandleChange form', form);
+    const data: TransformInterface = {
+      scaleX: form.scaleX || 0,
+      scaleY: form.scaleY || 0,
+      scaleZ: form.scaleZ || 0,
+      positionX: form.positionX || 0,
+      positionY: form.positionY || 0,
+      positionZ: form.positionZ || 0,
+      rotationX: MathUtils.degreesToRadians(form.rotationX || 0),
+      rotationY: MathUtils.degreesToRadians(form.rotationY || 0),
+      rotationZ: MathUtils.degreesToRadians(form.rotationZ || 0)
+    };
+
+    console.log('[ObjectInspector] HandleChange data', data);
+    onTransformChange(data);
+  };
+
+  const renderController = (
+    fieldName: keyof ObjectTransformFormInterface,
+    mask: IMask.AnyMaskedOptions
+  ) => {
+    return (
+      <Controller
+        name={fieldName}
+        control={control}
+        rules={{required: true}}
+        render={({field: {value, onChange}}) => {
+          const valStr = String(value);
+          return (
+            <Input
+              opts={mask}
+              value={valStr}
+              danger={!!errors[fieldName]}
+              onChange={(d) => {
+                onChange(d !== '' ? Number(d) : null);
+                if (d !== valStr) {
+                  handleSubmit(handleChange)();
+                }
+                if (d === '') {
+                  setError(fieldName, {message: 'invalid'});
+                }
+              }}
+            />
+          );
+        }}
+      />
+    );
+  };
 
   return (
     <styled.Container className="ObjectTransformForm-test">
@@ -69,26 +123,7 @@ const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange
           {scaleInputs.map(([label, name]) => (
             <styled.ControlsRowInputContainer key={name}>
               <styled.ControlsRowInputTitle>{label}</styled.ControlsRowInputTitle>
-              <Controller
-                control={control}
-                name={name}
-                rules={{required: true}}
-                render={({field: {value, onChange}}) => {
-                  const valStr = String(value);
-                  return (
-                    <Input
-                      value={valStr}
-                      opts={numberInputMask(DECIMALS, false)}
-                      onChange={(d) => {
-                        onChange(d);
-                        if (d !== valStr) {
-                          handleSubmit(handleChange)();
-                        }
-                      }}
-                    />
-                  );
-                }}
-              />
+              {renderController(name, numberInputMask(DECIMALS, false))}
             </styled.ControlsRowInputContainer>
           ))}
         </styled.ControlsRowInputsContainer>
@@ -101,26 +136,7 @@ const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange
           {positionInputs.map(([label, name]) => (
             <styled.ControlsRowInputContainer key={name}>
               <styled.ControlsRowInputTitle>{label}</styled.ControlsRowInputTitle>
-              <Controller
-                control={control}
-                name={name}
-                rules={{required: true}}
-                render={({field: {value, onChange}}) => {
-                  const valStr = String(value);
-                  return (
-                    <Input
-                      value={valStr}
-                      opts={numberInputMask(DECIMALS, true)}
-                      onChange={(d) => {
-                        onChange(d);
-                        if (d !== valStr) {
-                          handleSubmit(handleChange)();
-                        }
-                      }}
-                    />
-                  );
-                }}
-              />
+              {renderController(name, numberInputMask(DECIMALS, true))}
             </styled.ControlsRowInputContainer>
           ))}
         </styled.ControlsRowInputsContainer>
@@ -133,26 +149,7 @@ const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange
           {rotationInputs.map(([label, name]) => (
             <styled.ControlsRowInputContainer key={name}>
               <styled.ControlsRowInputTitle>{label}</styled.ControlsRowInputTitle>
-              <Controller
-                control={control}
-                name={name}
-                rules={{required: true}}
-                render={({field: {value, onChange}}) => {
-                  const valStr = String(value);
-                  return (
-                    <Input
-                      value={valStr}
-                      opts={numberInputSuffixMask('°', DECIMALS, true)}
-                      onChange={(d) => {
-                        onChange(d);
-                        if (d !== valStr) {
-                          handleSubmit(handleChange)();
-                        }
-                      }}
-                    />
-                  );
-                }}
-              />
+              {renderController(name, numberInputSuffixMask('°', DECIMALS, true, 360, -360))}
             </styled.ControlsRowInputContainer>
           ))}
         </styled.ControlsRowInputsContainer>

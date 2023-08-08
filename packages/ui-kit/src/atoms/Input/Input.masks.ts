@@ -37,7 +37,8 @@ export const numberInputSuffixMask = (
   suffix: string,
   scale = 0,
   signed = false,
-  max = Number.MAX_SAFE_INTEGER
+  max = Number.MAX_SAFE_INTEGER,
+  min = Number.MIN_SAFE_INTEGER
 ): IMask.AnyMaskedOptions => {
   return IMask.createMask({
     mask: `unit ${suffix}`,
@@ -45,6 +46,7 @@ export const numberInputSuffixMask = (
       unit: {
         mask: Number,
         max: max,
+        min: min,
         scale: scale,
         signed: signed,
         radix: '.',
