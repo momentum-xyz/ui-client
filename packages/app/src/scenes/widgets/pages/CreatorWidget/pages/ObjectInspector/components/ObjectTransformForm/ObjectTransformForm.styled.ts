@@ -8,26 +8,30 @@ export const Container = styled.div`
 `;
 
 export const ControlsRow = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 80px 1fr;
   align-items: center;
-  justify-content: space-between;
 `;
+
 export const ControlsRowTitle = styled.span`
   flex: 0 0 86px;
 `;
+
 export const ControlsRowInputsContainer = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
 `;
+
 export const ControlsRowInputContainer = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
+
   & input,
   & div {
     width: 100px;
   }
 `;
-export const ControlsRowInputTitle = styled.h1`
-  margin-right: 8px;
-`;
+
+export const ControlsRowInputTitle = styled.h1``;

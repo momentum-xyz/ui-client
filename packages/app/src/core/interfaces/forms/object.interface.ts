@@ -21,3 +21,15 @@ export interface CustomizableObjectFormInterface {
   image?: File;
   imageAIUrl?: string;
 }
+
+export interface ObjectTransformFormInterface {
+  positionX: number | null;
+  positionY: number | null;
+  positionZ: number | null;
+  rotationX: number | null;
+  rotationY: number | null;
+  rotationZ: number | null;
+  scaleX: number | null;
+  scaleY: number | null;
+  scaleZ: number | null;
+}

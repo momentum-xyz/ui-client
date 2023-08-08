@@ -1,8 +1,12 @@
 import {FC} from 'react';
+import IMask from 'imask';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Input, numberInputMask} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
+import {Input, numberInputMask, numberInputSuffixMask} from '@momentum-xyz/ui-kit';
+
+import {MathUtils} from 'core/utils';
+import {ObjectTransformFormInterface} from 'core/interfaces';
 
 import * as styled from './ObjectTransformForm.styled';
 
@@ -23,89 +27,133 @@ interface PropsInterface {
   onTransformChange: (data: TransformInterface) => void;
 }
 
+const DECIMALS = 3;
+
 const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange}) => {
   const {t} = useI18n();
 
-  const {control, handleSubmit} = useForm<TransformInterface>({defaultValues: initialData});
+  const {
+    control,
+    setError,
+    handleSubmit,
+    formState: {errors}
+  } = useForm<ObjectTransformFormInterface>({
+    defaultValues: {
+      ...initialData,
+      rotationX: MathUtils.radiansToDegrees(initialData.rotationX),
+      rotationY: MathUtils.radiansToDegrees(initialData.rotationY),
+      rotationZ: MathUtils.radiansToDegrees(initialData.rotationZ)
+    }
+  });
 
-  const handleChange: SubmitHandler<TransformInterface> = (data) => {
-    console.log('ObjectInspector handleChange', data);
+  const scaleInputs: [string, keyof ObjectTransformFormInterface][] = [
+    ['W', 'scaleX'],
+    ['H', 'scaleY'],
+    ['D', 'scaleZ']
+  ];
 
-    const dataWithNumbers = Object.keys(data).reduce((acc, key) => {
-      // @ts-ignore
-      acc[key] = parseFloat(data[key]);
-      return acc;
-    }, {} as TransformInterface);
+  const positionInputs: [string, keyof ObjectTransformFormInterface][] = [
+    ['X', 'positionX'],
+    ['Y', 'positionY'],
+    ['Z', 'positionZ']
+  ];
 
-    onTransformChange(dataWithNumbers);
+  const rotationInputs: [string, keyof ObjectTransformFormInterface][] = [
+    ['X', 'rotationX'],
+    ['Y', 'rotationY'],
+    ['Z', 'rotationZ']
+  ];
+
+  const handleChange: SubmitHandler<ObjectTransformFormInterface> = (form) => {
+    console.log('[ObjectInspector] HandleChange form', form);
+    const data: TransformInterface = {
+      scaleX: form.scaleX || 0,
+      scaleY: form.scaleY || 0,
+      scaleZ: form.scaleZ || 0,
+      positionX: form.positionX || 0,
+      positionY: form.positionY || 0,
+      positionZ: form.positionZ || 0,
+      rotationX: MathUtils.degreesToRadians(form.rotationX || 0),
+      rotationY: MathUtils.degreesToRadians(form.rotationY || 0),
+      rotationZ: MathUtils.degreesToRadians(form.rotationZ || 0)
+    };
+
+    console.log('[ObjectInspector] HandleChange data', data);
+    onTransformChange(data);
   };
 
-  const row = (
-    title: string,
-    inputNames: [string, keyof TransformInterface][],
-    allowNegative: boolean
-  ) => (
-    <styled.ControlsRow>
-      <styled.ControlsRowTitle>{title}</styled.ControlsRowTitle>
-      <styled.ControlsRowInputsContainer>
-        {inputNames.map(([label, name]) => (
-          <styled.ControlsRowInputContainer key={name}>
-            <styled.ControlsRowInputTitle>{label}</styled.ControlsRowInputTitle>
-            <Controller
-              control={control}
-              name={name}
-              rules={{required: true}}
-              render={({field: {value, onChange}}) => {
-                const valStr = String(value);
-                return (
-                  <Input
-                    value={valStr}
-                    opts={numberInputMask(10, allowNegative)}
-                    onChange={(d) => {
-                      onChange(d);
-                      if (d !== valStr) {
-                        handleSubmit(handleChange)();
-                      }
-                    }}
-                  />
-                );
+  const renderController = (
+    fieldName: keyof ObjectTransformFormInterface,
+    mask: IMask.AnyMaskedOptions
+  ) => {
+    return (
+      <Controller
+        name={fieldName}
+        control={control}
+        rules={{required: true}}
+        render={({field: {value, onChange}}) => {
+          const valStr = String(value);
+          return (
+            <Input
+              opts={mask}
+              value={valStr}
+              danger={!!errors[fieldName]}
+              onChange={(d) => {
+                onChange(d !== '' ? Number(d) : null);
+                if (d !== valStr) {
+                  handleSubmit(handleChange)();
+                }
+                if (d === '') {
+                  setError(fieldName, {message: 'invalid'});
+                }
               }}
             />
-          </styled.ControlsRowInputContainer>
-        ))}
-      </styled.ControlsRowInputsContainer>
-    </styled.ControlsRow>
-  );
+          );
+        }}
+      />
+    );
+  };
 
   return (
     <styled.Container className="ObjectTransformForm-test">
-      {row(
-        t('titles.scale'),
-        [
-          ['W', 'scaleX'],
-          ['H', 'scaleY'],
-          ['D', 'scaleZ']
-        ],
-        false
-      )}
-      {row(
-        t('titles.position'),
-        [
-          ['X', 'positionX'],
-          ['Y', 'positionY'],
-          ['Z', 'positionZ']
-        ],
-        true
-      )}
-      {row(
-        t('titles.rotation'),
-        [
-          ['X', 'rotationX'],
-          ['Y', 'rotationY'],
-          ['Z', 'rotationZ']
-        ],
-        true
-      )}
+      {/* SCALE INPUTS */}
+      <styled.ControlsRow>
+        <styled.ControlsRowTitle>{t('titles.scale')}</styled.ControlsRowTitle>
+        <styled.ControlsRowInputsContainer>
+          {scaleInputs.map(([label, name]) => (
+            <styled.ControlsRowInputContainer key={name}>
+              <styled.ControlsRowInputTitle>{label}</styled.ControlsRowInputTitle>
+              {renderController(name, numberInputMask(DECIMALS, false))}
+            </styled.ControlsRowInputContainer>
+          ))}
+        </styled.ControlsRowInputsContainer>
+      </styled.ControlsRow>
+
+      {/* POSITION INPUTS */}
+      <styled.ControlsRow>
+        <styled.ControlsRowTitle>{t('titles.position')}</styled.ControlsRowTitle>
+        <styled.ControlsRowInputsContainer>
+          {positionInputs.map(([label, name]) => (
+            <styled.ControlsRowInputContainer key={name}>
+              <styled.ControlsRowInputTitle>{label}</styled.ControlsRowInputTitle>
+              {renderController(name, numberInputMask(DECIMALS, true))}
+            </styled.ControlsRowInputContainer>
+          ))}
+        </styled.ControlsRowInputsContainer>
+      </styled.ControlsRow>
+
+      {/* ROTATION INPUTS */}
+      <styled.ControlsRow>
+        <styled.ControlsRowTitle>{t('titles.rotation')}</styled.ControlsRowTitle>
+        <styled.ControlsRowInputsContainer>
+          {rotationInputs.map(([label, name]) => (
+            <styled.ControlsRowInputContainer key={name}>
+              <styled.ControlsRowInputTitle>{label}</styled.ControlsRowInputTitle>
+              {renderController(name, numberInputSuffixMask('°', DECIMALS, true, 360, -360))}
+            </styled.ControlsRowInputContainer>
+          ))}
+        </styled.ControlsRowInputsContainer>
+      </styled.ControlsRow>
     </styled.Container>
   );
 };
