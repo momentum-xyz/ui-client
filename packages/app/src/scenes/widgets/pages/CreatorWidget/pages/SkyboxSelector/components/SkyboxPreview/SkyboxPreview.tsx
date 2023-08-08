@@ -10,8 +10,6 @@ import * as styled from './SkyboxPreview.styled';
 interface PropsInterface {
   skybox: Asset3dInterface;
   onSkyboxSelect: (skybox: Asset3dInterface) => void;
-  // eslint-disable-next-line react/no-unused-prop-types
-  onSkyboxDelete?: (skybox: Asset3dInterface) => void;
   onBack: () => void;
 }
 

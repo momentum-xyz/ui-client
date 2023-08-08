@@ -1,12 +1,12 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
+import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
-import {Asset3dInterface} from 'core/models';
-import {api, UploadFileResponse, AIStyleItemInterface, SkyboxGenerationStatusInterface} from 'api';
 import {PluginIdEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
+import {Asset3dInterface} from 'core/models';
+import {api, UploadFileResponse, AIStyleItemInterface, SkyboxGenerationStatusInterface} from 'api';
 
 // const UNITY_SKYBOX_ASSET_ID = '313a597a-8b9a-47a7-9908-52bdc7a21a3e';
 
@@ -22,15 +22,13 @@ const SkyboxSelectorStore = types
       request: types.optional(RequestModel, {}),
       worldSettingsRequest: types.optional(RequestModel, {}),
       createSkyboxRequest: types.optional(RequestModel, {}),
+      removeSkyboxRequest: types.optional(RequestModel, {}),
 
       selectedItemId: types.maybe(types.string),
       currentItemId: types.maybe(types.string),
       defaultSkyboxes: types.optional(types.map(SkyboxDatabaseModel), {}),
       userSkyboxes: types.optional(types.map(SkyboxDatabaseModel), {}),
       fetchSkyboxRequest: types.optional(RequestModel, {}),
-
-      skyboxToDeleteId: types.maybe(types.string),
-      deleteDialog: types.optional(Dialog, {}),
 
       fetchAIStylesRequest: types.optional(RequestModel, {}),
       fetchGeneratedSkyboxRequest: types.optional(RequestModel, {}),
@@ -48,9 +46,6 @@ const SkyboxSelectorStore = types
   .views((self) => ({
     get selectedItem(): Asset3dInterface | undefined {
       return this.allSkyboxes.find((item) => item.id === self.selectedItemId);
-    },
-    get skyboxToDelete(): Asset3dInterface | undefined {
-      return this.allSkyboxes.find((item) => item.id === self.skyboxToDeleteId);
     },
     get currentItem(): Asset3dInterface | undefined {
       return this.allSkyboxes.find((item) => item.id === self.currentItemId);
@@ -126,7 +121,7 @@ const SkyboxSelectorStore = types
       console.log('Fetching skyboxes for world:', worldId, 'and user:', userId);
 
       yield self.fetchDefaultSkyboxes();
-      yield self.fetchUserSkyboxes(worldId, userId);
+      yield self.fetchUserSkyboxes(userId);
 
       // const {objects} = yield self.worldSettingsRequest.send(
       //   api.spaceAttributeRepository.getSpaceAttribute,
@@ -163,7 +158,7 @@ const SkyboxSelectorStore = types
 
       self.defaultSkyboxes = cast(response || {});
     }),
-    fetchUserSkyboxes: flow(function* (spaceId: string, userId: string) {
+    fetchUserSkyboxes: flow(function* (userId: string) {
       const response = yield self.fetchSkyboxRequest.send(
         api.spaceUserAttributeRepository.getSpaceUserAttribute,
         {
@@ -240,37 +235,22 @@ const SkyboxSelectorStore = types
       });
 
       yield self.saveItem(hash, worldId);
-      yield self.fetchUserSkyboxes(worldId, userId);
+      yield self.fetchUserSkyboxes(userId);
 
       return self.createSkyboxRequest.isDone;
     }),
-    removeUserSkybox: flow(function* (worldId: string, userId: string, hash: string) {
-      // if (hash === self.currentItemId) {
-      //   return;
-      // }
-
-      const value = {...self.userSkyboxes.toJSON()};
-      delete value[hash];
-      yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
-        spaceId: appVariables.NODE_ID,
-        userId,
-        pluginId: PluginIdEnum.CORE,
-        attributeName: AttributeNameEnum.SKYBOX_LIST,
-        value
-      });
-
-      yield self.fetchUserSkyboxes(worldId, userId);
-      self.closeSkyboxDeletion();
-      return self.createSkyboxRequest.isDone;
+    removeUserSkybox: flow(function* (userId: string, skyboxId: string) {
+      yield self.removeSkyboxRequest.send(
+        api.spaceUserAttributeRepository.deleteSpaceUserSubAttribute,
+        {
+          userId,
+          spaceId: appVariables.NODE_ID,
+          pluginId: PluginIdEnum.CORE,
+          attributeName: AttributeNameEnum.SKYBOX_LIST,
+          sub_attribute_key: skyboxId
+        }
+      );
     }),
-    openSkyboxDeletion: function (skyboxToDeleteId: string) {
-      self.skyboxToDeleteId = skyboxToDeleteId;
-      self.deleteDialog.open();
-    },
-    closeSkyboxDeletion: function () {
-      self.skyboxToDeleteId = undefined;
-      self.deleteDialog.close();
-    },
     generateImageFromHash: function (hash: string | undefined) {
       // FIXME - temp until proper preview images are available
       return hash
