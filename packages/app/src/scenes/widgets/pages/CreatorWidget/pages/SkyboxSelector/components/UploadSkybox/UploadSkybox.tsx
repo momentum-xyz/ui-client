@@ -153,6 +153,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
                 variant="horizontal"
                 onChange={onChange}
                 options={options}
+                disabled={isUploadPending}
               />
             )}
           />

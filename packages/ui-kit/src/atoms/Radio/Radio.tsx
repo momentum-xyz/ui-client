@@ -14,12 +14,18 @@ export interface RadioPropsInterface {
   value?: string | null;
   options: RadioOptionInterface[];
   variant?: 'vertical' | 'horizontal';
+  disabled?: boolean;
   onChange?: (value: string) => void;
 }
 
-const Radio: FC<RadioPropsInterface> = (props) => {
-  const {name, value, options, variant = 'vertical', onChange} = props;
-
+const Radio: FC<RadioPropsInterface> = ({
+  name,
+  value,
+  options,
+  variant = 'vertical',
+  disabled = false,
+  onChange
+}) => {
   return (
     <styled.RadioList data-testid="Radio-test" className={cn(variant)}>
       {options.map((option) => (
@@ -30,7 +36,7 @@ const Radio: FC<RadioPropsInterface> = (props) => {
             name={name}
             value={option.value}
             checked={option.value === value}
-            disabled={option.disabled}
+            disabled={option.disabled || disabled}
             onChange={() => {
               onChange?.(option.value);
             }}

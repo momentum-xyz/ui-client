@@ -239,6 +239,7 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
                         options={options}
                         onChange={onChange}
                         variant="horizontal"
+                        disabled={isUploadPending}
                       />
                     )}
                   />
