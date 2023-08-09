@@ -1,19 +1,26 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
-import {AttributeNameEnum} from '@momentum-xyz/sdk';
+import {AttributeNameEnum, AttributeValueInterface} from '@momentum-xyz/sdk';
 import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {PluginIdEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
-import {Asset3dInterface} from 'core/models';
-import {api, UploadFileResponse, AIStyleItemInterface, SkyboxGenerationStatusInterface} from 'api';
+import {SkyboxInfoFormInterface} from 'core/interfaces';
+import {SkyboxItem, SkyboxItemModelType} from 'core/models';
+import {
+  api,
+  UploadFileResponse,
+  AIStyleItemInterface,
+  SkyboxGenerationStatusInterface,
+  GetAllSpaceUserAttributeListResponse
+} from 'api';
 
-// const UNITY_SKYBOX_ASSET_ID = '313a597a-8b9a-47a7-9908-52bdc7a21a3e';
-
-const SkyboxDatabaseModel = types.model({
-  name: types.string,
-  artist_name: types.optional(types.string, '')
-});
+interface SkyboxItemInterface {
+  _key: string;
+  artist_name: string | null;
+  is_public: string | null;
+  name: string | null;
+}
 
 const SkyboxSelectorStore = types
   .compose(
@@ -26,8 +33,8 @@ const SkyboxSelectorStore = types
 
       selectedItemId: types.maybe(types.string),
       currentItemId: types.maybe(types.string),
-      defaultSkyboxes: types.optional(types.map(SkyboxDatabaseModel), {}),
-      userSkyboxes: types.optional(types.map(SkyboxDatabaseModel), {}),
+      communitySkyboxes: types.optional(types.array(SkyboxItem), []),
+      userSkyboxes: types.optional(types.array(SkyboxItem), []),
       fetchSkyboxRequest: types.optional(RequestModel, {}),
 
       fetchAIStylesRequest: types.optional(RequestModel, {}),
@@ -44,58 +51,23 @@ const SkyboxSelectorStore = types
     })
   )
   .views((self) => ({
-    get selectedItem(): Asset3dInterface | undefined {
+    get selectedItem(): SkyboxItemModelType | undefined {
       return this.allSkyboxes.find((item) => item.id === self.selectedItemId);
     },
-    get currentItem(): Asset3dInterface | undefined {
+    get currentItem(): SkyboxItemModelType | undefined {
       return this.allSkyboxes.find((item) => item.id === self.currentItemId);
     },
     get isUploadPending(): boolean {
       return self.createSkyboxRequest.isPending;
     },
-    get allSkyboxes(): Asset3dInterface[] {
-      return [
-        ...Object.entries(self.userSkyboxes.toJSON()).map(
-          ([id, d]) =>
-            ({
-              id,
-              ...d,
-              isUserAttribute: true,
-              image: self.generateImageFromHash(id)
-            } as Asset3dInterface)
-        ),
-        ...Object.entries(self.defaultSkyboxes.toJSON()).map(
-          ([id, d]) =>
-            ({
-              id,
-              ...d,
-              isUserAttribute: false,
-              image: self.generateImageFromHash(id)
-            } as Asset3dInterface)
-        )
-      ];
+    get communitySkyboxesList(): SkyboxItemModelType[] {
+      return [...self.communitySkyboxes];
     },
-    get communitySkyboxesList(): Asset3dInterface[] {
-      return Object.entries(self.defaultSkyboxes.toJSON()).map(
-        ([id, d]) =>
-          ({
-            id,
-            ...d,
-            isUserAttribute: false,
-            image: self.generateImageFromHash(id)
-          } as Asset3dInterface)
-      );
+    get userSkyboxesList(): SkyboxItemModelType[] {
+      return [...self.userSkyboxes];
     },
-    get userSkyboxesList(): Asset3dInterface[] {
-      return Object.entries(self.userSkyboxes.toJSON()).map(
-        ([id, d]) =>
-          ({
-            id,
-            ...d,
-            isUserAttribute: true,
-            image: self.generateImageFromHash(id)
-          } as Asset3dInterface)
-      );
+    get allSkyboxes(): SkyboxItemModelType[] {
+      return [...this.communitySkyboxesList, ...this.userSkyboxesList];
     },
     get isSkyboxGenerationPending(): boolean {
       return (
@@ -117,26 +89,63 @@ const SkyboxSelectorStore = types
     }
   }))
   .actions((self) => ({
-    fetchItems: flow(function* (worldId: string, userId: string) {
-      console.log('Fetching skyboxes for world:', worldId, 'and user:', userId);
+    async fetchItems(worldId: string, userId: string) {
+      await this.fetchCommunitySkyboxes();
+      await this.fetchUserSkyboxes(userId);
+      await this.fetchActiveSkybox(worldId);
+    },
+    fetchCommunitySkyboxes: flow(function* () {
+      const response: GetAllSpaceUserAttributeListResponse = yield self.fetchSkyboxRequest.send(
+        api.spaceUserAttributeRepository.getAllSpaceUserAttributeList,
+        {
+          spaceId: appVariables.NODE_ID,
+          pluginId: PluginIdEnum.CORE,
+          attributeName: AttributeNameEnum.SKYBOX_LIST,
+          // Fields of SkyboxItemModelType
+          fields: ['name', 'is_public', 'artist_name'],
+          filterField: 'is_public',
+          filterValue: 'true'
+        }
+      );
 
-      yield self.fetchDefaultSkyboxes();
-      yield self.fetchUserSkyboxes(userId);
+      if (response.items) {
+        const skyboxes: SkyboxItemModelType[] = response.items.map((item) => {
+          const skybox = item as never as SkyboxItemInterface;
+          return {
+            id: skybox._key,
+            name: skybox.name || '',
+            artist_name: skybox.artist_name || '',
+            is_public: skybox.is_public === 'true'
+          };
+        });
 
-      // const {objects} = yield self.worldSettingsRequest.send(
-      //   api.spaceAttributeRepository.getSpaceAttribute,
-      //   {
-      //     spaceId: worldId,
-      //     plugin_id: PluginIdEnum.CORE,
-      //     attribute_name: AttributeNameEnum.WORLD_SETTINGS,
-      //     sub_attribute_key: 'objects'
-      //   }
-      // );
+        self.communitySkyboxes = cast(skyboxes);
+      }
+    }),
+    fetchUserSkyboxes: flow(function* (userId: string) {
+      const response: AttributeValueInterface = yield self.fetchSkyboxRequest.send(
+        api.spaceUserAttributeRepository.getSpaceUserAttribute,
+        {
+          userId,
+          spaceId: appVariables.NODE_ID,
+          pluginId: PluginIdEnum.CORE,
+          attributeName: AttributeNameEnum.SKYBOX_LIST
+        }
+      );
 
+      if (response) {
+        const skyboxList: SkyboxItemModelType[] = Object.entries(response).map(([key, value]) => ({
+          ...(value as SkyboxItemModelType),
+          id: key
+        }));
+
+        self.userSkyboxes = cast(skyboxList);
+      }
+    }),
+    fetchActiveSkybox: flow(function* (worldId: string) {
       const activeSkyboxData = yield self.createSkyboxRequest.send(
         api.spaceAttributeRepository.getSpaceAttribute,
         {
-          // spaceId: objects.skybox,
           spaceId: worldId,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.ACTIVE_SKYBOX
@@ -146,54 +155,10 @@ const SkyboxSelectorStore = types
       self.selectedItemId = activeSkyboxData?.render_hash || self.allSkyboxes?.[0]?.id;
       self.currentItemId = self.selectedItemId;
     }),
-    fetchDefaultSkyboxes: flow(function* () {
-      const response = yield self.fetchSkyboxRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
-        {
-          spaceId: appVariables.NODE_ID,
-          plugin_id: PluginIdEnum.CORE,
-          attribute_name: AttributeNameEnum.SKYBOX_LIST
-        }
-      );
-
-      self.defaultSkyboxes = cast(response || {});
-    }),
-    fetchUserSkyboxes: flow(function* (userId: string) {
-      const response = yield self.fetchSkyboxRequest.send(
-        api.spaceUserAttributeRepository.getSpaceUserAttribute,
-        {
-          spaceId: appVariables.NODE_ID,
-          userId,
-          pluginId: PluginIdEnum.CORE,
-          attributeName: AttributeNameEnum.SKYBOX_LIST
-        }
-      );
-
-      self.userSkyboxes = cast(response || {});
-    }),
-    selectItem(item: Asset3dInterface) {
-      self.selectedItemId = item.id;
-    },
-    saveItem: flow(function* (id: string, worldId: string) {
+    updateActiveSkybox: flow(function* (id: string, worldId: string) {
       self.currentItemId = id;
 
-      // const {objects} = yield self.worldSettingsRequest.send(
-      //   api.spaceAttributeRepository.getSpaceAttribute,
-      //   {
-      //     spaceId: worldId,
-      //     plugin_id: PluginIdEnum.CORE,
-      //     attribute_name: AttributeNameEnum.WORLD_SETTINGS,
-      //     sub_attribute_key: 'objects'
-      //   }
-      // );
-
-      // yield self.worldSettingsRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
-      //   spaceId: objects.skybox,
-      //   asset_3d_id: UNITY_SKYBOX_ASSET_ID
-      // });
-
       yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-        // spaceId: objects.skybox,
         spaceId: worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.ACTIVE_SKYBOX,
@@ -202,16 +167,10 @@ const SkyboxSelectorStore = types
 
       return self.worldSettingsRequest.isDone;
     }),
-    uploadSkybox: flow(function* (
-      worldId: string,
-      userId: string,
-      file: File,
-      name: string,
-      artistName?: string
-    ) {
+    uploadSkybox: flow(function* (worldId: string, userId: string, form: SkyboxInfoFormInterface) {
       const uploadImageResponse: UploadFileResponse = yield self.createSkyboxRequest.send(
         api.mediaRepository.uploadImage,
-        {file}
+        {file: form.file}
       );
 
       if (!uploadImageResponse) {
@@ -222,20 +181,25 @@ const SkyboxSelectorStore = types
       const {hash} = uploadImageResponse;
       console.log('Upload image response:', uploadImageResponse, hash);
 
-      const value = {
-        ...self.userSkyboxes.toJSON(),
-        [hash]: {name, artist_name: artistName}
-      };
-      yield self.createSkyboxRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
-        spaceId: appVariables.NODE_ID,
-        userId,
-        pluginId: PluginIdEnum.CORE,
-        attributeName: AttributeNameEnum.SKYBOX_LIST,
-        value
-      });
+      yield self.createSkyboxRequest.send(
+        api.spaceUserAttributeRepository.setSpaceUserSubAttribute,
+        {
+          userId,
+          spaceId: appVariables.NODE_ID,
+          pluginId: PluginIdEnum.CORE,
+          attributeName: AttributeNameEnum.SKYBOX_LIST,
+          sub_attribute_key: hash,
+          sub_attribute_value: {
+            name: form.name,
+            artist_name: form.artistName,
+            is_public: form.type === 'COMMUNITY'
+          }
+        }
+      );
 
-      yield self.saveItem(hash, worldId);
+      yield self.updateActiveSkybox(hash, worldId);
       yield self.fetchUserSkyboxes(userId);
+      yield self.fetchCommunitySkyboxes();
 
       return self.createSkyboxRequest.isDone;
     }),

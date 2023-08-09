@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Button, Input, FileUploader, ErrorsEnum} from '@momentum-xyz/ui-kit';
+import {Button, Input, FileUploader, Radio, ErrorsEnum} from '@momentum-xyz/ui-kit';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import cn from 'classnames';
@@ -8,15 +8,9 @@ import {toast} from 'react-toastify';
 
 import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
+import {SkyboxInfoFormInterface} from 'core/interfaces';
 
 import * as styled from './UploadSkybox.styled';
-
-interface SkyboxInfoInterface {
-  name: string;
-  artistName: string;
-  type: 'COMMUNITY' | 'PRIVATE';
-  file: File;
-}
 
 const MAX_ASSET_SIZE_MB = 8;
 const MAX_ASSET_SIZE_B = MAX_ASSET_SIZE_MB * Math.pow(1024, 2);
@@ -29,7 +23,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
   const {widgetStore, universeStore, sessionStore} = useStore();
   const {creatorStore} = widgetStore;
   const {skyboxSelectorStore} = creatorStore;
-  const {uploadSkybox, isUploadPending} = skyboxSelectorStore;
+  const {isUploadPending} = skyboxSelectorStore;
   const {user} = sessionStore;
   const worldId = universeStore.worldId;
 
@@ -37,35 +31,29 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
 
   const {
     control,
+    setError,
     handleSubmit,
-    formState: {errors},
-    setError
-  } = useForm<SkyboxInfoInterface>({
+    formState: {errors}
+  } = useForm<SkyboxInfoFormInterface>({
     defaultValues: {
       name: '',
       type: 'PRIVATE'
     }
   });
 
-  /*const options = [
+  const options = [
     {value: 'COMMUNITY', label: 'Available for Community'},
     {value: 'PRIVATE', label: 'Private Asset'}
-  ];*/
+  ];
 
-  const formSubmitHandler: SubmitHandler<SkyboxInfoInterface> = async ({
-    file,
-    name,
-    artistName,
-    type
-  }) => {
+  const formSubmitHandler: SubmitHandler<SkyboxInfoFormInterface> = async (form) => {
     if (!user) {
       return;
     }
-    const isUploadOK = await uploadSkybox(worldId, user.id, file, name, artistName);
+    const isUploadOK = await skyboxSelectorStore.uploadSkybox(worldId, user.id, form);
+
     if (!isUploadOK) {
-      setError('file', {
-        type: 'submit'
-      });
+      setError('file', {type: 'submit'});
       toast.error(<ToastContent isDanger icon="alert" text={t('assetsUploader.errorSave')} />);
       return;
     } else {
@@ -154,8 +142,8 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
               />
             )}
           />
-          {/* TODO: Implementation
-           <Controller
+
+          <Controller
             name="type"
             control={control}
             render={({field: {value, onChange}}) => (
@@ -167,7 +155,7 @@ const UploadSkybox: FC<PropsInterface> = ({onBack}) => {
                 options={options}
               />
             )}
-          /> */}
+          />
         </styled.InputsContainer>
       </styled.FormContainer>
 

@@ -29,3 +29,4 @@ export * from './WorldStaker';
 export * from './BigStakerInfo';
 export * from './TimelineEntry';
 export * from './TrackInfo';
+export * from './SkyboxItem';

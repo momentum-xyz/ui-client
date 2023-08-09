@@ -114,10 +114,12 @@ export const getAllSpaceUserAttributeList: RequestInterface<
     pluginId,
     attributeName,
     fields,
-    limit,
     offset,
     order,
     orderDirection,
+    filterField,
+    filterValue,
+    limit = Number.MAX_SAFE_INTEGER,
     ...restOptions
   } = options;
 
@@ -130,6 +132,10 @@ export const getAllSpaceUserAttributeList: RequestInterface<
     offset,
     ...(order && {order: orderDirection === 'DESC' ? `-${order}` : order})
   };
+
+  if (filterField) {
+    restOptions.params[filterField] = filterValue;
+  }
 
   return request.get(url, restOptions);
 };

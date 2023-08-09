@@ -10,11 +10,10 @@ export const Container = styled.div`
 export const FormContainer = styled.div``;
 
 export const InputsContainer = styled.div`
+  margin: 0 0 20px 0;
   display: flex;
-  gap: 12px;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
+  gap: 12px;
 `;
 
 export const ControlsRow = styled.div`

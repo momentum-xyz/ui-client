@@ -5,7 +5,7 @@ import {Frame, Button, Input} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
-import {Asset3dInterface} from 'core/models';
+import {SkyboxItemModelType} from 'core/models';
 
 import {SkyboxList, UploadSkybox, SkyboxPreview, CustomSkyboxWithAI} from './components';
 import * as styled from './SkyboxSelector.styled';
@@ -14,23 +14,20 @@ const SkyboxSelector: FC = () => {
   const {widgetStore, sessionStore, universeStore} = useStore();
   const {creatorStore} = widgetStore;
   const {skyboxSelectorStore} = creatorStore;
-  const {saveItem, communitySkyboxesList, userSkyboxesList} = skyboxSelectorStore;
-  const {user, userId} = sessionStore;
+  const {communitySkyboxesList, userSkyboxesList} = skyboxSelectorStore;
   const {worldId} = universeStore;
+  const {userId} = sessionStore;
 
   const {t} = useI18n();
 
-  const [previewSkybox, setPreviewSkybox] = useState<Asset3dInterface | null>(null);
+  const [previewSkybox, setPreviewSkybox] = useState<SkyboxItemModelType | null>(null);
   const [skyboxPreviewType, setSkyboxPreviewType] = useState<'COMMUNITY' | 'PRIVATE'>('COMMUNITY');
   const [mode, setMode] = useState<'view' | 'upload' | 'gen_ai'>('view');
   const [searchInputValue, setSearchInputValue] = useState<string>('');
 
   useEffect(() => {
-    if (!user) {
-      return;
-    }
-    skyboxSelectorStore.fetchItems(worldId, user.id);
-  }, [skyboxSelectorStore, user, worldId]);
+    skyboxSelectorStore.fetchItems(worldId, userId);
+  }, [skyboxSelectorStore, userId, worldId]);
 
   const filteredSkyboxList = useMemo(() => {
     const list = skyboxPreviewType === 'COMMUNITY' ? communitySkyboxesList : userSkyboxesList;
@@ -139,7 +136,8 @@ const SkyboxSelector: FC = () => {
         <SkyboxPreview
           skybox={previewSkybox}
           onSkyboxSelect={(sb) => {
-            saveItem(sb.id, worldId)
+            skyboxSelectorStore
+              .updateActiveSkybox(sb.id, worldId)
               .then(() => {
                 setPreviewSkybox(null);
               })

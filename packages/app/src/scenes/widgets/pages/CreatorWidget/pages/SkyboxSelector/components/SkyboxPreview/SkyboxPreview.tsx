@@ -1,15 +1,16 @@
-import {Button, Image} from '@momentum-xyz/ui-kit';
+import {Button, Image, ImageSizeEnum} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
 
-import {Asset3dInterface} from 'core/models';
+import {getImageAbsoluteUrl} from 'core/utils';
+import {SkyboxItemModelType} from 'core/models';
 import {BLOCKADE_LABS_ARTIST_NAME} from 'core/constants';
 import {BlockadeLabs} from 'ui-kit';
 
 import * as styled from './SkyboxPreview.styled';
 
 interface PropsInterface {
-  skybox: Asset3dInterface;
-  onSkyboxSelect: (skybox: Asset3dInterface) => void;
+  skybox: SkyboxItemModelType;
+  onSkyboxSelect: (skybox: SkyboxItemModelType) => void;
   onBack: () => void;
 }
 
@@ -19,10 +20,10 @@ export const SkyboxPreview = ({skybox, onSkyboxSelect, onBack}: PropsInterface):
   const isBlockadeLabs = skybox.artist_name === BLOCKADE_LABS_ARTIST_NAME;
 
   return (
-    <styled.Container>
+    <styled.Container data-testid="SkyboxPreview-test">
       <styled.SkyboxInfoContainer>
         <styled.PreviewHolder>
-          <Image src={skybox.image} height={360} bordered />
+          <Image src={getImageAbsoluteUrl(skybox.id, ImageSizeEnum.S4)} height={360} bordered />
           {isBlockadeLabs && <BlockadeLabs small bottomRightAbsolute />}
         </styled.PreviewHolder>
         <styled.SkyboxTitle>{skybox.name}</styled.SkyboxTitle>
