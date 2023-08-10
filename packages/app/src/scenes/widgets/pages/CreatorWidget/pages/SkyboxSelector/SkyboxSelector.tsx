@@ -133,7 +133,7 @@ const SkyboxSelector: FC = () => {
             onSkyboxSelect={(sb) => setPreviewSkybox(sb)}
             onSkyboxDelete={async (skyboxId) => {
               await skyboxSelectorStore.removeUserSkybox(userId, skyboxId);
-              await skyboxSelectorStore.fetchUserSkyboxes(userId);
+              await skyboxSelectorStore.fetchItems(worldId, userId);
             }}
             onLoadMore={(startIndex) => {
               if (isCommunityShown) {
