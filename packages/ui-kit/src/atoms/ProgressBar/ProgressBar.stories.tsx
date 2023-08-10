@@ -23,3 +23,9 @@ WithLogo.args = {
   percent: 50,
   withLogo: true
 };
+
+export const SimulateWithLogo = Template.bind({});
+SimulateWithLogo.args = {
+  simulateProgress: true,
+  withLogo: true
+};
