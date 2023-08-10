@@ -1,7 +1,6 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum, AttributeValueInterface} from '@momentum-xyz/sdk';
-import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {PluginIdEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
@@ -31,11 +30,11 @@ const SkyboxSelectorStore = types
       createSkyboxRequest: types.optional(RequestModel, {}),
       removeSkyboxRequest: types.optional(RequestModel, {}),
 
-      selectedItemId: types.maybe(types.string),
-      currentItemId: types.maybe(types.string),
-      communitySkyboxes: types.optional(types.array(SkyboxItem), []),
       userSkyboxes: types.optional(types.array(SkyboxItem), []),
       fetchSkyboxRequest: types.optional(RequestModel, {}),
+
+      communitySkyboxes: types.optional(types.array(SkyboxItem), []),
+      communitySkyboxesCount: types.optional(types.number, 0),
 
       fetchAIStylesRequest: types.optional(RequestModel, {}),
       fetchGeneratedSkyboxRequest: types.optional(RequestModel, {}),
@@ -50,51 +49,12 @@ const SkyboxSelectorStore = types
       generatedSkyboxFile: types.maybe(types.frozen<File>())
     })
   )
-  .views((self) => ({
-    get selectedItem(): SkyboxItemModelType | undefined {
-      return this.allSkyboxes.find((item) => item.id === self.selectedItemId);
-    },
-    get currentItem(): SkyboxItemModelType | undefined {
-      return this.allSkyboxes.find((item) => item.id === self.currentItemId);
-    },
-    get isUploadPending(): boolean {
-      return self.createSkyboxRequest.isPending;
-    },
-    get communitySkyboxesList(): SkyboxItemModelType[] {
-      return [...self.communitySkyboxes];
-    },
-    get userSkyboxesList(): SkyboxItemModelType[] {
-      return [...self.userSkyboxes];
-    },
-    get allSkyboxes(): SkyboxItemModelType[] {
-      return [...this.communitySkyboxesList, ...this.userSkyboxesList];
-    },
-    get isSkyboxGenerationPending(): boolean {
-      return (
-        self.generateAISkyboxRequest.isPending ||
-        (!!self.pendingGenerationId &&
-          !self.pendingGenerationErrorMessage &&
-          self.pendingGenerationStatus !== 'complete')
-      );
-    },
-    get isSkyboxGenerationComplete(): boolean {
-      return (
-        !!self.pendingGenerationId &&
-        !self.pendingGenerationErrorMessage &&
-        self.pendingGenerationStatus === 'complete'
-      );
-    },
-    get skyboxGenerationError(): string | undefined {
-      return self.pendingGenerationErrorMessage;
-    }
-  }))
   .actions((self) => ({
     async fetchItems(worldId: string, userId: string) {
-      await this.fetchCommunitySkyboxes();
+      await this.loadMoreCommunitySkyboxes(0);
       await this.fetchUserSkyboxes(userId);
-      await this.fetchActiveSkybox(worldId);
     },
-    fetchCommunitySkyboxes: flow(function* () {
+    loadMoreCommunitySkyboxes: flow(function* (startIndex: number) {
       const response: GetAllSpaceUserAttributeListResponse = yield self.fetchSkyboxRequest.send(
         api.spaceUserAttributeRepository.getAllSpaceUserAttributeList,
         {
@@ -142,22 +102,7 @@ const SkyboxSelectorStore = types
         self.userSkyboxes = cast(skyboxList);
       }
     }),
-    fetchActiveSkybox: flow(function* (worldId: string) {
-      const activeSkyboxData = yield self.createSkyboxRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
-        {
-          spaceId: worldId,
-          plugin_id: PluginIdEnum.CORE,
-          attribute_name: AttributeNameEnum.ACTIVE_SKYBOX
-        }
-      );
-
-      self.selectedItemId = activeSkyboxData?.render_hash || self.allSkyboxes?.[0]?.id;
-      self.currentItemId = self.selectedItemId;
-    }),
     updateActiveSkybox: flow(function* (id: string, worldId: string) {
-      self.currentItemId = id;
-
       yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
         spaceId: worldId,
         plugin_id: PluginIdEnum.CORE,
@@ -199,7 +144,7 @@ const SkyboxSelectorStore = types
 
       yield self.updateActiveSkybox(hash, worldId);
       yield self.fetchUserSkyboxes(userId);
-      yield self.fetchCommunitySkyboxes();
+      yield self.loadMoreCommunitySkyboxes(0);
 
       return self.createSkyboxRequest.isDone;
     }),
@@ -215,12 +160,6 @@ const SkyboxSelectorStore = types
         }
       );
     }),
-    generateImageFromHash: function (hash: string | undefined) {
-      // FIXME - temp until proper preview images are available
-      return hash
-        ? `${appVariables.RENDER_SERVICE_URL}/texture/${ImageSizeEnum.S5}/${hash}`
-        : 'https://dev.odyssey.ninja/api/v3/render/get/03ce359d18bfc0fe977bd66ab471d222';
-    },
     fetchAIStyles: flow(function* () {
       const response = yield self.fetchAIStylesRequest.send(
         api.skyboxRepository.fetchAIStyles,
@@ -280,6 +219,41 @@ const SkyboxSelectorStore = types
         }
       }
     })
+  }))
+  .views((self) => ({
+    get isUploadPending(): boolean {
+      return self.createSkyboxRequest.isPending;
+    },
+    get isSkyboxesLoading(): boolean {
+      return self.fetchSkyboxRequest.isNotComplete;
+    },
+    get allSkyboxes(): SkyboxItemModelType[] {
+      return [...self.communitySkyboxes, ...self.userSkyboxes];
+    },
+    get communitySkyboxesList(): SkyboxItemModelType[] {
+      return [...self.communitySkyboxes];
+    },
+    get userSkyboxesList(): SkyboxItemModelType[] {
+      return [...self.userSkyboxes];
+    },
+    get isSkyboxGenerationPending(): boolean {
+      return (
+        self.generateAISkyboxRequest.isPending ||
+        (!!self.pendingGenerationId &&
+          !self.pendingGenerationErrorMessage &&
+          self.pendingGenerationStatus !== 'complete')
+      );
+    },
+    get isSkyboxGenerationComplete(): boolean {
+      return (
+        !!self.pendingGenerationId &&
+        !self.pendingGenerationErrorMessage &&
+        self.pendingGenerationStatus === 'complete'
+      );
+    },
+    get skyboxGenerationError(): string | undefined {
+      return self.pendingGenerationErrorMessage;
+    }
   }));
 
 export {SkyboxSelectorStore};

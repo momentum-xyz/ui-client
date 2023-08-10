@@ -119,6 +119,7 @@ const SkyboxSelector: FC = () => {
           </styled.SkyboxListHeader>
           <SkyboxList
             skyboxes={filteredSkyboxList}
+            isLoading={skyboxSelectorStore.isSkyboxesLoading}
             isMySkyboxes={skyboxPreviewType === 'PRIVATE'}
             onSkyboxSelect={(sb) => setPreviewSkybox(sb)}
             onSkyboxDelete={async (skyboxId) => {
