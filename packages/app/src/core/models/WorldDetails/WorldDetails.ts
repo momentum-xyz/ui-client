@@ -28,6 +28,14 @@ const WorldDetails = types.compose(
         self.fetchWorld();
       }
     }))
+    .views((self) => ({
+      get isError() {
+        return self.request.isError;
+      },
+      get isNotFound() {
+        return self.request.isError && self.request.errorCode === 404;
+      }
+    }))
 );
 
 export type WorldDetailsModelType = Instance<typeof WorldDetails>;
