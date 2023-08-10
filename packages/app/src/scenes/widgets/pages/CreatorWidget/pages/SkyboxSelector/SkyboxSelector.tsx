@@ -1,8 +1,8 @@
 import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {Frame, Button, Input} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
+import {Frame, Button, Input, useDebouncedCallback} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {SkyboxItemModelType} from 'core/models';
@@ -33,6 +33,19 @@ const SkyboxSelector: FC = () => {
       skyboxSelectorStore.resetModel();
     };
   }, [worldId, userId, skyboxSelectorStore]);
+
+  const handleSkyboxSearch = useDebouncedCallback(
+    () => {
+      if (isCommunityShown) {
+        skyboxSelectorStore.loadMoreCommunitySkyboxes(0);
+      } else {
+        skyboxSelectorStore.fetchUserSkyboxes(userId);
+      }
+    },
+    250,
+    [],
+    {maxWait: 250}
+  );
 
   return (
     <styled.Container data-testid="SkyboxSelector-test">
@@ -74,10 +87,7 @@ const SkyboxSelector: FC = () => {
                 value={searchQuery.query}
                 onChange={(value) => {
                   searchQuery.setQuery(value);
-
-                  if (isCommunityShown) {
-                    // TODO: Debounce filter
-                  }
+                  handleSkyboxSearch();
                 }}
               />
             </styled.SkyboxSearchContainer>
@@ -115,7 +125,7 @@ const SkyboxSelector: FC = () => {
             <span>
               {isCommunityShown
                 ? skyboxSelectorStore.communitySkyboxesCount
-                : skyboxSelectorStore.filteredUserSkyboxes.length}
+                : skyboxSelectorStore.userSkyboxes.length}
             </span>
           </styled.SkyboxListHeader>
 
@@ -123,7 +133,7 @@ const SkyboxSelector: FC = () => {
             skyboxGroups={
               isCommunityShown
                 ? skyboxSelectorStore.communitySkyboxGroups
-                : skyboxSelectorStore.filteredUserSkyboxGroups
+                : skyboxSelectorStore.userSkyboxGroups
             }
             skyboxGroupCount={
               isCommunityShown

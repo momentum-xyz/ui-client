@@ -64,6 +64,7 @@ export interface GetAllSpaceUserAttributeListRequest
   orderDirection?: 'ASK' | 'DESC';
   filterField?: string;
   filterValue?: string;
+  q?: string;
 }
 
 export interface GetAllSpaceUserAttributeListResponse {

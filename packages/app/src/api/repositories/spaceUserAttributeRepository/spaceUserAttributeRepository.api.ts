@@ -120,6 +120,7 @@ export const getAllSpaceUserAttributeList: RequestInterface<
     filterField,
     filterValue,
     limit = Number.MAX_SAFE_INTEGER,
+    q,
     ...restOptions
   } = options;
 
@@ -130,7 +131,8 @@ export const getAllSpaceUserAttributeList: RequestInterface<
     fields,
     limit,
     offset,
-    ...(order && {order: orderDirection === 'DESC' ? `-${order}` : order})
+    ...(order && {order: orderDirection === 'DESC' ? `-${order}` : order}),
+    ...(q && {q: q})
   };
 
   if (filterField) {

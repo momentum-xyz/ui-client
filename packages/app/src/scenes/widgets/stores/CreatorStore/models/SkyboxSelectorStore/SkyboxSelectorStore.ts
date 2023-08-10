@@ -80,7 +80,8 @@ const SkyboxSelectorStore = types
             filterField: 'is_public',
             filterValue: 'true',
             limit: GROUP_SIZE * PAGE_GROUP_COUNT,
-            offset: GROUP_SIZE * startIndex
+            offset: GROUP_SIZE * startIndex,
+            q: self.searchQuery.query
           }
         );
 
@@ -108,6 +109,8 @@ const SkyboxSelectorStore = types
       }
     }),
     fetchUserSkyboxes: flow(function* (userId: string) {
+      self.userSkyboxes = cast([]);
+
       const response: AttributeValueInterface = yield self.fetchUserSkyboxesRequest.send(
         api.spaceUserAttributeRepository.getSpaceUserAttribute,
         {
@@ -124,7 +127,11 @@ const SkyboxSelectorStore = types
           id: key
         }));
 
-        self.userSkyboxes = cast(skyboxList);
+        self.userSkyboxes = cast(
+          skyboxList.filter((sb) =>
+            sb.name.toLowerCase().includes(self.searchQuery.queryLowerCased)
+          )
+        );
       }
     }),
     updateActiveSkybox: flow(function* (id: string, worldId: string) {
@@ -272,14 +279,6 @@ const SkyboxSelectorStore = types
     },
     get userSkyboxGroups(): SkyboxItemModelType[][] {
       return self.castSkyboxesToGroups([...self.userSkyboxes]);
-    },
-    get filteredUserSkyboxes(): SkyboxItemModelType[] {
-      return self.userSkyboxes.filter((sb) =>
-        sb.name.toLowerCase().includes(self.searchQuery.queryLowerCased)
-      );
-    },
-    get filteredUserSkyboxGroups(): SkyboxItemModelType[][] {
-      return self.castSkyboxesToGroups([...this.filteredUserSkyboxes]);
     },
     get isSkyboxGenerationPending(): boolean {
       return (
