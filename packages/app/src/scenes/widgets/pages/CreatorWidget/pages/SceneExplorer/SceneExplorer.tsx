@@ -65,7 +65,9 @@ const SceneExplorer: FC<PropsInterface> = ({world3dStore}) => {
             <styled.Item style={{marginLeft: depth * 30}}>
               {hasChildren ? expandIcon : <styled.IconButtonPlaceholder />}
               <IconSvg name="cube" isWhite />
-              {child.name}
+              <styled.ItemNameWithTrunkate title={child.name}>
+                {child.name}
+              </styled.ItemNameWithTrunkate>
               <styled.ItemActions>
                 <IconButton
                   name="fly-to"

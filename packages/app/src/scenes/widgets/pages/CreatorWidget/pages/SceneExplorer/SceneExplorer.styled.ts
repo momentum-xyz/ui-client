@@ -41,6 +41,13 @@ export const Item = styled.div`
   gap: 10px;
 `;
 
+export const ItemNameWithTrunkate = styled.div`
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
 export const ItemActions = styled.div`
   display: flex;
   align-items: center;
