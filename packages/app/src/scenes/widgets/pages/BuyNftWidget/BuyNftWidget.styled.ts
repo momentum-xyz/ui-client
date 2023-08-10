@@ -66,3 +66,17 @@ export const WalletInfo = styled.div`
   gap: 10px;
   align-items: center;
 `;
+
+export const Warning = styled.div`
+  text-transform: uppercase;
+  text-align: center;
+  font-size: var(--font-size-m);
+  font-weight: 600;
+  line-height: 22px;
+  letter-spacing: 3px;
+`;
+
+export const ProgressWrapper = styled.div`
+  margin: 0 auto;
+  width: 160px;
+`;

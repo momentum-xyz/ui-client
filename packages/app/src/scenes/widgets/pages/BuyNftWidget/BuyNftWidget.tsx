@@ -6,9 +6,9 @@ import {
   ImageSizeEnum,
   Input,
   ItemCard,
-  Loader,
   Panel,
   PositionEnum,
+  ProgressBar,
   Select,
   Steps,
   SymbolAmount,
@@ -154,7 +154,6 @@ const BuyNftWidget: FC = () => {
       title={t('labels.getYourOdyssey')}
       onClose={() => widgetManagerStore.close(WidgetEnum.BUY_NFT)}
     >
-      {inProgress && <Loader fill />}
       <styled.Wrapper>
         <styled.Steps>
           <Steps
@@ -206,11 +205,23 @@ const BuyNftWidget: FC = () => {
                 icon="rabbit"
                 variant="primary"
                 wide
-                disabled={!isBlockchainReady || !isEnoughBalance}
+                disabled={!isBlockchainReady || !isEnoughBalance || inProgress}
                 onClick={handleBuy}
               />
 
-              {isError && <Warning message="Error buying NFT" />}
+              {inProgress && (
+                <>
+                  <styled.Separator />
+                  <styled.Warning>{t('labels.waitDontClose')}</styled.Warning>
+                  {currentState === 'waiting_nft' && (
+                    <styled.ProgressWrapper>
+                      <ProgressBar withLogo simulateProgress />
+                    </styled.ProgressWrapper>
+                  )}
+                </>
+              )}
+
+              {isError && <Warning message={t('messages.errorBuyingNft')} />}
             </styled.Form>
           </>
         )}

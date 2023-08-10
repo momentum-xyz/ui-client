@@ -307,6 +307,7 @@ export const enGb = {
         'Welcome to our community. You are now the proud owner of an Odyssey.\nStart building your 3D environment and invite people to join you on your journey.',
       odysseyMintedDescription2:
         'Visit your Odyssey and start with creating a profile with an image, a short description and your mission. This way other people can search and find your Odyssey and start contributing',
+      waitDontClose: 'Please wait, don’t close this browser window',
       yourWallet: 'Your Wallet',
       skyboxName: 'Skybox Name',
       staking: 'Staking',
@@ -599,6 +600,7 @@ export const enGb = {
       selectOne: 'Select One',
       processing: 'Processing',
       comingSoonExclamation: 'Coming Soon!',
+      errorBuyingNft: 'Error buying NFT. Please contact the support!',
       mintingYourOdyssey: 'Minting your Odyssey...',
       mintingYourOdysseyWarning: "Please wait and don't refresh, this may take a while.",
       createProfileDesc:
