@@ -5,7 +5,7 @@ import {AttributeNameEnum, AttributeValueInterface} from '@momentum-xyz/sdk';
 import {PluginIdEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 import {SkyboxInfoFormInterface} from 'core/interfaces';
-import {SkyboxItem, SkyboxItemModelType} from 'core/models';
+import {SearchQuery, SkyboxItem, SkyboxItemModelType} from 'core/models';
 import {
   api,
   UploadFileResponse,
@@ -32,6 +32,8 @@ const SkyboxSelectorStore = types
       worldSettingsRequest: types.optional(RequestModel, {}),
       createSkyboxRequest: types.optional(RequestModel, {}),
       removeSkyboxRequest: types.optional(RequestModel, {}),
+
+      searchQuery: types.optional(SearchQuery, {}),
 
       userSkyboxes: types.optional(types.array(SkyboxItem), []),
       fetchUserSkyboxesRequest: types.optional(RequestModel, {}),
@@ -270,6 +272,14 @@ const SkyboxSelectorStore = types
     },
     get userSkyboxGroups(): SkyboxItemModelType[][] {
       return self.castSkyboxesToGroups([...self.userSkyboxes]);
+    },
+    get filteredUserSkyboxes(): SkyboxItemModelType[] {
+      return self.userSkyboxes.filter((sb) =>
+        sb.name.toLowerCase().includes(self.searchQuery.queryLowerCased)
+      );
+    },
+    get filteredUserSkyboxGroups(): SkyboxItemModelType[][] {
+      return self.castSkyboxesToGroups([...this.filteredUserSkyboxes]);
     },
     get isSkyboxGenerationPending(): boolean {
       return (
