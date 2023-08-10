@@ -21,6 +21,9 @@ interface SkyboxItemInterface {
   name: string | null;
 }
 
+const GROUP_SIZE = 3;
+const PAGE_GROUP_COUNT = 2;
+
 const SkyboxSelectorStore = types
   .compose(
     ResetModel,
@@ -31,10 +34,12 @@ const SkyboxSelectorStore = types
       removeSkyboxRequest: types.optional(RequestModel, {}),
 
       userSkyboxes: types.optional(types.array(SkyboxItem), []),
-      fetchSkyboxRequest: types.optional(RequestModel, {}),
+      fetchUserSkyboxesRequest: types.optional(RequestModel, {}),
 
       communitySkyboxes: types.optional(types.array(SkyboxItem), []),
       communitySkyboxesCount: types.optional(types.number, 0),
+      communitySkyboxesGroupsCount: types.optional(types.number, 0),
+      fetchCommunitySkyboxesRequest: types.optional(RequestModel, {}),
 
       fetchAIStylesRequest: types.optional(RequestModel, {}),
       fetchGeneratedSkyboxRequest: types.optional(RequestModel, {}),
@@ -55,18 +60,27 @@ const SkyboxSelectorStore = types
       await this.fetchUserSkyboxes(userId);
     },
     loadMoreCommunitySkyboxes: flow(function* (startIndex: number) {
-      const response: GetAllSpaceUserAttributeListResponse = yield self.fetchSkyboxRequest.send(
-        api.spaceUserAttributeRepository.getAllSpaceUserAttributeList,
-        {
-          spaceId: appVariables.NODE_ID,
-          pluginId: PluginIdEnum.CORE,
-          attributeName: AttributeNameEnum.SKYBOX_LIST,
-          // Fields of SkyboxItemModelType
-          fields: ['name', 'is_public', 'artist_name'],
-          filterField: 'is_public',
-          filterValue: 'true'
-        }
-      );
+      if (startIndex === 0) {
+        self.communitySkyboxes = cast([]);
+        self.communitySkyboxesCount = 0;
+        self.communitySkyboxesGroupsCount = 0;
+      }
+
+      const response: GetAllSpaceUserAttributeListResponse =
+        yield self.fetchCommunitySkyboxesRequest.send(
+          api.spaceUserAttributeRepository.getAllSpaceUserAttributeList,
+          {
+            spaceId: appVariables.NODE_ID,
+            pluginId: PluginIdEnum.CORE,
+            attributeName: AttributeNameEnum.SKYBOX_LIST,
+            // Fields of SkyboxItemModelType
+            fields: ['name', 'is_public', 'artist_name'],
+            filterField: 'is_public',
+            filterValue: 'true',
+            limit: GROUP_SIZE * PAGE_GROUP_COUNT,
+            offset: GROUP_SIZE * startIndex
+          }
+        );
 
       if (response.items) {
         const skyboxes: SkyboxItemModelType[] = response.items.map((item) => {
@@ -79,11 +93,20 @@ const SkyboxSelectorStore = types
           };
         });
 
-        self.communitySkyboxes = cast(skyboxes);
+        self.communitySkyboxes = cast([...self.communitySkyboxes, ...skyboxes]);
+
+        const totalCount = response.count;
+        const loadedCount = self.communitySkyboxes.length;
+        const noMoreItems = loadedCount >= totalCount;
+        const totalGroupCount = Math.ceil(totalCount / GROUP_SIZE);
+        const loadedGroupCount = Math.ceil(loadedCount / GROUP_SIZE);
+
+        self.communitySkyboxesCount = response.count;
+        self.communitySkyboxesGroupsCount = noMoreItems ? totalGroupCount : loadedGroupCount + 1;
       }
     }),
     fetchUserSkyboxes: flow(function* (userId: string) {
-      const response: AttributeValueInterface = yield self.fetchSkyboxRequest.send(
+      const response: AttributeValueInterface = yield self.fetchUserSkyboxesRequest.send(
         api.spaceUserAttributeRepository.getSpaceUserAttribute,
         {
           userId,
@@ -220,21 +243,33 @@ const SkyboxSelectorStore = types
       }
     })
   }))
+  .actions((self) => ({
+    castSkyboxesToGroups(skyboxes: SkyboxItemModelType[]): SkyboxItemModelType[][] {
+      const groups = [];
+      while (skyboxes.length) {
+        groups.push(skyboxes.splice(0, GROUP_SIZE));
+      }
+      return groups;
+    }
+  }))
   .views((self) => ({
     get isUploadPending(): boolean {
       return self.createSkyboxRequest.isPending;
     },
     get isSkyboxesLoading(): boolean {
-      return self.fetchSkyboxRequest.isNotComplete;
+      return (
+        self.fetchCommunitySkyboxesRequest.isNotComplete ||
+        self.fetchUserSkyboxesRequest.isNotComplete
+      );
     },
     get allSkyboxes(): SkyboxItemModelType[] {
       return [...self.communitySkyboxes, ...self.userSkyboxes];
     },
-    get communitySkyboxesList(): SkyboxItemModelType[] {
-      return [...self.communitySkyboxes];
+    get communitySkyboxGroups(): SkyboxItemModelType[][] {
+      return self.castSkyboxesToGroups([...self.communitySkyboxes]);
     },
-    get userSkyboxesList(): SkyboxItemModelType[] {
-      return [...self.userSkyboxes];
+    get userSkyboxGroups(): SkyboxItemModelType[][] {
+      return self.castSkyboxesToGroups([...self.userSkyboxes]);
     },
     get isSkyboxGenerationPending(): boolean {
       return (

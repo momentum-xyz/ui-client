@@ -1,4 +1,4 @@
-import {FC, useEffect, useMemo, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {Frame, Button, Input} from '@momentum-xyz/ui-kit';
@@ -14,25 +14,30 @@ const SkyboxSelector: FC = () => {
   const {widgetStore, sessionStore, universeStore} = useStore();
   const {creatorStore} = widgetStore;
   const {skyboxSelectorStore} = creatorStore;
-  const {communitySkyboxesList, userSkyboxesList} = skyboxSelectorStore;
   const {worldId} = universeStore;
   const {userId} = sessionStore;
-
-  const {t} = useI18n();
 
   const [previewSkybox, setPreviewSkybox] = useState<SkyboxItemModelType | null>(null);
   const [skyboxPreviewType, setSkyboxPreviewType] = useState<'COMMUNITY' | 'PRIVATE'>('COMMUNITY');
   const [mode, setMode] = useState<'view' | 'upload' | 'gen_ai'>('view');
   const [searchInputValue, setSearchInputValue] = useState<string>('');
 
+  const isCommunityShown = skyboxPreviewType === 'COMMUNITY';
+
+  const {t} = useI18n();
+
   useEffect(() => {
     skyboxSelectorStore.fetchItems(worldId, userId);
-  }, [skyboxSelectorStore, userId, worldId]);
 
-  const filteredSkyboxList = useMemo(() => {
+    return () => {
+      skyboxSelectorStore.resetModel();
+    };
+  }, [worldId, userId, skyboxSelectorStore]);
+
+  /*const filteredSkyboxList = useMemo(() => {
     const list = skyboxPreviewType === 'COMMUNITY' ? communitySkyboxesList : userSkyboxesList;
     return list.filter((sb) => sb.name.toLowerCase().includes(searchInputValue.toLowerCase()));
-  }, [communitySkyboxesList, skyboxPreviewType, userSkyboxesList, searchInputValue]);
+  }, [communitySkyboxesList, skyboxPreviewType, userSkyboxesList, searchInputValue]);*/
 
   return (
     <styled.Container data-testid="SkyboxSelector-test">
@@ -42,7 +47,7 @@ const SkyboxSelector: FC = () => {
             <styled.SkyboxTypeContainer>
               <Button
                 label={t('titles.communitySkyboxLibrary')}
-                active={skyboxPreviewType === 'COMMUNITY'}
+                active={isCommunityShown}
                 onClick={() => {
                   setPreviewSkybox(null);
                   setMode('view');
@@ -52,7 +57,7 @@ const SkyboxSelector: FC = () => {
               />
               <Button
                 label={t('titles.privateSkyboxLibrary')}
-                active={skyboxPreviewType === 'PRIVATE'}
+                active={!isCommunityShown}
                 onClick={() => {
                   setPreviewSkybox(null);
                   setMode('view');
@@ -63,17 +68,15 @@ const SkyboxSelector: FC = () => {
             </styled.SkyboxTypeContainer>
             <styled.SkyboxSearchContainer>
               <Input
-                placeholder={t(
-                  `placeholders.${
-                    skyboxPreviewType === 'COMMUNITY'
-                      ? 'searchCommunityLibrary'
-                      : 'searchPrivateLibrary'
-                  }`
-                )}
-                value={searchInputValue}
-                isSearch
-                onChange={setSearchInputValue}
                 wide
+                isSearch
+                placeholder={
+                  isCommunityShown
+                    ? t('placeholders.searchCommunityLibrary')
+                    : t('placeholders.searchPrivateLibrary')
+                }
+                value={searchInputValue}
+                onChange={setSearchInputValue}
               />
             </styled.SkyboxSearchContainer>
             <Button
@@ -103,28 +106,39 @@ const SkyboxSelector: FC = () => {
         <styled.SkyboxListContainer>
           <styled.SkyboxListHeader>
             <span>
-              {t(
-                `titles.${
-                  skyboxPreviewType === 'COMMUNITY'
-                    ? 'odysseySkyboxLibraryHeader'
-                    : 'privateSkyboxLibraryHeader'
-                }`
-              )}
+              {isCommunityShown
+                ? t('titles.odysseySkyboxLibraryHeader')
+                : t('titles.privateSkyboxLibraryHeader')}
             </span>
             <span>
-              {skyboxPreviewType === 'COMMUNITY'
-                ? communitySkyboxesList.length
-                : userSkyboxesList.length}
+              {isCommunityShown
+                ? skyboxSelectorStore.communitySkyboxesCount
+                : skyboxSelectorStore.userSkyboxes.length}
             </span>
           </styled.SkyboxListHeader>
+
           <SkyboxList
-            skyboxes={filteredSkyboxList}
+            skyboxGroups={
+              isCommunityShown
+                ? skyboxSelectorStore.communitySkyboxGroups
+                : skyboxSelectorStore.userSkyboxGroups
+            }
+            skyboxGroupCount={
+              isCommunityShown
+                ? skyboxSelectorStore.communitySkyboxesGroupsCount
+                : skyboxSelectorStore.userSkyboxGroups.length
+            }
             isLoading={skyboxSelectorStore.isSkyboxesLoading}
-            isMySkyboxes={skyboxPreviewType === 'PRIVATE'}
+            isMySkyboxes={!isCommunityShown}
             onSkyboxSelect={(sb) => setPreviewSkybox(sb)}
             onSkyboxDelete={async (skyboxId) => {
               await skyboxSelectorStore.removeUserSkybox(userId, skyboxId);
               await skyboxSelectorStore.fetchUserSkyboxes(userId);
+            }}
+            onLoadMore={(startIndex) => {
+              if (isCommunityShown) {
+                skyboxSelectorStore.loadMoreCommunitySkyboxes(startIndex);
+              }
             }}
           />
         </styled.SkyboxListContainer>
