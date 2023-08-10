@@ -65,6 +65,9 @@ const World2dStore = types.compose(
       get isCurrentUserWorldAdmin(): boolean {
         return self.worldDetails?.world?.is_admin === true;
       },
+      get isWorldNotFound(): boolean {
+        return self.worldDetails?.isNotFound === true;
+      },
       get image(): string | null {
         return self.worldDetails?.world?.avatarHash || null;
       },

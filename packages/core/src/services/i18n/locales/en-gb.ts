@@ -588,6 +588,7 @@ export const enGb = {
       comingSoonExclamation: 'Coming Soon!',
       mintingYourOdyssey: 'Minting your Odyssey...',
       mintingYourOdysseyWarning: "Please wait and don't refresh, this may take a while.",
+      worldNotCreated: 'Sorry, this Odyssey is not created yet.',
       createProfileDesc:
         'Get discovered by providing a name and picture for your Odyssey. The picture will make the outside of your Odyssey shine. The name you provided will be shown for others to search and connect to your Odyssey.',
       yourName: 'What should we call you?',

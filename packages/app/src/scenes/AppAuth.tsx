@@ -1,12 +1,15 @@
 import {FC, ReactNode, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useLocation, useNavigate} from 'react-router-dom';
+import {toast} from 'react-toastify';
 import {PositionEnum} from '@momentum-xyz/ui-kit';
+import {i18n} from '@momentum-xyz/core';
 
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {PosBusService, storage} from 'shared/services';
 import {ROUTES} from 'core/constants';
 import {StorageKeyEnum, WidgetEnum} from 'core/enums';
+import {ToastContent} from 'ui-kit';
 
 const AppAuth: FC<{children: ReactNode}> = ({children}) => {
   const {sessionStore, nftStore, universeStore, widgetManagerStore} = useStore();
@@ -38,6 +41,16 @@ const AppAuth: FC<{children: ReactNode}> = ({children}) => {
       sessionStore.signOutRedirect();
     }
   }, [sessionStore.isProfileError, sessionStore]);
+
+  const worldNotFound = universeStore.world2dStore?.isWorldNotFound;
+  useEffect(() => {
+    if (worldNotFound) {
+      toast.error(<ToastContent isDanger icon="alert" text={i18n.t('messages.worldNotCreated')} />);
+      navigate(ROUTES.explore);
+    }
+    // somehow 'navigate' causes a change and re-execution of the useEffect, so skipping it
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [worldNotFound]);
 
   useEffect(() => {
     if (sessionStore.token && sessionStore.user?.id) {
