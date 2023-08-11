@@ -40,6 +40,7 @@ const CreatorStore = types
       getObjectNameRequest: types.optional(RequestModel, {}),
 
       duplicateObjectRequest: types.optional(RequestModel, {}),
+      saveObjectNameRequest: types.optional(RequestModel, {}),
       removeObjectDialog: types.optional(Dialog, {}),
       removeObjectRequest: types.optional(RequestModel, {})
     })
@@ -115,6 +116,23 @@ const CreatorStore = types
       }
 
       return clonedObjectId;
+    }),
+    saveObjectName: flow(function* (name: string) {
+      if (!self.selectedObjectId) {
+        return;
+      }
+
+      yield self.saveObjectNameRequest.send(api.spaceAttributeRepository.setSpaceAttributeItem, {
+        spaceId: self.selectedObjectId,
+        plugin_id: PluginIdEnum.CORE,
+        attribute_name: AttributeNameEnum.NAME,
+        sub_attribute_key: AttributeNameEnum.NAME,
+        value: name
+      });
+
+      if (!self.saveObjectNameRequest.isError) {
+        self.objectName = name;
+      }
     })
   }));
 

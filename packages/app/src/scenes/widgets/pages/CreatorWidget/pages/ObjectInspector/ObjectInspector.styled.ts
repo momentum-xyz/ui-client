@@ -41,3 +41,10 @@ export const Separator = styled.div`
   background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
   margin: 20px 0;
 `;
+
+export const Form = styled.div`
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 10px;
+  align-items: center;
+`;

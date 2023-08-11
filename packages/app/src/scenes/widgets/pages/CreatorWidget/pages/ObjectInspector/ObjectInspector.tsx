@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Model3dPreview} from '@momentum-xyz/core3d';
 import {useI18n} from '@momentum-xyz/core';
-import {Frame} from '@momentum-xyz/ui-kit';
+import {Frame, Input, useDebouncedCallback} from '@momentum-xyz/ui-kit';
 
 import {Asset3d} from 'core/models';
 import {useStore} from 'shared/hooks';
@@ -15,8 +15,10 @@ import {TransformInterface} from './components/ObjectTransformForm/ObjectTransfo
 const ObjectInspector: FC = () => {
   const {widgetStore} = useStore();
   const {creatorStore} = widgetStore;
-  const {objectName, objectInfo, spawnAssetStore, selectedObjectId} = creatorStore;
+  const {objectName, objectInfo, spawnAssetStore, selectedObjectId, saveObjectName} = creatorStore;
   const {assets3dBasic, assets3dCustom} = spawnAssetStore;
+
+  const debounceSaveObjectName = useDebouncedCallback(saveObjectName, 500);
 
   const {t} = useI18n();
 
@@ -73,7 +75,11 @@ const ObjectInspector: FC = () => {
     <styled.Container data-testid="ObjectInspector-test">
       <styled.Section>
         <Frame>
-          <styled.Title>{objectName}</styled.Title>
+          <styled.Form>
+            <div>Name</div>
+            <Input value={objectName} onChange={debounceSaveObjectName} wide />
+          </styled.Form>
+
           <styled.ObjectPreviewModelContainer>
             {actualObjectAsset && (
               <Model3dPreview
