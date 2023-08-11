@@ -6,3 +6,4 @@ export * from './SpawnAsset';
 export * from './MusicManager';
 export * from './SceneExplorer';
 export * from './WorldEditor';
+export * from './WorldMembers';

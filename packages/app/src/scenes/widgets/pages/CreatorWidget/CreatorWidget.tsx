@@ -18,7 +18,8 @@ import {
   AssetCustomising,
   ObjectFunction,
   MusicManager,
-  SceneExplorer
+  SceneExplorer,
+  WorldMembers
 } from './pages';
 
 type MenuItemType = keyof typeof CreatorTabsEnum;
@@ -48,6 +49,11 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     id: 'sceneExplorer',
     iconName: 'cubicles',
     label: i18n.t('labels.sceneExplorer')
+  },
+  {
+    id: 'editMembers',
+    iconName: 'collaboration',
+    label: i18n.t('labels.coCreators')
   }
 ];
 
@@ -102,16 +108,19 @@ const CreatorWidget: FC = () => {
   const panel = allPanels.find((panel) => panel.id === selectedTab);
   const menuItem = sideMenuItems.find((item) => item.id === selectedTab);
 
-  const handleSubMenuActiveChange = (tab: keyof typeof CreatorTabsEnum | null): void => {
-    const currentTabIsOnSubMenu = selectedTab && subMenuKeyWidgetEnumMap[selectedTab];
-    const correspondingSubMenuWidget = tab && subMenuKeyWidgetEnumMap[tab];
+  const handleSubMenuActiveChange = useCallback(
+    (tab: keyof typeof CreatorTabsEnum | null): void => {
+      const currentTabIsOnSubMenu = selectedTab && subMenuKeyWidgetEnumMap[selectedTab];
+      const correspondingSubMenuWidget = tab && subMenuKeyWidgetEnumMap[tab];
 
-    if (correspondingSubMenuWidget) {
-      widgetManagerStore.setSubMenuActiveKeys([correspondingSubMenuWidget]);
-    } else if (currentTabIsOnSubMenu) {
-      widgetManagerStore.setSubMenuActiveKeys([]);
-    }
-  };
+      if (correspondingSubMenuWidget) {
+        widgetManagerStore.setSubMenuActiveKeys([correspondingSubMenuWidget]);
+      } else if (currentTabIsOnSubMenu) {
+        widgetManagerStore.setSubMenuActiveKeys([]);
+      }
+    },
+    [selectedTab, widgetManagerStore]
+  );
 
   const handleTabChange = useCallback(
     (tab?: keyof typeof CreatorTabsEnum): void => {
@@ -145,6 +154,8 @@ const CreatorWidget: FC = () => {
         return <AssetCustomising />;
       case 'sceneExplorer':
         return world3dStore ? <SceneExplorer world3dStore={world3dStore} /> : null;
+      case 'editMembers':
+        return <WorldMembers />;
       // case 'spawnPoint':
       //   return <SpawnPointPage />;
       default:

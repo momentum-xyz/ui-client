@@ -1,36 +1,18 @@
-import {FC, useMemo, useState} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {i18n, useI18n} from '@momentum-xyz/core';
-import {
-  Panel,
-  ImageSizeEnum,
-  PositionEnum,
-  SideMenu,
-  SideMenuItemInterface
-} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
+import {Panel, ImageSizeEnum, PositionEnum, Frame} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {getImageAbsoluteUrl} from 'core/utils';
+import {ProfileImage, ProfileInfo, StakersList, StakingAmount, StakingComment} from 'ui-kit';
 
-import {WorldMembers, WorldView} from './components';
 import * as styled from './WorldProfileWidget.styled';
-
-type MenuItemType = 'viewWorld' | 'editMembers';
-
-const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
-  {
-    id: 'editMembers',
-    iconName: 'collaboration',
-    label: i18n.t('labels.coCreators')
-  }
-];
 
 const WorldProfileWidget: FC = () => {
   const {widgetManagerStore, universeStore} = useStore();
   const {world2dStore} = universeStore;
-
-  const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewWorld');
 
   const {t} = useI18n();
 
@@ -42,13 +24,6 @@ const WorldProfileWidget: FC = () => {
     widgetManagerStore.open(WidgetEnum.STAKING, PositionEnum.RIGHT);
   };
 
-  const panelIcon = useMemo(() => {
-    if (activeMenuId !== 'viewWorld') {
-      return sideMenuItems.find((i) => i.id === activeMenuId)?.iconName;
-    }
-    return undefined;
-  }, [activeMenuId]);
-
   if (!world2dStore?.worldDetails?.world) {
     return <></>;
   }
@@ -57,35 +32,43 @@ const WorldProfileWidget: FC = () => {
 
   return (
     <styled.Container data-testid="WorldProfileWidget-test">
-      {world2dStore.isCurrentUserWorldAdmin && (
-        <styled.SideMenuContainer>
-          <SideMenu
-            orientation="left"
-            activeId={activeMenuId}
-            sideMenuItems={sideMenuItems}
-            onSelect={(menuId) => {
-              setActiveMenuId(activeMenuId === menuId ? 'viewWorld' : menuId);
-            }}
-          />
-        </styled.SideMenuContainer>
-      )}
-
       <styled.PanelContainer>
         <Panel
           isFullHeight
-          size={activeMenuId === 'editMembers' ? 'large' : 'normal'}
+          size="normal"
           variant="primary"
-          icon={panelIcon}
+          icon="rabbit_fill"
           title={t('labels.odysseyOverview')}
-          image={!panelIcon ? getImageAbsoluteUrl(world?.avatarHash, ImageSizeEnum.S3) : null}
+          image={getImageAbsoluteUrl(world?.avatarHash, ImageSizeEnum.S3)}
           onClose={() => widgetManagerStore.close(WidgetEnum.WORLD_PROFILE)}
         >
           <styled.Wrapper>
-            {activeMenuId === 'viewWorld' && (
-              <WorldView world={world} onSelectUser={onSelectUser} onStakeWorld={onStakeWorld} />
-            )}
+            <Frame>
+              <ProfileImage
+                name={world.name || world.id}
+                image={world.avatarHash}
+                imageErrorIcon="rabbit_fill"
+                byName={world.owner_name || world.owner_id}
+                onByClick={() => onSelectUser(world.owner_id)}
+              />
 
-            {activeMenuId === 'editMembers' && <WorldMembers />}
+              <ProfileInfo
+                description={world.description}
+                weblink={world.website_link}
+                createDate={world.createdAt}
+                onStake={onStakeWorld}
+              />
+            </Frame>
+
+            <styled.StakingWrapper>
+              <StakingAmount stakedAmount={world.momStaked} tokenSymbol="MOM" />
+
+              {!!world.last_staking_comment && (
+                <StakingComment comment={world.last_staking_comment} />
+              )}
+
+              <StakersList stakers={world.stakers} onSelectUser={onSelectUser} />
+            </styled.StakingWrapper>
           </styled.Wrapper>
         </Panel>
       </styled.PanelContainer>
