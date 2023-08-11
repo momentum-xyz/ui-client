@@ -1,1 +1,1 @@
-export * from './SkyboxList';
+export {default as SkyboxList} from './SkyboxList';

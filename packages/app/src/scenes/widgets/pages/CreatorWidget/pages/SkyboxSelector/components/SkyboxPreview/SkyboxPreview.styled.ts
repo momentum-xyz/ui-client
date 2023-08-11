@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  // align-items: center;
-  padding: 10px;
-  // justify-content: space-between;
   flex: 1 0 auto;
 `;
 export const SkyboxInfoContainer = styled.div`
@@ -16,6 +14,7 @@ export const SkyboxInfoContainer = styled.div`
 
 export const PreviewHolder = styled.div`
   position: relative;
+  width: 100%;
 `;
 
 export const SkyboxTitle = styled.div`

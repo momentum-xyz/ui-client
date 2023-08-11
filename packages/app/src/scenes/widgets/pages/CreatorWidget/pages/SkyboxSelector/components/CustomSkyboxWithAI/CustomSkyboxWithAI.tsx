@@ -2,7 +2,7 @@ import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {toast} from 'react-toastify';
-import {Button, Input, Loader, Textarea, Select, Image} from '@momentum-xyz/ui-kit';
+import {Button, Input, Loader, Textarea, Select, Image, Radio} from '@momentum-xyz/ui-kit';
 import {useSkyboxPreview} from '@momentum-xyz/core3d';
 import {useI18n} from '@momentum-xyz/core';
 
@@ -10,13 +10,9 @@ import {BlockadeLabs, ToastContent} from 'ui-kit';
 import {usePosBusEvent, useStore} from 'shared/hooks';
 import {SkyboxGenerationStatusInterface} from 'api';
 import {BLOCKADE_LABS_ARTIST_NAME} from 'core/constants';
+import {SkyboxInfoFormInterface} from 'core/interfaces';
 
 import * as styled from './CustomSkyboxWithAI.styled';
-
-interface SkyboxInfoInterface {
-  name: string;
-  type: 'COMMUNITY' | 'PRIVATE';
-}
 
 interface AIParamsInterface {
   styleId?: number;
@@ -32,7 +28,6 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
   const {creatorStore} = widgetStore;
   const {skyboxSelectorStore} = creatorStore;
   const {
-    uploadSkybox,
     isUploadPending,
     fetchAIStyles,
     AIStyles,
@@ -79,9 +74,9 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
   });
 
   const {
+    getValues,
     control: controlAI,
     handleSubmit: handleSubmitAI,
-    getValues,
     formState: {errors: errorsAI},
     setError: setErrorAI
   } = useForm<AIParamsInterface>({
@@ -95,35 +90,33 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
     handleSubmit,
     formState: {errors},
     setError
-  } = useForm<SkyboxInfoInterface>({
+  } = useForm<SkyboxInfoFormInterface>({
     defaultValues: {
       name: '',
       type: 'COMMUNITY'
     }
   });
+
   console.log('CustomSkyboxWithAI errors', {errors, errorsAI}); // TODO show them visually
 
-  /*const options = [
+  const options = [
     {value: 'COMMUNITY', label: 'Community Library'},
     {value: 'PRIVATE', label: 'Private Library'}
-  ];*/
+  ];
 
-  const formSubmitHandler: SubmitHandler<SkyboxInfoInterface> = async ({name, type}) => {
+  const formSubmitHandler: SubmitHandler<SkyboxInfoFormInterface> = async (form) => {
     if (!user || !generatedSkyboxFile) {
       return;
     }
-    // TODO type
-    const isUploadOK = await uploadSkybox(
-      worldId,
-      user.id,
-      generatedSkyboxFile,
-      name,
-      BLOCKADE_LABS_ARTIST_NAME
-    );
+    const isUploadOK = await skyboxSelectorStore.uploadSkybox(worldId, user.id, {
+      name: form.name,
+      type: form.type,
+      file: generatedSkyboxFile,
+      artistName: BLOCKADE_LABS_ARTIST_NAME
+    });
+
     if (!isUploadOK) {
-      setError('root', {
-        type: 'submit'
-      });
+      setError('root', {type: 'submit'});
       toast.error(<ToastContent isDanger icon="alert" text={t('assetsUploader.errorSave')} />);
       return;
     } else {
@@ -236,7 +229,6 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
                       />
                     )}
                   />
-                  {/* TODO: implementation
                   <Controller
                     name="type"
                     control={control}
@@ -244,14 +236,13 @@ const CustomSkyboxWithAI: FC<PropsInterface> = ({onBack}) => {
                       <Radio
                         name="type"
                         value={value}
-                        onChange={(value: string) => {
-                          onChange(value);
-                        }}
                         options={options}
-                        // disabled={isUploadPending}
+                        onChange={onChange}
+                        variant="horizontal"
+                        disabled={isUploadPending}
                       />
                     )}
-                  />*/}
+                  />
                 </styled.InputsContainer>
               </styled.FormContainer>
             </>

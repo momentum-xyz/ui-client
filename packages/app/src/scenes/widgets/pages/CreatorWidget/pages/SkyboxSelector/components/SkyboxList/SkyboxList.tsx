@@ -1,45 +1,90 @@
-import {FC} from 'react';
-import {Frame, Loader, Image, ButtonRound} from '@momentum-xyz/ui-kit';
+import {FC, useRef} from 'react';
+import {observer} from 'mobx-react-lite';
+import {VariableSizeList} from 'react-window';
+import InfiniteLoader from 'react-window-infinite-loader';
+import AutoSizer, {Size} from 'react-virtualized-auto-sizer';
+import {Loader} from '@momentum-xyz/ui-kit';
 
-import {Asset3dInterface} from 'core/models';
+import {SkyboxGroupRow} from 'ui-kit';
+import {SkyboxItemModelType} from 'core/models';
 
 import * as styled from './SkyboxList.styled';
 
 interface PropsInterface {
+  isLoading: boolean;
   isMySkyboxes: boolean;
-  skyboxes: Asset3dInterface[];
-  onSkyboxSelect: (skybox: Asset3dInterface) => void;
+  skyboxGroups: SkyboxItemModelType[][];
+  skyboxGroupCount: number;
+  onSkyboxSelect: (skybox: SkyboxItemModelType) => void;
   onSkyboxDelete: (skyboxId: string) => void;
+  onLoadMore: (startIndex: number) => void;
 }
 
-export const SkyboxList: FC<PropsInterface> = ({
-  skyboxes,
+const SkyboxList: FC<PropsInterface> = ({
+  skyboxGroups,
+  isLoading,
   isMySkyboxes,
+  skyboxGroupCount,
   onSkyboxSelect,
-  onSkyboxDelete
+  onSkyboxDelete,
+  onLoadMore
 }) => {
-  console.log('skyboxes', skyboxes);
+  const infiniteRef = useRef(null);
+  const scrollListRef = useRef<VariableSizeList | null>();
 
   return (
     <styled.Container data-testid="SkyboxList-test">
-      {!!skyboxes.length &&
-        skyboxes.map((sb) => (
-          <styled.SkyboxContainer key={sb.id}>
-            <Frame>
-              <styled.SkyboxInnerContainer onClick={() => onSkyboxSelect(sb)}>
-                <Image src={sb.image} height={140} bordered />
-                <styled.SkyboxName>{sb.name}</styled.SkyboxName>
-              </styled.SkyboxInnerContainer>
-            </Frame>
+      <AutoSizer>
+        {({height, width}: Size) => {
+          return (
+            <div>
+              <InfiniteLoader
+                threshold={2}
+                ref={infiniteRef}
+                itemCount={skyboxGroupCount}
+                isItemLoaded={(index) => index < skyboxGroups.length}
+                loadMoreItems={(startIndex) => {
+                  onLoadMore(startIndex);
+                }}
+              >
+                {({onItemsRendered, ref}) => {
+                  return (
+                    <VariableSizeList
+                      width={width}
+                      height={height}
+                      ref={(list) => {
+                        ref(list);
+                        scrollListRef.current = list;
+                      }}
+                      itemSize={() => 192}
+                      itemCount={skyboxGroupCount}
+                      itemKey={(index) => index}
+                      itemData={{
+                        items: skyboxGroups,
+                        isMySkyboxes,
+                        onSkyboxDelete,
+                        onSkyboxSelect
+                      }}
+                      onItemsRendered={onItemsRendered}
+                      estimatedItemSize={192}
+                    >
+                      {SkyboxGroupRow}
+                    </VariableSizeList>
+                  );
+                }}
+              </InfiniteLoader>
+            </div>
+          );
+        }}
+      </AutoSizer>
 
-            {isMySkyboxes && (
-              <styled.RemoveIcon>
-                <ButtonRound icon="bin" onClick={() => onSkyboxDelete(sb.id)} />
-              </styled.RemoveIcon>
-            )}
-          </styled.SkyboxContainer>
-        ))}
-      {!skyboxes.length && <Loader />}
+      {isLoading && skyboxGroups.length === 0 && (
+        <styled.SkyboxLoader>
+          <Loader />
+        </styled.SkyboxLoader>
+      )}
     </styled.Container>
   );
 };
+
+export default observer(SkyboxList);

@@ -45,7 +45,6 @@ export const InputsContainer = styled.div`
   display: flex;
   gap: 12px;
   flex-direction: column;
-  align-items: center;
 `;
 
 export const ControlsRow = styled.div`
