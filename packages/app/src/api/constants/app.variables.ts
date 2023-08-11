@@ -51,7 +51,8 @@ export const appVariables: AppConfigExtendedInterface = {
   NODE_ID: '',
   ODYSSEY_WORLD_ID: 'b8b104c4-b375-4933-8de8-29e0a1c67860',
   FEATURE_FLAGS: {
-    newsfeed: process.env.NODE_ENV === 'development'
+    newsfeed: process.env.NODE_ENV === 'development',
+    buy_nft: process.env.NODE_ENV === 'development'
   }
 };
 

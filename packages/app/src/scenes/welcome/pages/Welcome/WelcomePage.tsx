@@ -8,6 +8,8 @@ import {storage} from 'shared/services';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {StorageKeyEnum, WidgetEnum} from 'core/enums';
+import {isFeatureEnabled} from 'api/constants';
+import {FeatureFlagEnum} from 'api/enums';
 
 import * as styled from './WelcomePage.styled';
 
@@ -59,6 +61,7 @@ const WelcomePage: FC = () => {
         <Button
           wide
           icon="astronaut"
+          variant="secondary"
           label={t('actions.signUpNow')}
           onClick={() => handleNavigation(WidgetEnum.LOGIN)}
         />
@@ -81,24 +84,28 @@ const WelcomePage: FC = () => {
         </styled.CardButtonContainer>
       </styled.Card>
 
-      <styled.Card className="light">
-        <styled.CardHexContainer className="light">
-          <Hexagon type="primary-borderless" iconName="rocket" />
-        </styled.CardHexContainer>
-        <styled.CardTitle className="light">{t('labels.welcomePageBuyNftTitle')}</styled.CardTitle>
-        <styled.CardDescription className="light">
-          {t('labels.welcomePageGuestDescription')}
-        </styled.CardDescription>
-        <styled.CardButtonContainer className="light">
-          <Button
-            wide
-            icon="rocket"
-            variant="secondary"
-            label={t('actions.buyNft')}
-            onClick={handleBuyNft}
-          />
-        </styled.CardButtonContainer>
-      </styled.Card>
+      {isFeatureEnabled(FeatureFlagEnum.BUY_NFT) && (
+        <styled.Card className="light">
+          <styled.CardHexContainer className="light">
+            <Hexagon type="primary-borderless" iconName="rocket" />
+          </styled.CardHexContainer>
+          <styled.CardTitle className="light">
+            {t('labels.welcomePageBuyNftTitle')}
+          </styled.CardTitle>
+          <styled.CardDescription className="light">
+            {t('labels.welcomePageGuestDescription')}
+          </styled.CardDescription>
+          <styled.CardButtonContainer className="light">
+            <Button
+              wide
+              icon="rocket"
+              variant="secondary"
+              label={t('actions.buyNft')}
+              onClick={handleBuyNft}
+            />
+          </styled.CardButtonContainer>
+        </styled.Card>
+      )}
     </styled.Container>
   );
 };
