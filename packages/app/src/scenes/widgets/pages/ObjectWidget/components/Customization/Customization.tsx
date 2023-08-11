@@ -94,11 +94,11 @@ const Customization: FC = () => {
           onVote={() => customizableContent.toggleVote(userId)}
           onAddComment={async (message) => {
             await customizableContent.addComment(userId, message);
-            await customizableContent.fetchAllComments();
+            await customizableContent.fetchAllComments(0);
           }}
           onDeleteComment={async (commentId) => {
             await customizableContent.deleteComment(userId, commentId);
-            await customizableContent.fetchAllComments();
+            await customizableContent.fetchAllComments(0);
           }}
         />
       )}

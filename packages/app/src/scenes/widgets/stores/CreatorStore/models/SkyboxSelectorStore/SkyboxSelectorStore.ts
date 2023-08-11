@@ -79,6 +79,8 @@ const SkyboxSelectorStore = types
             fields: ['name', 'is_public', 'artist_name'],
             filterField: 'is_public',
             filterValue: 'true',
+            order: 'name',
+            orderDirection: 'ASK',
             limit: GROUP_SIZE * PAGE_GROUP_COUNT,
             offset: GROUP_SIZE * startIndex,
             q: self.searchQuery.query

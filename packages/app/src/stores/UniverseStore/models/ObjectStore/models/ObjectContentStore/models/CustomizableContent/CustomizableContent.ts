@@ -22,6 +22,8 @@ import {
   GetAllSpaceUserAttributeListResponse
 } from 'api';
 
+const COMMENTS_PAGE_SIZE = 100;
+
 const CustomizableContent = types
   .compose(
     ResetModel,
@@ -256,7 +258,17 @@ const CustomizableContent = types
     })
   }))
   .actions((self) => ({
-    fetchAllComments: flow(function* () {
+    async fetchAllComments(startIndex: number) {
+      const hasMoreItems = await this.fetchComments(startIndex);
+      if (hasMoreItems) {
+        this.fetchAllComments(self.commentList.length);
+      }
+    },
+    fetchComments: flow(function* (startIndex: number) {
+      if (startIndex === 0) {
+        self.commentList = cast([]);
+      }
+
       const response: GetAllSpaceUserAttributeListResponse = yield self.commentListRequest.send(
         api.spaceUserAttributeRepository.getAllSpaceUserAttributeList,
         {
@@ -266,15 +278,20 @@ const CustomizableContent = types
           orderDirection: 'DESC',
           // Fields of ObjectCommentInterface
           fields: ['uuid', 'created', 'content'],
-          order: 'created'
+          order: 'created',
+          limit: COMMENTS_PAGE_SIZE,
+          offset: startIndex
         }
       );
 
       if (response) {
-        self.commentList = cast(
-          response.items ? (response.items as ObjectCommentWithUserInterface[]) : []
-        );
+        const {items, count} = response;
+        const commentList = items ? (items as ObjectCommentWithUserInterface[]) : [];
+        self.commentList = cast([...self.commentList, ...commentList]);
+        return count > self.commentList.length;
       }
+
+      return false;
     }),
     addComment: flow(function* (userId: string, comment: string) {
       const uuid: string = uuidv4();
@@ -304,10 +321,10 @@ const CustomizableContent = types
     })
   }))
   .actions((self) => ({
-    initSocial(userId: string) {
-      self.fetchVoteCount();
-      self.checkVote(userId);
-      self.fetchAllComments();
+    async initSocial(userId: string) {
+      await self.fetchVoteCount();
+      await self.checkVote(userId);
+      await self.fetchAllComments(0);
     }
   }))
   .views((self) => ({
