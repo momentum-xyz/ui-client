@@ -1,5 +1,5 @@
 import {observer} from 'mobx-react-lite';
-import {FC, useEffect, useMemo} from 'react';
+import {FC, useCallback, useEffect, useMemo} from 'react';
 import {Panel, IconNameType, SideMenuItemInterface, SideMenu, Dialog} from '@momentum-xyz/ui-kit';
 import {i18n, useI18n} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
@@ -11,18 +11,25 @@ import {subMenuKeyWidgetEnumMap} from 'core/constants';
 
 import * as styled from './CreatorWidget.styled';
 import {
+  WorldEditor,
   SpawnAsset,
   SkyboxSelector,
   ObjectInspector,
   AssetCustomising,
   ObjectFunction,
   MusicManager,
-  SceneExplorer
+  SceneExplorer,
+  WorldMembers
 } from './pages';
 
 type MenuItemType = keyof typeof CreatorTabsEnum;
 
 const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
+  {
+    id: 'editWorld',
+    iconName: 'rabbit_fill',
+    label: i18n.t('actions.editProfile')
+  },
   {
     id: 'addObject',
     iconName: 'add',
@@ -42,6 +49,11 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     id: 'sceneExplorer',
     iconName: 'cubicles',
     label: i18n.t('labels.sceneExplorer')
+  },
+  {
+    id: 'editMembers',
+    iconName: 'collaboration',
+    label: i18n.t('labels.coCreators')
   }
 ];
 
@@ -66,9 +78,8 @@ const allPanels: SideMenuItemInterface<MenuItemType>[] = [
 
 const CreatorWidget: FC = () => {
   const {universeStore, widgetStore, widgetManagerStore} = useStore();
+  const {world2dStore, world3dStore, worldId} = universeStore;
   const {creatorStore} = widgetStore;
-  const world3dStore = universeStore.world3dStore;
-  const worldId = universeStore.worldId;
 
   const {
     selectedTab,
@@ -94,8 +105,41 @@ const CreatorWidget: FC = () => {
     };
   }, [creatorStore, world3dStore, spawnAssetStore, worldId]);
 
+  const panel = allPanels.find((panel) => panel.id === selectedTab);
+  const menuItem = sideMenuItems.find((item) => item.id === selectedTab);
+
+  const handleSubMenuActiveChange = useCallback(
+    (tab: keyof typeof CreatorTabsEnum | null): void => {
+      const currentTabIsOnSubMenu = selectedTab && subMenuKeyWidgetEnumMap[selectedTab];
+      const correspondingSubMenuWidget = tab && subMenuKeyWidgetEnumMap[tab];
+
+      if (correspondingSubMenuWidget) {
+        widgetManagerStore.setSubMenuActiveKeys([correspondingSubMenuWidget]);
+      } else if (currentTabIsOnSubMenu) {
+        widgetManagerStore.setSubMenuActiveKeys([]);
+      }
+    },
+    [selectedTab, widgetManagerStore]
+  );
+
+  const handleTabChange = useCallback(
+    (tab?: keyof typeof CreatorTabsEnum): void => {
+      setSelectedTab(tab || null);
+      handleSubMenuActiveChange(tab || null);
+    },
+    [handleSubMenuActiveChange, setSelectedTab]
+  );
+
   const content = useMemo(() => {
+    if (!world2dStore?.worldDetails?.world) {
+      return <></>;
+    }
+
+    const {world} = world2dStore.worldDetails;
+
     switch (selectedTab) {
+      case 'editWorld':
+        return <WorldEditor world={world} onCancel={() => handleTabChange(undefined)} />;
       case 'addObject':
         return <SpawnAsset />;
       case 'skybox':
@@ -110,31 +154,14 @@ const CreatorWidget: FC = () => {
         return <AssetCustomising />;
       case 'sceneExplorer':
         return world3dStore ? <SceneExplorer world3dStore={world3dStore} /> : null;
+      case 'editMembers':
+        return <WorldMembers />;
       // case 'spawnPoint':
       //   return <SpawnPointPage />;
       default:
     }
     return null;
-  }, [selectedTab, world3dStore]);
-
-  const panel = allPanels.find((panel) => panel.id === selectedTab);
-  const menuItem = sideMenuItems.find((item) => item.id === selectedTab);
-
-  const handleSubMenuActiveChange = (tab: keyof typeof CreatorTabsEnum | null): void => {
-    const currentTabIsOnSubMenu = selectedTab && subMenuKeyWidgetEnumMap[selectedTab];
-    const correspondingSubMenuWidget = tab && subMenuKeyWidgetEnumMap[tab];
-
-    if (correspondingSubMenuWidget) {
-      widgetManagerStore.setSubMenuActiveKeys([correspondingSubMenuWidget]);
-    } else if (currentTabIsOnSubMenu) {
-      widgetManagerStore.setSubMenuActiveKeys([]);
-    }
-  };
-
-  const handleTabChange = (tab?: keyof typeof CreatorTabsEnum): void => {
-    setSelectedTab(tab || null);
-    handleSubMenuActiveChange(tab || null);
-  };
+  }, [handleTabChange, selectedTab, world3dStore, world2dStore]);
 
   return (
     <styled.Container data-testid="CreatorWidget-test">
@@ -151,7 +178,9 @@ const CreatorWidget: FC = () => {
         <Panel
           isFullHeight
           size={
-            ['sound', 'functionality', 'sceneExplorer'].includes(selectedTab) ? 'normal' : 'large'
+            ['editWorld', 'sound', 'functionality', 'sceneExplorer'].includes(selectedTab)
+              ? 'normal'
+              : 'large'
           }
           variant="primary"
           title={panel?.label || ''}

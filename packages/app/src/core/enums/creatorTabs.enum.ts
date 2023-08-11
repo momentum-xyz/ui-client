@@ -1,4 +1,5 @@
 export enum CreatorTabsEnum {
+  editWorld = 'editWorld',
   addObject = 'addObject',
   gizmo = 'gizmo',
   skybox = 'skybox',
@@ -9,5 +10,6 @@ export enum CreatorTabsEnum {
   // objectColor = 'objectColor',
   inspector = 'inspector',
   sceneExplorer = 'sceneExplorer',
-  customise = 'customise'
+  customise = 'customise',
+  editMembers = 'editMembers'
 }

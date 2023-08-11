@@ -12,6 +12,6 @@ export const Wrapper = styled.div`
   padding: 0;
 `;
 
-export const SideMenuContainer = styled.div`
-  margin-top: 14px;
+export const StakingWrapper = styled.div`
+  padding: 0 10px 10px 10px;
 `;

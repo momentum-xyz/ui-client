@@ -7,10 +7,10 @@ import {FieldErrorInterface} from 'api/interfaces';
 import {WorldFormInterface} from 'core/interfaces';
 import {PluginIdEnum} from 'api/enums';
 
-const WorldProfileStore = types.compose(
+const WorldEditorStore = types.compose(
   ResetModel,
   types
-    .model('WorldProfileStore', {
+    .model('WorldEditorStore', {
       fieldErrors: types.optional(types.array(types.frozen<FieldErrorInterface>()), []),
       editRequest: types.optional(RequestModel, {}),
       uploadImageRequest: types.optional(RequestModel, {})
@@ -83,4 +83,4 @@ const WorldProfileStore = types.compose(
     }))
 );
 
-export {WorldProfileStore};
+export {WorldEditorStore};
