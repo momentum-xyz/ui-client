@@ -30,7 +30,3 @@ export const Actions = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 40px;
 `;
-
-export const StakeInfo = styled.div`
-  padding: 4px 10px 10px 10px;
-`;

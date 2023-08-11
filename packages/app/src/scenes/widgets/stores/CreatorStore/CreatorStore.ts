@@ -9,6 +9,7 @@ import {getRootStore} from 'core/utils';
 import {PosBusService} from 'shared/services';
 
 import {
+  WorldEditorStore,
   SkyboxSelectorStore,
   SpawnAssetStore,
   SpawnPointStore,
@@ -23,6 +24,7 @@ const CreatorStore = types
   .compose(
     ResetModel,
     types.model('CreatorStore', {
+      worldEditorStore: types.optional(WorldEditorStore, {}),
       skyboxSelectorStore: types.optional(SkyboxSelectorStore, {}),
       spawnAssetStore: types.optional(SpawnAssetStore, {}),
       musicManagerStore: types.optional(MusicManagerStore, {}),

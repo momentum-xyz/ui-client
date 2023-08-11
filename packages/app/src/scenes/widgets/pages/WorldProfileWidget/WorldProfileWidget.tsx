@@ -12,19 +12,13 @@ import {
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {getImageAbsoluteUrl} from 'core/utils';
-import {WorldFormInterface} from 'core/interfaces';
 
-import {WorldEditor, WorldMembers, WorldView} from './components';
+import {WorldMembers, WorldView} from './components';
 import * as styled from './WorldProfileWidget.styled';
 
-type MenuItemType = 'viewWorld' | 'editWorld' | 'editMembers';
+type MenuItemType = 'viewWorld' | 'editMembers';
 
 const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
-  {
-    id: 'editWorld',
-    iconName: 'edit',
-    label: i18n.t('actions.edit')
-  },
   {
     id: 'editMembers',
     iconName: 'collaboration',
@@ -33,8 +27,7 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
 ];
 
 const WorldProfileWidget: FC = () => {
-  const {sessionStore, widgetManagerStore, universeStore, widgetStore} = useStore();
-  const {worldProfileStore} = widgetStore;
+  const {widgetManagerStore, universeStore} = useStore();
   const {world2dStore} = universeStore;
 
   const [activeMenuId, setActiveMenuId] = useState<MenuItemType>('viewWorld');
@@ -47,20 +40,6 @@ const WorldProfileWidget: FC = () => {
 
   const onStakeWorld = () => {
     widgetManagerStore.open(WidgetEnum.STAKING, PositionEnum.RIGHT);
-  };
-
-  const onEditWorld = async (form: WorldFormInterface, previousImageHash?: string | null) => {
-    if (!world2dStore?.worldDetails?.world) {
-      return;
-    }
-    const {worldDetails, worldId} = world2dStore;
-    if (await worldProfileStore.editWorld(worldId, form, previousImageHash || undefined)) {
-      await worldDetails.fetchWorld();
-      await sessionStore.loadOwnWorlds();
-      await sessionStore.loadStakedWorlds();
-      await universeStore.universe2dStore.loadWorlds();
-      setActiveMenuId('viewWorld');
-    }
   };
 
   const panelIcon = useMemo(() => {
@@ -104,17 +83,6 @@ const WorldProfileWidget: FC = () => {
           <styled.Wrapper>
             {activeMenuId === 'viewWorld' && (
               <WorldView world={world} onSelectUser={onSelectUser} onStakeWorld={onStakeWorld} />
-            )}
-
-            {activeMenuId === 'editWorld' && (
-              <WorldEditor
-                world={world}
-                isUpdating={worldProfileStore.isUpdating}
-                formErrors={worldProfileStore.formErrors}
-                onSelectUser={onSelectUser}
-                onEditWorld={onEditWorld}
-                onCancel={() => setActiveMenuId('viewWorld')}
-              />
             )}
 
             {activeMenuId === 'editMembers' && <WorldMembers />}

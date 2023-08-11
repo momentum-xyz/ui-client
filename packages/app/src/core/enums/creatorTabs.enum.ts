@@ -1,4 +1,5 @@
 export enum CreatorTabsEnum {
+  editWorld = 'editWorld',
   addObject = 'addObject',
   gizmo = 'gizmo',
   skybox = 'skybox',

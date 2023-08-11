@@ -1,3 +1,4 @@
+export * from './WorldEditorStore';
 export * from './SkyboxSelectorStore';
 export * from './SpawnAssetStore';
 export * from './MusicManagerStore';

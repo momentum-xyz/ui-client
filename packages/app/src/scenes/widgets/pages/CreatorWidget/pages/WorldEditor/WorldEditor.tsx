@@ -4,30 +4,25 @@ import {Controller, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
 import {AvatarUpload, Button, ButtonRound, Frame, Input, Textarea} from '@momentum-xyz/ui-kit';
 
+import {ProfileInfo} from 'ui-kit';
+import {useStore} from 'shared/hooks';
 import {WorldModelInterface} from 'core/models';
-import {FieldErrorInterface} from 'api/interfaces';
 import {WorldFormInterface} from 'core/interfaces';
-import {ProfileInfo, StakersList, StakingAmount, StakingComment} from 'ui-kit';
 
 import * as styled from './WorldEditor.styled';
 
 interface PropsInterface {
   world: WorldModelInterface;
-  formErrors: FieldErrorInterface[];
-  isUpdating: boolean;
-  onSelectUser: (userId: string) => void;
-  onEditWorld: (form: WorldFormInterface, previousImageHash?: string | null) => void;
   onCancel: () => void;
 }
 
-const WorldEditor: FC<PropsInterface> = ({
-  world,
-  formErrors,
-  isUpdating,
-  onEditWorld,
-  onSelectUser,
-  onCancel
-}) => {
+const WorldEditor: FC<PropsInterface> = ({world, onCancel}) => {
+  const {universeStore, widgetStore, sessionStore} = useStore();
+  const {world2dStore} = universeStore;
+  const {creatorStore} = widgetStore;
+  const {worldEditorStore} = creatorStore;
+  const {formErrors, isUpdating} = worldEditorStore;
+
   const {t} = useI18n();
 
   const {
@@ -54,11 +49,19 @@ const WorldEditor: FC<PropsInterface> = ({
   }, [formErrors, setError]);
 
   const formSubmitHandler = handleSubmit(async (form: WorldFormInterface) => {
-    await onEditWorld(form, world.avatarHash);
+    if (world2dStore?.worldDetails?.world) {
+      const {worldDetails, worldId} = world2dStore;
+      if (await worldEditorStore.editWorld(worldId, form, world.avatarHash || undefined)) {
+        await worldDetails.fetchWorld();
+        await sessionStore.loadOwnWorlds();
+        await sessionStore.loadStakedWorlds();
+        await universeStore.universe2dStore.loadWorlds();
+      }
+    }
   });
 
   return (
-    <styled.Container data-testid="WorldProfileWidget-test">
+    <styled.Container data-testid="WorldEditor-test">
       <Frame>
         {/* AVATAR */}
         <Controller
@@ -140,14 +143,6 @@ const WorldEditor: FC<PropsInterface> = ({
 
         <ProfileInfo joinDate={world.createdAt} />
       </Frame>
-
-      <styled.StakeInfo>
-        <StakingAmount stakedAmount={world.momStaked} tokenSymbol="MOM" />
-
-        {!!world.last_staking_comment && <StakingComment comment={world.last_staking_comment} />}
-
-        <StakersList stakers={world.stakers} onSelectUser={onSelectUser} />
-      </styled.StakeInfo>
     </styled.Container>
   );
 };
