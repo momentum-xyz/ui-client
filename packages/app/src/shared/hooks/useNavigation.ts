@@ -44,5 +44,16 @@ export const useNavigation = () => {
     [goToOdysseyHome, widgetManagerStore]
   );
 
-  return {goToOdysseyHome, goToOdysseyAndStake};
+  const goToOdysseyAndEnableCreator = useCallback(
+    (worldId: string) => {
+      goToOdysseyHome(worldId);
+
+      setTimeout(() => {
+        widgetManagerStore.open(WidgetEnum.CREATOR, PositionEnum.RIGHT);
+      }, 300);
+    },
+    [goToOdysseyHome, widgetManagerStore]
+  );
+
+  return {goToOdysseyHome, goToOdysseyAndStake, goToOdysseyAndEnableCreator};
 };

@@ -41,7 +41,7 @@ const BuyNftWidget: FC = () => {
   });
 
   const {t} = useI18n();
-  const {goToOdysseyHome} = useNavigation();
+  const {goToOdysseyAndEnableCreator} = useNavigation();
 
   const [currentState, setCurrentState] = useState<
     'init' | 'sending_eth' | 'waiting_nft' | 'ready' | 'error'
@@ -240,7 +240,7 @@ const BuyNftWidget: FC = () => {
               description={mintedWorld.description}
               imageErrorIcon="rabbit_fill"
               imageUrl={getImageAbsoluteUrl(mintedWorld.avatarHash, ImageSizeEnum.S5)}
-              onVisitClick={() => goToOdysseyHome(mintedWorld.id)}
+              onVisitClick={() => goToOdysseyAndEnableCreator(mintedWorld.id)}
               onInfoClick={() => onInfoClick(mintedWorld.id)}
             />
             <styled.Separator />
@@ -252,7 +252,7 @@ const BuyNftWidget: FC = () => {
               icon="rabbit"
               variant="primary"
               wide
-              onClick={() => goToOdysseyHome(mintedWorld.id)}
+              onClick={() => goToOdysseyAndEnableCreator(mintedWorld.id)}
             />
           </>
         )}
