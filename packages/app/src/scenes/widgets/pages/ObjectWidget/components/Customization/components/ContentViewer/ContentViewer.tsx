@@ -1,6 +1,6 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useI18n} from '@momentum-xyz/core';
+import {dateWithoutTime, getTime, useI18n} from '@momentum-xyz/core';
 import {
   Frame,
   Image,
@@ -9,7 +9,8 @@ import {
   TextLinkify,
   CommentForm,
   ButtonEllipse,
-  ImageSizeEnum
+  ImageSizeEnum,
+  Hexagon
 } from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
@@ -23,6 +24,8 @@ interface PropsInterface {
   currentUserName: string;
   currentUserImageUrl: string;
   currentUserIsGuest: boolean;
+  authorName: string | null | undefined;
+  authorAvatarHash?: string | null | undefined;
   content: CustomizableObjectInterface;
   hasVote: boolean;
   voteCount: number;
@@ -39,6 +42,8 @@ const ContentViewer: FC<PropsInterface> = ({
   currentUserName,
   currentUserImageUrl,
   currentUserIsGuest,
+  authorName,
+  authorAvatarHash,
   content,
   hasVote,
   voteCount,
@@ -57,7 +62,27 @@ const ContentViewer: FC<PropsInterface> = ({
     <styled.Container data-testid="ContentViewer-test">
       <Frame>
         <styled.Wrapper>
+          <styled.Header>
+            <Hexagon
+              iconName="astronaut"
+              type="fourth-borderless"
+              imageSrc={getImageAbsoluteUrl(authorAvatarHash)}
+            />
+
+            <styled.UserInfo>
+              <styled.UserInfoTitle>
+                <styled.UserName>{authorName || content.claimed_by}</styled.UserName>
+                <styled.Date>
+                  <div>
+                    {dateWithoutTime(content.created_at)} / {getTime(content.created_at)}
+                  </div>
+                </styled.Date>
+              </styled.UserInfoTitle>
+            </styled.UserInfo>
+          </styled.Header>
+
           <styled.Title>{content.title}</styled.Title>
+
           <styled.Grid>
             <Image
               height={280}
