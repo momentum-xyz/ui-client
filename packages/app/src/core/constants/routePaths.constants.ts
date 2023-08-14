@@ -2,6 +2,7 @@ export const ROUTES = {
   base: '/',
   explore: '/explore',
   welcome: '/explore/welcome',
+  buyNft: '/explore/buy_nft',
   odyssey: {
     base: '/odyssey/:worldId'
   },

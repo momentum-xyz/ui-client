@@ -1,5 +1,6 @@
 import {TokenEnum} from '@momentum-xyz/core';
 import BN from 'bn.js';
+import {utils} from 'ethers';
 
 import {StorageKeyEnum} from 'core/enums';
 import {storage} from 'shared/services';
@@ -51,6 +52,10 @@ export const formatBigInt = (input: string | null | undefined, digits = 6): stri
   }
 
   return `${Number(result)}${lookupItem ? lookupItem.symbol : ''}`;
+};
+
+export const ethersToWei = (ethers: string): BN => {
+  return new BN(utils.parseEther(ethers).toString());
 };
 
 export const convertUuidToNftId = (worldId: string | undefined | null) => {

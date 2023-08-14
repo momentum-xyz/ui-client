@@ -18,6 +18,8 @@ const WidgetViewerPage: FC = () => {
         return <widgets.LoginWidget />;
       case WidgetEnum.MY_PROFILE:
         return <widgets.ProfileWidget />;
+      case WidgetEnum.BUY_NFT:
+        return <widgets.BuyNftWidget />;
       case WidgetEnum.CREATOR:
         return <widgets.CreatorWidget />;
       case WidgetEnum.EXPLORE:

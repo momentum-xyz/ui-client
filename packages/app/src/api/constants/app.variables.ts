@@ -38,9 +38,8 @@ export const appVariables: AppConfigExtendedInterface = {
   CONTRACT_DAD_ADDRESS: '0x0244BbA6fcB25eFed05955C4A1B86A458986D2e0',
   CONTRACT_NFT_ADDRESS: '0x97E0B10D89a494Eb5cfFCc72853FB0750BD64AcD',
   CONTRACT_FAUCET_ADDRESS: '0x9E760F1CddA0694B6156076C60657118CF874289',
-  // CONTRACT_STAKING_ADDRESS: '0xC4497d6c0f94dc427cE0B8F825c91F25e2845B91',
-  // CONTRACT_MOM_ADDRESS: '0x310c2B16c304109f32BABB5f47cC562813765744',
-  // CONTRACT_DAD_ADDRESS: '0x310c2B16c304109f32BABB5f47cC562813765744',
+  MINT_NFT_AMOUNT: '4.20',
+  MINT_NFT_DEPOSIT_ADDRESS: '0x683642c22feDE752415D4793832Ab75EFdF6223c',
   WIKI_URL: 'https://wiki.odyssey.org/momentum/help/support',
   DISCORD_URL: 'https://discord.gg/6PH9nSu7UP',
   PARTICIPANTS_VIDEO_LIMIT: 17,
@@ -52,7 +51,8 @@ export const appVariables: AppConfigExtendedInterface = {
   NODE_ID: '',
   ODYSSEY_WORLD_ID: 'b8b104c4-b375-4933-8de8-29e0a1c67860',
   FEATURE_FLAGS: {
-    newsfeed: process.env.NODE_ENV === 'development'
+    newsfeed: process.env.NODE_ENV === 'development',
+    buy_nft: process.env.NODE_ENV === 'development'
   }
 };
 

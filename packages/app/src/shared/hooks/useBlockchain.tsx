@@ -23,6 +23,8 @@ const DELAY_REFRESH_DATA_MS = 2000;
 
 export interface UseBlockchainPropsInterface {
   requiredAccountAddress: string;
+  requiredChainId?: number;
+  wrongChainErrorMessage?: string;
 }
 
 export interface BlockchainRewardsInterface {
@@ -47,7 +49,11 @@ export interface UnbondingInfoInterface {
   unstakes: ResolvedUnstakeInterface[];
 }
 
-export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterface) => {
+export const useBlockchain = ({
+  requiredAccountAddress,
+  requiredChainId,
+  wrongChainErrorMessage
+}: UseBlockchainPropsInterface) => {
   const {nftStore, refreshStakeRelatedData} = useStore();
   const {selectedWalletConf, setWalletIdByAddress, loadMyWallets} = nftStore;
 
@@ -264,6 +270,38 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
     setTimeout(() => loadMyWallets().catch(console.error), DELAY_REFRESH_DATA_MS);
   }, [stakingContract, account, isCorrectAccount, loadMyWallets]);
 
+  const sendEthers = useCallback(
+    async (to: string, amount: BN) => {
+      const amountStr = amount.toString();
+      console.log('useBlockchain sendEthers', {to, amount, amountStr});
+      if (!isCorrectAccount) {
+        console.log('Incorrect account selected');
+        return;
+      }
+
+      const result = await library?.getSigner(account).sendTransaction({
+        to,
+        value: amountStr
+      });
+      console.log('Transaction sent:', result);
+      await result.wait();
+      console.log('useBlockchain sendEthers done');
+      return result;
+    },
+    [library, account, isCorrectAccount]
+  );
+
+  const getBalanceEthers = useCallback(async (): Promise<string> => {
+    if (!isCorrectAccount) {
+      throw new Error('Incorrect account selected');
+    }
+
+    console.log('useBlockchain getBalanceEthers', {account});
+    const balance = await library?.getBalance(account);
+    console.log('useBlockchain getBalanceEthers', {balance});
+    return balance.toString();
+  }, [library, account, isCorrectAccount]);
+
   const walletSelectContent =
     selectedWalletConf === dummyWalletConf ? (
       <WalletSelector
@@ -278,6 +316,8 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
         key={selectedWalletConf.id}
         walletConf={selectedWalletConf}
         requiredAccountAddress={requiredAccountAddress}
+        requiredChainId={requiredChainId ?? +appVariables.BLOCKCHAIN_ID}
+        wrongChainErrorMessage={wrongChainErrorMessage}
         onActivationDone={setIsWalletActive}
         onSelectedAccountChanged={setAccount}
         onLibraryLoaded={setLibrary}
@@ -297,6 +337,8 @@ export const useBlockchain = ({requiredAccountAddress}: UseBlockchainPropsInterf
     walletSelectContent,
     canRequestAirdrop,
     dateOfNextAllowedAirdrop,
+    sendEthers,
+    getBalanceEthers,
     stake,
     unstake,
     getTokens,

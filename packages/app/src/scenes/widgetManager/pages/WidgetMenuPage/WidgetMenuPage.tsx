@@ -50,6 +50,18 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
     onClick: () => navigate(generatePath(ROUTES.odyssey.base, {worldId: world.id}))
   }));
 
+  if (!ODYSSEY_ITEMS.length && isFeatureEnabled(FeatureFlagEnum.BUY_NFT)) {
+    ODYSSEY_ITEMS.push({
+      key: WidgetEnum.BUY_NFT,
+      position: PositionEnum.LEFT,
+      iconName: 'rabbit_fill',
+      isHidden: isWorld,
+      tooltip: t('actions.buyOdyssey'),
+      iconIndicator: 'danger', // TODO: probably good to clear after first open?
+      onClick: () => navigate(ROUTES.buyNft)
+    });
+  }
+
   const MENU_ITEMS: MenuItemExtendedInterface[] = [
     {
       key: WidgetEnum.EXPLORE,

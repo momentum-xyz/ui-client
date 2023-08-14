@@ -49,7 +49,8 @@ const NftStore = types
 
       walletsRequest: types.optional(RequestModel, {}),
       stakesRequest: types.optional(RequestModel, {}),
-      postPendingStakeRequest: types.optional(RequestModel, {})
+      postPendingStakeRequest: types.optional(RequestModel, {}),
+      postPendingNftMintRequest: types.optional(RequestModel, {})
     })
   )
   .views((self) => ({
@@ -218,6 +219,13 @@ const NftStore = types
     }) {
       yield self.postPendingStakeRequest.send(api.userRepository.postPendingStake, options);
     }),*/
+    postPendingNftMint: flow(function* (options: {transaction_id: string; wallet: string}) {
+      yield self.postPendingNftMintRequest.send(api.userRepository.postPendingNftMint, options);
+
+      if (self.postPendingNftMintRequest.isError) {
+        throw new Error('Error minting NFT. Contact the support');
+      }
+    }),
     loadDefaultWalletId(): void {
       const storedAccount = storage.get<string>(StorageKeyEnum.DefaultAccount);
       if (storedAccount && self.wallets.find((w) => w.wallet_id === storedAccount)) {

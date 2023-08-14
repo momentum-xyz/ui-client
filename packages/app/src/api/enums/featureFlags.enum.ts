@@ -1,3 +1,4 @@
 export enum FeatureFlagEnum {
-  NEWSFEED = 'newsfeed'
+  NEWSFEED = 'newsfeed',
+  BUY_NFT = 'buy_nft'
 }

@@ -12,6 +12,7 @@ const SessionStore = types
   .model('SessionStore', {
     token: '',
     isAuthenticating: true,
+    isBuyNftFlow: false,
     user: types.maybeNull(User),
     worldsOwnedList: types.optional(types.array(WorldInfo), []),
     worldsStakedList: types.optional(types.array(WorldInfo), []),
@@ -137,6 +138,8 @@ const SessionStore = types
       if (userWorlds) {
         self.worldsOwnedList = cast(userWorlds);
       }
+
+      return userWorlds;
     }),
     loadStakedWorlds: flow(function* () {
       const userWorlds: WorldInfoInterface[] = yield self.worldsRequest.send(
@@ -178,6 +181,9 @@ const SessionStore = types
     signOutRedirect(): void {
       self.updateJwtToken('');
       document.location = ROUTES.explore;
+    },
+    setBuyNftFlow(isBuyNftFlow: boolean): void {
+      self.isBuyNftFlow = isBuyNftFlow;
     }
   }))
   .views((self) => ({
