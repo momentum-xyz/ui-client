@@ -65,7 +65,12 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
             )}
 
             {activeStep === 'mission' && (
-              <MissionStep setActiveStep={setActiveStep} onRenderActions={setStepActions} />
+              <MissionStep
+                missionData={canvasEditorStore.missionData}
+                onUpdate={canvasEditorStore.setMissionData}
+                setActiveStep={setActiveStep}
+                onRenderActions={setStepActions}
+              />
             )}
           </Frame>
         </styled.StepContent>

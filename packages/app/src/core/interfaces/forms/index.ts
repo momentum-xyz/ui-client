@@ -1,3 +1,4 @@
+export * from './canvas.interface';
 export * from './signUp.interface';
 export * from './profile.interface';
 export * from './object.interface';

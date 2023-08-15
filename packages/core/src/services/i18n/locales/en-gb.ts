@@ -658,6 +658,9 @@ export const enGb = {
       returnHighFive: 'Return the favour',
       createSpace: 'YOU CAN CREATE A SPACE FROM YOUR PROFILE',
       ownSpaceInvite: 'WANT YOUR OWN SPACE? (FREE)',
+      describeGoal: 'Describe your goal',
+      missionTitle: 'Title of the mission',
+      whatIsMission: 'What’s the mission?',
       later: 'later',
       create: 'create',
       by: 'By',
@@ -754,6 +757,9 @@ export const enGb = {
       nameTheArtist: 'Name the Artist',
       selectAnOption: 'Select an Option',
       nameYourObjectNavigation: 'Name your Object (Navigation)',
+      missionTitle: 'Title, maximum 80 characters.',
+      missionStory:
+        'Write a short story about the mission of this Odyssey, what do you want to achieve and what do you expect your visitors to contribute.',
       selectAccount: 'Select Account',
       searchCommunityLibrary: 'Search Community Library',
       searchPrivateLibrary: 'Search Private Library',
@@ -966,7 +972,9 @@ export const enGb = {
       canvasStep1_Two:
         'Here’s a short explanation of a user canvas. What’s the purpose and why should you use it? Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
       canvasStep1_Three:
-        'Here’s a short explanation of a user canvas. What’s the purpose and why should you use it? Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque'
+        'Here’s a short explanation of a user canvas. What’s the purpose and why should you use it? Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
+      canvasStep2_One:
+        'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',
