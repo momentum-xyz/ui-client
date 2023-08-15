@@ -1,4 +1,4 @@
-import {FC, ReactElement, useEffect, useState} from 'react';
+import {FC, ReactElement, useCallback, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {Frame, Panel, Steps, StepInterface} from '@momentum-xyz/ui-kit';
@@ -27,6 +27,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
   const {creatorStore} = widgetStore;
   const {canvasEditorStore} = creatorStore;
 
+  const canvasRef = useRef<HTMLDivElement>(null);
   const [stepActions, setStepActions] = useState<ReactElement>();
   const [activeStep, setActiveStep] = useState<CanvasStepType>('intro');
 
@@ -38,6 +39,15 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
     };
   }, [canvasEditorStore]);
 
+  const handleSetActiveStep = useCallback((stepType: CanvasStepType) => {
+    setActiveStep(stepType);
+
+    // Reset the scroll position during step changes
+    if (canvasRef.current?.parentElement) {
+      canvasRef.current.parentElement.scrollTop = 0;
+    }
+  }, []);
+
   return (
     <Panel
       icon="idea"
@@ -48,7 +58,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
       bottomComponent={stepActions}
       onClose={onClose}
     >
-      <styled.Container data-testid="CanvasEditor-test">
+      <styled.Container ref={canvasRef} data-testid="CanvasEditor-test">
         <styled.Steps>
           <Steps
             stepList={STEP_LIST.map((step) => ({
@@ -61,14 +71,14 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
         <styled.StepContent>
           <Frame>
             {activeStep === 'intro' && (
-              <IntroStep setActiveStep={setActiveStep} onRenderActions={setStepActions} />
+              <IntroStep setActiveStep={handleSetActiveStep} onRenderActions={setStepActions} />
             )}
 
             {activeStep === 'mission' && (
               <MissionStep
                 missionData={canvasEditorStore.missionData}
                 onUpdate={canvasEditorStore.setMissionData}
-                setActiveStep={setActiveStep}
+                setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
               />
             )}
@@ -77,7 +87,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
               <QuestionsStep
                 questionsData={canvasEditorStore.questionsData}
                 onUpdate={canvasEditorStore.setQuestionsData}
-                setActiveStep={setActiveStep}
+                setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
               />
             )}
