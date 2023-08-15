@@ -811,6 +811,7 @@ export const enGb = {
       takeSnapshot: 'Take a snapshot',
       createVideo: 'Create a video',
       createEvent: 'Create an event',
+      createEntry: 'Create an entry',
       edit: 'Edit',
       deleteObject: 'Delete object',
       duplicateObject: 'Duplicate object',

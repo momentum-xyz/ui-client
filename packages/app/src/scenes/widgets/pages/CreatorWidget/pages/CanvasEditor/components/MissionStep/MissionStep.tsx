@@ -53,9 +53,9 @@ const MissionStep: FC<PropsInterface> = ({
           onClick: () => setActiveStep('intro')
         }}
         nextProps={{
-          icon: 'rocket',
-          label: 'Create an entry',
+          icon: 'document_request',
           disabled: !isValid,
+          label: t('actions.createEntry'),
           onClick: () => handleSubmit(formSubmitHandler)()
         }}
       />
