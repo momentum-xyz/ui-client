@@ -661,6 +661,9 @@ export const enGb = {
       describeGoal: 'Describe your goal',
       missionTitle: 'Title of the mission',
       whatIsMission: 'What’s the mission?',
+      makeContributionEntry: 'Make a contribution entry',
+      canvasQuestion1: 'First question, always ask for a title',
+      question: 'Question',
       later: 'later',
       create: 'create',
       by: 'By',
@@ -760,6 +763,12 @@ export const enGb = {
       missionTitle: 'Title, maximum 80 characters.',
       missionStory:
         'Write a short story about the mission of this Odyssey, what do you want to achieve and what do you expect your visitors to contribute.',
+      canvasQuestion1: 'What’s the title of your contribution?',
+      canvasQuestion2:
+        'Write your second question, ask your visitors what they can contribute. For example an opinion, or an idea.',
+      canvasQuestion3:
+        'Third question, ask your visitors how they would achieve this idea or solve the problem.',
+      canvasQuestion4: 'This question is optional. Keep the survey short for the best result',
       selectAccount: 'Select Account',
       searchCommunityLibrary: 'Search Community Library',
       searchPrivateLibrary: 'Search Private Library',
@@ -802,6 +811,7 @@ export const enGb = {
       manageWallet: 'Manage wallet',
       removeObject: 'Remove object',
       describeMission: 'Describe mission',
+      aiImageScript: 'Ai image script',
       settings: 'Settings',
       publish: 'Publish',
       default: 'Default',
@@ -975,7 +985,9 @@ export const enGb = {
       canvasStep1_Three:
         'Here’s a short explanation of a user canvas. What’s the purpose and why should you use it? Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
       canvasStep2_One:
-        'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque'
+        'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
+      canvasStep3_One:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',

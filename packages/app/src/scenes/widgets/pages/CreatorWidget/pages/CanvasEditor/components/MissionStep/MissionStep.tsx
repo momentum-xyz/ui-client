@@ -40,9 +40,8 @@ const MissionStep: FC<PropsInterface> = ({
   const formSubmitHandler: SubmitHandler<CanvasMissionFormInterface> = useCallback(
     (form) => {
       onUpdate(form);
-      setActiveStep('questions');
     },
-    [onUpdate, setActiveStep]
+    [onUpdate]
   );
 
   useEffect(() => {
@@ -56,7 +55,10 @@ const MissionStep: FC<PropsInterface> = ({
           icon: 'document_request',
           disabled: !isValid,
           label: t('actions.createEntry'),
-          onClick: () => handleSubmit(formSubmitHandler)()
+          onClick: () => {
+            handleSubmit(formSubmitHandler)();
+            setActiveStep('questions');
+          }
         }}
       />
     );

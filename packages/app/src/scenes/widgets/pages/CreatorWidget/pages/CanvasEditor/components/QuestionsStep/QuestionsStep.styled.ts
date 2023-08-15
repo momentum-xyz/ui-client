@@ -1,11 +1,7 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-export const Container = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
+export const Container = styled.div``;
 
 export const Grid = styled.div`
   display: flex;
@@ -43,4 +39,14 @@ export const SubTitle = styled.div`
   font-weight: 600;
   line-height: 18px;
   gap: 10px;
+`;
+
+export const Round = styled.div`
+  display: flex;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
+  justify-content: center;
+  align-items: center;
 `;

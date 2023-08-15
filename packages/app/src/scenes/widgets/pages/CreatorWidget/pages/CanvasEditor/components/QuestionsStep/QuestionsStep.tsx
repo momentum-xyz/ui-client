@@ -1,0 +1,159 @@
+import {FC, ReactElement, useCallback, useEffect} from 'react';
+import {Controller, SubmitHandler, useForm} from 'react-hook-form';
+import {observer} from 'mobx-react-lite';
+import {useI18n} from '@momentum-xyz/core';
+import {Hexagon, Input, Textarea} from '@momentum-xyz/ui-kit';
+
+import {CanvasButtonGroup} from 'ui-kit';
+import {CanvasStepType} from 'core/types';
+import {CanvasQuestionsFormInterface} from 'core/interfaces';
+import {QuestionsDataModelInterface} from 'scenes/widgets/stores/CreatorStore/models';
+
+import * as styled from './QuestionsStep.styled';
+
+interface PropsInterface {
+  questionsData: QuestionsDataModelInterface;
+  onUpdate: (form: CanvasQuestionsFormInterface) => void;
+  setActiveStep: (step: CanvasStepType) => void;
+  onRenderActions: (element: ReactElement) => void;
+}
+
+const QuestionsStep: FC<PropsInterface> = ({
+  questionsData,
+  onUpdate,
+  onRenderActions,
+  setActiveStep
+}) => {
+  const {t} = useI18n();
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors, isValid}
+  } = useForm<CanvasQuestionsFormInterface>({
+    defaultValues: {
+      questionOne: questionsData.questionOne,
+      questionTwo: questionsData.questionTwo,
+      questionThree: questionsData.questionThree,
+      questionFour: questionsData.questionFour
+    }
+  });
+
+  const formSubmitHandler: SubmitHandler<CanvasQuestionsFormInterface> = useCallback(
+    (form) => {
+      onUpdate(form);
+    },
+    [onUpdate]
+  );
+
+  useEffect(() => {
+    onRenderActions(
+      <CanvasButtonGroup
+        backProps={{
+          label: t('actions.back'),
+          onClick: () => setActiveStep('mission')
+        }}
+        nextProps={{
+          icon: 'ai',
+          disabled: !isValid,
+          label: t('actions.aiImageScript'),
+          onClick: () => {
+            handleSubmit(formSubmitHandler)();
+            setActiveStep('script');
+          }
+        }}
+      />
+    );
+  }, [formSubmitHandler, handleSubmit, isValid, onRenderActions, setActiveStep, t]);
+
+  return (
+    <styled.Container data-testid="QuestionsStep-test">
+      <styled.Grid>
+        <styled.Header>
+          <Hexagon type="fourth-borderless" iconName="document_request" />
+          <span>{t('titles.makeContributionEntry')}</span>
+        </styled.Header>
+
+        <styled.Description>{t('descriptions.canvasStep3_One')}</styled.Description>
+
+        <styled.Separator />
+
+        <styled.SubTitle>
+          <styled.Round>1</styled.Round>
+          <span>{t('titles.canvasQuestion1')}*</span>
+        </styled.SubTitle>
+        <Controller
+          name="questionOne"
+          control={control}
+          rules={{required: true}}
+          render={({field: {value, onChange}}) => (
+            <Input
+              wide
+              value={value}
+              danger={!!errors.questionOne}
+              placeholder={t('placeholders.canvasQuestion1')}
+              onChange={onChange}
+            />
+          )}
+        />
+
+        <styled.SubTitle>
+          <styled.Round>2</styled.Round>
+          <span>{t('titles.question')}*</span>
+        </styled.SubTitle>
+        <Controller
+          name="questionTwo"
+          control={control}
+          rules={{required: true}}
+          render={({field: {value, onChange}}) => (
+            <Textarea
+              lines={3}
+              value={value}
+              danger={!!errors.questionTwo}
+              placeholder={t('placeholders.canvasQuestion2')}
+              onChange={onChange}
+            />
+          )}
+        />
+
+        <styled.SubTitle>
+          <styled.Round>3</styled.Round>
+          <span>{t('titles.question')}*</span>
+        </styled.SubTitle>
+        <Controller
+          name="questionThree"
+          control={control}
+          rules={{required: true}}
+          render={({field: {value, onChange}}) => (
+            <Textarea
+              lines={3}
+              value={value}
+              danger={!!errors.questionThree}
+              placeholder={t('placeholders.canvasQuestion3')}
+              onChange={onChange}
+            />
+          )}
+        />
+
+        <styled.SubTitle>
+          <styled.Round>4</styled.Round>
+          <span>{t('titles.question')}</span>
+        </styled.SubTitle>
+        <Controller
+          name="questionFour"
+          control={control}
+          render={({field: {value, onChange}}) => (
+            <Textarea
+              lines={3}
+              value={value}
+              placeholder={t('placeholders.canvasQuestion4')}
+              onChange={onChange}
+            />
+          )}
+        />
+      </styled.Grid>
+    </styled.Container>
+  );
+};
+
+export default observer(QuestionsStep);
