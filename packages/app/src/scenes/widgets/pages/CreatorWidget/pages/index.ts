@@ -1,4 +1,4 @@
-export * from './AssetCustomising';
+export * from './CanvasEditor';
 export * from './ObjectFunction';
 export * from './ObjectInspector';
 export * from './SkyboxSelector';

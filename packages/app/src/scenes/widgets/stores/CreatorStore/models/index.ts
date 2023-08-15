@@ -1,4 +1,5 @@
 export * from './WorldEditorStore';
+export * from './CanvasEditorStore';
 export * from './SkyboxSelectorStore';
 export * from './SpawnAssetStore';
 export * from './MusicManagerStore';

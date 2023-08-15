@@ -272,6 +272,13 @@ export const enGb = {
       home: 'Home',
       by: 'By',
       or: 'Or',
+      canvasEditor: 'Canvas editor',
+      canvasStep1: 'Read canvas explainer',
+      canvasStep2: 'Describe your mission',
+      canvasStep3: 'Make an contribution entry',
+      canvasStep4: 'AI Image settings',
+      canvasStep5: 'Create script AI teamwork',
+      canvasStep6: 'Overview and submit',
       screenShare: 'Screenshare',
       stageMode: 'Stage Mode',
       stakingOverview: 'Staking Overview',
@@ -706,6 +713,10 @@ export const enGb = {
       odysseySkyboxLibraryHeader: 'Odyssey Library',
       communitySkyboxLibraryHeader: 'Community',
       privateSkyboxLibraryHeader: 'Private Library',
+      whatIsCanvas: 'What is a user canvas',
+      howToBuildCanvas: 'How to Build a canvas in 6 steps',
+      synthesis3d: 'Synthesis in 3D',
+      usingAiTeamwork: 'Using AI to create Teamwork',
       scale: 'Scale',
       rotation: 'Rotation',
       position: 'Position'
@@ -783,6 +794,8 @@ export const enGb = {
       comment: 'Comment',
       addComment: 'Add comment',
       manageWallet: 'Manage wallet',
+      removeObject: 'Remove object',
+      describeMission: 'Describe mission',
       settings: 'Settings',
       publish: 'Publish',
       default: 'Default',
@@ -947,7 +960,13 @@ export const enGb = {
       worldSubdomain:
         'This is the subdomain of the publicly facing URL that people will visit when then visiting your metaverse',
       worldURL:
-        'This is the publicly facing URL that people will visit when then visiting your metaverse'
+        'This is the publicly facing URL that people will visit when then visiting your metaverse',
+      canvasStep1_One:
+        'Here’s a short explanation of a user canvas. What’s the purpose and why should you use it?',
+      canvasStep1_Two:
+        'Here’s a short explanation of a user canvas. What’s the purpose and why should you use it? Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
+      canvasStep1_Three:
+        'Here’s a short explanation of a user canvas. What’s the purpose and why should you use it? Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',
