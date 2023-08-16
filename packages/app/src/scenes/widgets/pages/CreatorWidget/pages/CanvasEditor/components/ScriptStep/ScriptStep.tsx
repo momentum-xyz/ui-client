@@ -2,7 +2,7 @@ import {FC, ReactElement, useCallback, useEffect} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {ButtonRound, Hexagon, Select, Textarea} from '@momentum-xyz/ui-kit';
+import {ButtonRectangle, ButtonRound, Hexagon, Select, Textarea} from '@momentum-xyz/ui-kit';
 
 import {CanvasButtonGroup} from 'ui-kit';
 import {CanvasStepType} from 'core/types';
@@ -10,6 +10,7 @@ import {LEONARDO_MODEL_OPTIONS} from 'core/enums';
 import {CanvasScriptFormInterface} from 'core/interfaces';
 import {ScriptDataModelInterface} from 'scenes/widgets/stores/CreatorStore/models';
 import scriptImage from 'static/images/script.png';
+import leonardoImage from 'static/images/leonardo.jpeg';
 
 import * as styled from './ScriptStep.styled';
 
@@ -79,6 +80,26 @@ const ScriptStep: FC<PropsInterface> = ({scriptData, onUpdate, onRenderActions, 
 
         <styled.Separator />
 
+        <Controller
+          name="isAIAvailable"
+          control={control}
+          rules={{required: true}}
+          render={({field: {value, onChange}}) => (
+            <styled.AIButtons>
+              <ButtonRectangle
+                title={t('actions.leonardo')}
+                label={t('labels.maxAICredits')}
+                imageSrc={leonardoImage}
+              />
+              <ButtonRectangle
+                title={t('actions.imageUpload')}
+                label={t('labels.noAIAvailable')}
+                icon="picture_upload"
+              />
+            </styled.AIButtons>
+          )}
+        />
+
         <styled.SubTitle>
           <ButtonRound isLabel icon="script" />
           <span>{t('titles.enterScript')}</span>
@@ -89,7 +110,7 @@ const ScriptStep: FC<PropsInterface> = ({scriptData, onUpdate, onRenderActions, 
           rules={{required: true}}
           render={({field: {value, onChange}}) => (
             <Textarea
-              lines={3}
+              lines={12}
               value={value}
               danger={!!errors.script}
               placeholder={t('placeholders.canvasScript')}

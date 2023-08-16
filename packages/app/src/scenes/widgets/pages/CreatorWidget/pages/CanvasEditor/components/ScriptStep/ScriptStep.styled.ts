@@ -57,3 +57,14 @@ export const SubTitle = styled.div`
   line-height: 18px;
   gap: 10px;
 `;
+
+export const AIButtons = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-s);
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  font-weight: 600;
+  line-height: 18px;
+  gap: 10px;
+`;

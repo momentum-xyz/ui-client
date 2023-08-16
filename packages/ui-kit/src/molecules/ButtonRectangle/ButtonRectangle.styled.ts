@@ -23,7 +23,7 @@ export const Button = styled.button`
   --primary-color-active: ${(props) => props.theme.accentText};
   --primary-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
 
-  --normal-height: 74px;
+  --normal-height: 76px;
   --normal-radius: 4px;
   --normal-padding: 10px;
 

@@ -279,6 +279,8 @@ export const enGb = {
       canvasStep4: 'AI Image settings',
       canvasStep5: 'Create script AI teamwork',
       canvasStep6: 'Overview and submit',
+      maxAICredits: 'Max 20 AI credits per contribution',
+      noAIAvailable: 'Restrict users to upload their own image. No AI available',
       screenShare: 'Screenshare',
       stageMode: 'Stage Mode',
       stakingOverview: 'Staking Overview',
@@ -772,6 +774,8 @@ export const enGb = {
       canvasQuestion3:
         'Third question, ask your visitors how they would achieve this idea or solve the problem.',
       canvasQuestion4: 'This question is optional. Keep the survey short for the best result',
+      canvasScript:
+        'This is an example of a script:\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\n\n#answer1\n#answer2',
       selectAccount: 'Select Account',
       searchCommunityLibrary: 'Search Community Library',
       searchPrivateLibrary: 'Search Private Library',
@@ -816,6 +820,8 @@ export const enGb = {
       describeMission: 'Describe mission',
       aiImageScript: 'Ai image script',
       scriptTeamwork: 'Script teamwork',
+      imageUpload: 'Image upload',
+      leonardo: 'Leonardo',
       settings: 'Settings',
       publish: 'Publish',
       default: 'Default',
