@@ -1,0 +1,121 @@
+import {FC, ReactElement, useCallback, useEffect} from 'react';
+import {Controller, SubmitHandler, useForm} from 'react-hook-form';
+import {observer} from 'mobx-react-lite';
+import {useI18n} from '@momentum-xyz/core';
+import {ButtonRound, Hexagon, Select, Textarea} from '@momentum-xyz/ui-kit';
+
+import {CanvasButtonGroup} from 'ui-kit';
+import {CanvasStepType} from 'core/types';
+import {LEONARDO_MODEL_OPTIONS} from 'core/enums';
+import {CanvasScriptFormInterface} from 'core/interfaces';
+import {ScriptDataModelInterface} from 'scenes/widgets/stores/CreatorStore/models';
+import scriptImage from 'static/images/script.png';
+
+import * as styled from './ScriptStep.styled';
+
+interface PropsInterface {
+  scriptData: ScriptDataModelInterface;
+  onUpdate: (form: CanvasScriptFormInterface) => void;
+  setActiveStep: (step: CanvasStepType) => void;
+  onRenderActions: (element: ReactElement) => void;
+}
+
+const ScriptStep: FC<PropsInterface> = ({scriptData, onUpdate, onRenderActions, setActiveStep}) => {
+  const {t} = useI18n();
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors, isValid}
+  } = useForm<CanvasScriptFormInterface>({
+    defaultValues: {
+      script: scriptData.script,
+      isAIAvailable: scriptData.isAIAvailable,
+      modelId: scriptData.modelId
+    }
+  });
+
+  const formSubmitHandler: SubmitHandler<CanvasScriptFormInterface> = useCallback(
+    (form) => {
+      onUpdate(form);
+    },
+    [onUpdate]
+  );
+
+  useEffect(() => {
+    onRenderActions(
+      <CanvasButtonGroup
+        backProps={{
+          label: t('actions.back'),
+          onClick: () => setActiveStep('questions')
+        }}
+        nextProps={{
+          icon: 'script',
+          disabled: !isValid,
+          label: t('actions.scriptTeamwork'),
+          onClick: () => {
+            handleSubmit(formSubmitHandler)();
+            setActiveStep('teamwork');
+          }
+        }}
+      />
+    );
+  }, [formSubmitHandler, handleSubmit, isValid, onRenderActions, setActiveStep, t]);
+
+  return (
+    <styled.Container data-testid="QuestionsStep-test">
+      <styled.Grid>
+        <styled.Header>
+          <Hexagon type="fourth-borderless" iconName="ai" />
+          <span>{t('titles.createScriptForImage')}</span>
+        </styled.Header>
+
+        <styled.Description>
+          <span>{t('descriptions.canvasStep4_One')}</span>
+          <styled.Hexagon>
+            <Hexagon type="primary-borderless" imageSrc={scriptImage} />
+          </styled.Hexagon>
+        </styled.Description>
+
+        <styled.Separator />
+
+        <styled.SubTitle>
+          <ButtonRound isLabel icon="script" />
+          <span>{t('titles.enterScript')}</span>
+        </styled.SubTitle>
+        <Controller
+          name="script"
+          control={control}
+          rules={{required: true}}
+          render={({field: {value, onChange}}) => (
+            <Textarea
+              lines={3}
+              value={value}
+              danger={!!errors.script}
+              placeholder={t('placeholders.canvasScript')}
+              onChange={onChange}
+            />
+          )}
+        />
+
+        <Controller
+          name="modelId"
+          control={control}
+          rules={{required: true}}
+          render={({field: {value, onChange}}) => (
+            <Select
+              wide
+              isClearable
+              value={value}
+              options={LEONARDO_MODEL_OPTIONS}
+              placeholder={`${t('placeholders.selectModel')}*`}
+              onSingleChange={onChange}
+            />
+          )}
+        />
+      </styled.Grid>
+    </styled.Container>
+  );
+};
+
+export default observer(ScriptStep);

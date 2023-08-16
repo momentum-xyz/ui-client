@@ -275,7 +275,7 @@ export const enGb = {
       canvasEditor: 'Canvas editor',
       canvasStep1: 'Read canvas explainer',
       canvasStep2: 'Describe your mission',
-      canvasStep3: 'Make an contribution entry',
+      canvasStep3: 'Make a contribution entry',
       canvasStep4: 'AI Image settings',
       canvasStep5: 'Create script AI teamwork',
       canvasStep6: 'Overview and submit',
@@ -662,7 +662,9 @@ export const enGb = {
       missionTitle: 'Title of the mission',
       whatIsMission: 'What’s the mission?',
       makeContributionEntry: 'Make a contribution entry',
+      createScriptForImage: 'Create a script for AI Image',
       canvasQuestion1: 'First question, always ask for a title',
+      enterScript: 'Enter your script',
       question: 'Question',
       later: 'later',
       create: 'create',
@@ -753,6 +755,7 @@ export const enGb = {
       searchForAttendees: 'Search for attendees...',
       nameYourWorld: 'Name your world',
       nameYourImage: 'Name your image',
+      selectModel: 'Select a model',
       worldname: 'worldname',
       selectPlugin: 'Select Plugin',
       nameYourAssetForYourLibrary: 'Name your Asset for your library',
@@ -812,6 +815,7 @@ export const enGb = {
       removeObject: 'Remove object',
       describeMission: 'Describe mission',
       aiImageScript: 'Ai image script',
+      scriptTeamwork: 'Script teamwork',
       settings: 'Settings',
       publish: 'Publish',
       default: 'Default',
@@ -987,6 +991,8 @@ export const enGb = {
       canvasStep2_One:
         'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
       canvasStep3_One:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+      canvasStep4_One:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.'
     },
     fileUploader: {

@@ -189,6 +189,7 @@ export type IconNameType =
   | 'rocket'
   | 'rocket_flying'
   | 'screenshare'
+  | 'script'
   | 'search'
   | 'send'
   | 'settings-slider'

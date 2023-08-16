@@ -6,7 +6,7 @@ import {Frame, Panel, Steps, StepInterface} from '@momentum-xyz/ui-kit';
 import {useStore} from 'shared/hooks';
 import {CanvasStepType} from 'core/types';
 
-import {IntroStep, MissionStep, QuestionsStep} from './components';
+import {IntroStep, MissionStep, QuestionsStep, ScriptStep} from './components';
 import * as styled from './CanvasEditor.styled';
 
 interface PropsInterface {
@@ -87,6 +87,15 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
               <QuestionsStep
                 questionsData={canvasEditorStore.questionsData}
                 onUpdate={canvasEditorStore.setQuestionsData}
+                setActiveStep={handleSetActiveStep}
+                onRenderActions={setStepActions}
+              />
+            )}
+
+            {activeStep === 'script' && (
+              <ScriptStep
+                scriptData={canvasEditorStore.scriptData}
+                onUpdate={canvasEditorStore.setScriptData}
                 setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
               />
