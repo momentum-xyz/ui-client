@@ -86,3 +86,31 @@ export const MaxCredits = styled.div`
   letter-spacing: 1.3px;
   text-transform: uppercase;
 `;
+
+export const SubTitle = styled.div`
+  font-size: var(--font-size-s);
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  font-weight: 600;
+  line-height: 18px;
+`;
+
+export const CreditsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+export const AmountGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 160px 160px;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const CreditsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 160px;
+  align-items: center;
+  gap: 10px;
+`;

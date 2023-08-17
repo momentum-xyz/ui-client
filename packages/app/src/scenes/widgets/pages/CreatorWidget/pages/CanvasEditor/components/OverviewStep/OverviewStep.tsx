@@ -2,7 +2,7 @@ import {FC, ReactElement, useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 import {dateWithoutTime, useI18n} from '@momentum-xyz/core';
-import {Hexagon} from '@momentum-xyz/ui-kit';
+import {Button, Hexagon, Input, Select, numberInputSuffixMask} from '@momentum-xyz/ui-kit';
 
 import {CanvasButtonGroup} from 'ui-kit';
 import {CanvasStepType} from 'core/types';
@@ -36,6 +36,10 @@ const OverviewStep: FC<PropsInterface> = ({
 }) => {
   const {t} = useI18n();
 
+  const isAIAvailable: boolean = useMemo(() => {
+    return isImageAIAvailable || isTextAIAvailable;
+  }, [isImageAIAvailable, isTextAIAvailable]);
+
   const maxCreditsAvailable: number = useMemo(() => {
     if (isImageAIAvailable && isTextAIAvailable) {
       return aiImageCreditsCount + aiTextCreditsCount;
@@ -56,7 +60,7 @@ const OverviewStep: FC<PropsInterface> = ({
           onClick: () => setActiveStep('teamworkScript')
         }}
         nextProps={{
-          icon: 'collect',
+          icon: 'idea',
           disabled: true, // TODO
           label: t('labels.???'),
           onClick: () => {
@@ -113,6 +117,36 @@ const OverviewStep: FC<PropsInterface> = ({
         </styled.MaxCredits>
 
         <styled.Separator />
+
+        {isAIAvailable && (
+          <styled.CreditsContainer>
+            <styled.SubTitle>Set Max amount of contributions</styled.SubTitle>
+            <styled.AmountGrid>
+              <styled.SubTitle>Set amount</styled.SubTitle>
+              <Select
+                wide
+                isClearable
+                options={[]} // TODO
+                value={null} // TODO
+                placeholder="Contributions"
+                onSingleChange={(value) => console.log(value)}
+              />
+
+              <Button wide icon="stats" variant="secondary" label="Calculate" onClick={() => {}} />
+            </styled.AmountGrid>
+
+            <styled.CreditsGrid>
+              <styled.SubTitle>Expected Total of AI Credits</styled.SubTitle>
+              <Input
+                wide
+                value={null}
+                placeholder="XX AI credits"
+                opts={numberInputSuffixMask('AI credits', 5, false)}
+                onChange={() => {}}
+              />
+            </styled.CreditsGrid>
+          </styled.CreditsContainer>
+        )}
       </styled.Grid>
     </styled.Container>
   );
