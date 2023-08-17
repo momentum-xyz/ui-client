@@ -25,16 +25,22 @@ const ScriptStep: FC<PropsInterface> = ({scriptData, onUpdate, onRenderActions, 
   const {t} = useI18n();
 
   const {
+    watch,
     control,
+    setValue,
     handleSubmit,
     formState: {errors, isValid}
-  } = useForm<CanvasScriptFormInterface>({
-    defaultValues: {
-      script: scriptData.script,
-      isAIAvailable: scriptData.isAIAvailable,
-      modelId: scriptData.modelId
+  } = useForm<CanvasScriptFormInterface>();
+
+  useEffect(() => {
+    if (scriptData) {
+      setValue('script', scriptData.script);
+      setValue('modelId', scriptData.modelId);
+      setValue('isAIAvailable', scriptData.isAIAvailable);
     }
-  });
+  }, [scriptData, setValue]);
+
+  const [isAIAvailable] = watch(['isAIAvailable']);
 
   const formSubmitHandler: SubmitHandler<CanvasScriptFormInterface> = useCallback(
     (form) => {
@@ -83,18 +89,25 @@ const ScriptStep: FC<PropsInterface> = ({scriptData, onUpdate, onRenderActions, 
         <Controller
           name="isAIAvailable"
           control={control}
-          rules={{required: true}}
           render={({field: {value, onChange}}) => (
             <styled.AIButtons>
               <ButtonRectangle
+                active={value}
+                imageSrc={leonardoImage}
                 title={t('actions.leonardo')}
                 label={t('labels.maxAICredits')}
-                imageSrc={leonardoImage}
+                onClick={() => {
+                  onChange(true);
+                }}
               />
               <ButtonRectangle
+                active={!value}
+                icon="picture_upload"
                 title={t('actions.imageUpload')}
                 label={t('labels.noAIAvailable')}
-                icon="picture_upload"
+                onClick={() => {
+                  onChange(false);
+                }}
               />
             </styled.AIButtons>
           )}
@@ -113,6 +126,7 @@ const ScriptStep: FC<PropsInterface> = ({scriptData, onUpdate, onRenderActions, 
               lines={12}
               value={value}
               danger={!!errors.script}
+              disabled={!isAIAvailable}
               placeholder={t('placeholders.canvasScript')}
               onChange={onChange}
             />
@@ -128,6 +142,7 @@ const ScriptStep: FC<PropsInterface> = ({scriptData, onUpdate, onRenderActions, 
               wide
               isClearable
               value={value}
+              isDisabled={!isAIAvailable}
               options={LEONARDO_MODEL_OPTIONS}
               placeholder={`${t('placeholders.selectModel')}*`}
               onSingleChange={onChange}
