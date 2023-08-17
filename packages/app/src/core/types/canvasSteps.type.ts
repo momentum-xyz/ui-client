@@ -1,1 +1,7 @@
-export type CanvasStepType = 'intro' | 'mission' | 'questions' | 'script' | 'teamwork' | 'overview';
+export type CanvasStepType =
+  | 'intro'
+  | 'mission'
+  | 'questions'
+  | 'script'
+  | 'teamworkScript'
+  | 'overview';

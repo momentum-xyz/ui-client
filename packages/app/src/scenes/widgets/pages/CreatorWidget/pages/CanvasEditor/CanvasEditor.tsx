@@ -6,7 +6,7 @@ import {Frame, Panel, Steps, StepInterface} from '@momentum-xyz/ui-kit';
 import {useStore} from 'shared/hooks';
 import {CanvasStepType} from 'core/types';
 
-import {IntroStep, MissionStep, QuestionsStep, ScriptStep} from './components';
+import {IntroStep, MissionStep, QuestionsStep, ScriptStep, TeamworkScriptStep} from './components';
 import * as styled from './CanvasEditor.styled';
 
 interface PropsInterface {
@@ -18,7 +18,7 @@ const STEP_LIST: StepInterface<CanvasStepType>[] = [
   {id: 'mission', label: '2'},
   {id: 'questions', label: '3'},
   {id: 'script', label: '4'},
-  {id: 'teamwork', label: '5'},
+  {id: 'teamworkScript', label: '5'},
   {id: 'overview', label: '6'}
 ];
 
@@ -94,8 +94,19 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'script' && (
               <ScriptStep
+                aiCreditsCount={20}
                 scriptData={canvasEditorStore.scriptData}
                 onUpdate={canvasEditorStore.setScriptData}
+                setActiveStep={handleSetActiveStep}
+                onRenderActions={setStepActions}
+              />
+            )}
+
+            {activeStep === 'teamworkScript' && (
+              <TeamworkScriptStep
+                aiCreditsCount={12}
+                teamworkScriptData={canvasEditorStore.teamworkScriptData}
+                onUpdate={canvasEditorStore.setTeamworkScriptData}
                 setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
               />

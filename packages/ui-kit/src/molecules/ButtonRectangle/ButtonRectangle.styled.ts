@@ -101,7 +101,7 @@ export const Button = styled.button`
 export const Inner = styled.div`
   display: grid;
   grid-template-columns: 32px 1fr;
-  gap: 10px;
+  gap: 8px;
 `;
 
 export const ImageOrIcon = styled.div``;
@@ -128,7 +128,8 @@ export const TitleContainer = styled.div`
 `;
 
 export const Title = styled.div`
-  font-size: var(--font-size-s);
+  white-space: nowrap;
+  font-size: var(--font-size-xs);
   text-transform: uppercase;
   letter-spacing: 1.3px;
   font-weight: 600;

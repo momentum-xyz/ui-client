@@ -4,10 +4,11 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {
   CanvasMissionFormInterface,
   CanvasQuestionsFormInterface,
-  CanvasScriptFormInterface
+  CanvasScriptFormInterface,
+  CanvasTeamworkScriptFormInterface
 } from 'core/interfaces';
 
-import {MissionData, QuestionsData, ScriptData} from './models';
+import {MissionData, QuestionsData, ScriptData, TeamworkScriptData} from './models';
 
 const CanvasEditorStore = types
   .compose(
@@ -16,6 +17,7 @@ const CanvasEditorStore = types
       missionData: types.optional(MissionData, {}),
       questionsData: types.optional(QuestionsData, {}),
       scriptData: types.optional(ScriptData, {}),
+      teamworkScriptData: types.optional(TeamworkScriptData, {}),
       request: types.optional(RequestModel, {})
     })
   )
@@ -28,6 +30,9 @@ const CanvasEditorStore = types
     },
     setScriptData(form: CanvasScriptFormInterface): void {
       self.scriptData = ScriptData.create({...form});
+    },
+    setTeamworkScriptData(form: CanvasTeamworkScriptFormInterface): void {
+      self.teamworkScriptData = TeamworkScriptData.create({...form});
     }
   }))
   .views((self) => ({

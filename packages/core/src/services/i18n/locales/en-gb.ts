@@ -279,7 +279,8 @@ export const enGb = {
       canvasStep4: 'AI Image settings',
       canvasStep5: 'Create script AI teamwork',
       canvasStep6: 'Overview and submit',
-      maxAICredits: 'Max 20 AI credits per contribution',
+      maxAICredits: 'Max {{count}} AI credits per contribution',
+      skipAI: 'Skip creating collective intelligence with AI',
       noAIAvailable: 'Restrict users to upload their own image. No AI available',
       screenShare: 'Screenshare',
       stageMode: 'Stage Mode',
@@ -665,6 +666,7 @@ export const enGb = {
       whatIsMission: 'What’s the mission?',
       makeContributionEntry: 'Make a contribution entry',
       createScriptForImage: 'Create a script for AI Image',
+      createTeamworkScript: 'Create the teamwork script',
       canvasQuestion1: 'First question, always ask for a title',
       enterScript: 'Enter your script',
       question: 'Question',
@@ -761,6 +763,7 @@ export const enGb = {
       worldname: 'worldname',
       selectPlugin: 'Select Plugin',
       nameYourAssetForYourLibrary: 'Name your Asset for your library',
+      whatIsProduct: 'What is the product you want to create collectively',
       nameYourAsset: 'Name your Asset*',
       nameTheArtist: 'Name the Artist',
       selectAnOption: 'Select an Option',
@@ -776,6 +779,8 @@ export const enGb = {
       canvasQuestion4: 'This question is optional. Keep the survey short for the best result',
       canvasScript:
         'This is an example of a script:\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\n\n#answer1\n#answer2',
+      canvasTeamworkScript:
+        'This is an example of a script:\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
       selectAccount: 'Select Account',
       searchCommunityLibrary: 'Search Community Library',
       searchPrivateLibrary: 'Search Private Library',
@@ -822,6 +827,8 @@ export const enGb = {
       scriptTeamwork: 'Script teamwork',
       imageUpload: 'Image upload',
       leonardo: 'Leonardo',
+      chatGPT: 'Chat GPT',
+      noTeamworkOutcome: 'No teamwork outcome',
       settings: 'Settings',
       publish: 'Publish',
       default: 'Default',
@@ -999,6 +1006,8 @@ export const enGb = {
       canvasStep3_One:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
       canvasStep4_One:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+      canvasStep5_One:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.'
     },
     fileUploader: {

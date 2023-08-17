@@ -17,3 +17,9 @@ export interface CanvasScriptFormInterface {
   script?: string;
   modelId?: LeonardoModelIdEnum;
 }
+
+export interface CanvasTeamworkScriptFormInterface {
+  isAIAvailable: boolean;
+  script?: string;
+  scriptTitle?: string;
+}

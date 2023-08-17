@@ -2,29 +2,27 @@ import {FC, ReactElement, useCallback, useEffect} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {ButtonRectangle, ButtonRound, Hexagon, Select, Textarea} from '@momentum-xyz/ui-kit';
+import {ButtonRectangle, ButtonRound, Hexagon, Input, Textarea} from '@momentum-xyz/ui-kit';
 
 import {CanvasButtonGroup} from 'ui-kit';
 import {CanvasStepType} from 'core/types';
-import {LEONARDO_MODEL_OPTIONS} from 'core/enums';
-import {CanvasScriptFormInterface} from 'core/interfaces';
-import {ScriptDataModelInterface} from 'scenes/widgets/stores/CreatorStore/models';
-import scriptImage from 'static/images/script.png';
-import leonardoImage from 'static/images/leonardo.jpeg';
+import {CanvasTeamworkScriptFormInterface} from 'core/interfaces';
+import {TeamworkScriptDataModelInterface} from 'scenes/widgets/stores/CreatorStore/models';
+import aiProfileImage from 'static/images/ai_profile.jpeg';
 
-import * as styled from './ScriptStep.styled';
+import * as styled from './TeamworkScriptStep.styled';
 
 interface PropsInterface {
   aiCreditsCount: number;
-  scriptData: ScriptDataModelInterface;
-  onUpdate: (form: CanvasScriptFormInterface) => void;
+  teamworkScriptData: TeamworkScriptDataModelInterface;
+  onUpdate: (form: CanvasTeamworkScriptFormInterface) => void;
   setActiveStep: (step: CanvasStepType) => void;
   onRenderActions: (element: ReactElement) => void;
 }
 
-const ScriptStep: FC<PropsInterface> = ({
+const TeamworkScriptStep: FC<PropsInterface> = ({
   aiCreditsCount,
-  scriptData,
+  teamworkScriptData,
   onUpdate,
   onRenderActions,
   setActiveStep
@@ -37,19 +35,19 @@ const ScriptStep: FC<PropsInterface> = ({
     setValue,
     handleSubmit,
     formState: {errors, isValid}
-  } = useForm<CanvasScriptFormInterface>();
+  } = useForm<CanvasTeamworkScriptFormInterface>();
 
   useEffect(() => {
-    if (scriptData) {
-      setValue('script', scriptData.script);
-      setValue('modelId', scriptData.modelId);
-      setValue('isAIAvailable', scriptData.isAIAvailable);
+    if (teamworkScriptData) {
+      setValue('script', teamworkScriptData.script);
+      setValue('scriptTitle', teamworkScriptData.scriptTitle);
+      setValue('isAIAvailable', teamworkScriptData.isAIAvailable);
     }
-  }, [scriptData, setValue]);
+  }, [teamworkScriptData, setValue]);
 
   const [isAIAvailable] = watch(['isAIAvailable']);
 
-  const formSubmitHandler: SubmitHandler<CanvasScriptFormInterface> = useCallback(
+  const formSubmitHandler: SubmitHandler<CanvasTeamworkScriptFormInterface> = useCallback(
     (form) => {
       onUpdate(form);
     },
@@ -61,15 +59,15 @@ const ScriptStep: FC<PropsInterface> = ({
       <CanvasButtonGroup
         backProps={{
           label: t('actions.back'),
-          onClick: () => setActiveStep('questions')
+          onClick: () => setActiveStep('script')
         }}
         nextProps={{
-          icon: 'script',
+          icon: 'collect',
           disabled: !isValid,
-          label: t('actions.scriptTeamwork'),
+          label: t('labels.overview'),
           onClick: () => {
             handleSubmit(formSubmitHandler)();
-            setActiveStep('teamworkScript');
+            setActiveStep('overview');
           }
         }}
       />
@@ -77,18 +75,15 @@ const ScriptStep: FC<PropsInterface> = ({
   }, [formSubmitHandler, handleSubmit, isValid, onRenderActions, setActiveStep, t]);
 
   return (
-    <styled.Container data-testid="QuestionsStep-test">
+    <styled.Container data-testid="TeamworkScriptStep-test">
       <styled.Grid>
         <styled.Header>
-          <Hexagon type="fourth-borderless" iconName="ai" />
-          <span>{t('titles.createScriptForImage')}</span>
+          <Hexagon type="fourth-borderless" iconName="script" />
+          <span>{t('titles.createTeamworkScript')}</span>
         </styled.Header>
 
         <styled.Description>
-          <span>{t('descriptions.canvasStep4_One')}</span>
-          <styled.Hexagon>
-            <Hexagon type="primary-borderless" imageSrc={scriptImage} />
-          </styled.Hexagon>
+          <span>{t('descriptions.canvasStep5_One')}</span>
         </styled.Description>
 
         <styled.Separator />
@@ -100,8 +95,8 @@ const ScriptStep: FC<PropsInterface> = ({
             <styled.AIButtons>
               <ButtonRectangle
                 active={value}
-                imageSrc={leonardoImage}
-                title={t('actions.leonardo')}
+                imageSrc={aiProfileImage}
+                title={t('actions.chatGPT')}
                 label={t('labels.maxAICredits', {count: aiCreditsCount})}
                 onClick={() => {
                   onChange(true);
@@ -109,9 +104,9 @@ const ScriptStep: FC<PropsInterface> = ({
               />
               <ButtonRectangle
                 active={!value}
-                icon="picture_upload"
-                title={t('actions.imageUpload')}
-                label={t('labels.noAIAvailable')}
+                icon="close_small"
+                title={t('actions.noTeamworkOutcome')}
+                label={t('labels.skipAI')}
                 onClick={() => {
                   onChange(false);
                 }}
@@ -124,6 +119,22 @@ const ScriptStep: FC<PropsInterface> = ({
           <ButtonRound isLabel icon="script" />
           <span>{t('titles.enterScript')}</span>
         </styled.SubTitle>
+
+        <Controller
+          name="scriptTitle"
+          control={control}
+          rules={{required: true}}
+          render={({field: {value, onChange}}) => (
+            <Input
+              wide
+              value={value}
+              danger={!!errors.scriptTitle}
+              placeholder={`${t('placeholders.whatIsProduct')}*`}
+              onChange={onChange}
+            />
+          )}
+        />
+
         <Controller
           name="script"
           control={control}
@@ -134,25 +145,8 @@ const ScriptStep: FC<PropsInterface> = ({
               value={value}
               danger={!!errors.script}
               disabled={!isAIAvailable}
-              placeholder={t('placeholders.canvasScript')}
+              placeholder={t('placeholders.canvasTeamworkScript')}
               onChange={onChange}
-            />
-          )}
-        />
-
-        <Controller
-          name="modelId"
-          control={control}
-          rules={{required: true}}
-          render={({field: {value, onChange}}) => (
-            <Select
-              wide
-              isClearable
-              value={value}
-              isDisabled={!isAIAvailable}
-              options={LEONARDO_MODEL_OPTIONS}
-              placeholder={`${t('placeholders.selectModel')}*`}
-              onSingleChange={onChange}
             />
           )}
         />
@@ -161,4 +155,4 @@ const ScriptStep: FC<PropsInterface> = ({
   );
 };
 
-export default observer(ScriptStep);
+export default observer(TeamworkScriptStep);
