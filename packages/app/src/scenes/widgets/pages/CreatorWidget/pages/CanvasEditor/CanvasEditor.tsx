@@ -6,7 +6,14 @@ import {Frame, Panel, Steps, StepInterface} from '@momentum-xyz/ui-kit';
 import {useStore} from 'shared/hooks';
 import {CanvasStepType} from 'core/types';
 
-import {IntroStep, MissionStep, QuestionsStep, ScriptStep, TeamworkScriptStep} from './components';
+import {
+  IntroStep,
+  MissionStep,
+  OverviewStep,
+  QuestionsStep,
+  ScriptStep,
+  TeamworkScriptStep
+} from './components';
 import * as styled from './CanvasEditor.styled';
 
 interface PropsInterface {
@@ -94,7 +101,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'script' && (
               <ScriptStep
-                aiCreditsCount={20}
+                aiCreditsCount={canvasEditorStore.aiImageCreditsCount}
                 scriptData={canvasEditorStore.scriptData}
                 onUpdate={canvasEditorStore.setScriptData}
                 setActiveStep={handleSetActiveStep}
@@ -104,11 +111,25 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'teamworkScript' && (
               <TeamworkScriptStep
-                aiCreditsCount={12}
+                aiCreditsCount={canvasEditorStore.aiTextCreditsCount}
                 teamworkScriptData={canvasEditorStore.teamworkScriptData}
                 onUpdate={canvasEditorStore.setTeamworkScriptData}
                 setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
+              />
+            )}
+
+            {activeStep === 'overview' && (
+              <OverviewStep
+                version="01" // TODO
+                missionTitle={canvasEditorStore.missionData.missionTitle}
+                aiTextCreditsCount={canvasEditorStore.aiTextCreditsCount}
+                aiImageCreditsCount={canvasEditorStore.aiImageCreditsCount}
+                isTextAIAvailable={canvasEditorStore.scriptData.isAIAvailable}
+                isImageAIAvailable={canvasEditorStore.teamworkScriptData.isAIAvailable}
+                setActiveStep={handleSetActiveStep}
+                onRenderActions={setStepActions}
+                onSubmitCanvas={() => {}} // TODO
               />
             )}
           </Frame>

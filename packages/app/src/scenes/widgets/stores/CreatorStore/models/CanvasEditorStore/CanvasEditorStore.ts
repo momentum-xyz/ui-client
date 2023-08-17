@@ -14,6 +14,8 @@ const CanvasEditorStore = types
   .compose(
     ResetModel,
     types.model('CanvasEditorStore', {
+      aiImageCreditsCount: 20,
+      aiTextCreditsCount: 12,
       missionData: types.optional(MissionData, {}),
       questionsData: types.optional(QuestionsData, {}),
       scriptData: types.optional(ScriptData, {}),
