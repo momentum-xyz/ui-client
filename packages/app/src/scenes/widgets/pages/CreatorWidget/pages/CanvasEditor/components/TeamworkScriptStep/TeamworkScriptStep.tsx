@@ -128,6 +128,7 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
             <Input
               wide
               value={value}
+              disabled={!isAIAvailable}
               danger={!!errors.scriptTitle}
               placeholder={`${t('placeholders.whatIsProduct')}*`}
               onChange={onChange}
