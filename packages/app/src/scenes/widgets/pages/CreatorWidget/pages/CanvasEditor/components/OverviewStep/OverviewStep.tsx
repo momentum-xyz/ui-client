@@ -2,7 +2,7 @@ import {FC, ReactElement, useEffect, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 import {dateWithoutTime, useI18n} from '@momentum-xyz/core';
-import {Button, Hexagon, Input, Select, numberInputSuffixMask} from '@momentum-xyz/ui-kit';
+import {Hexagon, Select, SelectOptionInterface} from '@momentum-xyz/ui-kit';
 
 import {CanvasButtonGroup} from 'ui-kit';
 import {CanvasStepType} from 'core/types';
@@ -13,23 +13,36 @@ import * as styled from './OverviewStep.styled';
 
 interface PropsInterface {
   version: string;
+  created: string | null;
   missionTitle: string;
   aiTextCreditsCount: number;
   aiImageCreditsCount: number;
   isTextAIAvailable: boolean;
   isImageAIAvailable: boolean;
+  contributionAmount: number | null;
+  setContributionAmount: (amount: number | null) => void;
   setActiveStep: (step: CanvasStepType) => void;
   onRenderActions: (element: ReactElement) => void;
   onSubmitCanvas: () => void;
 }
 
+export const CREDITS_AMOUNT_OPTIONS: SelectOptionInterface<number>[] = [
+  {label: '10', value: 10},
+  {label: '20', value: 20},
+  {label: '50', value: 50},
+  {label: '70', value: 70}
+];
+
 const OverviewStep: FC<PropsInterface> = ({
   version,
+  created,
   missionTitle,
   aiTextCreditsCount,
   aiImageCreditsCount,
   isTextAIAvailable,
   isImageAIAvailable,
+  contributionAmount,
+  setContributionAmount,
   setActiveStep,
   onRenderActions,
   onSubmitCanvas
@@ -70,7 +83,7 @@ const OverviewStep: FC<PropsInterface> = ({
         }}
       />
     );
-  }, [onRenderActions, onSubmitCanvas, setActiveStep, t]);
+  }, []);
 
   return (
     <styled.Container data-testid="OverviewStep-test">
@@ -80,7 +93,7 @@ const OverviewStep: FC<PropsInterface> = ({
           <div>
             <div>{missionTitle}</div>
             <styled.Label>
-              {t('labels.version', {version})} / {dateWithoutTime(new Date().toISOString())}
+              {t('labels.version', {version})} / {dateWithoutTime(created)}
             </styled.Label>
           </div>
         </styled.Header>
@@ -120,31 +133,22 @@ const OverviewStep: FC<PropsInterface> = ({
 
         {isAIAvailable && (
           <styled.CreditsContainer>
-            <styled.SubTitle>Set Max amount of contributions</styled.SubTitle>
+            <styled.SubTitle>{t('titles.setContributionsAmount')}</styled.SubTitle>
             <styled.AmountGrid>
-              <styled.SubTitle>Set amount</styled.SubTitle>
+              <styled.SubTitle>{t('actions.setAmount')}</styled.SubTitle>
               <Select
                 wide
                 isClearable
-                options={[]} // TODO
-                value={null} // TODO
-                placeholder="Contributions"
-                onSingleChange={(value) => console.log(value)}
+                value={contributionAmount}
+                options={CREDITS_AMOUNT_OPTIONS}
+                placeholder={t('placeholders.contributions')}
+                onSingleChange={setContributionAmount}
               />
 
-              <Button wide icon="stats" variant="secondary" label="Calculate" onClick={() => {}} />
+              <styled.AICreditsContainer>
+                {t('labels.aiCredits', {amount: 'XX'})}
+              </styled.AICreditsContainer>
             </styled.AmountGrid>
-
-            <styled.CreditsGrid>
-              <styled.SubTitle>Expected Total of AI Credits</styled.SubTitle>
-              <Input
-                wide
-                value={null}
-                placeholder="XX AI credits"
-                opts={numberInputSuffixMask('AI credits', 5, false)}
-                onChange={() => {}}
-              />
-            </styled.CreditsGrid>
           </styled.CreditsContainer>
         )}
       </styled.Grid>

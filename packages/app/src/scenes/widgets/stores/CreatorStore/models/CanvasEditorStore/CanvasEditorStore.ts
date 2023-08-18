@@ -14,8 +14,11 @@ const CanvasEditorStore = types
   .compose(
     ResetModel,
     types.model('CanvasEditorStore', {
+      version: '01',
+      created: types.maybeNull(types.string),
       aiImageCreditsCount: 20,
       aiTextCreditsCount: 12,
+      contributionAmount: types.maybeNull(types.number),
       missionData: types.optional(MissionData, {}),
       questionsData: types.optional(QuestionsData, {}),
       scriptData: types.optional(ScriptData, {}),
@@ -24,6 +27,9 @@ const CanvasEditorStore = types
     })
   )
   .actions((self) => ({
+    setCreated(dateISO: string): void {
+      self.created = dateISO;
+    },
     setMissionData(form: CanvasMissionFormInterface): void {
       self.missionData = MissionData.create({...form});
     },
@@ -35,6 +41,10 @@ const CanvasEditorStore = types
     },
     setTeamworkScriptData(form: CanvasTeamworkScriptFormInterface): void {
       self.teamworkScriptData = TeamworkScriptData.create({...form});
+    },
+    setContributionAmount(amount: number | null) {
+      console.log(amount);
+      self.contributionAmount = amount;
     }
   }))
   .views((self) => ({

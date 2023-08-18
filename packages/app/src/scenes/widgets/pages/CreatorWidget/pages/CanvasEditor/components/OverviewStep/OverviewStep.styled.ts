@@ -108,9 +108,12 @@ export const AmountGrid = styled.div`
   gap: 10px;
 `;
 
-export const CreditsGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 160px;
+export const AICreditsContainer = styled.div`
+  padding: 0 0 0 20px;
+  display: flex;
+  height: 38px;
   align-items: center;
-  gap: 10px;
+  border-radius: 4px;
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
+  border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
 `;

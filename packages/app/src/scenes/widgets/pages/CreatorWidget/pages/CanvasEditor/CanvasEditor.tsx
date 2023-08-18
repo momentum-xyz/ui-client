@@ -41,6 +41,8 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
   const {t} = useI18n();
 
   useEffect(() => {
+    canvasEditorStore.setCreated(new Date().toISOString());
+
     return () => {
       canvasEditorStore.resetModel();
     };
@@ -121,12 +123,15 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'overview' && (
               <OverviewStep
-                version="01" // TODO
+                version={canvasEditorStore.version}
+                created={canvasEditorStore.created}
                 missionTitle={canvasEditorStore.missionData.missionTitle}
                 aiTextCreditsCount={canvasEditorStore.aiTextCreditsCount}
                 aiImageCreditsCount={canvasEditorStore.aiImageCreditsCount}
                 isTextAIAvailable={canvasEditorStore.scriptData.isAIAvailable}
                 isImageAIAvailable={canvasEditorStore.teamworkScriptData.isAIAvailable}
+                contributionAmount={canvasEditorStore.contributionAmount}
+                setContributionAmount={canvasEditorStore.setContributionAmount}
                 setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
                 onSubmitCanvas={() => {}} // TODO
