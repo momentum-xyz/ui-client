@@ -36,14 +36,14 @@ const ScriptStep: FC<PropsInterface> = ({
     control,
     setValue,
     handleSubmit,
-    formState: {errors, isValid}
+    formState: {isValid}
   } = useForm<CanvasScriptFormInterface>();
 
   useEffect(() => {
     if (scriptData) {
-      setValue('script', scriptData.script);
-      setValue('modelId', scriptData.modelId);
-      setValue('isLeonardo', scriptData.isLeonardo);
+      setValue('script', scriptData.script, {shouldValidate: true});
+      setValue('modelId', scriptData.modelId, {shouldValidate: true});
+      setValue('isLeonardo', scriptData.isLeonardo, {shouldValidate: true});
     }
   }, [scriptData, setValue]);
 
@@ -114,6 +114,8 @@ const ScriptStep: FC<PropsInterface> = ({
                 label={t('labels.noAIAvailable')}
                 onClick={() => {
                   onChange(false);
+                  setValue('script', '');
+                  setValue('modelId', null);
                 }}
               />
             </styled.AIButtons>
@@ -127,23 +129,24 @@ const ScriptStep: FC<PropsInterface> = ({
         <Controller
           name="script"
           control={control}
-          rules={{required: true}}
-          render={({field: {value, onChange}}) => (
-            <Textarea
-              lines={12}
-              value={value}
-              danger={!!errors.script}
-              disabled={!isLeonardo}
-              placeholder={t('placeholders.canvasScript')}
-              onChange={onChange}
-            />
-          )}
+          rules={{required: isLeonardo}}
+          render={({field: {value, onChange}}) => {
+            return (
+              <Textarea
+                lines={12}
+                value={value}
+                disabled={!isLeonardo}
+                placeholder={t('placeholders.canvasScript')}
+                onChange={onChange}
+              />
+            );
+          }}
         />
 
         <Controller
           name="modelId"
           control={control}
-          rules={{required: true}}
+          rules={{required: isLeonardo}}
           render={({field: {value, onChange}}) => (
             <Select
               wide

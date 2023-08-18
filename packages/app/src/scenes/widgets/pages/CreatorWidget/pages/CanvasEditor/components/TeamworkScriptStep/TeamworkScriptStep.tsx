@@ -39,9 +39,9 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
 
   useEffect(() => {
     if (teamworkScriptData) {
-      setValue('script', teamworkScriptData.script);
-      setValue('scriptTitle', teamworkScriptData.scriptTitle);
-      setValue('isChatGPT', teamworkScriptData.isChatGPT);
+      setValue('script', teamworkScriptData.script, {shouldValidate: true});
+      setValue('scriptTitle', teamworkScriptData.scriptTitle, {shouldValidate: true});
+      setValue('isChatGPT', teamworkScriptData.isChatGPT, {shouldValidate: true});
     }
   }, [teamworkScriptData, setValue]);
 
@@ -109,6 +109,8 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
                 label={t('labels.skipAI')}
                 onClick={() => {
                   onChange(false);
+                  setValue('script', '');
+                  setValue('scriptTitle', '');
                 }}
               />
             </styled.AIButtons>
@@ -123,7 +125,7 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
         <Controller
           name="scriptTitle"
           control={control}
-          rules={{required: true}}
+          rules={{required: isChatGPT}}
           render={({field: {value, onChange}}) => (
             <Input
               wide
@@ -139,7 +141,7 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
         <Controller
           name="script"
           control={control}
-          rules={{required: true}}
+          rules={{required: isChatGPT}}
           render={({field: {value, onChange}}) => (
             <Textarea
               lines={12}

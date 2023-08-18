@@ -14,12 +14,12 @@ export interface CanvasQuestionsFormInterface {
 
 export interface CanvasScriptFormInterface {
   isLeonardo: boolean;
-  script?: string;
-  modelId?: LeonardoModelIdEnum;
+  script: string | null;
+  modelId: LeonardoModelIdEnum | null;
 }
 
 export interface CanvasTeamworkScriptFormInterface {
   isChatGPT: boolean;
-  script?: string;
-  scriptTitle?: string;
+  script: string | null;
+  scriptTitle: string | null;
 }
