@@ -4,6 +4,8 @@ import styled from 'styled-components';
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 10px;
+  position: relative;
 `;
 
 export const Section = styled.div`
@@ -26,11 +28,20 @@ export const Body = styled.div`
   overflow: hidden;
 `;
 
+export const MainTitle = styled.h1`
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  text-transform: uppercase;
+  margin: 10px 0;
+`;
+
 export const Title = styled.h1`
   font-weight: 600;
-  font-size: 15px;
-  line-height: 22px;
+  font-size: 13px;
+  line-height: 18px;
   text-transform: uppercase;
+  margin: 10px 0;
 `;
 
 export const ObjectPreviewModelContainer = styled.div``;
@@ -47,4 +58,27 @@ export const Form = styled.div`
   grid-template-columns: 90px 1fr;
   gap: 10px;
   align-items: center;
+`;
+
+export const VideoWrapper = styled.div`
+  iframe {
+    min-height: 265px;
+  }
+`;
+
+export const ActionBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px 0;
+`;
+
+export const Tabs = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: end;
+  top: -2px;
+  right: 10px;
+  left 0;
+  z-index: 1;
 `;

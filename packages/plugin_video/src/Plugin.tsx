@@ -98,6 +98,19 @@ const usePlugin: UsePluginHookType = (props) => {
     }
   };
 
+  const discardChanges = () => {
+    setModifiedState(null);
+  };
+
+  const remove = async () => {
+    try {
+      await setSharedState(null);
+    } catch (e: any) {
+      console.error(e);
+      setError(`Unable to remove. ${e.message}`);
+    }
+  };
+
   const state = modifiedState ?? sharedState;
 
   const embedUrl = state ? stateToQuery(state) : null;
@@ -133,23 +146,7 @@ const usePlugin: UsePluginHookType = (props) => {
   const editModeContent = !isAdmin ? (
     <span />
   ) : (
-    <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
-      <div
-        style={{
-          textTransform: 'uppercase',
-          fontSize: 'var(--font-size-l)',
-          fontWeight: 600,
-          letterSpacing: '0.2em'
-        }}
-      >
-        {t('plugin_video.labels.embed')}
-      </div>
-      <p>
-        By embedding a video to this object; users will also be able to see this video played when
-        they select the object; regardless of its asset type.
-      </p>
-      <p>To embed a video; add the url to the video in the input field below.</p>
-      <div style={{backgroundColor: theme.accentText, height: 1}} />
+    <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
       <Input
         wide
         // type="text"
@@ -172,15 +169,22 @@ const usePlugin: UsePluginHookType = (props) => {
         danger={isError}
         // errorMessage={error || t('plugin_video.messages.invalidUrl') || ''}
       />
-      <div>{isError && (error || t('plugin_video.messages.invalidUrl') || '')}</div>
+      {isError && <div>{error || t('plugin_video.messages.invalidUrl') || ''}</div>}
       {!!embedUrl && (
         <>
-          <br />
-          <h3 style={{textTransform: 'uppercase'}}>{t('plugin_video.labels.videoPreview')}</h3>
+          <div
+            style={{
+              textTransform: 'uppercase',
+              fontSize: '13px',
+              fontWeight: 600,
+              lineHeight: '18px'
+            }}
+          >
+            {t('plugin_video.labels.videoPreview')}
+          </div>
           {content}
         </>
       )}
-      <div style={{backgroundColor: theme.accentText, height: 1}} />
       <Input
         wide
         // type="text"
@@ -201,8 +205,12 @@ const usePlugin: UsePluginHookType = (props) => {
     objectView: {
       title: sharedState?.title || '',
       content,
+      isModified: !!modifiedState,
+      isValid: !isModifiedStateError,
       editModeContent,
-      saveChanges
+      saveChanges,
+      discardChanges,
+      remove
     }
   };
 };

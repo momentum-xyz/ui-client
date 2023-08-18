@@ -1,10 +1,12 @@
-import {FC} from 'react';
+import {FC, useCallback, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Controller, SubmitHandler, useForm} from 'react-hook-form';
-import {Button, Input, Textarea} from '@momentum-xyz/ui-kit';
-import {useI18n} from '@momentum-xyz/core';
+import {Controller, useForm} from 'react-hook-form';
+import {Textarea} from '@momentum-xyz/ui-kit';
+// import {useI18n} from '@momentum-xyz/core';
 
 import {TextObjectInterface} from 'core/interfaces';
+import {ObjectAttribute} from 'core/models';
+import {PluginIdEnum} from 'api/enums';
 
 import * as styled from './AssignText.styled';
 
@@ -18,6 +20,7 @@ interface PropsInterface {
   onBack: () => void;
 }
 
+// TODO remove
 const AssignText: FC<PropsInterface> = ({
   initialTitle,
   initialText,
@@ -27,90 +30,82 @@ const AssignText: FC<PropsInterface> = ({
   onDelete,
   onBack
 }) => {
-  const {t} = useI18n();
+  return <styled.Container data-testid="AssignText-test"></styled.Container>;
+};
+
+export const useAssignText = ({
+  objectId
+}: {
+  objectId: string;
+}): {
+  content: JSX.Element;
+  isModified: boolean;
+  save: () => Promise<void>;
+  discardChanges: () => void;
+  remove: () => Promise<void>;
+} => {
+  const attribute = useMemo(() => {
+    const attribute = ObjectAttribute.create({
+      objectId,
+      pluginId: PluginIdEnum.TEXT
+    });
+    attribute.load();
+    return attribute;
+  }, [objectId]);
+
+  const initialText = attribute.valueAs<TextObjectInterface>()?.content || '';
 
   const {
     control,
     handleSubmit,
-    formState: {errors, isValid}
-  } = useForm<TextObjectInterface>({
-    defaultValues: {
-      title: initialTitle,
-      content: initialText
-    }
-  });
+    reset,
+    formState: {errors, isDirty}
+  } = useForm<TextObjectInterface>();
 
-  const formSubmitHandler: SubmitHandler<TextObjectInterface> = async (data) => {
-    await onSave(data.title, data.content);
-  };
+  const save = useCallback(async () => {
+    await handleSubmit(async (data) => {
+      const {content} = data;
 
-  return (
+      if (content === undefined) {
+        return;
+      }
+
+      await attribute.set({
+        content
+      });
+    })();
+  }, [attribute, handleSubmit]);
+
+  const remove = useCallback(async () => {
+    await attribute.delete();
+  }, [attribute]);
+
+  const content = (
     <styled.Container data-testid="AssignText-test">
-      <styled.Title>Embed Text</styled.Title>
-      <styled.Description>
-        By embedding text onto this object; users will also be able to see this text displayed when
-        they select the object; regardless of its asset type.
-      </styled.Description>
-
-      <styled.Section>
-        <Controller
-          name="content"
-          control={control}
-          rules={{required: true}}
-          render={({field: {value, onChange}}) => (
-            <Textarea
-              value={value}
-              danger={!!errors.content}
-              placeholder="Enter Text Here"
-              onChange={onChange}
-              lines={8}
-            />
-          )}
-        />
-      </styled.Section>
-
-      <styled.Section>
-        <Controller
-          name="title"
-          control={control}
-          rules={{required: true}}
-          render={({field: {value, onChange}}) => (
-            <Input
-              wide
-              value={value}
-              danger={!!errors.title}
-              placeholder="Name your Text"
-              onChange={onChange}
-            />
-          )}
-        />
-      </styled.Section>
-
-      <styled.ActionBar>
-        <Button
-          variant="secondary"
-          label={t('actions.back')}
-          disabled={isPending}
-          onClick={onBack}
-        />
-
-        {isEditing && (
-          <Button
-            variant="secondary"
-            label={t('actions.delete')}
-            disabled={isPending}
-            onClick={onDelete}
+      <Controller
+        name="content"
+        control={control}
+        // rules={{required: true}}
+        render={({field: {value, onChange}}) => (
+          <Textarea
+            value={value ?? initialText}
+            danger={!!errors.content}
+            placeholder="Enter Text Here"
+            onChange={onChange}
+            lines={8}
           />
         )}
-
-        <Button
-          label={isEditing ? t('actions.save') : t('actions.embed')}
-          disabled={!isValid || isPending}
-          onClick={() => handleSubmit(formSubmitHandler)()}
-        />
-      </styled.ActionBar>
+      />
     </styled.Container>
   );
+
+  return {
+    content,
+    isModified: isDirty,
+    save,
+    discardChanges: reset,
+    remove
+  };
 };
 
 export default observer(AssignText);

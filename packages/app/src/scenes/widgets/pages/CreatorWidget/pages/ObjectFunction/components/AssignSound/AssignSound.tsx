@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Button, Frame, SoundItem} from '@momentum-xyz/ui-kit';
+import {Button, SoundItem} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {MusicFileForm} from 'ui-kit';
@@ -60,39 +60,28 @@ const AssignSound: FC<PropsInterface> = ({objectId, onBack}) => {
 
   return (
     <styled.Container data-testid="AssignSound-test">
-      <Frame>
-        <styled.Head>
-          <styled.Title>{t('titles.objectSound')}</styled.Title>
-          <styled.Message>{t('messages.objectSound')}</styled.Message>
+      <styled.Head>
+        <styled.Message>{t('messages.objectSound')}</styled.Message>
 
-          <styled.UploadBlock>
-            {!isNewForm ? (
-              <Button
-                wide
-                icon="sound_add"
-                label={t('actions.uploadSoundFile')}
-                onClick={() => setIsNewForm(true)}
-              />
-            ) : (
-              <MusicFileForm
-                isPending={objectSound.isUpdating}
-                onCancel={() => setIsNewForm(false)}
-                onPublish={handlePublish}
-              />
-            )}
-          </styled.UploadBlock>
-        </styled.Head>
-      </Frame>
+        <styled.UploadBlock>
+          {!isNewForm ? (
+            <Button
+              wide
+              icon="sound_add"
+              label={t('actions.uploadSoundFile')}
+              onClick={() => setIsNewForm(true)}
+            />
+          ) : (
+            <MusicFileForm
+              isPending={objectSound.isUpdating}
+              onCancel={() => setIsNewForm(false)}
+              onPublish={handlePublish}
+            />
+          )}
+        </styled.UploadBlock>
+      </styled.Head>
 
       <styled.TracksContainer>
-        {/* ACTIVE TRACK. FYI: It will be played by Babylon */}
-        <MusicPlayerView
-          isVolumeSeekingEnabled
-          musicPlayer={musicPlayer}
-          setVolume={objectSound.updateVolume}
-          setDistancePercent={objectSound.updateDistance}
-        />
-
         {/* TRACK LIST */}
         <styled.TrackList>
           {musicPlayer.trackList.map((track) => (
@@ -106,11 +95,15 @@ const AssignSound: FC<PropsInterface> = ({objectId, onBack}) => {
             />
           ))}
         </styled.TrackList>
-      </styled.TracksContainer>
 
-      <styled.ActionBar>
-        <Button variant="secondary" label={t('actions.back')} onClick={onBack} />
-      </styled.ActionBar>
+        {/* ACTIVE TRACK. FYI: It will be played by Babylon */}
+        <MusicPlayerView
+          isVolumeSeekingEnabled
+          musicPlayer={musicPlayer}
+          setVolume={objectSound.updateVolume}
+          setDistancePercent={objectSound.updateDistance}
+        />
+      </styled.TracksContainer>
     </styled.Container>
   );
 };

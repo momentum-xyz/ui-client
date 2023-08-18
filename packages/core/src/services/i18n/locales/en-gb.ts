@@ -318,6 +318,7 @@ export const enGb = {
       information: 'Information',
       help: 'Help',
       settings: 'Settings',
+      info: 'Info',
       fullscreen: 'Fullscreen',
       embedPicture: 'EMBED A PICTURE',
       embedPictureInfo:
@@ -622,7 +623,7 @@ export const enGb = {
       odysseySoundtrack:
         'Here you can set the soundtrack for your Odyssey. The song you select will be heard by visitors to your odyssey when they enter your world. Please be careful only to upload songs you have the rights to. Your Soundtrack will play on loop.',
       objectSound:
-        'By embedding a sound to this object; users will also be able to hear this sound played when they fly towards the object. To embed a sound choose a sound from your library.',
+        'Users will be able to hear this sound when they fly towards the object. You can upload the following sound files: MP3, OGG, ACC and WEBM',
       uploadAssetInfoTitle: 'Drag and drop your asset here',
       uploadAssetPictureDescription: 'Drag and drop YOUR CUSTOM image here',
       uploadAssetDesc1: 'We support GLB Models.',
@@ -658,7 +659,7 @@ export const enGb = {
       objectInfo: 'Object info',
       customizeObject: 'Customize object',
       odysseySoundtrack: 'Odyssey soundtrack',
-      objectSound: 'Embed a sound',
+      objectSound: 'Add sound to object',
       creatorEnabled: 'Odyssey Creator Mode Enabled',
       kickedFromMeeting: 'You have been kicked from a space',
       joinGathering: 'Gathering Event is starting now',
@@ -698,7 +699,7 @@ export const enGb = {
       upload3dAsset: 'Upload 3D Asset',
       admin: 'Admin',
       owner: 'Owner',
-      colourPicker: 'Colour Picker',
+      colourPicker: 'Change colour of object',
       setSpawnPoint: 'Set Spawn Point',
       statistics: 'Statistics',
       communitySkyboxLibrary: 'Community Library',
@@ -862,6 +863,7 @@ export const enGb = {
       confirmRemove: 'yes, remove',
       removeRule: 'remove rule',
       noCancel: 'no, cancel',
+      submit: 'submit',
       save: 'save',
       stake: 'Stake',
       unstake: 'Unstake',

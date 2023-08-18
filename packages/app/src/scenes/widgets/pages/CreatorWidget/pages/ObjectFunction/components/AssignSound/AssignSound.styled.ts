@@ -24,7 +24,7 @@ export const Message = styled.div`
 export const UploadBlock = styled.div``;
 
 export const TracksContainer = styled.div`
-  margin: 10px 10px 0 10px;
+  margin: 10px 0 0 0;
   padding: 20px 0 0 0;
   border-top: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
 `;

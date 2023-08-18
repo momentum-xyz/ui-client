@@ -2,9 +2,9 @@ import {rgba} from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --scroll-offset: 455px;
+  // --scroll-offset: 455px;
 
-  padding: 10px;
+  // padding: 10px;
 `;
 
 export const InfoContainer = styled.div`
@@ -117,4 +117,10 @@ export const ActionBar = styled.div`
     justify-content: center;
     max-width: 156px;
   }
+`;
+
+export const Error = styled.div`
+  color: ${(props) => props.theme.danger};
+  font-size: 12px;
+  margin: 10px 0 0 0;
 `;

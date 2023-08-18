@@ -1,7 +1,7 @@
 import {AttributeValueInterface} from '@momentum-xyz/sdk';
 
 export interface TextObjectInterface extends AttributeValueInterface {
-  title: string;
+  title?: string;
   content: string;
 }
 

@@ -1,5 +1,5 @@
 import {observer} from 'mobx-react-lite';
-import {FC, useCallback, useEffect, useMemo} from 'react';
+import {FC, useCallback, useEffect} from 'react';
 import {Panel, IconNameType, SideMenuItemInterface, SideMenu, Dialog} from '@momentum-xyz/ui-kit';
 import {i18n, useI18n} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
@@ -130,7 +130,7 @@ const CreatorWidget: FC = () => {
     [handleSubMenuActiveChange, setSelectedTab]
   );
 
-  const content = useMemo(() => {
+  const content = (() => {
     if (!world2dStore?.worldDetails?.world) {
       return <></>;
     }
@@ -147,7 +147,12 @@ const CreatorWidget: FC = () => {
       case 'sound':
         return <MusicManager />;
       case 'inspector':
-        return <ObjectInspector />;
+        return world3dStore?.selectedObjectId ? (
+          <ObjectInspector
+            objectId={world3dStore.selectedObjectId}
+            key={world3dStore.selectedObjectId}
+          />
+        ) : null;
       case 'functionality':
         return <ObjectFunction />;
       case 'customise':
@@ -161,7 +166,7 @@ const CreatorWidget: FC = () => {
       default:
     }
     return null;
-  }, [handleTabChange, selectedTab, world3dStore, world2dStore]);
+  })();
 
   return (
     <styled.Container data-testid="CreatorWidget-test">

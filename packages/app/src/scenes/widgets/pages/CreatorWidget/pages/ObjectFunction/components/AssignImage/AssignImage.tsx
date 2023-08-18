@@ -1,5 +1,5 @@
-import {FC, useEffect} from 'react';
-import {Frame, Input, FileUploader, ErrorsEnum, Button} from '@momentum-xyz/ui-kit';
+import {FC, useCallback, useEffect, useMemo} from 'react';
+import {Frame, Input, FileUploader, ErrorsEnum, Button, ImageSizeEnum} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
@@ -8,6 +8,9 @@ import cn from 'classnames';
 
 import {ToastContent} from 'ui-kit';
 import {ImageObjectInterface} from 'core/interfaces';
+import {PluginIdEnum} from 'api/enums';
+import {MediaUploader, ObjectAttribute} from 'core/models';
+import {getImageAbsoluteUrl} from 'core/utils';
 
 import * as styled from './AssignImage.styled';
 
@@ -155,6 +158,128 @@ const AssignImage: FC<PropsInterface> = ({
       </styled.Wrapper>
     </styled.Container>
   );
+};
+
+export const useAssignImage = ({
+  objectId
+}: {
+  objectId: string;
+}): {
+  content: JSX.Element;
+  isModified: boolean;
+  save: () => Promise<void>;
+  discardChanges: () => void;
+  clear: () => Promise<void>;
+} => {
+  const {t} = useI18n();
+
+  const {
+    control,
+    setError,
+    handleSubmit,
+    reset,
+    formState: {errors, isDirty}
+  } = useForm<ImageObjectInterface>({});
+
+  const [attribute, mediaUploader] = useMemo(() => {
+    const attribute = ObjectAttribute.create({
+      objectId,
+      pluginId: PluginIdEnum.IMAGE
+    });
+    attribute.load();
+    return [attribute, MediaUploader.create()];
+  }, [objectId]);
+
+  const save = useCallback(async () => {
+    await handleSubmit(async (data) => {
+      let render_hash: string | null = null;
+
+      if (data.image) {
+        render_hash = await mediaUploader.uploadImageOrVideo(data.image);
+        if (!render_hash) {
+          console.log('ObjectAttribute image: upload error');
+          setError('image', {message: 'upload'});
+          return;
+        }
+      }
+
+      await attribute.set({
+        render_hash
+      });
+    })();
+  }, [attribute, handleSubmit, mediaUploader, setError]);
+
+  const clear = useCallback(async () => {
+    await attribute.delete();
+  }, [attribute]);
+
+  const handleUploadError = (err: Error): void => {
+    console.log('File upload error:', err);
+    const message =
+      err.message === ErrorsEnum.FileSizeTooLarge
+        ? t('assetsUploader.errorTooLargeFile', {size: MAX_ASSET_SIZE_MB})
+        : t('assetsUploader.errorSave');
+
+    toast.error(<ToastContent isDanger icon="alert" text={message} />);
+    setError('image', {message});
+  };
+
+  const initialImageSrc = getImageAbsoluteUrl(
+    attribute.valueAs<ImageObjectInterface>()?.render_hash,
+    ImageSizeEnum.S5
+  );
+
+  const content = (
+    <styled.Container data-testid="AssignImage-test">
+      <Controller
+        name="image"
+        control={control}
+        render={({field: {value, onChange}}) => {
+          const imageUrl = value ? URL.createObjectURL(value) : initialImageSrc;
+
+          return (
+            <styled.ImageUploadContainer
+              className={cn(!!errors.image && 'error', !!imageUrl && 'has-image')}
+            >
+              {!!imageUrl && (
+                <styled.PreviewImageHolder style={{backgroundImage: `url(${imageUrl})`}} />
+              )}
+              {errors.image && (
+                <styled.Error>{errors.image.message || t('assetsUploader.errorSave')}</styled.Error>
+              )}
+
+              <styled.Uploader>
+                <FileUploader
+                  fileType="image"
+                  enableDragAndDrop
+                  label={t('actions.uploadYourAsset')}
+                  dragActiveLabel={t('actions.dropItHere')}
+                  maxSize={MAX_ASSET_SIZE_B}
+                  onError={handleUploadError}
+                  onFilesUpload={onChange}
+                >
+                  {!value && (
+                    <styled.DragAndDropPrompt>
+                      <span>{t('messages.uploadAssetPictureDescription')}</span>
+                      <span>{t('labels.or')}</span>
+                    </styled.DragAndDropPrompt>
+                  )}
+                </FileUploader>
+              </styled.Uploader>
+            </styled.ImageUploadContainer>
+          );
+        }}
+      />
+    </styled.Container>
+  );
+
+  return {
+    content,
+    isModified: isDirty,
+    save,
+    discardChanges: reset,
+    clear
+  };
 };
 
 export default observer(AssignImage);
