@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1.4
 # Multistage docker build
 ARG NODE_VERSION=18
+ARG NODE_OPTIONS=
 
 FROM node:${NODE_VERSION}-alpine AS build-deps
 
@@ -30,11 +31,12 @@ RUN yarn build:deps
 
 
 # App builder
-ARG BUILD_VERSION
 FROM base-build as app-build
 ARG BUILD_VERSION
+ARG NODE_OPTIONS
 RUN yarn workspace @momentum-xyz/ui-client install --check-files
 ENV REACT_APP_VERSION=${BUILD_VERSION}
+ENV NODE_OPTIONS=${NODE_OPTIONS}
 RUN yarn workspace @momentum-xyz/ui-client build
 
 
