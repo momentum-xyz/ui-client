@@ -47,7 +47,7 @@ RUN yarn workspace plugin_${PLUGIN} build
 
 
 # Base runtime
-FROM nginx:1.23.4-alpine as base-runtime
+FROM nginx:1.25.2-alpine as base-runtime
 WORKDIR /opt/srv
 
 ADD ./docker_assets/nginx.conf /etc/nginx/nginx.conf
@@ -64,5 +64,9 @@ COPY --from=plugin-build --link /src/packages/plugin_${PLUGIN}/build /opt/srv
 FROM base-runtime as app-runtime
 COPY --from=app-build --link /src/packages/app/build /opt/srv
 ARG BUILD_VERSION
+LABEL org.opencontainers.image.source=https://github.com/momentum-xyz/ui-client
+LABEL org.opencontainers.image.description="Web UI of Odyssey Momentum"
+LABEL org.opencontainers.image.licenses=GPL-3.0
 LABEL maintainer="Odyssey Maintainers"
 LABEL version="$BUILD_VERSION"
+
