@@ -1,3 +1,4 @@
+import {useMemo} from 'react';
 import ReactSelect, {components, MenuPlacement} from 'react-select';
 import cn from 'classnames';
 
@@ -46,6 +47,16 @@ const Select = <T,>({
   onMultiChange,
   ...rest
 }: SelectPropsInterface<T>) => {
+  const formattedValue = useMemo(() => {
+    if (value === undefined || value === null) {
+      return null;
+    } else {
+      return Array.isArray(value)
+        ? value.map((i) => options.find((opt) => opt.value === i))
+        : options.find((opt) => opt.value === value);
+    }
+  }, [options, value]);
+
   return (
     <styled.Container data-testid="Select-test" className={cn(wide && 'wide')}>
       <styled.GlobalSelectStyle />
@@ -62,11 +73,7 @@ const Select = <T,>({
         maxMenuHeight={maxMenuHeight}
         classNamePrefix="Select"
         menuPortalTarget={document.body}
-        value={
-          value && Array.isArray(value)
-            ? value.map((i) => options.find((opt) => opt.value === i))
-            : options.find((opt) => opt.value === value)
-        }
+        value={formattedValue}
         onChange={(opts) => {
           if (Array.isArray(opts)) {
             onMultiChange?.(opts?.map((opt) => opt.value) || []);
