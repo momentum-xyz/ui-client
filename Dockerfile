@@ -2,6 +2,8 @@
 # Multistage docker build
 ARG NODE_VERSION=18
 ARG NODE_OPTIONS=
+ARG BUILD_VERSION
+ARG PLUGIN=miro
 
 FROM node:${NODE_VERSION}-alpine AS build-deps
 
@@ -41,7 +43,6 @@ RUN yarn workspace @momentum-xyz/ui-client build
 
 
 # Plugin builder
-ARG PLUGIN=miro
 FROM base-build as plugin-build
 ARG PLUGIN
 RUN yarn workspace plugin_${PLUGIN} install --check-files
