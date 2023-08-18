@@ -1,13 +1,14 @@
-import {FC, ReactElement, useEffect, useMemo} from 'react';
+import {FC, ReactElement, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 import {dateWithoutTime, useI18n} from '@momentum-xyz/core';
-import {Hexagon, Select, SelectOptionInterface} from '@momentum-xyz/ui-kit';
+import {Hexagon, IconSvg, Select, SelectOptionInterface} from '@momentum-xyz/ui-kit';
 
 import {CanvasButtonGroup} from 'ui-kit';
 import {CanvasStepType} from 'core/types';
 import leonardoImage from 'static/images/leonardo.jpeg';
 import aiProfileImage from 'static/images/ai_profile.jpeg';
+import cubeImage from 'static/images/cube.svg';
 
 import * as styled from './OverviewStep.styled';
 
@@ -19,6 +20,8 @@ interface PropsInterface {
   leonardoCosts: number;
   isChatGPT: boolean;
   isLeonardo: boolean;
+  wasSubmitted: boolean;
+  wasSpawned: boolean;
   contributionAmount: number | null;
   setContributionAmount: (amount: number | null) => void;
   setActiveStep: (step: CanvasStepType) => void;
@@ -34,6 +37,8 @@ export const CREDITS_AMOUNT_OPTIONS: SelectOptionInterface<number>[] = [
 ];
 
 const OverviewStep: FC<PropsInterface> = ({
+  wasSubmitted,
+  wasSpawned,
   version,
   created,
   missionTitle,
@@ -47,21 +52,20 @@ const OverviewStep: FC<PropsInterface> = ({
   onRenderActions,
   onSubmitCanvas
 }) => {
+  const [isPreview, setIsPreview] = useState(false);
+
   const {t} = useI18n();
 
   const isAI: boolean = useMemo(() => isLeonardo || isChatGPT, [isLeonardo, isChatGPT]);
 
   const aiCosts: number = useMemo(() => {
-    if (isLeonardo && isChatGPT) {
-      return leonardoCosts + chatGPTCosts;
-    } else if (isLeonardo && !isChatGPT) {
-      return leonardoCosts;
-    } else if (!isLeonardo && isChatGPT) {
-      return chatGPTCosts;
-    } else {
-      return 0;
-    }
+    const costs = isLeonardo ? leonardoCosts : 0;
+    return isChatGPT ? costs + chatGPTCosts : costs;
   }, [leonardoCosts, chatGPTCosts, isLeonardo, isChatGPT]);
+
+  const isSubmitButtonAvailable = !wasSubmitted;
+  const isPreviewButtonAvailable = wasSubmitted && !wasSpawned && isPreview;
+  const isSpawnButtonAvailable = wasSubmitted && !wasSpawned && !isPreview;
 
   useEffect(() => {
     onRenderActions(
@@ -70,15 +74,44 @@ const OverviewStep: FC<PropsInterface> = ({
           label: t('actions.back'),
           onClick: () => setActiveStep('teamworkScript')
         }}
-        nextProps={{
-          icon: 'idea',
-          disabled: isAI && !contributionAmount,
-          label: t('actions.submitCanvas'),
-          onClick: () => onSubmitCanvas()
-        }}
+        {...(isSubmitButtonAvailable && {
+          nextProps: {
+            icon: 'idea',
+            disabled: isAI && !contributionAmount,
+            label: t('actions.submitCanvas'),
+            onClick: () => {
+              onSubmitCanvas();
+              setIsPreview(true);
+            }
+          }
+        })}
+        {...(isPreviewButtonAvailable && {
+          nextProps: {
+            icon: 'idea',
+            disabled: false,
+            label: t('actions.previewCanvas'),
+            onClick: () => {
+              setIsPreview(false);
+            }
+          }
+        })}
+        {...(isSpawnButtonAvailable && {
+          nextProps: {
+            icon: 'idea',
+            disabled: true,
+            label: t('actions.spawnCanvas'),
+            onClick: () => {}
+          }
+        })}
       />
     );
-  }, [isAI, contributionAmount]);
+  }, [
+    isAI,
+    contributionAmount,
+    isSubmitButtonAvailable,
+    isPreviewButtonAvailable,
+    isSpawnButtonAvailable
+  ]);
 
   return (
     <styled.Container data-testid="OverviewStep-test">
@@ -147,6 +180,39 @@ const OverviewStep: FC<PropsInterface> = ({
               </styled.AICreditsContainer>
             </styled.AmountGrid>
           </styled.CreditsContainer>
+        )}
+
+        {isPreviewButtonAvailable && (
+          <>
+            <styled.Separator />
+            <styled.SubTitle>{t('titles.placeCentralObject')}</styled.SubTitle>
+
+            <styled.PreviewContainer>
+              <styled.ImageContainer>
+                <styled.Image src={cubeImage} />
+              </styled.ImageContainer>
+              <styled.PreviewInfo>
+                <div>{t('descriptions.canvasStep6_One')}</div>
+                <div>{t('descriptions.canvasStep6_Two')}</div>
+              </styled.PreviewInfo>
+            </styled.PreviewContainer>
+          </>
+        )}
+
+        {isSpawnButtonAvailable && (
+          <>
+            <styled.Separator />
+            <styled.SubTitle>{t('titles.placeCentralObject')}</styled.SubTitle>
+            <styled.PreviewContainer>
+              <styled.ImageContainer>
+                <styled.Image src={cubeImage} />
+              </styled.ImageContainer>
+              <styled.FlightMessage>
+                <IconSvg name="alert" isWhite />
+                <div>{t('descriptions.canvasStep6_Three')}</div>
+              </styled.FlightMessage>
+            </styled.PreviewContainer>
+          </>
         )}
       </styled.Grid>
     </styled.Container>

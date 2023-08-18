@@ -14,6 +14,8 @@ const CanvasEditorStore = types
   .compose(
     ResetModel,
     types.model('CanvasEditorStore', {
+      wasSubmitted: false,
+      wasSpawned: false,
       version: '01',
       created: types.maybeNull(types.string),
       leonardoCosts: 20,
@@ -45,6 +47,12 @@ const CanvasEditorStore = types
     },
     setContributionAmount(amount: number | null) {
       self.contributionAmount = amount;
+    }
+  }))
+  .actions((self) => ({
+    submitCanvas(): void {
+      // TODO: Implementation
+      self.wasSubmitted = true;
     }
   }))
   .views((self) => ({

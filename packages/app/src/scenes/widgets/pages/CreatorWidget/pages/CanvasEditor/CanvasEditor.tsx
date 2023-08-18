@@ -123,6 +123,8 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'overview' && (
               <OverviewStep
+                wasSubmitted={canvasEditorStore.wasSubmitted}
+                wasSpawned={canvasEditorStore.wasSpawned}
                 version={canvasEditorStore.version}
                 created={canvasEditorStore.created}
                 missionTitle={canvasEditorStore.missionData.missionTitle}
@@ -134,7 +136,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
                 setContributionAmount={canvasEditorStore.setContributionAmount}
                 setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
-                onSubmitCanvas={() => {}} // TODO
+                onSubmitCanvas={canvasEditorStore.submitCanvas}
               />
             )}
           </Frame>

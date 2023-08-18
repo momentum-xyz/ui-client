@@ -117,3 +117,39 @@ export const AICreditsContainer = styled.div`
   background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
   border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
 `;
+
+export const PreviewContainer = styled.div`
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 20px;
+`;
+
+export const ImageContainer = styled.div`
+  display: flex;
+  width: 160px;
+  height: 145px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid ${(props) => props.theme.text};
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
+`;
+
+export const Image = styled.img`
+  width: 90px;
+  height: 105px;
+`;
+
+export const PreviewInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+`;
+
+export const FlightMessage = styled.div`
+  padding: 10px;
+  display: flex;
+  border-radius: 4px;
+  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
+  gap: 10px;
+`;

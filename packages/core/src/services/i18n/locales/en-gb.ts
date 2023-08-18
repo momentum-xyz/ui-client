@@ -673,6 +673,7 @@ export const enGb = {
       overviewAITools: 'Overview of AI Tools',
       createTeamworkScript: 'Create the teamwork script',
       canvasQuestion1: 'First question, always ask for a title',
+      placeCentralObject: 'Place the central 3D object of the Canvas in Odyssey',
       enterScript: 'Enter your script',
       question: 'Question',
       later: 'later',
@@ -842,6 +843,8 @@ export const enGb = {
       spawn: 'Spawn',
       setAmount: 'Set Amount',
       submitCanvas: 'Submit canvas',
+      previewCanvas: 'Preview canvas',
+      spawnCanvas: 'Spawn canvas',
       setAsDefault: 'Set as default',
       takeSnapshot: 'Take a snapshot',
       createVideo: 'Create a video',
@@ -1016,7 +1019,13 @@ export const enGb = {
       canvasStep4_One:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
       canvasStep5_One:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.'
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+      canvasStep6_One:
+        'By creating the canvas you spawn a central Canvas object in the Odyssey where the contributions will be placed around.',
+      canvasStep6_Two:
+        'You can fly with the preview of the object until you reached the perfect spawning point and place the object',
+      canvasStep6_Three:
+        'You can fly around with the preview of the object until you reached the perfect spawning point and place the object'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',
