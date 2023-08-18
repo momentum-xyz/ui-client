@@ -16,13 +16,14 @@ const CanvasEditorStore = types
     types.model('CanvasEditorStore', {
       version: '01',
       created: types.maybeNull(types.string),
-      aiImageCreditsCount: 20,
-      aiTextCreditsCount: 12,
+      leonardoCosts: 20,
+      chatGPTCosts: 12,
       contributionAmount: types.maybeNull(types.number),
       missionData: types.optional(MissionData, {}),
       questionsData: types.optional(QuestionsData, {}),
       scriptData: types.optional(ScriptData, {}),
       teamworkScriptData: types.optional(TeamworkScriptData, {}),
+
       request: types.optional(RequestModel, {})
     })
   )
@@ -43,7 +44,6 @@ const CanvasEditorStore = types
       self.teamworkScriptData = TeamworkScriptData.create({...form});
     },
     setContributionAmount(amount: number | null) {
-      console.log(amount);
       self.contributionAmount = amount;
     }
   }))

@@ -15,10 +15,10 @@ interface PropsInterface {
   version: string;
   created: string | null;
   missionTitle: string;
-  aiTextCreditsCount: number;
-  aiImageCreditsCount: number;
-  isTextAIAvailable: boolean;
-  isImageAIAvailable: boolean;
+  chatGPTCosts: number;
+  leonardoCosts: number;
+  isChatGPT: boolean;
+  isLeonardo: boolean;
   contributionAmount: number | null;
   setContributionAmount: (amount: number | null) => void;
   setActiveStep: (step: CanvasStepType) => void;
@@ -37,10 +37,10 @@ const OverviewStep: FC<PropsInterface> = ({
   version,
   created,
   missionTitle,
-  aiTextCreditsCount,
-  aiImageCreditsCount,
-  isTextAIAvailable,
-  isImageAIAvailable,
+  chatGPTCosts,
+  leonardoCosts,
+  isChatGPT,
+  isLeonardo,
   contributionAmount,
   setContributionAmount,
   setActiveStep,
@@ -49,21 +49,19 @@ const OverviewStep: FC<PropsInterface> = ({
 }) => {
   const {t} = useI18n();
 
-  const isAIAvailable: boolean = useMemo(() => {
-    return isImageAIAvailable || isTextAIAvailable;
-  }, [isImageAIAvailable, isTextAIAvailable]);
+  const isAI: boolean = useMemo(() => isLeonardo || isChatGPT, [isLeonardo, isChatGPT]);
 
-  const maxCreditsAvailable: number = useMemo(() => {
-    if (isImageAIAvailable && isTextAIAvailable) {
-      return aiImageCreditsCount + aiTextCreditsCount;
-    } else if (isImageAIAvailable && !isTextAIAvailable) {
-      return aiImageCreditsCount;
-    } else if (!isImageAIAvailable && isTextAIAvailable) {
-      return aiTextCreditsCount;
+  const aiCosts: number = useMemo(() => {
+    if (isLeonardo && isChatGPT) {
+      return leonardoCosts + chatGPTCosts;
+    } else if (isLeonardo && !isChatGPT) {
+      return leonardoCosts;
+    } else if (!isLeonardo && isChatGPT) {
+      return chatGPTCosts;
     } else {
       return 0;
     }
-  }, [aiImageCreditsCount, aiTextCreditsCount, isImageAIAvailable, isTextAIAvailable]);
+  }, [leonardoCosts, chatGPTCosts, isLeonardo, isChatGPT]);
 
   useEffect(() => {
     onRenderActions(
@@ -74,16 +72,13 @@ const OverviewStep: FC<PropsInterface> = ({
         }}
         nextProps={{
           icon: 'idea',
-          disabled: true, // TODO
-          label: t('labels.???'),
-          onClick: () => {
-            // TODO
-            onSubmitCanvas();
-          }
+          disabled: isAI && !contributionAmount,
+          label: t('actions.submitCanvas'),
+          onClick: () => onSubmitCanvas()
         }}
       />
     );
-  }, []);
+  }, [isAI, contributionAmount]);
 
   return (
     <styled.Container data-testid="OverviewStep-test">
@@ -105,25 +100,25 @@ const OverviewStep: FC<PropsInterface> = ({
           <div>{t('titles.overviewAITools')}</div>
         </styled.Header>
 
-        <styled.AIInfoContainer className={cn(!isTextAIAvailable && 'disabled')}>
+        <styled.AIInfoContainer className={cn(!isChatGPT && 'disabled')}>
           <styled.AIImage src={aiProfileImage} />
           <styled.AIInfo>
             <div>{t('actions.chatGPT')}</div>
-            <span>{t('labels.maxAICredits', {count: aiTextCreditsCount})}</span>
+            <span>{t('labels.maxAICredits', {count: chatGPTCosts})}</span>
           </styled.AIInfo>
         </styled.AIInfoContainer>
 
-        <styled.AIInfoContainer className={cn(!isImageAIAvailable && 'disabled')}>
+        <styled.AIInfoContainer className={cn(!isLeonardo && 'disabled')}>
           <styled.AIImage src={leonardoImage} />
           <styled.AIInfo>
             <div>{t('actions.leonardo')}</div>
-            <span>{t('labels.maxAICredits', {count: aiImageCreditsCount})}</span>
+            <span>{t('labels.maxAICredits', {count: leonardoCosts})}</span>
           </styled.AIInfo>
         </styled.AIInfoContainer>
 
         <styled.MaxCredits>
-          {isTextAIAvailable || isImageAIAvailable ? (
-            <>{t('labels.maxAICredits', {count: maxCreditsAvailable})}</>
+          {isChatGPT || isLeonardo ? (
+            <>{t('labels.maxAICredits', {count: aiCosts})}</>
           ) : (
             <>{t('labels.noAITools')}</>
           )}
@@ -131,7 +126,7 @@ const OverviewStep: FC<PropsInterface> = ({
 
         <styled.Separator />
 
-        {isAIAvailable && (
+        {isAI && (
           <styled.CreditsContainer>
             <styled.SubTitle>{t('titles.setContributionsAmount')}</styled.SubTitle>
             <styled.AmountGrid>
@@ -146,7 +141,9 @@ const OverviewStep: FC<PropsInterface> = ({
               />
 
               <styled.AICreditsContainer>
-                {t('labels.aiCredits', {amount: 'XX'})}
+                {t('labels.aiCredits', {
+                  amount: !contributionAmount ? 'XX' : contributionAmount * aiCosts
+                })}
               </styled.AICreditsContainer>
             </styled.AmountGrid>
           </styled.CreditsContainer>

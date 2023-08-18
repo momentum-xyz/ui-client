@@ -13,7 +13,7 @@ import aiProfileImage from 'static/images/ai_profile.jpeg';
 import * as styled from './TeamworkScriptStep.styled';
 
 interface PropsInterface {
-  aiCreditsCount: number;
+  chatGPTCosts: number;
   teamworkScriptData: TeamworkScriptDataModelInterface;
   onUpdate: (form: CanvasTeamworkScriptFormInterface) => void;
   setActiveStep: (step: CanvasStepType) => void;
@@ -21,7 +21,7 @@ interface PropsInterface {
 }
 
 const TeamworkScriptStep: FC<PropsInterface> = ({
-  aiCreditsCount,
+  chatGPTCosts,
   teamworkScriptData,
   onUpdate,
   onRenderActions,
@@ -41,11 +41,11 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
     if (teamworkScriptData) {
       setValue('script', teamworkScriptData.script);
       setValue('scriptTitle', teamworkScriptData.scriptTitle);
-      setValue('isAIAvailable', teamworkScriptData.isAIAvailable);
+      setValue('isChatGPT', teamworkScriptData.isChatGPT);
     }
   }, [teamworkScriptData, setValue]);
 
-  const [isAIAvailable] = watch(['isAIAvailable']);
+  const [isChatGPT] = watch(['isChatGPT']);
 
   const formSubmitHandler: SubmitHandler<CanvasTeamworkScriptFormInterface> = useCallback(
     (form) => {
@@ -89,7 +89,7 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
         <styled.Separator />
 
         <Controller
-          name="isAIAvailable"
+          name="isChatGPT"
           control={control}
           render={({field: {value, onChange}}) => (
             <styled.AIButtons>
@@ -97,7 +97,7 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
                 active={value}
                 imageSrc={aiProfileImage}
                 title={t('actions.chatGPT')}
-                label={t('labels.maxAICredits', {count: aiCreditsCount})}
+                label={t('labels.maxAICredits', {count: chatGPTCosts})}
                 onClick={() => {
                   onChange(true);
                 }}
@@ -128,7 +128,7 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
             <Input
               wide
               value={value}
-              disabled={!isAIAvailable}
+              disabled={!isChatGPT}
               danger={!!errors.scriptTitle}
               placeholder={`${t('placeholders.whatIsProduct')}*`}
               onChange={onChange}
@@ -145,7 +145,7 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
               lines={12}
               value={value}
               danger={!!errors.script}
-              disabled={!isAIAvailable}
+              disabled={!isChatGPT}
               placeholder={t('placeholders.canvasTeamworkScript')}
               onChange={onChange}
             />

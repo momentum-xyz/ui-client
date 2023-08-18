@@ -103,7 +103,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'script' && (
               <ScriptStep
-                aiCreditsCount={canvasEditorStore.aiImageCreditsCount}
+                leonardoCosts={canvasEditorStore.leonardoCosts}
                 scriptData={canvasEditorStore.scriptData}
                 onUpdate={canvasEditorStore.setScriptData}
                 setActiveStep={handleSetActiveStep}
@@ -113,7 +113,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'teamworkScript' && (
               <TeamworkScriptStep
-                aiCreditsCount={canvasEditorStore.aiTextCreditsCount}
+                chatGPTCosts={canvasEditorStore.chatGPTCosts}
                 teamworkScriptData={canvasEditorStore.teamworkScriptData}
                 onUpdate={canvasEditorStore.setTeamworkScriptData}
                 setActiveStep={handleSetActiveStep}
@@ -126,10 +126,10 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
                 version={canvasEditorStore.version}
                 created={canvasEditorStore.created}
                 missionTitle={canvasEditorStore.missionData.missionTitle}
-                aiTextCreditsCount={canvasEditorStore.aiTextCreditsCount}
-                aiImageCreditsCount={canvasEditorStore.aiImageCreditsCount}
-                isTextAIAvailable={canvasEditorStore.scriptData.isAIAvailable}
-                isImageAIAvailable={canvasEditorStore.teamworkScriptData.isAIAvailable}
+                chatGPTCosts={canvasEditorStore.chatGPTCosts}
+                leonardoCosts={canvasEditorStore.leonardoCosts}
+                isLeonardo={canvasEditorStore.scriptData.isLeonardo}
+                isChatGPT={canvasEditorStore.teamworkScriptData.isChatGPT}
                 contributionAmount={canvasEditorStore.contributionAmount}
                 setContributionAmount={canvasEditorStore.setContributionAmount}
                 setActiveStep={handleSetActiveStep}

@@ -1,7 +1,7 @@
 import {Instance, types} from 'mobx-state-tree';
 
 const TeamworkScriptData = types.model('TeamworkScriptData', {
-  isAIAvailable: true,
+  isChatGPT: true,
   script: types.maybe(types.string),
   scriptTitle: types.maybe(types.string)
 });

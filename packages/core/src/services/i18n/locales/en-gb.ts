@@ -841,6 +841,7 @@ export const enGb = {
       preview: 'Preview',
       spawn: 'Spawn',
       setAmount: 'Set Amount',
+      submitCanvas: 'Submit canvas',
       setAsDefault: 'Set as default',
       takeSnapshot: 'Take a snapshot',
       createVideo: 'Create a video',
