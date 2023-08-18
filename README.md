@@ -179,7 +179,9 @@ It's possible to assign a locally running plugin to some object in 3D for testin
 - Use `yarn start:plugin` command
 
 ```json
-REACT_APP_LOCAL_PLUGINS='{"ba5ae691-7ad7-4508-b83d-759529b82a19":{"meta":{"id":"1234","name":"plugin_twitch","pluginId":"123","scopeName":"plugin_twitch","scriptUrl":"http://localhost:3001/remoteEntry.js"}},"84f93e15-f064-4f79-aa74-e60f21c07ba9":{"meta":{"id":"22222","name":"plugin_video","pluginId":"222","scopeName":"plugin_video","scriptUrl":"http://localhost:3002/remoteEntry.js"}}}'
+REACT_APP_LOCAL_PLUGINS='{"bda25d5d-2aab-45b4-9e8a-23579514cec1":{"meta":{"id":"308fdacc-8c2d-40dc-bd5f-d1549e3e03ba","name":"plugin_video","pluginId":"308fdacc-8c2d-40dc-bd5f-d1549e3e03ba","scopeName":"plugin_video","scriptUrl":"http://localhost:3001/remoteEntry.js"}}}'
 ```
 
-Here `ba5ae691-7ad7-4508-b83d-759529b82a19` is the objectId of some spawned 3D object in my local world.
+Another option is uncommenting some of the lines in `packages/app/src/stores/UniverseStore/models/ObjectStore/ObjectStore.ts` defining `localPlugins` variable.
+
+Here `bda25d5d-2aab-45b4-9e8a-23579514cec1` is the `asset2dId` of the plugin - defined in `packages/app/src/core/enums/basicAsset2dId.enum.ts`.

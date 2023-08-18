@@ -11,9 +11,9 @@ import {ObjectContentStore} from './models';
 
 const {REACT_APP_LOCAL_PLUGINS = '{}'} = process.env;
 const localPlugins = JSON.parse(REACT_APP_LOCAL_PLUGINS);
-// It's: {[object_id: string]: {meta: {id, name, pluginId, scopeName, scriptUrl}}}
+// It's: {[asset_2d_id: string]: {meta: {id, name, pluginId, scopeName, scriptUrl}}}
 // const localPlugins = {
-//   '01880ae4-3ddb-7cb5-bef4-e70a36365a36': {
+//   'bda25d5d-2aab-45b4-9e8a-23579514cec1': {
 //     meta: {
 //       id: '308fdacc-8c2d-40dc-bd5f-d1549e3e03ba',
 //       name: 'plugin_video',
@@ -44,7 +44,7 @@ const ObjectStore = types
   )
   .actions((self) => ({
     initPluginLoader: flow(function* (asset2dId: string, objectId: string) {
-      let assetData = localPlugins[objectId];
+      let assetData = localPlugins[asset2dId];
 
       console.log('initPluginLoader', asset2dId, objectId, assetData);
 
