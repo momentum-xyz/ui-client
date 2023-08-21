@@ -207,6 +207,8 @@ const usePlugin: UsePluginHookType = (props) => {
       content,
       isModified: !!modifiedState,
       isValid: !isModifiedStateError,
+      isEmpty: !embedUrl,
+      isLoading,
       editModeContent,
       saveChanges,
       discardChanges,

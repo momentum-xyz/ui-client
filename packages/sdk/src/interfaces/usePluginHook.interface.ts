@@ -13,6 +13,8 @@ interface UsePluginHookReturnInterface {
     content: JSX.Element | null;
     isModified?: boolean;
     isValid?: boolean;
+    isEmpty?: boolean;
+    isLoading?: boolean;
     editModeContent?: JSX.Element | null;
     saveChanges?: () => Promise<void>;
     discardChanges?: () => void;
