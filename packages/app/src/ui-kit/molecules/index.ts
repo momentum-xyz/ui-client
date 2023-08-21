@@ -7,3 +7,4 @@ export * from './WorldsStakedList';
 export * from './WalletSelectHelper';
 export * from './WalletSelector';
 export * from './TokenSelector';
+export * from './CanvasButtonGroup';

@@ -1,3 +1,4 @@
+export * from './ButtonRectangle';
 export * from './Panel';
 export * from './Steps';
 export * from './Tabs';

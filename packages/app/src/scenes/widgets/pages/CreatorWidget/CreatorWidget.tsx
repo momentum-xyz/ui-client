@@ -15,7 +15,7 @@ import {
   SpawnAsset,
   SkyboxSelector,
   ObjectInspector,
-  AssetCustomising,
+  CanvasEditor,
   ObjectFunction,
   MusicManager,
   SceneExplorer,
@@ -34,6 +34,11 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     id: 'addObject',
     iconName: 'add',
     label: i18n.t('labels.addObject')
+  },
+  {
+    id: 'canvas',
+    iconName: 'idea',
+    label: i18n.t('labels.canvasEditor')
   },
   {
     id: 'skybox',
@@ -68,11 +73,6 @@ const allPanels: SideMenuItemInterface<MenuItemType>[] = [
     id: 'functionality',
     iconName: 'cubicles',
     label: i18n.t('labels.selectFunction')
-  },
-  {
-    id: 'customise',
-    iconName: 'group',
-    label: i18n.t('labels.assetCustomising')
   }
 ];
 
@@ -142,6 +142,8 @@ const CreatorWidget: FC = () => {
         return <WorldEditor world={world} onCancel={() => handleTabChange(undefined)} />;
       case 'addObject':
         return <SpawnAsset />;
+      case 'canvas':
+        return <CanvasEditor onClose={() => handleTabChange(undefined)} />;
       case 'skybox':
         return <SkyboxSelector />;
       case 'sound':
@@ -150,8 +152,6 @@ const CreatorWidget: FC = () => {
         return <ObjectInspector />;
       case 'functionality':
         return <ObjectFunction />;
-      case 'customise':
-        return <AssetCustomising />;
       case 'sceneExplorer':
         return world3dStore ? <SceneExplorer world3dStore={world3dStore} /> : null;
       case 'editMembers':
@@ -174,7 +174,8 @@ const CreatorWidget: FC = () => {
         />
       </div>
 
-      {!!selectedTab && !!content && (
+      {/* TODO: Add the Panel to each component */}
+      {!!selectedTab && !!content && selectedTab !== 'canvas' && (
         <Panel
           isFullHeight
           size={
@@ -190,6 +191,8 @@ const CreatorWidget: FC = () => {
           {content}
         </Panel>
       )}
+
+      {!!selectedTab && !!content && selectedTab === 'canvas' && <>{content}</>}
 
       {removeObjectDialog.isOpen && (
         <Dialog

@@ -48,6 +48,10 @@ export const GlobalSelectStyle = createGlobalStyle`
         }
       }
     }
+    
+    .Select__control--is-disabled {
+      border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
+    }
 
     .Select--is-disabled {
       pointer-events: auto;

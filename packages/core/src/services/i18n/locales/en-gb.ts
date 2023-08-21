@@ -272,6 +272,19 @@ export const enGb = {
       home: 'Home',
       by: 'By',
       or: 'Or',
+      version: 'Version {{version}}',
+      canvasEditor: 'Canvas editor',
+      canvasStep1: 'Read canvas explainer',
+      canvasStep2: 'Describe your mission',
+      canvasStep3: 'Make a contribution entry',
+      canvasStep4: 'AI Image settings',
+      canvasStep5: 'Create script AI teamwork',
+      canvasStep6: 'Overview and submit',
+      aiCredits: '{{amount}} AI credits',
+      maxAICredits: 'Max {{count}} AI credits per contribution',
+      noAITools: 'No AI Tools active',
+      skipAI: 'Skip creating collective intelligence with AI',
+      noAIAvailable: 'Restrict users to upload their own image. No AI available',
       screenShare: 'Screenshare',
       stageMode: 'Stage Mode',
       stakingOverview: 'Staking Overview',
@@ -651,6 +664,18 @@ export const enGb = {
       returnHighFive: 'Return the favour',
       createSpace: 'YOU CAN CREATE A SPACE FROM YOUR PROFILE',
       ownSpaceInvite: 'WANT YOUR OWN SPACE? (FREE)',
+      describeGoal: 'Describe your goal',
+      missionTitle: 'Title of the mission',
+      whatIsMission: 'What’s the mission?',
+      makeContributionEntry: 'Make a contribution entry',
+      createScriptForImage: 'Create a script for AI Image',
+      setContributionsAmount: 'Set Max amount of contributions',
+      overviewAITools: 'Overview of AI Tools',
+      createTeamworkScript: 'Create the teamwork script',
+      canvasQuestion1: 'First question, always ask for a title',
+      placeCentralObject: 'Place the central 3D object of the Canvas in Odyssey',
+      enterScript: 'Enter your script',
+      question: 'Question',
       later: 'later',
       create: 'create',
       by: 'By',
@@ -706,6 +731,10 @@ export const enGb = {
       odysseySkyboxLibraryHeader: 'Odyssey Library',
       communitySkyboxLibraryHeader: 'Community',
       privateSkyboxLibraryHeader: 'Private Library',
+      whatIsCanvas: 'What is a user canvas',
+      howToBuildCanvas: 'How to Build a canvas in 6 steps',
+      synthesis3d: 'Synthesis in 3D',
+      usingAiTeamwork: 'Using AI to create Teamwork',
       scale: 'Scale',
       rotation: 'Rotation',
       position: 'Position'
@@ -736,13 +765,29 @@ export const enGb = {
       searchForAttendees: 'Search for attendees...',
       nameYourWorld: 'Name your world',
       nameYourImage: 'Name your image',
+      selectModel: 'Select a model',
+      contributions: 'Contributions',
       worldname: 'worldname',
       selectPlugin: 'Select Plugin',
       nameYourAssetForYourLibrary: 'Name your Asset for your library',
+      whatIsProduct: 'What is the product you want to create collectively',
       nameYourAsset: 'Name your Asset*',
       nameTheArtist: 'Name the Artist',
       selectAnOption: 'Select an Option',
       nameYourObjectNavigation: 'Name your Object (Navigation)',
+      missionTitle: 'Title, maximum 80 characters.',
+      missionStory:
+        'Write a short story about the mission of this Odyssey, what do you want to achieve and what do you expect your visitors to contribute.',
+      canvasQuestion1: 'What’s the title of your contribution?',
+      canvasQuestion2:
+        'Write your second question, ask your visitors what they can contribute. For example an opinion, or an idea.',
+      canvasQuestion3:
+        'Third question, ask your visitors how they would achieve this idea or solve the problem.',
+      canvasQuestion4: 'This question is optional. Keep the survey short for the best result',
+      canvasScript:
+        'This is an example of a script:\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\n\n#answer1\n#answer2',
+      canvasTeamworkScript:
+        'This is an example of a script:\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
       selectAccount: 'Select Account',
       searchCommunityLibrary: 'Search Community Library',
       searchPrivateLibrary: 'Search Private Library',
@@ -783,15 +828,28 @@ export const enGb = {
       comment: 'Comment',
       addComment: 'Add comment',
       manageWallet: 'Manage wallet',
+      removeObject: 'Remove object',
+      describeMission: 'Describe mission',
+      aiImageScript: 'Ai image script',
+      scriptTeamwork: 'Script teamwork',
+      imageUpload: 'Image upload',
+      leonardo: 'Leonardo',
+      chatGPT: 'Chat GPT',
+      noTeamworkOutcome: 'No teamwork outcome',
       settings: 'Settings',
       publish: 'Publish',
       default: 'Default',
       preview: 'Preview',
       spawn: 'Spawn',
+      setAmount: 'Set Amount',
+      submitCanvas: 'Submit canvas',
+      previewCanvas: 'Preview canvas',
+      spawnCanvas: 'Spawn canvas',
       setAsDefault: 'Set as default',
       takeSnapshot: 'Take a snapshot',
       createVideo: 'Create a video',
       createEvent: 'Create an event',
+      createEntry: 'Create an entry',
       edit: 'Edit',
       deleteObject: 'Delete object',
       duplicateObject: 'Duplicate object',
@@ -947,7 +1005,27 @@ export const enGb = {
       worldSubdomain:
         'This is the subdomain of the publicly facing URL that people will visit when then visiting your metaverse',
       worldURL:
-        'This is the publicly facing URL that people will visit when then visiting your metaverse'
+        'This is the publicly facing URL that people will visit when then visiting your metaverse',
+      canvasStep1_One:
+        'Here’s a short explanation of a user canvas. What’s the purpose and why should you use it?',
+      canvasStep1_Two:
+        'Here’s a short explanation of a user canvas. What’s the purpose and why should you use it? Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
+      canvasStep1_Three:
+        'Here’s a short explanation of a user canvas. What’s the purpose and why should you use it? Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
+      canvasStep2_One:
+        'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
+      canvasStep3_One:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+      canvasStep4_One:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+      canvasStep5_One:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+      canvasStep6_One:
+        'By creating the canvas you spawn a central Canvas object in the Odyssey where the contributions will be placed around.',
+      canvasStep6_Two:
+        'You can fly with the preview of the object until you reached the perfect spawning point and place the object',
+      canvasStep6_Three:
+        'You can fly around with the preview of the object until you reached the perfect spawning point and place the object'
     },
     fileUploader: {
       uploadLabel: 'Upload Image',
