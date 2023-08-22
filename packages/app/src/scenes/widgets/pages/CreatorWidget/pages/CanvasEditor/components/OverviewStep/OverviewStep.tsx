@@ -13,6 +13,7 @@ import cubeImage from 'static/images/cube.svg';
 import * as styled from './OverviewStep.styled';
 
 interface PropsInterface {
+  isNewCanvas: boolean;
   version: string;
   created: string | null;
   missionTitle: string;
@@ -20,13 +21,12 @@ interface PropsInterface {
   leonardoCosts: number;
   isChatGPT: boolean;
   isLeonardo: boolean;
-  wasSubmitted: boolean;
-  wasSpawned: boolean;
   contributionAmount: number | null;
   setContributionAmount: (amount: number | null) => void;
   setActiveStep: (step: CanvasStepType) => void;
   onRenderActions: (element: ReactElement) => void;
-  onSubmitCanvas: () => void;
+  onSpawnAndSubmit: () => void;
+  onSpawned: () => void;
 }
 
 export const CREDITS_AMOUNT_OPTIONS: SelectOptionInterface<number>[] = [
@@ -37,8 +37,7 @@ export const CREDITS_AMOUNT_OPTIONS: SelectOptionInterface<number>[] = [
 ];
 
 const OverviewStep: FC<PropsInterface> = ({
-  wasSubmitted,
-  wasSpawned,
+  isNewCanvas,
   version,
   created,
   missionTitle,
@@ -50,9 +49,10 @@ const OverviewStep: FC<PropsInterface> = ({
   setContributionAmount,
   setActiveStep,
   onRenderActions,
-  onSubmitCanvas
+  onSpawnAndSubmit,
+  onSpawned
 }) => {
-  const [isPreview, setIsPreview] = useState(false);
+  const [wasSubmitted, setWasSubmitted] = useState(false);
 
   const {t} = useI18n();
 
@@ -63,9 +63,8 @@ const OverviewStep: FC<PropsInterface> = ({
     return isChatGPT ? costs + chatGPTCosts : costs;
   }, [leonardoCosts, chatGPTCosts, isLeonardo, isChatGPT]);
 
-  const isSubmitButtonAvailable = !wasSubmitted;
-  const isPreviewButtonAvailable = wasSubmitted && !wasSpawned && isPreview;
-  const isSpawnButtonAvailable = wasSubmitted && !wasSpawned && !isPreview;
+  const isPreviewButtonAvailable = isNewCanvas && !wasSubmitted;
+  const isSpawnButtonAvailable = isNewCanvas && wasSubmitted;
 
   useEffect(() => {
     onRenderActions(
@@ -74,44 +73,27 @@ const OverviewStep: FC<PropsInterface> = ({
           label: t('actions.back'),
           onClick: () => setActiveStep('teamworkScript')
         }}
-        {...(isSubmitButtonAvailable && {
-          nextProps: {
-            icon: 'idea',
-            disabled: isAI && !contributionAmount,
-            label: t('actions.submitCanvas'),
-            onClick: () => {
-              onSubmitCanvas();
-              setIsPreview(true);
-            }
-          }
-        })}
         {...(isPreviewButtonAvailable && {
           nextProps: {
             icon: 'idea',
-            disabled: false,
+            disabled: !contributionAmount,
             label: t('actions.previewCanvas'),
-            onClick: () => {
-              setIsPreview(false);
+            onClick: async () => {
+              await onSpawnAndSubmit();
+              setWasSubmitted(true);
             }
           }
         })}
         {...(isSpawnButtonAvailable && {
           nextProps: {
             icon: 'idea',
-            disabled: true,
             label: t('actions.spawnCanvas'),
-            onClick: () => {}
+            onClick: () => onSpawned()
           }
         })}
       />
     );
-  }, [
-    isAI,
-    contributionAmount,
-    isSubmitButtonAvailable,
-    isPreviewButtonAvailable,
-    isSpawnButtonAvailable
-  ]);
+  }, [isAI, contributionAmount, isPreviewButtonAvailable, isSpawnButtonAvailable]);
 
   return (
     <styled.Container data-testid="OverviewStep-test">
@@ -167,6 +149,7 @@ const OverviewStep: FC<PropsInterface> = ({
               <Select
                 wide
                 isClearable
+                isDisabled={!isNewCanvas || wasSubmitted}
                 value={contributionAmount}
                 options={CREDITS_AMOUNT_OPTIONS}
                 placeholder={t('placeholders.contributions')}

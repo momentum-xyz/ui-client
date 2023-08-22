@@ -30,9 +30,10 @@ const STEP_LIST: StepInterface<CanvasStepType>[] = [
 ];
 
 const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
-  const {widgetStore} = useStore();
+  const {widgetStore, universeStore} = useStore();
   const {creatorStore} = widgetStore;
   const {canvasEditorStore} = creatorStore;
+  const {worldId, world3dStore} = universeStore;
 
   const canvasRef = useRef<HTMLDivElement>(null);
   const [stepActions, setStepActions] = useState<ReactElement>();
@@ -42,11 +43,12 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
   useEffect(() => {
     canvasEditorStore.setCreated(new Date().toISOString());
+    canvasEditorStore.load(worldId);
 
     return () => {
       canvasEditorStore.resetModel();
     };
-  }, [canvasEditorStore]);
+  }, [canvasEditorStore, worldId]);
 
   const handleSetActiveStep = useCallback((stepType: CanvasStepType) => {
     setActiveStep(stepType);
@@ -80,11 +82,21 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
         <styled.StepContent>
           <Frame>
             {activeStep === 'intro' && (
-              <IntroStep setActiveStep={handleSetActiveStep} onRenderActions={setStepActions} />
+              <IntroStep
+                isNewCanvas={!canvasEditorStore.canvasObjectId}
+                setActiveStep={handleSetActiveStep}
+                onRenderActions={setStepActions}
+                onDelete={async () => {
+                  if (await canvasEditorStore.delete()) {
+                    onClose();
+                  }
+                }}
+              />
             )}
 
             {activeStep === 'mission' && (
               <MissionStep
+                isNewCanvas={!canvasEditorStore.canvasObjectId}
                 missionData={canvasEditorStore.missionData}
                 onUpdate={canvasEditorStore.setMissionData}
                 setActiveStep={handleSetActiveStep}
@@ -94,6 +106,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'questions' && (
               <QuestionsStep
+                isNewCanvas={!canvasEditorStore.canvasObjectId}
                 questionsData={canvasEditorStore.questionsData}
                 onUpdate={canvasEditorStore.setQuestionsData}
                 setActiveStep={handleSetActiveStep}
@@ -103,6 +116,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'script' && (
               <ScriptStep
+                isNewCanvas={!canvasEditorStore.canvasObjectId}
                 leonardoCosts={canvasEditorStore.leonardoCosts}
                 scriptData={canvasEditorStore.scriptData}
                 onUpdate={canvasEditorStore.setScriptData}
@@ -113,6 +127,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'teamworkScript' && (
               <TeamworkScriptStep
+                isNewCanvas={!canvasEditorStore.canvasObjectId}
                 chatGPTCosts={canvasEditorStore.chatGPTCosts}
                 teamworkScriptData={canvasEditorStore.teamworkScriptData}
                 onUpdate={canvasEditorStore.setTeamworkScriptData}
@@ -123,8 +138,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'overview' && (
               <OverviewStep
-                wasSubmitted={canvasEditorStore.wasSubmitted}
-                wasSpawned={canvasEditorStore.wasSpawned}
+                isNewCanvas={!canvasEditorStore.canvasObjectId}
                 version={canvasEditorStore.version}
                 created={canvasEditorStore.created}
                 missionTitle={canvasEditorStore.missionData.missionTitle}
@@ -136,7 +150,11 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
                 setContributionAmount={canvasEditorStore.setContributionAmount}
                 setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
-                onSubmitCanvas={canvasEditorStore.submitCanvas}
+                onSpawnAndSubmit={() => canvasEditorStore.spawnAndSubmit(worldId)}
+                onSpawned={() => {
+                  world3dStore?.setAttachedToCamera(null);
+                  onClose();
+                }}
               />
             )}
           </Frame>

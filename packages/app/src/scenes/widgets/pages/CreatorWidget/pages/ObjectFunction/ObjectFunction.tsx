@@ -2,14 +2,14 @@ import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {Button, Frame, IconSvg, TabInterface} from '@momentum-xyz/ui-kit';
-import {useI18n, i18n} from '@momentum-xyz/core';
+import {i18n, ObjectTypeIdEnum, useI18n} from '@momentum-xyz/core';
 
 import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
 import {BasicAsset2dIdEnum} from 'core/enums';
 import {subMenuKeyWidgetEnumMap} from 'core/constants';
 
-import {AssignText, AssignImage, AssignVideo, AssignSound} from './components';
+import {AssignImage, AssignSound, AssignText, AssignVideo} from './components';
 import * as styled from './ObjectFunction.styled';
 
 const TABS_LIST: TabInterface<BasicAsset2dIdEnum>[] = [
@@ -24,7 +24,7 @@ const ObjectFunction: FC = () => {
   const {selectedTab, objectFunctionalityStore, selectedObjectId} = creatorStore;
   const {currentAssetId} = objectFunctionalityStore;
   const {objectStore} = universeStore;
-  const {pluginLoader, objectContentStore} = objectStore;
+  const {pluginLoader, objectContentStore, objectTypeId} = objectStore;
   const {normalContent} = objectContentStore;
 
   const [activeType, setActiveType] = useState<string | null>(null);
@@ -169,7 +169,7 @@ const ObjectFunction: FC = () => {
     );
   };
 
-  /* FIXME: TEMP. THIS IS CUSTOMIZABLE OBJECT */
+  /* It is a customizable object */
   if (objectStore.asset2dId === BasicAsset2dIdEnum.CUSTOMIZABLE) {
     return (
       <styled.WarningContainer data-testid="ObjectFunction-test">
@@ -179,6 +179,19 @@ const ObjectFunction: FC = () => {
               This object is customizable by visitors and can not be assigned any other custom
               functions.
             </styled.Text>
+          </Frame>
+        </styled.WarningContainerInner>
+      </styled.WarningContainer>
+    );
+  }
+
+  /* It is a root canvas object or a child of canvas object */
+  if (objectTypeId === ObjectTypeIdEnum.CANVAS || objectTypeId === ObjectTypeIdEnum.CANVAS_CHILD) {
+    return (
+      <styled.WarningContainer data-testid="ObjectFunction-test">
+        <styled.WarningContainerInner>
+          <Frame>
+            <styled.Text>This object can not be assigned any other custom functions.</styled.Text>
           </Frame>
         </styled.WarningContainerInner>
       </styled.WarningContainer>

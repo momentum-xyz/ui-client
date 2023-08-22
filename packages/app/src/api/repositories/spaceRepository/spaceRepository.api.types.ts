@@ -81,6 +81,8 @@ export interface WorldObjectWithChildrenInterface {
 
 export interface FetchWorldTreeRequest {
   worldId: string;
+  max_depth?: number;
+  object_type?: string;
 }
 export interface FetchWorldTreeResponse extends WorldObjectWithChildrenInterface {
   max_depth: number;

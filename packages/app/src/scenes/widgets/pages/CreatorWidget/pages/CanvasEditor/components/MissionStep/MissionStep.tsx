@@ -12,6 +12,7 @@ import {MissionDataModelInterface} from 'scenes/widgets/stores/CreatorStore/mode
 import * as styled from './MissionStep.styled';
 
 interface PropsInterface {
+  isNewCanvas: boolean;
   missionData: MissionDataModelInterface;
   onUpdate: (form: CanvasMissionFormInterface) => void;
   setActiveStep: (step: CanvasStepType) => void;
@@ -19,6 +20,7 @@ interface PropsInterface {
 }
 
 const MissionStep: FC<PropsInterface> = ({
+  isNewCanvas,
   missionData,
   onUpdate,
   onRenderActions,
@@ -56,13 +58,15 @@ const MissionStep: FC<PropsInterface> = ({
           disabled: !isValid,
           label: t('actions.createEntry'),
           onClick: () => {
-            handleSubmit(formSubmitHandler)();
+            if (isNewCanvas) {
+              handleSubmit(formSubmitHandler)();
+            }
             setActiveStep('questions');
           }
         }}
       />
     );
-  }, [formSubmitHandler, handleSubmit, isValid, onRenderActions, setActiveStep, t]);
+  }, [isNewCanvas, formSubmitHandler, handleSubmit, isValid, onRenderActions, setActiveStep, t]);
 
   return (
     <styled.Container data-testid="MissionStep-test">
@@ -88,6 +92,7 @@ const MissionStep: FC<PropsInterface> = ({
             <Input
               wide
               value={value}
+              disabled={!isNewCanvas}
               danger={!!errors.missionTitle}
               placeholder={t('placeholders.missionTitle')}
               onChange={onChange}
@@ -107,6 +112,7 @@ const MissionStep: FC<PropsInterface> = ({
             <Textarea
               lines={15}
               value={value}
+              disabled={!isNewCanvas}
               danger={!!errors.missionStory}
               placeholder={t('placeholders.missionStory')}
               onChange={onChange}

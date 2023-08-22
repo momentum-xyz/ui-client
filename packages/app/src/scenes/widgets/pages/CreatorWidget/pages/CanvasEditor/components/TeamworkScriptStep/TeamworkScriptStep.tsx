@@ -13,6 +13,7 @@ import aiProfileImage from 'static/images/ai_profile.jpeg';
 import * as styled from './TeamworkScriptStep.styled';
 
 interface PropsInterface {
+  isNewCanvas: boolean;
   chatGPTCosts: number;
   teamworkScriptData: TeamworkScriptDataModelInterface;
   onUpdate: (form: CanvasTeamworkScriptFormInterface) => void;
@@ -21,6 +22,7 @@ interface PropsInterface {
 }
 
 const TeamworkScriptStep: FC<PropsInterface> = ({
+  isNewCanvas,
   chatGPTCosts,
   teamworkScriptData,
   onUpdate,
@@ -66,13 +68,15 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
           disabled: !isValid,
           label: t('labels.overview'),
           onClick: () => {
-            handleSubmit(formSubmitHandler)();
+            if (isNewCanvas) {
+              handleSubmit(formSubmitHandler)();
+            }
             setActiveStep('overview');
           }
         }}
       />
     );
-  }, [formSubmitHandler, handleSubmit, isValid, onRenderActions, setActiveStep, t]);
+  }, [isNewCanvas, formSubmitHandler, handleSubmit, isValid, onRenderActions, setActiveStep, t]);
 
   return (
     <styled.Container data-testid="TeamworkScriptStep-test">
@@ -96,6 +100,7 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
               <ButtonRectangle
                 active={value}
                 imageSrc={aiProfileImage}
+                disabled={!isNewCanvas}
                 title={t('actions.chatGPT')}
                 label={t('labels.maxAICredits', {count: chatGPTCosts})}
                 onClick={() => {
@@ -105,6 +110,7 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
               <ButtonRectangle
                 active={!value}
                 icon="close_small"
+                disabled={!isNewCanvas}
                 title={t('actions.noTeamworkOutcome')}
                 label={t('labels.skipAI')}
                 onClick={() => {
@@ -130,7 +136,7 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
             <Input
               wide
               value={value}
-              disabled={!isChatGPT}
+              disabled={!isChatGPT || !isNewCanvas}
               danger={!!errors.scriptTitle}
               placeholder={`${t('placeholders.whatIsProduct')}*`}
               onChange={onChange}
@@ -147,7 +153,7 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
               lines={12}
               value={value}
               danger={!!errors.script}
-              disabled={!isChatGPT}
+              disabled={!isChatGPT || !isNewCanvas}
               placeholder={t('placeholders.canvasTeamworkScript')}
               onChange={onChange}
             />

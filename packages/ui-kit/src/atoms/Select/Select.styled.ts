@@ -130,6 +130,10 @@ export const GlobalSelectStyle = createGlobalStyle`
       font-weight: 400;
       letter-spacing: 0.5px;
     }
+    
+    .Select__single-value--is-disabled {
+      color: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
+    }
 
     .Select__value-container--is-multi {
       > div:not(:first-child) {
