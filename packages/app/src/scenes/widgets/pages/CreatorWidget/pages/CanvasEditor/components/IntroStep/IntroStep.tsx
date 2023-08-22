@@ -10,16 +10,14 @@ import canvas from 'static/images/canvas.png';
 import * as styled from './IntroStep.styled';
 
 interface PropsInterface {
+  isNewCanvas: boolean;
   setActiveStep: (step: CanvasStepType) => void;
   onRenderActions: (element: ReactElement) => void;
+  onDelete: () => void;
 }
 
-const IntroStep: FC<PropsInterface> = ({onRenderActions, setActiveStep}) => {
+const IntroStep: FC<PropsInterface> = ({isNewCanvas, onRenderActions, setActiveStep, onDelete}) => {
   const {t} = useI18n();
-
-  const onRemoveObject = useCallback(() => {
-    // TODO: Implementation
-  }, []);
 
   const onDescribeMission = useCallback(() => {
     setActiveStep('mission');
@@ -28,12 +26,13 @@ const IntroStep: FC<PropsInterface> = ({onRenderActions, setActiveStep}) => {
   useEffect(() => {
     onRenderActions(
       <CanvasButtonGroup
-        backProps={{
-          icon: 'bin',
-          disabled: true,
-          label: t('actions.removeObject'),
-          onClick: onRemoveObject
-        }}
+        {...(!isNewCanvas && {
+          backProps: {
+            icon: 'bin',
+            label: t('actions.removeObject'),
+            onClick: onDelete
+          }
+        })}
         nextProps={{
           icon: 'rocket',
           label: t('actions.describeMission'),
@@ -41,7 +40,7 @@ const IntroStep: FC<PropsInterface> = ({onRenderActions, setActiveStep}) => {
         }}
       />
     );
-  }, [onDescribeMission, onRemoveObject, onRenderActions, t]);
+  }, [isNewCanvas, onDelete, onDescribeMission, onRenderActions, t]);
 
   const stepList: {stepNumber: string; stepTitle: string}[] = [
     {stepNumber: '1', stepTitle: t('labels.canvasStep1')},

@@ -12,6 +12,7 @@ import {QuestionsDataModelInterface} from 'scenes/widgets/stores/CreatorStore/mo
 import * as styled from './QuestionsStep.styled';
 
 interface PropsInterface {
+  isNewCanvas: boolean;
   questionsData: QuestionsDataModelInterface;
   onUpdate: (form: CanvasQuestionsFormInterface) => void;
   setActiveStep: (step: CanvasStepType) => void;
@@ -19,6 +20,7 @@ interface PropsInterface {
 }
 
 const QuestionsStep: FC<PropsInterface> = ({
+  isNewCanvas,
   questionsData,
   onUpdate,
   onRenderActions,
@@ -58,13 +60,15 @@ const QuestionsStep: FC<PropsInterface> = ({
           disabled: !isValid,
           label: t('actions.aiImageScript'),
           onClick: () => {
-            handleSubmit(formSubmitHandler)();
+            if (isNewCanvas) {
+              handleSubmit(formSubmitHandler)();
+            }
             setActiveStep('script');
           }
         }}
       />
     );
-  }, [formSubmitHandler, handleSubmit, isValid, onRenderActions, setActiveStep, t]);
+  }, [isNewCanvas, formSubmitHandler, handleSubmit, isValid, onRenderActions, setActiveStep, t]);
 
   return (
     <styled.Container data-testid="QuestionsStep-test">
@@ -90,6 +94,7 @@ const QuestionsStep: FC<PropsInterface> = ({
             <Input
               wide
               value={value}
+              disabled={!isNewCanvas}
               danger={!!errors.questionOne}
               placeholder={t('placeholders.canvasQuestion1')}
               onChange={onChange}
@@ -109,6 +114,7 @@ const QuestionsStep: FC<PropsInterface> = ({
             <Textarea
               lines={3}
               value={value}
+              disabled={!isNewCanvas}
               danger={!!errors.questionTwo}
               placeholder={t('placeholders.canvasQuestion2')}
               onChange={onChange}
@@ -128,6 +134,7 @@ const QuestionsStep: FC<PropsInterface> = ({
             <Textarea
               lines={3}
               value={value}
+              disabled={!isNewCanvas}
               danger={!!errors.questionThree}
               placeholder={t('placeholders.canvasQuestion3')}
               onChange={onChange}
@@ -146,6 +153,7 @@ const QuestionsStep: FC<PropsInterface> = ({
             <Textarea
               lines={3}
               value={value}
+              disabled={!isNewCanvas}
               placeholder={t('placeholders.canvasQuestion4')}
               onChange={onChange}
             />

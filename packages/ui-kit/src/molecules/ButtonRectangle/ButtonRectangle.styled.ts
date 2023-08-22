@@ -73,13 +73,7 @@ export const Button = styled.button`
     }
 
     &:disabled {
-      --border-color: var(--primary-border-color-disabled);
-      --bg-color: var(--primary-bg-color-disabled);
-      --color: var(--primary-color-disabled);
-
-      svg {
-        color: var(--primary-color-disabled);
-      }
+      opacity: 0.8;
     }
   }
 

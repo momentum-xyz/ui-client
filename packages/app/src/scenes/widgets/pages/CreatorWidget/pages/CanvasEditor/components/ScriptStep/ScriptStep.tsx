@@ -15,6 +15,7 @@ import leonardoImage from 'static/images/leonardo.jpeg';
 import * as styled from './ScriptStep.styled';
 
 interface PropsInterface {
+  isNewCanvas: boolean;
   leonardoCosts: number;
   scriptData: ScriptDataModelInterface;
   onUpdate: (form: CanvasScriptFormInterface) => void;
@@ -23,6 +24,7 @@ interface PropsInterface {
 }
 
 const ScriptStep: FC<PropsInterface> = ({
+  isNewCanvas,
   leonardoCosts,
   scriptData,
   onUpdate,
@@ -68,7 +70,9 @@ const ScriptStep: FC<PropsInterface> = ({
           disabled: !isValid,
           label: t('actions.scriptTeamwork'),
           onClick: () => {
-            handleSubmit(formSubmitHandler)();
+            if (isNewCanvas) {
+              handleSubmit(formSubmitHandler)();
+            }
             setActiveStep('teamworkScript');
           }
         }}
@@ -101,6 +105,7 @@ const ScriptStep: FC<PropsInterface> = ({
               <ButtonRectangle
                 active={value}
                 imageSrc={leonardoImage}
+                disabled={!isNewCanvas}
                 title={t('actions.leonardo')}
                 label={t('labels.maxAICredits', {count: leonardoCosts})}
                 onClick={() => {
@@ -110,6 +115,7 @@ const ScriptStep: FC<PropsInterface> = ({
               <ButtonRectangle
                 active={!value}
                 icon="picture_upload"
+                disabled={!isNewCanvas}
                 title={t('actions.imageUpload')}
                 label={t('labels.noAIAvailable')}
                 onClick={() => {
@@ -135,7 +141,7 @@ const ScriptStep: FC<PropsInterface> = ({
               <Textarea
                 lines={12}
                 value={value}
-                disabled={!isLeonardo}
+                disabled={!isLeonardo || !isNewCanvas}
                 placeholder={t('placeholders.canvasScript')}
                 onChange={onChange}
               />
@@ -152,7 +158,7 @@ const ScriptStep: FC<PropsInterface> = ({
               wide
               isClearable
               value={value}
-              isDisabled={!isLeonardo}
+              isDisabled={!isLeonardo || !isNewCanvas}
               options={LEONARDO_MODEL_OPTIONS}
               placeholder={`${t('placeholders.selectModel')}*`}
               onSingleChange={onChange}

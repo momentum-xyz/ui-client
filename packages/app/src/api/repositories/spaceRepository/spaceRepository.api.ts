@@ -119,12 +119,15 @@ export const deleteWorldMember: RequestInterface<DeleteWorldMemberRequest, null>
 export const fetchWorldTree: RequestInterface<FetchWorldTreeRequest, FetchWorldTreeResponse> = (
   options
 ) => {
-  const {worldId, ...restOptions} = options;
+  const {worldId, max_depth, object_type, ...restOptions} = options;
 
-  return request.get(
-    generatePath(spaceRepositoryEndpoints().tree, {objectId: worldId}),
-    restOptions
-  );
+  restOptions.params = {
+    max_depth,
+    object_type
+  };
+
+  const url = generatePath(spaceRepositoryEndpoints().tree, {objectId: worldId});
+  return request.get(url, restOptions);
 };
 
 export const claimAndCustomize: RequestInterface<ClaimAndCustomizeRequest, null> = (options) => {
