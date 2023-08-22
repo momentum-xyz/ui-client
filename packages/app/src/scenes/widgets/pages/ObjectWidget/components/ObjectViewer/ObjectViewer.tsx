@@ -1,6 +1,6 @@
 import {FC, useMemo, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Frame} from '@momentum-xyz/ui-kit';
+import {Frame, ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {PluginIdEnum} from 'api/enums';
 import {ObjectAttribute} from 'core/models';
@@ -48,7 +48,7 @@ const ObjectViewer: FC<PropsInterface> = ({objectId}) => {
     <Frame>
       {!!renderHash && (
         <styled.Item>
-          <ImageViewer imageSrc={getImageAbsoluteUrl(renderHash)} />
+          <ImageViewer imageSrc={getImageAbsoluteUrl(renderHash, ImageSizeEnum.S5)} />
         </styled.Item>
       )}
 
