@@ -156,7 +156,10 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
                 setContributionAmount={canvasEditorStore.setContributionAmount}
                 setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
-                onSpawnAndSubmit={() => canvasEditorStore.spawnAndSubmit(worldId)}
+                onSpawnAndSubmit={async () => {
+                  await canvasEditorStore.spawnAndSubmit(worldId);
+                  await world3dStore?.fetchCanvasObject();
+                }}
                 onSpawned={() => {
                   world3dStore?.setAttachedToCamera(null);
                   onClose();

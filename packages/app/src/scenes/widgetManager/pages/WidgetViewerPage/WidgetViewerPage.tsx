@@ -46,6 +46,8 @@ const WidgetViewerPage: FC = () => {
         return <widgets.WorldVisitorsWidget />;
       case WidgetEnum.OBJECT:
         return <widgets.ObjectWidget {...widgetInfo} />;
+      case WidgetEnum.CONTRIBUTION_FORM:
+        return <widgets.ContributionFormWidget />;
       default:
         return <></>;
     }
