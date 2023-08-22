@@ -34,8 +34,7 @@ const CanvasEditorStore = types
 
       request: types.optional(RequestModel, {}),
       spawnRequest: types.optional(RequestModel, {}),
-      attributeRequest: types.optional(RequestModel, {}),
-      deleteRequest: types.optional(RequestModel, {})
+      attributeRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -137,13 +136,6 @@ const CanvasEditorStore = types
       }
 
       return response?.object_id;
-    }),
-    delete: flow(function* () {
-      yield self.deleteRequest.send(api.spaceRepository.deleteSpace, {
-        spaceId: self.canvasObjectId || ''
-      });
-
-      return self.deleteRequest.isDone;
     })
   }))
   .actions((self) => ({

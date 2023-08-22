@@ -1,6 +1,6 @@
 import {FC, ReactElement, useCallback, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useI18n} from '@momentum-xyz/core';
+import {Event3dEmitter, useI18n} from '@momentum-xyz/core';
 import {Frame, Panel, Steps, StepInterface} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
@@ -34,6 +34,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
   const {creatorStore} = widgetStore;
   const {canvasEditorStore} = creatorStore;
   const {worldId, world3dStore} = universeStore;
+  const {canvasObjectId} = canvasEditorStore;
 
   const canvasRef = useRef<HTMLDivElement>(null);
   const [stepActions, setStepActions] = useState<ReactElement>();
@@ -49,6 +50,13 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
       canvasEditorStore.resetModel();
     };
   }, [canvasEditorStore, worldId]);
+
+  useEffect(() => {
+    if (canvasObjectId) {
+      Event3dEmitter.emit('FlyToObject', canvasObjectId);
+      world3dStore?.handleClick(canvasObjectId);
+    }
+  }, [canvasObjectId, world3dStore]);
 
   const handleSetActiveStep = useCallback((stepType: CanvasStepType) => {
     setActiveStep(stepType);
@@ -83,20 +91,18 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
           <Frame>
             {activeStep === 'intro' && (
               <IntroStep
-                isNewCanvas={!canvasEditorStore.canvasObjectId}
+                isNewCanvas={!canvasObjectId}
                 setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
-                onDelete={async () => {
-                  if (await canvasEditorStore.delete()) {
-                    onClose();
-                  }
+                onDelete={() => {
+                  world3dStore?.openDeleteObjectDialog(canvasObjectId || '');
                 }}
               />
             )}
 
             {activeStep === 'mission' && (
               <MissionStep
-                isNewCanvas={!canvasEditorStore.canvasObjectId}
+                isNewCanvas={!canvasObjectId}
                 missionData={canvasEditorStore.missionData}
                 onUpdate={canvasEditorStore.setMissionData}
                 setActiveStep={handleSetActiveStep}
@@ -106,7 +112,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'questions' && (
               <QuestionsStep
-                isNewCanvas={!canvasEditorStore.canvasObjectId}
+                isNewCanvas={!canvasObjectId}
                 questionsData={canvasEditorStore.questionsData}
                 onUpdate={canvasEditorStore.setQuestionsData}
                 setActiveStep={handleSetActiveStep}
@@ -116,7 +122,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'script' && (
               <ScriptStep
-                isNewCanvas={!canvasEditorStore.canvasObjectId}
+                isNewCanvas={!canvasObjectId}
                 leonardoCosts={canvasEditorStore.leonardoCosts}
                 scriptData={canvasEditorStore.scriptData}
                 onUpdate={canvasEditorStore.setScriptData}
@@ -127,7 +133,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'teamworkScript' && (
               <TeamworkScriptStep
-                isNewCanvas={!canvasEditorStore.canvasObjectId}
+                isNewCanvas={!canvasObjectId}
                 chatGPTCosts={canvasEditorStore.chatGPTCosts}
                 teamworkScriptData={canvasEditorStore.teamworkScriptData}
                 onUpdate={canvasEditorStore.setTeamworkScriptData}
@@ -138,7 +144,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
             {activeStep === 'overview' && (
               <OverviewStep
-                isNewCanvas={!canvasEditorStore.canvasObjectId}
+                isNewCanvas={!canvasObjectId}
                 version={canvasEditorStore.version}
                 created={canvasEditorStore.created}
                 missionTitle={canvasEditorStore.missionData.missionTitle}
