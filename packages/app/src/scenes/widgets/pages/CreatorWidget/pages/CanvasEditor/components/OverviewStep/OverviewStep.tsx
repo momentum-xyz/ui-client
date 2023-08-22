@@ -56,8 +56,6 @@ const OverviewStep: FC<PropsInterface> = ({
 
   const {t} = useI18n();
 
-  const isAI: boolean = useMemo(() => isLeonardo || isChatGPT, [isLeonardo, isChatGPT]);
-
   const aiCosts: number = useMemo(() => {
     const costs = isLeonardo ? leonardoCosts : 0;
     return isChatGPT ? costs + chatGPTCosts : costs;
@@ -93,7 +91,7 @@ const OverviewStep: FC<PropsInterface> = ({
         })}
       />
     );
-  }, [isAI, contributionAmount, isPreviewButtonAvailable, isSpawnButtonAvailable]);
+  }, [contributionAmount, isPreviewButtonAvailable, isSpawnButtonAvailable]);
 
   return (
     <styled.Container data-testid="OverviewStep-test">
@@ -140,30 +138,27 @@ const OverviewStep: FC<PropsInterface> = ({
         </styled.MaxCredits>
 
         <styled.Separator />
+        <styled.CreditsContainer>
+          <styled.SubTitle>{t('titles.setContributionsAmount')}</styled.SubTitle>
+          <styled.AmountGrid>
+            <styled.SubTitle>{t('actions.setAmount')}</styled.SubTitle>
+            <Select
+              wide
+              isClearable
+              isDisabled={!isNewCanvas || wasSubmitted}
+              value={contributionAmount}
+              options={CREDITS_AMOUNT_OPTIONS}
+              placeholder={t('placeholders.contributions')}
+              onSingleChange={setContributionAmount}
+            />
 
-        {isAI && (
-          <styled.CreditsContainer>
-            <styled.SubTitle>{t('titles.setContributionsAmount')}</styled.SubTitle>
-            <styled.AmountGrid>
-              <styled.SubTitle>{t('actions.setAmount')}</styled.SubTitle>
-              <Select
-                wide
-                isClearable
-                isDisabled={!isNewCanvas || wasSubmitted}
-                value={contributionAmount}
-                options={CREDITS_AMOUNT_OPTIONS}
-                placeholder={t('placeholders.contributions')}
-                onSingleChange={setContributionAmount}
-              />
-
-              <styled.AICreditsContainer>
-                {t('labels.aiCredits', {
-                  amount: !contributionAmount ? 'XX' : contributionAmount * aiCosts
-                })}
-              </styled.AICreditsContainer>
-            </styled.AmountGrid>
-          </styled.CreditsContainer>
-        )}
+            <styled.AICreditsContainer>
+              {t('labels.aiCredits', {
+                amount: !contributionAmount ? 'XX' : contributionAmount * aiCosts
+              })}
+            </styled.AICreditsContainer>
+          </styled.AmountGrid>
+        </styled.CreditsContainer>
 
         {isPreviewButtonAvailable && (
           <>
