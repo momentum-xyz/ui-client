@@ -124,3 +124,10 @@ export const Error = styled.div`
   font-size: 12px;
   margin: 10px 0 0 0;
 `;
+
+export const RemoveIcon = styled.div`
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  z-index: 1;
+`;

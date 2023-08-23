@@ -1,5 +1,13 @@
 import {FC, useCallback, useEffect, useMemo} from 'react';
-import {Frame, Input, FileUploader, ErrorsEnum, Button, ImageSizeEnum} from '@momentum-xyz/ui-kit';
+import {
+  Frame,
+  Input,
+  FileUploader,
+  ErrorsEnum,
+  Button,
+  ImageSizeEnum,
+  ButtonRound
+} from '@momentum-xyz/ui-kit';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {useI18n} from '@momentum-xyz/core';
 import {observer} from 'mobx-react-lite';
@@ -161,9 +169,15 @@ const AssignImage: FC<PropsInterface> = ({
 };
 
 export const useAssignImage = ({
-  objectId
+  objectId,
+  pluginId = PluginIdEnum.IMAGE,
+  attributeName = 'state',
+  onChange: _OnChange
 }: {
   objectId: string;
+  pluginId?: PluginIdEnum;
+  attributeName?: string;
+  onChange?: () => void;
 }): {
   content: JSX.Element;
   isModified: boolean;
@@ -184,11 +198,12 @@ export const useAssignImage = ({
   const [attribute, mediaUploader] = useMemo(() => {
     const attribute = ObjectAttribute.create({
       objectId,
-      pluginId: PluginIdEnum.IMAGE
+      pluginId,
+      attributeName
     });
     attribute.load();
     return [attribute, MediaUploader.create()];
-  }, [objectId]);
+  }, [objectId, pluginId, attributeName]);
 
   const save = useCallback(async () => {
     await handleSubmit(async (data) => {
@@ -235,14 +250,25 @@ export const useAssignImage = ({
         name="image"
         control={control}
         render={({field: {value, onChange}}) => {
-          const imageUrl = value ? URL.createObjectURL(value) : initialImageSrc;
+          const imageUrl =
+            (value && URL.createObjectURL(value)) || (value === null ? value : initialImageSrc);
+
+          const handleChange = (file: File | undefined | null) => {
+            onChange(file);
+            _OnChange?.();
+          };
 
           return (
             <styled.ImageUploadContainer
               className={cn(!!errors.image && 'error', !!imageUrl && 'has-image')}
             >
               {!!imageUrl && (
-                <styled.PreviewImageHolder style={{backgroundImage: `url(${imageUrl})`}} />
+                <>
+                  <styled.RemoveIcon>
+                    <ButtonRound size="normal" icon="bin" onClick={() => handleChange(null)} />
+                  </styled.RemoveIcon>
+                  <styled.PreviewImageHolder style={{backgroundImage: `url(${imageUrl})`}} />
+                </>
               )}
               {errors.image && (
                 <styled.Error>{errors.image.message || t('assetsUploader.errorSave')}</styled.Error>
@@ -256,7 +282,7 @@ export const useAssignImage = ({
                   dragActiveLabel={t('actions.dropItHere')}
                   maxSize={MAX_ASSET_SIZE_B}
                   onError={handleUploadError}
-                  onFilesUpload={onChange}
+                  onFilesUpload={handleChange}
                 >
                   {!value && (
                     <styled.DragAndDropPrompt>
