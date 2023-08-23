@@ -59,7 +59,7 @@ export const useAssignText = ({
     control,
     handleSubmit,
     reset,
-    formState: {errors, isDirty}
+    formState: {errors, dirtyFields}
   } = useForm<TextObjectInterface>();
 
   const save = useCallback(async () => {
@@ -101,7 +101,7 @@ export const useAssignText = ({
 
   return {
     content,
-    isModified: isDirty,
+    isModified: Object.keys(dirtyFields).length > 0,
     save,
     discardChanges: reset,
     remove

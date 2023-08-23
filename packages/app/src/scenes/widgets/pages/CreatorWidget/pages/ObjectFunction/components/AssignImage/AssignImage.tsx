@@ -178,8 +178,8 @@ export const useAssignImage = ({
     setError,
     handleSubmit,
     reset,
-    formState: {errors, isDirty}
-  } = useForm<ImageObjectInterface>({});
+    formState: {errors, dirtyFields}
+  } = useForm<ImageObjectInterface>();
 
   const [attribute, mediaUploader] = useMemo(() => {
     const attribute = ObjectAttribute.create({
@@ -275,7 +275,7 @@ export const useAssignImage = ({
 
   return {
     content,
-    isModified: isDirty,
+    isModified: Object.keys(dirtyFields).length > 0,
     save,
     discardChanges: reset,
     clear
