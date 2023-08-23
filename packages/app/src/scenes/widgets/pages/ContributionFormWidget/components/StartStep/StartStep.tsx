@@ -1,4 +1,4 @@
-import {FC, ReactElement, useCallback, useEffect} from 'react';
+import {FC, ReactElement, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {Button, Round} from '@momentum-xyz/ui-kit';
@@ -19,10 +19,6 @@ interface PropsInterface {
 const StartStep: FC<PropsInterface> = ({isGuest, onRenderActions, setActiveStep, onSignIn}) => {
   const {t} = useI18n();
 
-  const onStart = useCallback(() => {
-    setActiveStep('answers');
-  }, [setActiveStep]);
-
   useEffect(() => {
     onRenderActions(
       <CanvasButtonGroup
@@ -31,11 +27,11 @@ const StartStep: FC<PropsInterface> = ({isGuest, onRenderActions, setActiveStep,
           disabled: isGuest,
           icon: 'person_idea',
           label: t('actions.startContributing'),
-          onClick: onStart
+          onClick: () => setActiveStep('answers')
         }}
       />
     );
-  }, [isGuest, onStart, onRenderActions, t]);
+  }, [isGuest, setActiveStep, onRenderActions, t]);
 
   const stepList: {stepNumber: string; stepTitle: string}[] = [
     {stepNumber: '1', stepTitle: t('titles.answerQuestions')},

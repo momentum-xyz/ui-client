@@ -1,4 +1,4 @@
-import {FC, ReactElement, useCallback, useRef, useState} from 'react';
+import {FC, ReactElement, useCallback, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
 import {Panel, StepInterface, Steps, Frame, PositionEnum} from '@momentum-xyz/ui-kit';
@@ -7,7 +7,7 @@ import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {ContributionStepType} from 'core/types';
 
-import {StartStep} from './components';
+import {StartStep, AnswersStep} from './components';
 import * as styled from './ContributionFormWidget.styled';
 
 const STEP_LIST: StepInterface<ContributionStepType>[] = [
@@ -18,7 +18,9 @@ const STEP_LIST: StepInterface<ContributionStepType>[] = [
 ];
 
 const ContributionFormWidget: FC = () => {
-  const {widgetManagerStore, widgetStore, sessionStore} = useStore();
+  const {widgetManagerStore, widgetStore, sessionStore, universeStore} = useStore();
+  const {contributionFormsStore} = widgetStore;
+  const {world3dStore} = universeStore;
   const {isGuest} = sessionStore;
 
   const ref = useRef<HTMLDivElement>(null);
@@ -27,7 +29,15 @@ const ContributionFormWidget: FC = () => {
 
   const {t} = useI18n();
 
-  console.log(widgetStore);
+  useEffect(() => {
+    if (world3dStore?.canvasObjectId) {
+      contributionFormsStore.loadConfig(world3dStore.canvasObjectId);
+    }
+
+    return () => {
+      contributionFormsStore.resetModel();
+    };
+  }, [contributionFormsStore, world3dStore?.canvasObjectId]);
 
   const handleSetActiveStep = useCallback((stepType: ContributionStepType) => {
     setActiveStep(stepType);
@@ -37,6 +47,10 @@ const ContributionFormWidget: FC = () => {
       ref.current.parentElement.scrollTop = 0;
     }
   }, []);
+
+  if (!contributionFormsStore.config) {
+    return <></>;
+  }
 
   return (
     <Panel
@@ -69,6 +83,16 @@ const ContributionFormWidget: FC = () => {
                   widgetManagerStore.closeAll();
                   widgetManagerStore.open(WidgetEnum.LOGIN, PositionEnum.LEFT);
                 }}
+              />
+            )}
+
+            {activeStep === 'answers' && (
+              <AnswersStep
+                config={contributionFormsStore.config}
+                answersData={contributionFormsStore.answersData}
+                onUpdate={contributionFormsStore.setAnswersData}
+                setActiveStep={handleSetActiveStep}
+                onRenderActions={setStepActions}
               />
             )}
           </Frame>

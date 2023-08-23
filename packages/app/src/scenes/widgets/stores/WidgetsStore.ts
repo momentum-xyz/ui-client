@@ -8,6 +8,7 @@ import {StakingViewStore} from './StakingViewStore';
 import {CreatorStore} from './CreatorStore';
 import {NewsfeedStore} from './NewsfeedStore';
 import {TimelineStore} from './TimelineStore';
+import {ContributionFormsStore} from './ContributionFormsStore';
 
 const WidgetsStore = types.model('WidgetsStore', {
   loginStore: types.optional(LoginStore, {}),
@@ -17,7 +18,8 @@ const WidgetsStore = types.model('WidgetsStore', {
   stakingViewStore: types.optional(StakingViewStore, {}),
   newsfeedStore: types.optional(NewsfeedStore, {}),
   timelineStore: types.optional(TimelineStore, {}),
-  creatorStore: types.optional(CreatorStore, {})
+  creatorStore: types.optional(CreatorStore, {}),
+  contributionFormsStore: types.optional(ContributionFormsStore, {})
 });
 
 export {WidgetsStore};
