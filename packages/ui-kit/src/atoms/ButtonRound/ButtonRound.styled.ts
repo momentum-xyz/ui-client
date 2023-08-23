@@ -29,8 +29,8 @@ export const Button = styled.button`
   --extra-large-size: 40px;
 
   display: flex;
-  width: var(--size);
-  height: var(--size);
+  width: var(--size) !important;
+  height: var(--size) !important;
   align-items: center;
   justify-content: center;
   background: var(--bg-color);
