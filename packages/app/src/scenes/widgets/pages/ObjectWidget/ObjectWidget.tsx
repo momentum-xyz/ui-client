@@ -12,7 +12,7 @@ import * as styled from './ObjectWidget.styled';
 const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {universeStore, widgetManagerStore} = useStore();
   const {objectStore} = universeStore;
-  const {objectContentStore} = objectStore;
+  const {objectContentStore, asset2dId} = objectStore;
   const {assetType, customizableContent} = objectContentStore;
 
   const objectId = data?.id.toString() || '';
@@ -23,19 +23,18 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
 
   useEffect(() => {
     if (data?.id) {
-      objectStore.init(data.id.toString());
-      // .then((assetId) => {
-      //   if (!assetId) {
-      //     onClose();
-      //   }
-      // });
+      objectStore.init(data.id.toString()).then((assetId) => {
+        if (!assetId) {
+          onClose();
+        }
+      });
     }
     return () => {
       objectStore.resetModel();
     };
   }, [data?.id, objectStore, onClose]);
 
-  if (!objectId) {
+  if (!objectId || !asset2dId) {
     return null;
   }
 

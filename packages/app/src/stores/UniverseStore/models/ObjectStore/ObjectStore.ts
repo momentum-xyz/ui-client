@@ -106,6 +106,9 @@ const ObjectStore = types
           }
           break;
         }
+        case BasicAsset2dIdEnum.CONTENT:
+          // noop
+          break;
         default: {
           yield self.initPluginLoader(self.asset2dId, objectId);
           self.objectContentStore.assetType = 'plugin';

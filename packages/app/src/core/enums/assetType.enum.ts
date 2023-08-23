@@ -4,5 +4,6 @@ export enum AssetTypeEnum {
   VIDEO = 'video',
   TEXT = 'text',
   DOCK = 'Docking station',
+  CONTENT = 'object_content',
   CLAIMABLE = 'claimable'
 }

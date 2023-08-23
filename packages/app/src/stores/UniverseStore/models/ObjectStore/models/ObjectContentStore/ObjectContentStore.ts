@@ -50,6 +50,9 @@ const ObjectContentStore = types
           self.assetType = AssetTypeEnum.IMAGE;
           self.initNormalContent(meta.pluginId, spaceId);
           break;
+        case AssetTypeEnum.CONTENT:
+          self.assetType = AssetTypeEnum.CONTENT;
+          break;
         case AssetTypeEnum.CLAIMABLE:
           self.assetType = AssetTypeEnum.CLAIMABLE;
           self.initCustomizableContent(meta.pluginId, spaceId);

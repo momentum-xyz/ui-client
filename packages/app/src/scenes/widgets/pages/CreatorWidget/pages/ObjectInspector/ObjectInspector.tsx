@@ -7,6 +7,8 @@ import {toast} from 'react-toastify';
 import {useStore} from 'shared/hooks';
 import {PosBusService} from 'shared/services';
 import {ToastContent} from 'ui-kit';
+import {PluginIdEnum} from 'api/enums';
+import {BasicAsset2dIdEnum} from 'core/enums';
 
 import {AssignSound} from '../ObjectFunction/components';
 import {useAssignImage} from '../ObjectFunction/components/AssignImage/AssignImage';
@@ -100,6 +102,19 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
     PosBusService.sendObjectTransform(objectId, transform);
   };
 
+  const {content: assignTextureContent, save: saveTexture} = useAssignImage({
+    objectId,
+    pluginId: PluginIdEnum.CORE,
+    attributeName: 'texture',
+    onChange: () => {
+      console.log('textureContent onChange');
+      saveTexture().catch((err) => {
+        console.log('Error saving textureContent in inspector:', err);
+        toast.error(<ToastContent isDanger icon="alert" text={t('assetsUploader.errorSave')} />);
+      });
+    }
+  });
+
   const {
     content: assignImageContent,
     isModified: isModifiedImage,
@@ -134,8 +149,11 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
 
   const isValid = isValidVideo && !isEmptyNameSet;
 
-  const handleSave = async () => {
+  const handleSaveInfo = async () => {
     try {
+      objectFunctionalityStore.selectAsset(BasicAsset2dIdEnum.CONTENT);
+      await objectFunctionalityStore.updateObject();
+
       // check if modified - here or internally
       await Promise.all([
         isModifiedImage && saveImage(),
@@ -189,7 +207,7 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
           <styled.Separator />
 
           <styled.Title>Wrap image around object</styled.Title>
-          {assignImageContent}
+          {assignTextureContent}
 
           <styled.Separator />
 
@@ -253,7 +271,7 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
           {isModified && (
             <styled.ActionBar>
               <Button label={t('actions.cancel')} onClick={handleDiscard} />
-              <Button label={t('actions.submit')} disabled={!isValid} onClick={handleSave} />
+              <Button label={t('actions.submit')} disabled={!isValid} onClick={handleSaveInfo} />
             </styled.ActionBar>
           )}
         </>
