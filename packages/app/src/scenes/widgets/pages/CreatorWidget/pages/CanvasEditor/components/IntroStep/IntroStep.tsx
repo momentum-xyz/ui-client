@@ -1,7 +1,7 @@
 import {FC, ReactElement, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Hexagon} from '@momentum-xyz/ui-kit';
+import {Hexagon, Round} from '@momentum-xyz/ui-kit';
 
 import {CanvasButtonGroup} from 'ui-kit';
 import {CanvasStepType} from 'core/types';
@@ -67,7 +67,7 @@ const IntroStep: FC<PropsInterface> = ({isNewCanvas, onRenderActions, setActiveS
         <styled.Steps>
           {stepList.map((step) => (
             <styled.Step key={step.stepNumber}>
-              <styled.Round>{step.stepNumber}</styled.Round>
+              <Round label={step.stepNumber} />
               <span>{step.stepTitle}</span>
             </styled.Step>
           ))}

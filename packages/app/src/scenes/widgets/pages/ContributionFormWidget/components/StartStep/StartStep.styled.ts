@@ -44,16 +44,6 @@ export const Step = styled.div`
   gap: 8px;
 `;
 
-export const Round = styled.div`
-  display: flex;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
-  justify-content: center;
-  align-items: center;
-`;
-
 export const ImageContainer = styled.div`
   display: flex;
   height: 160px;

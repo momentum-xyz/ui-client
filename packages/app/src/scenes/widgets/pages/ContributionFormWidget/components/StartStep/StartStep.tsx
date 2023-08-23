@@ -1,7 +1,7 @@
 import {FC, ReactElement, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Button} from '@momentum-xyz/ui-kit';
+import {Button, Round} from '@momentum-xyz/ui-kit';
 
 import {CanvasButtonGroup} from 'ui-kit';
 import {ContributionStepType} from 'core/types';
@@ -92,7 +92,7 @@ const StartStep: FC<PropsInterface> = ({isGuest, onRenderActions, setActiveStep,
         <styled.Title>{t('titles.contributeSteps')}</styled.Title>
         {stepList.map((step) => (
           <styled.Step key={step.stepNumber}>
-            <styled.Round>{step.stepNumber}</styled.Round>
+            <Round label={step.stepNumber} />
             <span>{step.stepTitle}</span>
           </styled.Step>
         ))}
