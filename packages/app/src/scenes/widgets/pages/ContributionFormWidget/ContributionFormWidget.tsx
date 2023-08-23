@@ -1,33 +1,80 @@
-import {FC} from 'react';
+import {FC, ReactElement, useCallback, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Panel} from '@momentum-xyz/ui-kit';
+import {Panel, StepInterface, Steps, Frame, PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
+import {ContributionStepType} from 'core/types';
 
+import {StartStep} from './components';
 import * as styled from './ContributionFormWidget.styled';
 
+const STEP_LIST: StepInterface<ContributionStepType>[] = [
+  {id: 'start', label: '0'},
+  {id: 'answers', label: '1'},
+  {id: 'image', label: '2'},
+  {id: 'submit', label: '3'}
+];
+
 const ContributionFormWidget: FC = () => {
-  const {widgetManagerStore, widgetStore} = useStore();
+  const {widgetManagerStore, widgetStore, sessionStore} = useStore();
+  const {isGuest} = sessionStore;
+
+  const ref = useRef<HTMLDivElement>(null);
+  const [stepActions, setStepActions] = useState<ReactElement>();
+  const [activeStep, setActiveStep] = useState<ContributionStepType>('start');
 
   const {t} = useI18n();
 
   console.log(widgetStore);
 
+  const handleSetActiveStep = useCallback((stepType: ContributionStepType) => {
+    setActiveStep(stepType);
+
+    // Reset the scroll position during step changes
+    if (ref.current?.parentElement) {
+      ref.current.parentElement.scrollTop = 0;
+    }
+  }, []);
+
   return (
-    <styled.Container data-testid="ContributionFormWidget-test">
-      <Panel
-        size="normal"
-        isFullHeight
-        variant="primary"
-        icon="person_idea"
-        title={t('labels.contribute')}
-        onClose={() => widgetManagerStore.close(WidgetEnum.CONTRIBUTION_FORM)}
-      >
-        <styled.Wrapper>XXX</styled.Wrapper>
-      </Panel>
-    </styled.Container>
+    <Panel
+      size="normal"
+      isFullHeight
+      variant="primary"
+      icon="person_idea"
+      title={t('labels.contribute')}
+      bottomComponent={stepActions}
+      onClose={() => widgetManagerStore.close(WidgetEnum.CONTRIBUTION_FORM)}
+    >
+      <styled.Container ref={ref} data-testid="ContributionFormWidget-test">
+        <styled.Steps>
+          <Steps
+            stepList={STEP_LIST.map((step) => ({
+              variant: step.id === activeStep ? 'active' : 'prev',
+              ...step
+            }))}
+          />
+        </styled.Steps>
+
+        <styled.StepContent>
+          <Frame>
+            {activeStep === 'start' && (
+              <StartStep
+                isGuest={isGuest}
+                setActiveStep={handleSetActiveStep}
+                onRenderActions={setStepActions}
+                onSignIn={() => {
+                  widgetManagerStore.closeAll();
+                  widgetManagerStore.open(WidgetEnum.LOGIN, PositionEnum.LEFT);
+                }}
+              />
+            )}
+          </Frame>
+        </styled.StepContent>
+      </styled.Container>
+    </Panel>
   );
 };
 
