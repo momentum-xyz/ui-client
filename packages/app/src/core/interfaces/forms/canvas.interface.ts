@@ -30,3 +30,8 @@ export interface ContributionAnswersFormInterface {
   answerThree: string;
   answerFour: string;
 }
+
+export interface ContributionImageFormInterface {
+  file?: File | null;
+  fileUrl?: string | null;
+}

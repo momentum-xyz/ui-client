@@ -5,9 +5,9 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {PluginIdEnum} from 'api/enums';
 import {api, GetSpaceAttributeResponse} from 'api';
 import {CanvasConfigInterface} from 'api/interfaces';
-import {ContributionAnswersFormInterface} from 'core/interfaces';
+import {ContributionAnswersFormInterface, ContributionImageFormInterface} from 'core/interfaces';
 
-import {AnswersData} from './models';
+import {AnswersData, ImageData} from './models';
 
 const ContributionFormsStore = types.compose(
   ResetModel,
@@ -15,6 +15,7 @@ const ContributionFormsStore = types.compose(
     .model('ContributionFormsStore', {
       config: types.maybeNull(types.frozen<CanvasConfigInterface>()),
       answersData: types.optional(AnswersData, {}),
+      imageData: types.optional(ImageData, {}),
 
       configRequest: types.optional(RequestModel, {})
     })
@@ -35,6 +36,9 @@ const ContributionFormsStore = types.compose(
       }),
       setAnswersData(form: ContributionAnswersFormInterface): void {
         self.answersData = AnswersData.create({...form});
+      },
+      setImageData(form: ContributionImageFormInterface): void {
+        // TODO:
       }
     }))
     .views(() => ({}))

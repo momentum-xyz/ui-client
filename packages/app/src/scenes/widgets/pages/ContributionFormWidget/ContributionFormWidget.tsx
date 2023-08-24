@@ -1,13 +1,13 @@
 import {FC, ReactElement, useCallback, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useI18n} from '@momentum-xyz/core';
+import {Event3dEmitter, useI18n} from '@momentum-xyz/core';
 import {Panel, StepInterface, Steps, Frame, PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {ContributionStepType} from 'core/types';
 
-import {StartStep, AnswersStep} from './components';
+import {StartStep, AnswersStep, ImageStep} from './components';
 import * as styled from './ContributionFormWidget.styled';
 
 const STEP_LIST: StepInterface<ContributionStepType>[] = [
@@ -32,6 +32,7 @@ const ContributionFormWidget: FC = () => {
   useEffect(() => {
     if (world3dStore?.canvasObjectId) {
       contributionFormsStore.loadConfig(world3dStore.canvasObjectId);
+      Event3dEmitter.emit('FlyToObject', world3dStore.canvasObjectId);
     }
 
     return () => {
@@ -91,6 +92,16 @@ const ContributionFormWidget: FC = () => {
                 config={contributionFormsStore.config}
                 answersData={contributionFormsStore.answersData}
                 onUpdate={contributionFormsStore.setAnswersData}
+                setActiveStep={handleSetActiveStep}
+                onRenderActions={setStepActions}
+              />
+            )}
+
+            {activeStep === 'image' && (
+              <ImageStep
+                config={contributionFormsStore.config}
+                imageData={contributionFormsStore.imageData}
+                onUpdate={contributionFormsStore.setImageData}
                 setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
               />
