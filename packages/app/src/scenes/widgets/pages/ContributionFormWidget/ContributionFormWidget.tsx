@@ -101,6 +101,10 @@ const ContributionFormWidget: FC = () => {
               <ImageStep
                 config={contributionFormsStore.config}
                 imageData={contributionFormsStore.imageData}
+                isGenerating={contributionFormsStore.isGenerating}
+                generatedImages={contributionFormsStore.generatedImages}
+                onGenerateImages={contributionFormsStore.generateAIImages}
+                onClearGeneratedImages={contributionFormsStore.clearGeneratedImages}
                 onUpdate={contributionFormsStore.setImageData}
                 setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
