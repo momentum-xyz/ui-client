@@ -178,104 +178,104 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
 
   return (
     <styled.Container data-testid="ObjectInspector-test">
-      <styled.Tabs>
-        <Tabs tabList={TABS_LIST} activeId={activeTab} onSelect={setActiveTab} />
-      </styled.Tabs>
+      <Tabs tabList={TABS_LIST} activeId={activeTab} onSelect={setActiveTab} stickToTopRight />
 
-      {activeTab === 'settings' && (
-        <>
-          <styled.MainTitle>{objectName}</styled.MainTitle>
-          {/* TODO  date */}
+      <styled.Body>
+        {activeTab === 'settings' && (
+          <>
+            <styled.MainTitle>{objectName}</styled.MainTitle>
+            {/* TODO  date */}
 
-          <styled.Separator />
+            <styled.Separator />
 
-          {transformFormData && (
-            <ObjectTransformForm
-              // key={selectedObjectId}
-              key={JSON.stringify(transformFormData)} // there's slight delay between selectedObjectId change and objectInfo change, so we need to use transformFormData as key
-              initialData={transformFormData}
-              onTransformChange={handleTransformChange}
-            />
-          )}
-
-          <styled.Separator />
-
-          <styled.Title>{t('titles.objectSound')}</styled.Title>
-
-          <AssignSound objectId={objectId} onBack={() => {}} />
-
-          <styled.Separator />
-
-          <styled.Title>Wrap image around object</styled.Title>
-          {assignTextureContent}
-
-          <styled.Separator />
-
-          {canChangeColor && (
-            // <styled.Section className="color-picker">
-            <>
-              <styled.Title>{t('titles.colourPicker')}</styled.Title>
-              <ObjectColorPicker />
-            </>
-            // </styled.Section>
-          )}
-        </>
-      )}
-
-      {activeTab === 'info' && (
-        <>
-          {/* owner name, date   */}
-          <styled.MainTitle>{objectName}</styled.MainTitle>
-
-          <styled.Separator />
-
-          {assignImageContent}
-
-          <styled.Separator />
-
-          <styled.Title>Name of object</styled.Title>
-          <Input
-            value={modifiedObjectName ?? objectName}
-            onChange={setModifiedObjectName}
-            wide
-            danger={isEmptyNameSet}
-          />
-          <styled.Title>Description of object</styled.Title>
-          {assignTextContent}
-
-          <styled.Separator />
-
-          <styled.Title>Add video to object info</styled.Title>
-          <styled.VideoWrapper>
-            {pluginLoader?.plugin ? (
-              // <AssignVideo
-              //   objectId={objectId}
-              //   plugin={pluginLoader.plugin}
-              //   pluginLoader={pluginLoader}
-              //   isEditing
-              //   onDelete={() => {}}
-              //   onSaved={() => {}}
-              //   onBack={() => {}}
-              // />
-              assignVideoContent
-            ) : (
-              <div>
-                <div>Cannot assign functionality because plugin_video is not loaded.</div>
-                <div>Report to development.</div>
-              </div>
+            {transformFormData && (
+              <ObjectTransformForm
+                // key={selectedObjectId}
+                key={JSON.stringify(transformFormData)} // there's slight delay between selectedObjectId change and objectInfo change, so we need to use transformFormData as key
+                initialData={transformFormData}
+                onTransformChange={handleTransformChange}
+              />
             )}
-          </styled.VideoWrapper>
 
-          <styled.Separator />
+            <styled.Separator />
 
-          {isModified && (
-            <styled.ActionBar>
-              <Button label={t('actions.cancel')} onClick={handleDiscard} />
-              <Button label={t('actions.submit')} disabled={!isValid} onClick={handleSaveInfo} />
-            </styled.ActionBar>
-          )}
-        </>
-      )}
+            <styled.Title>{t('titles.objectSound')}</styled.Title>
+
+            <AssignSound objectId={objectId} onBack={() => {}} />
+
+            <styled.Separator />
+
+            <styled.Title>Wrap image around object</styled.Title>
+            {assignTextureContent}
+
+            <styled.Separator />
+
+            {canChangeColor && (
+              // <styled.Section className="color-picker">
+              <>
+                <styled.Title>{t('titles.colourPicker')}</styled.Title>
+                <ObjectColorPicker />
+              </>
+              // </styled.Section>
+            )}
+          </>
+        )}
+
+        {activeTab === 'info' && (
+          <>
+            {/* owner name, date   */}
+            <styled.MainTitle>{objectName}</styled.MainTitle>
+
+            <styled.Separator />
+
+            {assignImageContent}
+
+            <styled.Separator />
+
+            <styled.Title>Name of object</styled.Title>
+            <Input
+              value={modifiedObjectName ?? objectName}
+              onChange={setModifiedObjectName}
+              wide
+              danger={isEmptyNameSet}
+            />
+            <styled.Title>Description of object</styled.Title>
+            {assignTextContent}
+
+            <styled.Separator />
+
+            <styled.Title>Add video to object info</styled.Title>
+            <styled.VideoWrapper>
+              {pluginLoader?.plugin ? (
+                // <AssignVideo
+                //   objectId={objectId}
+                //   plugin={pluginLoader.plugin}
+                //   pluginLoader={pluginLoader}
+                //   isEditing
+                //   onDelete={() => {}}
+                //   onSaved={() => {}}
+                //   onBack={() => {}}
+                // />
+                assignVideoContent
+              ) : (
+                <div>
+                  <div>Cannot assign functionality because plugin_video is not loaded.</div>
+                  <div>Report to development.</div>
+                </div>
+              )}
+            </styled.VideoWrapper>
+
+            <styled.Separator />
+
+            {isModified && (
+              <styled.ActionBar>
+                <Button label={t('actions.cancel')} onClick={handleDiscard} />
+                <Button label={t('actions.submit')} disabled={!isValid} onClick={handleSaveInfo} />
+              </styled.ActionBar>
+            )}
+          </>
+        )}
+      </styled.Body>
     </styled.Container>
   );
 };

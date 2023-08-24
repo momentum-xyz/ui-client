@@ -4,8 +4,9 @@ import styled from 'styled-components';
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 10px 0 10px 10px;
   position: relative;
+  height: 100%;
 `;
 
 export const Section = styled.div`
@@ -24,8 +25,9 @@ export const Section = styled.div`
 
 export const Body = styled.div`
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
-  overflow: hidden;
+  overflow: auto;
 `;
 
 export const MainTitle = styled.h1`
@@ -71,14 +73,4 @@ export const ActionBar = styled.div`
   align-items: center;
   justify-content: space-around;
   padding: 10px 0;
-`;
-
-export const Tabs = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: end;
-  top: -2px;
-  right: 10px;
-  left 0;
-  z-index: 1;
 `;
