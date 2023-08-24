@@ -27,7 +27,9 @@ export const Body = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  overflow: auto;
+  overflow: scroll;
+  margin-right: -10px;
+  padding-right: 10px;
 `;
 
 export const MainTitle = styled.h1`

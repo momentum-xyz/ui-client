@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {i18n, useI18n} from '@momentum-xyz/core';
-import {Button, Input, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
+import {Button, CollapsibleSection, Input, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
@@ -199,25 +199,21 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
 
             <styled.Separator />
 
-            <styled.Title>{t('titles.objectSound')}</styled.Title>
-
-            <AssignSound objectId={objectId} onBack={() => {}} />
-
-            <styled.Separator />
-
-            <styled.Title>Wrap image around object</styled.Title>
-            {assignTextureContent}
+            <CollapsibleSection title={t('titles.objectSound')}>
+              <AssignSound objectId={objectId} onBack={() => {}} />
+            </CollapsibleSection>
 
             <styled.Separator />
 
-            {canChangeColor && (
-              // <styled.Section className="color-picker">
-              <>
-                <styled.Title>{t('titles.colourPicker')}</styled.Title>
-                <ObjectColorPicker />
-              </>
-              // </styled.Section>
-            )}
+            <CollapsibleSection title={t('titles.wrapImage')}>
+              {assignTextureContent}
+            </CollapsibleSection>
+
+            <styled.Separator />
+
+            <CollapsibleSection title={t('titles.colourPicker')} disabled={!canChangeColor}>
+              <ObjectColorPicker />
+            </CollapsibleSection>
           </>
         )}
 
@@ -228,42 +224,36 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
 
             <styled.Separator />
 
-            {assignImageContent}
+            <CollapsibleSection title={t('titles.addImage')}>
+              {assignImageContent}
+            </CollapsibleSection>
 
             <styled.Separator />
 
-            <styled.Title>Name of object</styled.Title>
+            <styled.Title>{t('titles.nameOfObject')}</styled.Title>
             <Input
               value={modifiedObjectName ?? objectName}
               onChange={setModifiedObjectName}
               wide
               danger={isEmptyNameSet}
             />
-            <styled.Title>Description of object</styled.Title>
+            <styled.Title>{t('titles.descriptionOfObject')}</styled.Title>
             {assignTextContent}
 
             <styled.Separator />
 
-            <styled.Title>Add video to object info</styled.Title>
-            <styled.VideoWrapper>
-              {pluginLoader?.plugin ? (
-                // <AssignVideo
-                //   objectId={objectId}
-                //   plugin={pluginLoader.plugin}
-                //   pluginLoader={pluginLoader}
-                //   isEditing
-                //   onDelete={() => {}}
-                //   onSaved={() => {}}
-                //   onBack={() => {}}
-                // />
-                assignVideoContent
-              ) : (
-                <div>
-                  <div>Cannot assign functionality because plugin_video is not loaded.</div>
-                  <div>Report to development.</div>
-                </div>
-              )}
-            </styled.VideoWrapper>
+            <CollapsibleSection title={t('titles.addVideo')}>
+              <styled.VideoWrapper>
+                {pluginLoader?.plugin ? (
+                  assignVideoContent
+                ) : (
+                  <div>
+                    <div>Cannot assign functionality because plugin_video is not loaded.</div>
+                    <div>Report to development.</div>
+                  </div>
+                )}
+              </styled.VideoWrapper>
+            </CollapsibleSection>
 
             <styled.Separator />
 
