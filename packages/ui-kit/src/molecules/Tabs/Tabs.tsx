@@ -1,3 +1,5 @@
+import cn from 'classnames';
+
 import {IconNameType} from '../../types';
 import {ButtonEllipse} from '../../atoms';
 
@@ -14,11 +16,12 @@ export interface TabsPropsInterface<T> {
   activeId?: T;
   tabList: TabInterface<T>[];
   onSelect?: (id: T) => void;
+  stickToTopRight?: boolean;
 }
 
-const Tabs = <T,>({tabList, activeId, onSelect}: TabsPropsInterface<T>) => {
+const Tabs = <T,>({tabList, activeId, onSelect, stickToTopRight}: TabsPropsInterface<T>) => {
   return (
-    <styled.Tabs data-testid="Tabs-test">
+    <styled.Tabs data-testid="Tabs-test" className={cn(stickToTopRight && 'stick-to-top-right')}>
       {tabList.map((tab, index) => (
         <ButtonEllipse
           key={`${tab.id}${index}`}

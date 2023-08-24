@@ -8,8 +8,19 @@ export default {
   component: Tabs,
   decorators: [
     (Story) => (
-      <div className="storybook-block">
+      <div
+        className="storybook-block"
+        style={{width: 400, padding: 10, position: 'relative', border: 'solid 1px blue'}}
+      >
         <Story />
+        <div style={{height: '500px', overflow: 'auto'}}>
+          {new Array(100).fill('').map((_, idx) => (
+            <span key={idx}>
+              Some really long text
+              <br />
+            </span>
+          ))}
+        </div>
       </div>
     )
   ]
@@ -26,4 +37,13 @@ General.args = {
     {id: '1', label: 'Latest', icon: 'planet'},
     {id: '2', label: 'Connections', icon: 'planet'}
   ]
+};
+
+export const StickToTopRight = Template.bind({});
+StickToTopRight.args = {
+  tabList: [
+    {id: '1', label: 'Latest', icon: 'planet'},
+    {id: '2', label: 'Connections', icon: 'planet'}
+  ],
+  stickToTopRight: true
 };
