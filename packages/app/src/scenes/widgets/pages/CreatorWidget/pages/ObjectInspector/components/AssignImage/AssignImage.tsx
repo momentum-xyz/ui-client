@@ -101,24 +101,23 @@ export const useAssignImage: UseAssignImageHookType = ({
         name="image"
         control={control}
         render={({field: {value, onChange}}) => {
-          const imageUrl =
-            (value && URL.createObjectURL(value)) || (value === null ? value : initialImageSrc);
-
           const handleChange = (file: File | undefined | null) => {
             onChange(file);
             _OnChange?.();
           };
 
+          const hasImage = !!value || !!initialImageSrc;
+
           return (
             <styled.ImageUploadContainer
-              className={cn(!!errors.image && 'error', !!imageUrl && 'has-image')}
+              className={cn(!!errors.image && 'error', !!hasImage && 'has-image')}
             >
-              {!!imageUrl && (
+              {hasImage && (
                 <>
                   <styled.RemoveIcon>
                     <ButtonRound size="normal" icon="bin" onClick={() => handleChange(null)} />
                   </styled.RemoveIcon>
-                  <styled.PreviewImageHolder style={{backgroundImage: `url(${imageUrl})`}} />
+                  <styled.PreviewImageHolder file={value} initialImageSrc={initialImageSrc} />
                 </>
               )}
               {errors.image && (

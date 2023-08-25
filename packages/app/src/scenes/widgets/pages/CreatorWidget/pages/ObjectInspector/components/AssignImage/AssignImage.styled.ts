@@ -1,4 +1,5 @@
 import {rgba} from 'polished';
+import {memo} from 'react';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -97,14 +98,19 @@ export const DragAndDropPrompt = styled.div`
   left: 0;
 `;
 
-export const PreviewImageHolder = styled.div`
+export const PreviewImageHolder = memo(styled.div<{
+  file?: File;
+  initialImageSrc?: string | null;
+}>`
   background-position: center center;
   background-size: cover;
   position: absolute;
   width: 100%;
   height: 100%;
   border-radius: 8px;
-`;
+  background-image: url(${({file, initialImageSrc}) =>
+    (file && URL.createObjectURL(file)) || (file === null ? file : initialImageSrc)});
+`);
 
 export const ActionBar = styled.div`
   padding: 10px 0;
