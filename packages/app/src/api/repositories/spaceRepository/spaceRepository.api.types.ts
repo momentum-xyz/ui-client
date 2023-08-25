@@ -99,3 +99,16 @@ export interface ClaimAndCustomizeRequest extends CustomizableObjectInterface {
 export interface CleanCustomizationRequest {
   objectId: string;
 }
+
+/** SPAWN OBJECT BY USER **/
+
+export interface SpawnByUserRequest {
+  objectId: string;
+  object_name: string;
+  object_type_id: string;
+  attributes: Record<string, unknown>;
+}
+
+export interface SpawnByUserResponse {
+  object_id: string;
+}

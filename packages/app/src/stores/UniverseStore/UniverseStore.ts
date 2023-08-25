@@ -23,6 +23,8 @@ const UniverseStore = types
     },
     enterWorld(worldId: string): void {
       self.world3dStore = World3dStore.create({worldId});
+      self.world3dStore.init();
+
       self.world2dStore = World2dStore.create();
       self.world2dStore.init(worldId);
     },

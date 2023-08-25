@@ -7,6 +7,10 @@ export const StepActions = styled.div`
   grid-template-columns: 1fr 1fr;
   background-color: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
   gap: 65px;
+
+  &.single {
+    display: block;
+  }
 `;
 
 export const StepAction = styled.div``;

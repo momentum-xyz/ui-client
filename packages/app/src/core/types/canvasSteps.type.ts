@@ -5,3 +5,5 @@ export type CanvasStepType =
   | 'script'
   | 'teamworkScript'
   | 'overview';
+
+export type ContributionStepType = 'start' | 'answers' | 'image' | 'submit';

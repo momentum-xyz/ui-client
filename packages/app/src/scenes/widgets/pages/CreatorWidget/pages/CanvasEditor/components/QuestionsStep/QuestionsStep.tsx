@@ -2,7 +2,7 @@ import {FC, ReactElement, useCallback, useEffect} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
-import {Hexagon, Input, Textarea} from '@momentum-xyz/ui-kit';
+import {Hexagon, Input, Round, Textarea} from '@momentum-xyz/ui-kit';
 
 import {CanvasButtonGroup} from 'ui-kit';
 import {CanvasStepType} from 'core/types';
@@ -83,7 +83,7 @@ const QuestionsStep: FC<PropsInterface> = ({
         <styled.Separator />
 
         <styled.SubTitle>
-          <styled.Round>1</styled.Round>
+          <Round label={1} />
           <span>{t('titles.canvasQuestion1')}*</span>
         </styled.SubTitle>
         <Controller
@@ -103,7 +103,7 @@ const QuestionsStep: FC<PropsInterface> = ({
         />
 
         <styled.SubTitle>
-          <styled.Round>2</styled.Round>
+          <Round label={2} />
           <span>{t('titles.question')}*</span>
         </styled.SubTitle>
         <Controller
@@ -123,7 +123,7 @@ const QuestionsStep: FC<PropsInterface> = ({
         />
 
         <styled.SubTitle>
-          <styled.Round>3</styled.Round>
+          <Round label={3} />
           <span>{t('titles.question')}*</span>
         </styled.SubTitle>
         <Controller
@@ -143,7 +143,7 @@ const QuestionsStep: FC<PropsInterface> = ({
         />
 
         <styled.SubTitle>
-          <styled.Round>4</styled.Round>
+          <Round label={4} />
           <span>{t('titles.question')}</span>
         </styled.SubTitle>
         <Controller

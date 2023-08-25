@@ -1,6 +1,6 @@
 import {Instance, flow, types} from 'mobx-state-tree';
 import {MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
-import {Event3dEmitter, MediaInterface, RequestModel} from '@momentum-xyz/core';
+import {Event3dEmitter, MediaInterface, ObjectTypeIdEnum, RequestModel} from '@momentum-xyz/core';
 
 import {getRootStore} from 'core/utils';
 import {CreatorTabsEnum, WidgetEnum} from 'core/enums';
@@ -18,6 +18,9 @@ const World3dStore = types
 
     worldTree: types.maybeNull(types.frozen<FetchWorldTreeResponse>()),
     fetchWorldTreeRequest: types.optional(RequestModel, {}),
+
+    canvasObjectId: types.maybeNull(types.string),
+    fetchCanvasRequest: types.optional(RequestModel, {}),
 
     isScreenRecording: false,
     screenshotOrVideo: types.maybeNull(types.frozen<MediaInterface>())
@@ -190,6 +193,28 @@ const World3dStore = types
         worldId: self.worldId
       });
     })
+  }))
+  .actions((self) => ({
+    fetchCanvasObject: flow(function* () {
+      const response: FetchWorldTreeResponse = yield self.fetchCanvasRequest.send(
+        api.spaceRepository.fetchWorldTree,
+        {
+          max_depth: 1,
+          worldId: self.worldId,
+          object_type: ObjectTypeIdEnum.CANVAS
+        }
+      );
+
+      if (response?.total_direct_children > 0) {
+        const objectArray = Object.values(response.children);
+        self.canvasObjectId = objectArray[0].id;
+      } else {
+        self.canvasObjectId = null;
+      }
+    }),
+    async init(): Promise<void> {
+      await this.fetchCanvasObject();
+    }
   }))
   .actions((self) => ({
     enableCreatorMode() {

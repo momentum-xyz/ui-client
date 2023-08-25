@@ -16,7 +16,8 @@ import {
   ButtonRound,
   FileUploader,
   ImageSizeEnum,
-  Warning
+  Warning,
+  ButtonSquare
 } from '@momentum-xyz/ui-kit';
 
 import {LeonardoModelIdEnum, LEONARDO_MODEL_OPTIONS} from 'core/enums';
@@ -185,15 +186,16 @@ const NewOrEditForm: FC<PropsInterface> = ({
         {/* SELECT IMAGE TYPE */}
         {!selectedImageType && (
           <styled.ImageTypeSelector>
-            <styled.ImageType onClick={() => handleImageType('custom')}>
-              <IconSvg name="picture_upload" size="xll" isWhite />
-              <span>Upload an image</span>
-            </styled.ImageType>
-
-            <styled.ImageType onClick={() => handleImageType('ai')}>
-              <IconSvg name="ai" size="xll" isWhite />
-              <span>Create an AI image</span>
-            </styled.ImageType>
+            <ButtonSquare
+              icon="picture_upload"
+              label={t('actions.uploadImage')}
+              onClick={() => handleImageType('custom')}
+            />
+            <ButtonSquare
+              icon="ai"
+              label={t('actions.createAIImage')}
+              onClick={() => handleImageType('ai')}
+            />
           </styled.ImageTypeSelector>
         )}
 

@@ -207,6 +207,7 @@ const CreatorWidget: FC = () => {
                   toast.info(<ToastContent icon="bin" text={t('messages.objectDeleted')} />);
                   removeObjectDialog.close();
                   widgetManagerStore.closeSubMenu();
+                  world3dStore?.fetchCanvasObject();
                 })
                 .catch((error) => {
                   console.log('Error removing object:', error);

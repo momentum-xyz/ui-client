@@ -8,6 +8,7 @@ export const Container = styled.div`
   padding: 10px;
   display: flex;
   background: linear-gradient(180deg, var(--lg-from) 0%, var(--lg-to) 100%);
+  box-shadow: -1px -1px 2px 0px rgba(158, 238, 255, 0.1);
   color: ${(props) => props.theme.text};
   border-radius: 4px;
   flex-direction: column;

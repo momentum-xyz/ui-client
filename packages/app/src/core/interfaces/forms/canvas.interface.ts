@@ -23,3 +23,15 @@ export interface CanvasTeamworkScriptFormInterface {
   script: string | null;
   scriptTitle: string | null;
 }
+
+export interface ContributionAnswersFormInterface {
+  answerOne: string;
+  answerTwo: string;
+  answerThree: string;
+  answerFour: string;
+}
+
+export interface ContributionImageFormInterface {
+  file?: File | null;
+  fileUrlOrHash?: string | null;
+}

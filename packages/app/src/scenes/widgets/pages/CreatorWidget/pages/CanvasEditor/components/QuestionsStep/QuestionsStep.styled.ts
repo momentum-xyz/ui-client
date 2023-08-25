@@ -40,13 +40,3 @@ export const SubTitle = styled.div`
   line-height: 18px;
   gap: 10px;
 `;
-
-export const Round = styled.div`
-  display: flex;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.6)};
-  justify-content: center;
-  align-items: center;
-`;

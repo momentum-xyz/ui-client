@@ -1,3 +1,4 @@
+export * from './ButtonSquare';
 export * from './ButtonRectangle';
 export * from './Panel';
 export * from './Steps';

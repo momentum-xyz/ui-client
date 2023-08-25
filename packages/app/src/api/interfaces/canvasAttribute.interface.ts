@@ -19,3 +19,12 @@ export interface CanvasConfigInterface extends AttributeValueInterface {
   chatGPTScriptTitle: string | null;
   contributionAmount: number;
 }
+
+export interface UserContributionInterface extends AttributeValueInterface {
+  created: string;
+  answerOne: string;
+  answerTwo: string;
+  answerThree: string;
+  answerFour: string;
+  render_hash: string;
+}
