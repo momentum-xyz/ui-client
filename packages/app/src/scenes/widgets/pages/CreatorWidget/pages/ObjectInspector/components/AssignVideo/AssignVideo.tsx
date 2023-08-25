@@ -1,7 +1,6 @@
-import {FC, useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {ErrorBoundary, useMutableCallback} from '@momentum-xyz/ui-kit';
 import {useI18n} from '@momentum-xyz/core';
-import {observer} from 'mobx-react-lite';
 import {useTheme} from 'styled-components';
 import {
   PluginInterface,
@@ -14,55 +13,26 @@ import {PluginLoaderModelType} from 'core/models';
 
 import * as styled from './AssignVideo.styled';
 
-interface PropsInterface {
-  objectId: string;
-  plugin: PluginInterface;
-  pluginLoader: PluginLoaderModelType;
-  isEditing: boolean;
-  onDelete: () => void;
-  onBack: () => void;
-  onSaved: (success: boolean) => void;
-}
-
-// TODO remove
-const AssignVideo: FC<PropsInterface> = ({
-  objectId,
-  isEditing,
-  plugin,
-  pluginLoader,
-  onSaved,
-  onDelete,
-  onBack
-}) => {
-  return <styled.Container></styled.Container>;
-};
-
-export const useAssignVideo = ({
-  objectId,
-  plugin,
-  pluginLoader
-}: {
+type UseAssignVideoHookType = (props: {
   objectId: string;
   plugin: PluginInterface | undefined;
   pluginLoader: PluginLoaderModelType | undefined;
-}): {
+}) => {
   content: JSX.Element;
   isModified: boolean;
   isValid: boolean;
   save: () => Promise<void>;
   discardChanges: () => void;
   remove: () => Promise<void>;
-} => {
+};
+
+export const useAssignVideo: UseAssignVideoHookType = ({objectId, plugin, pluginLoader}) => {
   const {universeStore} = useStore();
 
   const {t} = useI18n();
   const theme = useTheme();
 
   const isAdmin = universeStore.isCurrentUserWorldAdmin;
-
-  // if (!pluginLoader) {
-  //   return null;
-  // }
 
   const [isModified, setIsModified] = useState(false);
   const [isValid, setIsValid] = useState(false);
@@ -198,36 +168,8 @@ const PluginInnerWrapper = ({
           This version of <strong>plugin_video</strong> doesn't support edit
         </div>
       ) : (
-        <>
-          {editModeContent}
-
-          {/* <styled.ActionBar>
-            <Button variant="secondary" label={t('actions.back')} onClick={onBack} />
-
-            {isEditing && (
-              <Button variant="secondary" label={t('actions.delete')} onClick={onDelete} />
-            )}
-
-            <Button
-              label={isEditing ? t('actions.save') : t('actions.embed')}
-              onClick={async () => {
-                try {
-                  if (!saveChanges) {
-                    throw new Error('plugin_video error: saveChanges method is not defined');
-                  }
-
-                  await saveChanges();
-                  onSaved(true);
-                } catch (err) {
-                  onSaved(false);
-                }
-              }}
-            />
-          </styled.ActionBar> */}
-        </>
+        <>{editModeContent}</>
       )}
     </>
   );
 };
-
-export default observer(AssignVideo);

@@ -1,8 +1,6 @@
-import {FC, useCallback, useMemo} from 'react';
-import {observer} from 'mobx-react-lite';
+import {useCallback, useMemo} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {Textarea} from '@momentum-xyz/ui-kit';
-// import {useI18n} from '@momentum-xyz/core';
 
 import {TextObjectInterface} from 'core/interfaces';
 import {ObjectAttribute} from 'core/models';
@@ -10,40 +8,15 @@ import {PluginIdEnum} from 'api/enums';
 
 import * as styled from './AssignText.styled';
 
-interface PropsInterface {
-  initialTitle: string | undefined;
-  initialText: string | undefined;
-  isEditing: boolean;
-  isPending: boolean;
-  onDelete: () => void;
-  onSave: (title: string, text: string) => void;
-  onBack: () => void;
-}
-
-// TODO remove
-const AssignText: FC<PropsInterface> = ({
-  initialTitle,
-  initialText,
-  isEditing,
-  isPending,
-  onSave,
-  onDelete,
-  onBack
-}) => {
-  return <styled.Container data-testid="AssignText-test"></styled.Container>;
-};
-
-export const useAssignText = ({
-  objectId
-}: {
-  objectId: string;
-}): {
+type UseAssignTextHookType = (props: {objectId: string}) => {
   content: JSX.Element;
   isModified: boolean;
   save: () => Promise<void>;
   discardChanges: () => void;
   remove: () => Promise<void>;
-} => {
+};
+
+export const useAssignText: UseAssignTextHookType = ({objectId}) => {
   const attribute = useMemo(() => {
     const attribute = ObjectAttribute.create({
       objectId,
@@ -107,5 +80,3 @@ export const useAssignText = ({
     remove
   };
 };
-
-export default observer(AssignText);

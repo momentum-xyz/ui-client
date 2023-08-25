@@ -16,7 +16,6 @@ import {
   SkyboxSelector,
   ObjectInspector,
   AssetCustomising,
-  ObjectFunction,
   MusicManager,
   SceneExplorer,
   WorldMembers
@@ -63,11 +62,6 @@ const allPanels: SideMenuItemInterface<MenuItemType>[] = [
     id: 'inspector',
     iconName: 'info',
     label: i18n.t('labels.inspector')
-  },
-  {
-    id: 'functionality',
-    iconName: 'cubicles',
-    label: i18n.t('labels.selectFunction')
   },
   {
     id: 'customise',
@@ -153,8 +147,6 @@ const CreatorWidget: FC = () => {
             key={world3dStore.selectedObjectId}
           />
         ) : null;
-      case 'functionality':
-        return <ObjectFunction />;
       case 'customise':
         return <AssetCustomising />;
       case 'sceneExplorer':

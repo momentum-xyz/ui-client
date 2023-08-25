@@ -10,11 +10,7 @@ import {ToastContent} from 'ui-kit';
 import {PluginIdEnum} from 'api/enums';
 import {BasicAsset2dIdEnum} from 'core/enums';
 
-import {AssignSound} from '../ObjectFunction/components';
-import {useAssignImage} from '../ObjectFunction/components/AssignImage/AssignImage';
-import {useAssignVideo} from '../ObjectFunction/components/AssignVideo/AssignVideo';
-import {useAssignText} from '../ObjectFunction/components/AssignText/AssignText';
-
+import {AssignSound, useAssignImage, useAssignText, useAssignVideo} from './components';
 import * as styled from './ObjectInspector.styled';
 import {ObjectColorPicker, ObjectTransformForm} from './components';
 import {TransformInterface} from './components/ObjectTransformForm/ObjectTransformForm';
