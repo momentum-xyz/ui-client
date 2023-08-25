@@ -7,7 +7,7 @@ import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 import {ContributionStepType} from 'core/types';
 
-import {StartStep, AnswersStep, ImageStep} from './components';
+import {StartStep, AnswersStep, ImageStep, SubmitStep} from './components';
 import * as styled from './ContributionFormWidget.styled';
 
 const STEP_LIST: StepInterface<ContributionStepType>[] = [
@@ -106,6 +106,18 @@ const ContributionFormWidget: FC = () => {
                 onGenerateImages={contributionFormsStore.generateAIImages}
                 onClearGeneratedImages={contributionFormsStore.clearGeneratedImages}
                 onUpdate={contributionFormsStore.setImageData}
+                setActiveStep={handleSetActiveStep}
+                onRenderActions={setStepActions}
+              />
+            )}
+
+            {activeStep === 'submit' && (
+              <SubmitStep
+                config={contributionFormsStore.config}
+                imageData={contributionFormsStore.imageData}
+                answersData={contributionFormsStore.answersData}
+                isSubmitting={false}
+                onSubmit={() => {}}
                 setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
               />

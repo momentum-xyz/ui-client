@@ -55,7 +55,7 @@ const ImageStep: FC<PropsInterface> = ({
   const [prompt, setPrompt] = useState<string>('');
 
   useEffect(() => {
-    if (!config.isLeonardo || imageData.renderHash) {
+    if (!config.isLeonardo || imageData.fileUrlOrHash) {
       setImageType('custom');
     }
   }, [config, imageData]);
@@ -68,13 +68,13 @@ const ImageStep: FC<PropsInterface> = ({
 
   const {t} = useI18n();
 
-  const {control, handleSubmit, watch} = useForm<ContributionImageFormInterface>({
+  const {control, setValue, handleSubmit, watch} = useForm<ContributionImageFormInterface>({
     defaultValues: {
-      fileUrl: getImageAbsoluteUrl(imageData.renderHash)
+      fileUrlOrHash: getImageAbsoluteUrl(imageData.fileUrlOrHash)
     }
   });
 
-  const [fileUrl, file] = watch(['fileUrl', 'file']);
+  const [fileUrlOrHash, file] = watch(['fileUrlOrHash', 'file']);
 
   const formSubmitHandler: SubmitHandler<ContributionImageFormInterface> = useCallback(
     (form) => {
@@ -95,7 +95,7 @@ const ImageStep: FC<PropsInterface> = ({
         }}
         nextProps={{
           icon: 'person_idea',
-          disabled: (imageType === 'ai' && !fileUrl) || (imageType === 'custom' && !file),
+          disabled: (imageType === 'ai' && !fileUrlOrHash) || (imageType === 'custom' && !file),
           label: t('actions.next'),
           onClick: () => {
             handleSubmit(formSubmitHandler)();
@@ -104,7 +104,7 @@ const ImageStep: FC<PropsInterface> = ({
         }}
       />
     );
-  }, [imageType, fileUrl, file, onRenderActions]);
+  }, [imageType, fileUrlOrHash, file, onRenderActions]);
 
   return (
     <styled.Container data-testid="ImageStep-test">
@@ -124,21 +124,27 @@ const ImageStep: FC<PropsInterface> = ({
             isActive={imageType === 'ai'}
             isDisabled={!config.isLeonardo}
             label={t('actions.createAIImage')}
-            onClick={() => setImageType('ai')}
+            onClick={() => {
+              setValue('file', null);
+              setImageType('ai');
+            }}
           />
 
           <ButtonSquare
             icon="picture_upload"
             isActive={imageType === 'custom'}
             label={t('actions.uploadImage')}
-            onClick={() => setImageType('custom')}
+            onClick={() => {
+              setValue('fileUrlOrHash', null);
+              setImageType('custom');
+            }}
           />
         </styled.ImageTypeSelector>
 
         {/* AI IMAGE */}
         {imageType === 'ai' && (
           <Controller
-            name="fileUrl"
+            name="fileUrlOrHash"
             control={control}
             render={({field: {value, onChange}}) => (
               <styled.AIContainer>
@@ -231,7 +237,7 @@ const ImageStep: FC<PropsInterface> = ({
               const imageUrl = value
                 ? URL.createObjectURL(value)
                 : getImageAbsoluteUrl(
-                    !isImageCleared ? imageData.renderHash : null,
+                    !isImageCleared ? imageData.fileUrlOrHash : null,
                     ImageSizeEnum.S5
                   );
 

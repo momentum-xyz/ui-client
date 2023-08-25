@@ -672,6 +672,7 @@ export const enGb = {
       createScriptForImage: 'Create a script for AI Image',
       setContributionsAmount: 'Set Max amount of contributions',
       addImageToIdea: 'Add an image to your idea',
+      submitContribution: 'Submit your Contribution',
       overviewAITools: 'Overview of AI Tools',
       createTeamworkScript: 'Create the teamwork script',
       canvasQuestion1: 'First question, always ask for a title',

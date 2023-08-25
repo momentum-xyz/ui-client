@@ -33,5 +33,5 @@ export interface ContributionAnswersFormInterface {
 
 export interface ContributionImageFormInterface {
   file?: File | null;
-  fileUrl?: string | null;
+  fileUrlOrHash?: string | null;
 }

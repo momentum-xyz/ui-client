@@ -53,7 +53,10 @@ const ContributionFormsStore = types.compose(
         self.answersData = AnswersData.create({...form});
       },
       setImageData(form: ContributionImageFormInterface): void {
-        // TODO:
+        self.imageData = ImageData.create({
+          file: form.file || null,
+          fileUrlOrHash: form.fileUrlOrHash || null
+        });
       }
     }))
     .actions((self) => ({
