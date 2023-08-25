@@ -54,6 +54,10 @@ export const AIContainer = styled.div`
   border-radius: 4px;
   grid-template-rows: 32px 1fr 28px;
   background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+
+  &.no-height {
+    height: initial;
+  }
 `;
 
 export const AITitle = styled.div`
@@ -146,4 +150,26 @@ export const ClearSelectedImage = styled.div`
     min-width: 0;
     margin: 0;
   }
+`;
+
+export const ClearConfirmContainer = styled.div`
+  margin: 0 0 20px 0;
+  padding: 16px 20px 20px 20px;
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  background: ${(props) => props.theme.danger && rgba(props.theme.danger, 0.6)};
+  border-radius: 4px;
+  gap: 10px;
+`;
+
+export const AlertIcon = styled.div`
+  padding: 4px 0 0 0;
+`;
+
+export const ClearConfirmInner = styled.div``;
+
+export const ClearConfirmActions = styled.div`
+  padding: 20px 0 0 0;
+  display: flex;
+  justify-content: space-between;
 `;

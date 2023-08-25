@@ -106,6 +106,7 @@ export type IconNameType =
   | 'invite-user'
   | 'king'
   | 'kusama'
+  | 'layout'
   | 'leave-left'
   | 'leave'
   | 'lightbulb'

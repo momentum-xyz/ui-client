@@ -123,8 +123,10 @@ const ContributionFormWidget: FC = () => {
                   const canvasObjectId = world3dStore?.canvasObjectId || '';
                   const objectId = await contributionFormsStore.submitContribution(canvasObjectId);
                   if (objectId) {
-                    Event3dEmitter.emit('FlyToObject', objectId);
                     widgetManagerStore.close(WidgetEnum.CONTRIBUTION_FORM);
+                    setTimeout(() => {
+                      Event3dEmitter.emit('FlyToObject', objectId);
+                    }, 200);
                   }
                 }}
               />

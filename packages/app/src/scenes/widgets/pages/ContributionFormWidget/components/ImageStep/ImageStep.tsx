@@ -2,13 +2,14 @@ import {FC, ReactElement, useCallback, useEffect, useState} from 'react';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {observer} from 'mobx-react-lite';
 import {useI18n} from '@momentum-xyz/core';
+import cn from 'classnames';
 import {
   ButtonEllipse,
   ButtonRound,
   ButtonSquare,
   FileUploader,
+  IconSvg,
   Image,
-  ImageSizeEnum,
   ProgressBar,
   Textarea
 } from '@momentum-xyz/ui-kit';
@@ -38,6 +39,7 @@ type ImageType = 'custom' | 'ai';
 
 const MAX_ASSET_SIZE_MB = 8;
 const MAX_ASSET_SIZE_B = MAX_ASSET_SIZE_MB * Math.pow(1024, 2);
+const MAX_GENERATION_COUNT = 2;
 
 const ImageStep: FC<PropsInterface> = ({
   config,
@@ -50,13 +52,25 @@ const ImageStep: FC<PropsInterface> = ({
   setActiveStep,
   onUpdate
 }) => {
-  const [isImageCleared, setIsImageCleared] = useState(false);
+  const [generationCount, setGenerationCount] = useState(0);
+  const [isClearConfirm, setIsClearConfirm] = useState(false);
   const [imageType, setImageType] = useState<ImageType>('ai');
   const [prompt, setPrompt] = useState<string>('');
 
+  const {t} = useI18n();
+
+  const {control, setValue, handleSubmit, watch} = useForm<ContributionImageFormInterface>({
+    defaultValues: {
+      fileUrlOrHash: getImageAbsoluteUrl(imageData.fileUrlOrHash),
+      file: imageData.file
+    }
+  });
+
   useEffect(() => {
-    if (!config.isLeonardo || imageData.fileUrlOrHash) {
+    if (!config.isLeonardo || imageData.file) {
       setImageType('custom');
+    } else if (imageData.fileUrlOrHash) {
+      setImageType('ai');
     }
   }, [config, imageData]);
 
@@ -65,14 +79,6 @@ const ImageStep: FC<PropsInterface> = ({
       setPrompt(config.leonardoScript);
     }
   }, [config]);
-
-  const {t} = useI18n();
-
-  const {control, setValue, handleSubmit, watch} = useForm<ContributionImageFormInterface>({
-    defaultValues: {
-      fileUrlOrHash: getImageAbsoluteUrl(imageData.fileUrlOrHash)
-    }
-  });
 
   const [fileUrlOrHash, file] = watch(['fileUrlOrHash', 'file']);
 
@@ -89,7 +95,6 @@ const ImageStep: FC<PropsInterface> = ({
         backProps={{
           label: t('actions.back'),
           onClick: () => {
-            onClearGeneratedImages();
             setActiveStep('answers');
           }
         }}
@@ -147,7 +152,7 @@ const ImageStep: FC<PropsInterface> = ({
             name="fileUrlOrHash"
             control={control}
             render={({field: {value, onChange}}) => (
-              <styled.AIContainer>
+              <styled.AIContainer className={cn(isClearConfirm && 'no-height')}>
                 {!isGenerating && generatedImages.length === 0 && (
                   <>
                     <styled.AITitle>Image Prompt based on your input</styled.AITitle>
@@ -161,9 +166,12 @@ const ImageStep: FC<PropsInterface> = ({
                       <div />
                       <ButtonEllipse
                         icon="ai"
-                        label="Generate image"
                         disabled={!prompt}
-                        onClick={() => onGenerateImages(prompt)}
+                        label={t('actions.generateImage')}
+                        onClick={() => {
+                          onGenerateImages(prompt);
+                          setGenerationCount(generationCount + 1);
+                        }}
                       />
                     </styled.AIActions>
                   </>
@@ -178,8 +186,8 @@ const ImageStep: FC<PropsInterface> = ({
                       </styled.Progress>
                     </styled.AIProgress>
                     <styled.AIActions>
-                      <ButtonEllipse icon="adjust" label="Overview" disabled />
-                      <ButtonEllipse icon="adjust" label="Change image" disabled />
+                      <ButtonEllipse icon="layout" label={t('actions.overview')} disabled />
+                      <ButtonEllipse icon="adjust" label={t('actions.changeImage')} disabled />
                     </styled.AIActions>
                   </>
                 )}
@@ -187,7 +195,8 @@ const ImageStep: FC<PropsInterface> = ({
                 {!isGenerating && generatedImages.length > 0 && (
                   <>
                     <styled.AITitle>Select your image</styled.AITitle>
-                    {!value ? (
+
+                    {!value && !isClearConfirm && (
                       <styled.AIImagesGrid>
                         {generatedImages.map((url) => (
                           <Image
@@ -200,24 +209,58 @@ const ImageStep: FC<PropsInterface> = ({
                           />
                         ))}
                       </styled.AIImagesGrid>
-                    ) : (
+                    )}
+
+                    {!!value && !isClearConfirm && (
                       <Image bordered src={value} height={260} errorIcon="ai" />
+                    )}
+
+                    {isClearConfirm && (
+                      <styled.ClearConfirmContainer>
+                        <styled.AlertIcon>
+                          <IconSvg name="alert" isWhite />
+                        </styled.AlertIcon>
+                        <styled.ClearConfirmInner>
+                          <div>
+                            Are you sure you want to remove these images and try again? There is a
+                            maximum amount of 2 changes you can use.
+                          </div>
+                          <styled.ClearConfirmActions>
+                            <ButtonEllipse
+                              icon="close_large"
+                              variant="thirty"
+                              label={t('actions.cancel')}
+                              onClick={() => setIsClearConfirm(false)}
+                            />
+
+                            <ButtonEllipse
+                              icon="bin"
+                              label={t('actions.remove')}
+                              onClick={() => {
+                                onChange(null);
+                                onClearGeneratedImages();
+                                setIsClearConfirm(false);
+                              }}
+                            />
+                          </styled.ClearConfirmActions>
+                        </styled.ClearConfirmInner>
+                      </styled.ClearConfirmContainer>
                     )}
 
                     <styled.AIActions>
                       <ButtonEllipse
-                        icon="adjust"
-                        label="Overview"
+                        icon="layout"
                         disabled={!value}
+                        label={t('actions.overview')}
                         onClick={() => onChange(null)}
                       />
                       <ButtonEllipse
                         icon="adjust"
-                        disabled={!!value}
-                        label="Change images"
+                        isActive={isClearConfirm}
+                        label={t('actions.Change image')}
+                        disabled={!!value || generationCount === MAX_GENERATION_COUNT}
                         onClick={() => {
-                          onChange(null);
-                          onClearGeneratedImages();
+                          setIsClearConfirm(true);
                         }}
                       />
                     </styled.AIActions>
@@ -234,12 +277,7 @@ const ImageStep: FC<PropsInterface> = ({
             name="file"
             control={control}
             render={({field: {value, onChange}}) => {
-              const imageUrl = value
-                ? URL.createObjectURL(value)
-                : getImageAbsoluteUrl(
-                    !isImageCleared ? imageData.fileUrlOrHash : null,
-                    ImageSizeEnum.S5
-                  );
+              const imageUrl = value ? URL.createObjectURL(value) : null;
 
               return (
                 <styled.CustomImage>
@@ -261,7 +299,6 @@ const ImageStep: FC<PropsInterface> = ({
                             <ButtonRound
                               icon="close_large"
                               onClick={() => {
-                                setIsImageCleared(true);
                                 onChange(undefined);
                               }}
                             />

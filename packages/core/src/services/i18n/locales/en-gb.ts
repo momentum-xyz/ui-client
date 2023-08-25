@@ -835,6 +835,8 @@ export const enGb = {
       add: 'Add',
       signIn: 'Sign In',
       signUpNow: 'Sign up now',
+      generateImage: 'Generate image',
+      overview: 'Overview',
       signOut: 'Sign Out',
       sort: 'Sort',
       logOut: 'Log out',
