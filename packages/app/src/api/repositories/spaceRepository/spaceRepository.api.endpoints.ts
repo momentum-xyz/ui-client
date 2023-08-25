@@ -9,6 +9,7 @@ export const spaceRepositoryEndpoints = () => {
     tree: `${BASE_URL}/:objectId/tree`,
     deleteMember: `${BASE_URL}/:objectId/members/:userId`,
     claimAndCustomize: `${BASE_URL}/:objectId/claim-and-customise`,
-    cleanCustomization: `${BASE_URL}/:objectId/unclaim-and-clear-customisation`
+    cleanCustomization: `${BASE_URL}/:objectId/unclaim-and-clear-customisation`,
+    spawnByUser: `${BASE_URL}/:objectId/spawn-by-user`
   };
 };

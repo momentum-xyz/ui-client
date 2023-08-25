@@ -116,10 +116,17 @@ const ContributionFormWidget: FC = () => {
                 config={contributionFormsStore.config}
                 imageData={contributionFormsStore.imageData}
                 answersData={contributionFormsStore.answersData}
-                isSubmitting={false}
-                onSubmit={() => {}}
+                isSubmitting={contributionFormsStore.isSubmitting}
                 setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
+                onSubmit={async () => {
+                  const canvasObjectId = world3dStore?.canvasObjectId || '';
+                  const objectId = await contributionFormsStore.submitContribution(canvasObjectId);
+                  if (objectId) {
+                    Event3dEmitter.emit('FlyToObject', objectId);
+                    widgetManagerStore.close(WidgetEnum.CONTRIBUTION_FORM);
+                  }
+                }}
               />
             )}
           </Frame>

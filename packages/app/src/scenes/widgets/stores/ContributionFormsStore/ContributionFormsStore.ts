@@ -1,15 +1,17 @@
 import {cast, flow, types} from 'mobx-state-tree';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
-import {RequestModel, ResetModel} from '@momentum-xyz/core';
+import {ObjectTypeIdEnum, RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {PluginIdEnum} from 'api/enums';
 import {LeonardoModelIdEnum} from 'core/enums';
-import {CanvasConfigInterface} from 'api/interfaces';
+import {CanvasConfigInterface, UserContributionInterface} from 'api/interfaces';
+import {MediaUploader} from 'core/models';
 import {
   api,
   FetchAIGeneratedImagesResponse,
   GenerateAIImagesResponse,
-  GetSpaceAttributeResponse
+  GetSpaceAttributeResponse,
+  SpawnByUserResponse
 } from 'api';
 import {ContributionAnswersFormInterface, ContributionImageFormInterface} from 'core/interfaces';
 
@@ -22,11 +24,13 @@ const ContributionFormsStore = types.compose(
       config: types.maybeNull(types.frozen<CanvasConfigInterface>()),
       answersData: types.optional(AnswersData, {}),
       imageData: types.optional(ImageData, {}),
+      mediaUploader: types.optional(MediaUploader, {}),
 
       isGenerating: false,
       generationJobId: types.maybeNull(types.string),
       generatedImages: types.optional(types.array(types.string), []),
 
+      submitRequest: types.optional(RequestModel, {}),
       configRequest: types.optional(RequestModel, {}),
       generateRequest: types.optional(RequestModel, {}),
       fetchGeneratedRequest: types.optional(RequestModel, {})
@@ -109,7 +113,58 @@ const ContributionFormsStore = types.compose(
         self.generatedImages = cast([]);
       }
     }))
-    .views(() => ({}))
+    .actions((self) => ({
+      submitContribution: flow(function* (canvasObjectId: string) {
+        const imageHashOrUrl = self.imageData.fileUrlOrHash
+          ? yield self.mediaUploader.uploadImageByUrl(self.imageData.fileUrlOrHash)
+          : yield self.mediaUploader.uploadImageOrVideo(self.imageData.file || undefined);
+
+        if (!imageHashOrUrl) {
+          return null;
+        }
+
+        const attributeValue: UserContributionInterface = {
+          created: new Date().toISOString(),
+          answerOne: self.answersData.answerOne || '',
+          answerTwo: self.answersData.answerTwo || '',
+          answerThree: self.answersData.answerThree || '',
+          answerFour: self.answersData.answerFour || '',
+          render_hash: imageHashOrUrl
+        };
+
+        const response: SpawnByUserResponse = yield self.submitRequest.send(
+          api.spaceRepository.spawnByUser,
+          {
+            objectId: canvasObjectId,
+            object_name: self.answersData.answerOne || '',
+            object_type_id: ObjectTypeIdEnum.CANVAS_CHILD,
+            attributes: {
+              object_user: [
+                {
+                  plugin_id: PluginIdEnum.CANVAS_EDITOR,
+                  attribute_name: AttributeNameEnum.CANVAS_CONTRIBUTION,
+                  value: attributeValue
+                }
+              ]
+            }
+          }
+        );
+
+        if (response?.object_id) {
+          return response.object_id;
+        }
+
+        return null;
+      }),
+      clearGeneratedImages(): void {
+        self.generatedImages = cast([]);
+      }
+    }))
+    .views((self) => ({
+      get isSubmitting(): boolean {
+        return self.submitRequest.isPending || self.mediaUploader.isPending;
+      }
+    }))
 );
 
 export {ContributionFormsStore};

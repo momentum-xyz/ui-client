@@ -77,7 +77,7 @@ const SubmitStep: FC<PropsInterface> = ({
           </styled.Date>
         </styled.Header>
 
-        <Image src={imageSrc} errorIcon="rabbit_fill" bordered height={320} />
+        <Image src={imageSrc} errorIcon="rabbit_fill" height={320} />
 
         <styled.Separator />
 
