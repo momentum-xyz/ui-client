@@ -10,6 +10,6 @@ export enum CreatorTabsEnum {
   // objectColor = 'objectColor',
   inspector = 'inspector',
   sceneExplorer = 'sceneExplorer',
-  customise = 'customise',
+  canvas = 'canvas',
   editMembers = 'editMembers'
 }

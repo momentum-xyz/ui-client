@@ -41,6 +41,7 @@ export const Container = styled.div`
     }
 
     &:disabled {
+      border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
       background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
       color: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
 

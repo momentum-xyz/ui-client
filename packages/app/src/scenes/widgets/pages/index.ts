@@ -14,3 +14,4 @@ export * from './NewsfeedWidget';
 export * from './TimelineWidget';
 export * from './MusicWidget';
 export * from './BuyNftWidget';
+export * from './ContributionFormWidget';

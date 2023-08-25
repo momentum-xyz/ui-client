@@ -23,5 +23,7 @@ export enum AttributeNameEnum {
   OBJECT_EFFECT = 'object_effect',
   USER_CUSTOMISABLE_DATA = 'user_customisable_data',
   COMMENTS = 'comments',
-  VOTE = 'vote'
+  VOTE = 'vote',
+  CANVAS = 'canvas',
+  CANVAS_CONTRIBUTION = 'canvas_contribution'
 }

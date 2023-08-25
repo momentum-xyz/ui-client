@@ -48,6 +48,10 @@ export const GlobalSelectStyle = createGlobalStyle`
         }
       }
     }
+    
+    .Select__control--is-disabled {
+      border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
+    }
 
     .Select--is-disabled {
       pointer-events: auto;
@@ -125,6 +129,10 @@ export const GlobalSelectStyle = createGlobalStyle`
       font-size: var(--font-size-m);
       font-weight: 400;
       letter-spacing: 0.5px;
+    }
+    
+    .Select__single-value--is-disabled {
+      color: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
     }
 
     .Select__value-container--is-multi {

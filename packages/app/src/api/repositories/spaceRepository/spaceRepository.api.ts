@@ -4,7 +4,12 @@ import {generatePath} from 'react-router-dom';
 
 import {PluginIdEnum} from 'api/enums';
 import {request} from 'api/request';
-import {GetSpaceAttributeItemRequest, SpaceAttributeItemResponse} from 'api';
+import {
+  GetSpaceAttributeItemRequest,
+  SpaceAttributeItemResponse,
+  SpawnByUserRequest,
+  SpawnByUserResponse
+} from 'api';
 import {getSpaceAttributeItem} from 'api/repositories/spaceAttributeRepository';
 
 import {
@@ -119,12 +124,15 @@ export const deleteWorldMember: RequestInterface<DeleteWorldMemberRequest, null>
 export const fetchWorldTree: RequestInterface<FetchWorldTreeRequest, FetchWorldTreeResponse> = (
   options
 ) => {
-  const {worldId, ...restOptions} = options;
+  const {worldId, max_depth, object_type, ...restOptions} = options;
 
-  return request.get(
-    generatePath(spaceRepositoryEndpoints().tree, {objectId: worldId}),
-    restOptions
-  );
+  restOptions.params = {
+    max_depth,
+    object_type
+  };
+
+  const url = generatePath(spaceRepositoryEndpoints().tree, {objectId: worldId});
+  return request.get(url, restOptions);
 };
 
 export const claimAndCustomize: RequestInterface<ClaimAndCustomizeRequest, null> = (options) => {
@@ -139,4 +147,11 @@ export const cleanCustomization: RequestInterface<CleanCustomizationRequest, nul
 
   const url = generatePath(spaceRepositoryEndpoints().cleanCustomization, {objectId});
   return request.post(url, {}, rest);
+};
+
+export const spawnByUser: RequestInterface<SpawnByUserRequest, SpawnByUserResponse> = (options) => {
+  const {objectId, object_name, object_type_id, attributes, ...rest} = options;
+
+  const url = generatePath(spaceRepositoryEndpoints().spawnByUser, {objectId});
+  return request.post(url, {object_name, object_type_id, attributes}, rest);
 };

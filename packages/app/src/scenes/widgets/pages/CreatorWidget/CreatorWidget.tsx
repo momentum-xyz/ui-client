@@ -15,7 +15,7 @@ import {
   SpawnAsset,
   SkyboxSelector,
   ObjectInspector,
-  AssetCustomising,
+  CanvasEditor,
   MusicManager,
   SceneExplorer,
   WorldMembers
@@ -33,6 +33,11 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
     id: 'addObject',
     iconName: 'add',
     label: i18n.t('labels.addObject')
+  },
+  {
+    id: 'canvas',
+    iconName: 'idea',
+    label: i18n.t('labels.canvasEditor')
   },
   {
     id: 'skybox',
@@ -62,11 +67,6 @@ const allPanels: SideMenuItemInterface<MenuItemType>[] = [
     id: 'inspector',
     iconName: 'info',
     label: i18n.t('labels.inspector')
-  },
-  {
-    id: 'customise',
-    iconName: 'group',
-    label: i18n.t('labels.assetCustomising')
   }
 ];
 
@@ -136,6 +136,8 @@ const CreatorWidget: FC = () => {
         return <WorldEditor world={world} onCancel={() => handleTabChange(undefined)} />;
       case 'addObject':
         return <SpawnAsset />;
+      case 'canvas':
+        return <CanvasEditor onClose={() => handleTabChange(undefined)} />;
       case 'skybox':
         return <SkyboxSelector />;
       case 'sound':
@@ -147,8 +149,6 @@ const CreatorWidget: FC = () => {
             key={world3dStore.selectedObjectId}
           />
         ) : null;
-      case 'customise':
-        return <AssetCustomising />;
       case 'sceneExplorer':
         return world3dStore ? <SceneExplorer world3dStore={world3dStore} /> : null;
       case 'editMembers':
@@ -171,7 +171,8 @@ const CreatorWidget: FC = () => {
         />
       </div>
 
-      {!!selectedTab && !!content && (
+      {/* TODO: Add the Panel to each component */}
+      {!!selectedTab && !!content && selectedTab !== 'canvas' && (
         <Panel
           isFullHeight
           size={
@@ -188,6 +189,8 @@ const CreatorWidget: FC = () => {
         </Panel>
       )}
 
+      {!!selectedTab && !!content && selectedTab === 'canvas' && <>{content}</>}
+
       {removeObjectDialog.isOpen && (
         <Dialog
           title={
@@ -201,6 +204,7 @@ const CreatorWidget: FC = () => {
                   toast.info(<ToastContent icon="bin" text={t('messages.objectDeleted')} />);
                   removeObjectDialog.close();
                   widgetManagerStore.closeSubMenu();
+                  world3dStore?.fetchCanvasObject();
                 })
                 .catch((error) => {
                   console.log('Error removing object:', error);

@@ -34,7 +34,7 @@ const Textarea: FC<TextareaPropsInterface> = ({
         placeholder={placeholder}
         name={name}
         disabled={disabled}
-        value={value || undefined}
+        value={value || ''}
         onChange={(event) => onChange?.(event.target.value)}
         cols={lineLength}
         rows={lines}

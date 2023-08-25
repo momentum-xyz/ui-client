@@ -16,11 +16,11 @@ import {
   ButtonRound,
   FileUploader,
   ImageSizeEnum,
-  SelectOptionInterface,
-  Warning
+  Warning,
+  ButtonSquare
 } from '@momentum-xyz/ui-kit';
 
-import {LeonardoModelIdEnum} from 'core/enums';
+import {LeonardoModelIdEnum, LEONARDO_MODEL_OPTIONS} from 'core/enums';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {CustomizableObjectInterface} from 'api';
 import {CustomizableObjectFormInterface} from 'core/interfaces';
@@ -42,21 +42,6 @@ type ImageType = 'custom' | 'ai';
 
 const MAX_ASSET_SIZE_MB = 8;
 const MAX_ASSET_SIZE_B = MAX_ASSET_SIZE_MB * Math.pow(1024, 2);
-
-const MODEL_OPTIONS: SelectOptionInterface<LeonardoModelIdEnum>[] = [
-  {
-    label: 'Creative',
-    value: LeonardoModelIdEnum.CREATIVE
-  },
-  {
-    label: 'Select',
-    value: LeonardoModelIdEnum.SELECT
-  },
-  {
-    label: 'Signature',
-    value: LeonardoModelIdEnum.SIGNATURE
-  }
-];
 
 const NewOrEditForm: FC<PropsInterface> = ({
   content,
@@ -201,15 +186,16 @@ const NewOrEditForm: FC<PropsInterface> = ({
         {/* SELECT IMAGE TYPE */}
         {!selectedImageType && (
           <styled.ImageTypeSelector>
-            <styled.ImageType onClick={() => handleImageType('custom')}>
-              <IconSvg name="picture_upload" size="xll" isWhite />
-              <span>Upload an image</span>
-            </styled.ImageType>
-
-            <styled.ImageType onClick={() => handleImageType('ai')}>
-              <IconSvg name="ai" size="xll" isWhite />
-              <span>Create an AI image</span>
-            </styled.ImageType>
+            <ButtonSquare
+              icon="picture_upload"
+              label={t('actions.uploadImage')}
+              onClick={() => handleImageType('custom')}
+            />
+            <ButtonSquare
+              icon="ai"
+              label={t('actions.createAIImage')}
+              onClick={() => handleImageType('ai')}
+            />
           </styled.ImageTypeSelector>
         )}
 
@@ -283,8 +269,8 @@ const NewOrEditForm: FC<PropsInterface> = ({
                   wide
                   isClearable
                   value={modelId}
-                  options={MODEL_OPTIONS}
-                  placeholder="Select a model*"
+                  options={LEONARDO_MODEL_OPTIONS}
+                  placeholder={`${t('placeholders.selectModel')}*`}
                   onSingleChange={setModelId}
                 />
 
