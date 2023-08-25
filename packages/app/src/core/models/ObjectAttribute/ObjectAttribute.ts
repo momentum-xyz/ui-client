@@ -91,13 +91,13 @@ export const ObjectAttribute = types
       if (self.request.isError) {
         throw new Error('Error deleting attribute: ' + self.request.errorCode);
       }
-    }),
-    valueAs: <T>(): T | undefined => {
-      return self._value as T | undefined;
-    }
+    })
   }))
   .views((self) => ({
     get value(): AttributeValueInterface | undefined {
       return self._value;
+    },
+    get isPending(): boolean {
+      return self.request.isPending;
     }
   }));

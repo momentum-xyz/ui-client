@@ -1,10 +1,7 @@
-import {FC, useMemo, useEffect} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Frame, ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
-import {PluginIdEnum} from 'api/enums';
-import {ObjectAttribute} from 'core/models';
-import {BasicAsset2dIdEnum} from 'core/enums';
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ImageObjectInterface, TextObjectInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
@@ -19,30 +16,11 @@ interface PropsInterface {
 const ObjectViewer: FC<PropsInterface> = ({objectId}) => {
   const {universeStore} = useStore();
   const {objectStore, isCurrentUserWorldAdmin} = universeStore;
-  const {pluginLoader} = objectStore;
+  const {pluginLoader, objectContentStore} = objectStore;
+  const {image, text} = objectContentStore.normalContent;
 
-  useEffect(() => {
-    objectStore.initPluginLoader(BasicAsset2dIdEnum.VIDEO, objectId);
-  }, [objectId, objectStore]);
-
-  const [attrImage, attrText] = useMemo(() => {
-    const attrImage = ObjectAttribute.create({
-      objectId,
-      pluginId: PluginIdEnum.IMAGE
-    });
-    attrImage.load();
-
-    const attrText = ObjectAttribute.create({
-      objectId,
-      pluginId: PluginIdEnum.TEXT
-    });
-    attrText.load();
-
-    return [attrImage, attrText];
-  }, [objectId]);
-
-  const renderHash = attrImage?.valueAs<ImageObjectInterface>()?.render_hash;
-  const content = attrText?.valueAs<TextObjectInterface>();
+  const renderHash = (image?.value as ImageObjectInterface)?.render_hash;
+  const content = text?.value as TextObjectInterface;
 
   return (
     <Frame>
@@ -52,7 +30,7 @@ const ObjectViewer: FC<PropsInterface> = ({objectId}) => {
         </styled.Item>
       )}
 
-      {!!attrText.value && (
+      {!!content && (
         <styled.Item>
           <TextViewer title={content?.title} text={content?.content} />
         </styled.Item>

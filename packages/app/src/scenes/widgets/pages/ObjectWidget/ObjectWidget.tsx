@@ -54,7 +54,7 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
       ) : (
         <Panel
           isFullHeight
-          size="large"
+          size="normal"
           icon="document"
           variant="primary"
           title={objectStore.objectName || ''}

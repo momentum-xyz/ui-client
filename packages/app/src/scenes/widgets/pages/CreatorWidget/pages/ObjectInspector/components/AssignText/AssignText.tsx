@@ -26,7 +26,7 @@ export const useAssignText: UseAssignTextHookType = ({objectId}) => {
     return attribute;
   }, [objectId]);
 
-  const initialText = attribute.valueAs<TextObjectInterface>()?.content || '';
+  const initialText = (attribute.value as TextObjectInterface)?.content || '';
 
   const {
     control,

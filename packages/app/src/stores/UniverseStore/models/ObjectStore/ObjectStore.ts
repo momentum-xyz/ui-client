@@ -94,8 +94,7 @@ const ObjectStore = types
       self.objectTypeId = cast(spaceInfo.object_type_id);
 
       switch (self.asset2dId) {
-        case BasicAsset2dIdEnum.TEXT:
-        case BasicAsset2dIdEnum.IMAGE:
+        case BasicAsset2dIdEnum.CONTENT:
         case BasicAsset2dIdEnum.CUSTOMIZABLE: {
           const objectResponse = yield self.assetRequest.send(api.assets2dRepository.get2dAsset, {
             assetId: self.asset2dId
@@ -106,9 +105,6 @@ const ObjectStore = types
           }
           break;
         }
-        case BasicAsset2dIdEnum.CONTENT:
-          // noop
-          break;
         default: {
           yield self.initPluginLoader(self.asset2dId, objectId);
           self.objectContentStore.assetType = 'plugin';

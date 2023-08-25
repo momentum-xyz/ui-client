@@ -91,7 +91,7 @@ export const useAssignImage: UseAssignImageHookType = ({
   };
 
   const initialImageSrc = getImageAbsoluteUrl(
-    attribute.valueAs<ImageObjectInterface>()?.render_hash,
+    (attribute.value as ImageObjectInterface)?.render_hash,
     ImageSizeEnum.S5
   );
 
