@@ -18,9 +18,9 @@ const ObjectContentStore = types
     })
   )
   .actions((self) => ({
-    initNormalContent(pluginId: string, spaceId: string): void {
+    initNormalContent(spaceId: string): void {
       self.normalContent = NormalContent.create({});
-      self.normalContent.initContent(pluginId, spaceId);
+      self.normalContent.initContent(spaceId);
     },
     initCustomizableContent(pluginId: string, spaceId: string): void {
       self.customizableContent = CustomizableContent.create({});
@@ -42,13 +42,9 @@ const ObjectContentStore = types
       self.pluginId = meta.pluginId;
 
       switch (meta.name) {
-        case AssetTypeEnum.TEXT:
-          self.assetType = AssetTypeEnum.TEXT;
-          self.initNormalContent(meta.pluginId, spaceId);
-          break;
-        case AssetTypeEnum.IMAGE:
-          self.assetType = AssetTypeEnum.IMAGE;
-          self.initNormalContent(meta.pluginId, spaceId);
+        case AssetTypeEnum.CONTENT:
+          self.assetType = AssetTypeEnum.CONTENT;
+          self.initNormalContent(spaceId);
           break;
         case AssetTypeEnum.CLAIMABLE:
           self.assetType = AssetTypeEnum.CLAIMABLE;

@@ -36,3 +36,11 @@ export const HeadingWrapper = styled.div`
 export const ContentWrapper = styled.div`
   flex: 1 0 auto;
 `;
+
+export const Title = styled.div`
+  text-transform: uppercase;
+  font-size: var(--font-size-l);
+  font-weight: 600;
+  line-height: 22px;
+  letter-spacing: 3px;
+`;

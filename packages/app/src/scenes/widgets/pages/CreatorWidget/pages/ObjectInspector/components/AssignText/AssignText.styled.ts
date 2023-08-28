@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import {rgba} from 'polished';
 
-export const Container = styled.div`
-  padding: 10px;
-`;
+export const Container = styled.div``;
 
 export const Title = styled.div`
   font-size: var(--font-size-l);

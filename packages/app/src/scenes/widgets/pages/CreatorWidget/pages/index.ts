@@ -1,5 +1,4 @@
 export * from './CanvasEditor';
-export * from './ObjectFunction';
 export * from './ObjectInspector';
 export * from './SkyboxSelector';
 export * from './SpawnAsset';

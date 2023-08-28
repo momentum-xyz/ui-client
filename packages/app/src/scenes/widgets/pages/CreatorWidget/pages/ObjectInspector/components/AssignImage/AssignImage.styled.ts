@@ -1,10 +1,11 @@
 import {rgba} from 'polished';
+import {memo} from 'react';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  --scroll-offset: 455px;
+  // --scroll-offset: 455px;
 
-  padding: 10px;
+  // padding: 10px;
 `;
 
 export const InfoContainer = styled.div`
@@ -97,14 +98,19 @@ export const DragAndDropPrompt = styled.div`
   left: 0;
 `;
 
-export const PreviewImageHolder = styled.div`
+export const PreviewImageHolder = memo(styled.div<{
+  file?: File;
+  initialImageSrc?: string | null;
+}>`
   background-position: center center;
   background-size: cover;
   position: absolute;
   width: 100%;
   height: 100%;
   border-radius: 8px;
-`;
+  background-image: url(${({file, initialImageSrc}) =>
+    (file && URL.createObjectURL(file)) || (file === null ? file : initialImageSrc)});
+`);
 
 export const ActionBar = styled.div`
   padding: 10px 0;
@@ -117,4 +123,17 @@ export const ActionBar = styled.div`
     justify-content: center;
     max-width: 156px;
   }
+`;
+
+export const Error = styled.div`
+  color: ${(props) => props.theme.danger};
+  font-size: 12px;
+  margin: 10px 0 0 0;
+`;
+
+export const RemoveIcon = styled.div`
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  z-index: 1;
 `;

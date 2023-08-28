@@ -134,13 +134,6 @@ const World3dPage: FC = () => {
         onClick: () => handleTabSelection('inspector')
       },
       {
-        key: WidgetEnum.ASSIGN_FUNCTIONALITY,
-        position: PositionEnum.CENTER,
-        iconName: 'cubicles',
-        tooltip: t('labels.selectFunction'),
-        onClick: () => handleTabSelection('functionality')
-      },
-      {
         key: WidgetEnum.DUPLICATE,
         position: PositionEnum.CENTER,
         iconName: 'copy',

@@ -6,7 +6,7 @@ export enum CreatorTabsEnum {
   sound = 'sound',
   // spawnPoint = 'spawnPoint',
   // spawnAsset = 'spawnAsset',
-  functionality = 'functionality',
+  // functionality = 'functionality',
   // objectColor = 'objectColor',
   inspector = 'inspector',
   sceneExplorer = 'sceneExplorer',

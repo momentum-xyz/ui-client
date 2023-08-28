@@ -22,10 +22,17 @@ interface PropsInterface {
   plugin: PluginInterface;
   pluginLoader: PluginLoaderModelType;
   isAdmin: boolean;
-  onClose: () => void;
+  hideWhenUnset?: boolean;
+  // onClose: () => void;
 }
 
-const PluginViewer: FC<PropsInterface> = ({plugin, pluginLoader, isAdmin, onClose, objectId}) => {
+const PluginViewer: FC<PropsInterface> = ({
+  plugin,
+  pluginLoader,
+  isAdmin,
+  hideWhenUnset = false,
+  objectId
+}) => {
   const theme = useTheme();
   const {t} = useI18n();
 
@@ -58,13 +65,18 @@ const PluginViewer: FC<PropsInterface> = ({plugin, pluginLoader, isAdmin, onClos
     onToggleExpand: pluginLoader.toggleIsExpanded,
     pluginApi: pluginLoader.attributesManager.pluginApi,
     api: pluginLoader.attributesManager.api,
-    onClose
+    onClose: () => {}
   };
 
   return (
     <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>
       <ObjectGlobalPropsContextProvider props={pluginProps}>
-        <PluginInnerWrapper pluginProps={pluginProps} plugin={plugin} pluginLoader={pluginLoader} />
+        <PluginInnerWrapper
+          pluginProps={pluginProps}
+          hideWhenUnset={hideWhenUnset}
+          plugin={plugin}
+          pluginLoader={pluginLoader}
+        />
       </ObjectGlobalPropsContextProvider>
     </ErrorBoundary>
   );
@@ -72,12 +84,14 @@ const PluginViewer: FC<PropsInterface> = ({plugin, pluginLoader, isAdmin, onClos
 
 const PluginInnerWrapper = ({
   pluginProps,
+  hideWhenUnset,
   plugin,
   pluginLoader
 }: {
   pluginProps: PluginPropsInterface;
   plugin: PluginInterface;
   pluginLoader: PluginLoaderModelType;
+  hideWhenUnset: boolean;
 }) => {
   const {t} = useI18n();
 
@@ -90,12 +104,14 @@ const PluginInnerWrapper = ({
           {content}
         </styled.Container>
       ) : objectView ? (
-        <styled.Wrapper>
-          <styled.HeadingWrapper>
-            <div>{objectView.title}</div>
-          </styled.HeadingWrapper>
-          <styled.ContentWrapper>{objectView.content}</styled.ContentWrapper>
-        </styled.Wrapper>
+        hideWhenUnset && objectView.isEmpty ? null : (
+          <styled.Wrapper>
+            <styled.HeadingWrapper>
+              <styled.Title>{objectView.title}</styled.Title>
+            </styled.HeadingWrapper>
+            <styled.ContentWrapper>{objectView.content}</styled.ContentWrapper>
+          </styled.Wrapper>
+        )
       ) : (
         <div>{t('errors.errorPluginContactDev')}</div>
       )}

@@ -2,6 +2,7 @@ export * from './UserProfile';
 export * from './User';
 export * from './MediaUploader';
 export * from './Object';
+export * from './ObjectAttribute';
 export * from './AgoraRemoteUser';
 export * from './EmojiDetail';
 export * from './PluginLoader';

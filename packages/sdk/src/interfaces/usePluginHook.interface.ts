@@ -11,8 +11,14 @@ interface UsePluginHookReturnInterface {
     subtitle?: string;
     actions?: JSX.Element | null;
     content: JSX.Element | null;
+    isModified?: boolean;
+    isValid?: boolean;
+    isEmpty?: boolean;
+    isLoading?: boolean;
     editModeContent?: JSX.Element | null;
     saveChanges?: () => Promise<void>;
+    discardChanges?: () => void;
+    remove?: () => Promise<void>;
   };
 }
 

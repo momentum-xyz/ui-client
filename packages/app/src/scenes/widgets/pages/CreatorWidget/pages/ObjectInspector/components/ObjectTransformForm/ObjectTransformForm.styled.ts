@@ -8,13 +8,17 @@ export const Container = styled.div`
 `;
 
 export const ControlsRow = styled.div`
-  display: grid;
-  grid-template-columns: 80px 1fr;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;
 
-export const ControlsRowTitle = styled.span`
-  flex: 0 0 86px;
+export const ControlsRowTitle = styled.div`
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
 `;
 
 export const ControlsRowInputsContainer = styled.div`
