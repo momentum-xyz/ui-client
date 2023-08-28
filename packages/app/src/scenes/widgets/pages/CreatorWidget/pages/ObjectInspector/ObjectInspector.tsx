@@ -98,7 +98,11 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
     PosBusService.sendObjectTransform(objectId, transform);
   };
 
-  const {content: assignTextureContent, save: saveTexture} = useAssignImage({
+  const {
+    content: assignTextureContent,
+    isEmpty: isEmptyTexture,
+    save: saveTexture
+  } = useAssignImage({
     objectId,
     pluginId: PluginIdEnum.CORE,
     attributeName: 'texture',
@@ -114,6 +118,7 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
   const {
     content: assignImageContent,
     isModified: isModifiedImage,
+    isEmpty: isEmptyImage,
     save: saveImage,
     discardChanges: discardImageChanges
   } = useAssignImage({objectId});
@@ -122,6 +127,7 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
     content: assignVideoContent,
     isModified: isModifiedVideo,
     isValid: isValidVideo,
+    isEmpty: isEmptyVideo,
     save: saveVideo,
     discardChanges: discardVideoChanges
   } = useAssignVideo({
@@ -195,19 +201,26 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
 
             <styled.Separator />
 
-            <CollapsibleSection title={t('titles.objectSound')}>
+            <CollapsibleSection
+              title={t('titles.objectSound')}
+              initialCollapsed={!objectFunctionalityStore.objectSound.musicPlayer.trackList.length}
+            >
               <AssignSound objectId={objectId} onBack={() => {}} />
             </CollapsibleSection>
 
             <styled.Separator />
 
-            <CollapsibleSection title={t('titles.wrapImage')}>
+            <CollapsibleSection title={t('titles.wrapImage')} initialCollapsed={isEmptyTexture}>
               {assignTextureContent}
             </CollapsibleSection>
 
             <styled.Separator />
 
-            <CollapsibleSection title={t('titles.colourPicker')} disabled={!canChangeColor}>
+            <CollapsibleSection
+              title={t('titles.colourPicker')}
+              disabled={!canChangeColor}
+              initialCollapsed={!creatorStore.objectColorStore.objectColor}
+            >
               <ObjectColorPicker />
             </CollapsibleSection>
           </>
@@ -220,7 +233,7 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
 
             <styled.Separator />
 
-            <CollapsibleSection title={t('titles.addImage')}>
+            <CollapsibleSection title={t('titles.addImage')} initialCollapsed={isEmptyImage}>
               {assignImageContent}
             </CollapsibleSection>
 
@@ -238,7 +251,7 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
 
             <styled.Separator />
 
-            <CollapsibleSection title={t('titles.addVideo')}>
+            <CollapsibleSection title={t('titles.addVideo')} initialCollapsed={isEmptyVideo}>
               <styled.VideoWrapper>
                 {pluginLoader?.plugin ? (
                   assignVideoContent

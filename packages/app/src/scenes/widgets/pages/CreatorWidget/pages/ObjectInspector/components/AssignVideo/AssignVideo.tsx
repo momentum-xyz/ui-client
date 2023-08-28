@@ -20,6 +20,7 @@ type UseAssignVideoHookType = (props: {
 }) => {
   content: JSX.Element;
   isModified: boolean;
+  isEmpty: boolean | undefined;
   isValid: boolean;
   save: () => Promise<void>;
   discardChanges: () => void;
@@ -36,6 +37,7 @@ export const useAssignVideo: UseAssignVideoHookType = ({objectId, plugin, plugin
 
   const [isModified, setIsModified] = useState(false);
   const [isValid, setIsValid] = useState(false);
+  const [isEmpty, setIsEmpty] = useState<boolean>();
   const pluginProps: PluginPropsInterface | null = pluginLoader
     ? {
         theme,
@@ -69,12 +71,19 @@ export const useAssignVideo: UseAssignVideoHookType = ({objectId, plugin, plugin
     await refControls.current?.remove();
   }, []);
 
-  const handleChange = (isModified: boolean | undefined, isValid: boolean | undefined) => {
+  const handleChange = (
+    isModified: boolean | undefined,
+    isValid: boolean | undefined,
+    isEmpty: boolean | undefined
+  ) => {
     if (isModified !== undefined) {
       setIsModified(isModified);
     }
     if (isValid !== undefined) {
       setIsValid(isValid);
+    }
+    if (isEmpty !== undefined) {
+      setIsEmpty(isEmpty);
     }
   };
 
@@ -104,6 +113,7 @@ export const useAssignVideo: UseAssignVideoHookType = ({objectId, plugin, plugin
     content,
     isModified,
     isValid,
+    isEmpty,
     save,
     discardChanges,
     remove
@@ -118,7 +128,7 @@ const PluginInnerWrapper = ({
 }: {
   pluginProps: PluginPropsInterface;
   plugin: PluginInterface;
-  onChange: (isModified: boolean, isValid: boolean) => void;
+  onChange: (isModified: boolean, isValid: boolean, isEmpty: boolean | undefined) => void;
   refControls: React.MutableRefObject<{
     save: () => Promise<void>;
     discardChanges: () => void;
@@ -126,7 +136,7 @@ const PluginInnerWrapper = ({
   } | null>;
 }) => {
   const {objectView} = plugin.usePlugin(pluginProps);
-  const {editModeContent, saveChanges, discardChanges, remove, isModified, isValid} =
+  const {editModeContent, saveChanges, discardChanges, remove, isModified, isValid, isEmpty} =
     objectView || {};
 
   refControls.current = {
@@ -157,9 +167,9 @@ const PluginInnerWrapper = ({
 
   useEffect(() => {
     if (isModified !== undefined && isValid !== undefined) {
-      handleOnChange(isModified, isValid);
+      handleOnChange(isModified, isValid, isEmpty);
     }
-  }, [isModified, isValid, handleOnChange]);
+  }, [isModified, isValid, handleOnChange, isEmpty]);
 
   return (
     <>

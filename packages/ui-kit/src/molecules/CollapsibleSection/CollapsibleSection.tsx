@@ -17,7 +17,7 @@ export const CollapsibleSection: FC<CollapsibleSectionPropsInterface> = ({
   title,
   children
 }) => {
-  const [collapsed, setCollapsed] = useState(initialCollapsed);
+  const [collapsed = initialCollapsed, setCollapsed] = useState<boolean>();
 
   return (
     <styled.Container data-testid="CollapsibleSection-test">

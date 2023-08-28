@@ -24,6 +24,7 @@ type UseAssignImageHookType = (props: {
 }) => {
   content: JSX.Element;
   isModified: boolean;
+  isEmpty: boolean | undefined;
   save: () => Promise<void>;
   discardChanges: () => void;
   clear: () => Promise<void>;
@@ -152,6 +153,7 @@ export const useAssignImage: UseAssignImageHookType = ({
   return {
     content,
     isModified: Object.keys(dirtyFields).length > 0,
+    isEmpty: attribute.isPending ? undefined : !attribute.value?.render_hash,
     save,
     discardChanges: reset,
     clear
