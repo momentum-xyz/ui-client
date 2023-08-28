@@ -39,7 +39,7 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
   } = creatorStore;
   const {assets3dBasic} = spawnAssetStore;
   const {objectStore} = universeStore;
-  const {pluginLoader} = objectStore;
+  const {pluginLoader, asset2dId} = objectStore;
 
   const [activeTab, setActiveTab] = useState<TabsType>('settings');
 
@@ -69,7 +69,9 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
       }
     : null;
 
-  const canChangeColor = assets3dBasic.some((asset) => asset.id === objectInfo?.asset_3d_id);
+  const isBasicAsset = assets3dBasic.some((asset) => asset.id === objectInfo?.asset_3d_id);
+
+  const isCustomisableObject = asset2dId === BasicAsset2dIdEnum.CUSTOMIZABLE;
 
   // don't use debounce here, if different object is selected, it gets assigned prev object transform...
   const handleTransformChange = (data: TransformInterface) => {
@@ -204,13 +206,18 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
             <CollapsibleSection
               title={t('titles.objectSound')}
               initialCollapsed={!objectFunctionalityStore.objectSound.musicPlayer.trackList.length}
+              disabled={isCustomisableObject}
             >
               <AssignSound objectId={objectId} onBack={() => {}} />
             </CollapsibleSection>
 
             <styled.Separator />
 
-            <CollapsibleSection title={t('titles.wrapImage')} initialCollapsed={isEmptyTexture}>
+            <CollapsibleSection
+              title={t('titles.wrapImage')}
+              initialCollapsed={isEmptyTexture}
+              disabled={!isBasicAsset || isCustomisableObject}
+            >
               {assignTextureContent}
             </CollapsibleSection>
 
@@ -218,7 +225,7 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
 
             <CollapsibleSection
               title={t('titles.colourPicker')}
-              disabled={!canChangeColor}
+              disabled={!isBasicAsset || isCustomisableObject}
               initialCollapsed={!creatorStore.objectColorStore.objectColor}
             >
               <ObjectColorPicker />
@@ -233,7 +240,11 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
 
             <styled.Separator />
 
-            <CollapsibleSection title={t('titles.addImage')} initialCollapsed={isEmptyImage}>
+            <CollapsibleSection
+              title={t('titles.addImage')}
+              initialCollapsed={isEmptyImage}
+              disabled={isCustomisableObject}
+            >
               {assignImageContent}
             </CollapsibleSection>
 
@@ -246,12 +257,21 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
               wide
               danger={isEmptyNameSet}
             />
-            <styled.Title>{t('titles.descriptionOfObject')}</styled.Title>
-            {assignTextContent}
+
+            {!isCustomisableObject && (
+              <>
+                <styled.Title>{t('titles.descriptionOfObject')}</styled.Title>
+                {assignTextContent}
+              </>
+            )}
 
             <styled.Separator />
 
-            <CollapsibleSection title={t('titles.addVideo')} initialCollapsed={isEmptyVideo}>
+            <CollapsibleSection
+              title={t('titles.addVideo')}
+              initialCollapsed={isEmptyVideo}
+              disabled={isCustomisableObject}
+            >
               <styled.VideoWrapper>
                 {pluginLoader?.plugin ? (
                   assignVideoContent
