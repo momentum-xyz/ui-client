@@ -69,7 +69,7 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
       }
     : null;
 
-  const canChangeColor = assets3dBasic.some((asset) => asset.id === objectInfo?.asset_3d_id);
+  const isBasicAsset = assets3dBasic.some((asset) => asset.id === objectInfo?.asset_3d_id);
 
   const isCustomisableObject = asset2dId === BasicAsset2dIdEnum.CUSTOMIZABLE;
 
@@ -216,7 +216,7 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
             <CollapsibleSection
               title={t('titles.wrapImage')}
               initialCollapsed={isEmptyTexture}
-              disabled={isCustomisableObject}
+              disabled={!isBasicAsset || isCustomisableObject}
             >
               {assignTextureContent}
             </CollapsibleSection>
@@ -225,7 +225,7 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
 
             <CollapsibleSection
               title={t('titles.colourPicker')}
-              disabled={!canChangeColor || isCustomisableObject}
+              disabled={!isBasicAsset || isCustomisableObject}
               initialCollapsed={!creatorStore.objectColorStore.objectColor}
             >
               <ObjectColorPicker />
