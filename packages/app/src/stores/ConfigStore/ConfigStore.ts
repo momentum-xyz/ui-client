@@ -9,7 +9,8 @@ const ConfigStore = types
   .model('ConfigStore', {
     versionRequest: types.optional(RequestModel, {}),
     configRequest: types.optional(RequestModel, {}),
-    isConfigReady: false
+    isConfigReady: false,
+    isAgoraActive: false
   })
   .actions((self) => ({
     init: flow(function* () {
@@ -36,6 +37,7 @@ const ConfigStore = types
           });
 
           self.isConfigReady = true;
+          self.isAgoraActive = !!appVariables.AGORA_APP_ID;
         }
       }
     })

@@ -22,8 +22,15 @@ interface PropsInterface {
 }
 
 const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
-  const {sessionStore, widgetStore, widgetManagerStore, universeStore, agoraStore, musicStore} =
-    useStore();
+  const {
+    sessionStore,
+    widgetStore,
+    widgetManagerStore,
+    universeStore,
+    agoraStore,
+    musicStore,
+    configStore
+  } = useStore();
   const {activeWidgetList, subMenuInfo} = widgetManagerStore;
   const {isCurrentUserWorldAdmin, world2dStore, world3dStore} = universeStore;
 
@@ -143,7 +150,8 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       position: PositionEnum.RIGHT,
       viewPosition: PositionEnum.RIGHT,
       iconName: 'person_idea',
-      isHidden: !isWorld || !world3dStore?.canvasObjectId,
+      isHidden:
+        !isWorld || !world3dStore?.canvasObjectId || !isFeatureEnabled(FeatureFlagEnum.CANVAS),
       tooltip: t('labels.contribute'),
       isDisabled: universeStore.isScreenRecording,
       onClick: handleToggle
@@ -180,7 +188,7 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       tooltip: t('labels.voiceChat'),
       onClick: handleToggle,
       isDisabled: universeStore.isScreenRecording,
-      isHidden: !isWorld
+      isHidden: !isWorld || !configStore.isAgoraActive
     },
     {
       key: WidgetEnum.WORLD_VISITORS,
