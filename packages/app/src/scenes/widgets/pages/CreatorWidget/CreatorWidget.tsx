@@ -1,29 +1,31 @@
 import {observer} from 'mobx-react-lite';
 import {FC, useCallback, useEffect} from 'react';
-import {Panel, IconNameType, SideMenuItemInterface, SideMenu, Dialog} from '@momentum-xyz/ui-kit';
+import {Dialog, IconNameType, Panel, SideMenu, SideMenuItemInterface} from '@momentum-xyz/ui-kit';
 import {i18n, useI18n} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
 
 import {ToastContent} from 'ui-kit';
 import {useStore} from 'shared/hooks';
+import {FeatureFlagEnum} from 'api/enums';
 import {CreatorTabsEnum} from 'core/enums';
+import {isFeatureEnabled} from 'api/constants';
 import {subMenuKeyWidgetEnumMap} from 'core/constants';
 
 import * as styled from './CreatorWidget.styled';
 import {
-  WorldEditor,
-  SpawnAsset,
-  SkyboxSelector,
-  ObjectInspector,
   CanvasEditor,
   MusicManager,
+  ObjectInspector,
   SceneExplorer,
+  SkyboxSelector,
+  SpawnAsset,
+  WorldEditor,
   WorldMembers
 } from './pages';
 
 type MenuItemType = keyof typeof CreatorTabsEnum;
 
-const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
+const SIZE_MENU_ITEMS: SideMenuItemInterface<MenuItemType>[] = [
   {
     id: 'editWorld',
     iconName: 'rabbit_fill',
@@ -61,8 +63,8 @@ const sideMenuItems: SideMenuItemInterface<MenuItemType>[] = [
   }
 ];
 
-const allPanels: SideMenuItemInterface<MenuItemType>[] = [
-  ...sideMenuItems,
+const ALL_MENU_ITEMS: SideMenuItemInterface<MenuItemType>[] = [
+  ...SIZE_MENU_ITEMS,
   {
     id: 'inspector',
     iconName: 'info',
@@ -99,8 +101,12 @@ const CreatorWidget: FC = () => {
     };
   }, [creatorStore, world3dStore, spawnAssetStore, worldId]);
 
-  const panel = allPanels.find((panel) => panel.id === selectedTab);
-  const menuItem = sideMenuItems.find((item) => item.id === selectedTab);
+  const panel = ALL_MENU_ITEMS.find((panel) => panel.id === selectedTab);
+  const menuItem = SIZE_MENU_ITEMS.find((item) => item.id === selectedTab);
+
+  const filteredSideMenuItems = !isFeatureEnabled(FeatureFlagEnum.CANVAS)
+    ? SIZE_MENU_ITEMS.filter((item) => item.id !== 'canvas')
+    : SIZE_MENU_ITEMS;
 
   const handleSubMenuActiveChange = useCallback(
     (tab: keyof typeof CreatorTabsEnum | null): void => {
@@ -153,8 +159,6 @@ const CreatorWidget: FC = () => {
         return world3dStore ? <SceneExplorer world3dStore={world3dStore} /> : null;
       case 'editMembers':
         return <WorldMembers />;
-      // case 'spawnPoint':
-      //   return <SpawnPointPage />;
       default:
     }
     return null;
@@ -164,9 +168,9 @@ const CreatorWidget: FC = () => {
     <styled.Container data-testid="CreatorWidget-test">
       <div>
         <SideMenu
-          activeId={menuItem?.id}
           orientation="left"
-          sideMenuItems={sideMenuItems}
+          activeId={menuItem?.id}
+          sideMenuItems={filteredSideMenuItems}
           onSelect={handleTabChange}
         />
       </div>
