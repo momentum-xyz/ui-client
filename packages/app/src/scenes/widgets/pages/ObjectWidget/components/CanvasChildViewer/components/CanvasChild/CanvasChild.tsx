@@ -1,0 +1,174 @@
+import {FC, useState} from 'react';
+import {observer} from 'mobx-react-lite';
+import {dateWithoutTime, getTime, useI18n} from '@momentum-xyz/core';
+import {
+  Frame,
+  Image,
+  Voting,
+  Comment,
+  CommentForm,
+  ButtonEllipse,
+  ImageSizeEnum,
+  Hexagon,
+  TextCut
+} from '@momentum-xyz/ui-kit';
+
+import {getImageAbsoluteUrl} from 'core/utils';
+import {ObjectCommentWithUserInterface} from 'core/interfaces';
+import {CanvasConfigInterface, UserContributionInterface} from 'api/interfaces';
+
+import * as styled from './CanvasChild.styled';
+
+interface PropsInterface {
+  currentUserId: string;
+  currentUserName: string;
+  currentUserImageUrl: string;
+  currentUserIsGuest: boolean;
+  authorName: string | null | undefined;
+  authorAvatarHash?: string | null | undefined;
+  content: UserContributionInterface;
+  config: CanvasConfigInterface;
+  hasVote: boolean;
+  voteCount: number;
+  commentList: ObjectCommentWithUserInterface[];
+  onDelete?: () => void;
+  onVote: () => void;
+  onAddComment: (message: string) => void;
+  onDeleteComment: (commentId: string) => void;
+}
+
+const ANSWER_LINES = 5;
+
+const CanvasChild: FC<PropsInterface> = ({
+  currentUserId,
+  currentUserName,
+  currentUserImageUrl,
+  currentUserIsGuest,
+  authorName,
+  authorAvatarHash,
+  content,
+  config,
+  hasVote,
+  voteCount,
+  commentList,
+  onDelete,
+  onVote,
+  onAddComment,
+  onDeleteComment
+}) => {
+  const [isNewCommentShown, setIsNewCommentShown] = useState(false);
+
+  const {t} = useI18n();
+
+  return (
+    <styled.Container data-testid="ContentViewer-test">
+      <Frame>
+        <styled.Wrapper>
+          <styled.Header>
+            <Hexagon
+              iconName="astronaut"
+              type="fourth-borderless"
+              imageSrc={getImageAbsoluteUrl(authorAvatarHash)}
+            />
+
+            <styled.UserInfo>
+              <styled.UserInfoTitle>
+                <styled.UserName>{authorName}</styled.UserName>
+                <styled.Date>
+                  <div>
+                    {dateWithoutTime(content.created)} / {getTime(content.created)}
+                  </div>
+                </styled.Date>
+              </styled.UserInfoTitle>
+            </styled.UserInfo>
+          </styled.Header>
+
+          <styled.Title>{content.answerOne}</styled.Title>
+
+          <styled.Grid>
+            <Image
+              height={280}
+              errorIcon="photo_camera"
+              src={getImageAbsoluteUrl(content.render_hash, ImageSizeEnum.S5)}
+            />
+
+            <styled.Opinion>
+              <Voting
+                count={voteCount}
+                isActive={hasVote}
+                disabled={currentUserIsGuest}
+                onClick={onVote}
+              />
+              <ButtonEllipse
+                icon="comment"
+                label={t('actions.comment')}
+                disabled={currentUserIsGuest}
+                onClick={() => setIsNewCommentShown(!isNewCommentShown)}
+              />
+              {!!onDelete && (
+                <ButtonEllipse icon="bin" label={t('actions.remove')} onClick={onDelete} />
+              )}
+            </styled.Opinion>
+
+            <styled.Separator />
+
+            <styled.SubHeader>
+              <span>{config.questionTwo}</span>
+            </styled.SubHeader>
+            <styled.Description>
+              <TextCut text={content.answerTwo} lines={ANSWER_LINES} />
+            </styled.Description>
+
+            <styled.Separator />
+
+            <styled.SubHeader>
+              <span>{config.questionThree}</span>
+            </styled.SubHeader>
+            <styled.Description>
+              <TextCut text={content.answerThree} lines={ANSWER_LINES} />
+            </styled.Description>
+
+            {!!config.questionFour && (
+              <>
+                <styled.Separator />
+                <styled.SubHeader>
+                  <span>{config.questionFour}</span>
+                </styled.SubHeader>
+                <styled.Description>
+                  <TextCut text={content.answerFour} lines={ANSWER_LINES} />
+                </styled.Description>
+              </>
+            )}
+          </styled.Grid>
+
+          <styled.CommentsContainer>
+            {isNewCommentShown && (
+              <CommentForm
+                author={currentUserName}
+                authorImageSrc={currentUserImageUrl}
+                onCancel={() => setIsNewCommentShown(false)}
+                onComment={(comment) => {
+                  onAddComment(comment);
+                  setIsNewCommentShown(false);
+                }}
+              />
+            )}
+
+            {commentList.map(({uuid, created, content, _user}) => (
+              <Comment
+                key={uuid}
+                message={content}
+                dateISO={created}
+                author={_user.profile.name}
+                authorImageSrc={getImageAbsoluteUrl(_user.profile.avatar_hash)}
+                onDelete={currentUserId === _user.user_id ? () => onDeleteComment(uuid) : undefined}
+              />
+            ))}
+          </styled.CommentsContainer>
+        </styled.Wrapper>
+      </Frame>
+    </styled.Container>
+  );
+};
+
+export default observer(CanvasChild);

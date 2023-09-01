@@ -257,7 +257,7 @@ const ImageStep: FC<PropsInterface> = ({
                       <ButtonEllipse
                         icon="adjust"
                         isActive={isClearConfirm}
-                        label={t('actions.Change image')}
+                        label={t('actions.changeImage')}
                         disabled={!!value || generationCount === MAX_GENERATION_COUNT}
                         onClick={() => {
                           setIsClearConfirm(true);

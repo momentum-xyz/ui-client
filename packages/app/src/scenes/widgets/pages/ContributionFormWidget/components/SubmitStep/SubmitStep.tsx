@@ -82,7 +82,7 @@ const SubmitStep: FC<PropsInterface> = ({
         <styled.Separator />
 
         <styled.Header>
-          <span>{config.questionOne}</span>
+          <span>{config.questionTwo}</span>
         </styled.Header>
         <styled.Description>{answersData.answerTwo}</styled.Description>
 
