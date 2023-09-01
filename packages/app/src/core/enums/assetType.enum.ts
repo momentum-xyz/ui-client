@@ -5,5 +5,7 @@ export enum AssetTypeEnum {
   TEXT = 'text',
   DOCK = 'Docking station',
   CONTENT = 'object_content',
-  CLAIMABLE = 'claimable'
+  CLAIMABLE = 'claimable',
+  CANVAS_CHILD = 'Canvas child objects',
+  CANVAS_ROOT = 'Canvas object UI'
 }

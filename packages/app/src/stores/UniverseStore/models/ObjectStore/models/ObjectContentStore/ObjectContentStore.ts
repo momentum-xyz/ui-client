@@ -4,7 +4,7 @@ import {ResetModel} from '@momentum-xyz/core';
 import {AssetTypeEnum} from 'core/enums';
 import {Asset2dResponse, ObjectMetadataInterface, ObjectOptionsInterface} from 'api';
 
-import {NormalContent, CustomizableContent} from './models';
+import {NormalContent, CustomizableContent, CanvasChildContent} from './models';
 
 const ObjectContentStore = types
   .compose(
@@ -14,7 +14,8 @@ const ObjectContentStore = types
       pluginId: types.maybe(types.string),
 
       normalContent: types.optional(NormalContent, {}),
-      customizableContent: types.optional(CustomizableContent, {})
+      customizableContent: types.optional(CustomizableContent, {}),
+      canvasChildContent: types.optional(CanvasChildContent, {})
     })
   )
   .actions((self) => ({
@@ -25,12 +26,17 @@ const ObjectContentStore = types
     initCustomizableContent(pluginId: string, spaceId: string): void {
       self.customizableContent = CustomizableContent.create({});
       self.customizableContent.initContent(pluginId, spaceId);
+    },
+    initCanvasChildContent(pluginId: string, spaceId: string, ownerId: string): void {
+      self.canvasChildContent = CanvasChildContent.create({});
+      self.canvasChildContent.initContent(pluginId, spaceId, ownerId);
     }
   }))
   .actions((self) => ({
     setObject(
       object: Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface> | undefined,
-      spaceId: string
+      spaceId: string,
+      ownerId: string
     ) {
       console.log('AssetStore setObject', object, spaceId);
 
@@ -50,10 +56,14 @@ const ObjectContentStore = types
           self.assetType = AssetTypeEnum.CLAIMABLE;
           self.initCustomizableContent(meta.pluginId, spaceId);
           break;
-        /*case AssetTypeEnum.DOCK:
-          self.assetType = AssetTypeEnum.DOCK;
-          self.getDockInfo(spaceId);
-          break;*/
+        case AssetTypeEnum.CANVAS_ROOT:
+          self.assetType = AssetTypeEnum.CANVAS_ROOT;
+          //self.initCustomizableContent(meta.pluginId, spaceId);
+          break;
+        case AssetTypeEnum.CANVAS_CHILD:
+          self.assetType = AssetTypeEnum.CANVAS_CHILD;
+          self.initCanvasChildContent(meta.pluginId, spaceId, ownerId);
+          break;
         default:
           break;
       }

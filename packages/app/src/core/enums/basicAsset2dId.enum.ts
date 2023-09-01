@@ -6,7 +6,7 @@ export enum BasicAsset2dIdEnum {
   MIRO = 'a31722a6-26b7-46bc-97f9-435c380c3ca9',
   GOOGLE_DRIVE = 'c601404b-61a2-47d5-a5c7-f3c704a8bf58',
   CONTENT = '7be0964f-df73-4880-91f5-22eef996beef',
-  CUSTOMIZABLE = '7be0964f-df73-4880-91f5-22eef996aaaa'
-  // MIRO_LOCAL = '2a879830-b79e-4c35-accc-05607c51d504',
-  // GOOGLE_DRIVE_LOCAL = '0d99e5aa-a627-4353-8bfa-1c0e7053db90'
+  CUSTOMIZABLE = '7be0964f-df73-4880-91f5-22eef996aaaa',
+  CANVAS_ROOT = 'd768aa3e-ca03-4f5e-b366-780a5361cc02',
+  CANVAS_CHILD = '8a0f9e8e-b32e-476a-8afe-e0c57260ff20'
 }

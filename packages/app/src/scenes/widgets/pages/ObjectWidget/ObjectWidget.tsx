@@ -1,12 +1,13 @@
 import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Panel} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {AssetTypeEnum, WidgetEnum} from 'core/enums';
 import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 
-import {Customization, ObjectViewer} from './components';
+import {CanvasChildViewer, Customization, ObjectViewer} from './components';
 import * as styled from './ObjectWidget.styled';
 
 const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
@@ -14,6 +15,8 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {objectStore} = universeStore;
   const {objectContentStore, asset2dId} = objectStore;
   const {assetType, customizableContent} = objectContentStore;
+
+  const {t} = useI18n();
 
   const objectId = data?.id.toString() || '';
 
@@ -34,13 +37,13 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
     };
   }, [data?.id, objectStore, onClose]);
 
-  if (!objectId || !asset2dId) {
+  if (!objectId || !asset2dId || !assetType) {
     return null;
   }
 
   return (
     <styled.Container data-testid="ObjectWidget-test">
-      {assetType === AssetTypeEnum.CLAIMABLE ? (
+      {assetType === AssetTypeEnum.CLAIMABLE && (
         <Panel
           isFullHeight
           size="normal"
@@ -51,7 +54,37 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
         >
           <Customization />
         </Panel>
-      ) : (
+      )}
+
+      {assetType === AssetTypeEnum.CANVAS_CHILD && (
+        <Panel
+          isFullHeight
+          size="normal"
+          variant="primary"
+          icon="cubicle"
+          title={t('titles.objectInfo')}
+          onClose={onClose}
+        >
+          <CanvasChildViewer onClose={onClose} />
+        </Panel>
+      )}
+
+      {assetType === AssetTypeEnum.CANVAS_ROOT && (
+        <Panel
+          isFullHeight
+          size="normal"
+          variant="primary"
+          icon="cubicle"
+          title={t('titles.objectInfo')}
+          onClose={onClose}
+        >
+          <div>TODO</div>
+        </Panel>
+      )}
+
+      {![AssetTypeEnum.CLAIMABLE, AssetTypeEnum.CANVAS_CHILD, AssetTypeEnum.CANVAS_ROOT].includes(
+        assetType as AssetTypeEnum
+      ) && (
         <Panel
           isFullHeight
           size="normal"

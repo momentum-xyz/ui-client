@@ -95,13 +95,15 @@ const ObjectStore = types
 
       switch (self.asset2dId) {
         case BasicAsset2dIdEnum.CONTENT:
-        case BasicAsset2dIdEnum.CUSTOMIZABLE: {
+        case BasicAsset2dIdEnum.CUSTOMIZABLE:
+        case BasicAsset2dIdEnum.CANVAS_ROOT:
+        case BasicAsset2dIdEnum.CANVAS_CHILD: {
           const objectResponse = yield self.assetRequest.send(api.assets2dRepository.get2dAsset, {
             assetId: self.asset2dId
           });
 
           if (objectResponse?.meta.pluginId) {
-            self.objectContentStore.setObject(objectResponse, objectId);
+            self.objectContentStore.setObject(objectResponse, objectId, spaceInfo.owner_id);
           }
           break;
         }
