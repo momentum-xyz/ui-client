@@ -7,7 +7,7 @@ import {useStore} from 'shared/hooks';
 import {AssetTypeEnum, WidgetEnum} from 'core/enums';
 import {WidgetInfoModelInterface} from 'stores/WidgetManagerStore';
 
-import {CanvasChildViewer, Customization, ObjectViewer} from './components';
+import {CanvasChildViewer, CanvasViewer, Customization, ObjectViewer} from './components';
 import * as styled from './ObjectWidget.styled';
 
 const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
@@ -71,14 +71,14 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
 
       {assetType === AssetTypeEnum.CANVAS_ROOT && (
         <Panel
+          icon="idea"
+          size="large"
           isFullHeight
-          size="normal"
           variant="primary"
-          icon="cubicle"
-          title={t('titles.objectInfo')}
+          title={t('labels.contributionOverview')}
           onClose={onClose}
         >
-          <div>TODO</div>
+          <CanvasViewer onClose={onClose} />
         </Panel>
       )}
 

@@ -273,6 +273,7 @@ export const enGb = {
       by: 'By',
       or: 'Or',
       contribute: 'Contribute',
+      contributionOverview: 'Contribution overview',
       version: 'Version {{version}}',
       canvasEditor: 'Canvas editor',
       canvasStep1: 'Read canvas explainer',
