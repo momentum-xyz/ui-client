@@ -153,7 +153,7 @@ const World3dPage: FC = () => {
     const isSameSubMenu = currentSubMenuInfo?.sourceItemKey === WidgetEnum.CREATOR;
 
     const activeSubMenuKeys = !currentSubMenuInfo
-      ? [WidgetEnum.MOVE_ITEM]
+      ? [WidgetEnum.INSPECTOR]
       : isSameSubMenu
       ? currentSubMenuInfo?.activeKeys
       : [];
