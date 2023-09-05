@@ -28,3 +28,13 @@ export interface UserContributionInterface extends AttributeValueInterface {
   answerFour: string;
   render_hash: string;
 }
+
+export interface UserContributionWithUserInterface extends UserContributionInterface {
+  _user: {
+    user_id: string;
+    profile: {
+      avatar_hash: string | null;
+      name: string;
+    };
+  };
+}

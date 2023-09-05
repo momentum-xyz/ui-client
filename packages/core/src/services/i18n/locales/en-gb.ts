@@ -777,6 +777,7 @@ export const enGb = {
     },
     placeholders: {
       search: 'Search',
+      sort: 'Sort',
       addComment: 'Add a comment',
       searchForPeople: 'Search for people...',
       searchForSpaces: 'Search for spaces...',
@@ -895,6 +896,7 @@ export const enGb = {
       buyNft: 'Buy Odyssey NFT',
       visitYourOdyssey: 'Visit your Odyssey',
       createOrSignIn: 'Create an account or sign in',
+      searchContributions: 'Search contributions',
       searchOdysseys: 'Search Odysseys',
       searchMembers: 'Search Members',
       searchStakes: 'Search Stakes',

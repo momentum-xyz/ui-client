@@ -14,3 +14,7 @@ export const Tabs = styled.div`
   left 0;
   z-index: 1;
 `;
+
+export const Content = styled.div`
+  padding: 20px 0 0 0;
+`;

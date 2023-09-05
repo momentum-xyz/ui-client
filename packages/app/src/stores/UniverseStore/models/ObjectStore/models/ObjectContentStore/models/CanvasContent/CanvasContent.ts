@@ -2,10 +2,9 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {User} from 'core/models';
 import {PluginIdEnum} from 'api/enums';
-import {CanvasConfigInterface, UserContributionInterface} from 'api/interfaces';
-import {api, GetSpaceAttributeResponse} from 'api';
+import {CanvasConfigInterface, UserContributionWithUserInterface} from 'api/interfaces';
+import {api, GetSpaceAttributeResponse, GetUserContributionsResponse} from 'api';
 
 const CanvasContent = types
   .compose(
@@ -14,9 +13,11 @@ const CanvasContent = types
       pluginId: '',
       objectId: '',
 
-      author: types.maybe(User),
-      content: types.maybe(types.frozen<UserContributionInterface>()),
       config: types.maybeNull(types.frozen<CanvasConfigInterface>()),
+      contentArray: types.optional(
+        types.array(types.frozen<UserContributionWithUserInterface>()),
+        []
+      ),
 
       configRequest: types.optional(RequestModel, {}),
       fetchRequest: types.optional(RequestModel, {}),
@@ -33,28 +34,18 @@ const CanvasContent = types
       self.pluginId = pluginId;
       self.objectId = objectId;
 
-      /*const attributeResponse: UserContributionInterface = yield self.fetchRequest.send(
-        api.spaceUserAttributeRepository.getSpaceUserAttribute,
+      const response: GetUserContributionsResponse = yield self.fetchRequest.send(
+        api.canvasRepository.getUserContributions,
         {
-          userId: self.ownerId,
-          spaceId: self.objectId,
-          pluginId: self.pluginId,
-          attributeName: AttributeNameEnum.CANVAS_CONTRIBUTION
+          objectId: self.objectId
         }
       );
 
-      if (attributeResponse) {
-        self.content = attributeResponse;
-      }*/
+      // TODO: Items & Interface
+      console.log('response', response);
 
-      if (self.ownerId) {
-        const authorResponse = yield self.authorRequest.send(api.userRepository.fetchUser, {
-          userId: '' // self.ownerId
-        });
-
-        if (authorResponse) {
-          self.author = cast(authorResponse);
-        }
+      if (response) {
+        console.log(response);
       }
     }),
     loadConfig: flow(function* (objectId: string) {
