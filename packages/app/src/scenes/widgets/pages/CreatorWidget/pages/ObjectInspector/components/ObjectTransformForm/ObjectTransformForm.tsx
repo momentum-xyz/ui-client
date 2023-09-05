@@ -28,6 +28,13 @@ interface PropsInterface {
 }
 
 const DECIMALS = 3;
+const truncate = (num: number | null, decimals = DECIMALS) => {
+  if (!num) {
+    return num;
+  }
+  const x = Math.pow(10, decimals);
+  return Math.trunc(num * x) / x;
+};
 
 const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange}) => {
   const {t} = useI18n();
@@ -92,7 +99,7 @@ const ObjectTransformForm: FC<PropsInterface> = ({initialData, onTransformChange
         control={control}
         rules={{required: true}}
         render={({field: {value, onChange}}) => {
-          const valStr = String(value);
+          const valStr = String(truncate(value, DECIMALS));
           return (
             <Input
               opts={mask}
