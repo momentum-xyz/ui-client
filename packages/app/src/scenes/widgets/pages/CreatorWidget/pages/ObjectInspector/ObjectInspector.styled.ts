@@ -29,6 +29,7 @@ export const Body = styled.div`
   flex-grow: 1;
   overflow: scroll;
   margin-right: -10px;
+  margin-top: 8px;
   padding-right: 10px;
 `;
 
@@ -52,6 +53,7 @@ export const ObjectPreviewModelContainer = styled.div``;
 
 export const Separator = styled.div`
   height: 1px;
+  min-height: 1px;
   width: 100%;
   background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.4)};
   margin: 20px 0;
@@ -70,9 +72,11 @@ export const VideoWrapper = styled.div`
   }
 `;
 
-export const ActionBar = styled.div`
+export const StickyActionBar = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 10px 0;
+  padding-top: 10px;
+  position: sticky;
+  bottom: 0;
 `;

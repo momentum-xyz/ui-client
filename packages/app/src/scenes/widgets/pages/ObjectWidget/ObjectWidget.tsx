@@ -90,7 +90,7 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
           size="normal"
           icon="document"
           variant="primary"
-          title={objectStore.objectName || ''}
+          title={t('titles.objectInfo')}
           onClose={onClose}
         >
           <ObjectViewer objectId={objectId} />

@@ -1,7 +1,14 @@
 import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {i18n, useI18n} from '@momentum-xyz/core';
-import {Button, CollapsibleSection, Input, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
+import {
+  Button,
+  ButtonEllipse,
+  CollapsibleSection,
+  Input,
+  TabInterface,
+  Tabs
+} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 
 import {useStore} from 'shared/hooks';
@@ -9,6 +16,7 @@ import {PosBusService} from 'shared/services';
 import {ToastContent} from 'ui-kit';
 import {PluginIdEnum} from 'api/enums';
 import {BasicAsset2dIdEnum} from 'core/enums';
+import {ObjectViewer} from 'scenes/widgets/pages/ObjectWidget/components';
 
 import {AssignSound, useAssignImage, useAssignText, useAssignVideo} from './components';
 import * as styled from './ObjectInspector.styled';
@@ -117,6 +125,8 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
     }
   });
 
+  const [isEditMode, setIsEditMode] = useState(false);
+
   const {
     content: assignImageContent,
     isModified: isModifiedImage,
@@ -167,6 +177,11 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
       ]);
 
       toast.info(<ToastContent icon="check" text={t('messages.saved')} />);
+
+      // refresh content
+      await objectStore.init(objectId);
+
+      setIsEditMode(false);
     } catch (err) {
       console.log('Error saving in inspector:', err);
       toast.error(<ToastContent isDanger icon="alert" text={t('assetsUploader.errorSave')} />);
@@ -178,6 +193,7 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
     discardVideoChanges();
     discardTextChanges();
     setModifiedObjectName(undefined);
+    setIsEditMode(false);
   };
 
   return (
@@ -233,7 +249,22 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
           </>
         )}
 
-        {activeTab === 'info' && (
+        {activeTab === 'info' && !isEditMode && (
+          <>
+            <ObjectViewer objectId={objectId} />
+
+            <styled.Separator />
+
+            <div>
+              <ButtonEllipse
+                icon="edit"
+                label={t('actions.editObjectInfo')}
+                onClick={() => setIsEditMode(!isEditMode)}
+              />
+            </div>
+          </>
+        )}
+        {activeTab === 'info' && isEditMode && (
           <>
             {/* owner name, date   */}
             <styled.MainTitle>{objectName}</styled.MainTitle>
@@ -285,16 +316,20 @@ const ObjectInspector: FC<PropsInterface> = ({objectId}) => {
             </CollapsibleSection>
 
             <styled.Separator />
-
-            {isModified && (
-              <styled.ActionBar>
-                <Button label={t('actions.cancel')} onClick={handleDiscard} />
-                <Button label={t('actions.submit')} disabled={!isValid} onClick={handleSaveInfo} />
-              </styled.ActionBar>
-            )}
           </>
         )}
       </styled.Body>
+
+      {activeTab === 'info' && isEditMode && (
+        <styled.StickyActionBar>
+          <Button label={t('actions.cancel')} onClick={handleDiscard} />
+          <Button
+            label={t('actions.submit')}
+            disabled={!isValid || !isModified}
+            onClick={handleSaveInfo}
+          />
+        </styled.StickyActionBar>
+      )}
     </styled.Container>
   );
 };
