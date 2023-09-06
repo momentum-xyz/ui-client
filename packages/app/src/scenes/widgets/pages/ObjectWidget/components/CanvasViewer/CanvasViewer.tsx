@@ -54,9 +54,14 @@ const CanvasViewer: FC<PropsInterface> = ({onClose}) => {
         <styled.Content>
           {activeTab === 'contributions' && (
             <Contributions
-              onContribute={() =>
-                widgetManagerStore.open(WidgetEnum.CONTRIBUTION_FORM, PositionEnum.RIGHT)
-              }
+              contributions={canvasContent.contributions}
+              onFlyToObject={(objectId) => {
+                Event3dEmitter.emit('FlyToObject', objectId);
+                widgetManagerStore.open(WidgetEnum.OBJECT, PositionEnum.RIGHT, {id: objectId});
+              }}
+              onContribute={() => {
+                widgetManagerStore.open(WidgetEnum.CONTRIBUTION_FORM, PositionEnum.RIGHT);
+              }}
             />
           )}
 

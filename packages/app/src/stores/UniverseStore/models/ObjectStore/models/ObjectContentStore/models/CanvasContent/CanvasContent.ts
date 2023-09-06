@@ -3,8 +3,13 @@ import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {PluginIdEnum} from 'api/enums';
-import {CanvasConfigInterface, UserContributionWithUserInterface} from 'api/interfaces';
-import {api, GetSpaceAttributeResponse, GetUserContributionsResponse} from 'api';
+import {CanvasConfigInterface} from 'api/interfaces';
+import {
+  api,
+  ContributionItemInterface,
+  GetSpaceAttributeResponse,
+  GetUserContributionsResponse
+} from 'api';
 
 const CanvasContent = types
   .compose(
@@ -14,19 +19,10 @@ const CanvasContent = types
       objectId: '',
 
       config: types.maybeNull(types.frozen<CanvasConfigInterface>()),
-      contentArray: types.optional(
-        types.array(types.frozen<UserContributionWithUserInterface>()),
-        []
-      ),
+      contributions: types.optional(types.array(types.frozen<ContributionItemInterface>()), []),
 
       configRequest: types.optional(RequestModel, {}),
-      fetchRequest: types.optional(RequestModel, {}),
-      authorRequest: types.optional(RequestModel, {}),
-      deleteRequest: types.optional(RequestModel, {}),
-      voteRequest: types.optional(RequestModel, {}),
-      voteCountRequest: types.optional(RequestModel, {}),
-      commentRequest: types.optional(RequestModel, {}),
-      commentListRequest: types.optional(RequestModel, {})
+      fetchRequest: types.optional(RequestModel, {})
     })
   )
   .actions((self) => ({
@@ -41,11 +37,8 @@ const CanvasContent = types
         }
       );
 
-      // TODO: Items & Interface
-      console.log('response', response);
-
       if (response) {
-        console.log(response);
+        self.contributions = cast(response.items ? response.items : []);
       }
     }),
     loadConfig: flow(function* (objectId: string) {
@@ -68,7 +61,7 @@ const CanvasContent = types
   }))
   .views((self) => ({
     get isLoading(): boolean {
-      return self.fetchRequest.isPending || self.authorRequest.isPending;
+      return self.fetchRequest.isPending;
     }
   }));
 

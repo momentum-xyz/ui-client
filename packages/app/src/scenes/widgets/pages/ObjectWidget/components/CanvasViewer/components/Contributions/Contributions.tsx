@@ -1,11 +1,25 @@
-import {FC, useState} from 'react';
+import {FC, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {useI18n} from '@momentum-xyz/core';
-import {Button, Input, Select, SelectOptionInterface, stringInputMask} from '@momentum-xyz/ui-kit';
+import {dateWithoutTime, getTime, useI18n} from '@momentum-xyz/core';
+import {
+  Image,
+  Input,
+  Select,
+  Button,
+  TextCut,
+  ButtonEllipse,
+  stringInputMask,
+  SelectOptionInterface
+} from '@momentum-xyz/ui-kit';
+
+import {ContributionItemInterface} from 'api';
+import {getImageAbsoluteUrl} from 'core/utils';
 
 import * as styled from './Contributions.styled';
 
 interface PropsInterface {
+  contributions: ContributionItemInterface[];
+  onFlyToObject: (objectId: string) => void;
   onContribute: () => void;
 }
 
@@ -22,11 +36,20 @@ const SORT_OPTIONS: SelectOptionInterface<SortType>[] = [
   }
 ];
 
-const Contributions: FC<PropsInterface> = ({onContribute}) => {
+const Contributions: FC<PropsInterface> = ({contributions, onFlyToObject, onContribute}) => {
   const [query, setQuery] = useState<string>('');
   const [sortType, setSortType] = useState<SortType | null>(null);
 
   const {t} = useI18n();
+
+  const sortedFilteredContributions = useMemo(() => {
+    const filteredItems = query
+      ? contributions.filter((i) => i.value.answerOne.toLowerCase().includes(query.toLowerCase()))
+      : contributions;
+
+    // TODO sorting
+    return filteredItems;
+  }, [contributions, query]);
 
   return (
     <styled.Container data-testid="Contributions-test">
@@ -61,6 +84,55 @@ const Contributions: FC<PropsInterface> = ({onContribute}) => {
           />
         </styled.Sorting>
       </styled.Search>
+
+      <styled.ContributionCount>
+        {t('labels.contributionCount', {count: sortedFilteredContributions.length})}
+      </styled.ContributionCount>
+
+      <styled.ContributionList>
+        {sortedFilteredContributions.map((i) => (
+          <styled.Contribution key={i.object_id}>
+            <styled.ContributionInner>
+              <Image
+                height={80}
+                errorIcon="rabbit_fill"
+                src={getImageAbsoluteUrl(i.value.render_hash)}
+              />
+              <div>
+                <styled.ContributionTitle>{i.value.answerOne}</styled.ContributionTitle>
+                <styled.Date>
+                  {dateWithoutTime(i.created_at)} / {getTime(i.created_at)}
+                </styled.Date>
+
+                <styled.Description>
+                  <TextCut text={i.value.answerTwo} lines={2} />
+                </styled.Description>
+
+                <styled.Actions>
+                  <ButtonEllipse
+                    isLabel
+                    icon="heart"
+                    variant="secondary"
+                    label={i.votes.toString()}
+                  />
+                  <ButtonEllipse
+                    isLabel
+                    icon="comment"
+                    variant="secondary"
+                    label={t('labels.commentsCount', {count: i.comments})}
+                  />
+                  <ButtonEllipse
+                    icon="rocket_flying"
+                    variant="secondary"
+                    label={t('actions.visit')}
+                    onClick={() => onFlyToObject(i.object_id)}
+                  />
+                </styled.Actions>
+              </div>
+            </styled.ContributionInner>
+          </styled.Contribution>
+        ))}
+      </styled.ContributionList>
     </styled.Container>
   );
 };
