@@ -1,7 +1,5 @@
 import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Panel} from '@momentum-xyz/ui-kit';
-import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {AssetTypeEnum, WidgetEnum} from 'core/enums';
@@ -14,9 +12,7 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {universeStore, widgetManagerStore} = useStore();
   const {objectStore} = universeStore;
   const {objectContentStore, asset2dId} = objectStore;
-  const {assetType, customizableContent} = objectContentStore;
-
-  const {t} = useI18n();
+  const {assetType} = objectContentStore;
 
   const objectId = data?.id.toString() || '';
 
@@ -43,59 +39,15 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
 
   return (
     <styled.Container data-testid="ObjectWidget-test">
-      {assetType === AssetTypeEnum.CLAIMABLE && (
-        <Panel
-          isFullHeight
-          size="normal"
-          variant="primary"
-          icon={customizableContent.widgetIcon}
-          title={customizableContent.widgetTitle}
-          onClose={onClose}
-        >
-          <Customization />
-        </Panel>
-      )}
+      {assetType === AssetTypeEnum.CLAIMABLE && <Customization onClose={onClose} />}
 
-      {assetType === AssetTypeEnum.CANVAS_CHILD && (
-        <Panel
-          isFullHeight
-          size="normal"
-          variant="primary"
-          icon="cubicle"
-          title={t('titles.objectInfo')}
-          onClose={onClose}
-        >
-          <CanvasChildViewer onClose={onClose} />
-        </Panel>
-      )}
+      {assetType === AssetTypeEnum.CANVAS_CHILD && <CanvasChildViewer onClose={onClose} />}
 
-      {assetType === AssetTypeEnum.CANVAS_ROOT && (
-        <Panel
-          icon="idea"
-          size="large"
-          isFullHeight
-          variant="primary"
-          title={t('labels.contributionOverview')}
-          onClose={onClose}
-        >
-          <CanvasViewer onClose={onClose} />
-        </Panel>
-      )}
+      {assetType === AssetTypeEnum.CANVAS_ROOT && <CanvasViewer onClose={onClose} />}
 
       {![AssetTypeEnum.CLAIMABLE, AssetTypeEnum.CANVAS_CHILD, AssetTypeEnum.CANVAS_ROOT].includes(
         assetType as AssetTypeEnum
-      ) && (
-        <Panel
-          isFullHeight
-          size="normal"
-          icon="document"
-          variant="primary"
-          title={objectStore.objectName || ''}
-          onClose={onClose}
-        >
-          <ObjectViewer objectId={objectId} />
-        </Panel>
-      )}
+      ) && <ObjectViewer objectId={objectId} onClose={onClose} />}
     </styled.Container>
   );
 };

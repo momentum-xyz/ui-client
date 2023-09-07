@@ -18,3 +18,9 @@ export const Tabs = styled.div`
 export const Content = styled.div`
   padding: 20px 0 0 0;
 `;
+
+export const BottomActions = styled.div`
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+`;

@@ -1,5 +1,7 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import {Panel} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 
@@ -16,6 +18,8 @@ const CanvasChildViewer: FC<PropsInterface> = ({onClose}) => {
   const {objectContentStore} = objectStore;
   const {canvasChildContent} = objectContentStore;
   const {userId} = sessionStore;
+
+  const {t} = useI18n();
 
   const canUserEdit = canvasChildContent.ownerId === userId;
 
@@ -39,31 +43,40 @@ const CanvasChildViewer: FC<PropsInterface> = ({onClose}) => {
   }
 
   return (
-    <styled.Container data-testid="CanvasChildViewer-test">
-      <CanvasChild
-        hasVote={canvasChildContent.hasVote}
-        voteCount={canvasChildContent.voteCount}
-        config={canvasChildContent.config}
-        content={canvasChildContent.content}
-        currentUserId={userId}
-        currentUserName={sessionStore.userName}
-        currentUserImageUrl={sessionStore.userImageUrl}
-        currentUserIsGuest={sessionStore.isGuest}
-        authorName={canvasChildContent.author?.name}
-        authorAvatarHash={canvasChildContent.author?.profile.avatarHash}
-        commentList={canvasChildContent.commentList}
-        onDelete={canUserEdit ? handleDelete : undefined}
-        onVote={() => canvasChildContent.toggleVote(userId)}
-        onAddComment={async (message) => {
-          await canvasChildContent.addComment(userId, message);
-          await canvasChildContent.fetchAllComments(0);
-        }}
-        onDeleteComment={async (commentId) => {
-          await canvasChildContent.deleteComment(userId, commentId);
-          await canvasChildContent.fetchAllComments(0);
-        }}
-      />
-    </styled.Container>
+    <Panel
+      isFullHeight
+      size="normal"
+      variant="primary"
+      icon="cubicle"
+      title={t('titles.objectInfo')}
+      onClose={onClose}
+    >
+      <styled.Container data-testid="CanvasChildViewer-test">
+        <CanvasChild
+          hasVote={canvasChildContent.hasVote}
+          voteCount={canvasChildContent.voteCount}
+          config={canvasChildContent.config}
+          content={canvasChildContent.content}
+          currentUserId={userId}
+          currentUserName={sessionStore.userName}
+          currentUserImageUrl={sessionStore.userImageUrl}
+          currentUserIsGuest={sessionStore.isGuest}
+          authorName={canvasChildContent.author?.name}
+          authorAvatarHash={canvasChildContent.author?.profile.avatarHash}
+          commentList={canvasChildContent.commentList}
+          onDelete={canUserEdit ? handleDelete : undefined}
+          onVote={() => canvasChildContent.toggleVote(userId)}
+          onAddComment={async (message) => {
+            await canvasChildContent.addComment(userId, message);
+            await canvasChildContent.fetchAllComments(0);
+          }}
+          onDeleteComment={async (commentId) => {
+            await canvasChildContent.deleteComment(userId, commentId);
+            await canvasChildContent.fetchAllComments(0);
+          }}
+        />
+      </styled.Container>
+    </Panel>
   );
 };
 

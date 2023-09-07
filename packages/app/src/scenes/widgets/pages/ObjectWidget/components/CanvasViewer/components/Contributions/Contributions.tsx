@@ -47,9 +47,21 @@ const Contributions: FC<PropsInterface> = ({contributions, onFlyToObject, onCont
       ? contributions.filter((i) => i.value.answerOne.toLowerCase().includes(query.toLowerCase()))
       : contributions;
 
-    // TODO sorting
-    return filteredItems;
-  }, [contributions, query]);
+    switch (sortType) {
+      case 'title':
+        return [...filteredItems].sort((a, b) => {
+          return a.value.answerOne.localeCompare(b.value.answerOne);
+        });
+      case 'mostLiked':
+        return [...filteredItems].sort((a, b) => {
+          return b.votes - a.votes;
+        });
+      default:
+        return filteredItems;
+    }
+  }, [contributions, query, sortType]);
+
+  console.log('sortedFilteredContributions', sortedFilteredContributions);
 
   return (
     <styled.Container data-testid="Contributions-test">

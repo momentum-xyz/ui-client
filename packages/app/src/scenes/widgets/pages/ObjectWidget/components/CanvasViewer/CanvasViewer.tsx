@@ -1,24 +1,23 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Event3dEmitter} from '@momentum-xyz/core';
-import {Frame, PositionEnum, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
+import {Event3dEmitter, useI18n} from '@momentum-xyz/core';
+import {Button, Frame, Panel, PositionEnum, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
 
-import {Contributions} from './components';
+import {Contributions, MissionInfo} from './components';
 import * as styled from './CanvasViewer.styled';
 
 interface PropsInterface {
   onClose: () => void;
 }
 
-type CanvasTabType = 'contributions' | 'mission' | 'team';
+type CanvasTabType = 'contributions' | 'mission';
 
 const TABS_LIST: TabInterface<CanvasTabType>[] = [
   {id: 'contributions', icon: 'person_idea', label: 'Contributions'},
-  {id: 'mission', icon: 'rocket', label: 'Mission'},
-  {id: 'team', icon: 'idea', label: 'Teamwork'}
+  {id: 'mission', icon: 'rocket', label: 'Mission'}
 ];
 
 const CanvasViewer: FC<PropsInterface> = ({onClose}) => {
@@ -30,6 +29,8 @@ const CanvasViewer: FC<PropsInterface> = ({onClose}) => {
 
   const [activeTab, setActiveTab] = useState<CanvasTabType>('contributions');
 
+  const {t} = useI18n();
+
   useEffect(() => {
     if (world3dStore?.canvasObjectId) {
       canvasContent.loadConfig(world3dStore?.canvasObjectId || '');
@@ -40,37 +41,65 @@ const CanvasViewer: FC<PropsInterface> = ({onClose}) => {
     };
   }, [canvasContent, world3dStore, userId]);
 
-  if (canvasContent.isLoading) {
+  const handleFlyToObject = useCallback(
+    (objectId: string) => {
+      Event3dEmitter.emit('FlyToObject', objectId);
+      widgetManagerStore.open(WidgetEnum.OBJECT, PositionEnum.RIGHT, {id: objectId});
+    },
+    [widgetManagerStore]
+  );
+
+  const handleContribute = useCallback(() => {
+    widgetManagerStore.open(WidgetEnum.CONTRIBUTION_FORM, PositionEnum.RIGHT);
+  }, [widgetManagerStore]);
+
+  if (canvasContent.isLoading || !canvasContent.config) {
     return <></>;
   }
 
   return (
-    <styled.Container data-testid="CanvasViewer-test">
-      <Frame>
-        <styled.Tabs>
-          <Tabs tabList={TABS_LIST} activeId={activeTab} onSelect={setActiveTab} />
-        </styled.Tabs>
-
-        <styled.Content>
-          {activeTab === 'contributions' && (
-            <Contributions
-              contributions={canvasContent.contributions}
-              onFlyToObject={(objectId) => {
-                Event3dEmitter.emit('FlyToObject', objectId);
-                widgetManagerStore.open(WidgetEnum.OBJECT, PositionEnum.RIGHT, {id: objectId});
-              }}
-              onContribute={() => {
-                widgetManagerStore.open(WidgetEnum.CONTRIBUTION_FORM, PositionEnum.RIGHT);
-              }}
+    <Panel
+      icon="idea"
+      size="large"
+      isFullHeight
+      variant="primary"
+      title={t('labels.contributionOverview')}
+      onClose={onClose}
+      bottomComponent={
+        activeTab === 'mission' ? (
+          <styled.BottomActions>
+            <div />
+            <Button
+              wide
+              icon="person_idea"
+              variant="secondary"
+              label={t('labels.contribute')}
+              onClick={handleContribute}
             />
-          )}
+          </styled.BottomActions>
+        ) : null
+      }
+    >
+      <styled.Container data-testid="CanvasViewer-test">
+        <Frame>
+          <styled.Tabs>
+            <Tabs tabList={TABS_LIST} activeId={activeTab} onSelect={setActiveTab} />
+          </styled.Tabs>
 
-          {activeTab === 'mission' && <div>mission</div>}
+          <styled.Content>
+            {activeTab === 'contributions' && (
+              <Contributions
+                contributions={canvasContent.contributions}
+                onFlyToObject={handleFlyToObject}
+                onContribute={handleContribute}
+              />
+            )}
 
-          {activeTab === 'team' && <div>team</div>}
-        </styled.Content>
-      </Frame>
-    </styled.Container>
+            {activeTab === 'mission' && <MissionInfo config={canvasContent.config} />}
+          </styled.Content>
+        </Frame>
+      </styled.Container>
+    </Panel>
   );
 };
 
