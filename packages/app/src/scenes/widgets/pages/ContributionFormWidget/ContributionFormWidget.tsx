@@ -31,7 +31,6 @@ const ContributionFormWidget: FC = () => {
 
   useEffect(() => {
     if (world3dStore?.canvasObjectId) {
-      contributionFormsStore.loadConfig(world3dStore.canvasObjectId);
       Event3dEmitter.emit('FlyToObject', world3dStore.canvasObjectId);
     }
 
@@ -49,7 +48,7 @@ const ContributionFormWidget: FC = () => {
     }
   }, []);
 
-  if (!contributionFormsStore.config) {
+  if (!world3dStore?.canvasConfig) {
     return <></>;
   }
 
@@ -89,7 +88,7 @@ const ContributionFormWidget: FC = () => {
 
             {activeStep === 'answers' && (
               <AnswersStep
-                config={contributionFormsStore.config}
+                config={world3dStore.canvasConfig}
                 answersData={contributionFormsStore.answersData}
                 onUpdate={contributionFormsStore.setAnswersData}
                 setActiveStep={handleSetActiveStep}
@@ -99,11 +98,18 @@ const ContributionFormWidget: FC = () => {
 
             {activeStep === 'image' && (
               <ImageStep
-                config={contributionFormsStore.config}
+                config={world3dStore.canvasConfig}
                 imageData={contributionFormsStore.imageData}
                 isGenerating={contributionFormsStore.isGenerating}
                 generatedImages={contributionFormsStore.generatedImages}
-                onGenerateImages={contributionFormsStore.generateAIImages}
+                onGenerateImages={(prompt) => {
+                  if (world3dStore?.canvasConfig?.leonardoModelId) {
+                    contributionFormsStore.generateAIImages(
+                      prompt,
+                      world3dStore.canvasConfig.leonardoModelId
+                    );
+                  }
+                }}
                 onClearGeneratedImages={contributionFormsStore.clearGeneratedImages}
                 onUpdate={contributionFormsStore.setImageData}
                 setActiveStep={handleSetActiveStep}
@@ -113,7 +119,7 @@ const ContributionFormWidget: FC = () => {
 
             {activeStep === 'submit' && (
               <SubmitStep
-                config={contributionFormsStore.config}
+                config={world3dStore.canvasConfig}
                 imageData={contributionFormsStore.imageData}
                 answersData={contributionFormsStore.answersData}
                 isSubmitting={contributionFormsStore.isSubmitting}

@@ -25,7 +25,6 @@ const CanvasChildViewer: FC<PropsInterface> = ({onClose}) => {
 
   useEffect(() => {
     canvasChildContent.initSocial(userId);
-    canvasChildContent.loadConfig(world3dStore?.canvasObjectId || '');
 
     return () => {
       canvasChildContent.resetModel();
@@ -38,7 +37,7 @@ const CanvasChildViewer: FC<PropsInterface> = ({onClose}) => {
     }
   };
 
-  if (canvasChildContent.isLoading || !canvasChildContent.content || !canvasChildContent.config) {
+  if (canvasChildContent.isLoading || !canvasChildContent.content || !world3dStore?.canvasConfig) {
     return <></>;
   }
 
@@ -55,7 +54,7 @@ const CanvasChildViewer: FC<PropsInterface> = ({onClose}) => {
         <CanvasChild
           hasVote={canvasChildContent.hasVote}
           voteCount={canvasChildContent.voteCount}
-          config={canvasChildContent.config}
+          config={world3dStore.canvasConfig}
           content={canvasChildContent.content}
           currentUserId={userId}
           currentUserName={sessionStore.userName}

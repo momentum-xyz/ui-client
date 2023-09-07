@@ -33,7 +33,6 @@ const CanvasViewer: FC<PropsInterface> = ({onClose}) => {
 
   useEffect(() => {
     if (world3dStore?.canvasObjectId) {
-      canvasContent.loadConfig(world3dStore?.canvasObjectId || '');
       Event3dEmitter.emit('FlyToObject', world3dStore.canvasObjectId);
     }
     return () => {
@@ -53,7 +52,7 @@ const CanvasViewer: FC<PropsInterface> = ({onClose}) => {
     widgetManagerStore.open(WidgetEnum.CONTRIBUTION_FORM, PositionEnum.RIGHT);
   }, [widgetManagerStore]);
 
-  if (canvasContent.isLoading || !canvasContent.config) {
+  if (canvasContent.isLoading || !world3dStore?.canvasConfig) {
     return <></>;
   }
 
@@ -95,7 +94,7 @@ const CanvasViewer: FC<PropsInterface> = ({onClose}) => {
               />
             )}
 
-            {activeTab === 'mission' && <MissionInfo config={canvasContent.config} />}
+            {activeTab === 'mission' && <MissionInfo config={world3dStore.canvasConfig} />}
           </styled.Content>
         </Frame>
       </styled.Container>

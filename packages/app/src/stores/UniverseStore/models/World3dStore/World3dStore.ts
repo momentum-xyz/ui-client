@@ -1,11 +1,14 @@
-import {Instance, flow, types} from 'mobx-state-tree';
+import {Instance, flow, types, cast} from 'mobx-state-tree';
 import {MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
+import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {Event3dEmitter, MediaInterface, ObjectTypeIdEnum, RequestModel} from '@momentum-xyz/core';
 
 import {getRootStore} from 'core/utils';
 import {CreatorTabsEnum, WidgetEnum} from 'core/enums';
 import {PosBusService} from 'shared/services';
-import {FetchWorldTreeResponse, api} from 'api';
+import {FetchWorldTreeResponse, api, GetSpaceAttributeResponse} from 'api';
+import {CanvasConfigInterface} from 'api/interfaces';
+import {PluginIdEnum} from 'api/enums';
 
 const World3dStore = types
   .model('World3dStore', {
@@ -20,7 +23,9 @@ const World3dStore = types
     fetchWorldTreeRequest: types.optional(RequestModel, {}),
 
     canvasObjectId: types.maybeNull(types.string),
+    canvasConfig: types.maybeNull(types.frozen<CanvasConfigInterface>()),
     fetchCanvasRequest: types.optional(RequestModel, {}),
+    fetchCanvasConfigRequest: types.optional(RequestModel, {}),
 
     isScreenRecording: false,
     screenshotOrVideo: types.maybeNull(types.frozen<MediaInterface>())
@@ -212,8 +217,24 @@ const World3dStore = types
         self.canvasObjectId = null;
       }
     }),
+    loadCanvasConfig: flow(function* (objectId: string) {
+      const configAttribute: GetSpaceAttributeResponse | null =
+        yield self.fetchCanvasConfigRequest.send(api.spaceAttributeRepository.getSpaceAttribute, {
+          spaceId: objectId,
+          plugin_id: PluginIdEnum.CANVAS_EDITOR,
+          attribute_name: AttributeNameEnum.CANVAS
+        });
+
+      if (configAttribute) {
+        self.canvasConfig = cast(configAttribute as CanvasConfigInterface);
+      }
+    }),
     async init(): Promise<void> {
       await this.fetchCanvasObject();
+
+      if (self.canvasObjectId) {
+        await this.loadCanvasConfig(self.canvasObjectId);
+      }
     }
   }))
   .actions((self) => ({

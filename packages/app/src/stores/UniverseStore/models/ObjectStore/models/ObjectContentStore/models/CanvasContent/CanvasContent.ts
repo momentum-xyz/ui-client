@@ -1,15 +1,7 @@
 import {cast, flow, types} from 'mobx-state-tree';
-import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
-import {PluginIdEnum} from 'api/enums';
-import {CanvasConfigInterface} from 'api/interfaces';
-import {
-  api,
-  ContributionItemInterface,
-  GetSpaceAttributeResponse,
-  GetUserContributionsResponse
-} from 'api';
+import {api, ContributionItemInterface, GetUserContributionsResponse} from 'api';
 
 const CanvasContent = types
   .compose(
@@ -17,11 +9,7 @@ const CanvasContent = types
     types.model('CanvasContent', {
       pluginId: '',
       objectId: '',
-
-      config: types.maybeNull(types.frozen<CanvasConfigInterface>()),
       contributions: types.optional(types.array(types.frozen<ContributionItemInterface>()), []),
-
-      configRequest: types.optional(RequestModel, {}),
       fetchRequest: types.optional(RequestModel, {})
     })
   )
@@ -39,20 +27,6 @@ const CanvasContent = types
 
       if (response) {
         self.contributions = cast(response.items ? response.items : []);
-      }
-    }),
-    loadConfig: flow(function* (objectId: string) {
-      const configAttribute: GetSpaceAttributeResponse | null = yield self.configRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
-        {
-          spaceId: objectId,
-          plugin_id: PluginIdEnum.CANVAS_EDITOR,
-          attribute_name: AttributeNameEnum.CANVAS
-        }
-      );
-
-      if (configAttribute) {
-        self.config = cast(configAttribute as CanvasConfigInterface);
       }
     }),
     fetchContent(): void {
