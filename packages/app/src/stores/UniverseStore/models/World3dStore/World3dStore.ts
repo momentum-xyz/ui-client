@@ -138,7 +138,7 @@ const World3dStore = types
         if (tabToSelect) {
           creatorStore.setSelectedTab(tabToSelect);
         } else if (creatorStore.selectedTab === null) {
-          creatorStore.setSelectedTab('gizmo');
+          creatorStore.setSelectedTab('inspector');
         }
       });
     },

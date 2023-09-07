@@ -886,6 +886,7 @@ export const enGb = {
       edit: 'Edit',
       deleteObject: 'Delete object',
       duplicateObject: 'Duplicate object',
+      editObjectInfo: 'Edit object info',
       editProfile: 'Edit profile',
       claimRewards: 'Claim Rewards',
       nextStep: 'Next Step',

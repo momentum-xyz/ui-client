@@ -77,12 +77,13 @@ const CreatorStore = types
   }))
   .actions((self) => ({
     setSelectedObjectId(id: string | null) {
+      self.objectName = null;
+      self.objectInfo = null;
+
       self.selectedObjectId = id;
+
       if (id) {
         Promise.all([self.fetchObject(id), self.fetchObjectName(id)]);
-      } else {
-        self.objectName = null;
-        self.objectInfo = null;
       }
     },
     setSelectedTab(tab: CreatorTabsType | null) {
