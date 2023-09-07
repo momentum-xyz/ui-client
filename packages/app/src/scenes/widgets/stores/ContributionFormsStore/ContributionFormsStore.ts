@@ -4,13 +4,12 @@ import {ObjectTypeIdEnum, RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {PluginIdEnum} from 'api/enums';
 import {LeonardoModelIdEnum} from 'core/enums';
-import {CanvasConfigInterface, UserContributionInterface} from 'api/interfaces';
+import {UserContributionInterface} from 'api/interfaces';
 import {MediaUploader} from 'core/models';
 import {
   api,
   FetchAIGeneratedImagesResponse,
   GenerateAIImagesResponse,
-  GetSpaceAttributeResponse,
   SpawnByUserResponse
 } from 'api';
 import {ContributionAnswersFormInterface, ContributionImageFormInterface} from 'core/interfaces';
@@ -21,7 +20,6 @@ const ContributionFormsStore = types.compose(
   ResetModel,
   types
     .model('ContributionFormsStore', {
-      config: types.maybeNull(types.frozen<CanvasConfigInterface>()),
       answersData: types.optional(AnswersData, {}),
       imageData: types.optional(ImageData, {}),
       mediaUploader: types.optional(MediaUploader, {}),
@@ -31,7 +29,6 @@ const ContributionFormsStore = types.compose(
       generatedImages: types.optional(types.array(types.string), []),
 
       submitRequest: types.optional(RequestModel, {}),
-      configRequest: types.optional(RequestModel, {}),
       generateRequest: types.optional(RequestModel, {}),
       fetchGeneratedRequest: types.optional(RequestModel, {})
     })
@@ -39,20 +36,6 @@ const ContributionFormsStore = types.compose(
       watcher: null
     }))
     .actions((self) => ({
-      loadConfig: flow(function* (objectId: string) {
-        const configAttribute: GetSpaceAttributeResponse | null = yield self.configRequest.send(
-          api.spaceAttributeRepository.getSpaceAttribute,
-          {
-            spaceId: objectId,
-            plugin_id: PluginIdEnum.CANVAS_EDITOR,
-            attribute_name: AttributeNameEnum.CANVAS
-          }
-        );
-
-        if (configAttribute) {
-          self.config = cast(configAttribute as CanvasConfigInterface);
-        }
-      }),
       setAnswersData(form: ContributionAnswersFormInterface): void {
         self.answersData = AnswersData.create({...form});
       },
@@ -91,14 +74,14 @@ const ContributionFormsStore = types.compose(
       })
     }))
     .actions((self) => ({
-      generateAIImages: flow(function* (prompt: string) {
+      generateAIImages: flow(function* (prompt: string, leonardoModelId: LeonardoModelIdEnum) {
         self.isGenerating = true;
 
         const response: GenerateAIImagesResponse = yield self.generateRequest.send(
           api.aiImagesRepository.generateImages,
           {
             prompt: prompt,
-            model: self.config?.leonardoModelId || LeonardoModelIdEnum.SELECT
+            model: leonardoModelId
           }
         );
 

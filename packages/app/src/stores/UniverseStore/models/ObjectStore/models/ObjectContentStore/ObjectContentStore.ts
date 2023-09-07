@@ -4,7 +4,7 @@ import {ResetModel} from '@momentum-xyz/core';
 import {AssetTypeEnum} from 'core/enums';
 import {Asset2dResponse, ObjectMetadataInterface, ObjectOptionsInterface} from 'api';
 
-import {NormalContent, CustomizableContent, CanvasChildContent} from './models';
+import {NormalContent, CustomizableContent, CanvasChildContent, CanvasContent} from './models';
 
 const ObjectContentStore = types
   .compose(
@@ -15,7 +15,8 @@ const ObjectContentStore = types
 
       normalContent: types.optional(NormalContent, {}),
       customizableContent: types.optional(CustomizableContent, {}),
-      canvasChildContent: types.optional(CanvasChildContent, {})
+      canvasChildContent: types.optional(CanvasChildContent, {}),
+      canvasContent: types.optional(CanvasContent, {})
     })
   )
   .actions((self) => ({
@@ -30,6 +31,10 @@ const ObjectContentStore = types
     initCanvasChildContent(pluginId: string, spaceId: string, ownerId: string): void {
       self.canvasChildContent = CanvasChildContent.create({});
       self.canvasChildContent.initContent(pluginId, spaceId, ownerId);
+    },
+    initCanvasContent(pluginId: string, spaceId: string): void {
+      self.canvasContent = CanvasContent.create({});
+      self.canvasContent.initContent(pluginId, spaceId);
     }
   }))
   .actions((self) => ({
@@ -58,7 +63,7 @@ const ObjectContentStore = types
           break;
         case AssetTypeEnum.CANVAS_ROOT:
           self.assetType = AssetTypeEnum.CANVAS_ROOT;
-          //self.initCustomizableContent(meta.pluginId, spaceId);
+          self.initCanvasContent(meta.pluginId, spaceId);
           break;
         case AssetTypeEnum.CANVAS_CHILD:
           self.assetType = AssetTypeEnum.CANVAS_CHILD;

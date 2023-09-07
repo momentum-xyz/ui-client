@@ -273,6 +273,7 @@ export const enGb = {
       by: 'By',
       or: 'Or',
       contribute: 'Contribute',
+      contributionOverview: 'Contribution overview',
       version: 'Version {{version}}',
       canvasEditor: 'Canvas editor',
       canvasStep1: 'Read canvas explainer',
@@ -448,6 +449,10 @@ export const enGb = {
       assignFunctionToObjectTitle: 'Assign a function to the object',
       assignFunctionToObjectDescription:
         'By embedding a picture, text, video or sound you change the function of this object; users can see an image wrapped around the object or hear a sound when they fly towards the object. Users will also be able to see the text, image or video displayed when they select the object; regardless of its asset type.',
+      commentsCount_one: `{{count}} Comment`,
+      commentsCount_other: `{{count}} Comments`,
+      contributionCount_one: `{{count}} Contribution`,
+      contributionCount_other: `{{count}} Contributions`,
       readMore: 'Read more',
       readLess: 'Read less'
     },
@@ -776,6 +781,7 @@ export const enGb = {
     },
     placeholders: {
       search: 'Search',
+      sort: 'Sort',
       addComment: 'Add a comment',
       searchForPeople: 'Search for people...',
       searchForSpaces: 'Search for spaces...',
@@ -895,6 +901,7 @@ export const enGb = {
       buyNft: 'Buy Odyssey NFT',
       visitYourOdyssey: 'Visit your Odyssey',
       createOrSignIn: 'Create an account or sign in',
+      searchContributions: 'Search contributions',
       searchOdysseys: 'Search Odysseys',
       searchMembers: 'Search Members',
       searchStakes: 'Search Stakes',

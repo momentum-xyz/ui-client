@@ -5,14 +5,9 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {User} from 'core/models';
 import {PluginIdEnum} from 'api/enums';
-import {CanvasConfigInterface, UserContributionInterface} from 'api/interfaces';
+import {UserContributionInterface} from 'api/interfaces';
 import {ObjectCommentInterface, ObjectCommentWithUserInterface} from 'core/interfaces';
-import {
-  api,
-  GetSpaceUserAttributeCountResponse,
-  GetAllSpaceUserAttributeListResponse,
-  GetSpaceAttributeResponse
-} from 'api';
+import {api, GetSpaceUserAttributeCountResponse, GetAllSpaceUserAttributeListResponse} from 'api';
 
 const COMMENTS_PAGE_SIZE = 100;
 
@@ -26,14 +21,12 @@ const CanvasChildContent = types
 
       author: types.maybe(User),
       content: types.maybe(types.frozen<UserContributionInterface>()),
-      config: types.maybeNull(types.frozen<CanvasConfigInterface>()),
 
       voteCount: 0,
       hasVote: false,
 
       commentList: types.optional(types.array(types.frozen<ObjectCommentWithUserInterface>()), []),
 
-      configRequest: types.optional(RequestModel, {}),
       fetchRequest: types.optional(RequestModel, {}),
       authorRequest: types.optional(RequestModel, {}),
       deleteRequest: types.optional(RequestModel, {}),
@@ -71,20 +64,6 @@ const CanvasChildContent = types
         if (authorResponse) {
           self.author = cast(authorResponse);
         }
-      }
-    }),
-    loadConfig: flow(function* (objectId: string) {
-      const configAttribute: GetSpaceAttributeResponse | null = yield self.configRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
-        {
-          spaceId: objectId,
-          plugin_id: PluginIdEnum.CANVAS_EDITOR,
-          attribute_name: AttributeNameEnum.CANVAS
-        }
-      );
-
-      if (configAttribute) {
-        self.config = cast(configAttribute as CanvasConfigInterface);
       }
     }),
     fetchContent(): void {

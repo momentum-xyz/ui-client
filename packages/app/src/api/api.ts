@@ -23,6 +23,7 @@ import * as streamChatRepository from './repositories/streamChatRepository';
 import * as spaceUserAttributeRepository from './repositories/spaceUserAttributeRepository';
 import * as skyboxRepository from './repositories/skyboxRepository';
 import * as aiImagesRepository from './repositories/aiImagesRepository';
+import * as canvasRepository from './repositories/canvasRepository';
 import * as spaceEmojiRepository from './repositories_OLD/spaceEmojiRepository';
 
 /**
@@ -61,7 +62,8 @@ export const api = {
   objectRepository,
   skyboxRepository,
   aiImagesRepository,
-  assets3dRepository
+  assets3dRepository,
+  canvasRepository
 };
 
 /**
@@ -95,5 +97,6 @@ export * from './repositories/streamChatRepository/streamChatRepository.api.type
 export * from './repositories/spaceUserAttributeRepository/spaceUserAttributeRepository.api.types';
 export * from './repositories/skyboxRepository/skyboxRepository.api.types';
 export * from './repositories/aiImagesRepository/aiImagesRepository.api.types';
+export * from './repositories/canvasRepository/canvasRepository.api.types';
 
 export * from './repositories_OLD/spaceEmojiRepository/spaceEmojiRepository.api.types';

@@ -38,6 +38,8 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
   const navigate = useNavigate();
 
   const isGuest = sessionStore.isGuest || sessionStore.isSignUpInProgress;
+  const isCanvasHidden =
+    !isWorld || !world3dStore?.canvasObjectId || !isFeatureEnabled(FeatureFlagEnum.CANVAS);
 
   const handleBackToExplore = () => {
     navigate(ROUTES.explore);
@@ -45,6 +47,10 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
 
   const handleToggle = (type: WidgetEnum, position: PositionEnum) => {
     widgetManagerStore.toggle(type, position);
+  };
+
+  const handleToggleContribution = (type: WidgetEnum, position: PositionEnum) => {
+    widgetManagerStore.toggle(type, position, {id: world3dStore?.canvasObjectId || ''});
   };
 
   const ODYSSEY_ITEMS: MenuItemExtendedInterface[] = sessionStore.worldsOwnedList.map((world) => ({
@@ -146,12 +152,21 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       onClick: handleToggle
     },
     {
+      key: WidgetEnum.OBJECT,
+      position: PositionEnum.RIGHT,
+      viewPosition: PositionEnum.RIGHT,
+      iconName: 'idea',
+      isHidden: isCanvasHidden,
+      tooltip: t('labels.contributionOverview'),
+      isDisabled: universeStore.isScreenRecording,
+      onClick: handleToggleContribution
+    },
+    {
       key: WidgetEnum.CONTRIBUTION_FORM,
       position: PositionEnum.RIGHT,
       viewPosition: PositionEnum.RIGHT,
       iconName: 'person_idea',
-      isHidden:
-        !isWorld || !world3dStore?.canvasObjectId || !isFeatureEnabled(FeatureFlagEnum.CANVAS),
+      isHidden: isCanvasHidden,
       tooltip: t('labels.contribute'),
       isDisabled: universeStore.isScreenRecording,
       onClick: handleToggle
@@ -182,7 +197,8 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       position: PositionEnum.RIGHT,
       iconName: 'voice_chat',
       iconIndicator:
-        agoraStore.hasJoined && !activeWidgetList.includes(WidgetEnum.VOICE_CHAT)
+        agoraStore.hasJoined &&
+        !activeWidgetList.map((w) => w.widget).includes(WidgetEnum.VOICE_CHAT)
           ? 'voice'
           : undefined,
       tooltip: t('labels.voiceChat'),
@@ -213,10 +229,19 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
 
   const items = isWelcomePage ? [] : MENU_ITEMS.filter((menuItem) => !menuItem.isHidden);
 
+  const filteredActiveWidgets = activeWidgetList.filter(
+    (w) =>
+      w.widget !== WidgetEnum.OBJECT ||
+      (w.widget === WidgetEnum.OBJECT && w.id === world3dStore?.canvasObjectId)
+  );
+
   return (
     <styled.Container data-testid="WidgetMenuPage-test">
       <Menu
-        activeKeys={[...activeWidgetList, ...(subMenuInfo?.activeKeys || [])]}
+        activeKeys={[
+          ...filteredActiveWidgets.map((w) => w.widget),
+          ...(subMenuInfo?.activeKeys || [])
+        ]}
         items={items}
         subMenuItems={subMenuInfo?.items || []}
         subMenuSource={subMenuInfo?.sourceItemKey}

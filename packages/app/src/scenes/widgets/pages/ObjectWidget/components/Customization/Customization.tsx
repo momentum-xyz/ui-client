@@ -1,6 +1,6 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, PositionEnum} from '@momentum-xyz/ui-kit';
+import {Button, Panel, PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
 import {WidgetEnum} from 'core/enums';
@@ -9,7 +9,11 @@ import {CustomizableObjectFormInterface} from 'core/interfaces';
 import {ContentViewer, NewOrEditForm} from './components';
 import * as styled from './Customization.styled';
 
-const Customization: FC = () => {
+interface PropsInterface {
+  onClose: () => void;
+}
+
+const Customization: FC<PropsInterface> = ({onClose}) => {
   const {universeStore, sessionStore, widgetManagerStore} = useStore();
   const {objectStore} = universeStore;
   const {objectContentStore} = objectStore;
@@ -63,46 +67,55 @@ const Customization: FC = () => {
   }
 
   return (
-    <styled.Container data-testid="CustomViewer-test">
-      {customizableContent.isNewOrEditForm && (
-        <NewOrEditForm
-          content={customizableContent.content}
-          isPending={customizableContent.isPending}
-          isGenerating={customizableContent.isGenerating}
-          generatedImages={customizableContent.generatedImages}
-          onGenerateImages={customizableContent.generateAIImages}
-          onClearGeneratedImages={customizableContent.clearGeneratedImages}
-          onCreateOrUpdate={handleCustomize}
-          onBack={handleBack}
-        />
-      )}
+    <Panel
+      isFullHeight
+      size="normal"
+      variant="primary"
+      icon={customizableContent.widgetIcon}
+      title={customizableContent.widgetTitle}
+      onClose={onClose}
+    >
+      <styled.Container data-testid="CustomViewer-test">
+        {customizableContent.isNewOrEditForm && (
+          <NewOrEditForm
+            content={customizableContent.content}
+            isPending={customizableContent.isPending}
+            isGenerating={customizableContent.isGenerating}
+            generatedImages={customizableContent.generatedImages}
+            onGenerateImages={customizableContent.generateAIImages}
+            onClearGeneratedImages={customizableContent.clearGeneratedImages}
+            onCreateOrUpdate={handleCustomize}
+            onBack={handleBack}
+          />
+        )}
 
-      {customizableContent.isViewForm && !!customizableContent.content && (
-        <ContentViewer
-          hasVote={customizableContent.hasVote}
-          voteCount={customizableContent.voteCount}
-          content={customizableContent.content}
-          currentUserId={userId}
-          currentUserName={sessionStore.userName}
-          currentUserImageUrl={sessionStore.userImageUrl}
-          currentUserIsGuest={sessionStore.isGuest}
-          authorName={customizableContent.author?.name}
-          authorAvatarHash={customizableContent.author?.profile.avatarHash}
-          commentList={customizableContent.commentList}
-          onDelete={canUserEdit ? handleDelete : undefined}
-          onEdit={canUserEdit ? handleEdit : undefined}
-          onVote={() => customizableContent.toggleVote(userId)}
-          onAddComment={async (message) => {
-            await customizableContent.addComment(userId, message);
-            await customizableContent.fetchAllComments(0);
-          }}
-          onDeleteComment={async (commentId) => {
-            await customizableContent.deleteComment(userId, commentId);
-            await customizableContent.fetchAllComments(0);
-          }}
-        />
-      )}
-    </styled.Container>
+        {customizableContent.isViewForm && !!customizableContent.content && (
+          <ContentViewer
+            hasVote={customizableContent.hasVote}
+            voteCount={customizableContent.voteCount}
+            content={customizableContent.content}
+            currentUserId={userId}
+            currentUserName={sessionStore.userName}
+            currentUserImageUrl={sessionStore.userImageUrl}
+            currentUserIsGuest={sessionStore.isGuest}
+            authorName={customizableContent.author?.name}
+            authorAvatarHash={customizableContent.author?.profile.avatarHash}
+            commentList={customizableContent.commentList}
+            onDelete={canUserEdit ? handleDelete : undefined}
+            onEdit={canUserEdit ? handleEdit : undefined}
+            onVote={() => customizableContent.toggleVote(userId)}
+            onAddComment={async (message) => {
+              await customizableContent.addComment(userId, message);
+              await customizableContent.fetchAllComments(0);
+            }}
+            onDeleteComment={async (commentId) => {
+              await customizableContent.deleteComment(userId, commentId);
+              await customizableContent.fetchAllComments(0);
+            }}
+          />
+        )}
+      </styled.Container>
+    </Panel>
   );
 };
 

@@ -24,8 +24,6 @@ const ObjectViewer: FC<PropsInterface> = ({objectId}) => {
 
   return (
     <Frame>
-      <styled.Title>{objectStore.objectName || ''}</styled.Title>
-
       {!!renderHash && (
         <styled.Item>
           <ImageViewer imageSrc={getImageAbsoluteUrl(renderHash, ImageSizeEnum.S5)} />
