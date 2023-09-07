@@ -17,3 +17,11 @@ export const StepContent = styled.div`
     padding-top: 20px;
   }
 `;
+
+export const Limit = styled.div`
+  display: flex;
+  width: 100%;
+  height: 500px;
+  align-items: center;
+  justify-content: center;
+`;

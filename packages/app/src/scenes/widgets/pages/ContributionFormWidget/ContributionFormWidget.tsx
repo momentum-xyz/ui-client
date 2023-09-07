@@ -63,82 +63,91 @@ const ContributionFormWidget: FC = () => {
       onClose={() => widgetManagerStore.close(WidgetEnum.CONTRIBUTION_FORM)}
     >
       <styled.Container ref={ref} data-testid="ContributionFormWidget-test">
-        <styled.Steps>
-          <Steps
-            stepList={STEP_LIST.map((step) => ({
-              variant: step.id === activeStep ? 'active' : 'prev',
-              ...step
-            }))}
-          />
-        </styled.Steps>
-
-        <styled.StepContent>
-          <Frame>
-            {activeStep === 'start' && (
-              <StartStep
-                isGuest={isGuest}
-                setActiveStep={handleSetActiveStep}
-                onRenderActions={setStepActions}
-                onSignIn={() => {
-                  widgetManagerStore.closeAll();
-                  widgetManagerStore.open(WidgetEnum.LOGIN, PositionEnum.LEFT);
-                }}
+        {world3dStore?.isContributionLimitReached ? (
+          <styled.Limit>The contribution limit has been reached</styled.Limit>
+        ) : (
+          <>
+            <styled.Steps>
+              <Steps
+                stepList={STEP_LIST.map((step) => ({
+                  variant: step.id === activeStep ? 'active' : 'prev',
+                  ...step
+                }))}
               />
-            )}
+            </styled.Steps>
 
-            {activeStep === 'answers' && (
-              <AnswersStep
-                config={world3dStore.canvasConfig}
-                answersData={contributionFormsStore.answersData}
-                onUpdate={contributionFormsStore.setAnswersData}
-                setActiveStep={handleSetActiveStep}
-                onRenderActions={setStepActions}
-              />
-            )}
+            <styled.StepContent>
+              <Frame>
+                {activeStep === 'start' && (
+                  <StartStep
+                    isGuest={isGuest}
+                    setActiveStep={handleSetActiveStep}
+                    onRenderActions={setStepActions}
+                    onSignIn={() => {
+                      widgetManagerStore.closeAll();
+                      widgetManagerStore.open(WidgetEnum.LOGIN, PositionEnum.LEFT);
+                    }}
+                  />
+                )}
 
-            {activeStep === 'image' && (
-              <ImageStep
-                config={world3dStore.canvasConfig}
-                imageData={contributionFormsStore.imageData}
-                isGenerating={contributionFormsStore.isGenerating}
-                generatedImages={contributionFormsStore.generatedImages}
-                onGenerateImages={(prompt) => {
-                  if (world3dStore?.canvasConfig?.leonardoModelId) {
-                    contributionFormsStore.generateAIImages(
-                      prompt,
-                      world3dStore.canvasConfig.leonardoModelId
-                    );
-                  }
-                }}
-                onClearGeneratedImages={contributionFormsStore.clearGeneratedImages}
-                onUpdate={contributionFormsStore.setImageData}
-                setActiveStep={handleSetActiveStep}
-                onRenderActions={setStepActions}
-              />
-            )}
+                {activeStep === 'answers' && (
+                  <AnswersStep
+                    config={world3dStore.canvasConfig}
+                    answersData={contributionFormsStore.answersData}
+                    onUpdate={contributionFormsStore.setAnswersData}
+                    setActiveStep={handleSetActiveStep}
+                    onRenderActions={setStepActions}
+                  />
+                )}
 
-            {activeStep === 'submit' && (
-              <SubmitStep
-                config={world3dStore.canvasConfig}
-                imageData={contributionFormsStore.imageData}
-                answersData={contributionFormsStore.answersData}
-                isSubmitting={contributionFormsStore.isSubmitting}
-                setActiveStep={handleSetActiveStep}
-                onRenderActions={setStepActions}
-                onSubmit={async () => {
-                  const canvasObjectId = world3dStore?.canvasObjectId || '';
-                  const objectId = await contributionFormsStore.submitContribution(canvasObjectId);
-                  if (objectId) {
-                    widgetManagerStore.close(WidgetEnum.CONTRIBUTION_FORM);
-                    setTimeout(() => {
-                      Event3dEmitter.emit('FlyToObject', objectId);
-                    }, 200);
-                  }
-                }}
-              />
-            )}
-          </Frame>
-        </styled.StepContent>
+                {activeStep === 'image' && (
+                  <ImageStep
+                    config={world3dStore.canvasConfig}
+                    imageData={contributionFormsStore.imageData}
+                    isGenerating={contributionFormsStore.isGenerating}
+                    generatedImages={contributionFormsStore.generatedImages}
+                    onGenerateImages={(prompt) => {
+                      if (world3dStore?.canvasConfig?.leonardoModelId) {
+                        contributionFormsStore.generateAIImages(
+                          prompt,
+                          world3dStore.canvasConfig.leonardoModelId
+                        );
+                      }
+                    }}
+                    onClearGeneratedImages={contributionFormsStore.clearGeneratedImages}
+                    onUpdate={contributionFormsStore.setImageData}
+                    setActiveStep={handleSetActiveStep}
+                    onRenderActions={setStepActions}
+                  />
+                )}
+
+                {activeStep === 'submit' && (
+                  <SubmitStep
+                    config={world3dStore.canvasConfig}
+                    imageData={contributionFormsStore.imageData}
+                    answersData={contributionFormsStore.answersData}
+                    isSubmitting={contributionFormsStore.isSubmitting}
+                    setActiveStep={handleSetActiveStep}
+                    onRenderActions={setStepActions}
+                    onSubmit={async () => {
+                      const canvasObjectId = world3dStore?.canvasObjectId || '';
+                      const objectId = await contributionFormsStore.submitContribution(
+                        canvasObjectId
+                      );
+                      if (objectId) {
+                        widgetManagerStore.close(WidgetEnum.CONTRIBUTION_FORM);
+                        world3dStore?.loadContributionCount();
+                        setTimeout(() => {
+                          Event3dEmitter.emit('FlyToObject', objectId);
+                        }, 200);
+                      }
+                    }}
+                  />
+                )}
+              </Frame>
+            </styled.StepContent>
+          </>
+        )}
       </styled.Container>
     </Panel>
   );
