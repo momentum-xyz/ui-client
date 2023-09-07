@@ -1,5 +1,7 @@
 import {FC, useCallback, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import {Panel} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {useStore} from 'shared/hooks';
 import {AssetTypeEnum, WidgetEnum} from 'core/enums';
@@ -13,6 +15,8 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
   const {objectStore} = universeStore;
   const {objectContentStore, asset2dId} = objectStore;
   const {assetType} = objectContentStore;
+
+  const {t} = useI18n();
 
   const objectId = data?.id.toString() || '';
 
@@ -47,7 +51,18 @@ const ObjectWidget: FC<WidgetInfoModelInterface> = ({data}) => {
 
       {![AssetTypeEnum.CLAIMABLE, AssetTypeEnum.CANVAS_CHILD, AssetTypeEnum.CANVAS_ROOT].includes(
         assetType as AssetTypeEnum
-      ) && <ObjectViewer objectId={objectId} onClose={onClose} />}
+      ) && (
+        <Panel
+          isFullHeight
+          size="normal"
+          icon="document"
+          variant="primary"
+          title={t('titles.objectInfo')}
+          onClose={onClose}
+        >
+          <ObjectViewer objectId={objectId} />
+        </Panel>
+      )}
     </styled.Container>
   );
 };

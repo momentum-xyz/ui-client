@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Frame, ImageSizeEnum, Panel} from '@momentum-xyz/ui-kit';
+import {Frame, ImageSizeEnum} from '@momentum-xyz/ui-kit';
 
 import {getImageAbsoluteUrl} from 'core/utils';
 import {ImageObjectInterface, TextObjectInterface} from 'core/interfaces';
@@ -11,10 +11,9 @@ import * as styled from './ObjectViewer.styled';
 
 interface PropsInterface {
   objectId: string;
-  onClose: () => void;
 }
 
-const ObjectViewer: FC<PropsInterface> = ({objectId, onClose}) => {
+const ObjectViewer: FC<PropsInterface> = ({objectId}) => {
   const {universeStore} = useStore();
   const {objectStore, isCurrentUserWorldAdmin} = universeStore;
   const {pluginLoader, objectContentStore} = objectStore;
@@ -24,40 +23,31 @@ const ObjectViewer: FC<PropsInterface> = ({objectId, onClose}) => {
   const content = text?.value as TextObjectInterface;
 
   return (
-    <Panel
-      isFullHeight
-      size="normal"
-      icon="document"
-      variant="primary"
-      title={objectStore.objectName || ''}
-      onClose={onClose}
-    >
-      <Frame>
-        {!!renderHash && (
-          <styled.Item>
-            <ImageViewer imageSrc={getImageAbsoluteUrl(renderHash, ImageSizeEnum.S5)} />
-          </styled.Item>
-        )}
+    <Frame>
+      {!!renderHash && (
+        <styled.Item>
+          <ImageViewer imageSrc={getImageAbsoluteUrl(renderHash, ImageSizeEnum.S5)} />
+        </styled.Item>
+      )}
 
-        {!!content && (
-          <styled.Item>
-            <TextViewer title={content?.title} text={content?.content} />
-          </styled.Item>
-        )}
+      {!!content && (
+        <styled.Item>
+          <TextViewer title={content?.title} text={content?.content} />
+        </styled.Item>
+      )}
 
-        {pluginLoader?.plugin && (
-          <styled.Item>
-            <PluginViewer
-              plugin={pluginLoader.plugin}
-              pluginLoader={pluginLoader}
-              objectId={objectId}
-              isAdmin={isCurrentUserWorldAdmin}
-              hideWhenUnset
-            />
-          </styled.Item>
-        )}
-      </Frame>
-    </Panel>
+      {pluginLoader?.plugin && (
+        <styled.Item>
+          <PluginViewer
+            plugin={pluginLoader.plugin}
+            pluginLoader={pluginLoader}
+            objectId={objectId}
+            isAdmin={isCurrentUserWorldAdmin}
+            hideWhenUnset
+          />
+        </styled.Item>
+      )}
+    </Frame>
   );
 };
 
