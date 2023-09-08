@@ -9,10 +9,13 @@ import {CanvasStepType} from 'core/types';
 import {CanvasQuestionsFormInterface} from 'core/interfaces';
 import {QuestionsDataModelInterface} from 'scenes/widgets/stores/CreatorStore/models';
 
+import {CanvasStepInterface} from '../../CanvasEditor';
+
 import * as styled from './QuestionsStep.styled';
 
 interface PropsInterface {
   isNewCanvas: boolean;
+  nextStep: CanvasStepInterface<CanvasStepType>;
   questionsData: QuestionsDataModelInterface;
   onUpdate: (form: CanvasQuestionsFormInterface) => void;
   setActiveStep: (step: CanvasStepType) => void;
@@ -21,6 +24,7 @@ interface PropsInterface {
 
 const QuestionsStep: FC<PropsInterface> = ({
   isNewCanvas,
+  nextStep,
   questionsData,
   onUpdate,
   onRenderActions,
@@ -56,19 +60,28 @@ const QuestionsStep: FC<PropsInterface> = ({
           onClick: () => setActiveStep('mission')
         }}
         nextProps={{
-          icon: 'ai',
+          icon: nextStep.stepIcon,
           disabled: !isValid,
-          label: t('actions.aiImageScript'),
+          label: nextStep.stepLabel || '',
           onClick: () => {
             if (isNewCanvas) {
               handleSubmit(formSubmitHandler)();
             }
-            setActiveStep('script');
+            setActiveStep(nextStep.id);
           }
         }}
       />
     );
-  }, [isNewCanvas, formSubmitHandler, handleSubmit, isValid, onRenderActions, setActiveStep, t]);
+  }, [
+    isNewCanvas,
+    formSubmitHandler,
+    handleSubmit,
+    isValid,
+    onRenderActions,
+    setActiveStep,
+    t,
+    nextStep
+  ]);
 
   return (
     <styled.Container data-testid="QuestionsStep-test">

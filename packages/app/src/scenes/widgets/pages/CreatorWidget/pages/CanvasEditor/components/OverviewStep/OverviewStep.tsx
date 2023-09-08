@@ -10,10 +10,13 @@ import leonardoImage from 'static/images/leonardo.jpeg';
 import aiProfileImage from 'static/images/ai_profile.jpeg';
 import cubeImage from 'static/images/cube.svg';
 
+import {CanvasStepInterface} from '../../CanvasEditor';
+
 import * as styled from './OverviewStep.styled';
 
 interface PropsInterface {
   isNewCanvas: boolean;
+  prevStep: CanvasStepInterface<CanvasStepType>;
   version: string;
   created: string | null;
   missionTitle: string;
@@ -38,6 +41,7 @@ export const CREDITS_AMOUNT_OPTIONS: SelectOptionInterface<number>[] = [
 
 const OverviewStep: FC<PropsInterface> = ({
   isNewCanvas,
+  prevStep,
   version,
   created,
   missionTitle,
@@ -69,7 +73,7 @@ const OverviewStep: FC<PropsInterface> = ({
       <CanvasButtonGroup
         backProps={{
           label: t('actions.back'),
-          onClick: () => setActiveStep('teamworkScript')
+          onClick: () => setActiveStep(prevStep.id)
         }}
         {...(isPreviewButtonAvailable && {
           nextProps: {
@@ -91,7 +95,7 @@ const OverviewStep: FC<PropsInterface> = ({
         })}
       />
     );
-  }, [contributionAmount, isPreviewButtonAvailable, isSpawnButtonAvailable]);
+  }, [contributionAmount, isPreviewButtonAvailable, isSpawnButtonAvailable, prevStep]);
 
   return (
     <styled.Container data-testid="OverviewStep-test">

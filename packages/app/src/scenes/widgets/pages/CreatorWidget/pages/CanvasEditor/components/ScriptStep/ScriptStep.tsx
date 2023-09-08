@@ -12,11 +12,15 @@ import {ScriptDataModelInterface} from 'scenes/widgets/stores/CreatorStore/model
 import scriptImage from 'static/images/script.png';
 import leonardoImage from 'static/images/leonardo.jpeg';
 
+import {CanvasStepInterface} from '../../CanvasEditor';
+
 import * as styled from './ScriptStep.styled';
 
 interface PropsInterface {
   isNewCanvas: boolean;
   leonardoCosts: number;
+  prevStep: CanvasStepInterface<CanvasStepType>;
+  nextStep: CanvasStepInterface<CanvasStepType>;
   scriptData: ScriptDataModelInterface;
   onUpdate: (form: CanvasScriptFormInterface) => void;
   setActiveStep: (step: CanvasStepType) => void;
@@ -25,6 +29,8 @@ interface PropsInterface {
 
 const ScriptStep: FC<PropsInterface> = ({
   isNewCanvas,
+  prevStep,
+  nextStep,
   leonardoCosts,
   scriptData,
   onUpdate,
@@ -63,22 +69,31 @@ const ScriptStep: FC<PropsInterface> = ({
       <CanvasButtonGroup
         backProps={{
           label: t('actions.back'),
-          onClick: () => setActiveStep('questions')
+          onClick: () => setActiveStep(prevStep.id)
         }}
         nextProps={{
-          icon: 'script',
+          icon: nextStep.stepIcon,
           disabled: !isValid,
-          label: t('actions.scriptTeamwork'),
+          label: nextStep.stepLabel || '',
           onClick: () => {
             if (isNewCanvas) {
               handleSubmit(formSubmitHandler)();
             }
-            setActiveStep('teamworkScript');
+            setActiveStep(nextStep.id);
           }
         }}
       />
     );
-  }, [formSubmitHandler, handleSubmit, isValid, onRenderActions, setActiveStep, t]);
+  }, [
+    formSubmitHandler,
+    handleSubmit,
+    isValid,
+    onRenderActions,
+    setActiveStep,
+    t,
+    prevStep,
+    nextStep
+  ]);
 
   return (
     <styled.Container data-testid="QuestionsStep-test">

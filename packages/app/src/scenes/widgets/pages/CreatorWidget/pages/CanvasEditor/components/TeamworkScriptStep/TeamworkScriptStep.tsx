@@ -10,10 +10,14 @@ import {CanvasTeamworkScriptFormInterface} from 'core/interfaces';
 import {TeamworkScriptDataModelInterface} from 'scenes/widgets/stores/CreatorStore/models';
 import aiProfileImage from 'static/images/ai_profile.jpeg';
 
+import {CanvasStepInterface} from '../../CanvasEditor';
+
 import * as styled from './TeamworkScriptStep.styled';
 
 interface PropsInterface {
   isNewCanvas: boolean;
+  prevStep: CanvasStepInterface<CanvasStepType>;
+  nextStep: CanvasStepInterface<CanvasStepType>;
   chatGPTCosts: number;
   teamworkScriptData: TeamworkScriptDataModelInterface;
   onUpdate: (form: CanvasTeamworkScriptFormInterface) => void;
@@ -23,6 +27,8 @@ interface PropsInterface {
 
 const TeamworkScriptStep: FC<PropsInterface> = ({
   isNewCanvas,
+  prevStep,
+  nextStep,
   chatGPTCosts,
   teamworkScriptData,
   onUpdate,
@@ -61,22 +67,32 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
       <CanvasButtonGroup
         backProps={{
           label: t('actions.back'),
-          onClick: () => setActiveStep('script')
+          onClick: () => setActiveStep(prevStep.id)
         }}
         nextProps={{
-          icon: 'collect',
+          icon: nextStep.stepIcon,
           disabled: !isValid,
-          label: t('labels.overview'),
+          label: nextStep.label || '',
           onClick: () => {
             if (isNewCanvas) {
               handleSubmit(formSubmitHandler)();
             }
-            setActiveStep('overview');
+            setActiveStep(nextStep.id);
           }
         }}
       />
     );
-  }, [isNewCanvas, formSubmitHandler, handleSubmit, isValid, onRenderActions, setActiveStep, t]);
+  }, [
+    isNewCanvas,
+    formSubmitHandler,
+    handleSubmit,
+    isValid,
+    onRenderActions,
+    setActiveStep,
+    t,
+    prevStep,
+    nextStep
+  ]);
 
   return (
     <styled.Container data-testid="TeamworkScriptStep-test">

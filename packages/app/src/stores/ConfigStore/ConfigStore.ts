@@ -36,6 +36,8 @@ const ConfigStore = types
             appVariables[key as keyof AppConfigInterface] = value as string;
           });
 
+          appVariables.AI_PROVIDERS.leonardo = false;
+
           self.isConfigReady = true;
           self.isAgoraActive = !!appVariables.AGORA_APP_ID;
         }
