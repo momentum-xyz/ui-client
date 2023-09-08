@@ -1,4 +1,4 @@
-import {AbstractMesh, Scene, TransformNode, Vector3} from '@babylonjs/core';
+import {AbstractMesh, Animatable, Animation, Behavior, CircleEase, EasingFunction, EventState, Node, Observer, Scene, TransformNode, Vector3} from '@babylonjs/core';
 import {PositionInterface} from '@momentum-xyz/core';
 
 import {PlayerHelper} from './PlayerHelper';
@@ -157,3 +157,79 @@ export function vec3ToPos(vec: Vector3) {
 export const posToVec3 = (pos: {x: number; y: number; z: number}) => {
   return new Vector3(pos.x, pos.y, pos.z);
 };
+
+
+export class SmoothTransformBehavior implements Behavior<TransformNode> {
+  readonly name = "SmoothTransform"
+  private fps = 24 // Animation target frames per second.
+  private observer?: Observer<Scene>;
+  private target?: TransformNode;
+  private scene?: Scene;
+  private anim?: Animatable;
+  private easingFunction: CircleEase | null = null;
+
+  init(): void {
+    this.easingFunction = new CircleEase();
+    this.easingFunction.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT);
+  }
+
+  attach(node: TransformNode): void {
+    this.target = node;
+		this.scene = node.getScene();
+  }
+
+  detach(): void {
+    if(this.observer) {
+      this.observer.unregisterOnNextCall = true;
+      this.observer = undefined;
+    }
+  }
+
+  setTarget(pos: Vector3, rot: Vector3, scl: Vector3) {
+    const duration = 3;
+    const start = 0;
+    const end = duration * this.fps;
+    if(this.target && this.scene) {
+      const posDistance = Vector3.Distance(this.target.position, pos)
+      const rotDistance = Vector3.Distance(this.target.rotation, rot)
+      const sclDistance = Vector3.Distance(this.target.scaling, scl)
+      // TODO: base animation algo on distance
+      const aPos = new Animation("smoothPosition", "position", this.fps, Animation.ANIMATIONTYPE_VECTOR3)
+      aPos.setKeys([
+        {frame: start, value: this.target.position.clone()},
+        {frame: end, value: pos},
+      ])
+      const aRot = new Animation("smoothRotation", "rotation", this.fps, Animation.ANIMATIONTYPE_VECTOR3)
+      aRot.setKeys([
+        {frame: start, value: this.target.rotation.clone()},
+        {frame: end, value: rot},
+      ])
+      // TODO: Use slerp on quaternion values for nicer rotation animation.
+      //aRot.vector3InterpolateFunction = (startValue, endValue, gradient) => {
+      //  return Vector3.SlerpToRef(startValue, endValue, gradient);
+      //};
+      const aScl = new Animation("smoothScale", "scaling", this.fps, Animation.ANIMATIONTYPE_VECTOR3)
+      aScl.setKeys([
+        {frame: start, value: this.target.scaling.clone()},
+        {frame: end, value: scl},
+      ])
+      if(this.anim) {
+        this.anim.stop();
+      }
+      [aPos,aRot,aScl].forEach(a => a.setEasingFunction(this.easingFunction))
+      this.anim = this.scene.beginDirectAnimation(this.target,[aPos,aRot,aScl], start, end)
+    }
+  }
+}
+
+
+  // a getter to shutup typescript
+  export const getOrSetBehaviour = (node: Node): SmoothTransformBehavior => {
+      const existing = node.getBehaviorByName("SmoothMovementBehaviour")
+      if(existing instanceof SmoothTransformBehavior) {
+        return existing;
+      }
+      const behaviour = new SmoothTransformBehavior()
+      node.addBehavior(behaviour);
+      return behaviour;
+  }
