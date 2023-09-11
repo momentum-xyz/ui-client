@@ -106,6 +106,31 @@ export const AmountGrid = styled.div`
   grid-template-columns: 1fr 160px 160px;
   align-items: center;
   gap: 10px;
+
+  &.noAI {
+    grid-template-columns: 1fr 160px;
+  }
+`;
+
+export const QuestionsGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+export const QuestionBlock = styled.div`
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 10px;
+`;
+
+export const Question = styled.div`
+  padding: 6px 0 0 0;
+  font-size: var(--font-size-s);
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
 `;
 
 export const AICreditsContainer = styled.div`

@@ -54,4 +54,5 @@ export interface AppConfigExtendedInterface extends AppConfigInterface {
   GAT_UI_TYPE_ID: string;
   ODYSSEY_WORLD_ID: string;
   FEATURE_FLAGS: {[key: string /*FeatureFlagEnum*/]: boolean};
+  AI_PROVIDERS: {[key: string /*AIProvidersFlagEnum*/]: boolean};
 }

@@ -686,6 +686,7 @@ export const enGb = {
       enterScript: 'Enter your script',
       answerQuestionsCounted: 'Please answer the following {{count}} questions',
       question: 'Question',
+      questions: 'Questions',
       later: 'later',
       create: 'create',
       by: 'By',
