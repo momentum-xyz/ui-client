@@ -72,7 +72,7 @@ const TeamworkScriptStep: FC<PropsInterface> = ({
         nextProps={{
           icon: nextStep.stepIcon,
           disabled: !isValid,
-          label: nextStep.label || '',
+          label: nextStep.stepLabel || '',
           onClick: () => {
             if (isNewCanvas) {
               handleSubmit(formSubmitHandler)();

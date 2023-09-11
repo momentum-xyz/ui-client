@@ -40,8 +40,8 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
   const {t} = useI18n();
 
-  const isLeonardoActive = isAIProviderEnabled(AIProvidersFlagEnum.LEONARDO);
-  const isChatGPTActive = isAIProviderEnabled(AIProvidersFlagEnum.CHAT_GPT);
+  const isLeonardoEnabled = isAIProviderEnabled(AIProvidersFlagEnum.LEONARDO);
+  const isChatGPTEnabled = isAIProviderEnabled(AIProvidersFlagEnum.CHAT_GPT);
 
   const stepList = useMemo((): CanvasStepInterface<CanvasStepType>[] => {
     const steps: CanvasStepInterface<CanvasStepType>[] = [
@@ -63,7 +63,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
       }
     ];
 
-    if (isLeonardoActive) {
+    if (isLeonardoEnabled) {
       steps.push({
         id: 'script',
         label: '4',
@@ -72,10 +72,10 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
       });
     }
 
-    if (isChatGPTActive) {
+    if (isChatGPTEnabled) {
       steps.push({
         id: 'teamworkScript',
-        label: isLeonardoActive ? '5' : '4',
+        label: isLeonardoEnabled ? '5' : '4',
         stepIcon: 'script',
         stepLabel: t('actions.scriptTeamwork')
       });
@@ -89,7 +89,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
     });
 
     return steps;
-  }, [isChatGPTActive, isLeonardoActive, t]);
+  }, [isChatGPTEnabled, isLeonardoEnabled, t]);
 
   const getNextStep = useCallback(
     (currentStep: CanvasStepType): CanvasStepInterface<CanvasStepType> => {
@@ -109,12 +109,12 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
 
   useEffect(() => {
     canvasEditorStore.setCreated(new Date().toISOString());
-    canvasEditorStore.load(worldId);
+    canvasEditorStore.initAndLoad(worldId, isChatGPTEnabled, isLeonardoEnabled);
 
     return () => {
       canvasEditorStore.resetModel();
     };
-  }, [canvasEditorStore, worldId]);
+  }, [canvasEditorStore, worldId, isChatGPTEnabled, isLeonardoEnabled]);
 
   useEffect(() => {
     if (canvasObjectId) {
@@ -221,9 +221,12 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
                 missionTitle={canvasEditorStore.missionData.missionTitle}
                 chatGPTCosts={canvasEditorStore.chatGPTCosts}
                 leonardoCosts={canvasEditorStore.leonardoCosts}
+                isLeonardoEnabled={isLeonardoEnabled}
                 isLeonardo={canvasEditorStore.scriptData.isLeonardo}
+                isChatGPTEnabled={isChatGPTEnabled}
                 isChatGPT={canvasEditorStore.teamworkScriptData.isChatGPT}
                 contributionAmount={canvasEditorStore.contributionAmount}
+                questionsData={canvasEditorStore.questionsData}
                 setContributionAmount={canvasEditorStore.setContributionAmount}
                 setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
