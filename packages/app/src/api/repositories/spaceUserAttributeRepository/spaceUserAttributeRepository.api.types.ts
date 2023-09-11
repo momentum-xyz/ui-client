@@ -61,7 +61,7 @@ export interface GetAllSpaceUserAttributeListRequest
   limit?: number;
   offset?: number;
   order?: string;
-  orderDirection?: 'ASK' | 'DESC';
+  orderDirection?: 'ASC' | 'DESC';
   filterField?: string;
   filterValue?: string;
   q?: string;

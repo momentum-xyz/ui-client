@@ -6,7 +6,7 @@ import {getImageAbsoluteUrl} from 'core/utils';
 import {ImageObjectInterface, TextObjectInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
 
-import {ImageViewer, PluginViewer, TextViewer} from './components';
+import {ImageViewer, PluginViewer, TextViewer, VoteCommentsBar} from './components';
 import * as styled from './ObjectViewer.styled';
 
 interface PropsInterface {
@@ -49,6 +49,8 @@ const ObjectViewer: FC<PropsInterface> = ({objectId}) => {
           />
         </styled.Item>
       )}
+
+      <VoteCommentsBar objectId={objectId} />
     </Frame>
   );
 };

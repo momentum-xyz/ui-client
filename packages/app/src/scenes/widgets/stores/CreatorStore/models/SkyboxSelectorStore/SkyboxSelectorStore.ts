@@ -80,7 +80,7 @@ const SkyboxSelectorStore = types
             filterField: 'is_public',
             filterValue: 'true',
             order: 'name',
-            orderDirection: 'ASK',
+            orderDirection: 'ASC',
             limit: GROUP_SIZE * PAGE_GROUP_COUNT,
             offset: GROUP_SIZE * startIndex,
             q: self.searchQuery.query

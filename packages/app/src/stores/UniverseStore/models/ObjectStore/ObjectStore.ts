@@ -5,7 +5,13 @@ import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {PluginIdEnum} from 'api/enums';
 import {api, GetSpaceInfoResponse} from 'api';
 import {BasicAsset2dIdEnum} from 'core/enums';
-import {PluginAttributesManager, PluginLoader, DynamicScriptList} from 'core/models';
+import {
+  PluginAttributesManager,
+  PluginLoader,
+  DynamicScriptList,
+  ObjectUserAttribute
+} from 'core/models';
+import {getRootStore} from 'core/utils';
 
 import {ObjectContentStore} from './models';
 
@@ -24,6 +30,8 @@ const localPlugins = JSON.parse(REACT_APP_LOCAL_PLUGINS);
 //   }
 // } as any;
 
+const COMMENTS_PAGE_SIZE = 100;
+
 const ObjectStore = types
   .compose(
     ResetModel,
@@ -35,6 +43,9 @@ const ObjectStore = types
       objectRequest: types.optional(RequestModel, {}),
       assetRequest: types.optional(RequestModel, {}),
       nameRequest: types.optional(RequestModel, {}),
+
+      votesAttr: types.maybeNull(ObjectUserAttribute),
+      commentsAttr: types.maybeNull(ObjectUserAttribute),
 
       dynamicScriptList: types.optional(DynamicScriptList, {}),
       pluginLoader: types.maybe(PluginLoader),
@@ -130,12 +141,43 @@ const ObjectStore = types
       }
 
       self.objectName = response[AttributeNameEnum.NAME];
+    }),
+    fetchComments: flow(function* (startIndex = 0) {
+      if (!self.commentsAttr) {
+        return;
+      }
+
+      yield self.commentsAttr.entries({
+        orderDirection: 'DESC',
+        // Fields of ObjectCommentInterface
+        fields: ['uuid', 'created', 'content'],
+        order: 'created',
+        limit: COMMENTS_PAGE_SIZE,
+        offset: startIndex
+      });
     })
   }))
   .actions((self) => ({
     init: flow(function* (objectId: string) {
       yield self.loadAsset2D(objectId);
       yield self.fetchObjectName(objectId);
+
+      self.votesAttr = ObjectUserAttribute.create({
+        objectId,
+        attributeName: AttributeNameEnum.VOTE,
+        pluginId: PluginIdEnum.CORE,
+        userId: getRootStore(self).sessionStore.userId
+      });
+      yield self.votesAttr.load();
+      yield self.votesAttr.countAllUsers();
+
+      self.commentsAttr = ObjectUserAttribute.create({
+        objectId,
+        attributeName: AttributeNameEnum.COMMENTS,
+        pluginId: PluginIdEnum.CORE,
+        userId: getRootStore(self).sessionStore.userId
+      });
+      yield self.fetchComments();
 
       return self.asset2dId;
     })

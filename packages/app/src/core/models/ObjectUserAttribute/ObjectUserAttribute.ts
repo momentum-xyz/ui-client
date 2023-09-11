@@ -2,7 +2,7 @@ import {flow, types} from 'mobx-state-tree';
 import {RequestModel} from '@momentum-xyz/core';
 import {AttributeNameEnum, AttributeValueInterface} from '@momentum-xyz/sdk';
 
-import {api} from 'api';
+import {GetAllSpaceUserAttributeListResponse, api} from 'api';
 import {PluginIdEnum} from 'api/enums';
 
 export const ObjectUserAttribute = types
@@ -11,7 +11,9 @@ export const ObjectUserAttribute = types
     userId: types.string,
     attributeName: types.optional(types.string, AttributeNameEnum.STATE),
     pluginId: types.optional(types.string, PluginIdEnum.CORE),
-    _value: types.maybe(types.frozen<AttributeValueInterface>()),
+    _value: types.maybe(types.maybeNull(types.frozen<AttributeValueInterface>())),
+    items: types.maybeNull(types.array(types.frozen())),
+    count: types.maybe(types.number),
     request: types.optional(RequestModel, {})
   })
   .actions((self) => ({
@@ -95,6 +97,23 @@ export const ObjectUserAttribute = types
       if (self.request.isError) {
         throw new Error('Error deleting attribute: ' + self.request.errorCode);
       }
+
+      self._value = null;
+    }),
+    deleteItem: flow(function* (itemName: string) {
+      const params = {
+        spaceId: self.objectId,
+        userId: self.userId,
+        pluginId: self.pluginId,
+        attributeName: self.attributeName,
+        sub_attribute_key: itemName
+      };
+      console.log('[ObjectUserAttribute] deleteItem', params);
+      yield self.request.send(api.spaceUserAttributeRepository.deleteSpaceUserSubAttribute, params);
+
+      if (self.request.isError) {
+        throw new Error('Error deleting attribute item: ' + self.request.errorCode);
+      }
     }),
     countAllUsers: flow(function* () {
       const params = {
@@ -103,18 +122,64 @@ export const ObjectUserAttribute = types
         attributeName: self.attributeName
       };
       console.log('[ObjectUserAttribute] countAllUsers', params);
-      const response: number = yield self.request.send(
+      const response: {count: number} = yield self.request.send(
         api.spaceUserAttributeRepository.getSpaceUserAttributeCount,
         params
       );
 
       console.log('[ObjectUserAttribute] countAllUsers', params, 'resp:', response);
 
+      self.count = response?.count || 0;
+
+      return response;
+    }),
+    entries: flow(function* ({
+      fields,
+      offset = 0,
+      limit = Number.MAX_SAFE_INTEGER,
+      order,
+      orderDirection = 'DESC',
+      filterField,
+      filterValue,
+      q
+    }: {
+      fields?: string[];
+      offset?: number;
+      limit?: number;
+      order?: string;
+      orderDirection?: 'ASC' | 'DESC';
+      filterField?: string;
+      filterValue?: string;
+      q?: string;
+    }) {
+      const response: GetAllSpaceUserAttributeListResponse = yield self.request.send(
+        api.spaceUserAttributeRepository.getAllSpaceUserAttributeList,
+        {
+          spaceId: self.objectId,
+          pluginId: self.pluginId,
+          attributeName: self.attributeName,
+          fields,
+          offset,
+          limit,
+          order,
+          orderDirection,
+          filterField,
+          filterValue,
+          q
+        }
+      );
+
+      if (response) {
+        const {items, count} = response;
+        self.count = count;
+        self.items = (offset === 0 ? items : [...(self.items || []), items]) as any;
+      }
+
       return response;
     })
   }))
   .views((self) => ({
-    get value(): AttributeValueInterface | undefined {
+    get value(): AttributeValueInterface | null | undefined {
       return self._value;
     },
     get isPending(): boolean {
