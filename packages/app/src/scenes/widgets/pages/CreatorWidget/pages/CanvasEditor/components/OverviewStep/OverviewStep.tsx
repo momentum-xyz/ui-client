@@ -2,26 +2,33 @@ import {FC, ReactElement, useEffect, useMemo, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import cn from 'classnames';
 import {dateWithoutTime, useI18n} from '@momentum-xyz/core';
-import {Hexagon, IconSvg, Select, SelectOptionInterface} from '@momentum-xyz/ui-kit';
+import {Hexagon, IconSvg, Round, Select, SelectOptionInterface} from '@momentum-xyz/ui-kit';
 
 import {CanvasButtonGroup} from 'ui-kit';
 import {CanvasStepType} from 'core/types';
 import leonardoImage from 'static/images/leonardo.jpeg';
 import aiProfileImage from 'static/images/ai_profile.jpeg';
 import cubeImage from 'static/images/cube.svg';
+import {QuestionsDataModelInterface} from 'scenes/widgets/stores/CreatorStore/models';
+
+import {CanvasStepInterface} from '../../CanvasEditor';
 
 import * as styled from './OverviewStep.styled';
 
 interface PropsInterface {
   isNewCanvas: boolean;
+  prevStep: CanvasStepInterface<CanvasStepType>;
   version: string;
   created: string | null;
   missionTitle: string;
   chatGPTCosts: number;
   leonardoCosts: number;
   isChatGPT: boolean;
+  isChatGPTEnabled: boolean;
   isLeonardo: boolean;
+  isLeonardoEnabled: boolean;
   contributionAmount: number | null;
+  questionsData: QuestionsDataModelInterface;
   setContributionAmount: (amount: number | null) => void;
   setActiveStep: (step: CanvasStepType) => void;
   onRenderActions: (element: ReactElement) => void;
@@ -38,14 +45,18 @@ export const CREDITS_AMOUNT_OPTIONS: SelectOptionInterface<number>[] = [
 
 const OverviewStep: FC<PropsInterface> = ({
   isNewCanvas,
+  prevStep,
   version,
   created,
   missionTitle,
   chatGPTCosts,
   leonardoCosts,
+  isChatGPTEnabled,
   isChatGPT,
+  isLeonardoEnabled,
   isLeonardo,
   contributionAmount,
+  questionsData,
   setContributionAmount,
   setActiveStep,
   onRenderActions,
@@ -61,6 +72,8 @@ const OverviewStep: FC<PropsInterface> = ({
     return isChatGPT ? costs + chatGPTCosts : costs;
   }, [leonardoCosts, chatGPTCosts, isLeonardo, isChatGPT]);
 
+  const aiIsNotEnabled = !isLeonardoEnabled && !isChatGPTEnabled;
+
   const isPreviewButtonAvailable = isNewCanvas && !wasSubmitted;
   const isSpawnButtonAvailable = isNewCanvas && wasSubmitted;
 
@@ -69,7 +82,7 @@ const OverviewStep: FC<PropsInterface> = ({
       <CanvasButtonGroup
         backProps={{
           label: t('actions.back'),
-          onClick: () => setActiveStep('teamworkScript')
+          onClick: () => setActiveStep(prevStep.id)
         }}
         {...(isPreviewButtonAvailable && {
           nextProps: {
@@ -91,7 +104,7 @@ const OverviewStep: FC<PropsInterface> = ({
         })}
       />
     );
-  }, [contributionAmount, isPreviewButtonAvailable, isSpawnButtonAvailable]);
+  }, [contributionAmount, isPreviewButtonAvailable, isSpawnButtonAvailable, prevStep]);
 
   return (
     <styled.Container data-testid="OverviewStep-test">
@@ -108,39 +121,73 @@ const OverviewStep: FC<PropsInterface> = ({
 
         <styled.Separator />
 
-        <styled.Header>
-          <Hexagon type="fourth-borderless" iconName="connect" />
-          <div>{t('titles.overviewAITools')}</div>
-        </styled.Header>
+        {aiIsNotEnabled ? (
+          <>
+            <styled.SubTitle>{t('titles.questions')}</styled.SubTitle>
 
-        <styled.AIInfoContainer className={cn(!isChatGPT && 'disabled')}>
-          <styled.AIImage src={aiProfileImage} />
-          <styled.AIInfo>
-            <div>{t('actions.chatGPT')}</div>
-            <span>{t('labels.maxAICredits', {count: chatGPTCosts})}</span>
-          </styled.AIInfo>
-        </styled.AIInfoContainer>
+            <styled.QuestionsGrid>
+              <styled.QuestionBlock>
+                <Round label={1} />
+                <styled.Question>{questionsData.questionOne}</styled.Question>
+              </styled.QuestionBlock>
+              <styled.QuestionBlock>
+                <Round label={2} />
+                <styled.Question>{questionsData.questionTwo}</styled.Question>
+              </styled.QuestionBlock>
+              <styled.QuestionBlock>
+                <Round label={3} />
+                <styled.Question>{questionsData.questionThree}</styled.Question>
+              </styled.QuestionBlock>
 
-        <styled.AIInfoContainer className={cn(!isLeonardo && 'disabled')}>
-          <styled.AIImage src={leonardoImage} />
-          <styled.AIInfo>
-            <div>{t('actions.leonardo')}</div>
-            <span>{t('labels.maxAICredits', {count: leonardoCosts})}</span>
-          </styled.AIInfo>
-        </styled.AIInfoContainer>
+              {!!questionsData.questionFour && (
+                <styled.QuestionBlock>
+                  <Round label={4} />
+                  <styled.Question>{questionsData.questionFour}</styled.Question>
+                </styled.QuestionBlock>
+              )}
+            </styled.QuestionsGrid>
+          </>
+        ) : (
+          <>
+            <styled.Header>
+              <Hexagon type="fourth-borderless" iconName="connect" />
+              <div>{t('titles.overviewAITools')}</div>
+            </styled.Header>
 
-        <styled.MaxCredits>
-          {isChatGPT || isLeonardo ? (
-            <>{t('labels.maxAICredits', {count: aiCosts})}</>
-          ) : (
-            <>{t('labels.noAITools')}</>
-          )}
-        </styled.MaxCredits>
+            {isChatGPTEnabled && (
+              <styled.AIInfoContainer className={cn(!isChatGPT && 'disabled')}>
+                <styled.AIImage src={aiProfileImage} />
+                <styled.AIInfo>
+                  <div>{t('actions.chatGPT')}</div>
+                  <span>{t('labels.maxAICredits', {count: chatGPTCosts})}</span>
+                </styled.AIInfo>
+              </styled.AIInfoContainer>
+            )}
+
+            {isLeonardoEnabled && (
+              <styled.AIInfoContainer className={cn(!isLeonardo && 'disabled')}>
+                <styled.AIImage src={leonardoImage} />
+                <styled.AIInfo>
+                  <div>{t('actions.leonardo')}</div>
+                  <span>{t('labels.maxAICredits', {count: leonardoCosts})}</span>
+                </styled.AIInfo>
+              </styled.AIInfoContainer>
+            )}
+
+            <styled.MaxCredits>
+              {isChatGPT || isLeonardo ? (
+                <>{t('labels.maxAICredits', {count: aiCosts})}</>
+              ) : (
+                <>{t('labels.noAITools')}</>
+              )}
+            </styled.MaxCredits>
+          </>
+        )}
 
         <styled.Separator />
         <styled.CreditsContainer>
           <styled.SubTitle>{t('titles.setContributionsAmount')}</styled.SubTitle>
-          <styled.AmountGrid>
+          <styled.AmountGrid className={cn(aiIsNotEnabled && 'noAI')}>
             <styled.SubTitle>{t('actions.setAmount')}</styled.SubTitle>
             <Select
               wide
@@ -152,11 +199,13 @@ const OverviewStep: FC<PropsInterface> = ({
               onSingleChange={setContributionAmount}
             />
 
-            <styled.AICreditsContainer>
-              {t('labels.aiCredits', {
-                amount: !contributionAmount ? 'XX' : contributionAmount * aiCosts
-              })}
-            </styled.AICreditsContainer>
+            {!aiIsNotEnabled && (
+              <styled.AICreditsContainer>
+                {t('labels.aiCredits', {
+                  amount: !contributionAmount ? 'XX' : contributionAmount * aiCosts
+                })}
+              </styled.AICreditsContainer>
+            )}
           </styled.AmountGrid>
         </styled.CreditsContainer>
 

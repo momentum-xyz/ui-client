@@ -1,11 +1,19 @@
-import {Instance, flow, types} from 'mobx-state-tree';
+import {Instance, flow, types, cast} from 'mobx-state-tree';
 import {MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
+import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {Event3dEmitter, MediaInterface, ObjectTypeIdEnum, RequestModel} from '@momentum-xyz/core';
 
 import {getRootStore} from 'core/utils';
 import {CreatorTabsEnum, WidgetEnum} from 'core/enums';
 import {PosBusService} from 'shared/services';
-import {FetchWorldTreeResponse, api} from 'api';
+import {
+  FetchWorldTreeResponse,
+  api,
+  GetSpaceAttributeResponse,
+  GetUserContributionsResponse
+} from 'api';
+import {CanvasConfigInterface} from 'api/interfaces';
+import {PluginIdEnum} from 'api/enums';
 
 const World3dStore = types
   .model('World3dStore', {
@@ -20,7 +28,12 @@ const World3dStore = types
     fetchWorldTreeRequest: types.optional(RequestModel, {}),
 
     canvasObjectId: types.maybeNull(types.string),
+    canvasConfig: types.maybeNull(types.frozen<CanvasConfigInterface>()),
+    contributionCount: 0,
+
     fetchCanvasRequest: types.optional(RequestModel, {}),
+    fetchCanvasConfigRequest: types.optional(RequestModel, {}),
+    fetchContributionsRequest: types.optional(RequestModel, {}),
 
     isScreenRecording: false,
     screenshotOrVideo: types.maybeNull(types.frozen<MediaInterface>())
@@ -212,8 +225,38 @@ const World3dStore = types
         self.canvasObjectId = null;
       }
     }),
+    loadCanvasConfig: flow(function* () {
+      if (self.canvasObjectId) {
+        const configAttribute: GetSpaceAttributeResponse | null =
+          yield self.fetchCanvasConfigRequest.send(api.spaceAttributeRepository.getSpaceAttribute, {
+            spaceId: self.canvasObjectId,
+            plugin_id: PluginIdEnum.CANVAS_EDITOR,
+            attribute_name: AttributeNameEnum.CANVAS
+          });
+
+        if (configAttribute) {
+          self.canvasConfig = cast(configAttribute as CanvasConfigInterface);
+        }
+      }
+    }),
+    loadContributionCount: flow(function* () {
+      if (self.canvasObjectId) {
+        const response: GetUserContributionsResponse = yield self.fetchContributionsRequest.send(
+          api.canvasRepository.getUserContributions,
+          {
+            objectId: self.canvasObjectId
+          }
+        );
+
+        if (response) {
+          self.contributionCount = cast(response.count);
+        }
+      }
+    }),
     async init(): Promise<void> {
       await this.fetchCanvasObject();
+      await this.loadCanvasConfig();
+      await this.loadContributionCount();
     }
   }))
   .actions((self) => ({
@@ -223,6 +266,11 @@ const World3dStore = types
     disableCreatorMode() {
       self.isCreatorMode = false;
       self.closeAndResetObjectMenu();
+    }
+  }))
+  .views((self) => ({
+    get isContributionLimitReached(): boolean {
+      return self.contributionCount >= (self.canvasConfig?.contributionAmount || 0);
     }
   }));
 

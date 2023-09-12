@@ -54,6 +54,11 @@ export const appVariables: AppConfigExtendedInterface = {
     newsfeed: process.env.NODE_ENV === 'development',
     buy_nft: process.env.NODE_ENV === 'development',
     canvas: process.env.NODE_ENV === 'development'
+  },
+  AI_PROVIDERS: {
+    leonardo: process.env.NODE_ENV === 'development',
+    chatgpt: process.env.NODE_ENV === 'development',
+    blockadelabs: process.env.NODE_ENV === 'development'
   }
 };
 

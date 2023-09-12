@@ -26,6 +26,7 @@ export const Label = styled.div`
 export const GlobalSelectStyle = createGlobalStyle`
   :root {
     .Select__control {
+      min-height: 40px;
       background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.4)};
       border: 1px solid ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
       border-radius: 4px;

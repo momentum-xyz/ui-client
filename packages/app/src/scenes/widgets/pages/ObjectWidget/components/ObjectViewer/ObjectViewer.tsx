@@ -37,6 +37,7 @@ const ObjectViewer: FC<PropsInterface> = ({objectId}) => {
           datetime={updatedAt}
         />
       )}
+
       <styled.Title>{objectStore.objectName || ''}</styled.Title>
 
       {!!renderHash && (

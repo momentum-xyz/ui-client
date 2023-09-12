@@ -76,7 +76,14 @@ const CanvasEditorStore = types
     }
   }))
   .actions((self) => ({
-    load: flow(function* (worldId: string) {
+    initAndLoad: flow(function* (
+      worldId: string,
+      isChatGPTEnabled: boolean,
+      isLeonardoEnabled: boolean
+    ) {
+      self.scriptData.isLeonardo = isLeonardoEnabled;
+      self.teamworkScriptData.isChatGPT = isChatGPTEnabled;
+
       const response: FetchWorldTreeResponse = yield self.request.send(
         api.spaceRepository.fetchWorldTree,
         {

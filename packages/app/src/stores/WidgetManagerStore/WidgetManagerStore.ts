@@ -13,13 +13,15 @@ const WidgetManagerStore = types
     subMenuInfo: types.maybeNull(SubMenuInfo)
   })
   .actions((self) => ({
-    toggle(type: WidgetEnum, position: PositionEnum): void {
+    toggle(type: WidgetEnum, position: PositionEnum, data?: WidgetInfoDataInterface): void {
       switch (position) {
         case PositionEnum.LEFT:
-          self.leftActiveWidget?.type !== type ? this.open(type, position) : this.close(type);
+          self.leftActiveWidget?.type !== type ? this.open(type, position, data) : this.close(type);
           break;
         case PositionEnum.RIGHT:
-          self.rightActiveWidget?.type !== type ? this.open(type, position) : this.close(type);
+          self.rightActiveWidget?.type !== type
+            ? this.open(type, position, data)
+            : this.close(type);
           break;
       }
     },
@@ -68,13 +70,13 @@ const WidgetManagerStore = types
     }
   }))
   .views((self) => ({
-    get activeWidgetList(): Array<WidgetEnum> {
-      const widgets: WidgetEnum[] = [];
+    get activeWidgetList(): Array<{widget: WidgetEnum; id: string | number | null | undefined}> {
+      const widgets: {widget: WidgetEnum; id: string | number | null | undefined}[] = [];
       if (self.leftActiveWidget) {
-        widgets.push(self.leftActiveWidget.type);
+        widgets.push({widget: self.leftActiveWidget.type, id: self.leftActiveWidget.data?.id});
       }
       if (self.rightActiveWidget) {
-        widgets.push(self.rightActiveWidget.type);
+        widgets.push({widget: self.rightActiveWidget.type, id: self.rightActiveWidget.data?.id});
       }
 
       return widgets;
