@@ -1,4 +1,4 @@
-import {flow, types} from 'mobx-state-tree';
+import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel} from '@momentum-xyz/core';
 import {AttributeNameEnum, AttributeValueInterface} from '@momentum-xyz/sdk';
 
@@ -172,7 +172,7 @@ export const ObjectUserAttribute = types
       if (response) {
         const {items, count} = response;
         self.count = count;
-        self.items = (offset === 0 ? items : [...(self.items || []), items]) as any;
+        self.items = cast(offset === 0 ? items : [...(self.items || []), items]);
       }
 
       return response;
