@@ -36,6 +36,9 @@ const ConfigStore = types
             appVariables[key as keyof AppConfigInterface] = value as string;
           });
 
+          //appVariables.AI_PROVIDERS.leonardo = true;
+          //appVariables.AI_PROVIDERS.chatgpt = true;
+
           self.isConfigReady = true;
           self.isAgoraActive = !!appVariables.AGORA_APP_ID;
         }

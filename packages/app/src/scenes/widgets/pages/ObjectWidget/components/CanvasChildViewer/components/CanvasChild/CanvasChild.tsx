@@ -110,30 +110,25 @@ const CanvasChild: FC<PropsInterface> = ({
               )}
             </styled.Opinion>
 
-            <styled.Separator />
-
-            <styled.SubHeader>
+            <styled.BoldText>
               <span>{config.questionTwo}</span>
-            </styled.SubHeader>
+            </styled.BoldText>
             <styled.Description>
               <TextCut text={content.answerTwo} lines={ANSWER_LINES} />
             </styled.Description>
 
-            <styled.Separator />
-
-            <styled.SubHeader>
+            <styled.BoldText>
               <span>{config.questionThree}</span>
-            </styled.SubHeader>
+            </styled.BoldText>
             <styled.Description>
               <TextCut text={content.answerThree} lines={ANSWER_LINES} />
             </styled.Description>
 
             {!!config.questionFour && (
               <>
-                <styled.Separator />
-                <styled.SubHeader>
+                <styled.BoldText>
                   <span>{config.questionFour}</span>
-                </styled.SubHeader>
+                </styled.BoldText>
                 <styled.Description>
                   <TextCut text={content.answerFour} lines={ANSWER_LINES} />
                 </styled.Description>

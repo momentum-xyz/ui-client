@@ -78,7 +78,8 @@ const AnswersStep: FC<PropsInterface> = ({
           {t('titles.answerQuestionsCounted', {count: config.questionFour ? 4 : 3})}
         </styled.Header>
         <styled.Description>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+          Please share your vision based on the questions. Your answers are the core of your
+          contribution.
         </styled.Description>
 
         <styled.Separator />

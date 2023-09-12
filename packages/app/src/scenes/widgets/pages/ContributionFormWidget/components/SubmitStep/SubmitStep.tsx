@@ -63,9 +63,8 @@ const SubmitStep: FC<PropsInterface> = ({
       <styled.Grid>
         <styled.Header>{t('titles.submitContribution')}</styled.Header>
         <styled.Description>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Duis aute
-          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur.
+          Please check the result before you create your presence in this world. And contribute when
+          you’re happy!
         </styled.Description>
 
         <styled.Separator />
@@ -79,26 +78,21 @@ const SubmitStep: FC<PropsInterface> = ({
 
         <Image src={imageSrc} errorIcon="rabbit_fill" height={320} />
 
-        <styled.Separator />
-
-        <styled.Header>
+        <styled.BoldText>
           <span>{config.questionTwo}</span>
-        </styled.Header>
+        </styled.BoldText>
         <styled.Description>{answersData.answerTwo}</styled.Description>
 
-        <styled.Separator />
-
-        <styled.Header>
+        <styled.BoldText>
           <span>{config.questionThree}</span>
-        </styled.Header>
+        </styled.BoldText>
         <styled.Description>{answersData.answerThree}</styled.Description>
 
         {!!config.questionFour && (
           <>
-            <styled.Separator />
-            <styled.Header>
+            <styled.BoldText>
               <span>{config.questionFour}</span>
-            </styled.Header>
+            </styled.BoldText>
             <styled.Description>{answersData.answerFour}</styled.Description>
           </>
         )}

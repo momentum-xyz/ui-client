@@ -82,6 +82,7 @@ const ContributionFormWidget: FC = () => {
                   <StartStep
                     isGuest={isGuest}
                     setActiveStep={handleSetActiveStep}
+                    config={world3dStore.canvasConfig}
                     onRenderActions={setStepActions}
                     onSignIn={() => {
                       widgetManagerStore.closeAll();

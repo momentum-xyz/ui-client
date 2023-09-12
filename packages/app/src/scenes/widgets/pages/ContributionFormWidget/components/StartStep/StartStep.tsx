@@ -5,6 +5,7 @@ import {Button, Round} from '@momentum-xyz/ui-kit';
 
 import {CanvasButtonGroup} from 'ui-kit';
 import {ContributionStepType} from 'core/types';
+import {CanvasConfigInterface} from 'api/interfaces';
 import canvas from 'static/images/canvas.png';
 
 import * as styled from './StartStep.styled';
@@ -12,11 +13,18 @@ import * as styled from './StartStep.styled';
 interface PropsInterface {
   isGuest: boolean;
   setActiveStep: (step: ContributionStepType) => void;
+  config: CanvasConfigInterface;
   onRenderActions: (element: ReactElement) => void;
   onSignIn: () => void;
 }
 
-const StartStep: FC<PropsInterface> = ({isGuest, onRenderActions, setActiveStep, onSignIn}) => {
+const StartStep: FC<PropsInterface> = ({
+  isGuest,
+  config,
+  onRenderActions,
+  setActiveStep,
+  onSignIn
+}) => {
   const {t} = useI18n();
 
   useEffect(() => {
@@ -44,7 +52,7 @@ const StartStep: FC<PropsInterface> = ({isGuest, onRenderActions, setActiveStep,
       <styled.Grid>
         <styled.Header>{t('titles.shareContribution')}</styled.Header>
         <styled.Description>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+          Share your ideas to the visitors of this Odyssey and create a new 3D object.
         </styled.Description>
 
         <styled.Separator />
@@ -53,8 +61,7 @@ const StartStep: FC<PropsInterface> = ({isGuest, onRenderActions, setActiveStep,
           <>
             <styled.Title>{t('titles.becomeMemberToContribute')}</styled.Title>
             <styled.Description>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua.
+              You need to connect your wallet to Odyssey to create your presence in this world.
             </styled.Description>
             <Button
               wide
@@ -68,16 +75,14 @@ const StartStep: FC<PropsInterface> = ({isGuest, onRenderActions, setActiveStep,
         )}
 
         <styled.Title>{t('titles.titleMissionOfOdyssey')}</styled.Title>
-        <styled.Description>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua.
-        </styled.Description>
+        <styled.Description>{config.questionOne}</styled.Description>
 
         <styled.Separator />
 
         <styled.Title>{t('titles.contributionMatters')}</styled.Title>
         <styled.Description>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+          You can add your own physical presence in this wold by contributing and sharing your
+          vision.
         </styled.Description>
 
         <styled.ImageContainer>

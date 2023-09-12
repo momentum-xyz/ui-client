@@ -671,7 +671,7 @@ export const enGb = {
       returnHighFive: 'Return the favour',
       createSpace: 'YOU CAN CREATE A SPACE FROM YOUR PROFILE',
       ownSpaceInvite: 'WANT YOUR OWN SPACE? (FREE)',
-      describeGoal: 'Describe your goal',
+      describeGoal: 'Describe your mission',
       missionTitle: 'Title of the mission',
       whatIsMission: 'What’s the mission?',
       makeContributionEntry: 'Make a contribution entry',
@@ -748,7 +748,7 @@ export const enGb = {
       communitySkyboxLibraryHeader: 'Community',
       privateSkyboxLibraryHeader: 'Private Library',
       whatIsCanvas: 'What is a user canvas',
-      howToBuildCanvas: 'How to Build a canvas in 6 steps',
+      howToBuildCanvas: 'How to Build a canvas in {{count}} steps',
       synthesis3d: 'Synthesis in 3D',
       usingAiTeamwork: 'Using AI to create Teamwork',
       shareContribution: 'Share your contribution',
@@ -804,13 +804,13 @@ export const enGb = {
       nameYourObjectNavigation: 'Name your Object (Navigation)',
       missionTitle: 'Title, maximum 80 characters.',
       missionStory:
-        'Write a short story about the mission of this Odyssey, what do you want to achieve and what do you expect your visitors to contribute.',
+        'Describe your mission, your goal with this Odyssey or just a statement. Keep it short and invite visitors to contribute.',
       canvasQuestion1: 'What’s the title of your contribution?',
       canvasQuestion2:
         'Write your second question, ask your visitors what they can contribute. For example an opinion, or an idea.',
       canvasQuestion3:
         'Third question, ask your visitors how they would achieve this idea or solve the problem.',
-      canvasQuestion4: 'This question is optional. Keep the survey short for the best result',
+      canvasQuestion4: 'This question is optional. Keep the survey short for the best result.',
       canvasScript:
         'This is an example of a script:\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\n\n#answer1\n#answer2',
       canvasTeamworkScript:
@@ -1044,19 +1044,19 @@ export const enGb = {
       worldURL:
         'This is the publicly facing URL that people will visit when then visiting your metaverse',
       canvasStep1_One:
-        'Here’s a short explanation of a user canvas. What’s the purpose and why should you use it?',
+        'Enable visitors to contribute their ideas and objects to your Odyssey by creating an User Canvas.',
       canvasStep1_Two:
-        'Here’s a short explanation of a user canvas. What’s the purpose and why should you use it? Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
+        'You can ask visitors to share their ideas and opinions in this Odyssey based on your on your goal and a little survey. The contributions of the visitors will spawn as a 3D object in your world.',
       canvasStep1_Three:
-        'Here’s a short explanation of a user canvas. What’s the purpose and why should you use it? Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
+        'By using AI you can compile all the contributions and translate these to a common goal or a masterplan. This is called Teamwork.',
       canvasStep2_One:
-        'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
+        'Write a (short) story about the mission of this Odyssey, what do you want to achieve and what do you expect your visitors to contribute.',
       canvasStep3_One:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+        'With this survey you can ask your visitors specific questions about the mission of your Odyssey or invite them to share their ideas. Keep it short and simple, you can ask maximal 4 questions.',
       canvasStep4_One:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+        'Visitors can generate an image with AI based on their answers. If you want to use this feature please enter a script to create a specific format or style. Users can also choose to upload their own image.',
       canvasStep5_One:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.',
+        'With this feature you can assemble all the contributions and translate these to a common goal or a master plan with the help of AI. You can make a script to create a format, for example a masterplan with all the ideas or a resume.',
       canvasStep6_One:
         'By creating the canvas you spawn a central Canvas object in the Odyssey where the contributions will be placed around.',
       canvasStep6_Two:

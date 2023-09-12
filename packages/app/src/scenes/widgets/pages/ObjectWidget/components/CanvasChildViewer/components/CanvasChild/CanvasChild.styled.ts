@@ -36,6 +36,22 @@ export const Separator = styled.div`
   background: ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.6)};
 `;
 
+export const BoldText = styled.div`
+  padding: 6px 0;
+  font-size: var(--font-size-s);
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  font-weight: 600;
+
+  > span {
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 350px;
+    white-space: nowrap;
+  }
+`;
+
 export const UserInfo = styled.div`
   display: flex;
   align-items: center;
