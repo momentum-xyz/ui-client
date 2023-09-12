@@ -7,16 +7,25 @@ import {CanvasButtonGroup} from 'ui-kit';
 import {CanvasStepType} from 'core/types';
 import canvas from 'static/images/canvas.png';
 
+import {CanvasStepInterface} from '../../CanvasEditor';
+
 import * as styled from './IntroStep.styled';
 
 interface PropsInterface {
   isNewCanvas: boolean;
+  stepList: CanvasStepInterface<CanvasStepType>[];
   setActiveStep: (step: CanvasStepType) => void;
   onRenderActions: (element: ReactElement) => void;
   onDelete: () => void;
 }
 
-const IntroStep: FC<PropsInterface> = ({isNewCanvas, onRenderActions, setActiveStep, onDelete}) => {
+const IntroStep: FC<PropsInterface> = ({
+  isNewCanvas,
+  stepList,
+  onRenderActions,
+  setActiveStep,
+  onDelete
+}) => {
   const {t} = useI18n();
 
   const onDescribeMission = useCallback(() => {
@@ -42,15 +51,6 @@ const IntroStep: FC<PropsInterface> = ({isNewCanvas, onRenderActions, setActiveS
     );
   }, [isNewCanvas, onDelete, onDescribeMission, onRenderActions, t]);
 
-  const stepList: {stepNumber: string; stepTitle: string}[] = [
-    {stepNumber: '1', stepTitle: t('labels.canvasStep1')},
-    {stepNumber: '4', stepTitle: t('labels.canvasStep4')},
-    {stepNumber: '2', stepTitle: t('labels.canvasStep2')},
-    {stepNumber: '5', stepTitle: t('labels.canvasStep5')},
-    {stepNumber: '3', stepTitle: t('labels.canvasStep3')},
-    {stepNumber: '6', stepTitle: t('labels.canvasStep6')}
-  ];
-
   return (
     <styled.Container data-testid="IntroStep-test">
       <styled.Grid>
@@ -63,11 +63,11 @@ const IntroStep: FC<PropsInterface> = ({isNewCanvas, onRenderActions, setActiveS
 
         <styled.Separator />
 
-        <styled.SubTitle>{t('titles.howToBuildCanvas')}</styled.SubTitle>
+        <styled.SubTitle>{t('titles.howToBuildCanvas', {count: stepList.length})}</styled.SubTitle>
         <styled.Steps>
           {stepList.map((step) => (
-            <styled.Step key={step.stepNumber}>
-              <Round label={step.stepNumber} />
+            <styled.Step key={step.label}>
+              <Round label={step.label || ''} />
               <span>{step.stepTitle}</span>
             </styled.Step>
           ))}

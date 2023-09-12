@@ -24,6 +24,7 @@ interface PropsInterface {
 
 export interface CanvasStepInterface<T> extends StepInterface<T> {
   stepIcon?: IconNameType;
+  stepTitle?: string;
   stepLabel?: string;
 }
 
@@ -47,18 +48,21 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
     const steps: CanvasStepInterface<CanvasStepType>[] = [
       {
         id: 'intro',
-        label: '1'
+        label: '1',
+        stepTitle: t('labels.canvasStep1')
       },
       {
         id: 'mission',
         label: '2',
         stepIcon: 'rocket',
+        stepTitle: t('labels.canvasStep2'),
         stepLabel: t('actions.describeMission')
       },
       {
         id: 'questions',
         label: '3',
         stepIcon: 'document_request',
+        stepTitle: t('labels.canvasStep3'),
         stepLabel: t('actions.createEntry')
       }
     ];
@@ -68,6 +72,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
         id: 'script',
         label: '4',
         stepIcon: 'ai',
+        stepTitle: t('labels.canvasStep4'),
         stepLabel: t('actions.aiImageScript')
       });
     }
@@ -77,6 +82,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
         id: 'teamworkScript',
         label: isLeonardoEnabled ? '5' : '4',
         stepIcon: 'script',
+        stepTitle: t('labels.canvasStep5'),
         stepLabel: t('actions.scriptTeamwork')
       });
     }
@@ -85,6 +91,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
       id: 'overview',
       label: `${steps.length + 1}`,
       stepIcon: 'collect',
+      stepTitle: t('labels.canvasStep6'),
       stepLabel: t('labels.overview')
     });
 
@@ -157,6 +164,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
             {activeStep === 'intro' && (
               <IntroStep
                 isNewCanvas={!canvasObjectId}
+                stepList={stepList}
                 setActiveStep={handleSetActiveStep}
                 onRenderActions={setStepActions}
                 onDelete={() => {
@@ -233,6 +241,7 @@ const CanvasEditor: FC<PropsInterface> = ({onClose}) => {
                 onSpawnAndSubmit={async () => {
                   await canvasEditorStore.spawnAndSubmit(worldId);
                   await world3dStore?.fetchCanvasObject();
+                  await world3dStore?.loadCanvasConfig();
                 }}
                 onSpawned={() => {
                   world3dStore?.setAttachedToCamera(null);

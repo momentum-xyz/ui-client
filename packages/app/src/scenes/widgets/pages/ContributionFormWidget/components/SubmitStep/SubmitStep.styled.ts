@@ -49,6 +49,22 @@ export const SubTitle = styled.div`
   gap: 10px;
 `;
 
+export const BoldText = styled.div`
+  padding: 6px 0;
+  font-size: var(--font-size-s);
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  font-weight: 600;
+
+  > span {
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 350px;
+    white-space: nowrap;
+  }
+`;
+
 export const Date = styled.div`
   font-size: var(--font-size-s);
   font-weight: 400;

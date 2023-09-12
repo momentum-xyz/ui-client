@@ -116,9 +116,8 @@ const ImageStep: FC<PropsInterface> = ({
       <styled.Grid>
         <styled.Header>{t('titles.addImageToIdea')}</styled.Header>
         <styled.Description>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Duis aute
-          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur.
+          Create a new image with AI based on the answers to the questions. You can chance the text
+          before generating an image. Or upload an image from your computer.
         </styled.Description>
 
         <styled.Separator />
