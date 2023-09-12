@@ -9,7 +9,8 @@ import {
   PluginAttributesManager,
   PluginLoader,
   DynamicScriptList,
-  ObjectUserAttribute
+  ObjectUserAttribute,
+  User
 } from 'core/models';
 import {getRootStore} from 'core/utils';
 
@@ -39,13 +40,18 @@ const ObjectStore = types
       objectName: types.maybe(types.string),
       objectTypeId: types.maybe(types.enumeration(Object.values(ObjectTypeIdEnum))),
       asset2dId: types.maybe(types.string),
+      ownerId: types.maybe(types.string),
+      updatedAt: types.maybe(types.string),
 
       objectRequest: types.optional(RequestModel, {}),
       assetRequest: types.optional(RequestModel, {}),
       nameRequest: types.optional(RequestModel, {}),
+      ownerRequest: types.optional(RequestModel, {}),
 
       votesAttr: types.maybeNull(ObjectUserAttribute),
       commentsAttr: types.maybeNull(ObjectUserAttribute),
+
+      owner: types.maybe(User),
 
       dynamicScriptList: types.optional(DynamicScriptList, {}),
       pluginLoader: types.maybe(PluginLoader),
@@ -103,6 +109,8 @@ const ObjectStore = types
 
       self.asset2dId = spaceInfo.asset_2d_id;
       self.objectTypeId = cast(spaceInfo.object_type_id);
+      self.ownerId = spaceInfo.owner_id;
+      // self.updatedAt = spaceInfo.updated_at;
 
       switch (self.asset2dId) {
         case BasicAsset2dIdEnum.CONTENT:
@@ -142,6 +150,23 @@ const ObjectStore = types
 
       self.objectName = response[AttributeNameEnum.NAME];
     }),
+    fetchObjectOwner: flow(function* () {
+      if (!self.ownerId) {
+        return;
+      }
+
+      const response = yield self.ownerRequest.send(api.userRepository.fetchUser, {
+        userId: self.ownerId
+      });
+
+      if (response === undefined) {
+        return;
+      }
+
+      self.owner = cast(response);
+
+      return response;
+    }),
     fetchComments: flow(function* (startIndex = 0) {
       if (!self.commentsAttr) {
         return;
@@ -160,7 +185,7 @@ const ObjectStore = types
   .actions((self) => ({
     init: flow(function* (objectId: string) {
       yield self.loadAsset2D(objectId);
-      yield self.fetchObjectName(objectId);
+      yield Promise.all([self.fetchObjectOwner(), self.fetchObjectName(objectId)]);
 
       self.votesAttr = ObjectUserAttribute.create({
         objectId,

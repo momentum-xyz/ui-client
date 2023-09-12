@@ -6,7 +6,13 @@ import {getImageAbsoluteUrl} from 'core/utils';
 import {ImageObjectInterface, TextObjectInterface} from 'core/interfaces';
 import {useStore} from 'shared/hooks';
 
-import {ImageViewer, PluginViewer, TextViewer, VoteCommentsBar} from './components';
+import {
+  ImageViewer,
+  ObjectOwnerHeading,
+  PluginViewer,
+  TextViewer,
+  VoteCommentsBar
+} from './components';
 import * as styled from './ObjectViewer.styled';
 
 interface PropsInterface {
@@ -16,7 +22,7 @@ interface PropsInterface {
 const ObjectViewer: FC<PropsInterface> = ({objectId}) => {
   const {universeStore} = useStore();
   const {objectStore, isCurrentUserWorldAdmin} = universeStore;
-  const {pluginLoader, objectContentStore} = objectStore;
+  const {pluginLoader, objectContentStore, owner, updatedAt} = objectStore;
   const {image, text} = objectContentStore.normalContent;
 
   const renderHash = (image?.value as ImageObjectInterface)?.render_hash;
@@ -24,6 +30,13 @@ const ObjectViewer: FC<PropsInterface> = ({objectId}) => {
 
   return (
     <Frame>
+      {!!owner && (
+        <ObjectOwnerHeading
+          authorName={owner.name}
+          authorAvatarHash={owner.avatarSrc}
+          datetime={updatedAt}
+        />
+      )}
       <styled.Title>{objectStore.objectName || ''}</styled.Title>
 
       {!!renderHash && (
