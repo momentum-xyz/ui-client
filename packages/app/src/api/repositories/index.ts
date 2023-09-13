@@ -5,7 +5,7 @@ export * from './web3Repository';
 export * from './userRepository';
 export * from './userProfileRepository';
 export * from './pluginsRepository';
-export * from './spaceAttributeRepository';
+export * from './objectAttributeRepository';
 export * from './userAttributeRepository';
 export * from './mediaRepository';
 export * from './emojiRepository';

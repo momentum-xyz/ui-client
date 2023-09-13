@@ -21,7 +21,7 @@ export const ObjectAttribute = types
         attribute_name: self.attributeName
       });
       const response: AttributeValueInterface | undefined = yield self.request.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
+        api.objectAttributeRepository.getObjectAttribute,
         {
           spaceId: self.objectId,
           plugin_id: self.pluginId,
@@ -49,7 +49,7 @@ export const ObjectAttribute = types
     set: flow(function* (value: AttributeValueInterface) {
       console.log('ObjectAttribute set:', value);
 
-      yield self.request.send(api.spaceAttributeRepository.setSpaceAttribute, {
+      yield self.request.send(api.objectAttributeRepository.setSpaceAttribute, {
         spaceId: self.objectId,
         plugin_id: self.pluginId,
         attribute_name: self.attributeName,
@@ -63,7 +63,7 @@ export const ObjectAttribute = types
       self._value = value;
     }),
     setItem: flow(function* (itemName: string, value: unknown) {
-      yield self.request.send(api.spaceAttributeRepository.setSpaceAttributeItem, {
+      yield self.request.send(api.objectAttributeRepository.setSpaceAttributeItem, {
         spaceId: self.objectId,
         plugin_id: self.pluginId,
         attribute_name: self.attributeName,
@@ -82,7 +82,7 @@ export const ObjectAttribute = types
       }
     }),
     delete: flow(function* () {
-      yield self.request.send(api.spaceAttributeRepository.deleteSpaceAttribute, {
+      yield self.request.send(api.objectAttributeRepository.deleteSpaceAttribute, {
         spaceId: self.objectId,
         plugin_id: self.pluginId,
         attribute_name: self.attributeName

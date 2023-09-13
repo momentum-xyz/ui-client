@@ -60,7 +60,7 @@ const CreatorStore = types
     fetchObjectName: flow(function* (spaceId: string) {
       const attributeName = AttributeNameEnum.NAME;
       const response = yield self.getObjectNameRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
+        api.objectAttributeRepository.getObjectAttribute,
         {
           spaceId: spaceId,
           plugin_id: PluginIdEnum.CORE,
@@ -125,7 +125,7 @@ const CreatorStore = types
         return;
       }
 
-      yield self.saveObjectNameRequest.send(api.spaceAttributeRepository.setSpaceAttributeItem, {
+      yield self.saveObjectNameRequest.send(api.objectAttributeRepository.setSpaceAttributeItem, {
         spaceId: self.selectedObjectId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.NAME,

@@ -9,7 +9,7 @@ import {PosBusService} from 'shared/services';
 import {
   FetchWorldTreeResponse,
   api,
-  GetSpaceAttributeResponse,
+  GetObjectAttributeResponse,
   GetUserContributionsResponse
 } from 'api';
 import {CanvasConfigInterface} from 'api/interfaces';
@@ -227,12 +227,15 @@ const World3dStore = types
     }),
     loadCanvasConfig: flow(function* () {
       if (self.canvasObjectId) {
-        const configAttribute: GetSpaceAttributeResponse | null =
-          yield self.fetchCanvasConfigRequest.send(api.spaceAttributeRepository.getSpaceAttribute, {
-            spaceId: self.canvasObjectId,
-            plugin_id: PluginIdEnum.CANVAS_EDITOR,
-            attribute_name: AttributeNameEnum.CANVAS
-          });
+        const configAttribute: GetObjectAttributeResponse | null =
+          yield self.fetchCanvasConfigRequest.send(
+            api.objectAttributeRepository.getObjectAttribute,
+            {
+              spaceId: self.canvasObjectId,
+              plugin_id: PluginIdEnum.CANVAS_EDITOR,
+              attribute_name: AttributeNameEnum.CANVAS
+            }
+          );
 
         if (configAttribute) {
           self.canvasConfig = cast(configAttribute as CanvasConfigInterface);

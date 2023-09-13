@@ -194,7 +194,7 @@ const SpawnAssetStore = types
         getRootStore(self).universeStore.world3dStore?.setAttachedToCamera(objectId);
 
         if (self.isCustomizable) {
-          yield self.setEffectAttrRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+          yield self.setEffectAttrRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
             spaceId: objectId,
             plugin_id: PluginIdEnum.CORE,
             attribute_name: AttributeNameEnum.OBJECT_EFFECT,

@@ -26,7 +26,7 @@ const ObjectColorStore = types
 
     fetchObjectColor: flow(function* (objectId: string) {
       const response: ObjectColorAttributeInterface = yield self.fetchRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
+        api.objectAttributeRepository.getObjectAttribute,
         {
           spaceId: objectId,
           plugin_id: PluginIdEnum.CORE,
@@ -41,7 +41,7 @@ const ObjectColorStore = types
     updateObjectColor: flow(function* (objectId: string, colorHex: string) {
       const value: ObjectColorAttributeInterface = {value: colorHex};
 
-      yield self.updateRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+      yield self.updateRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
         spaceId: objectId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.OBJECT_COLOR,

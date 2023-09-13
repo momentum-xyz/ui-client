@@ -7,7 +7,7 @@ import {
 } from '@momentum-xyz/sdk';
 import {flow, Instance, types} from 'mobx-state-tree';
 
-import {api, GetSpaceAttributeResponse} from 'api';
+import {api, GetObjectAttributeResponse} from 'api';
 import {appVariables} from 'api/constants';
 import {PosBusService} from 'shared/services';
 import {usePosBusEvent} from 'shared/hooks';
@@ -35,7 +35,7 @@ const PluginAttributesManager = types
       attributeName: string
     ) {
       const response = yield self.getAttributeRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
+        api.objectAttributeRepository.getObjectAttribute,
         {
           spaceId,
           plugin_id: self.pluginId,
@@ -55,7 +55,7 @@ const PluginAttributesManager = types
       value: T
     ) {
       const response = yield self.setAttributeRequest.send(
-        api.spaceAttributeRepository.setSpaceAttribute,
+        api.objectAttributeRepository.setSpaceAttribute,
         {
           spaceId,
           plugin_id: self.pluginId,
@@ -72,7 +72,7 @@ const PluginAttributesManager = types
     }),
     deleteSpaceAttribute: flow(function* (spaceId: string, attributeName: string) {
       const response = yield self.deleteAttributeRequest.send(
-        api.spaceAttributeRepository.deleteSpaceAttribute,
+        api.objectAttributeRepository.deleteSpaceAttribute,
         {
           spaceId,
           plugin_id: self.pluginId,
@@ -93,7 +93,7 @@ const PluginAttributesManager = types
       attributeItemName: string
     ) {
       const response = yield self.getAttributeItemRequest.send(
-        api.spaceAttributeRepository.getSpaceAttributeItem,
+        api.objectAttributeRepository.getSpaceAttributeItem,
         {
           spaceId,
           plugin_id: self.pluginId,
@@ -117,7 +117,7 @@ const PluginAttributesManager = types
       value: T
     ) {
       const response = yield self.setAttributeItemRequest.send(
-        api.spaceAttributeRepository.setSpaceAttributeItem,
+        api.objectAttributeRepository.setSpaceAttributeItem,
         {
           spaceId,
           plugin_id: self.pluginId,
@@ -145,7 +145,7 @@ const PluginAttributesManager = types
       attributeItemName: string
     ) {
       const response = yield self.deleteAttributeItemRequest.send(
-        api.spaceAttributeRepository.deleteSpaceAttribute,
+        api.objectAttributeRepository.deleteSpaceAttribute,
         {
           spaceId,
           plugin_id: self.pluginId,
@@ -177,7 +177,7 @@ const PluginAttributesManager = types
       // return yield self.deleteSpaceAttributeItem(spaceId, AttributeNameEnum.STATE, key);
       return yield self.deleteSpaceAttribute(spaceId, AttributeNameEnum.STATE);
     }),
-    getConfig: flow(function* <C extends GetSpaceAttributeResponse>() {
+    getConfig: flow(function* <C extends GetObjectAttributeResponse>() {
       return yield self.getSpaceAttributeValue<C>(appVariables.NODE_ID, AttributeNameEnum.CONFIG);
     })
   }))

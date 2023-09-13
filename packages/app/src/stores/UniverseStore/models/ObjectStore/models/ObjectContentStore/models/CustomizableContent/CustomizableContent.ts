@@ -67,7 +67,7 @@ const CustomizableContent = types
       self.objectId = objectId;
 
       const attributeResponse = yield self.fetchRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
+        api.objectAttributeRepository.getObjectAttribute,
         {
           spaceId: self.objectId,
           plugin_id: self.pluginId, // It is PluginIdEnum.CORE
@@ -117,7 +117,7 @@ const CustomizableContent = types
         return false;
       }
 
-      yield self.setEffectAttrRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+      yield self.setEffectAttrRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
         spaceId: self.objectId,
         plugin_id: self.pluginId,
         attribute_name: AttributeNameEnum.OBJECT_EFFECT,
@@ -127,7 +127,7 @@ const CustomizableContent = types
       return self.setEffectAttrRequest.isDone;
     }),
     unclaimAndClear: flow(function* () {
-      yield self.setEffectAttrRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+      yield self.setEffectAttrRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
         spaceId: self.objectId,
         plugin_id: self.pluginId,
         attribute_name: AttributeNameEnum.OBJECT_EFFECT,

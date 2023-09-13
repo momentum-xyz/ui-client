@@ -138,11 +138,14 @@ const ObjectStore = types
       }
     }),
     fetchObjectName: flow(function* (spaceId: string) {
-      const response = yield self.nameRequest.send(api.spaceAttributeRepository.getSpaceAttribute, {
-        spaceId: spaceId,
-        plugin_id: PluginIdEnum.CORE,
-        attribute_name: AttributeNameEnum.NAME
-      });
+      const response = yield self.nameRequest.send(
+        api.objectAttributeRepository.getObjectAttribute,
+        {
+          spaceId: spaceId,
+          plugin_id: PluginIdEnum.CORE,
+          attribute_name: AttributeNameEnum.NAME
+        }
+      );
 
       if (response === undefined || !(AttributeNameEnum.NAME in response)) {
         return;

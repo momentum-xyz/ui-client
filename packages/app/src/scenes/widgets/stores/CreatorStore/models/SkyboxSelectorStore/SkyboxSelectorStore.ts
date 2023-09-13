@@ -137,7 +137,7 @@ const SkyboxSelectorStore = types
       }
     }),
     updateActiveSkybox: flow(function* (id: string, worldId: string) {
-      yield self.createSkyboxRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+      yield self.createSkyboxRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
         spaceId: worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.ACTIVE_SKYBOX,

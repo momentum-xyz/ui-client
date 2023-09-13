@@ -4,7 +4,7 @@ import {ObjectTypeIdEnum, RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {PluginIdEnum} from 'api/enums';
 import {getRootStore} from 'core/utils';
-import {api, FetchWorldTreeResponse, GetSpaceAttributeResponse, PostSpaceResponse} from 'api';
+import {api, FetchWorldTreeResponse, GetObjectAttributeResponse, PostSpaceResponse} from 'api';
 import {PosBusService} from 'shared/services';
 import {CanvasConfigInterface} from 'api/interfaces';
 import {
@@ -99,8 +99,8 @@ const CanvasEditorStore = types
 
         self.canvasObjectId = canvasObjectId;
 
-        const configAttribute: GetSpaceAttributeResponse | null = yield self.attributeRequest.send(
-          api.spaceAttributeRepository.getSpaceAttribute,
+        const configAttribute: GetObjectAttributeResponse | null = yield self.attributeRequest.send(
+          api.objectAttributeRepository.getObjectAttribute,
           {
             spaceId: canvasObjectId,
             plugin_id: PluginIdEnum.CANVAS_EDITOR,
@@ -129,7 +129,7 @@ const CanvasEditorStore = types
 
       // 2. Save object attribute
       if (response?.object_id) {
-        yield self.attributeRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+        yield self.attributeRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
           spaceId: response.object_id,
           plugin_id: PluginIdEnum.CANVAS_EDITOR,
           attribute_name: AttributeNameEnum.CANVAS,

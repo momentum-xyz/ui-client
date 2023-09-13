@@ -6,7 +6,7 @@ import * as userRepository from './repositories/userRepository';
 import * as worldRepository from './repositories/worldRepository';
 import * as userProfileRepository from './repositories/userProfileRepository';
 import * as pluginsRepository from './repositories/pluginsRepository';
-import * as spaceAttributeRepository from './repositories/spaceAttributeRepository';
+import * as objectAttributeRepository from './repositories/objectAttributeRepository';
 import * as spaceRepository from './repositories/spaceRepository';
 import * as userAttributeRepository from './repositories/userAttributeRepository';
 import * as mediaRepository from './repositories/mediaRepository';
@@ -47,7 +47,7 @@ export const api = {
   agoraRepository,
   streamChatRepository,
   pluginsRepository,
-  spaceAttributeRepository,
+  objectAttributeRepository,
   userAttributeRepository,
   spaceUserAttributeRepository,
   mediaRepository,
@@ -78,7 +78,7 @@ export * from './repositories/userRepository/userRepository.api.types';
 export * from './repositories/userProfileRepository/userProfileRepository.api.types';
 export * from './repositories/worldRepository/worldRepository.api.types';
 export * from './repositories/pluginsRepository/pluginsRepository.api.types';
-export * from './repositories/spaceAttributeRepository/spaceAttribute.api.types';
+export * from './repositories/objectAttributeRepository/objectAttribute.api.types';
 export * from './repositories/spaceRepository/spaceRepository.api.types';
 export * from './repositories/userAttributeRepository/userAttributeRepository.api.types';
 export * from './repositories/mediaRepository/mediaRepository.api.types';

@@ -24,7 +24,7 @@ const SpawnPointStore = types
         value: {object: worldId, location, rotation}
       };
 
-      yield self.updateRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+      yield self.updateRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
         spaceId: worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.SPAWN_POINT,

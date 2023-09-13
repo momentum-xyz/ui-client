@@ -242,7 +242,7 @@ const AgoraVoiceChatStore = types
         return;
       }
 
-      yield self.muteUserRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+      yield self.muteUserRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
         spaceId: self.worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.VOICE_CHAT_ACTION,
@@ -257,7 +257,7 @@ const AgoraVoiceChatStore = types
         return;
       }
 
-      yield self.muteAllRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
+      yield self.muteAllRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
         spaceId: self.worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.VOICE_CHAT_ACTION,

@@ -5,12 +5,12 @@ import {generatePath} from 'react-router-dom';
 import {PluginIdEnum} from 'api/enums';
 import {request} from 'api/request';
 import {
-  GetSpaceAttributeItemRequest,
-  SpaceAttributeItemResponse,
+  GetObjectAttributeItemRequest,
+  ObjectAttributeItemResponse,
   SpawnByUserRequest,
   SpawnByUserResponse
 } from 'api';
-import {getSpaceAttributeItem} from 'api/repositories/spaceAttributeRepository';
+import {getSpaceAttributeItem} from 'api/repositories/objectAttributeRepository';
 
 import {
   ClaimAndCustomizeRequest,
@@ -31,12 +31,12 @@ import {
 import {spaceRepositoryEndpoints} from './spaceRepository.api.endpoints';
 
 // TODO: This functionality is still in progress
-export const fetchSpace: RequestInterface<FetchSpaceRequest, SpaceAttributeItemResponse> = (
+export const fetchSpace: RequestInterface<FetchSpaceRequest, ObjectAttributeItemResponse> = (
   options
 ) => {
   const {spaceId, ...restOptions} = options;
 
-  const attributeOptions: GetSpaceAttributeItemRequest = {
+  const attributeOptions: GetObjectAttributeItemRequest = {
     spaceId,
     plugin_id: PluginIdEnum.CORE,
     attribute_name: AttributeNameEnum.NAME,

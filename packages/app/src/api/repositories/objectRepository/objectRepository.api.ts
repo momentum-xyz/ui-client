@@ -2,20 +2,21 @@ import {RequestInterface} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
 import {request} from 'api/request';
-import {FetchObjectRequest, GetSpaceAttributeRequest, GetSpaceAttributeResponse} from 'api';
-import {getSpaceAttribute} from 'api/repositories/spaceAttributeRepository';
+import {FetchObjectRequest, GetObjectAttributeRequest, GetObjectAttributeResponse} from 'api';
+import {getObjectAttribute} from 'api/repositories/objectAttributeRepository';
 
-export const fetchObject: RequestInterface<FetchObjectRequest, GetSpaceAttributeResponse | null> = (
-  options
-) => {
+export const fetchObject: RequestInterface<
+  FetchObjectRequest,
+  GetObjectAttributeResponse | null
+> = (options) => {
   const {spaceId, pluginId, ...restOptions} = options;
 
-  const attributeOptions: GetSpaceAttributeRequest = {
+  const attributeOptions: GetObjectAttributeRequest = {
     spaceId,
     plugin_id: pluginId,
     attribute_name: AttributeNameEnum.STATE,
     ...restOptions
   };
 
-  return getSpaceAttribute(attributeOptions, request);
+  return getObjectAttribute(attributeOptions, request);
 };

@@ -71,7 +71,7 @@ const ObjectFunctionalityStore = types
     fetchObjectName: flow(function* (spaceId: string) {
       const attributeName = AttributeNameEnum.NAME;
       const response = yield self.getAttributeItemRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
+        api.objectAttributeRepository.getObjectAttribute,
         {
           spaceId: spaceId,
           plugin_id: PluginIdEnum.CORE,
