@@ -41,12 +41,7 @@ const CommentForm: FC<CommentFormPropsInterface> = ({
       </styled.Message>
 
       <styled.Actions>
-        <ButtonEllipse
-          icon="close_large"
-          label={t('actions.cancel')}
-          onClick={onCancel}
-          disabled={!message}
-        />
+        <ButtonEllipse icon="close_large" label={t('actions.cancel')} onClick={onCancel} />
         <ButtonEllipse
           icon="add"
           label={t('actions.addComment')}

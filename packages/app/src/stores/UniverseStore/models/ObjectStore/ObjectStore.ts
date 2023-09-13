@@ -5,7 +5,14 @@ import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {PluginIdEnum} from 'api/enums';
 import {api, GetSpaceInfoResponse} from 'api';
 import {BasicAsset2dIdEnum} from 'core/enums';
-import {PluginAttributesManager, PluginLoader, DynamicScriptList} from 'core/models';
+import {
+  PluginAttributesManager,
+  PluginLoader,
+  DynamicScriptList,
+  ObjectUserAttribute,
+  User
+} from 'core/models';
+import {getRootStore} from 'core/utils';
 
 import {ObjectContentStore} from './models';
 
@@ -24,6 +31,8 @@ const localPlugins = JSON.parse(REACT_APP_LOCAL_PLUGINS);
 //   }
 // } as any;
 
+const COMMENTS_PAGE_SIZE = 100;
+
 const ObjectStore = types
   .compose(
     ResetModel,
@@ -31,10 +40,18 @@ const ObjectStore = types
       objectName: types.maybe(types.string),
       objectTypeId: types.maybe(types.enumeration(Object.values(ObjectTypeIdEnum))),
       asset2dId: types.maybe(types.string),
+      ownerId: types.maybe(types.string),
+      updatedAt: types.maybe(types.string),
 
       objectRequest: types.optional(RequestModel, {}),
       assetRequest: types.optional(RequestModel, {}),
       nameRequest: types.optional(RequestModel, {}),
+      ownerRequest: types.optional(RequestModel, {}),
+
+      votesAttr: types.maybeNull(ObjectUserAttribute),
+      commentsAttr: types.maybeNull(ObjectUserAttribute),
+
+      owner: types.maybe(User),
 
       dynamicScriptList: types.optional(DynamicScriptList, {}),
       pluginLoader: types.maybe(PluginLoader),
@@ -92,6 +109,8 @@ const ObjectStore = types
 
       self.asset2dId = spaceInfo.asset_2d_id;
       self.objectTypeId = cast(spaceInfo.object_type_id);
+      self.ownerId = spaceInfo.owner_id;
+      // self.updatedAt = spaceInfo.updated_at;
 
       switch (self.asset2dId) {
         case BasicAsset2dIdEnum.CONTENT:
@@ -130,12 +149,60 @@ const ObjectStore = types
       }
 
       self.objectName = response[AttributeNameEnum.NAME];
+    }),
+    fetchObjectOwner: flow(function* () {
+      if (!self.ownerId) {
+        return;
+      }
+
+      const response = yield self.ownerRequest.send(api.userRepository.fetchUser, {
+        userId: self.ownerId
+      });
+
+      if (response === undefined) {
+        return;
+      }
+
+      self.owner = cast(response);
+
+      return response;
+    }),
+    fetchComments: flow(function* (startIndex = 0) {
+      if (!self.commentsAttr) {
+        return;
+      }
+
+      yield self.commentsAttr.entries({
+        orderDirection: 'DESC',
+        // Fields of ObjectCommentInterface
+        fields: ['uuid', 'created', 'content'],
+        order: 'created',
+        limit: COMMENTS_PAGE_SIZE,
+        offset: startIndex
+      });
     })
   }))
   .actions((self) => ({
     init: flow(function* (objectId: string) {
       yield self.loadAsset2D(objectId);
-      yield self.fetchObjectName(objectId);
+      yield Promise.all([self.fetchObjectOwner(), self.fetchObjectName(objectId)]);
+
+      self.votesAttr = ObjectUserAttribute.create({
+        objectId,
+        attributeName: AttributeNameEnum.VOTE,
+        pluginId: PluginIdEnum.CORE,
+        userId: getRootStore(self).sessionStore.userId
+      });
+      yield self.votesAttr.load();
+      yield self.votesAttr.countAllUsers();
+
+      self.commentsAttr = ObjectUserAttribute.create({
+        objectId,
+        attributeName: AttributeNameEnum.COMMENTS,
+        pluginId: PluginIdEnum.CORE,
+        userId: getRootStore(self).sessionStore.userId
+      });
+      yield self.fetchComments();
 
       return self.asset2dId;
     })
