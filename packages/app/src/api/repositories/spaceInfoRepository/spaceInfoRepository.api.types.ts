@@ -1,10 +1,4 @@
-import {ObjectTransformInterface, ObjectTypeIdEnum} from '@momentum-xyz/core';
-
-export interface PositionInterface {
-  x: number;
-  y: number;
-  z: number;
-}
+import {ObjectTransformInterface, ObjectTypeIdEnum, PositionInterface} from '@momentum-xyz/core';
 
 export interface GetSpaceInfoRequest {
   spaceId: string;

@@ -11,7 +11,7 @@ import {InteractionEffectHelper} from '../../babylon/InteractionEffectHelper';
 import {ScreenCaptureHelper} from '../../babylon/ScreenCaptureHelper';
 import {InputHelper} from '../../babylon/InputHelper';
 
-const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callbacks}) => {
+const WorldBabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callbacks}) => {
   const onObjectClick = useMutableCallback(callbacks.onObjectClick);
   const onUserClick = useMutableCallback(callbacks.onUserClick);
   const onMove = useMutableCallback(callbacks.onMove);
@@ -204,4 +204,4 @@ const BabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...callba
   );
 };
 
-export default BabylonScene;
+export default WorldBabylonScene;

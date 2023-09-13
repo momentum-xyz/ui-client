@@ -23,7 +23,7 @@ export interface PropsInterface {
   onReadyToHandleEvents: () => void;
 }
 
-export const UniverseScene: FC<PropsInterface> = ({events, renderURL, ...callbacks}) => {
+export const UniverseBabylonScene: FC<PropsInterface> = ({events, renderURL, ...callbacks}) => {
   const onWorldClick = useMutableCallback(callbacks.onWorldClick);
   const onUserClick = useMutableCallback(callbacks.onUserClick);
   const onClickOutside = useMutableCallback(callbacks.onClickOutside);

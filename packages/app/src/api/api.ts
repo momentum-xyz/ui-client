@@ -24,7 +24,6 @@ import * as spaceUserAttributeRepository from './repositories/spaceUserAttribute
 import * as skyboxRepository from './repositories/skyboxRepository';
 import * as aiImagesRepository from './repositories/aiImagesRepository';
 import * as canvasRepository from './repositories/canvasRepository';
-import * as spaceEmojiRepository from './repositories_OLD/spaceEmojiRepository';
 
 /**
  * This layer is responsible for:
@@ -47,7 +46,6 @@ export const api = {
   spaceRepository,
   agoraRepository,
   streamChatRepository,
-  spaceEmojiRepository,
   pluginsRepository,
   spaceAttributeRepository,
   userAttributeRepository,
@@ -98,5 +96,3 @@ export * from './repositories/spaceUserAttributeRepository/spaceUserAttributeRep
 export * from './repositories/skyboxRepository/skyboxRepository.api.types';
 export * from './repositories/aiImagesRepository/aiImagesRepository.api.types';
 export * from './repositories/canvasRepository/canvasRepository.api.types';
-
-export * from './repositories_OLD/spaceEmojiRepository/spaceEmojiRepository.api.types';

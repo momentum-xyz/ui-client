@@ -1,7 +1,7 @@
 import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Universe3dEmitter} from '@momentum-xyz/core';
-import {UniverseScene} from '@momentum-xyz/core3d';
+import {UniverseBabylonScene} from '@momentum-xyz/core3d';
 import {PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {appVariables} from 'api/constants';
@@ -68,7 +68,7 @@ const Universe3dPage: FC = () => {
   }, [allUsers.length, allSortedWorlds.length, readyToHandleEvents, allSortedWorlds, allUsers]);
 
   return (
-    <UniverseScene
+    <UniverseBabylonScene
       events={Universe3dEmitter}
       renderURL={appVariables.RENDER_SERVICE_URL}
       onWorldClick={(id) => {
