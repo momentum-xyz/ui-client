@@ -19,7 +19,7 @@ import * as objectRepository from './repositories/objectRepository';
 import * as assets3dRepository from './repositories/assets3dRepository';
 import * as agoraRepository from './repositories/agoraRepository';
 import * as streamChatRepository from './repositories/streamChatRepository';
-import * as spaceUserAttributeRepository from './repositories/spaceUserAttributeRepository';
+import * as objectUserAttributeRepository from './repositories/objectUserAttributeRepository';
 import * as skyboxRepository from './repositories/skyboxRepository';
 import * as aiImagesRepository from './repositories/aiImagesRepository';
 import * as canvasRepository from './repositories/canvasRepository';
@@ -47,7 +47,7 @@ export const api = {
   pluginsRepository,
   objectAttributeRepository,
   userAttributeRepository,
-  spaceUserAttributeRepository,
+  objectUserAttributeRepository,
   mediaRepository,
   newsfeedRepository,
   timelineRepository,
@@ -89,7 +89,7 @@ export * from './repositories/objectInfoRepository/objectInfoRepository.api.type
 export * from './repositories/objectRepository/objectRepository.api.types';
 export * from './repositories/agoraRepository/agoraRepository.api.types';
 export * from './repositories/streamChatRepository/streamChatRepository.api.types';
-export * from './repositories/spaceUserAttributeRepository/spaceUserAttributeRepository.api.types';
+export * from './repositories/objectUserAttributeRepository/objectUserAttributeRepository.api.types';
 export * from './repositories/skyboxRepository/skyboxRepository.api.types';
 export * from './repositories/aiImagesRepository/aiImagesRepository.api.types';
 export * from './repositories/canvasRepository/canvasRepository.api.types';

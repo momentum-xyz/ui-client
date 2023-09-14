@@ -18,8 +18,8 @@ import {
   GenerateAIImagesResponse,
   CustomizableObjectInterface,
   FetchAIGeneratedImagesResponse,
-  GetSpaceUserAttributeCountResponse,
-  GetAllSpaceUserAttributeListResponse
+  GetObjectUserAttributeCountResponse,
+  GetAllObjectUserAttributeListResponse
 } from 'api';
 
 const COMMENTS_PAGE_SIZE = 100;
@@ -198,10 +198,10 @@ const CustomizableContent = types
   }))
   .actions((self) => ({
     fetchVoteCount: flow(function* () {
-      const response: GetSpaceUserAttributeCountResponse = yield self.voteCountRequest.send(
-        api.spaceUserAttributeRepository.getSpaceUserAttributeCount,
+      const response: GetObjectUserAttributeCountResponse = yield self.voteCountRequest.send(
+        api.objectUserAttributeRepository.getObjectUserAttributeCount,
         {
-          spaceId: self.objectId,
+          objectId: self.objectId,
           pluginId: PluginIdEnum.CORE,
           attributeName: AttributeNameEnum.VOTE
         }
@@ -211,10 +211,10 @@ const CustomizableContent = types
     }),
     checkVote: flow(function* (userId: string) {
       const response = yield self.voteRequest.send(
-        api.spaceUserAttributeRepository.getSpaceUserAttribute,
+        api.objectUserAttributeRepository.getObjectUserAttribute,
         {
           userId: userId,
-          spaceId: self.objectId,
+          objectId: self.objectId,
           pluginId: PluginIdEnum.CORE,
           attributeName: AttributeNameEnum.VOTE
         }
@@ -232,9 +232,9 @@ const CustomizableContent = types
       this.fetchVoteCount();
     },
     addVote: flow(function* (userId: string) {
-      yield self.voteRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
+      yield self.voteRequest.send(api.objectUserAttributeRepository.setObjectUserAttribute, {
         userId: userId,
-        spaceId: self.objectId,
+        objectId: self.objectId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.VOTE,
         value: {}
@@ -245,9 +245,9 @@ const CustomizableContent = types
       }
     }),
     removeVote: flow(function* (userId: string) {
-      yield self.voteRequest.send(api.spaceUserAttributeRepository.deleteSpaceUserAttribute, {
+      yield self.voteRequest.send(api.objectUserAttributeRepository.deleteObjectUserAttribute, {
         userId: userId,
-        spaceId: self.objectId,
+        objectId: self.objectId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.VOTE
       });
@@ -269,10 +269,10 @@ const CustomizableContent = types
         self.commentList = cast([]);
       }
 
-      const response: GetAllSpaceUserAttributeListResponse = yield self.commentListRequest.send(
-        api.spaceUserAttributeRepository.getAllSpaceUserAttributeList,
+      const response: GetAllObjectUserAttributeListResponse = yield self.commentListRequest.send(
+        api.objectUserAttributeRepository.getAllObjectUserAttributeList,
         {
-          spaceId: self.objectId,
+          objectId: self.objectId,
           pluginId: PluginIdEnum.CORE,
           attributeName: AttributeNameEnum.COMMENTS,
           orderDirection: 'DESC',
@@ -301,9 +301,9 @@ const CustomizableContent = types
         content: comment
       };
 
-      yield self.commentRequest.send(api.spaceUserAttributeRepository.setSpaceUserSubAttribute, {
+      yield self.commentRequest.send(api.objectUserAttributeRepository.setObjectUserSubAttribute, {
         userId: userId,
-        spaceId: self.objectId,
+        objectId: self.objectId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.COMMENTS,
         sub_attribute_key: uuid,
@@ -311,13 +311,16 @@ const CustomizableContent = types
       });
     }),
     deleteComment: flow(function* (userId: string, commentId: string) {
-      yield self.commentRequest.send(api.spaceUserAttributeRepository.deleteSpaceUserSubAttribute, {
-        userId: userId,
-        spaceId: self.objectId,
-        pluginId: PluginIdEnum.CORE,
-        attributeName: AttributeNameEnum.COMMENTS,
-        sub_attribute_key: commentId
-      });
+      yield self.commentRequest.send(
+        api.objectUserAttributeRepository.deleteObjectUserSubAttribute,
+        {
+          userId: userId,
+          objectId: self.objectId,
+          pluginId: PluginIdEnum.CORE,
+          attributeName: AttributeNameEnum.COMMENTS,
+          sub_attribute_key: commentId
+        }
+      );
     })
   }))
   .actions((self) => ({

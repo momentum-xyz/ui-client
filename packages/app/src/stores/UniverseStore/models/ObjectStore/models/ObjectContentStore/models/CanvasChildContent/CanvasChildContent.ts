@@ -7,7 +7,7 @@ import {User} from 'core/models';
 import {PluginIdEnum} from 'api/enums';
 import {UserContributionInterface} from 'api/interfaces';
 import {ObjectCommentInterface, ObjectCommentWithUserInterface} from 'core/interfaces';
-import {api, GetSpaceUserAttributeCountResponse, GetAllSpaceUserAttributeListResponse} from 'api';
+import {api, GetObjectUserAttributeCountResponse, GetAllObjectUserAttributeListResponse} from 'api';
 
 const COMMENTS_PAGE_SIZE = 100;
 
@@ -43,10 +43,10 @@ const CanvasChildContent = types
       self.ownerId = ownerId;
 
       const attributeResponse: UserContributionInterface = yield self.fetchRequest.send(
-        api.spaceUserAttributeRepository.getSpaceUserAttribute,
+        api.objectUserAttributeRepository.getObjectUserAttribute,
         {
           userId: self.ownerId,
-          spaceId: self.objectId,
+          objectId: self.objectId,
           pluginId: self.pluginId,
           attributeName: AttributeNameEnum.CANVAS_CONTRIBUTION
         }
@@ -81,10 +81,10 @@ const CanvasChildContent = types
   }))
   .actions((self) => ({
     fetchVoteCount: flow(function* () {
-      const response: GetSpaceUserAttributeCountResponse = yield self.voteCountRequest.send(
-        api.spaceUserAttributeRepository.getSpaceUserAttributeCount,
+      const response: GetObjectUserAttributeCountResponse = yield self.voteCountRequest.send(
+        api.objectUserAttributeRepository.getObjectUserAttributeCount,
         {
-          spaceId: self.objectId,
+          objectId: self.objectId,
           pluginId: PluginIdEnum.CORE,
           attributeName: AttributeNameEnum.VOTE
         }
@@ -94,10 +94,10 @@ const CanvasChildContent = types
     }),
     checkVote: flow(function* (userId: string) {
       const response = yield self.voteRequest.send(
-        api.spaceUserAttributeRepository.getSpaceUserAttribute,
+        api.objectUserAttributeRepository.getObjectUserAttribute,
         {
           userId: userId,
-          spaceId: self.objectId,
+          objectId: self.objectId,
           pluginId: PluginIdEnum.CORE,
           attributeName: AttributeNameEnum.VOTE
         }
@@ -115,9 +115,9 @@ const CanvasChildContent = types
       this.fetchVoteCount();
     },
     addVote: flow(function* (userId: string) {
-      yield self.voteRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
+      yield self.voteRequest.send(api.objectUserAttributeRepository.setObjectUserAttribute, {
         userId: userId,
-        spaceId: self.objectId,
+        objectId: self.objectId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.VOTE,
         value: {}
@@ -128,9 +128,9 @@ const CanvasChildContent = types
       }
     }),
     removeVote: flow(function* (userId: string) {
-      yield self.voteRequest.send(api.spaceUserAttributeRepository.deleteSpaceUserAttribute, {
+      yield self.voteRequest.send(api.objectUserAttributeRepository.deleteObjectUserAttribute, {
         userId: userId,
-        spaceId: self.objectId,
+        objectId: self.objectId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.VOTE
       });
@@ -152,10 +152,10 @@ const CanvasChildContent = types
         self.commentList = cast([]);
       }
 
-      const response: GetAllSpaceUserAttributeListResponse = yield self.commentListRequest.send(
-        api.spaceUserAttributeRepository.getAllSpaceUserAttributeList,
+      const response: GetAllObjectUserAttributeListResponse = yield self.commentListRequest.send(
+        api.objectUserAttributeRepository.getAllObjectUserAttributeList,
         {
-          spaceId: self.objectId,
+          objectId: self.objectId,
           pluginId: PluginIdEnum.CORE,
           attributeName: AttributeNameEnum.COMMENTS,
           orderDirection: 'DESC',
@@ -184,9 +184,9 @@ const CanvasChildContent = types
         content: comment
       };
 
-      yield self.commentRequest.send(api.spaceUserAttributeRepository.setSpaceUserSubAttribute, {
+      yield self.commentRequest.send(api.objectUserAttributeRepository.setObjectUserSubAttribute, {
         userId: userId,
-        spaceId: self.objectId,
+        objectId: self.objectId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.COMMENTS,
         sub_attribute_key: uuid,
@@ -194,13 +194,16 @@ const CanvasChildContent = types
       });
     }),
     deleteComment: flow(function* (userId: string, commentId: string) {
-      yield self.commentRequest.send(api.spaceUserAttributeRepository.deleteSpaceUserSubAttribute, {
-        userId: userId,
-        spaceId: self.objectId,
-        pluginId: PluginIdEnum.CORE,
-        attributeName: AttributeNameEnum.COMMENTS,
-        sub_attribute_key: commentId
-      });
+      yield self.commentRequest.send(
+        api.objectUserAttributeRepository.deleteObjectUserSubAttribute,
+        {
+          userId: userId,
+          objectId: self.objectId,
+          pluginId: PluginIdEnum.CORE,
+          attributeName: AttributeNameEnum.COMMENTS,
+          sub_attribute_key: commentId
+        }
+      );
     })
   }))
   .actions((self) => ({

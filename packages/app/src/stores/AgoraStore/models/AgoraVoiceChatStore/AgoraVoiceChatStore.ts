@@ -10,7 +10,7 @@ import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {PluginIdEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 import {AgoraRemoteUser, AgoraRemoteUserInterface} from 'core/models';
-import {api, AgoraTokenResponse, GetAllSpaceUserAttributesForSpaceResponse} from 'api';
+import {api, AgoraTokenResponse, GetAllObjectUserAttributesForObjectResponse} from 'api';
 
 import {VoiceChatUser} from './models';
 
@@ -50,10 +50,10 @@ const AgoraVoiceChatStore = types
       this.subscribeToPosBusUsers();
     },
     loadUsers: flow(function* (worldId: string) {
-      const response: GetAllSpaceUserAttributesForSpaceResponse = yield self.usersRequest.send(
-        api.spaceUserAttributeRepository.getAllSpaceUserAttributesForSpace,
+      const response: GetAllObjectUserAttributesForObjectResponse = yield self.usersRequest.send(
+        api.objectUserAttributeRepository.getAllObjectUserAttributesForObject,
         {
-          spaceId: worldId,
+          objectId: worldId,
           pluginId: PluginIdEnum.CORE,
           attributeName: AttributeNameEnum.VOICE_CHAT_USER
         }
@@ -189,8 +189,8 @@ const AgoraVoiceChatStore = types
       yield self.client.join(self.appId, tokenResponse.channel, tokenResponse.token, self.userId);
       self.hasJoined = true;
 
-      yield self.joinRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
-        spaceId: self.worldId,
+      yield self.joinRequest.send(api.objectUserAttributeRepository.setObjectUserAttribute, {
+        objectId: self.worldId,
         userId: self.userId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.VOICE_CHAT_USER,
@@ -204,8 +204,8 @@ const AgoraVoiceChatStore = types
         return;
       }
 
-      yield self.leaveRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
-        spaceId: self.worldId,
+      yield self.leaveRequest.send(api.objectUserAttributeRepository.setObjectUserAttribute, {
+        objectId: self.worldId,
         userId: self.userId,
         pluginId: PluginIdEnum.CORE,
         attributeName: AttributeNameEnum.VOICE_CHAT_USER,
@@ -218,55 +218,6 @@ const AgoraVoiceChatStore = types
         self.hasJoined = false;
       }
     })
-    /*kickUser: flow(function* (userId: string) {
-      console.info('[AgoraVoiceChatStore] Kicking user...', userId, self.worldId);
-      if (!self.worldId) {
-        return;
-      }
-
-      const attributeValue: VoiceChatUserAttributeInterface = {
-        userId,
-        joined: false
-      };
-
-      yield self.kickRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
-        spaceId: self.worldId,
-        userId,
-        pluginId: PluginIdEnum.CORE,
-        attributeName: AttributeNameEnum.VOICE_CHAT_USER,
-        value: attributeValue
-      });
-    }),
-    muteUser: flow(function* (userId: string) {
-      if (!self.worldId) {
-        return;
-      }
-
-      yield self.muteUserRequest.send(api.objectAttributeRepository.setObjectAttribute, {
-        objectId: self.worldId,
-        plugin_id: PluginIdEnum.CORE,
-        attribute_name: AttributeNameEnum.VOICE_CHAT_ACTION,
-        value: {
-          action: VoiceChatActionEnum.MUTE_USER,
-          userId: userId
-        }
-      });
-    }),
-    muteAll: flow(function* () {
-      if (!self.worldId || !self.userId) {
-        return;
-      }
-
-      yield self.muteAllRequest.send(api.objectAttributeRepository.setObjectAttribute, {
-        objectId: self.worldId,
-        plugin_id: PluginIdEnum.CORE,
-        attribute_name: AttributeNameEnum.VOICE_CHAT_ACTION,
-        value: {
-          action: VoiceChatActionEnum.MUTE_ALL,
-          userId: self.userId
-        }
-      });
-    })*/
   }))
   .views((self) => ({
     get joinedUsers() {

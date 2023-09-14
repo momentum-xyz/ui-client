@@ -2,7 +2,7 @@ import {cast, flow, types} from 'mobx-state-tree';
 import {RequestModel} from '@momentum-xyz/core';
 import {AttributeNameEnum, AttributeValueInterface} from '@momentum-xyz/sdk';
 
-import {GetAllSpaceUserAttributeListResponse, api} from 'api';
+import {GetAllObjectUserAttributeListResponse, api} from 'api';
 import {PluginIdEnum} from 'api/enums';
 
 export const ObjectUserAttribute = types
@@ -26,9 +26,9 @@ export const ObjectUserAttribute = types
       };
       console.log('[ObjectUserAttribute] load', params);
       const response: AttributeValueInterface | undefined = yield self.request.send(
-        api.spaceUserAttributeRepository.getSpaceUserAttribute,
+        api.objectUserAttributeRepository.getObjectUserAttribute,
         {
-          spaceId: self.objectId,
+          objectId: self.objectId,
           userId: self.userId,
           pluginId: self.pluginId,
           attributeName: self.attributeName
@@ -47,14 +47,14 @@ export const ObjectUserAttribute = types
       console.log('[ObjectUserAttribute] set:', value);
 
       const data = {
-        spaceId: self.objectId,
+        objectId: self.objectId,
         userId: self.userId,
         pluginId: self.pluginId,
         attributeName: self.attributeName,
         value
       };
 
-      yield self.request.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, data);
+      yield self.request.send(api.objectUserAttributeRepository.setObjectUserAttribute, data);
 
       if (self.request.isError) {
         throw new Error('Error setting attribute: ' + self.request.errorCode);
@@ -65,14 +65,14 @@ export const ObjectUserAttribute = types
     setItem: flow(function* (itemName: string, value: unknown) {
       console.log('[ObjectUserAttribute] setItem:', itemName, value);
       const data = {
-        spaceId: self.objectId,
+        objectId: self.objectId,
         userId: self.userId,
         pluginId: self.pluginId,
         attributeName: self.attributeName,
         sub_attribute_key: itemName,
         sub_attribute_value: value
       };
-      yield self.request.send(api.spaceUserAttributeRepository.setSpaceUserSubAttribute, data);
+      yield self.request.send(api.objectUserAttributeRepository.setObjectUserSubAttribute, data);
 
       if (self.request.isError) {
         throw new Error('Error setting attribute item: ' + self.request.errorCode);
@@ -86,13 +86,13 @@ export const ObjectUserAttribute = types
     }),
     delete: flow(function* () {
       const params = {
-        spaceId: self.objectId,
+        objectId: self.objectId,
         userId: self.userId,
         pluginId: self.pluginId,
         attributeName: self.attributeName
       };
       console.log('[ObjectUserAttribute] delete', params);
-      yield self.request.send(api.spaceUserAttributeRepository.deleteSpaceUserAttribute, params);
+      yield self.request.send(api.objectUserAttributeRepository.deleteObjectUserAttribute, params);
 
       if (self.request.isError) {
         throw new Error('Error deleting attribute: ' + self.request.errorCode);
@@ -102,14 +102,17 @@ export const ObjectUserAttribute = types
     }),
     deleteItem: flow(function* (itemName: string) {
       const params = {
-        spaceId: self.objectId,
+        objectId: self.objectId,
         userId: self.userId,
         pluginId: self.pluginId,
         attributeName: self.attributeName,
         sub_attribute_key: itemName
       };
       console.log('[ObjectUserAttribute] deleteItem', params);
-      yield self.request.send(api.spaceUserAttributeRepository.deleteSpaceUserSubAttribute, params);
+      yield self.request.send(
+        api.objectUserAttributeRepository.deleteObjectUserSubAttribute,
+        params
+      );
 
       if (self.request.isError) {
         throw new Error('Error deleting attribute item: ' + self.request.errorCode);
@@ -117,13 +120,13 @@ export const ObjectUserAttribute = types
     }),
     countAllUsers: flow(function* () {
       const params = {
-        spaceId: self.objectId,
+        objectId: self.objectId,
         pluginId: self.pluginId,
         attributeName: self.attributeName
       };
       console.log('[ObjectUserAttribute] countAllUsers', params);
       const response: {count: number} = yield self.request.send(
-        api.spaceUserAttributeRepository.getSpaceUserAttributeCount,
+        api.objectUserAttributeRepository.getObjectUserAttributeCount,
         params
       );
 
@@ -152,10 +155,10 @@ export const ObjectUserAttribute = types
       filterValue?: string;
       q?: string;
     }) {
-      const response: GetAllSpaceUserAttributeListResponse = yield self.request.send(
-        api.spaceUserAttributeRepository.getAllSpaceUserAttributeList,
+      const response: GetAllObjectUserAttributeListResponse = yield self.request.send(
+        api.objectUserAttributeRepository.getAllObjectUserAttributeList,
         {
-          spaceId: self.objectId,
+          objectId: self.objectId,
           pluginId: self.pluginId,
           attributeName: self.attributeName,
           fields,

@@ -11,7 +11,7 @@ import {
   UploadFileResponse,
   AIStyleItemInterface,
   SkyboxGenerationStatusInterface,
-  GetAllSpaceUserAttributeListResponse
+  GetAllObjectUserAttributeListResponse
 } from 'api';
 
 interface SkyboxItemInterface {
@@ -68,11 +68,11 @@ const SkyboxSelectorStore = types
         self.communitySkyboxesGroupsCount = 0;
       }
 
-      const response: GetAllSpaceUserAttributeListResponse =
+      const response: GetAllObjectUserAttributeListResponse =
         yield self.fetchCommunitySkyboxesRequest.send(
-          api.spaceUserAttributeRepository.getAllSpaceUserAttributeList,
+          api.objectUserAttributeRepository.getAllObjectUserAttributeList,
           {
-            spaceId: appVariables.NODE_ID,
+            objectId: appVariables.NODE_ID,
             pluginId: PluginIdEnum.CORE,
             attributeName: AttributeNameEnum.SKYBOX_LIST,
             // Fields of SkyboxItemModelType
@@ -114,10 +114,10 @@ const SkyboxSelectorStore = types
       self.userSkyboxes = cast([]);
 
       const response: AttributeValueInterface = yield self.fetchUserSkyboxesRequest.send(
-        api.spaceUserAttributeRepository.getSpaceUserAttribute,
+        api.objectUserAttributeRepository.getObjectUserAttribute,
         {
           userId,
-          spaceId: appVariables.NODE_ID,
+          objectId: appVariables.NODE_ID,
           pluginId: PluginIdEnum.CORE,
           attributeName: AttributeNameEnum.SKYBOX_LIST
         }
@@ -161,10 +161,10 @@ const SkyboxSelectorStore = types
       console.log('Upload image response:', uploadImageResponse, hash);
 
       yield self.createSkyboxRequest.send(
-        api.spaceUserAttributeRepository.setSpaceUserSubAttribute,
+        api.objectUserAttributeRepository.setObjectUserSubAttribute,
         {
           userId,
-          spaceId: appVariables.NODE_ID,
+          objectId: appVariables.NODE_ID,
           pluginId: PluginIdEnum.CORE,
           attributeName: AttributeNameEnum.SKYBOX_LIST,
           sub_attribute_key: hash,
@@ -184,10 +184,10 @@ const SkyboxSelectorStore = types
     }),
     removeUserSkybox: flow(function* (userId: string, skyboxId: string) {
       yield self.removeSkyboxRequest.send(
-        api.spaceUserAttributeRepository.deleteSpaceUserSubAttribute,
+        api.objectUserAttributeRepository.deleteObjectUserSubAttribute,
         {
           userId,
-          spaceId: appVariables.NODE_ID,
+          objectId: appVariables.NODE_ID,
           pluginId: PluginIdEnum.CORE,
           attributeName: AttributeNameEnum.SKYBOX_LIST,
           sub_attribute_key: skyboxId
