@@ -1,6 +1,6 @@
 export interface EmojiUploadRequest {
   key: string;
-  spaceId: string;
+  objectId: string;
   name: string;
   hash: string;
   emojiId: string;
@@ -8,11 +8,11 @@ export interface EmojiUploadRequest {
 
 export interface EmojiDeleteRequest {
   key: string;
-  spaceId: string;
+  objectId: string;
 }
 
 export interface FetchEmojiRequest {
-  spaceId: string;
+  objectId: string;
 }
 
 export interface EmojiItemInterface {

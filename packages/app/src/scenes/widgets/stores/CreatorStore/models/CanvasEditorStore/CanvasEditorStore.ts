@@ -4,7 +4,7 @@ import {ObjectTypeIdEnum, RequestModel, ResetModel} from '@momentum-xyz/core';
 
 import {PluginIdEnum} from 'api/enums';
 import {getRootStore} from 'core/utils';
-import {api, FetchWorldTreeResponse, GetObjectAttributeResponse, PostSpaceResponse} from 'api';
+import {api, FetchWorldTreeResponse, GetObjectAttributeResponse, CreateObjectResponse} from 'api';
 import {PosBusService} from 'shared/services';
 import {CanvasConfigInterface} from 'api/interfaces';
 import {
@@ -85,7 +85,7 @@ const CanvasEditorStore = types
       self.teamworkScriptData.isChatGPT = isChatGPTEnabled;
 
       const response: FetchWorldTreeResponse = yield self.request.send(
-        api.spaceRepository.fetchWorldTree,
+        api.objectRepository.fetchWorldTree,
         {
           worldId: worldId,
           max_depth: 1,
@@ -102,7 +102,7 @@ const CanvasEditorStore = types
         const configAttribute: GetObjectAttributeResponse | null = yield self.attributeRequest.send(
           api.objectAttributeRepository.getObjectAttribute,
           {
-            spaceId: canvasObjectId,
+            objectId: canvasObjectId,
             plugin_id: PluginIdEnum.CANVAS_EDITOR,
             attribute_name: AttributeNameEnum.CANVAS
           }
@@ -117,8 +117,8 @@ const CanvasEditorStore = types
       PosBusService.attachNextReceivedObjectToCamera = true;
 
       // 1. Spawn object
-      const response: PostSpaceResponse | undefined = yield self.spawnRequest.send(
-        api.spaceRepository.postSpace,
+      const response: CreateObjectResponse | undefined = yield self.spawnRequest.send(
+        api.objectRepository.createObject,
         {
           minimap: true,
           parent_id: worldId,
@@ -129,8 +129,8 @@ const CanvasEditorStore = types
 
       // 2. Save object attribute
       if (response?.object_id) {
-        yield self.attributeRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
-          spaceId: response.object_id,
+        yield self.attributeRequest.send(api.objectAttributeRepository.setObjectAttribute, {
+          objectId: response.object_id,
           plugin_id: PluginIdEnum.CANVAS_EDITOR,
           attribute_name: AttributeNameEnum.CANVAS,
           value: self.getCanvasConfig()

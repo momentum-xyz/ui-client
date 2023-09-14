@@ -20,30 +20,30 @@ export const getObjectAttribute: RequestInterface<
   GetObjectAttributeRequest,
   GetObjectAttributeResponse | null
 > = (options) => {
-  const {spaceId, plugin_id, attribute_name, ...restOptions} = options;
+  const {objectId, plugin_id, attribute_name, ...restOptions} = options;
 
   restOptions.params = {
     plugin_id,
     attribute_name
   };
 
-  const url = generatePath(objectAttributesRepositoryEndpoints().attributes, {spaceId});
+  const url = generatePath(objectAttributesRepositoryEndpoints().attributes, {objectId});
 
   return request.get(url, restOptions);
 };
 
-export const setSpaceAttribute: RequestInterface<
+export const setObjectAttribute: RequestInterface<
   SetObjectAttributeRequest,
   SetObjectAttributeResponse | null
 > = (options) => {
-  const {spaceId, plugin_id, attribute_name, value, ...restOptions} = options;
+  const {objectId, plugin_id, attribute_name, value, ...restOptions} = options;
 
   restOptions.params = {
     plugin_id,
     attribute_name
   };
 
-  const url = generatePath(objectAttributesRepositoryEndpoints().attributes, {spaceId});
+  const url = generatePath(objectAttributesRepositoryEndpoints().attributes, {objectId});
 
   return request.post(
     url,
@@ -56,26 +56,26 @@ export const setSpaceAttribute: RequestInterface<
   );
 };
 
-export const deleteSpaceAttribute: RequestInterface<DeleteObjectAttributeRequest, null> = (
+export const deleteObjectAttribute: RequestInterface<DeleteObjectAttributeRequest, null> = (
   options
 ) => {
-  const {spaceId, plugin_id, attribute_name, ...restOptions} = options;
+  const {objectId, plugin_id, attribute_name, ...restOptions} = options;
 
   restOptions.params = {
     plugin_id,
     attribute_name
   };
 
-  const url = generatePath(objectAttributesRepositoryEndpoints().attributes, {spaceId});
+  const url = generatePath(objectAttributesRepositoryEndpoints().attributes, {objectId});
 
   return request.delete(url, restOptions);
 };
 
-export const getSpaceAttributeItem: RequestInterface<
+export const getObjectAttributeItem: RequestInterface<
   GetObjectAttributeItemRequest,
   ObjectAttributeItemResponse
 > = (options) => {
-  const {spaceId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
+  const {objectId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
 
   restOptions.params = {
     plugin_id,
@@ -83,18 +83,18 @@ export const getSpaceAttributeItem: RequestInterface<
     sub_attribute_key
   };
 
-  const url = generatePath(objectAttributesRepositoryEndpoints().attributeItem, {spaceId});
+  const url = generatePath(objectAttributesRepositoryEndpoints().attributeItem, {objectId});
 
   return request.get(url, restOptions);
 };
 
-export const setSpaceAttributeItem: RequestInterface<
+export const setObjectAttributeItem: RequestInterface<
   SetObjectAttributeItemRequest,
   ObjectAttributeItemResponse
 > = (options) => {
-  const {spaceId, plugin_id, attribute_name, sub_attribute_key, value, ...restOptions} = options;
+  const {objectId, plugin_id, attribute_name, sub_attribute_key, value, ...restOptions} = options;
 
-  const url = generatePath(objectAttributesRepositoryEndpoints().attributeItem, {spaceId});
+  const url = generatePath(objectAttributesRepositoryEndpoints().attributeItem, {objectId});
 
   return request.post(
     url,
@@ -108,12 +108,12 @@ export const setSpaceAttributeItem: RequestInterface<
   );
 };
 
-export const deleteSpaceAttributeItem: RequestInterface<DeleteObjectAttributeItemRequest, null> = (
+export const deleteObjectAttributeItem: RequestInterface<DeleteObjectAttributeItemRequest, null> = (
   options
 ) => {
-  const {spaceId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
+  const {objectId, plugin_id, attribute_name, sub_attribute_key, ...restOptions} = options;
 
-  const url = generatePath(objectAttributesRepositoryEndpoints().attributeItem, {spaceId});
+  const url = generatePath(objectAttributesRepositoryEndpoints().attributeItem, {objectId});
 
   restOptions.data = {
     plugin_id,

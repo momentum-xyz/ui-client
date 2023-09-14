@@ -202,7 +202,7 @@ const World3dStore = types
   }))
   .actions((self) => ({
     fetchWorldTree: flow(function* () {
-      self.worldTree = yield self.fetchWorldTreeRequest.send(api.spaceRepository.fetchWorldTree, {
+      self.worldTree = yield self.fetchWorldTreeRequest.send(api.objectRepository.fetchWorldTree, {
         worldId: self.worldId
       });
     })
@@ -210,7 +210,7 @@ const World3dStore = types
   .actions((self) => ({
     fetchCanvasObject: flow(function* () {
       const response: FetchWorldTreeResponse = yield self.fetchCanvasRequest.send(
-        api.spaceRepository.fetchWorldTree,
+        api.objectRepository.fetchWorldTree,
         {
           max_depth: 1,
           worldId: self.worldId,
@@ -231,7 +231,7 @@ const World3dStore = types
           yield self.fetchCanvasConfigRequest.send(
             api.objectAttributeRepository.getObjectAttribute,
             {
-              spaceId: self.canvasObjectId,
+              objectId: self.canvasObjectId,
               plugin_id: PluginIdEnum.CANVAS_EDITOR,
               attribute_name: AttributeNameEnum.CANVAS
             }

@@ -2,27 +2,27 @@ import {UserModelInterface} from 'core/models';
 
 export interface EventCreateRequest {
   data: EventInterface;
-  spaceId: string;
+  objectId: string;
   eventId: string;
 }
 
 export interface EventDeleteRequest {
   eventId: string;
-  spaceId: string;
+  objectId: string;
 }
 
 export interface FetchEventsRequest {
-  spaceId: string;
+  objectId: string;
 }
 
 export interface GetEventRequest {
-  spaceId: string;
+  objectId: string;
   eventId: string;
 }
 
 export interface EventInterface {
   eventId?: string;
-  spaceId?: string;
+  objectId?: string;
   ownerId?: string;
   spaceName?: string;
   start?: Date;

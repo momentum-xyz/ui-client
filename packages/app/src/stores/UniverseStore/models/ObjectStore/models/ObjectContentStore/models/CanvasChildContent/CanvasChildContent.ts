@@ -72,8 +72,8 @@ const CanvasChildContent = types
   }))
   .actions((self) => ({
     deleteObject: flow(function* () {
-      yield self.deleteRequest.send(api.spaceRepository.deleteSpace, {
-        spaceId: self.objectId
+      yield self.deleteRequest.send(api.objectRepository.deleteObject, {
+        objectId: self.objectId
       });
 
       return self.deleteRequest.isDone;

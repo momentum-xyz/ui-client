@@ -242,8 +242,8 @@ const AgoraVoiceChatStore = types
         return;
       }
 
-      yield self.muteUserRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
-        spaceId: self.worldId,
+      yield self.muteUserRequest.send(api.objectAttributeRepository.setObjectAttribute, {
+        objectId: self.worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.VOICE_CHAT_ACTION,
         value: {
@@ -257,8 +257,8 @@ const AgoraVoiceChatStore = types
         return;
       }
 
-      yield self.muteAllRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
-        spaceId: self.worldId,
+      yield self.muteAllRequest.send(api.objectAttributeRepository.setObjectAttribute, {
+        objectId: self.worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.VOICE_CHAT_ACTION,
         value: {

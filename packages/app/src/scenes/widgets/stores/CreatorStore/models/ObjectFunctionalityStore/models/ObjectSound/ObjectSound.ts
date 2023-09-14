@@ -35,8 +35,8 @@ const ObjectSound = types
   }))
   .actions((self) => ({
     updateAttribute: flow(function* (tracks: TrackInfoModelInterface[]) {
-      yield self.publishRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
-        spaceId: self.objectId,
+      yield self.publishRequest.send(api.objectAttributeRepository.setObjectAttribute, {
+        objectId: self.objectId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.SPATIAL_AUDIO,
         value: {
@@ -55,7 +55,7 @@ const ObjectSound = types
       const attributeResponse = yield self.fetchRequest.send(
         api.objectAttributeRepository.getObjectAttribute,
         {
-          spaceId: self.objectId,
+          objectId: self.objectId,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.SPATIAL_AUDIO
         }

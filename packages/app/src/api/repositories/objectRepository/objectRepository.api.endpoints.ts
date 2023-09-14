@@ -1,4 +1,4 @@
-export const spaceRepositoryEndpoints = () => {
+export const objectRepositoryEndpoints = () => {
   const BASE_URL = '/objects';
 
   return {

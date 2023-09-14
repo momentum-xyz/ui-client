@@ -2,7 +2,7 @@ import {AttributeValueInterface} from '@momentum-xyz/sdk';
 
 // GET OBJECT ATTRIBUTE
 export interface GetObjectAttributeRequest {
-  spaceId: string;
+  objectId: string;
   plugin_id: string;
   attribute_name: string;
 }
@@ -11,7 +11,7 @@ export interface GetObjectAttributeResponse extends AttributeValueInterface {}
 
 // SET OBJECT ATTRIBUTE
 export interface SetObjectAttributeRequest {
-  spaceId: string;
+  objectId: string;
   plugin_id: string;
   attribute_name: string;
   value: AttributeValueInterface;

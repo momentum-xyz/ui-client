@@ -31,13 +31,13 @@ const PluginAttributesManager = types
   })
   .actions((self) => ({
     getSpaceAttributeValue: flow(function* <T extends AttributeValueInterface>(
-      spaceId: string,
+      objectId: string,
       attributeName: string
     ) {
       const response = yield self.getAttributeRequest.send(
         api.objectAttributeRepository.getObjectAttribute,
         {
-          spaceId,
+          objectId,
           plugin_id: self.pluginId,
           attribute_name: attributeName
         }
@@ -50,14 +50,14 @@ const PluginAttributesManager = types
       return response as T;
     }),
     setSpaceAttributeValue: flow(function* <T extends AttributeValueInterface>(
-      spaceId: string,
+      objectId: string,
       attributeName: string,
       value: T
     ) {
       const response = yield self.setAttributeRequest.send(
-        api.objectAttributeRepository.setSpaceAttribute,
+        api.objectAttributeRepository.setObjectAttribute,
         {
-          spaceId,
+          objectId,
           plugin_id: self.pluginId,
           attribute_name: attributeName,
           value
@@ -70,11 +70,11 @@ const PluginAttributesManager = types
 
       return response as T;
     }),
-    deleteSpaceAttribute: flow(function* (spaceId: string, attributeName: string) {
+    deleteSpaceAttribute: flow(function* (objectId: string, attributeName: string) {
       const response = yield self.deleteAttributeRequest.send(
-        api.objectAttributeRepository.deleteSpaceAttribute,
+        api.objectAttributeRepository.deleteObjectAttribute,
         {
-          spaceId,
+          objectId,
           plugin_id: self.pluginId,
           attribute_name: attributeName
         }
@@ -88,14 +88,14 @@ const PluginAttributesManager = types
     }),
 
     getSpaceAttributeItem: flow(function* <T>(
-      spaceId: string,
+      objectId: string,
       attributeName: string,
       attributeItemName: string
     ) {
       const response = yield self.getAttributeItemRequest.send(
-        api.objectAttributeRepository.getSpaceAttributeItem,
+        api.objectAttributeRepository.getObjectAttributeItem,
         {
-          spaceId,
+          objectId,
           plugin_id: self.pluginId,
           attribute_name: attributeName,
           sub_attribute_key: attributeItemName
@@ -111,15 +111,15 @@ const PluginAttributesManager = types
       return value;
     }),
     setSpaceAttributeItem: flow(function* <T>(
-      spaceId: string,
+      objectId: string,
       attributeName: string,
       attributeItemName: string,
       value: T
     ) {
       const response = yield self.setAttributeItemRequest.send(
-        api.objectAttributeRepository.setSpaceAttributeItem,
+        api.objectAttributeRepository.setObjectAttributeItem,
         {
-          spaceId,
+          objectId,
           plugin_id: self.pluginId,
           attribute_name: attributeName,
           sub_attribute_key: attributeItemName,
@@ -140,14 +140,14 @@ const PluginAttributesManager = types
       return finalValue;
     }),
     deleteSpaceAttributeItem: flow(function* (
-      spaceId: string,
+      objectId: string,
       attributeName: string,
       attributeItemName: string
     ) {
       const response = yield self.deleteAttributeItemRequest.send(
-        api.objectAttributeRepository.deleteSpaceAttribute,
+        api.objectAttributeRepository.deleteObjectAttribute,
         {
-          spaceId,
+          objectId,
           plugin_id: self.pluginId,
           attribute_name: attributeName,
           sub_attribute_key: attributeItemName
@@ -174,7 +174,7 @@ const PluginAttributesManager = types
     }),
     deleteItem: flow(function* (spaceId: string, key: string) {
       // TODO: Replace after attribute item is implemented on PosBus
-      // return yield self.deleteSpaceAttributeItem(spaceId, AttributeNameEnum.STATE, key);
+      // return yield self.deleteObjectAttributeItem(spaceId, AttributeNameEnum.STATE, key);
       return yield self.deleteSpaceAttribute(spaceId, AttributeNameEnum.STATE);
     }),
     getConfig: flow(function* <C extends GetObjectAttributeResponse>() {
@@ -295,7 +295,7 @@ const PluginAttributesManager = types
         //   spaceId: string,
         //   attributeName: string,
         //   attributeItemName: string
-        // ) => self.deleteSpaceAttributeItem(spaceId, attributeName, attributeItemName),
+        // ) => self.deleteObjectAttributeItem(spaceId, attributeName, attributeItemName),
 
         // TODO: Change above to this after PosBus supports attribute items
         deleteSpaceAttributeItem: async (

@@ -33,7 +33,7 @@ const MusicStore = types
       const attributeResponse = yield self.fetchRequest.send(
         api.objectAttributeRepository.getObjectAttribute,
         {
-          spaceId: worldId,
+          objectId: worldId,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.SOUNDTRACK
         }

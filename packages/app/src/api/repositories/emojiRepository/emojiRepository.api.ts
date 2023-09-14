@@ -10,9 +10,9 @@ import {
   SetObjectAttributeItemRequest
 } from 'api';
 import {
-  deleteSpaceAttributeItem,
+  deleteObjectAttributeItem,
   getObjectAttribute,
-  setSpaceAttributeItem
+  setObjectAttributeItem
 } from 'api/repositories/objectAttributeRepository';
 
 import {
@@ -25,7 +25,7 @@ import {
 export const createEmoji: RequestInterface<EmojiUploadRequest, GetObjectAttributeResponse> = (
   options
 ) => {
-  const {key, spaceId, hash, emojiId, name, ...restOptions} = options;
+  const {key, objectId, hash, emojiId, name, ...restOptions} = options;
 
   const emoji: EmojiItemInterface = {
     hash,
@@ -34,7 +34,7 @@ export const createEmoji: RequestInterface<EmojiUploadRequest, GetObjectAttribut
   };
 
   const attributeOptions: SetObjectAttributeItemRequest = {
-    spaceId: spaceId,
+    objectId,
     plugin_id: PluginIdEnum.CORE,
     attribute_name: AttributeNameEnum.EMOJIS,
     sub_attribute_key: key,
@@ -42,29 +42,29 @@ export const createEmoji: RequestInterface<EmojiUploadRequest, GetObjectAttribut
     ...restOptions
   };
 
-  return setSpaceAttributeItem(attributeOptions, request);
+  return setObjectAttributeItem(attributeOptions, request);
 };
 
 export const deleteEmoji: RequestInterface<EmojiDeleteRequest, null> = (options) => {
-  const {key, spaceId, ...restOptions} = options;
+  const {key, objectId, ...restOptions} = options;
 
   const attributeOptions: DeleteObjectAttributeItemRequest = {
-    spaceId: spaceId,
+    objectId,
     plugin_id: PluginIdEnum.CORE,
     attribute_name: AttributeNameEnum.EMOJIS,
     sub_attribute_key: key,
     ...restOptions
   };
-  return deleteSpaceAttributeItem(attributeOptions, request);
+  return deleteObjectAttributeItem(attributeOptions, request);
 };
 
 export const fetchEmojis: RequestInterface<FetchEmojiRequest, GetObjectAttributeResponse | null> = (
   options
 ) => {
-  const {spaceId, ...restOptions} = options;
+  const {objectId, ...restOptions} = options;
 
   const attributeOptions: GetObjectAttributeRequest = {
-    spaceId: spaceId,
+    objectId,
     plugin_id: PluginIdEnum.CORE,
     attribute_name: AttributeNameEnum.EMOJIS,
     ...restOptions

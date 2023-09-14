@@ -4,7 +4,7 @@ import {ImageSizeEnum} from '@momentum-xyz/ui-kit';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {EffectsEnum} from '@momentum-xyz/core3d';
 
-import {api, FetchAssets3dResponse, PostSpaceResponse, UploadAsset3dResponse} from 'api';
+import {api, FetchAssets3dResponse, CreateObjectResponse, UploadAsset3dResponse} from 'api';
 import {Asset3dCategoryEnum, PluginIdEnum} from 'api/enums';
 import {appVariables} from 'api/constants';
 import {Asset3d, Asset3dInterface, SearchQuery} from 'core/models';
@@ -175,9 +175,8 @@ const SpawnAssetStore = types
       // and babylon module is not currently flexible enough to handle this situation
       PosBusService.attachNextReceivedObjectToCamera = true;
 
-      const response: PostSpaceResponse | undefined = yield self.spawnObjectRequest.send(
-        // TODO rename SPACE to OBJECT
-        api.spaceRepository.postSpace,
+      const response: CreateObjectResponse | undefined = yield self.spawnObjectRequest.send(
+        api.objectRepository.createObject,
         {
           parent_id: worldId,
           object_name: self.navigationObjectName,
@@ -194,8 +193,8 @@ const SpawnAssetStore = types
         getRootStore(self).universeStore.world3dStore?.setAttachedToCamera(objectId);
 
         if (self.isCustomizable) {
-          yield self.setEffectAttrRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
-            spaceId: objectId,
+          yield self.setEffectAttrRequest.send(api.objectAttributeRepository.setObjectAttribute, {
+            objectId: objectId,
             plugin_id: PluginIdEnum.CORE,
             attribute_name: AttributeNameEnum.OBJECT_EFFECT,
             value: {value: EffectsEnum.TRANSPARENT}

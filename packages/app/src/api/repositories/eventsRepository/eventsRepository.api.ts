@@ -4,10 +4,10 @@ import {PluginIdEnum} from 'api/enums';
 import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
 import {
-  deleteSpaceAttributeItem,
+  deleteObjectAttributeItem,
   getObjectAttribute,
-  getSpaceAttributeItem,
-  setSpaceAttributeItem
+  getObjectAttributeItem,
+  setObjectAttributeItem
 } from 'api/repositories/objectAttributeRepository';
 import {
   DeleteObjectAttributeItemRequest,
@@ -26,10 +26,10 @@ export const setEventAttributes: RequestInterface<
   EventCreateRequest,
   GetObjectAttributeResponse | null
 > = (options) => {
-  const {spaceId, eventId, data, ...restOptions} = options;
+  const {objectId, eventId, data, ...restOptions} = options;
 
   const attributeOptions: SetObjectAttributeItemRequest = {
-    spaceId: spaceId,
+    objectId,
     plugin_id: PluginIdEnum.CORE,
     attribute_name: AttributeNameEnum.EVENTS,
     sub_attribute_key: eventId,
@@ -37,47 +37,47 @@ export const setEventAttributes: RequestInterface<
     ...restOptions
   };
 
-  return setSpaceAttributeItem(attributeOptions, request);
+  return setObjectAttributeItem(attributeOptions, request);
 };
 
 export const deleteEventAttribute: RequestInterface<EventDeleteRequest, null> = (options) => {
-  const {eventId, spaceId, ...restOptions} = options;
+  const {eventId, objectId, ...restOptions} = options;
 
   const attributeOptions: DeleteObjectAttributeItemRequest = {
-    spaceId: spaceId,
+    objectId,
     plugin_id: PluginIdEnum.CORE,
     attribute_name: AttributeNameEnum.EVENTS,
     sub_attribute_key: eventId,
     ...restOptions
   };
-  return deleteSpaceAttributeItem(attributeOptions, request);
+  return deleteObjectAttributeItem(attributeOptions, request);
 };
 
 export const getEventAttribute: RequestInterface<
   GetEventRequest,
   ObjectAttributeItemResponse | null
 > = (options) => {
-  const {spaceId, eventId, ...restOptions} = options;
+  const {objectId, eventId, ...restOptions} = options;
 
   const attributeOptions: GetObjectAttributeItemRequest = {
-    spaceId: spaceId,
+    objectId,
     plugin_id: PluginIdEnum.CORE,
     attribute_name: AttributeNameEnum.EVENTS,
     sub_attribute_key: eventId,
     ...restOptions
   };
 
-  return getSpaceAttributeItem(attributeOptions, request);
+  return getObjectAttributeItem(attributeOptions, request);
 };
 
 export const getEventAttributes: RequestInterface<
   FetchEventsRequest,
   GetObjectAttributeResponse | null
 > = (options) => {
-  const {spaceId, ...restOptions} = options;
+  const {objectId, ...restOptions} = options;
 
   const attributeOptions: GetObjectAttributeRequest = {
-    spaceId: spaceId,
+    objectId,
     plugin_id: PluginIdEnum.CORE,
     attribute_name: AttributeNameEnum.EVENTS,
     ...restOptions

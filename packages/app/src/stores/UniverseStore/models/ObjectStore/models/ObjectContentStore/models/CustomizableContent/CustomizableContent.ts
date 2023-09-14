@@ -69,7 +69,7 @@ const CustomizableContent = types
       const attributeResponse = yield self.fetchRequest.send(
         api.objectAttributeRepository.getObjectAttribute,
         {
-          spaceId: self.objectId,
+          objectId: self.objectId,
           plugin_id: self.pluginId, // It is PluginIdEnum.CORE
           attribute_name: AttributeNameEnum.USER_CUSTOMISABLE_DATA
         }
@@ -106,7 +106,7 @@ const CustomizableContent = types
         return false;
       }
 
-      yield self.customizeRequest.send(api.spaceRepository.claimAndCustomize, {
+      yield self.customizeRequest.send(api.objectRepository.claimAndCustomize, {
         objectId: self.objectId,
         text: form.text || '',
         title: form.title || '',
@@ -117,8 +117,8 @@ const CustomizableContent = types
         return false;
       }
 
-      yield self.setEffectAttrRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
-        spaceId: self.objectId,
+      yield self.setEffectAttrRequest.send(api.objectAttributeRepository.setObjectAttribute, {
+        objectId: self.objectId,
         plugin_id: self.pluginId,
         attribute_name: AttributeNameEnum.OBJECT_EFFECT,
         value: {value: EffectsEnum.NONE}
@@ -127,14 +127,14 @@ const CustomizableContent = types
       return self.setEffectAttrRequest.isDone;
     }),
     unclaimAndClear: flow(function* () {
-      yield self.setEffectAttrRequest.send(api.objectAttributeRepository.setSpaceAttribute, {
-        spaceId: self.objectId,
+      yield self.setEffectAttrRequest.send(api.objectAttributeRepository.setObjectAttribute, {
+        objectId: self.objectId,
         plugin_id: self.pluginId,
         attribute_name: AttributeNameEnum.OBJECT_EFFECT,
         value: {value: EffectsEnum.TRANSPARENT}
       });
 
-      yield self.cleanRequest.send(api.spaceRepository.cleanCustomization, {
+      yield self.cleanRequest.send(api.objectRepository.cleanCustomization, {
         objectId: self.objectId
       });
 

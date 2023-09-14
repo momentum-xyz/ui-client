@@ -7,7 +7,6 @@ import * as worldRepository from './repositories/worldRepository';
 import * as userProfileRepository from './repositories/userProfileRepository';
 import * as pluginsRepository from './repositories/pluginsRepository';
 import * as objectAttributeRepository from './repositories/objectAttributeRepository';
-import * as spaceRepository from './repositories/spaceRepository';
 import * as userAttributeRepository from './repositories/userAttributeRepository';
 import * as mediaRepository from './repositories/mediaRepository';
 import * as newsfeedRepository from './repositories/newsfeedRepository';
@@ -43,7 +42,6 @@ export const api = {
   worldRepository,
   userRepository,
   userProfileRepository,
-  spaceRepository,
   agoraRepository,
   streamChatRepository,
   pluginsRepository,
@@ -79,7 +77,6 @@ export * from './repositories/userProfileRepository/userProfileRepository.api.ty
 export * from './repositories/worldRepository/worldRepository.api.types';
 export * from './repositories/pluginsRepository/pluginsRepository.api.types';
 export * from './repositories/objectAttributeRepository/objectAttribute.api.types';
-export * from './repositories/spaceRepository/spaceRepository.api.types';
 export * from './repositories/userAttributeRepository/userAttributeRepository.api.types';
 export * from './repositories/mediaRepository/mediaRepository.api.types';
 export * from './repositories/newsfeedRepository/newsfeedRepository.api.types';

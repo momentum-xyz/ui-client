@@ -1,5 +1,5 @@
 export const objectAttributesRepositoryEndpoints = () => {
-  const BASE_URL = '/objects/:spaceId/attributes';
+  const BASE_URL = '/objects/:objectId/attributes';
 
   return {
     attributes: `${BASE_URL}`,

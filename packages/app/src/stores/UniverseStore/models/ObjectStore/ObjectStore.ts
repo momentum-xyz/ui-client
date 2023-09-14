@@ -137,11 +137,11 @@ const ObjectStore = types
         yield self.initPluginLoader(BasicAsset2dIdEnum.VIDEO, objectId);
       }
     }),
-    fetchObjectName: flow(function* (spaceId: string) {
+    fetchObjectName: flow(function* (objectId: string) {
       const response = yield self.nameRequest.send(
         api.objectAttributeRepository.getObjectAttribute,
         {
-          spaceId: spaceId,
+          objectId: objectId,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.NAME
         }

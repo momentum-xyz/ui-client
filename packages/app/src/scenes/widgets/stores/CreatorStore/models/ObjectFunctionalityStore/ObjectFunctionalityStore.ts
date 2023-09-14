@@ -68,12 +68,12 @@ const ObjectFunctionalityStore = types
     selectAsset(id: string) {
       self.currentAssetId = id;
     },
-    fetchObjectName: flow(function* (spaceId: string) {
+    fetchObjectName: flow(function* (objectId: string) {
       const attributeName = AttributeNameEnum.NAME;
       const response = yield self.getAttributeItemRequest.send(
         api.objectAttributeRepository.getObjectAttribute,
         {
-          spaceId: spaceId,
+          objectId: objectId,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: attributeName,
           sub_attribute_key: attributeName
