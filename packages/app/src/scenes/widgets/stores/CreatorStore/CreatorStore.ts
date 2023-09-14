@@ -2,7 +2,7 @@ import {flow, types} from 'mobx-state-tree';
 import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
-import {GetSpaceInfoResponse, CreateObjectResponse, api} from 'api';
+import {GetObjectInfoResponse, CreateObjectResponse, api} from 'api';
 import {PluginIdEnum} from 'api/enums';
 import {CreatorTabsEnum} from 'core/enums';
 import {getRootStore} from 'core/utils';
@@ -37,7 +37,7 @@ const CreatorStore = types
       selectedTab: types.maybeNull(types.enumeration(Object.keys(CreatorTabsEnum))),
       selectedObjectId: types.maybeNull(types.string),
       objectName: types.maybeNull(types.string),
-      objectInfo: types.maybeNull(types.frozen<GetSpaceInfoResponse>()),
+      objectInfo: types.maybeNull(types.frozen<GetObjectInfoResponse>()),
       getObjectInfoRequest: types.optional(RequestModel, {}),
       getObjectNameRequest: types.optional(RequestModel, {}),
 
@@ -49,9 +49,12 @@ const CreatorStore = types
   )
   .actions((self) => ({
     fetchObject: flow(function* (objectId: string) {
-      const response = yield self.getObjectInfoRequest.send(api.spaceInfoRepository.getSpaceInfo, {
-        spaceId: objectId
-      });
+      const response = yield self.getObjectInfoRequest.send(
+        api.objectInfoRepository.getObjectInfo,
+        {
+          objectId
+        }
+      );
 
       if (response) {
         self.objectInfo = response;

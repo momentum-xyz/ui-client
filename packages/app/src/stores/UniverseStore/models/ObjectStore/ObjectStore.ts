@@ -3,7 +3,7 @@ import {ObjectTypeIdEnum, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
 import {PluginIdEnum} from 'api/enums';
-import {api, GetSpaceInfoResponse} from 'api';
+import {api, GetObjectInfoResponse} from 'api';
 import {BasicAsset2dIdEnum} from 'core/enums';
 import {
   PluginAttributesManager,
@@ -98,19 +98,18 @@ const ObjectStore = types
   }))
   .actions((self) => ({
     loadAsset2D: flow(function* (objectId: string) {
-      const spaceInfo: GetSpaceInfoResponse | undefined = yield self.objectRequest.send(
-        api.spaceInfoRepository.getSpaceInfo,
-        {spaceId: objectId}
+      const objectInfo: GetObjectInfoResponse | undefined = yield self.objectRequest.send(
+        api.objectInfoRepository.getObjectInfo,
+        {objectId}
       );
 
-      if (!spaceInfo) {
+      if (!objectInfo) {
         return;
       }
 
-      self.asset2dId = spaceInfo.asset_2d_id;
-      self.objectTypeId = cast(spaceInfo.object_type_id);
-      self.ownerId = spaceInfo.owner_id;
-      // self.updatedAt = spaceInfo.updated_at;
+      self.asset2dId = objectInfo.asset_2d_id;
+      self.objectTypeId = cast(objectInfo.object_type_id);
+      self.ownerId = objectInfo.owner_id;
 
       switch (self.asset2dId) {
         case BasicAsset2dIdEnum.CONTENT:
@@ -122,7 +121,7 @@ const ObjectStore = types
           });
 
           if (objectResponse?.meta.pluginId) {
-            self.objectContentStore.setObject(objectResponse, objectId, spaceInfo.owner_id);
+            self.objectContentStore.setObject(objectResponse, objectId, objectInfo.owner_id);
           }
           break;
         }

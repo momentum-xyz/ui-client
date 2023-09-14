@@ -5,7 +5,7 @@ import {ObjectAttributeItemResponse} from 'api';
  * @param subAttributes key-value pairs.
  * @return {type} Generic type.
  */
-export const mapSpaceSubAttributes = <T>(subAttributes: ObjectAttributeItemResponse): T => {
+export const mapObjectSubAttributes = <T>(subAttributes: ObjectAttributeItemResponse): T => {
   // TODO: add edge cases if it needs
   return subAttributes as never as T;
 };

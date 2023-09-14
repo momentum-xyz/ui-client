@@ -2,7 +2,7 @@ import {RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {flow, types} from 'mobx-state-tree';
 
-import {api, GetSpaceInfoResponse} from 'api';
+import {api, GetObjectInfoResponse} from 'api';
 import {PluginIdEnum} from 'api/enums';
 
 import {ObjectSound} from './models';
@@ -15,7 +15,7 @@ const ObjectFunctionalityStore = types
     types.model('ObjectFunctionalityStore', {
       objectId: types.maybe(types.string),
       objectName: types.maybe(types.string),
-      objectInfo: types.maybe(types.frozen<GetSpaceInfoResponse>()),
+      objectInfo: types.maybe(types.frozen<GetObjectInfoResponse>()),
       getObjectInfoRequest: types.optional(RequestModel, {}),
       updateAsset2dRequest: types.optional(RequestModel, {}),
 
@@ -32,9 +32,12 @@ const ObjectFunctionalityStore = types
       this.fetchObjectName(objectId);
     },
     fetchObject: flow(function* (objectId: string) {
-      const response = yield self.getObjectInfoRequest.send(api.spaceInfoRepository.getSpaceInfo, {
-        spaceId: objectId
-      });
+      const response = yield self.getObjectInfoRequest.send(
+        api.objectInfoRepository.getObjectInfo,
+        {
+          objectId
+        }
+      );
 
       if (response) {
         self.objectId = objectId;
@@ -48,8 +51,8 @@ const ObjectFunctionalityStore = types
         return;
       }
 
-      yield self.updateAsset2dRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
-        spaceId: self.objectId,
+      yield self.updateAsset2dRequest.send(api.objectInfoRepository.patchObjectInfo, {
+        objectId: self.objectId,
         asset_2d_id: self.currentAssetId
       });
     }),
@@ -58,8 +61,8 @@ const ObjectFunctionalityStore = types
         return;
       }
 
-      yield self.updateAsset2dRequest.send(api.spaceInfoRepository.patchSpaceInfo, {
-        spaceId: self.objectId,
+      yield self.updateAsset2dRequest.send(api.objectInfoRepository.patchObjectInfo, {
+        objectId: self.objectId,
         asset_2d_id: ''
       });
 

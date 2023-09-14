@@ -3,7 +3,7 @@ import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {flow, types} from 'mobx-state-tree';
 
 import {BasicAsset2dIdEnum} from 'core/enums';
-import {api, FetchAssets3dResponse, GetSpaceInfoResponse} from 'api';
+import {api, FetchAssets3dResponse, GetObjectInfoResponse} from 'api';
 import {Asset3dCategoryEnum, PluginIdEnum} from 'api/enums';
 import {ObjectColorAttributeInterface} from 'api/interfaces';
 
@@ -49,9 +49,9 @@ const ObjectColorStore = types
       });
     }),
     isColorPickerAvailable: flow(function* (worldId: string, objectId: string) {
-      const objectInfo: GetSpaceInfoResponse = yield self.objectInfoRequest.send(
-        api.spaceInfoRepository.getSpaceInfo,
-        {spaceId: objectId}
+      const objectInfo: GetObjectInfoResponse = yield self.objectInfoRequest.send(
+        api.objectInfoRepository.getObjectInfo,
+        {objectId}
       );
 
       const assets3dList: FetchAssets3dResponse = yield self.assets3dRequest.send(

@@ -13,7 +13,7 @@ import * as newsfeedRepository from './repositories/newsfeedRepository';
 import * as timelineRepository from './repositories/timelineRepository';
 import * as emojiRepository from './repositories/emojiRepository';
 import * as eventsRepository from './repositories/eventsRepository';
-import * as spaceInfoRepository from './repositories/spaceInfoRepository';
+import * as objectInfoRepository from './repositories/objectInfoRepository';
 import * as assets2dRepository from './repositories/assets2dRepository';
 import * as objectRepository from './repositories/objectRepository';
 import * as assets3dRepository from './repositories/assets3dRepository';
@@ -53,7 +53,7 @@ export const api = {
   timelineRepository,
   emojiRepository,
   eventsRepository,
-  spaceInfoRepository,
+  objectInfoRepository,
   assets2dRepository,
   objectRepository,
   skyboxRepository,
@@ -85,7 +85,7 @@ export * from './repositories/emojiRepository/emojiRepository.api.types';
 export * from './repositories/eventsRepository/eventsRepository.api.types';
 export * from './repositories/assets2dRepository/assets2dRepository.api.types';
 export * from './repositories/assets3dRepository/assets3dRepository.api.types';
-export * from './repositories/spaceInfoRepository/spaceInfoRepository.api.types';
+export * from './repositories/objectInfoRepository/objectInfoRepository.api.types';
 export * from './repositories/objectRepository/objectRepository.api.types';
 export * from './repositories/agoraRepository/agoraRepository.api.types';
 export * from './repositories/streamChatRepository/streamChatRepository.api.types';
