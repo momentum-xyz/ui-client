@@ -364,6 +364,39 @@ export const useBlockchain = ({
     [mappingContract]
   );
 
+  const setOdysseyMapping = useCallback(
+    async (node_id: string, odyssey_id: string, signed_challenge: string) => {
+      console.log('useBlockchain setOdysseyMapping', {node_id, odyssey_id, signed_challenge});
+
+      await mappingContract?.methods
+        .setOdysseyMapping(node_id, odyssey_id, signed_challenge)
+        .send({from: account});
+    },
+    [account, mappingContract]
+  );
+
+  const removeMapping = useCallback(
+    async (node_id: string, odyssey_id: string) => {
+      console.log('useBlockchain removeMapping', {node_id, odyssey_id});
+
+      await mappingContract?.methods.removeMapping(node_id, odyssey_id).send({from: account});
+    },
+    [account, mappingContract]
+  );
+
+  const getNodeForTheOdyssey = useCallback(
+    async (odyssey_id: string) => {
+      console.log('useBlockchain getNodeForOdyssey', {odyssey_id});
+
+      const nodeInfo = await mappingContract?.methods.getNodeForTheOdyssey(odyssey_id).call();
+
+      console.log('useBlockchain getNodeForOdyssey result', nodeInfo);
+
+      return nodeInfo;
+    },
+    [mappingContract]
+  );
+
   const walletSelectContent =
     selectedWalletConf === dummyWalletConf ? (
       <WalletSelector
@@ -411,6 +444,9 @@ export const useBlockchain = ({
     addNode,
     updateNode,
     removeNode,
-    getNodeInfo
+    getNodeInfo,
+    setOdysseyMapping,
+    removeMapping,
+    getNodeForTheOdyssey
   };
 };
