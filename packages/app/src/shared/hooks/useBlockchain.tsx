@@ -18,6 +18,7 @@ import stackingABI from './contract_staking.ABI.json';
 import momABI from './contract_MOM.ABI.json';
 import dadABI from './contract_DAD.ABI.json';
 import faucetABI from './contract_faucet.ABI.json';
+import mappingABI from './contract_mapping.ABI.json';
 
 const DELAY_REFRESH_DATA_MS = 2000;
 
@@ -64,27 +65,33 @@ export const useBlockchain = ({
 
   const isCorrectAccount = account === requiredAccountAddress;
 
-  const [stakingContract, momContract, dadContract, faucetContract] = useMemo(() => {
-    if (!library) {
-      return [];
-    }
-    const web3 = new Web3(library.provider);
+  const [stakingContract, momContract, dadContract, faucetContract, mappingContract] =
+    useMemo(() => {
+      if (!library) {
+        return [];
+      }
+      const web3 = new Web3(library.provider);
 
-    const stakingContract = new web3.eth.Contract(
-      stackingABI as any,
-      appVariables.CONTRACT_STAKING_ADDRESS
-    );
+      const stakingContract = new web3.eth.Contract(
+        stackingABI as any,
+        appVariables.CONTRACT_STAKING_ADDRESS
+      );
 
-    const momContract = new web3.eth.Contract(momABI as any, appVariables.CONTRACT_MOM_ADDRESS);
-    const dadContract = new web3.eth.Contract(dadABI as any, appVariables.CONTRACT_DAD_ADDRESS);
+      const momContract = new web3.eth.Contract(momABI as any, appVariables.CONTRACT_MOM_ADDRESS);
+      const dadContract = new web3.eth.Contract(dadABI as any, appVariables.CONTRACT_DAD_ADDRESS);
 
-    const faucetContract = new web3.eth.Contract(
-      faucetABI as any,
-      appVariables.CONTRACT_FAUCET_ADDRESS
-    );
+      const faucetContract = new web3.eth.Contract(
+        faucetABI as any,
+        appVariables.CONTRACT_FAUCET_ADDRESS
+      );
 
-    return [stakingContract, momContract, dadContract, faucetContract];
-  }, [library]);
+      const mappingContract = new web3.eth.Contract(
+        mappingABI as any,
+        appVariables.CONTRACT_MAPPING_ADDRESS
+      );
+
+      return [stakingContract, momContract, dadContract, faucetContract, mappingContract];
+    }, [library]);
 
   const stake = useCallback(
     async (worldId: string, amount: BN, tokenKind = TokenEnum.MOM_TOKEN) => {
@@ -302,6 +309,61 @@ export const useBlockchain = ({
     return balance.toString();
   }, [library, account, isCorrectAccount]);
 
+  const addNode = useCallback(
+    async (
+      node_id: string,
+      hostname: string,
+      name: string,
+      feeAmount: BN,
+      tokenKind = TokenEnum.MOM_TOKEN
+    ) => {
+      console.log('useBlockchain addNode', {node_id, hostname, name, tokenKind});
+
+      const tokenContract = tokenKind === TokenEnum.MOM_TOKEN ? momContract : dadContract;
+
+      const res = await tokenContract?.methods
+        .approve(appVariables.CONTRACT_MAPPING_ADDRESS, feeAmount)
+        .send({from: account});
+      console.log('useBlockchain addNode approve result', res);
+
+      await mappingContract?.methods.addNode(node_id, hostname, name).send({
+        from: account
+      });
+    },
+    [account, dadContract, mappingContract, momContract]
+  );
+
+  const updateNode = useCallback(
+    async (node_id: string, hostname: string, name: string) => {
+      console.log('useBlockchain updateNode', {node_id, hostname, name});
+
+      await mappingContract?.methods.updateNode(node_id, hostname, name).send({from: account});
+    },
+    [account, mappingContract]
+  );
+
+  const removeNode = useCallback(
+    async (node_id: string) => {
+      console.log('useBlockchain removeNode', {node_id});
+
+      await mappingContract?.methods.removeNode(node_id).send({from: account});
+    },
+    [account, mappingContract]
+  );
+
+  const getNodeInfo = useCallback(
+    async (node_id: string) => {
+      console.log('useBlockchain getNodeInfo', {node_id});
+
+      const nodeInfo = await mappingContract?.methods.getNode(node_id).call();
+
+      console.log('useBlockchain getNodeInfo result', nodeInfo);
+
+      return nodeInfo;
+    },
+    [mappingContract]
+  );
+
   const walletSelectContent =
     selectedWalletConf === dummyWalletConf ? (
       <WalletSelector
@@ -345,6 +407,10 @@ export const useBlockchain = ({
     getRewards,
     claimRewards,
     getUnstakes,
-    claimUnstakedTokens
+    claimUnstakedTokens,
+    addNode,
+    updateNode,
+    removeNode,
+    getNodeInfo
   };
 };

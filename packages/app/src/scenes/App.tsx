@@ -15,7 +15,7 @@ import {Universe3dPage} from 'scenes/universe';
 
 import AppAuth from './AppAuth';
 import {WidgetManager} from './widgetManager';
-import {UNIVERSE_ROUTES, WORLD_ROUTES, SYSTEM_ROUTES} from './App.routes';
+import {UNIVERSE_ROUTES, WORLD_ROUTES, SYSTEM_ROUTES, ADMIN_ROUTES} from './App.routes';
 import {WelcomePage} from './welcome';
 
 const ThemeProvider = ThemeProviderOriginal as unknown as FC<ThemeProviderProps<any, any>>;
@@ -85,9 +85,15 @@ const App: FC = () => {
     <ThemeProvider theme={themeStore.theme}>
       <AppAuth>
         <GlobalStyles />
-        {isTargetRoute(pathname, WORLD_ROUTES) ? (
+        <Toast />
+        {isTargetRoute(pathname, ADMIN_ROUTES) ? (
           <>
-            <Toast />
+            <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
+              <main>{createSwitchByConfig(ADMIN_ROUTES)}</main>
+            </Suspense>
+          </>
+        ) : isTargetRoute(pathname, WORLD_ROUTES) ? (
+          <>
             <World3dPage />
             <WidgetManager isWorld />
             <Suspense fallback={<LoaderFallback text={t('messages.loading')} />}>
@@ -96,7 +102,6 @@ const App: FC = () => {
           </>
         ) : (
           <>
-            <Toast />
             <Universe3dPage />
             {isWelcomePage && <WelcomePage />}
             <WidgetManager isWelcomePage={isWelcomePage} />
