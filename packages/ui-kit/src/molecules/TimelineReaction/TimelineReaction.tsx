@@ -6,8 +6,8 @@ import * as styled from './TimelineReaction.styled';
 
 export interface ReactionInterface {
   id: string;
-  imageSrc?: string;
   value: string;
+  imageSrc?: string;
 }
 
 export interface TimelineReactionPropsInterface {
