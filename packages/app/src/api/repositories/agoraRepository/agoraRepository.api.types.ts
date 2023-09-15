@@ -1,5 +1,5 @@
 export interface AgoraTokenRequest {
-  spaceId: string;
+  objectId: string;
   screenshare?: boolean;
 }
 

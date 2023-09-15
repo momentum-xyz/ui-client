@@ -20,30 +20,30 @@ const ObjectContentStore = types
     })
   )
   .actions((self) => ({
-    initNormalContent(spaceId: string): void {
+    initNormalContent(objectId: string): void {
       self.normalContent = NormalContent.create({});
-      self.normalContent.initContent(spaceId);
+      self.normalContent.initContent(objectId);
     },
-    initCustomizableContent(pluginId: string, spaceId: string): void {
+    initCustomizableContent(pluginId: string, objectId: string): void {
       self.customizableContent = CustomizableContent.create({});
-      self.customizableContent.initContent(pluginId, spaceId);
+      self.customizableContent.initContent(pluginId, objectId);
     },
-    initCanvasChildContent(pluginId: string, spaceId: string, ownerId: string): void {
+    initCanvasChildContent(pluginId: string, objectId: string, ownerId: string): void {
       self.canvasChildContent = CanvasChildContent.create({});
-      self.canvasChildContent.initContent(pluginId, spaceId, ownerId);
+      self.canvasChildContent.initContent(pluginId, objectId, ownerId);
     },
-    initCanvasContent(pluginId: string, spaceId: string): void {
+    initCanvasContent(pluginId: string, objectId: string): void {
       self.canvasContent = CanvasContent.create({});
-      self.canvasContent.initContent(pluginId, spaceId);
+      self.canvasContent.initContent(pluginId, objectId);
     }
   }))
   .actions((self) => ({
     setObject(
       object: Asset2dResponse<ObjectMetadataInterface, ObjectOptionsInterface> | undefined,
-      spaceId: string,
+      objectId: string,
       ownerId: string
     ) {
-      console.log('AssetStore setObject', object, spaceId);
+      console.log('AssetStore setObject', object, objectId);
 
       if (!object) {
         return;
@@ -55,19 +55,19 @@ const ObjectContentStore = types
       switch (meta.name) {
         case AssetTypeEnum.CONTENT:
           self.assetType = AssetTypeEnum.CONTENT;
-          self.initNormalContent(spaceId);
+          self.initNormalContent(objectId);
           break;
         case AssetTypeEnum.CLAIMABLE:
           self.assetType = AssetTypeEnum.CLAIMABLE;
-          self.initCustomizableContent(meta.pluginId, spaceId);
+          self.initCustomizableContent(meta.pluginId, objectId);
           break;
         case AssetTypeEnum.CANVAS_ROOT:
           self.assetType = AssetTypeEnum.CANVAS_ROOT;
-          self.initCanvasContent(meta.pluginId, spaceId);
+          self.initCanvasContent(meta.pluginId, objectId);
           break;
         case AssetTypeEnum.CANVAS_CHILD:
           self.assetType = AssetTypeEnum.CANVAS_CHILD;
-          self.initCanvasChildContent(meta.pluginId, spaceId, ownerId);
+          self.initCanvasChildContent(meta.pluginId, objectId, ownerId);
           break;
         default:
           break;

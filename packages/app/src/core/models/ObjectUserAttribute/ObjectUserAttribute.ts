@@ -19,7 +19,7 @@ export const ObjectUserAttribute = types
   .actions((self) => ({
     load: flow(function* () {
       const params = {
-        spaceId: self.objectId,
+        objectId: self.objectId,
         userId: self.userId,
         pluginId: self.pluginId,
         attributeName: self.attributeName

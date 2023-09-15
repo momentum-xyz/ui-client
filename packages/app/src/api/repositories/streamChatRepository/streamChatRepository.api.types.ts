@@ -1,5 +1,5 @@
 export interface StreamChatRequest {
-  spaceId: string;
+  objectId: string;
 }
 
 export interface StreamChatTokenResponse {

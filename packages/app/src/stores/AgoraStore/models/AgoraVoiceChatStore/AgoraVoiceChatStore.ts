@@ -183,7 +183,7 @@ const AgoraVoiceChatStore = types
 
       const tokenResponse: AgoraTokenResponse = yield self.tokenRequest.send(
         api.agoraRepository.getAgoraToken,
-        {spaceId: self.worldId}
+        {objectId: self.worldId}
       );
 
       yield self.client.join(self.appId, tokenResponse.channel, tokenResponse.token, self.userId);
