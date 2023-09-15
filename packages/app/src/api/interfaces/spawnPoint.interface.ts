@@ -1,11 +1,10 @@
 import {AttributeValueInterface} from '@momentum-xyz/sdk';
-
-import {UnityPositionInterface} from 'core/interfaces';
+import {PositionInterface} from '@momentum-xyz/core';
 
 export interface SpawnPointAttributeInterface extends AttributeValueInterface {
   value: {
     object: string;
-    location: UnityPositionInterface;
-    rotation: UnityPositionInterface;
+    location: PositionInterface;
+    rotation: PositionInterface;
   };
 }

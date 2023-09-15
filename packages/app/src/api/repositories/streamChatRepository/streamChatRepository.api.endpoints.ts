@@ -3,6 +3,6 @@ export const streamChatRepositoryApiEndpoints = () => {
 
   return {
     baseURL: BASE_URL,
-    token: `${BASE_URL}/:spaceId/token`
+    token: `${BASE_URL}/:objectId/token`
   };
 };

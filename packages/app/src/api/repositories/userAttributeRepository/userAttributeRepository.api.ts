@@ -3,7 +3,7 @@ import {generatePath} from 'react-router-dom';
 
 import {request} from 'api/request';
 
-import {spaceUserAttributesRepositoryEndpoints} from './userAttributeRepository.api.endpoints';
+import {userAttributesRepositoryEndpoints} from './userAttributeRepository.api.endpoints';
 import {
   // CreateOrUpdatePluginUserAttributeValueRequest,
   // CreateOrUpdatePluginUserAttributeValueResponse,
@@ -50,7 +50,7 @@ export const getPluginUserAttributeValue: RequestInterface<
     ...restOptions
   };
 
-  const url = generatePath(spaceUserAttributesRepositoryEndpoints().pluginAttributeValue, {
+  const url = generatePath(userAttributesRepositoryEndpoints().pluginAttributeValue, {
     userId
   });
 

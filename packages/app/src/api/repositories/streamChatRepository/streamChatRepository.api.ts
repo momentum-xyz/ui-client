@@ -9,7 +9,7 @@ import {streamChatRepositoryApiEndpoints} from './streamChatRepository.api.endpo
 export const getStreamChatToken: RequestInterface<StreamChatRequest, StreamChatTokenResponse> = (
   options
 ) => {
-  const {spaceId, ...restOptions} = options;
-  const url = generatePath(streamChatRepositoryApiEndpoints().token, {spaceId});
+  const {objectId, ...restOptions} = options;
+  const url = generatePath(streamChatRepositoryApiEndpoints().token, {objectId});
   return request.post(url, restOptions);
 };

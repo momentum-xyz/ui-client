@@ -2,7 +2,7 @@ import {flow, types} from 'mobx-state-tree';
 import {Dialog, RequestModel, ResetModel} from '@momentum-xyz/core';
 import {AttributeNameEnum} from '@momentum-xyz/sdk';
 
-import {GetSpaceInfoResponse, PostSpaceResponse, api} from 'api';
+import {GetObjectInfoResponse, CreateObjectResponse, api} from 'api';
 import {PluginIdEnum} from 'api/enums';
 import {CreatorTabsEnum} from 'core/enums';
 import {getRootStore} from 'core/utils';
@@ -37,7 +37,7 @@ const CreatorStore = types
       selectedTab: types.maybeNull(types.enumeration(Object.keys(CreatorTabsEnum))),
       selectedObjectId: types.maybeNull(types.string),
       objectName: types.maybeNull(types.string),
-      objectInfo: types.maybeNull(types.frozen<GetSpaceInfoResponse>()),
+      objectInfo: types.maybeNull(types.frozen<GetObjectInfoResponse>()),
       getObjectInfoRequest: types.optional(RequestModel, {}),
       getObjectNameRequest: types.optional(RequestModel, {}),
 
@@ -49,20 +49,23 @@ const CreatorStore = types
   )
   .actions((self) => ({
     fetchObject: flow(function* (objectId: string) {
-      const response = yield self.getObjectInfoRequest.send(api.spaceInfoRepository.getSpaceInfo, {
-        spaceId: objectId
-      });
+      const response = yield self.getObjectInfoRequest.send(
+        api.objectInfoRepository.getObjectInfo,
+        {
+          objectId
+        }
+      );
 
       if (response) {
         self.objectInfo = response;
       }
     }),
-    fetchObjectName: flow(function* (spaceId: string) {
+    fetchObjectName: flow(function* (objectId: string) {
       const attributeName = AttributeNameEnum.NAME;
       const response = yield self.getObjectNameRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
+        api.objectAttributeRepository.getObjectAttribute,
         {
-          spaceId: spaceId,
+          objectId: objectId,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: attributeName
         }
@@ -96,8 +99,8 @@ const CreatorStore = types
         return;
       }
 
-      yield self.removeObjectRequest.send(api.spaceRepository.deleteSpace, {
-        spaceId: self.selectedObjectId
+      yield self.removeObjectRequest.send(api.objectRepository.deleteObject, {
+        objectId: self.selectedObjectId
       });
 
       // TODO merge these stores??
@@ -106,8 +109,8 @@ const CreatorStore = types
     duplicateObject: flow(function* (objectId: string) {
       PosBusService.attachNextReceivedObjectToCamera = true;
 
-      const response: PostSpaceResponse | undefined = yield self.duplicateObjectRequest.send(
-        api.spaceRepository.cloneObject,
+      const response: CreateObjectResponse | undefined = yield self.duplicateObjectRequest.send(
+        api.objectRepository.cloneObject,
         {
           objectId
         }
@@ -125,8 +128,8 @@ const CreatorStore = types
         return;
       }
 
-      yield self.saveObjectNameRequest.send(api.spaceAttributeRepository.setSpaceAttributeItem, {
-        spaceId: self.selectedObjectId,
+      yield self.saveObjectNameRequest.send(api.objectAttributeRepository.setObjectAttributeItem, {
+        objectId: self.selectedObjectId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.NAME,
         sub_attribute_key: AttributeNameEnum.NAME,

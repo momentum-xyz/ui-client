@@ -17,9 +17,9 @@ const RootGoogleDriveStore = types
     })
   )
   .actions((self) => ({
-    init: flow(function* (spaceId: string) {
+    init: flow(function* (objectId: string) {
       const config = yield self.api.getConfig();
-      self.objectId = spaceId;
+      self.objectId = objectId;
 
       Object.entries(config).forEach((entry) => {
         const [key, value] = entry;
@@ -27,7 +27,7 @@ const RootGoogleDriveStore = types
       });
 
       self.spaceName = yield self.attributesApi.getSpaceAttributeItem(
-        spaceId,
+        objectId,
         AttributeNameEnum.NAME,
         AttributeNameEnum.NAME
       );

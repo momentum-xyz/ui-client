@@ -1,2 +1,2 @@
-export * from './BabylonScene';
-export * from './UniverseScene';
+export * from './WorldBabylonScene';
+export * from './UniverseBabylonScene';

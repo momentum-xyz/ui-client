@@ -26,8 +26,8 @@ const MusicManagerStore = types
 
       const tracks: TrackInfoModelInterface[] = getRootStore(self).musicStore.musicPlayer.tracks;
 
-      yield self.publishRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-        spaceId: worldId,
+      yield self.publishRequest.send(api.objectAttributeRepository.setObjectAttribute, {
+        objectId: worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.SOUNDTRACK,
         value: {
@@ -43,8 +43,8 @@ const MusicManagerStore = types
     deleteSound: flow(function* (render_hash: string, worldId: string) {
       const tracks: TrackInfoModelInterface[] = getRootStore(self).musicStore.musicPlayer.tracks;
 
-      yield self.publishRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-        spaceId: worldId,
+      yield self.publishRequest.send(api.objectAttributeRepository.setObjectAttribute, {
+        objectId: worldId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.SOUNDTRACK,
         value: {tracks: [...tracks.filter((s) => s.render_hash !== render_hash)]}

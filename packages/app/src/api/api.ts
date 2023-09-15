@@ -6,25 +6,23 @@ import * as userRepository from './repositories/userRepository';
 import * as worldRepository from './repositories/worldRepository';
 import * as userProfileRepository from './repositories/userProfileRepository';
 import * as pluginsRepository from './repositories/pluginsRepository';
-import * as spaceAttributeRepository from './repositories/spaceAttributeRepository';
-import * as spaceRepository from './repositories/spaceRepository';
+import * as objectAttributeRepository from './repositories/objectAttributeRepository';
 import * as userAttributeRepository from './repositories/userAttributeRepository';
 import * as mediaRepository from './repositories/mediaRepository';
 import * as newsfeedRepository from './repositories/newsfeedRepository';
 import * as timelineRepository from './repositories/timelineRepository';
 import * as emojiRepository from './repositories/emojiRepository';
 import * as eventsRepository from './repositories/eventsRepository';
-import * as spaceInfoRepository from './repositories/spaceInfoRepository';
+import * as objectInfoRepository from './repositories/objectInfoRepository';
 import * as assets2dRepository from './repositories/assets2dRepository';
 import * as objectRepository from './repositories/objectRepository';
 import * as assets3dRepository from './repositories/assets3dRepository';
 import * as agoraRepository from './repositories/agoraRepository';
 import * as streamChatRepository from './repositories/streamChatRepository';
-import * as spaceUserAttributeRepository from './repositories/spaceUserAttributeRepository';
+import * as objectUserAttributeRepository from './repositories/objectUserAttributeRepository';
 import * as skyboxRepository from './repositories/skyboxRepository';
 import * as aiImagesRepository from './repositories/aiImagesRepository';
 import * as canvasRepository from './repositories/canvasRepository';
-import * as spaceEmojiRepository from './repositories_OLD/spaceEmojiRepository';
 
 /**
  * This layer is responsible for:
@@ -44,20 +42,18 @@ export const api = {
   worldRepository,
   userRepository,
   userProfileRepository,
-  spaceRepository,
   agoraRepository,
   streamChatRepository,
-  spaceEmojiRepository,
   pluginsRepository,
-  spaceAttributeRepository,
+  objectAttributeRepository,
   userAttributeRepository,
-  spaceUserAttributeRepository,
+  objectUserAttributeRepository,
   mediaRepository,
   newsfeedRepository,
   timelineRepository,
   emojiRepository,
   eventsRepository,
-  spaceInfoRepository,
+  objectInfoRepository,
   assets2dRepository,
   objectRepository,
   skyboxRepository,
@@ -80,8 +76,7 @@ export * from './repositories/userRepository/userRepository.api.types';
 export * from './repositories/userProfileRepository/userProfileRepository.api.types';
 export * from './repositories/worldRepository/worldRepository.api.types';
 export * from './repositories/pluginsRepository/pluginsRepository.api.types';
-export * from './repositories/spaceAttributeRepository/spaceAttribute.api.types';
-export * from './repositories/spaceRepository/spaceRepository.api.types';
+export * from './repositories/objectAttributeRepository/objectAttribute.api.types';
 export * from './repositories/userAttributeRepository/userAttributeRepository.api.types';
 export * from './repositories/mediaRepository/mediaRepository.api.types';
 export * from './repositories/newsfeedRepository/newsfeedRepository.api.types';
@@ -90,13 +85,11 @@ export * from './repositories/emojiRepository/emojiRepository.api.types';
 export * from './repositories/eventsRepository/eventsRepository.api.types';
 export * from './repositories/assets2dRepository/assets2dRepository.api.types';
 export * from './repositories/assets3dRepository/assets3dRepository.api.types';
-export * from './repositories/spaceInfoRepository/spaceInfoRepository.api.types';
+export * from './repositories/objectInfoRepository/objectInfoRepository.api.types';
 export * from './repositories/objectRepository/objectRepository.api.types';
 export * from './repositories/agoraRepository/agoraRepository.api.types';
 export * from './repositories/streamChatRepository/streamChatRepository.api.types';
-export * from './repositories/spaceUserAttributeRepository/spaceUserAttributeRepository.api.types';
+export * from './repositories/objectUserAttributeRepository/objectUserAttributeRepository.api.types';
 export * from './repositories/skyboxRepository/skyboxRepository.api.types';
 export * from './repositories/aiImagesRepository/aiImagesRepository.api.types';
 export * from './repositories/canvasRepository/canvasRepository.api.types';
-
-export * from './repositories_OLD/spaceEmojiRepository/spaceEmojiRepository.api.types';

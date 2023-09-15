@@ -18270,11 +18270,6 @@ react-transition-group@^4.3.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-unity-webgl@8.8.0:
-  version "8.8.0"
-  resolved "https://registry.npmjs.org/react-unity-webgl/-/react-unity-webgl-8.8.0.tgz"
-  integrity sha512-4PHTEwUQd70IJAy+jdVvHM+A6No9GMTmA/PCFOWkgpy2g0SlKJF3LREt92TfhttnMJ+CLL9iF8X03wMBvNvsjA==
-
 react-use-error-boundary@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/react-use-error-boundary/-/react-use-error-boundary-3.0.0.tgz"

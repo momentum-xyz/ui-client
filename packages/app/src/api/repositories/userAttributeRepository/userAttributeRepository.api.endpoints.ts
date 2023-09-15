@@ -1,4 +1,4 @@
-export const spaceUserAttributesRepositoryEndpoints = () => {
+export const userAttributesRepositoryEndpoints = () => {
   // const BASE_URL = '/worlds/:worldId/users/:userId/attributes';
   const BASE_URL = '/users/:userId/attributes';
   // const BASE_URL = '/users/attributes';

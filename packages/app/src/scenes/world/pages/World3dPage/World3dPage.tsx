@@ -2,7 +2,7 @@ import {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
 import {useDebouncedCallback, MenuItemInterface, PositionEnum} from '@momentum-xyz/ui-kit';
-import {BabylonScene} from '@momentum-xyz/core3d';
+import {WorldBabylonScene} from '@momentum-xyz/core3d';
 import {
   useI18n,
   Event3dEmitter,
@@ -251,7 +251,7 @@ const World3dPage: FC = () => {
   });
 
   return (
-    <BabylonScene
+    <WorldBabylonScene
       key={worldId}
       events={Event3dEmitter}
       renderURL={appVariables.RENDER_SERVICE_URL}
