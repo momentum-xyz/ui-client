@@ -17,15 +17,15 @@ const WelcomeWidget: FC = () => {
       <styled.Hexagons>
         <styled.TopHexagons>
           <styled.BigHexagon className="hexagon">
-            <span>I am</span>
+            <span>I am 1</span>
           </styled.BigHexagon>
           <styled.BigHexagon className="hexagon">
-            <span>I am</span>
+            <span>I am 2</span>
           </styled.BigHexagon>
         </styled.TopHexagons>
         <styled.BottomHexagon>
           <styled.BigHexagon className="hexagon">
-            <span>I am</span>
+            <span>I am 3</span>
           </styled.BigHexagon>
         </styled.BottomHexagon>
       </styled.Hexagons>
