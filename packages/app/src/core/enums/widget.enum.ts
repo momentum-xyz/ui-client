@@ -1,4 +1,5 @@
 export enum WidgetEnum {
+  WELCOME = 'WELCOME',
   LOGIN = 'LOGIN',
   EXPLORE = 'EXPLORE',
   BUY_NFT = 'BUY_NFT',

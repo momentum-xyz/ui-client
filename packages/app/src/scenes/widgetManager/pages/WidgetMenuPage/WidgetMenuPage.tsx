@@ -132,6 +132,15 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
     },
     ...ODYSSEY_ITEMS,
     {
+      key: WidgetEnum.WELCOME,
+      position: PositionEnum.CENTER,
+      viewPosition: PositionEnum.CENTER,
+      iconName: 'info',
+      tooltip: t('actions.info'),
+      isDisabled: universeStore.isScreenRecording,
+      onClick: handleToggle
+    },
+    {
       key: WidgetEnum.STAKING,
       position: PositionEnum.CENTER,
       viewPosition: PositionEnum.RIGHT,

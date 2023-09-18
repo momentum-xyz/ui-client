@@ -8,6 +8,7 @@ import {SubMenuInfo, WidgetInfo, WidgetInfoDataInterface} from './models';
 const WidgetManagerStore = types
   .model('WidgetManagerStore', {
     leftActiveWidget: types.maybeNull(WidgetInfo),
+    centerActiveWidget: types.maybeNull(WidgetInfo),
     rightActiveWidget: types.maybeNull(WidgetInfo),
 
     subMenuInfo: types.maybeNull(SubMenuInfo)
@@ -23,6 +24,11 @@ const WidgetManagerStore = types
             ? this.open(type, position, data)
             : this.close(type);
           break;
+        case PositionEnum.CENTER:
+          self.centerActiveWidget?.type !== type
+            ? this.open(type, position, data)
+            : this.close(type);
+          break;
       }
     },
     open(type: WidgetEnum, position: PositionEnum, data?: WidgetInfoDataInterface): void {
@@ -33,6 +39,9 @@ const WidgetManagerStore = types
         case PositionEnum.RIGHT:
           self.rightActiveWidget = cast({type, data});
           break;
+        case PositionEnum.CENTER:
+          self.centerActiveWidget = cast({type, data});
+          break;
       }
     },
     close(type: WidgetEnum): void {
@@ -40,11 +49,14 @@ const WidgetManagerStore = types
         self.leftActiveWidget = null;
       } else if (self.rightActiveWidget?.type === type) {
         self.rightActiveWidget = null;
+      } else if (self.centerActiveWidget?.type === type) {
+        self.centerActiveWidget = null;
       }
     },
     closeAll(): void {
       self.leftActiveWidget = null;
       self.rightActiveWidget = null;
+      self.centerActiveWidget = null;
     },
     openSubMenu(
       key: WidgetEnum,
@@ -78,6 +90,9 @@ const WidgetManagerStore = types
       if (self.rightActiveWidget) {
         widgets.push({widget: self.rightActiveWidget.type, id: self.rightActiveWidget.data?.id});
       }
+      if (self.centerActiveWidget) {
+        widgets.push({widget: self.centerActiveWidget.type, id: self.centerActiveWidget.data?.id});
+      }
 
       return widgets;
     },
@@ -86,6 +101,9 @@ const WidgetManagerStore = types
     },
     get isRightWidgetShown(): boolean {
       return !!self.rightActiveWidget;
+    },
+    get isCenterWidgetShown(): boolean {
+      return !!self.centerActiveWidget;
     }
   }));
 

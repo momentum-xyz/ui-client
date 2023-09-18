@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto auto auto;
   height: 100%;
   gap: 10px;
 `;
@@ -10,6 +10,12 @@ export const Container = styled.div`
 export const LeftSection = styled.div`
   padding: var(--menu-padding) 0 0 var(--menu-padding);
   display: flex;
+`;
+
+export const CenterSection = styled.div`
+  padding: var(--menu-padding) 0 0 0;
+  display: flex;
+  justify-content: center;
 `;
 
 export const RightSection = styled.div`
