@@ -1,6 +1,7 @@
 export * from './versionRepository';
 export * from './configRepository';
 export * from './authRepository';
+export * from './nodeRepository';
 export * from './web3Repository';
 export * from './userRepository';
 export * from './userProfileRepository';

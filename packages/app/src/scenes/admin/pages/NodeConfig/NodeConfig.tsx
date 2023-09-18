@@ -9,8 +9,12 @@ import * as styled from './NodeConfig.styled';
 
 const NODE_ADDING_FEE = new BN('4200000000000000000');
 
+const uuidToDecString = (uuid: string) => {
+  return new BN(uuid.replace(/-/g, ''), 16).toString(10);
+};
+
 const NodeOdysseyMapping: FC = () => {
-  const {nftStore} = useStore();
+  const {nftStore, adminStore} = useStore();
   const {selectedWalletId} = nftStore;
 
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +22,6 @@ const NodeOdysseyMapping: FC = () => {
 
   const [nodeId, setNodeId] = useState<string>();
   const [odysseyId, setOdysseyId] = useState<string>();
-  const [challenge, setChallenge] = useState<string>();
 
   const {
     isBlockchainReady,
@@ -36,11 +39,26 @@ const NodeOdysseyMapping: FC = () => {
       console.log('handleAddMapping');
       setError(null);
 
-      if (!nodeId || !odysseyId || !challenge) {
+      if (!nodeId || !odysseyId) {
         throw new Error('Missing required fields');
       }
 
-      await setOdysseyMapping(nodeId, odysseyId, challenge);
+      const odysseyIdDec = uuidToDecString(odysseyId);
+      console.log('Convert odysseyId to decimal', odysseyId, '-->', odysseyIdDec);
+
+      const nodeIdDec = uuidToDecString(nodeId);
+      console.log('Convert nodeId to decimal', nodeId, '-->', nodeIdDec);
+
+      const signedChallenge = await adminStore.getNodeSignedChallenge(odysseyIdDec);
+
+      console.log('challenge for odyssey', odysseyIdDec, signedChallenge);
+      console.log('setOdysseyMapping', {nodeIdDec, odysseyIdDec, challenge: signedChallenge});
+
+      if (!signedChallenge) {
+        throw new Error('Missing challenge');
+      }
+
+      await setOdysseyMapping(nodeIdDec, odysseyIdDec, signedChallenge);
       console.log('handleAddMapping done');
     } catch (err: any) {
       console.log('handleAddMapping error', err);
@@ -93,14 +111,11 @@ const NodeOdysseyMapping: FC = () => {
         {walletSelectContent}
 
         <styled.Form>
-          <div>Node ID (number)</div>
+          <div>Node ID (UUID)</div>
           <Input value={nodeId} onChange={setNodeId} />
 
           <div>Odyssey ID</div>
           <Input value={odysseyId} onChange={setOdysseyId} />
-
-          <div>Challenge TODO</div>
-          <Input value={challenge} onChange={setChallenge} />
         </styled.Form>
 
         <Button onClick={handleAddMapping} disabled={!isBlockchainReady} label="Add Mapping" />
@@ -160,7 +175,9 @@ const NodeConfig: FC = () => {
         throw new Error('Missing required fields');
       }
 
-      await addNode(nodeId, hostname, name, NODE_ADDING_FEE);
+      const nodeIdDec = uuidToDecString(nodeId);
+
+      await addNode(nodeIdDec, hostname, name, NODE_ADDING_FEE);
       console.log('handleAddNode done');
     } catch (err: any) {
       console.log('handleAddNode error', err);
@@ -175,8 +192,9 @@ const NodeConfig: FC = () => {
       if (!nodeId || !hostname || !name) {
         throw new Error('Missing required fields');
       }
+      const nodeIdDec = uuidToDecString(nodeId);
 
-      await updateNode(nodeId, hostname, name);
+      await updateNode(nodeIdDec, hostname, name);
 
       console.log('handleUpdateNode done');
     } catch (err: any) {
@@ -193,8 +211,9 @@ const NodeConfig: FC = () => {
       if (!nodeId) {
         throw new Error('Missing required fields');
       }
+      const nodeIdDec = uuidToDecString(nodeId);
 
-      await removeNode(nodeId);
+      await removeNode(nodeIdDec);
 
       console.log('handleRemoveNode done');
     } catch (err: any) {
@@ -211,8 +230,9 @@ const NodeConfig: FC = () => {
       if (!nodeId) {
         throw new Error('Missing required fields');
       }
+      const nodeIdDec = uuidToDecString(nodeId);
 
-      const nodeInfo = await getNodeInfo(nodeId);
+      const nodeInfo = await getNodeInfo(nodeIdDec);
 
       console.log('handleGetNodeInfo done', nodeInfo);
 
@@ -230,7 +250,7 @@ const NodeConfig: FC = () => {
         {walletSelectContent}
 
         <styled.Form>
-          <div>Node ID (number)</div>
+          <div>Node ID (UUID)</div>
           <Input value={nodeId} onChange={setNodeId} />
 
           <div>Hostname</div>

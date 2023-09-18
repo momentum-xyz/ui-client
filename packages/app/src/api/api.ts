@@ -1,6 +1,7 @@
 import * as versionRepository from './repositories/versionRepository';
 import * as configRepository from './repositories/configRepository';
 import * as authRepository from './repositories/authRepository';
+import * as nodeRepository from './repositories/nodeRepository';
 import * as web3Repository from './repositories/web3Repository';
 import * as userRepository from './repositories/userRepository';
 import * as worldRepository from './repositories/worldRepository';
@@ -40,6 +41,7 @@ export const api = {
   versionRepository,
   configRepository,
   authRepository,
+  nodeRepository,
   web3Repository,
   worldRepository,
   userRepository,
@@ -75,6 +77,7 @@ export const api = {
 export * from './repositories/versionRepository/versionRepository.api.types';
 export * from './repositories/configRepository/configRepository.api.types';
 export * from './repositories/authRepository/authRepository.api.types';
+export * from './repositories/nodeRepository/nodeRepository.api.types';
 export * from './repositories/web3Repository/web3Repository.api.types';
 export * from './repositories/userRepository/userRepository.api.types';
 export * from './repositories/userProfileRepository/userProfileRepository.api.types';
