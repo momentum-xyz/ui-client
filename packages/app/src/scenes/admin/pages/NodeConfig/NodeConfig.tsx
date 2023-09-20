@@ -13,6 +13,10 @@ const uuidToDecString = (uuid: string) => {
   return new BN(uuid.replace(/-/g, ''), 16).toString(10);
 };
 
+const uuidToHex = (uuid: string) => {
+  return `0x${uuid.replace(/-/g, '')}`;
+};
+
 const NodeOdysseyMapping: FC = () => {
   const {nftStore, adminStore} = useStore();
   const {selectedWalletId} = nftStore;
@@ -43,22 +47,25 @@ const NodeOdysseyMapping: FC = () => {
         throw new Error('Missing required fields');
       }
 
-      const odysseyIdDec = uuidToDecString(odysseyId);
-      console.log('Convert odysseyId to decimal', odysseyId, '-->', odysseyIdDec);
+      // const odysseyIdDec = uuidToDecString(odysseyId);
+      // console.log('Convert odysseyId to decimal', odysseyId, '-->', odysseyIdDec);
 
-      const nodeIdDec = uuidToDecString(nodeId);
-      console.log('Convert nodeId to decimal', nodeId, '-->', nodeIdDec);
+      // const nodeIdDec = uuidToDecString(nodeId);
+      // console.log('Convert nodeId to decimal', nodeId, '-->', nodeIdDec);
 
-      const signedChallenge = await adminStore.getNodeSignedChallenge(odysseyIdDec);
+      const signedChallenge = await adminStore.getNodeSignedChallenge(odysseyId);
+      console.log('challenge for odyssey', odysseyId, signedChallenge);
 
-      console.log('challenge for odyssey', odysseyIdDec, signedChallenge);
-      console.log('setOdysseyMapping', {nodeIdDec, odysseyIdDec, challenge: signedChallenge});
+      const hexNodeId = uuidToHex(nodeId);
+      const hexOdysseyId = uuidToHex(odysseyId);
+
+      console.log('setOdysseyMapping', {hexNodeId, hexOdysseyId, challenge: signedChallenge});
 
       if (!signedChallenge) {
         throw new Error('Missing challenge');
       }
 
-      await setOdysseyMapping(nodeIdDec, odysseyIdDec, signedChallenge);
+      await setOdysseyMapping(hexNodeId, hexOdysseyId, signedChallenge);
       console.log('handleAddMapping done');
     } catch (err: any) {
       console.log('handleAddMapping error', err);
@@ -93,7 +100,7 @@ const NodeOdysseyMapping: FC = () => {
         throw new Error('Missing required fields');
       }
 
-      const nodeForOdyssey = await getNodeForTheOdyssey(odysseyId);
+      const nodeForOdyssey = await getNodeForTheOdyssey(uuidToHex(odysseyId));
 
       console.log('handleGetNodeForTheOdyssey done', nodeForOdyssey);
 
@@ -114,7 +121,7 @@ const NodeOdysseyMapping: FC = () => {
           <div>Node ID (UUID)</div>
           <Input value={nodeId} onChange={setNodeId} />
 
-          <div>Odyssey ID</div>
+          <div>Odyssey ID (UUID)</div>
           <Input value={odysseyId} onChange={setOdysseyId} />
         </styled.Form>
 
@@ -230,9 +237,9 @@ const NodeConfig: FC = () => {
       if (!nodeId) {
         throw new Error('Missing required fields');
       }
-      const nodeIdDec = uuidToDecString(nodeId);
+      const nodeIdHex = uuidToHex(nodeId);
 
-      const nodeInfo = await getNodeInfo(nodeIdDec);
+      const nodeInfo = await getNodeInfo(nodeIdHex);
 
       console.log('handleGetNodeInfo done', nodeInfo);
 
