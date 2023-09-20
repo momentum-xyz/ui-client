@@ -1,15 +1,15 @@
-import {FC} from 'react';
+import {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useLocation, useNavigate} from 'react-router-dom';
-import {IconNameType, PositionEnum} from '@momentum-xyz/ui-kit';
+import {Hexagon, IconNameType, PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {WidgetEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
 
 import * as styled from './WelcomeWidget.styled';
+import {BigHexagon} from './components';
 
-type HexagonPositionType = 'left' | 'right' | 'bottom';
 type HexagonContentType =
   | 'signUp'
   | 'enterAsGuest'
@@ -21,7 +21,7 @@ type HexagonContentType =
   | 'contributions'
   | 'contribute';
 
-interface ContentInterface {
+export interface ContentInterface {
   type: HexagonContentType;
   icon: IconNameType;
   title: string;
@@ -118,37 +118,60 @@ const WelcomeWidget: FC = () => {
     }
   ];
 
-  const renderHexagon = (position: HexagonPositionType): ContentInterface | null => {
-    switch (position) {
-      case 'left':
-        return null;
-      case 'right':
-        return null;
-      case 'bottom':
-        return null;
-      default:
-        return null;
-    }
-  };
+  const getContentList = useCallback((): ContentInterface[] => {
+    return [
+      {
+        type: 'signUp',
+        icon: 'astro',
+        title: 'Join Odyssey as a member',
+        message: 'Connect your wallet and join the community',
+        actionTitle: 'Sign up now',
+        onAction: () => widgetManagerStore.open(WidgetEnum.LOGIN, PositionEnum.LEFT)
+      },
+      {
+        type: 'enterAsGuest',
+        icon: 'rocket',
+        title: 'Enter Odyssey as a guest',
+        message: 'Fly around freely and enjoy all the creations',
+        actionTitle: 'Start your journey',
+        onAction: () => widgetManagerStore.closeAll()
+      },
+      {
+        type: 'buyNft',
+        icon: 'rabbit_fill',
+        title: 'Create your own Odyssey',
+        message: 'Buy a 3D environment NFT and start creating',
+        actionTitle: 'Buy Odyssey nft',
+        onAction: () => navigate(ROUTES.buyNft)
+      }
+    ];
+  }, [navigate, widgetManagerStore]);
 
-  console.log(worldId, isGuest, isWelcomePage, hexagonContentList, renderHexagon);
+  console.log(worldId, isGuest, isWelcomePage, hexagonContentList);
+
+  const hexagons = getContentList();
 
   return (
     <styled.Container data-testid="WelcomeWidget-test">
       <styled.Hexagons>
         <styled.TopHexagons>
-          <styled.BigHexagon className="hexagon">
-            <span>I am 1</span>
-          </styled.BigHexagon>
-          <styled.BigHexagon className="hexagon">
-            <span>I am 2</span>
-          </styled.BigHexagon>
+          <BigHexagon hexagon={hexagons[0]} />
+          <BigHexagon hexagon={hexagons[1]} />
         </styled.TopHexagons>
-        <styled.BottomHexagon>
-          <styled.BigHexagon className="hexagon">
-            <span>I am 3</span>
-          </styled.BigHexagon>
-        </styled.BottomHexagon>
+
+        {hexagons.length === 3 && (
+          <styled.BottomHexagon>
+            <BigHexagon hexagon={hexagons[2]} inverse />
+          </styled.BottomHexagon>
+        )}
+
+        <styled.CloseButton>
+          <Hexagon
+            type="fourth-borderless"
+            iconName="close_large"
+            onClick={widgetManagerStore.closeAll}
+          />
+        </styled.CloseButton>
       </styled.Hexagons>
     </styled.Container>
   );

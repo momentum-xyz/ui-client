@@ -34,12 +34,16 @@ const WidgetManagerStore = types
     open(type: WidgetEnum, position: PositionEnum, data?: WidgetInfoDataInterface): void {
       switch (position) {
         case PositionEnum.LEFT:
+          self.centerActiveWidget = null;
           self.leftActiveWidget = cast({type, data});
           break;
         case PositionEnum.RIGHT:
+          self.centerActiveWidget = null;
           self.rightActiveWidget = cast({type, data});
           break;
         case PositionEnum.CENTER:
+          self.leftActiveWidget = null;
+          self.rightActiveWidget = null;
           self.centerActiveWidget = cast({type, data});
           break;
       }

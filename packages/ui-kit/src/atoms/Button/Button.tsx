@@ -10,7 +10,7 @@ export interface ButtonPropsInterface {
   label: string;
   icon?: IconNameType;
   size?: 'normal';
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'third';
   wide?: boolean;
   active?: boolean;
   disabled?: boolean;
