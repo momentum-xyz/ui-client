@@ -132,15 +132,6 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
     },
     ...ODYSSEY_ITEMS,
     {
-      key: WidgetEnum.WELCOME,
-      position: PositionEnum.CENTER,
-      viewPosition: PositionEnum.CENTER,
-      iconName: 'info',
-      tooltip: t('actions.info'),
-      isDisabled: universeStore.isScreenRecording,
-      onClick: handleToggle
-    },
-    {
       key: WidgetEnum.STAKING,
       position: PositionEnum.CENTER,
       viewPosition: PositionEnum.RIGHT,
@@ -157,6 +148,15 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       iconName: 'pencil',
       isHidden: !isWorld || !isCurrentUserWorldAdmin,
       tooltip: t('actions.creatorOpen'),
+      isDisabled: universeStore.isScreenRecording,
+      onClick: handleToggle
+    },
+    {
+      key: WidgetEnum.WELCOME,
+      position: PositionEnum.CENTER,
+      viewPosition: PositionEnum.CENTER,
+      iconName: 'info',
+      tooltip: t('actions.info'),
       isDisabled: universeStore.isScreenRecording,
       onClick: handleToggle
     },

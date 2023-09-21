@@ -72,7 +72,8 @@ export const Icon = styled.div`
 
 export const Title = styled.div`
   padding: 16px 0;
-  font-size: var(--font-size-xxxl);
+  height: 92px;
+  font-size: var(--font-size-xxl);
   font-weight: 700;
   letter-spacing: 4px;
   text-transform: uppercase;
@@ -81,7 +82,7 @@ export const Title = styled.div`
 export const Message = styled.div`
   padding: 16px 0;
   border-top: 1px solid ${(props) => props.theme.accentText};
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-xxs);
   font-weight: 600;
   letter-spacing: 2.6px;
   text-transform: uppercase;
