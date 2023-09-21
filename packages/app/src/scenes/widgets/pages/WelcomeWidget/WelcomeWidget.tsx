@@ -3,14 +3,15 @@ import {observer} from 'mobx-react-lite';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {Hexagon, IconNameType, PositionEnum} from '@momentum-xyz/ui-kit';
 
-import {WidgetEnum} from 'core/enums';
+import {StorageKeyEnum, WidgetEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
 import {useStore} from 'shared/hooks';
-import {isFeatureEnabled} from 'api/constants';
+import {storage} from 'shared/services';
 import {FeatureFlagEnum} from 'api/enums';
+import {isFeatureEnabled} from 'api/constants';
 
-import * as styled from './WelcomeWidget.styled';
 import {BigHexagon} from './components';
+import * as styled from './WelcomeWidget.styled';
 
 type HexagonContentType =
   | 'signUp'
@@ -43,6 +44,20 @@ const WelcomeWidget: FC = () => {
   const isContributionAvailable =
     isFeatureEnabled(FeatureFlagEnum.CANVAS) && !!world3dStore?.canvasObjectId;
 
+  const handleNavigate = useCallback(
+    (redirectUrl?: string) => {
+      storage.setString(StorageKeyEnum.HasSeenWelcome, '1');
+      const redirectRoute = redirectUrl ? redirectUrl : storage.get(StorageKeyEnum.RedirectOnLogin);
+      if (redirectRoute) {
+        navigate(redirectRoute);
+        storage.delete(StorageKeyEnum.RedirectOnLogin);
+      } else {
+        navigate(ROUTES.explore);
+      }
+    },
+    [navigate]
+  );
+
   const hexagonContentList: ContentInterface[] = useMemo(() => {
     return [
       {
@@ -51,7 +66,11 @@ const WelcomeWidget: FC = () => {
         title: 'Join Odyssey as a member',
         message: 'Connect your wallet and join the community',
         actionTitle: 'Sign up now',
-        onAction: () => widgetManagerStore.open(WidgetEnum.LOGIN, PositionEnum.LEFT)
+        onAction: () => {
+          handleNavigate();
+          widgetManagerStore.closeAll();
+          widgetManagerStore.open(WidgetEnum.LOGIN, PositionEnum.LEFT);
+        }
       },
       {
         type: 'enterAsGuest',
@@ -59,7 +78,10 @@ const WelcomeWidget: FC = () => {
         title: 'Enter Odyssey as a guest',
         message: 'Fly around freely and enjoy all the creations',
         actionTitle: 'Start your journey',
-        onAction: () => widgetManagerStore.closeAll()
+        onAction: () => {
+          widgetManagerStore.closeAll();
+          handleNavigate();
+        }
       },
       {
         type: 'search',
@@ -123,10 +145,10 @@ const WelcomeWidget: FC = () => {
         title: 'Create your own Odyssey',
         message: 'Buy a 3D environment NFT and start creating',
         actionTitle: 'Buy Odyssey nft',
-        onAction: () => navigate(ROUTES.buyNft)
+        onAction: () => handleNavigate(ROUTES.buyNft)
       }
     ];
-  }, [isContributionAvailable, navigate, widgetManagerStore, world3dStore?.canvasObjectId]);
+  }, [handleNavigate, widgetManagerStore, isContributionAvailable, world3dStore?.canvasObjectId]);
 
   const getContentList = useCallback((): ContentInterface[] => {
     if (isWelcomePage) {
