@@ -10,10 +10,12 @@ import * as styled from './WidgetViewerPage.styled';
 
 const WidgetViewerPage: FC = () => {
   const {widgetManagerStore} = useStore();
-  const {leftActiveWidget, rightActiveWidget} = widgetManagerStore;
+  const {leftActiveWidget, centerActiveWidget, rightActiveWidget} = widgetManagerStore;
 
   const visualizeSection = (widgetInfo: WidgetInfoModelInterface) => {
     switch (widgetInfo?.type) {
+      case WidgetEnum.WELCOME:
+        return <widgets.WelcomeWidget />;
       case WidgetEnum.LOGIN:
         return <widgets.LoginWidget />;
       case WidgetEnum.MY_PROFILE:
@@ -58,6 +60,10 @@ const WidgetViewerPage: FC = () => {
       <styled.LeftSection>
         <styled.Widget>{leftActiveWidget && visualizeSection(leftActiveWidget)}</styled.Widget>
       </styled.LeftSection>
+
+      <styled.CenterSection>
+        <styled.Widget>{centerActiveWidget && visualizeSection(centerActiveWidget)}</styled.Widget>
+      </styled.CenterSection>
 
       <styled.RightSection>
         <styled.Widget>{rightActiveWidget && visualizeSection(rightActiveWidget)}</styled.Widget>

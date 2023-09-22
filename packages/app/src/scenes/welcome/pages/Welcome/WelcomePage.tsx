@@ -1,15 +1,12 @@
-import {FC, useCallback, useEffect} from 'react';
+import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useNavigate} from 'react-router-dom';
-import {Button, Hexagon, PositionEnum} from '@momentum-xyz/ui-kit';
-import {useI18n} from '@momentum-xyz/core';
+import {PositionEnum} from '@momentum-xyz/ui-kit';
 
 import {storage} from 'shared/services';
 import {useStore} from 'shared/hooks';
 import {ROUTES} from 'core/constants';
 import {StorageKeyEnum, WidgetEnum} from 'core/enums';
-import {isFeatureEnabled} from 'api/constants';
-import {FeatureFlagEnum} from 'api/enums';
 
 import * as styled from './WelcomePage.styled';
 
@@ -19,16 +16,14 @@ const WelcomePage: FC = () => {
   const {widgetManagerStore, sessionStore} = useStore();
   const {isGuest} = sessionStore;
   const navigate = useNavigate();
-  const {t} = useI18n();
 
   useEffect(() => {
-    widgetManagerStore.closeAll();
+    widgetManagerStore.open(WidgetEnum.WELCOME, PositionEnum.CENTER);
   }, [widgetManagerStore]);
 
-  const handleNavigation = useCallback(
-    (widget: WidgetEnum) => {
-      storage.setString(StorageKeyEnum.HasSeenWelcome, HAS_SEEN_WELCOME_VALUE);
-      widgetManagerStore.open(widget, PositionEnum.LEFT);
+  useEffect(() => {
+    if (!isGuest) {
+      storage.setString(StorageKeyEnum.HasSeenWelcome, '1');
       const redirectRoute = storage.get(StorageKeyEnum.RedirectOnLogin);
       if (redirectRoute) {
         navigate(redirectRoute);
@@ -36,78 +31,10 @@ const WelcomePage: FC = () => {
       } else {
         navigate(ROUTES.explore);
       }
-    },
-    [navigate, widgetManagerStore]
-  );
-
-  const handleBuyNft = useCallback(() => {
-    navigate(ROUTES.buyNft);
-  }, [navigate]);
-
-  useEffect(() => {
-    if (!isGuest) {
-      handleNavigation(WidgetEnum.EXPLORE);
     }
-  }, [isGuest, handleNavigation]);
+  }, [isGuest, navigate]);
 
-  return (
-    <styled.Container data-testid="WelcomePage=test">
-      <styled.Card>
-        <styled.CardHexContainer>
-          <Hexagon type="primary-borderless" iconName="astronaut" />
-        </styled.CardHexContainer>
-        <styled.CardTitle>{t('labels.welcomePageJoinTitle')}</styled.CardTitle>
-        <styled.CardDescription>{t('labels.welcomePageJoinDescription')}</styled.CardDescription>
-        <Button
-          wide
-          icon="astronaut"
-          variant="secondary"
-          label={t('actions.signUpNow')}
-          onClick={() => handleNavigation(WidgetEnum.LOGIN)}
-        />
-      </styled.Card>
-
-      <styled.Card>
-        <styled.CardHexContainer>
-          <Hexagon type="primary-borderless" iconName="rocket" />
-        </styled.CardHexContainer>
-        <styled.CardTitle>{t('labels.welcomePageGuestTitle')}</styled.CardTitle>
-        <styled.CardDescription>{t('labels.welcomePageGuestDescription')}</styled.CardDescription>
-        <styled.CardButtonContainer>
-          <Button
-            wide
-            icon="rocket"
-            variant="secondary"
-            label={t('actions.startJourney')}
-            onClick={() => handleNavigation(WidgetEnum.EXPLORE)}
-          />
-        </styled.CardButtonContainer>
-      </styled.Card>
-
-      {isFeatureEnabled(FeatureFlagEnum.BUY_NFT) && (
-        <styled.Card className="light">
-          <styled.CardHexContainer className="light">
-            <Hexagon type="primary-borderless" iconName="rocket" />
-          </styled.CardHexContainer>
-          <styled.CardTitle className="light">
-            {t('labels.welcomePageBuyNftTitle')}
-          </styled.CardTitle>
-          <styled.CardDescription className="light">
-            {t('labels.welcomePageGuestDescription')}
-          </styled.CardDescription>
-          <styled.CardButtonContainer className="light">
-            <Button
-              wide
-              icon="rocket"
-              variant="secondary"
-              label={t('actions.buyNft')}
-              onClick={handleBuyNft}
-            />
-          </styled.CardButtonContainer>
-        </styled.Card>
-      )}
-    </styled.Container>
-  );
+  return <styled.Container data-testid="WelcomePage=test" />;
 };
 
 export default observer(WelcomePage);

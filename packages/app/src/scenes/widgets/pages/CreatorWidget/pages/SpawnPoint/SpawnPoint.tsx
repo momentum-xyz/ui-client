@@ -37,7 +37,7 @@ const SpawnPoint: FC = () => {
 
   return (
     <styled.Container data-testid="SpawnPoint-test">
-      <div>{t('textMessage.setSpawnPoint')}</div>
+      <div>{t('message.setSpawnPoint')}</div>
 
       <styled.ButtonContainer>
         <Button label={t('titles.setSpawnPoint')} onClick={onSetHandler} />

@@ -152,6 +152,15 @@ const WidgetMenuPage: FC<PropsInterface> = ({isWorld, isWelcomePage}) => {
       onClick: handleToggle
     },
     {
+      key: WidgetEnum.WELCOME,
+      position: PositionEnum.CENTER,
+      viewPosition: PositionEnum.CENTER,
+      iconName: 'info',
+      tooltip: t('actions.info'),
+      isDisabled: universeStore.isScreenRecording,
+      onClick: handleToggle
+    },
+    {
       key: WidgetEnum.OBJECT,
       position: PositionEnum.RIGHT,
       viewPosition: PositionEnum.RIGHT,
