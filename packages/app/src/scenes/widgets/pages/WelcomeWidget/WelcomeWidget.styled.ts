@@ -1,11 +1,15 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  display: flex;
   height: calc(100vh - 90px);
+  justify-content: center;
+  align-items: center;
 `;
 
 export const Hexagons = styled.div`
   position: relative;
+  height: 660px;
 `;
 
 export const TopHexagons = styled.div`

@@ -2,6 +2,7 @@ import {FC, useCallback, useMemo} from 'react';
 import {observer} from 'mobx-react-lite';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {Hexagon, IconNameType, PositionEnum} from '@momentum-xyz/ui-kit';
+import {useI18n} from '@momentum-xyz/core';
 
 import {StorageKeyEnum, WidgetEnum} from 'core/enums';
 import {ROUTES} from 'core/constants';
@@ -37,12 +38,13 @@ const WelcomeWidget: FC = () => {
   const {widgetManagerStore, universeStore} = useStore();
   const {worldId, world3dStore} = universeStore;
 
+  const {t} = useI18n();
   const {pathname} = useLocation();
   const navigate = useNavigate();
 
+  const canvasId: string = world3dStore?.canvasObjectId || '';
   const isWelcomePage = pathname === ROUTES.welcome;
-  const isContributionAvailable =
-    isFeatureEnabled(FeatureFlagEnum.CANVAS) && !!world3dStore?.canvasObjectId;
+  const isContributionAvailable = isFeatureEnabled(FeatureFlagEnum.CANVAS) && !!canvasId;
 
   const handleNavigate = useCallback(
     (redirectUrl?: string) => {
@@ -63,9 +65,9 @@ const WelcomeWidget: FC = () => {
       {
         type: 'signUp',
         icon: 'astro',
-        title: 'Join Odyssey as a member',
-        message: 'Connect your wallet and join the community',
-        actionTitle: 'Sign up now',
+        title: t('titles.joinAsMember'),
+        message: t('messages.connectWalletJoin'),
+        actionTitle: t('actions.signUpNow'),
         onAction: () => {
           handleNavigate();
           widgetManagerStore.closeAll();
@@ -75,9 +77,9 @@ const WelcomeWidget: FC = () => {
       {
         type: 'enterAsGuest',
         icon: 'rocket',
-        title: 'Enter Odyssey as a guest',
-        message: 'Fly around freely and enjoy all the creations',
-        actionTitle: 'Start your journey',
+        title: t('titles.enterAsGuest'),
+        message: t('messages.flyAroundCreations'),
+        actionTitle: t('actions.startJourney'),
         onAction: () => {
           widgetManagerStore.closeAll();
           handleNavigate();
@@ -86,30 +88,28 @@ const WelcomeWidget: FC = () => {
       {
         type: 'search',
         icon: 'explore',
-        title: 'Search Odysseys and members',
-        message: 'Look for the space of your interest',
-        actionTitle: 'Start searching',
+        title: t('titles.searchOdysseysMembers'),
+        message: t('messages.lookForSpace'),
+        actionTitle: t('actions.startSearching'),
         onAction: () => widgetManagerStore.open(WidgetEnum.EXPLORE, PositionEnum.LEFT)
       },
       {
         type: 'newsfeed',
         icon: 'newsfeed',
-        title: 'Check the latest news in Odyssey',
-        message: 'Open the newsfeed and see everything happening',
-        actionTitle: 'Open the newsfeed',
+        title: t('titles.checkLatestNews'),
+        message: t('messages.openNewsfeed'),
+        actionTitle: t('actions.openNewsfeed'),
         onAction: () => widgetManagerStore.open(WidgetEnum.NEWSFEED, PositionEnum.LEFT)
       },
       {
         type: 'checkCore',
         icon: 'idea',
-        title: 'About this Odyssey',
-        message: 'Learn about the objectives and collective results',
-        actionTitle: 'Check the core',
+        title: t('titles.aboutThisOdyssey'),
+        message: t('messages.learnAboutObjectives'),
+        actionTitle: t('actions.checkCore'),
         onAction: () => {
           if (isContributionAvailable) {
-            widgetManagerStore.open(WidgetEnum.OBJECT, PositionEnum.RIGHT, {
-              id: world3dStore?.canvasObjectId || ''
-            });
+            widgetManagerStore.open(WidgetEnum.OBJECT, PositionEnum.RIGHT, {id: canvasId});
           } else {
             widgetManagerStore.open(WidgetEnum.WORLD_PROFILE, PositionEnum.RIGHT);
           }
@@ -118,60 +118,54 @@ const WelcomeWidget: FC = () => {
       {
         type: 'timeline',
         icon: 'clock',
-        title: 'See the latest updates',
-        message: 'Open the timeline and see what’s going on',
-        actionTitle: 'Open timeline',
+        title: t('titles.seeUpdates'),
+        message: t('messages.openTimeline'),
+        actionTitle: t('actions.openTimeline'),
         onAction: () => widgetManagerStore.open(WidgetEnum.TIMELINE, PositionEnum.RIGHT)
       },
       {
         type: 'contribute',
         icon: 'person_idea',
-        title: 'Join the action',
-        message: 'make a mark and participate in the mission',
-        actionTitle: 'Contribute',
+        title: t('titles.joinAction'),
+        message: t('messages.makeMark'),
+        actionTitle: t('labels.contribute'),
         onAction: () => widgetManagerStore.open(WidgetEnum.CONTRIBUTION_FORM, PositionEnum.RIGHT)
       },
       {
         type: 'explore',
         icon: 'rocket_flying',
-        title: 'Explore',
-        message: 'Fly around freely and enjoy all the creations ',
-        actionTitle: 'Fly around',
+        title: t('labels.explore'),
+        message: t('messages.flyAroundCreations'),
+        actionTitle: t('actions.flyAround'),
         onAction: () => widgetManagerStore.closeAll()
       },
       {
         type: 'buyNft',
         icon: 'rabbit_fill',
-        title: 'Create your own Odyssey',
-        message: 'Buy a 3D environment NFT and start creating',
-        actionTitle: 'Buy Odyssey nft',
+        title: t('titles.createOdyssey'),
+        message: t('messages.buyNFT'),
+        actionTitle: t('actions.buyNft'),
         onAction: () => handleNavigate(ROUTES.buyNft)
       }
     ];
-  }, [handleNavigate, widgetManagerStore, isContributionAvailable, world3dStore?.canvasObjectId]);
+  }, [t, handleNavigate, widgetManagerStore, isContributionAvailable, canvasId]);
 
   const getContentList = useCallback((): ContentInterface[] => {
+    const hexagonTypeList: HexagonContentType[] = [];
     if (isWelcomePage) {
-      return hexagonContentList.filter(
-        (i) =>
-          i.type === 'signUp' ||
-          i.type === 'enterAsGuest' ||
-          (i.type === 'buyNft' && isFeatureEnabled(FeatureFlagEnum.BUY_NFT))
-      );
-    } else if (worldId) {
-      if (isContributionAvailable) {
-        return hexagonContentList.filter(
-          (i) => i.type === 'checkCore' || i.type === 'contribute' || i.type === 'explore'
-        );
+      hexagonTypeList.push('signUp', 'enterAsGuest');
+      if (isFeatureEnabled(FeatureFlagEnum.BUY_NFT)) {
+        hexagonTypeList.push('buyNft');
       }
-      return hexagonContentList.filter(
-        (i) => i.type === 'checkCore' || i.type === 'timeline' || i.type === 'explore'
-      );
+    } else if (worldId && isContributionAvailable) {
+      hexagonTypeList.push('checkCore', 'contribute', 'explore');
+    } else if (worldId && !isContributionAvailable) {
+      hexagonTypeList.push('checkCore', 'timeline', 'explore');
     } else {
-      return hexagonContentList.filter(
-        (i) => i.type === 'search' || i.type === 'newsfeed' || i.type === 'explore'
-      );
+      hexagonTypeList.push('search', 'newsfeed', 'explore');
     }
+
+    return hexagonContentList.filter((i) => hexagonTypeList.includes(i.type));
   }, [hexagonContentList, isContributionAvailable, isWelcomePage, worldId]);
 
   const hexagons = getContentList();
