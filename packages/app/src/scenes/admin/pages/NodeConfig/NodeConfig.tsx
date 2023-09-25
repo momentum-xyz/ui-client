@@ -9,14 +9,6 @@ import * as styled from './NodeConfig.styled';
 
 const NODE_ADDING_FEE = new BN('4200000000000000000');
 
-const uuidToDecString = (uuid: string) => {
-  return new BN(uuid.replace(/-/g, ''), 16).toString(10);
-};
-
-const uuidToHex = (uuid: string) => {
-  return `0x${uuid.replace(/-/g, '')}`;
-};
-
 const NodeOdysseyMapping: FC = () => {
   const {nftStore, adminStore} = useStore();
   const {selectedWalletId} = nftStore;
@@ -32,6 +24,7 @@ const NodeOdysseyMapping: FC = () => {
     walletSelectContent,
     account,
     setOdysseyMapping,
+    setNodeMapping,
     removeMapping,
     getNodeForTheOdyssey
   } = useBlockchain({
@@ -47,28 +40,34 @@ const NodeOdysseyMapping: FC = () => {
         throw new Error('Missing required fields');
       }
 
-      // const odysseyIdDec = uuidToDecString(odysseyId);
-      // console.log('Convert odysseyId to decimal', odysseyId, '-->', odysseyIdDec);
-
-      // const nodeIdDec = uuidToDecString(nodeId);
-      // console.log('Convert nodeId to decimal', nodeId, '-->', nodeIdDec);
-
       const signedChallenge = await adminStore.getNodeSignedChallenge(odysseyId);
       console.log('challenge for odyssey', odysseyId, signedChallenge);
-
-      const hexNodeId = uuidToHex(nodeId);
-      const hexOdysseyId = uuidToHex(odysseyId);
-
-      console.log('setOdysseyMapping', {hexNodeId, hexOdysseyId, challenge: signedChallenge});
 
       if (!signedChallenge) {
         throw new Error('Missing challenge');
       }
 
-      await setOdysseyMapping(hexNodeId, hexOdysseyId, signedChallenge);
+      await setOdysseyMapping(nodeId, odysseyId, signedChallenge);
       console.log('handleAddMapping done');
     } catch (err: any) {
       console.log('handleAddMapping error', err);
+      setError(err.message);
+    }
+  };
+
+  const handleAddNodeMapping = async () => {
+    try {
+      console.log('handleAddNodeMapping');
+      setError(null);
+
+      if (!nodeId || !odysseyId) {
+        throw new Error('Missing required fields');
+      }
+
+      await setNodeMapping(nodeId, odysseyId);
+      console.log('handleAddNodeMapping done');
+    } catch (err: any) {
+      console.log('handleAddNodeMapping error', err);
       setError(err.message);
     }
   };
@@ -100,7 +99,7 @@ const NodeOdysseyMapping: FC = () => {
         throw new Error('Missing required fields');
       }
 
-      const nodeForOdyssey = await getNodeForTheOdyssey(uuidToHex(odysseyId));
+      const nodeForOdyssey = await getNodeForTheOdyssey(odysseyId);
 
       console.log('handleGetNodeForTheOdyssey done', nodeForOdyssey);
 
@@ -126,6 +125,14 @@ const NodeOdysseyMapping: FC = () => {
         </styled.Form>
 
         <Button onClick={handleAddMapping} disabled={!isBlockchainReady} label="Add Mapping" />
+
+        <br />
+
+        <Button
+          onClick={handleAddNodeMapping}
+          disabled={!isBlockchainReady}
+          label="Add Node Mapping"
+        />
 
         <br />
 
@@ -182,9 +189,7 @@ const NodeConfig: FC = () => {
         throw new Error('Missing required fields');
       }
 
-      const nodeIdDec = uuidToDecString(nodeId);
-
-      await addNode(nodeIdDec, hostname, name, NODE_ADDING_FEE);
+      await addNode(nodeId, hostname, name, NODE_ADDING_FEE);
       console.log('handleAddNode done');
     } catch (err: any) {
       console.log('handleAddNode error', err);
@@ -199,9 +204,8 @@ const NodeConfig: FC = () => {
       if (!nodeId || !hostname || !name) {
         throw new Error('Missing required fields');
       }
-      const nodeIdDec = uuidToDecString(nodeId);
 
-      await updateNode(nodeIdDec, hostname, name);
+      await updateNode(nodeId, hostname, name);
 
       console.log('handleUpdateNode done');
     } catch (err: any) {
@@ -218,9 +222,8 @@ const NodeConfig: FC = () => {
       if (!nodeId) {
         throw new Error('Missing required fields');
       }
-      const nodeIdDec = uuidToDecString(nodeId);
 
-      await removeNode(nodeIdDec);
+      await removeNode(nodeId);
 
       console.log('handleRemoveNode done');
     } catch (err: any) {
@@ -237,9 +240,8 @@ const NodeConfig: FC = () => {
       if (!nodeId) {
         throw new Error('Missing required fields');
       }
-      const nodeIdHex = uuidToHex(nodeId);
 
-      const nodeInfo = await getNodeInfo(nodeIdHex);
+      const nodeInfo = await getNodeInfo(nodeId);
 
       console.log('handleGetNodeInfo done', nodeInfo);
 

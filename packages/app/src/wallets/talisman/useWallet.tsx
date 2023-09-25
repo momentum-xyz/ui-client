@@ -103,7 +103,7 @@ export const useWallet: UseWalletType = ({appVariables, onActivationDone}) => {
 
   const signChallenge = useCallback(
     async (challenge: string) => {
-      console.log('Talisman useWallet connect', challenge);
+      console.log('Talisman useWallet signChallenge', challenge);
       const signature = await library.getSigner(account).signMessage(challenge);
       return signature;
     },
