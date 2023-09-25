@@ -104,7 +104,7 @@ const Menu = <T,>({
       tmp_leftBlankCount = tmp_leftBlankCount > 1 ? tmp_leftBlankCount - 1 : tmp_leftBlankCount;
     }
 
-    if (tmp_leftBlankCount % 1 !== 0) {
+    if (tmp_leftBlankCount % 1 !== 0 || tmp_rightBlankCount % 1 !== 0) {
       tmp_leftBlankCount = Math.floor(tmp_leftBlankCount);
       tmp_rightBlankCount = Math.ceil(tmp_rightBlankCount);
     }
