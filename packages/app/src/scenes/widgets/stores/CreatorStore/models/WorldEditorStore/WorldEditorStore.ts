@@ -33,29 +33,29 @@ const WorldEditorStore = types.compose(
           }
         }
 
-        yield self.editRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-          spaceId: id,
+        yield self.editRequest.send(api.objectAttributeRepository.setObjectAttribute, {
+          objectId: id,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.WORLD_AVATAR,
           value: {render_hash: avatarHash || ''}
         });
 
-        yield self.editRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-          spaceId: id,
+        yield self.editRequest.send(api.objectAttributeRepository.setObjectAttribute, {
+          objectId: id,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.NAME,
           value: {name: form.name}
         });
 
-        yield self.editRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-          spaceId: id,
+        yield self.editRequest.send(api.objectAttributeRepository.setObjectAttribute, {
+          objectId: id,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.DESCRIPTION,
           value: {description: form.description}
         });
 
-        yield self.editRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-          spaceId: id,
+        yield self.editRequest.send(api.objectAttributeRepository.setObjectAttribute, {
+          objectId: id,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.WEBSITE_LINK,
           value: {website_link: form.website_link}

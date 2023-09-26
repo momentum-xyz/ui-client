@@ -31,9 +31,9 @@ const MusicStore = types
   .actions((self) => ({
     loadTracks: flow(function* (worldId: string) {
       const attributeResponse = yield self.fetchRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
+        api.objectAttributeRepository.getObjectAttribute,
         {
-          spaceId: worldId,
+          objectId: worldId,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.SOUNDTRACK
         }

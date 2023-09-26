@@ -1,9 +1,9 @@
-import {mapSpaceSubAttributes} from './spaceAttribute.mapper';
+import {mapObjectSubAttributes} from './objectAttribute.mapper';
 import {mapSubAttributeValue} from './subAttributeValue.mapper';
-import {mapSpaceAttributeValues} from './spaceAttributeValue.mapper';
+import {mapObjectAttributeValues} from './objectAttributeValue.mapper';
 
 export const mapper = {
-  mapSpaceSubAttributes,
+  mapObjectSubAttributes,
   mapSubAttributeValue,
-  mapSpaceAttributeValues
+  mapObjectAttributeValues
 };

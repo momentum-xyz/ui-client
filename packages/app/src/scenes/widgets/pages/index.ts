@@ -1,3 +1,4 @@
+export * from './WelcomeWidget';
 export * from './LoginWidget';
 export * from './ExploreWidget';
 export * from './ProfileWidget';

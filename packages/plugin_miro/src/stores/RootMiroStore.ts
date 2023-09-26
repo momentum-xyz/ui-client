@@ -17,7 +17,7 @@ const RootMiroStore = types
     })
   )
   .actions((self) => ({
-    init: flow(function* (spaceId: string) {
+    init: flow(function* (objectId: string) {
       const config = yield self.api.getConfig();
 
       Object.entries(config).forEach((entry) => {
@@ -25,7 +25,7 @@ const RootMiroStore = types
         appVariables[key as keyof AppConfigInterface] = value;
       });
 
-      self.objectId = spaceId;
+      self.objectId = objectId;
     })
   }));
 

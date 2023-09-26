@@ -3,7 +3,7 @@ import {AttributeNameEnum} from '@momentum-xyz/sdk';
 import {flow, types} from 'mobx-state-tree';
 
 import {BasicAsset2dIdEnum} from 'core/enums';
-import {api, FetchAssets3dResponse, GetSpaceInfoResponse} from 'api';
+import {api, FetchAssets3dResponse, GetObjectInfoResponse} from 'api';
 import {Asset3dCategoryEnum, PluginIdEnum} from 'api/enums';
 import {ObjectColorAttributeInterface} from 'api/interfaces';
 
@@ -26,9 +26,9 @@ const ObjectColorStore = types
 
     fetchObjectColor: flow(function* (objectId: string) {
       const response: ObjectColorAttributeInterface = yield self.fetchRequest.send(
-        api.spaceAttributeRepository.getSpaceAttribute,
+        api.objectAttributeRepository.getObjectAttribute,
         {
-          spaceId: objectId,
+          objectId: objectId,
           plugin_id: PluginIdEnum.CORE,
           attribute_name: AttributeNameEnum.OBJECT_COLOR
         }
@@ -41,17 +41,17 @@ const ObjectColorStore = types
     updateObjectColor: flow(function* (objectId: string, colorHex: string) {
       const value: ObjectColorAttributeInterface = {value: colorHex};
 
-      yield self.updateRequest.send(api.spaceAttributeRepository.setSpaceAttribute, {
-        spaceId: objectId,
+      yield self.updateRequest.send(api.objectAttributeRepository.setObjectAttribute, {
+        objectId: objectId,
         plugin_id: PluginIdEnum.CORE,
         attribute_name: AttributeNameEnum.OBJECT_COLOR,
         value
       });
     }),
     isColorPickerAvailable: flow(function* (worldId: string, objectId: string) {
-      const objectInfo: GetSpaceInfoResponse = yield self.objectInfoRequest.send(
-        api.spaceInfoRepository.getSpaceInfo,
-        {spaceId: objectId}
+      const objectInfo: GetObjectInfoResponse = yield self.objectInfoRequest.send(
+        api.objectInfoRepository.getObjectInfo,
+        {objectId}
       );
 
       const assets3dList: FetchAssets3dResponse = yield self.assets3dRequest.send(

@@ -1,11 +1,5 @@
 export const enGb = {
   translation: {
-    time: {
-      days: '{{days}} days',
-      hours: '{{hours}} hours',
-      minutes: '{{minutes}} minutes',
-      seconds: '{{seconds}} seconds'
-    },
     staking: {
       title: 'Personal Connecting Dashboard',
       label: 'Staking',
@@ -239,7 +233,6 @@ export const enGb = {
       somethingWentWrongTryAgain: 'Something went wrong. Please try again later.',
       noWorldBuilderPermissions:
         'Your Account is not whitelisted;\nPlease contact support to request a whitelist slot or login to a different whitelisted account',
-      savingSpaceDetailsError: 'An error has occurred while saving space.',
       failedToLoadDynamicScript: 'Failed to load dynamic script: {{url}}',
       noModuleSpecified: 'No module specyfied',
       errorWhileLoadingPlugin: 'An error has occured while loading plugin',
@@ -288,7 +281,6 @@ export const enGb = {
       skipAI: 'Skip creating collective intelligence with AI',
       noAIAvailable: 'Restrict users to upload their own image. No AI available',
       screenShare: 'Screenshare',
-      stageMode: 'Stage Mode',
       stakingOverview: 'Staking Overview',
       calendar: 'World Calendar',
       odysseys: 'Odysseys',
@@ -355,7 +347,6 @@ export const enGb = {
       person: 'Person',
       online: 'Available',
       dnd: 'Do Not Disturb',
-      subspaces: 'Subspaces',
       searchResults: 'Search Results',
       results: 'Results',
       attendeeList: 'Attendee List',
@@ -368,7 +359,6 @@ export const enGb = {
       microphoneOff: 'Microphone off',
       webcamPreview: 'Webcam Preview',
       audioVideoSettings: 'Audio/Video Settings',
-      grabTable: 'Grab a Table',
       videoinput: 'Video Input',
       audioinput: 'Audio Input',
       audiooutput: 'Audio Output',
@@ -471,10 +461,6 @@ export const enGb = {
         'You need a wallet to create your own Odyssey. If you already have one, you will see a pop-up asking for the address you would like to use or create. If you do not have a wallet, please install a browser plugins and refresh the page',
       orSignIn: 'Or if you already have an account please sign in',
       howSignUp: 'How to create an Odyssey',
-      hello_title: 'Hello traveller',
-      hello_one: 'Want to go on a journey?',
-      hello_two: 'Click on any of the spheres in the space and see what’s inside.',
-      hello_three: 'Or create your own Odyssey.',
       startCounting: 'Are you ready? Start counting. Go!',
       startCreating: 'Start creating your personal journey and...',
       hello_nickname: 'Well done, {{nickname}}! You just created your Odyssey',
@@ -484,6 +470,13 @@ export const enGb = {
       startRecording: 'Start recording and fly around',
       recording: 'Recording',
       wasCreatedBy: 'was created by',
+      connectWalletJoin: 'Connect your wallet and join the community',
+      flyAroundCreations: 'Fly around freely and enjoy all the creations',
+      lookForSpace: 'Look for the space of your interest',
+      openNewsfeed: 'Open the newsfeed and see everything happening',
+      learnAboutObjectives: 'Learn about the objectives and collective results',
+      openTimeline: 'Open the timeline and see what’s going on',
+      makeMark: 'Make a mark and participate in the mission',
       flyForSpawning:
         'You can fly around with the preview of the object until you reached the perfect spawning point and place the object',
       receivedBoost: 'received a boost of {{amount}} {{symbol}} from {{name}}',
@@ -503,6 +496,7 @@ export const enGb = {
       linkCopied: 'The link is copied to your clipboard.',
       fullyEnjoy: 'Connect your wallet to fully enjoy Odyssey!',
       flyAround: 'Fly around and start experiencing Odyssey!',
+      buyNFT: 'Buy a 3D environment NFT and start creating',
       extensionOpen:
         'The {{name}} extension will now open and ask you to authenticate and sign a message.',
       extensionWindow:
@@ -526,19 +520,11 @@ export const enGb = {
       avatarFailure: 'There was a problem saving the avatar',
       askToUnstake:
         'You are about to unstake all your {{tokenSymbol}} from this odyssey, it is currently not possible to unstake portions of your staked {{tokenSymbol}}. Are you sure you want to do this?',
-      spaceEditSuccess: 'Successfully edited space',
-      spaceSaveFailure: 'There was an error saving the space',
-      spaceDeleteFailure: 'There was an error deleting the space',
-      joinSpaceWelcome: 'Click on the button to join the space!',
-      spaceInvitationNote: '{{invitor}} has invited you to {{spaceName}}',
-      joinTableWelcome: 'Click on the button to join the table!',
-      grabTableInvitationNote: '{{invitor}} has invited you to join a table',
       highFiveSentTitle: 'High five sent to {{name}}',
       highFiveSentText: 'You sent a high five',
       highFiveReceivedTitle: '{{name}} has sent you a high five',
       highFiveReceivedText: 'Click on the button to high five back!',
       launchInitiativeNote: 'Feel free to launch your initiative at a later time.',
-      launchSpaceNote: 'Launch your initiative in just one minute',
       allowCustomize: 'Allow visitors to contribute to this object with text, an image or sound',
       maximumParticipants:
         "The maximum number of video participants have been reached. New participants won't be able to stream their webcam.",
@@ -548,26 +534,9 @@ export const enGb = {
       memberRemoveSuccess: 'The member was removed successfully',
       memberRemoveFailure: 'There was an error removing the member',
       userRequestDeny: 'Cannot Accept User Request',
-      offStageFailure: 'Cannot send {{user}} off stage',
       followingSoundFiles: 'You can upload the following sound files',
       soundExtensions: 'MP3, FLAC, OGG, ACC and WEBM',
-      joinStageRequestFailure: 'Request has not been made at the moment, try again later',
-      joinStageRefused: 'Could not join stage.',
-      inviteToStageFailure: 'Cannot invite {{user}} to stage',
-      subSpaceDeleteFailure: 'There was an error deleting the subspace',
-      subSpaceCreateFailure: 'There was an error creating the subspace',
-      subSpaceCreateSuccess: 'The subspace was created successully!',
-      stageModeActivated:
-        'The stage has been enabled right now. Want to participate? Ask to go on stage.',
-      stageModeNotActiveGuest: `Stage Mode has not Been Toggled\n\nA space member must toggle this`,
-      stageModeNotActiveModerator: `Stage Mode has not Been Toggled\n\nYou can toggle stage-mode, since you are a member of this space`,
-      stageModeDeActivated: 'The stage has been disabled',
-      stageModeFull: 'The stage is currently full. Try again later to go on stage.',
-      stageModeMuted: 'You have been muted by a member of the space.',
-      kickedFromMeeting: 'A Space Admin has kicked you from the space',
       joinGathering: 'The gathering {{title}} is about to start',
-      updateSpace:
-        'Please update your space with a meme and a poster within 1 week (otherwise your space will be archived).',
       noScreenSharing: 'There is no one screensharing',
       preparingScreenSharing: 'preparing screen share',
       tileCreateSuccess: 'Your tile has been created successfully',
@@ -576,36 +545,14 @@ export const enGb = {
       tileUpdateError: 'There was a problem updating your tile',
       tileRemoveSuccess: 'Your tile has been successfully removed',
       tileRemoveError: 'There was a problem removing your tile',
-      pendingRequestToGoOnStage: 'Request to go on stage pending',
-      stageIsFull: 'Stage is full',
-      stageIsActive: 'Stage is active',
-      stageIsInactiveToggleToActivate: 'Stage is inactive. Toggle to activate.',
-      noParticipantsOnStage: 'There are currently no participants on stage.',
-      onStage: 'On Stage',
-      requestedPermissionToGoOnStage: 'You have requested permission to go on stage',
       waitForModeratorsToAccept: 'Wait for the moderators to accept or deny your request',
-      thisPersonWantsToComeOnStage: 'This person wants to come on stage, invite them?',
-      thisWillEnablePersonToUseStage:
-        '(This will enable the person to talk, screenshare, and transmit video)',
-      stageIsCurrentlyFull:
-        '(The stage is currently full, you must first remove someone from the stage before you can accept)',
-      youAreInAudience: 'You are in the audience, stage mode is on',
       newDeviceDetected:
         'Odyssey has detected a new {{deviceKind}} device named "{{deviceName}}". Do you want to switch to it?',
-      inviteSuccess: 'You have successfully invited {{user}} to the space',
-      inviteError: 'There was a problem inviting {{user}} to space',
-      areYouSureYouWantToRemoveUserFromStage: `Are you sure you want remove {{name}} from stage?`,
-      wouldYouLikeToGoOnStage: 'Would you like to go on stage?',
-      thisWillEnableYouToUseStage:
-        '(This will enable you to talk, screenshare, and transmit video)',
       pleaseTryAgainLater: 'Please try again later',
       videoLimitReached: 'Video limit reached',
-      stageFull: 'Stage full',
       worldBuilderDescription:
         'This is the Odyssey creator - a place where you can create your own decentralised social metaverse. Take ownership of your own world to build and create together. Shape your metaverse to suit your needs, enable the functionality you want to use and invite the people you want to collaborate with.',
       startBuilding: 'Connect your wallet\n To start Building',
-      savingSpaceDetailsSuceess: 'Space details saved succesfully!',
-      stageIsFullTryAgain: 'Stage is full, please try again later...',
       flyWithMeEnabled: 'Fly with me enabled',
       flyWithMeActivated: 'Fly with me has been activated',
       flyWithMeDisabled: 'Fly with me has been disabled',
@@ -619,6 +566,7 @@ export const enGb = {
       glbModelsMaxSize: '(max file size {{size}}MB)',
       selectOne: 'Select One',
       processing: 'Processing',
+      setSpawnPoint: 'Set your current location and orientation as the spawn point.',
       comingSoonExclamation: 'Coming Soon!',
       errorBuyingNft: 'Error buying NFT. Please contact the support!',
       mintingYourOdyssey: 'Minting your Odyssey...',
@@ -664,13 +612,17 @@ export const enGb = {
     },
     titles: {
       alert: 'alert',
+      joinAsMember: 'Join Odyssey as a member',
+      enterAsGuest: 'Enter Odyssey as a guest',
+      searchOdysseysMembers: 'Search Odysseys and members',
+      checkLatestNews: 'Check the latest news in Odyssey',
+      aboutThisOdyssey: 'About this Odyssey',
+      seeUpdates: 'See the latest updates',
+      joinAction: 'Join the action',
+      createOdyssey: 'Create your own Odyssey',
       myWalletAccounts: 'My wallet accounts',
       connectAnotherWallet: 'Connect another wallet',
-      joinSpace: 'join the space',
-      joinTable: 'join the table',
       returnHighFive: 'Return the favour',
-      createSpace: 'YOU CAN CREATE A SPACE FROM YOUR PROFILE',
-      ownSpaceInvite: 'WANT YOUR OWN SPACE? (FREE)',
       describeGoal: 'Describe your mission',
       missionTitle: 'Title of the mission',
       whatIsMission: 'What’s the mission?',
@@ -690,7 +642,6 @@ export const enGb = {
       later: 'later',
       create: 'create',
       by: 'By',
-      stage: 'Stage mode',
       objectInfo: 'Object info',
       customizeObject: 'Customize object',
       odysseySoundtrack: 'Odyssey soundtrack',
@@ -701,20 +652,11 @@ export const enGb = {
       descriptionOfObject: 'Description of object',
       nameOfObject: 'Name of object',
       creatorEnabled: 'Odyssey Creator Mode Enabled',
-      kickedFromMeeting: 'You have been kicked from a space',
-      joinGathering: 'Gathering Event is starting now',
-      updateSpace: 'update your space with some enticing content',
-      goToStageMode: 'Click to go to stage-mode',
-      userWantsToComeOnStage: '{{user}} wants to come on stage',
       newDeviceDetected: 'New Device Detected',
       inviteUsers: 'Invite users',
-      removeParticipantFromStage: 'Remove Participant From Stage',
       yourRequestHasBeenAccepted: 'Your request has been accepted,',
       getReadyToGetLive: 'Get ready. You are about to go live in.',
-      goingOnStage: 'Going On Stage',
       yourRequestWasDeclined: 'Your request was declined',
-      youHaveBeenInvitedOnStage: 'You have been invited on stage',
-      prepareToGoOnStage: 'Prepare to go on stage',
       broadcastManage: 'Manage Broadcast',
       profile: 'Profile',
       myProfile: 'My profile',
@@ -725,12 +667,10 @@ export const enGb = {
       worldBuilder: 'Odyssey Creator',
       worldChat: 'World Chat',
       templateNameWrapper: '{{name}} Template',
-      stageIsFull: 'Stage is full',
       success: 'Success',
       failedToUpload: 'Failed to upload',
       plugins: 'Plugins',
       addPlugin: 'Add Plugin',
-      deletePluginFromSpace: 'Delete plugin from space',
       error: 'Error',
       social: 'Social',
       selectFunctionality: 'Select Functionality',
@@ -763,15 +703,6 @@ export const enGb = {
       rotation: 'Rotation',
       position: 'Position'
     },
-    textMessage: {
-      you: 'you',
-      placeholder: 'Message',
-      joinText: '{{name}} has joined the collaboration space',
-      leftText: '{{name}} has left the collaboration space',
-      flyWithMeInvite: '{{name}} has invited you to join them in fly with me',
-      flyWithMeDisabled: '{{name}} has disabled fly with me',
-      setSpawnPoint: 'Set your current location and orientation as the spawn point.'
-    },
     tooltipTitles: {
       openAdmin: 'Open Admin',
       closeChat: 'Close Chat',
@@ -785,7 +716,6 @@ export const enGb = {
       sort: 'Sort',
       addComment: 'Add a comment',
       searchForPeople: 'Search for people...',
-      searchForSpaces: 'Search for spaces...',
       searchForAssets: 'Search for assets...',
       searchForAttendees: 'Search for attendees...',
       nameYourWorld: 'Name your world',
@@ -849,6 +779,11 @@ export const enGb = {
       signIn: 'Sign In',
       signUpNow: 'Sign up now',
       generateImage: 'Generate image',
+      startSearching: 'Start searching',
+      openNewsfeed: 'Open the newsfeed',
+      checkCore: 'Check the core',
+      openTimeline: 'Open the timeline',
+      flyAround: 'Fly around',
       overview: 'Overview',
       signOut: 'Sign Out',
       sort: 'Sort',
@@ -913,7 +848,6 @@ export const enGb = {
       addToTimeline: 'Add to timeline',
       seeAll: 'See all',
       approve: 'Approve',
-      joinStage: 'Join Stage',
       decline: 'Decline',
       cancel: 'Cancel',
       react: 'React',
@@ -930,8 +864,6 @@ export const enGb = {
       copyLink: 'Copy Link',
       createInitiative: 'Launch new initiative',
       flyTo: 'Fly to',
-      flyToThisSpace: 'Fly to this space',
-      grabTable: 'Grab table',
       highFive: 'High five',
       connect: 'Connect',
       connected: 'Connected',
@@ -962,8 +894,6 @@ export const enGb = {
       unstake: 'Unstake',
       addStake: 'Add stake',
       info: 'Info',
-      launchInitiativeSuccess: 'Launched initiative succesfully, you will be now teleported.',
-      lunchingInitiative: 'launching initiative',
       invite: 'Invite',
       invited: 'Invited',
       closeAndContinue: 'Close and Continue',
@@ -972,8 +902,6 @@ export const enGb = {
       muteName: 'Mute {{name}}',
       kickName: 'Kick {{name}}',
       kickNameFromVoice: 'Kick {{name}} from Voice',
-      leaveStage: 'Leave stage',
-      goOnStage: 'Go on stage',
       remove: 'Remove',
       mute: 'Mute',
       unmute: 'Unmute',
@@ -983,10 +911,8 @@ export const enGb = {
       switchDevice: 'Switch device',
       getReady: 'Get Ready',
       close: 'Close',
-      inviteToStage: 'Invite to stage',
       ready: 'Ready',
       uploadSoundFile: 'Upload a sound file',
-      inviteThisPersonToTheStage: 'Invite this person to the stage?',
       logIn: 'Log In',
       getStarted: 'Get Started',
       selectTemplate: 'Select Template',
@@ -1072,7 +998,6 @@ export const enGb = {
     assetsUploader: {
       uploadLabel: 'Upload .glb file',
       dragActiveLabel: 'Drop the files here...',
-      spaceName: 'Space Name',
       successMessage: 'Asset successfully uploaded',
       errorUnsupportedFile: 'Only .glb files are supported',
       errorTooLargeFile: 'Max file size is {{size}}MB',
@@ -1080,410 +1005,6 @@ export const enGb = {
     },
     skyboxGenerator: {
       errorGenerating: 'Error generating skybox'
-    },
-    eventList: {
-      noGatherings: 'There are no gatherings scheduled for this space.',
-      eventItem: {
-        live: 'Live',
-        websiteLink: 'Learn More',
-        moreAttendees: 'More attendees',
-        websiteLinkDialog: {
-          title: 'Website Link',
-          copyLabel: 'Copy Link'
-        },
-        flyToSpace: 'Fly To',
-        gatheringLink: 'Share',
-        addToCalendar: 'Add to My Calendar',
-        joinGathering: 'Join The Gathering',
-        by: 'By',
-        at: 'At',
-        from: 'From',
-        to: 'To',
-        showMore: 'Show more',
-        collapse: 'Show less',
-        attendees_one: `{{count}} Attendee`,
-        attendees_other: `{{count}} Attendees`,
-        interested: 'Interested'
-      }
-    },
-    eventForm: {
-      addTitle: 'Create Gathering',
-      editTitle: 'Edit Gathering',
-      descriptionLabel: 'Description',
-      descriptionPlaceholder: 'Describe your gathering here',
-      linkLabel: 'Optional URL',
-      linkPlaceholder: 'Add a Website Link to Your Gathering',
-      hostLabel: 'host',
-      hostPlaceholder: 'Add a Host to Your Gathering',
-      titleLabel: 'title',
-      titlePlaceholder: 'Add a Title to Your Gathering',
-      startDateTimeLabel: 'Start Date and Time',
-      startDateTimePlaceholder: 'Set Start Date and Time',
-      endDateTimeLabel: 'End Date and Time',
-      endDateTimePlaceholder: 'Set End Date and Time',
-      errorMessage: 'This field is required',
-      createSuccess: 'Event created successfully',
-      createFailed: 'There was a problem creating the event'
-    },
-    tokenRules: {
-      tokenForm: {
-        title: 'add a new token',
-        submitButtonLabel: 'add token',
-        description: 'Add a new token',
-        tokenTypeLabel: 'Select token type',
-        tokenTypePlaceholder: 'Token Type',
-        tokenIDLabel: 'token id',
-        tokenIDPlaceholder: 'Token ID',
-        networkLabel: 'select network',
-        networkPlaceholder: 'Network',
-        contractAddressLabel: 'smart contract address',
-        contractAddressPlaceholder: 'Address',
-        tokenSelectedDescription: 'Automatically selected from Smart Contract',
-        tokenNotFilledDescription:
-          'After selecting network and a valid smart contract address the token will be shown here',
-        tokenCreatedSuccessMessage: 'Your Token can now be selected when defining a new token rule'
-      },
-      tokenRuleForm: {
-        title: 'Define a new token rule',
-        submitButtonLabel: 'submit rule for approval',
-        description: 'Define a new token rule for the list',
-        tokenRuleNameLabel: 'new token rule name',
-        tokenRuleNamePlaceholder: 'Add a Name Here',
-        searchInputLabel: 'token select',
-        searchInputPlaceholder: 'Select or Add New Token',
-        minimumBalanceLabel: 'minimum balance',
-        minimumBalancePlaceholder: 'Add a Minimum Balance To This Rule',
-        addLabelButton: 'Add New Token',
-        tokenRuleCreatedSuccessMessage: 'Your Token Rule has been added to your space'
-      },
-      tokenRuleReview: {
-        dialogTitle: 'Token Rule Name',
-        dialogDescription: 'Review a token gated access rule request for your world.',
-        tokenLabel: 'token',
-        networkLabel: 'network',
-        addressLabel: 'address',
-        minimumAmountLabel: 'minimum amount',
-        spaceRequestedLabel: 'space requested',
-        userRequestedLabel: 'user requested',
-        tokenIdLabel: 'Token Id'
-      },
-      applyTokenRuleForm: {
-        title: 'Apply a new token rule',
-        submitButtonLabel: 'Add Rule',
-        succeedButtonLabel: 'Okay',
-        description: 'Add a token gated access rule to your space.',
-        tokenRuleAppliedSuccessMessage: 'The Token Rule has been applied to your space',
-        searchInputLabel: 'Token rule',
-        searchInputPlaceholder: 'Search for token rule or add new one',
-        addLabelButton: 'Add New Token Rule',
-        selectedTokenTypeLabel: 'Token',
-        selectedTokenNetworkLabel: 'network',
-        selectedTokenAddressLabel: 'address',
-        selectedTokenMinBalanceLabel: 'Minimum Amount',
-        dropdown: {
-          placeholder: 'Select a role'
-        }
-      },
-      removeTokenRuleDialog: {
-        title: 'remove Token Rule from space',
-        message: 'Are you sure you want to remove the {{name}} from this space?'
-      },
-      editTokenRuleDialog: {
-        success: 'The token rule role was successfully edited',
-        title: 'Change member',
-        dropdownPlaceholder: 'Select a role'
-      },
-      memberLabel: 'member',
-      adminLabel: 'admin',
-      deleteApproveMessage: 'no, cancel',
-      approve: 'approve',
-      declined: 'declined',
-      requested: 'requested',
-      status: 'status',
-      ruleName: 'Rule Name',
-      noTokenRules: 'No token rules',
-      overview: {
-        title: 'token rules Overview'
-      }
-    },
-    broadcastAdmin: {
-      subtitle: 'Manage Broadcast',
-      formTitle: 'broadcast',
-      formDescription:
-        'Broadcasting allows you to send out a message to this space and the spaces below. Add a youtube url to start broadcasting. What would you like to broadcast?',
-      formInstruction: 'Add a youtube url which you would like to broadcast:',
-      formInputLabel: 'youtube video url',
-      formErrorMessage: 'Please enter a valid Youtube URL',
-      formButton: 'preview',
-      formInfo: 'The broadcast will be sent to the following spaces and their subspaces:',
-      previewTitle: 'preview',
-      broadcastStart: 'start broadcasting',
-      broadcastStartDialog: 'Starting Broadcast',
-      broadcastStartMessage: 'Streaming is about to start',
-      broadcastStop: 'stop broadcasting',
-      broadcastStopMessage: 'Are you sure you want to end the broadcast?',
-      broadcastStopTitle: 'End broadcast',
-      confirmStop: 'Yes, end broadcast',
-      cancelStop: 'No, cancel',
-      enableSuccess: 'The video has broadcast successfully',
-      enableError: 'There was a problem broadcasting this video',
-      disableSuccess: 'Broadcasting has disabled successfully',
-      disableError: 'There was a problem disabling the broadcast'
-    },
-    liveStream: {
-      subtitle: 'Live Stream',
-      stopStream: 'Stop streaming'
-    },
-    spaceAdmin: {
-      subtitle: 'Manage Space',
-      noAccess: 'You have no admin rights for that space',
-      sectionPanel: {
-        tokenRulesPanel: 'Token rules',
-        spaceMemberPanel: 'Space Members',
-        subSpacesPanel: 'Subspaces'
-      },
-      spaceDetails: {
-        title: 'Space details',
-        typeLabel: 'Type',
-        accessLabel: 'Access',
-        accessWarning: 'Turning on private only allows members and admins of the space to enter',
-        privateSpaceText: 'Private space',
-        spaceNameLabel: 'Space Name',
-        deleteSpaceLabel: 'Delete Space',
-        saveDetailsLabel: 'Save Details',
-        spaceNameError: 'Space name is required',
-        deleteConfirmation: {
-          title: 'Delete space',
-          text: 'Are you sure you want to delete this space?',
-          acceptLabel: 'Yes, delete',
-          declineLabel: 'No, cancel'
-        }
-      },
-      manageEmoji: {
-        title: 'Emoji',
-        text1:
-          'To upload an emoji to the Emoji Palette, upload a static PNG file which is 512 x 512 pixels in size or greater. Transparency is supported. Once uploaded this emoji will be usable all over the metaverse by anyone.',
-        noEmojiUploaded: 'This space has no emoji uploaded yet.',
-        yourUploadedEmoji: 'Your uploaded Emoji:',
-        deleteEmoji: 'Delete Emoji',
-        uploadEmoji: 'Upload EMoji',
-        uploadDialog: {
-          title: 'Upload your emoji',
-          emojiName: 'Name',
-          errorMissingName: 'Please enter a name for your emoji',
-          selectImage: 'Select Image',
-          changeImage: 'Change Image',
-          confirmButton: 'Save',
-          errorSave: 'Could not save emoji. Please try again later',
-          successSave: 'Emoji uploaded successfully',
-          errorDeleteOld: 'Could not delete old emoji. Please try again later'
-        },
-        deleteDialog: {
-          title: 'Delete emoji',
-          text: 'Are you sure you want to delete the emoji?',
-          yes: 'Yes, delete',
-          no: 'No, cancel',
-          errorDelete: 'Could not delete emoji. Please try again later',
-          successDelete: 'Emoji deleted successfully.'
-        }
-      },
-      users: {
-        title: 'Space Members',
-        removeConfirmation: {
-          title: 'Remove member from space',
-          text: 'Are you sure you want to remove the {{name}} from this space?',
-          acceptLabel: 'Yes, remove',
-          declineLabel: 'No, cancel',
-          success: 'The member was removed successfully',
-          failure: 'There was an error removing the member'
-        },
-        addMemberDialog: {
-          title: 'Invite new member',
-          message: 'You are about to invite a new member to the space.',
-          query: {
-            label: 'Query',
-            placeholder: 'Search for name or email',
-            errors: {
-              required: 'Please enter a query',
-              nonSelected: 'Please select a user from the dropdown list'
-            },
-            dropdownPlaceholder: 'Select a user'
-          },
-          dropdown: {
-            label: 'member role',
-            member: 'Member',
-            admin: 'Admin',
-            placeholder: 'Select a role',
-            errors: {
-              required: 'Please select a role'
-            }
-          },
-          approveLabel: 'Add member',
-          declineLabel: 'Cancel',
-          successInvite: 'Invitation sent!',
-          successAdd: 'User added to the space sucessfully',
-          failure: 'There was an error inviting the member'
-        },
-        editMemberDialog: {
-          title: 'Change member',
-          approveLabel: 'save',
-          declineLabel: 'cancel',
-          dropdown: {
-            placeholder: 'member role',
-            member: 'Member',
-            admin: 'Admin'
-          },
-          success: 'The member role was successfully edited'
-        }
-      },
-      subSpaces: {
-        title: 'SubSpaces',
-        addSubSpaceDialog: {
-          title: 'Create new subspace',
-          message: 'You are about to create a new subspace for the space "{{spaceName}}".',
-          approveLabel: 'save',
-          declineLabel: 'cancel',
-          dropdown: {
-            label: 'Space Type',
-            placeholder: 'Select a type',
-            errors: {
-              required: 'Please select a type'
-            }
-          },
-          name: {
-            label: 'Name',
-            placeholder: 'Type name of space',
-            errors: {
-              required: 'Please enter a name'
-            }
-          }
-        }
-      }
-    },
-    helpSection: {
-      title: 'help',
-      helpNote:
-        'You are about to embark on your flight in Odyssey.\n\n Below we have a good dose of the essentials for you to get started.\n\n We have long term plans with Odyssey, yet we are at humble beginnings with the release of this first milestone. We are so delighted you are flying with us!\n\n We invite you to help us improve Odyssey, as we are at humble beginnings with the release of this first milestone. So...\n\n Something doesn’t work for you? Let us know!\n Something you are missing? Let us know!\n Something you feel should be different? Let us know!\n\nWant to help building Odyssey? Let us know ;)',
-      discord: {
-        iconLabel: 'discord',
-        dropDownLabel: 'Join discord',
-        topTextOne: 'Got any feedback, question, or just wanna chat with us? Visit our',
-        topTextBold: ' Discord!',
-        bottomTextOne: 'Need flight assistance? Get in touch with our',
-        bottomTextTwo: 'team!',
-        bottomTextBold: ' @Tech-Support! ',
-        serverButtonLabel: 'visit discord server',
-        supportButtonLabel: 'tech support channel'
-      },
-      controls: {
-        iconLabel: 'controls',
-        dropDownLabel: 'Controls',
-        buttonsText: 'To fly, use the following controls: ',
-        wLetter: 'W',
-        aLetter: 'A',
-        sLetter: 'S',
-        qLetter: 'Q',
-        eLetter: 'E',
-        dLetter: 'D',
-        forwardLabel: ' - FORWARD',
-        leftLabel: ' - LEFT',
-        backwardLabel: ' - BACKWARD',
-        rightLabel: ' - RIGHT',
-        downWardLabel: ' - DOWNWARD',
-        upWardLabel: ' - UPWARD',
-        buttonsIconLabel: 'qweasd',
-        arrowsTextFirst: 'You can also use the ',
-        arrowsTextSecond: ' for forward,\r\n backward, left and right movement.',
-        arrowsBoldText: 'Arrow Keys',
-        arrowsIconLabel: 'arrow-keys',
-        shiftTextFirst: 'Hold ',
-        shiftTextBold: 'Shift',
-        shiftTextSecond: ' while flying: Fast flight mode',
-        shiftIconLabel: 'shift-button',
-        mouseBoldTextFirst: 'Mouse',
-        trackPadBoldText: ' Trackpad',
-        mouseBoldTextSecond: 'left mouse button',
-        mousePadTextFirst: ' or',
-        mousePadTextSecond: ': Turn camera',
-        mousePadTextThird: ': Interact with objects',
-        mousePadIconLabel: 'mouse-pad',
-        spaceBarTextFirst: 'Hold',
-        spaceBarBoldText: ' space',
-        spaceBarTextSecond: ' while not moving: Look around',
-        spaceBarIconLabel: 'space-bar'
-      },
-      emoji: {
-        title: "Emoji and Megamoji's",
-        paragraphs: {
-          one: {
-            partOne:
-              'Want to let people know how you are feeling, or if you agree or disagree with something behind said? Let everyone know your opinion by expressing yourself using ',
-            highlightedPart: 'Emojis',
-            partTwo: '.'
-          },
-          two: {
-            partOne: 'The ',
-            highlightedPart: 'EMOJI BUTTON',
-            partTwo:
-              ', is located at the bottom left hand corner of the UI, click on it to bring up a selection of emojis.'
-          },
-          three: {
-            partOne:
-              'Selecting one of the emojis from this palette will cause the emoji of your choice to appear near you inside the metaverse - visible to everyone around you! This not only works while flying in the ',
-            highlightedPartOne: '3D SPACE',
-            partTwo: ', using it while inside a ',
-            highlightedPartTwo: 'DASHBOARD',
-            partThree: ' will cause your emoji to appear to everyone inside that dashboard!'
-          },
-          four: {
-            partOne: 'When a group of people all feel the same way, something ',
-            highlightedPart: 'AWESOME',
-            partTwo: ' may happen!'
-          }
-        }
-      },
-      momentum: {
-        title: 'Odyssey Space',
-        paragraphs: {
-          one: "You're diggin' it and you want to be more involved?",
-          two: {
-            partOne: 'Join us at our ',
-            highlightedPart: 'Weekly KSMverse Community Calls',
-            partTwo:
-              ', on Wednesdays and Fridays 3pm CEST, in the Kusamaverse, where we will talk about all things Dotsmama, metaversal and phygital!'
-          },
-          three: {
-            partOne: 'Check out ',
-            highlightedPart: 'the Calendar on our Odyssey space',
-            partTwo:
-              ' or updates on topics. Want to be a guest speaker and share your insights with the community? Do reach out to us on Discord.'
-          },
-          four: 'Wanna chat, or have any more questions, crazy ideas or suggestions to us? Check out our momentum space. LFG!'
-        },
-        visitSpace: 'Visit the Odyssey Space',
-        visitSpaceDisabled: 'Disabled during Fly with me'
-      },
-      wiki: {
-        title: 'Wiki',
-        partOne: `Please feel free to deep-dive into the Kusamaverse, its nooks and crannies and feature map in `,
-        highlightedPart: 'our Wiki',
-        partTwo:
-          '. While we do our best to keep our wiki updated please bare in mind this is a living breathing ecosystem that is subject to constant change.',
-        link: 'Wiki Link'
-      },
-      openLabel: 'Expand',
-      closeLabel: 'Minimize'
-    },
-    editProfileWidget: {
-      title: 'Edit my bio',
-      avatarInstructions: 'Choose an avatar that will be shown when your camera is disabled',
-      saveInProgress: 'Your profile is updating.',
-      saveSuccess: 'Your profile was updated.',
-      saveFailure: 'Your profile was not updated.',
-      isUpdating: 'Profile is updating...',
-      changeAvatar: 'Change your avatar',
-      upload: 'upload',
-      avatar: 'avatar'
     },
     devices: {
       device: 'device',
@@ -1493,53 +1014,6 @@ export const enGb = {
       audio: 'audio',
       selectInputSource: 'Select input source',
       selectOutputSource: 'Select output source'
-    },
-    collaboration: {
-      spaceIsPrivate: 'This space is set to private by its admin and only accessible by its members'
-    },
-    calendar: {
-      formButton: 'Create new event in your Odyssey',
-      subTitle: 'Calendar'
-    },
-    dashboard: {
-      subtitle: 'dashboard',
-      vibe: 'vibe',
-      vibes: 'vibes',
-      addTile: 'add tile',
-      invitePeople: 'invite people',
-      stake: 'stake',
-      tileForm: {
-        title: 'create a new tile',
-        createTile: 'create tile',
-        updateTile: 'update tile',
-        tileType: 'Tile type',
-        typePlaceholder: 'Select a type',
-        textType: 'Text',
-        imageType: 'Image',
-        videoType: 'Video',
-        videoLabel: 'Youtube video url',
-        textLabel: 'Title',
-        textPlaceholder: 'Please choose a title',
-        descriptionLabel: 'Description',
-        descriptionPlaceholder: 'Please write a description'
-      },
-      removeTileForm: {
-        title: 'remove Tile from dashboard',
-        message: 'Are you sure you want to remove this tile?'
-      }
-    },
-    mutualConnections: {
-      noConnection: 'There are no connections yet',
-      title: 'Mutual connections list',
-      admin: 'admin'
-    },
-    newsfeed: {
-      stakedIn: ' staked in ',
-      you: 'You',
-      and: ' and ',
-      docked: ' docked',
-      boostMessage: 'received a boost of {{amount}} MOM from {{user_name}}',
-      createdMessage: 'was created by {{user_name}}'
     },
     plugin_gd: {
       labels: {

@@ -116,7 +116,7 @@ const ContributionFormsStore = types.compose(
         };
 
         const response: SpawnByUserResponse = yield self.submitRequest.send(
-          api.spaceRepository.spawnByUser,
+          api.objectRepository.spawnByUser,
           {
             objectId: canvasObjectId,
             object_name: self.answersData.answerOne || '',

@@ -175,9 +175,9 @@ const TimelineStore = types.compose(
       checkLastSeenDate: flow(function* () {
         /* 1. GETTING LAST SEEN DATE */
         const attributeResponse = yield self.lastSeenRequest.send(
-          api.spaceUserAttributeRepository.getSpaceUserAttribute,
+          api.objectUserAttributeRepository.getObjectUserAttribute,
           {
-            spaceId: self.worldId,
+            objectId: self.worldId,
             userId: self.userId,
             pluginId: PluginIdEnum.CORE,
             attributeName: AttributeNameEnum.TIMELINE_LAST_SEEN
@@ -216,8 +216,8 @@ const TimelineStore = types.compose(
         }
       }),
       updateLastSeenDate: flow(function* () {
-        yield self.lastSeenRequest.send(api.spaceUserAttributeRepository.setSpaceUserAttribute, {
-          spaceId: self.worldId,
+        yield self.lastSeenRequest.send(api.objectUserAttributeRepository.setObjectUserAttribute, {
+          objectId: self.worldId,
           userId: self.userId,
           pluginId: PluginIdEnum.CORE,
           attributeName: AttributeNameEnum.TIMELINE_LAST_SEEN,

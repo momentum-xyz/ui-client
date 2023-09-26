@@ -17,7 +17,7 @@ const WorldMembers = types.compose(
     .actions((self) => ({
       fetchMembers: flow(function* () {
         const response: WorldMemberInterface[] = yield self.requestMembers.send(
-          api.spaceRepository.fetchWorldMembers,
+          api.objectRepository.fetchWorldMembers,
           {
             worldId: self.worldId
           }
@@ -30,7 +30,7 @@ const WorldMembers = types.compose(
     }))
     .actions((self) => ({
       addMember: flow(function* (address: string, role = 'admin') {
-        yield self.addMemberRequest.send(api.spaceRepository.addWorldMember, {
+        yield self.addMemberRequest.send(api.objectRepository.addWorldMember, {
           worldId: self.worldId,
           address,
           role
@@ -43,7 +43,7 @@ const WorldMembers = types.compose(
         yield self.fetchMembers();
       }),
       deleteMember: flow(function* (userId: string) {
-        yield self.deleteMemberRequest.send(api.spaceRepository.deleteWorldMember, {
+        yield self.deleteMemberRequest.send(api.objectRepository.deleteWorldMember, {
           worldId: self.worldId,
           userId
         });

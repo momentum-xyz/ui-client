@@ -38,6 +38,21 @@ export const Button = styled.button`
   --secondary-color-active: ${(props) => props.theme.accentText};
   --secondary-color-disabled: ${(props) => props.theme.text && rgba(props.theme.text, 0.6)};
 
+  --third-border-color: ${(props) => props.theme.accentBg};
+  --third-border-color-hover: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+  --third-border-color-active: ${(props) =>
+    props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+  --third-border-color-disabled: ${(props) =>
+    props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
+  --third-bg-color: transparent;
+  --third-bg-color-hover: transparent;
+  --third-bg-color-active: transparent;
+  --third-bg-color-disabled: transparent;
+  --third-color: ${(props) => props.theme.accentBg};
+  --third-color-hover: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+  --third-color-active: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.8)};
+  --third-color-disabled: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.2)};
+
   --normal-height: 40px;
   --normal-radius: 4px;
   --normal-padding: 0 20px;
@@ -134,6 +149,46 @@ export const Button = styled.button`
 
       svg {
         color: var(--secondary-color-disabled);
+      }
+    }
+  }
+
+  &.third {
+    --border-color: var(--third-border-color);
+    --bg-color: var(--third-bg-color);
+    --color: var(--third-color);
+
+    svg {
+      color: var(--third-color);
+    }
+
+    &:hover {
+      --border-color: var(--third-border-color-hover);
+      --bg-color: var(--third-bg-color-hover);
+      --color: var(--third-color-hover);
+
+      svg {
+        color: var(--third-color-hover);
+      }
+    }
+
+    &:active {
+      --border-color: var(--third-border-color-active);
+      --bg-color: var(--third-bg-color-active);
+      --color: var(--third-color-active);
+
+      svg {
+        color: var(--third-color-active);
+      }
+    }
+
+    &:disabled {
+      --border-color: var(--third-border-color-disabled);
+      --bg-color: var(--third-bg-color-disabled);
+      --color: var(--third-color-disabled);
+
+      svg {
+        color: var(--third-color-disabled);
       }
     }
   }

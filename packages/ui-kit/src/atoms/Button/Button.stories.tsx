@@ -47,6 +47,24 @@ SecondaryDisabled.args = {
   disabled: true
 };
 
+export const Third = Template.bind({});
+Third.args = {
+  variant: 'third'
+};
+
+export const ThirdWithIcon = Template.bind({});
+ThirdWithIcon.args = {
+  icon: 'astro',
+  variant: 'third'
+};
+
+export const ThirdDisabled = Template.bind({});
+ThirdDisabled.args = {
+  icon: 'astro',
+  variant: 'third',
+  disabled: true
+};
+
 export const Wide = Template.bind({});
 Wide.args = {
   icon: 'astro',

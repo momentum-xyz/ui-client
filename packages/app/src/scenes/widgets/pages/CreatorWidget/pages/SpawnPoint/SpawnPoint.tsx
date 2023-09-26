@@ -1,11 +1,10 @@
 import {FC, useCallback} from 'react';
 import {observer} from 'mobx-react-lite';
 import {toast} from 'react-toastify';
-import {useI18n} from '@momentum-xyz/core';
+import {PositionInterface, useI18n} from '@momentum-xyz/core';
 import {Button} from '@momentum-xyz/ui-kit';
 
 import {useStore} from 'shared/hooks';
-import {UnityPositionInterface} from 'core/interfaces';
 import {TOAST_COMMON_OPTIONS, ToastContent} from 'ui-kit';
 
 import * as styled from './SpawnPoint.styled';
@@ -20,8 +19,8 @@ const SpawnPoint: FC = () => {
   const {t} = useI18n();
 
   const onSetHandler = useCallback(async () => {
-    const position: UnityPositionInterface | null = null;
-    const rotation: UnityPositionInterface | null = null;
+    const position: PositionInterface | null = null;
+    const rotation: PositionInterface | null = null;
 
     if (position && rotation && (await setSpawnPoint(worldId, position, rotation))) {
       toast.info(
@@ -38,7 +37,7 @@ const SpawnPoint: FC = () => {
 
   return (
     <styled.Container data-testid="SpawnPoint-test">
-      <div>{t('textMessage.setSpawnPoint')}</div>
+      <div>{t('message.setSpawnPoint')}</div>
 
       <styled.ButtonContainer>
         <Button label={t('titles.setSpawnPoint')} onClick={onSetHandler} />

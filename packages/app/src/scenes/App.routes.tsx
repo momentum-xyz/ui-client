@@ -36,7 +36,7 @@ export const UNIVERSE_ROUTES: RouteConfigInterface[] = [
   }
 ];
 
-/* !!! EACH ROUTE MUST HAVE WORLD ID IN ORDER TO LOAD UNITY !!! */
+/* !!! EACH ROUTE MUST HAVE WORLD ID !!! */
 export const WORLD_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.odyssey.base,

@@ -9,7 +9,7 @@ import {PosBusService} from 'shared/services';
 import {
   FetchWorldTreeResponse,
   api,
-  GetSpaceAttributeResponse,
+  GetObjectAttributeResponse,
   GetUserContributionsResponse
 } from 'api';
 import {CanvasConfigInterface} from 'api/interfaces';
@@ -202,7 +202,7 @@ const World3dStore = types
   }))
   .actions((self) => ({
     fetchWorldTree: flow(function* () {
-      self.worldTree = yield self.fetchWorldTreeRequest.send(api.spaceRepository.fetchWorldTree, {
+      self.worldTree = yield self.fetchWorldTreeRequest.send(api.objectRepository.fetchWorldTree, {
         worldId: self.worldId
       });
     })
@@ -210,7 +210,7 @@ const World3dStore = types
   .actions((self) => ({
     fetchCanvasObject: flow(function* () {
       const response: FetchWorldTreeResponse = yield self.fetchCanvasRequest.send(
-        api.spaceRepository.fetchWorldTree,
+        api.objectRepository.fetchWorldTree,
         {
           max_depth: 1,
           worldId: self.worldId,
@@ -227,12 +227,15 @@ const World3dStore = types
     }),
     loadCanvasConfig: flow(function* () {
       if (self.canvasObjectId) {
-        const configAttribute: GetSpaceAttributeResponse | null =
-          yield self.fetchCanvasConfigRequest.send(api.spaceAttributeRepository.getSpaceAttribute, {
-            spaceId: self.canvasObjectId,
-            plugin_id: PluginIdEnum.CANVAS_EDITOR,
-            attribute_name: AttributeNameEnum.CANVAS
-          });
+        const configAttribute: GetObjectAttributeResponse | null =
+          yield self.fetchCanvasConfigRequest.send(
+            api.objectAttributeRepository.getObjectAttribute,
+            {
+              objectId: self.canvasObjectId,
+              plugin_id: PluginIdEnum.CANVAS_EDITOR,
+              attribute_name: AttributeNameEnum.CANVAS
+            }
+          );
 
         if (configAttribute) {
           self.canvasConfig = cast(configAttribute as CanvasConfigInterface);

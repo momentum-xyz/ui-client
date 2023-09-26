@@ -124,7 +124,7 @@ const AgoraScreenShareStore = types
         const {token, channel}: AgoraTokenResponse = yield self.request.send(
           api.agoraRepository.getAgoraToken,
           {
-            spaceId: self.worldId,
+            objectId: self.worldId,
             screenshare: true
           }
         );

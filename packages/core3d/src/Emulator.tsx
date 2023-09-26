@@ -6,7 +6,7 @@ import {Event3dEmitter, Universe3dEmitter} from '@momentum-xyz/core';
 import '@babylonjs/core/Debug/debugLayer';
 import '@babylonjs/inspector';
 
-import {BabylonScene, UniverseScene} from './scenes';
+import {WorldBabylonScene, UniverseBabylonScene} from './scenes';
 import * as styled from './Emulator.styled';
 
 window.sessionStorage.setItem('babylon_debug', 'true');
@@ -71,7 +71,7 @@ const WorldEmulator: FC = () => {
   }, []);
 
   return (
-    <BabylonScene
+    <WorldBabylonScene
       events={Event3dEmitter}
       renderURL="https://dev.odyssey.ninja/api/v3/render"
       onMove={(e) => console.log('onMove', e)}
@@ -114,7 +114,7 @@ const UniverseEmulator = () => {
   }, []);
 
   return (
-    <UniverseScene
+    <UniverseBabylonScene
       events={Universe3dEmitter}
       renderURL="https://dev.odyssey.ninja/api/v3/render"
       onWorldClick={(e) => console.log('onWorldClick', e)}
