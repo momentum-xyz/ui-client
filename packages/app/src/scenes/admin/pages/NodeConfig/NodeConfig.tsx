@@ -1,10 +1,11 @@
 import {FC, useState} from 'react';
 import {observer} from 'mobx-react-lite';
-import {Button, Input, Panel} from '@momentum-xyz/ui-kit';
+import {Button, Frame, Input, Panel, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
 import BN from 'bn.js';
 
 import {useBlockchain, useStore} from 'shared/hooks';
 
+import {BlockchainRegistration} from './components';
 import * as styled from './NodeConfig.styled';
 
 const NODE_ADDING_FEE = new BN('4200000000000000000');
@@ -111,53 +112,48 @@ const NodeOdysseyMapping: FC = () => {
   };
 
   return (
-    <styled.Container>
-      <Panel size="large" isFullHeight variant="primary" icon="rabbit" title="Node Admin">
-        <div>Account: {account}</div>
-        {walletSelectContent}
+    <>
+      <div>Account: {account}</div>
+      {walletSelectContent}
 
-        <styled.Form>
-          <div>Node ID (UUID)</div>
-          <Input value={nodeId} onChange={setNodeId} />
+      <styled.Form>
+        <div>Node ID (UUID)</div>
+        <Input value={nodeId} onChange={setNodeId} />
 
-          <div>Odyssey ID (UUID)</div>
-          <Input value={odysseyId} onChange={setOdysseyId} />
-        </styled.Form>
+        <div>Odyssey ID (UUID)</div>
+        <Input value={odysseyId} onChange={setOdysseyId} />
+      </styled.Form>
 
-        <Button onClick={handleAddMapping} disabled={!isBlockchainReady} label="Add Mapping" />
+      <Button onClick={handleAddMapping} disabled={!isBlockchainReady} label="Add Mapping" />
 
-        <br />
+      <br />
 
-        <Button
-          onClick={handleAddNodeMapping}
-          disabled={!isBlockchainReady}
-          label="Add Node Mapping"
-        />
+      <Button
+        onClick={handleAddNodeMapping}
+        disabled={!isBlockchainReady}
+        label="Add Node Mapping"
+      />
 
-        <br />
+      <br />
 
-        <Button
-          onClick={handleRemoveMapping}
-          disabled={!isBlockchainReady}
-          label="Remove Mapping"
-        />
-        <br />
-        <hr />
-        <br />
-        <Button
-          onClick={handleGetNodeForTheOdyssey}
-          disabled={!isBlockchainReady}
-          label="Get Node For The Odyssey"
-        />
+      <Button onClick={handleRemoveMapping} disabled={!isBlockchainReady} label="Remove Mapping" />
+      <br />
+      <hr />
+      <br />
+      <Button
+        onClick={handleGetNodeForTheOdyssey}
+        disabled={!isBlockchainReady}
+        label="Get Node For The Odyssey"
+      />
 
-        {!!nodeForOdyssey && <pre>nodeForOdyssey: {JSON.stringify(nodeForOdyssey, null, 2)}</pre>}
-        {!!error && <div>Error: {error}</div>}
-      </Panel>
-    </styled.Container>
+      {!!nodeForOdyssey && <pre>nodeForOdyssey: {JSON.stringify(nodeForOdyssey, null, 2)}</pre>}
+
+      {!!error && <div>Error: {error}</div>}
+    </>
   );
 };
 
-const NodeConfig: FC = () => {
+const NodeReg: FC = () => {
   const {nftStore} = useStore();
   const {selectedWalletId} = nftStore;
 
@@ -253,60 +249,91 @@ const NodeConfig: FC = () => {
   };
 
   return (
+    <>
+      <div>Account: {account}</div>
+      {walletSelectContent}
+
+      <styled.Form>
+        <div>Node ID (UUID)</div>
+        <Input value={nodeId} onChange={setNodeId} />
+
+        <div>Hostname</div>
+        <Input value={hostname} onChange={setHostname} />
+
+        <div>Name</div>
+        <Input value={name} onChange={setName} />
+      </styled.Form>
+
+      <Button onClick={handleAddNode} disabled={!isBlockchainReady} label="Add Node" />
+      <br />
+      <Button onClick={handleUpdateNode} disabled={!isBlockchainReady} label="Update Node" />
+      <br />
+      <Button onClick={handleRemoveNode} disabled={!isBlockchainReady} label="Remove Node" />
+      <br />
+      <hr />
+      <br />
+      <Button onClick={handleGetNodeInfo} disabled={!isBlockchainReady} label="Get Node Info" />
+      <br />
+      {!!nodeInfo && (
+        <pre>
+          Node Info:{' '}
+          {JSON.stringify(
+            {
+              node_id: nodeInfo.node_id,
+              hostname: nodeInfo.hostname,
+              name: nodeInfo.name,
+              owner: nodeInfo.owner
+            },
+            null,
+            2
+          )}
+        </pre>
+      )}
+      {!!error && <div>Error: {error}</div>}
+    </>
+  );
+};
+
+type TabsType = 'blockchain' | 'mapping' | 'reg';
+
+const TABS_LIST: TabInterface<TabsType>[] = [
+  {id: 'blockchain', icon: 'connect', label: 'Blockchain registration'},
+  {id: 'mapping', icon: 'info', label: 'mapping'},
+  {id: 'reg', icon: 'info', label: 'test register'}
+];
+
+const NodeConfig = () => {
+  const {nftStore} = useStore();
+  const {selectedWalletId} = nftStore;
+
+  const [activeTab, setActiveTab] = useState<TabsType>('blockchain');
+
+  if (!selectedWalletId) {
+    return <div>...</div>;
+  }
+
+  return (
     <styled.Container>
-      <Panel size="large" isFullHeight variant="primary" icon="rabbit" title="Node Admin">
-        <div>Account: {account}</div>
-        {walletSelectContent}
+      <Panel
+        size="wide"
+        isFullHeight
+        variant="primary"
+        icon="rabbit"
+        title="Node Management Console"
+      >
+        <styled.Content>
+          <Tabs tabList={TABS_LIST} activeId={activeTab} onSelect={setActiveTab} stickToTopRight />
+          <Frame>
+            {activeTab === 'blockchain' && <BlockchainRegistration />}
 
-        <styled.Form>
-          <div>Node ID (UUID)</div>
-          <Input value={nodeId} onChange={setNodeId} />
+            {activeTab === 'mapping' && <NodeOdysseyMapping />}
 
-          <div>Hostname</div>
-          <Input value={hostname} onChange={setHostname} />
-
-          <div>Name</div>
-          <Input value={name} onChange={setName} />
-        </styled.Form>
-
-        <Button onClick={handleAddNode} disabled={!isBlockchainReady} label="Add Node" />
-        <br />
-        <Button onClick={handleUpdateNode} disabled={!isBlockchainReady} label="Update Node" />
-        <br />
-        <Button onClick={handleRemoveNode} disabled={!isBlockchainReady} label="Remove Node" />
-        <br />
-        <hr />
-        <br />
-        <Button onClick={handleGetNodeInfo} disabled={!isBlockchainReady} label="Get Node Info" />
-        <br />
-        {!!nodeInfo && (
-          <pre>
-            Node Info:{' '}
-            {JSON.stringify(
-              {
-                node_id: nodeInfo.node_id,
-                hostname: nodeInfo.hostname,
-                name: nodeInfo.name,
-                owner: nodeInfo.owner
-              },
-              null,
-              2
-            )}
-          </pre>
-        )}
-        {!!error && <div>Error: {error}</div>}
+            {activeTab === 'reg' && <NodeReg />}
+          </Frame>
+        </styled.Content>
       </Panel>
     </styled.Container>
   );
 };
 
-const SideBySide = () => {
-  return (
-    <div style={{display: 'flex', justifyContent: 'space-around'}}>
-      <NodeOdysseyMapping />
-      <NodeConfig />
-    </div>
-  );
-};
-
-export default observer(SideBySide);
+export default observer(NodeConfig);

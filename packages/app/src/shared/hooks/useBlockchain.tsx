@@ -14,6 +14,7 @@ import {
   getDateOfNextAllowedAirdrop,
   saveLastAirdropInfo as originalSaveLastAirdropInfo
 } from 'core/utils';
+import {NodeConfigInterface} from 'core/models';
 
 import stackingABI from './contract_staking.ABI.json';
 import momABI from './contract_MOM.ABI.json';
@@ -361,15 +362,20 @@ export const useBlockchain = ({
   );
 
   const getNodeInfo = useCallback(
-    async (node_id: string) => {
+    async (node_id: string): Promise<NodeConfigInterface | null> => {
       const hexNodeId = uuidToHex(node_id);
       console.log('useBlockchain getNodeInfo', {node_id, hexNodeId});
 
-      const nodeInfo = await mappingContract?.methods.getNode(hexNodeId).call();
+      try {
+        const nodeInfo = await mappingContract?.methods.getNode(hexNodeId).call();
 
-      console.log('useBlockchain getNodeInfo result', nodeInfo);
+        console.log('useBlockchain getNodeInfo result', nodeInfo);
 
-      return nodeInfo;
+        return nodeInfo;
+      } catch (e) {
+        console.log('useBlockchain getNodeInfo error', e);
+        return null;
+      }
     },
     [mappingContract]
   );

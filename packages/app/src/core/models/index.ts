@@ -32,3 +32,4 @@ export * from './BigStakerInfo';
 export * from './TimelineEntry';
 export * from './TrackInfo';
 export * from './SkyboxItem';
+export * from './NodeConfig';
