@@ -5,7 +5,7 @@ import BN from 'bn.js';
 
 import {useBlockchain, useStore} from 'shared/hooks';
 
-import {BlockchainRegistration} from './components';
+import {ApiKeys, BlockchainRegistration} from './components';
 import * as styled from './NodeConfig.styled';
 
 const NODE_ADDING_FEE = new BN('4200000000000000000');
@@ -294,10 +294,11 @@ const NodeReg: FC = () => {
   );
 };
 
-type TabsType = 'blockchain' | 'mapping' | 'reg';
+type TabsType = 'blockchain' | 'api_keys' | 'mapping' | 'reg';
 
 const TABS_LIST: TabInterface<TabsType>[] = [
   {id: 'blockchain', icon: 'connect', label: 'Blockchain registration'},
+  {id: 'api_keys', icon: 'key', label: 'API Keys'},
   {id: 'mapping', icon: 'info', label: 'mapping'},
   {id: 'reg', icon: 'info', label: 'test register'}
 ];
@@ -325,6 +326,8 @@ const NodeConfig = () => {
           <Tabs tabList={TABS_LIST} activeId={activeTab} onSelect={setActiveTab} stickToTopRight />
           <Frame>
             {activeTab === 'blockchain' && <BlockchainRegistration />}
+
+            {activeTab === 'api_keys' && <ApiKeys />}
 
             {activeTab === 'mapping' && <NodeOdysseyMapping />}
 
