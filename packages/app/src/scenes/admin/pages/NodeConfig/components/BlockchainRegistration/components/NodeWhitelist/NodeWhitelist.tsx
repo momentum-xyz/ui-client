@@ -1,9 +1,12 @@
-import {FC} from 'react';
+import {FC, useEffect} from 'react';
+import {observer} from 'mobx-react-lite';
 import {Controller, useForm} from 'react-hook-form';
 import {IconButton, Input} from '@momentum-xyz/ui-kit';
+import {toast} from 'react-toastify';
 
 import {ETHEREUM_ADDRESS_REGEX} from 'core/utils';
-// import {ToastContent} from 'ui-kit';
+import {useStore} from 'shared/hooks';
+import {ToastContent} from 'ui-kit';
 
 import * as styled from './NodeWhitelist.styled';
 
@@ -15,28 +18,49 @@ interface PropsInterface {
   disabled?: boolean;
 }
 
-// temp
-const whitelist: string[] = [];
+const NodeWhitelist: FC<PropsInterface> = ({disabled}) => {
+  const {
+    fetchHostingAllowList,
+    hostingAllowListItems,
+    addToHostingAllowList,
+    removeFromHostingAllowList
+  } = useStore().adminStore;
+  console.log('hostingAllowListItems', hostingAllowListItems);
 
-export const NodeWhitelist: FC<PropsInterface> = ({disabled}) => {
   const {
     control,
     handleSubmit,
-    formState: {errors}
+    formState: {errors},
+    setValue
   } = useForm<WhitelistItemInterface>();
 
-  // useEffect(() => {
-  //   nodeAdmin?.fetchWhitelist();
-  // }, [nodeAdmin]);
+  useEffect(() => {
+    fetchHostingAllowList();
+  }, [fetchHostingAllowList]);
 
-  const formSubmitHandler = ({address}: WhitelistItemInterface) => {
-    console.log('TODO handle add', address);
+  const formSubmitHandler = async ({address}: WhitelistItemInterface) => {
+    try {
+      await addToHostingAllowList({wallet: address});
+      await fetchHostingAllowList();
+      setValue('address', '', {shouldDirty: false, shouldValidate: false});
+      toast.info(<ToastContent icon="checked" text="User added successfully" />);
+    } catch (err: any) {
+      console.log(err);
+      toast.error(<ToastContent icon="alert" text="Something went wrong" />);
+    }
   };
 
-  const handleDelete = (address: string) => {
-    // if (window.confirm(`Are you sure you want to remove ${address}?`)) {
-    console.log('TODO handle delete', address);
-    // }
+  const handleDelete = async (address: string) => {
+    if (window.confirm(`Are you sure you want to remove ${address}?`)) {
+      try {
+        await removeFromHostingAllowList(address);
+        await fetchHostingAllowList();
+        toast.info(<ToastContent icon="checked" text="User removed successfully" />);
+      } catch (err: any) {
+        console.log(err);
+        toast.error(<ToastContent icon="alert" text="Something went wrong" />);
+      }
+    }
   };
 
   return (
@@ -76,8 +100,9 @@ export const NodeWhitelist: FC<PropsInterface> = ({disabled}) => {
         )}
       />
       <styled.List>
-        {whitelist.map((address) => (
+        {hostingAllowListItems.map((address) => (
           <styled.Item key={address}>
+            TODO resolve user id {address}
             <styled.ItemAction>
               <IconButton isWhite name="subtract_large" onClick={() => handleDelete(address)} />
             </styled.ItemAction>
@@ -87,3 +112,5 @@ export const NodeWhitelist: FC<PropsInterface> = ({disabled}) => {
     </styled.Container>
   );
 };
+
+export default observer(NodeWhitelist);

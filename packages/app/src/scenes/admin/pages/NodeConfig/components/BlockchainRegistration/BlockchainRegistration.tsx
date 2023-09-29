@@ -158,7 +158,7 @@ const BlockchainRegistration: FC = () => {
         </styled.ActionsBar>
       </styled.Form>
 
-      <NodeWhitelist disabled />
+      <NodeWhitelist />
     </>
   );
 };

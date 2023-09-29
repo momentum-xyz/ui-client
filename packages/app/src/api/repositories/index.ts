@@ -19,3 +19,4 @@ export * from './assets2dRepository';
 export * from './agoraRepository';
 export * from './streamChatRepository';
 export * from './objectUserAttributeRepository';
+export * from './nodeAttributeRepository';

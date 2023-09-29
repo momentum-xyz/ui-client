@@ -1,1 +1,1 @@
-export * from './NodeWhitelist';
+export {default as NodeWhitelist} from './NodeWhitelist';

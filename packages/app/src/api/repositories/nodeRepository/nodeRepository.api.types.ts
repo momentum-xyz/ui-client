@@ -5,3 +5,12 @@ export interface GetNodeChallengeRequest {
 export interface GetNodeChallengeResponse {
   challenge: string;
 }
+
+export interface AddToHostingAllowListRequest {
+  wallet?: string;
+  user_id?: string;
+}
+
+export interface RemoveFromHostingAllowListRequest {
+  user_id: string;
+}

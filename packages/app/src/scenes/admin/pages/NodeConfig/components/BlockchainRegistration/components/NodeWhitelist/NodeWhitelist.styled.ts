@@ -34,4 +34,8 @@ export const Item = styled.div`
 
 export const ItemAction = styled.div`
   margin-left: auto;
+  margin-right: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
