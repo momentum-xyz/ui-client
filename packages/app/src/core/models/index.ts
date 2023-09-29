@@ -4,6 +4,7 @@ export * from './MediaUploader';
 export * from './Object';
 export * from './ObjectAttribute';
 export * from './ObjectUserAttribute';
+export * from './NodeAttribute';
 export * from './AgoraRemoteUser';
 export * from './EmojiDetail';
 export * from './PluginLoader';
