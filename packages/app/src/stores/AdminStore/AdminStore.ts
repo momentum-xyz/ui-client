@@ -1,8 +1,7 @@
-import {types} from 'mobx-state-tree';
+import {flow, types} from 'mobx-state-tree';
 import {RequestModel} from '@momentum-xyz/core';
 
-import {api} from 'api';
-import {NodeAttribute} from 'core/models';
+import {HostingAllowListItemInterface, api} from 'api';
 
 export const AdminStore = types
   .model('AdminStore', {
@@ -10,10 +9,12 @@ export const AdminStore = types
     whitelist: types.optional(NodeAttribute, {
       attributeName: 'hosting_allow_list'
     })
+    hostingAllowListRequest: types.optional(RequestModel, {}),
+    hostingAllowListItems: types.optional(types.frozen<HostingAllowListItemInterface[]>(), [])
   })
   .actions((self) => ({
-    getNodeSignedChallenge: async (odyssey_id: string) => {
-      const response = await self.challengeRequest.send(api.nodeRepository.getNodeChallenge, {
+    getNodeSignedChallenge: flow(function* (odyssey_id: string) {
+      const response = yield self.challengeRequest.send(api.nodeRepository.getNodeChallenge, {
         odyssey_id
       });
       console.log('getNodeChallenge resp:', response);
@@ -22,20 +23,24 @@ export const AdminStore = types
         throw new Error('Invalid challenge');
       }
       return challenge;
-    },
-    fetchHostingAllowList: async () => {
-      await self.whitelist.load();
-      return self.whitelist.value;
-    },
+    }),
+    fetchHostingAllowList: flow(function* () {
+      const resp = yield self.hostingAllowListRequest.send(
+        api.nodeRepository.getHostingAllowList,
+        {}
+      );
+      console.log('getHostingAllowList resp:', resp);
+
+      if (resp) {
+        self.hostingAllowListItems = resp;
+      }
+
+      return resp;
+    }),
     addToHostingAllowList: (data: {wallet?: string; user_id?: string}) => {
       return api.nodeRepository.addToHostingAllowList(data);
     },
     removeFromHostingAllowList: (user_id: string) => {
       return api.nodeRepository.removeFromHostingAllowList({user_id});
-    }
-  }))
-  .views((self) => ({
-    get hostingAllowListItems(): string[] {
-      return (self.whitelist.value?.users as string[]) || [];
     }
   }));

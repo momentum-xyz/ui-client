@@ -5,6 +5,8 @@ import {RequestInterface} from 'api/interfaces';
 
 import {
   AddToHostingAllowListRequest,
+  GetHostingAllowListRequest,
+  GetHostingAllowListResponse,
   GetNodeChallengeRequest,
   GetNodeChallengeResponse,
   RemoveFromHostingAllowListRequest
@@ -16,6 +18,13 @@ export const getNodeChallenge: RequestInterface<
   GetNodeChallengeResponse
 > = (options) => {
   return request.post(configRepositoryEndpoints().getChallenge, options);
+};
+
+export const getHostingAllowList: RequestInterface<
+  GetHostingAllowListRequest,
+  GetHostingAllowListResponse
+> = (options) => {
+  return request.get(configRepositoryEndpoints().hostingAllowList, options);
 };
 
 export const addToHostingAllowList: RequestInterface<AddToHostingAllowListRequest, null> = (

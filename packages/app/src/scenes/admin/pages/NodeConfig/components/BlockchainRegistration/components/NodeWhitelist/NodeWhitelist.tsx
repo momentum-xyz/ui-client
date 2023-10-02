@@ -1,10 +1,10 @@
 import {FC, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Controller, useForm} from 'react-hook-form';
-import {IconButton, Input} from '@momentum-xyz/ui-kit';
+import {Heading, Hexagon, IconButton, Input} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 
-import {ETHEREUM_ADDRESS_REGEX} from 'core/utils';
+import {ETHEREUM_ADDRESS_REGEX, getImageAbsoluteUrl} from 'core/utils';
 import {useStore} from 'shared/hooks';
 import {ToastContent} from 'ui-kit';
 
@@ -50,8 +50,8 @@ const NodeWhitelist: FC<PropsInterface> = ({disabled}) => {
     }
   };
 
-  const handleDelete = async (address: string) => {
-    if (window.confirm(`Are you sure you want to remove ${address}?`)) {
+  const handleDelete = async (address: string, name: string) => {
+    if (window.confirm(`Are you sure you want to remove ${name}?`)) {
       try {
         await removeFromHostingAllowList(address);
         await fetchHostingAllowList();
@@ -82,7 +82,7 @@ const NodeWhitelist: FC<PropsInterface> = ({disabled}) => {
         }}
         render={({field: {value, onChange}}) => (
           <Input
-            placeholder="Wallet address"
+            placeholder="Wallet address like 0xCc5A3155513b3294113657C188cB8c031376aB0A"
             onChange={onChange}
             danger={!!errors.address}
             wide
@@ -100,11 +100,26 @@ const NodeWhitelist: FC<PropsInterface> = ({disabled}) => {
         )}
       />
       <styled.List>
-        {hostingAllowListItems.map((address) => (
-          <styled.Item key={address}>
-            TODO resolve user id {address}
+        {hostingAllowListItems.map(({user_id, name, avatar_hash, wallets}) => (
+          <styled.Item key={user_id}>
+            <Hexagon
+              type="fourth-borderless"
+              skipOuterBorder
+              imageSrc={getImageAbsoluteUrl(avatar_hash)}
+              iconName="astronaut"
+            />
+            <styled.ItemContent>
+              <Heading variant="h4">{name}</Heading>
+              <styled.Wallets>
+                <div>{wallets.join(', ')}</div>
+              </styled.Wallets>
+            </styled.ItemContent>
             <styled.ItemAction>
-              <IconButton isWhite name="subtract_large" onClick={() => handleDelete(address)} />
+              <IconButton
+                isWhite
+                name="subtract_large"
+                onClick={() => handleDelete(user_id, name)}
+              />
             </styled.ItemAction>
           </styled.Item>
         ))}

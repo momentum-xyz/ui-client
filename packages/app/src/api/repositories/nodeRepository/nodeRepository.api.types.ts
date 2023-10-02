@@ -14,3 +14,14 @@ export interface AddToHostingAllowListRequest {
 export interface RemoveFromHostingAllowListRequest {
   user_id: string;
 }
+
+export interface HostingAllowListItemInterface {
+  user_id: string;
+  name: string;
+  avatar_hash: string;
+  wallets: string[];
+}
+
+export interface GetHostingAllowListRequest {}
+
+export interface GetHostingAllowListResponse extends Array<HostingAllowListItemInterface> {}

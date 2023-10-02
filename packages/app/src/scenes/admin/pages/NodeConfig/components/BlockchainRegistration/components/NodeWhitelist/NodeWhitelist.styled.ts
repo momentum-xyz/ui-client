@@ -29,7 +29,17 @@ export const Item = styled.div`
   background: ${(props) => props.theme.accentBg && rgba(props.theme.accentBg, 0.5)};
   box-shadow: -1px -1px 2px ${(props) => props.theme.accentText && rgba(props.theme.accentText, 0.1)};
   border-radius: 4px;
-  gap: 10px;
+  gap: 15px;
+`;
+
+export const ItemContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+export const Wallets = styled.div`
+  font-size: var(--font-size-xs);
 `;
 
 export const ItemAction = styled.div`
