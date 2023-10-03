@@ -2,13 +2,20 @@ import {flow, types} from 'mobx-state-tree';
 import {RequestModel} from '@momentum-xyz/core';
 
 import {HostingAllowListItemInterface, api} from 'api';
+import {NodeAttribute} from 'core/models';
 
 export const AdminStore = types
   .model('AdminStore', {
     challengeRequest: types.optional(RequestModel, {}),
-    whitelist: types.optional(NodeAttribute, {
-      attributeName: 'hosting_allow_list'
-    })
+    attrBlockadelabs: types.optional(NodeAttribute, {
+      attributeName: 'blockadelabs'
+    }),
+    attrLeonardo: types.optional(NodeAttribute, {
+      attributeName: 'leonardo'
+    }),
+    attrOpenai: types.optional(NodeAttribute, {
+      attributeName: 'open_ai'
+    }),
     hostingAllowListRequest: types.optional(RequestModel, {}),
     hostingAllowListItems: types.optional(types.frozen<HostingAllowListItemInterface[]>(), [])
   })
@@ -43,4 +50,14 @@ export const AdminStore = types
     removeFromHostingAllowList: (user_id: string) => {
       return api.nodeRepository.removeFromHostingAllowList({user_id});
     }
+  }))
+  .actions((self) => ({
+    fetchApiKeys: flow(function* () {
+      const resp = yield Promise.all([
+        self.attrBlockadelabs.load(),
+        self.attrLeonardo.load(),
+        self.attrOpenai.load()
+      ]);
+      return resp;
+    })
   }));

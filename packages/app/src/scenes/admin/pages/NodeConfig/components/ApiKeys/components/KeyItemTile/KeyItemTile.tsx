@@ -3,10 +3,14 @@ import {Heading, Image, Input} from '@momentum-xyz/ui-kit';
 
 import * as styled from './KeyItemTile.styled';
 
+export interface KeyItemTileValueInterface {
+  [key: string]: string | number;
+}
+
 interface PropsInterface {
-  value: string;
-  placeholder?: string;
-  onChange: (value: string) => void;
+  value: KeyItemTileValueInterface | null | undefined;
+  defaultValue: KeyItemTileValueInterface;
+  onChange: (value: KeyItemTileValueInterface) => void;
   icon: string;
   title: string;
   description?: string;
@@ -14,12 +18,19 @@ interface PropsInterface {
 
 export const KeyItemTile: FC<PropsInterface> = ({
   value,
-  placeholder,
+  defaultValue,
   onChange,
   icon,
   title,
   description
 }) => {
+  const handleChange = (partialValue: KeyItemTileValueInterface) => {
+    onChange({
+      ...defaultValue,
+      ...value,
+      ...partialValue
+    });
+  };
   return (
     <styled.Container>
       <Image height={40} src={icon} />
@@ -28,9 +39,21 @@ export const KeyItemTile: FC<PropsInterface> = ({
         <span>{description}</span>
       </div>
       <span />
-      <div>
-        <Input wide value={value} placeholder={placeholder} onChange={onChange} />
-      </div>
+      <styled.Form>
+        {Object.entries(defaultValue).map(([key, val]) => (
+          <styled.FormRow key={key}>
+            <Heading variant="h4">{key}</Heading>
+
+            <Input
+              wide
+              value={value?.[key] ?? val}
+              onChange={(newVal) => {
+                handleChange({[key]: typeof val === 'number' ? Number(newVal) : newVal});
+              }}
+            />
+          </styled.FormRow>
+        ))}
+      </styled.Form>
     </styled.Container>
   );
 };
