@@ -31,15 +31,11 @@ export const setNodeAttribute: RequestInterface<
 > = (options) => {
   const {pluginId, attributeName, attributeValue, ...restOptions} = options;
 
-  const requestParams = {
-    params: {
-      plugin_id: pluginId,
-      attribute_name: attributeName
-    },
-    ...restOptions
-  };
-
-  return request.post(nodeAttributesRepositoryEndpoints().base, {attributeValue}, requestParams);
+  return request.post(
+    nodeAttributesRepositoryEndpoints().base,
+    {plugin_id: pluginId, attribute_name: attributeName, attribute_value: attributeValue},
+    restOptions
+  );
 };
 
 export const deleteNodeAttribute: RequestInterface<NodeAttributeRequest, null> = (options) => {
