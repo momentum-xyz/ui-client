@@ -82,7 +82,7 @@ const NodeWhitelist: FC<PropsInterface> = ({disabled}) => {
         }}
         render={({field: {value, onChange}}) => (
           <Input
-            placeholder="Wallet address like 0xCc5A3155513b3294113657C188cB8c031376aB0A"
+            placeholder="Wallet address"
             onChange={onChange}
             danger={!!errors.address}
             wide
