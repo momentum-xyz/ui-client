@@ -11,6 +11,7 @@ import {AgoraStore} from './AgoraStore';
 import {SentryStore} from './SentryStore';
 import {WidgetManagerStore} from './WidgetManagerStore';
 import {MusicStore} from './MusicStore';
+import {PluginStore} from './PluginStore';
 
 const RootStore = types
   .model('RootStore', {
@@ -26,13 +27,15 @@ const RootStore = types
     musicStore: types.optional(MusicStore, {}),
 
     /* Connect independent stores */
-    widgetStore: types.optional(WidgetsStore, {})
+    widgetStore: types.optional(WidgetsStore, {}),
+    pluginStore: types.optional(PluginStore, {})
   })
   .actions((self) => ({
     async initApplication() {
       await self.configStore.init();
       self.agoraStore.userDevicesStore.init();
       self.themeStore.init();
+      self.pluginStore.init();
     },
     async refreshStakeRelatedData() {
       await self.nftStore.loadMyStakes();

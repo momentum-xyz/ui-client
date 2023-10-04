@@ -33,7 +33,8 @@ module.exports = {
       paths.appPublic = publicPath;
 
       webpackConfig.plugins = webpackConfig.plugins.map((webpackPlugin) => {
-        if (webpackPlugin instanceof HtmlWebpackPlugin) {
+        // if (webpackPlugin instanceof HtmlWebpackPlugin) {
+        if (webpackPlugin.constructor.name === 'HtmlWebpackPlugin') {
           return new HtmlWebpackPlugin({
             template: htmlPath,
             inject: true
@@ -62,11 +63,11 @@ module.exports = {
             shared: {
               react: {
                 singleton: true,
-                requiredVersion: '^16.14.0'
+                requiredVersion: '^18.2.0'
               },
               'react-dom': {
                 singleton: true,
-                requiredVersion: '^16.14.0'
+                requiredVersion: '^18.2.0'
               },
               mobx: {
                 requiredVersion: '^6.4.2'

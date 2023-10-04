@@ -79,8 +79,17 @@ function spawnProcess(command, args, env) {
 }
 
 function generateAndStoreMetadata() {
-  const {name, version, description, author, repository, homepage, license, attribute_types} =
-    packageJSON;
+  const {
+    name,
+    version,
+    description,
+    author,
+    repository,
+    homepage,
+    license,
+    attribute_types = [],
+    scopes = []
+  } = packageJSON;
   const metadata = {
     name,
     version,
@@ -89,7 +98,8 @@ function generateAndStoreMetadata() {
     repository,
     homepage,
     license,
-    attribute_types: attribute_types ?? []
+    attribute_types,
+    scopes
   };
   const filename = path.resolve(BUILD_DIR, 'metadata.json');
   fs.writeFileSync(filename, JSON.stringify(metadata, null, 2));

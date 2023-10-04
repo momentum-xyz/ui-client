@@ -34,7 +34,8 @@ const CreatorStore = types
       objectFunctionalityStore: types.optional(ObjectFunctionalityStore, {}),
       objectColorStore: types.optional(ObjectColorStore, {}),
 
-      selectedTab: types.maybeNull(types.enumeration(Object.keys(CreatorTabsEnum))),
+      // selectedTab: types.maybeNull(types.enumeration(Object.keys(CreatorTabsEnum))),
+      selectedTab: types.maybeNull(types.string),
       selectedObjectId: types.maybeNull(types.string),
       objectName: types.maybeNull(types.string),
       objectInfo: types.maybeNull(types.frozen<GetObjectInfoResponse>()),
