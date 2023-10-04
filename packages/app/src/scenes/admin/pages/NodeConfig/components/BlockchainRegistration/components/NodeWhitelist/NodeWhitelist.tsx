@@ -65,8 +65,8 @@ const NodeWhitelist: FC<PropsInterface> = ({disabled}) => {
 
   return (
     <styled.Container>
-      <styled.Title>Whitelist Odysseys</styled.Title>
-      <styled.Text>Define the list of Odysseys that can be hosted on your node.</styled.Text>
+      <styled.Title>Whitelist Odyssey owners</styled.Title>
+      <styled.Text>Define the list of Odysseys owners who can host on your node.</styled.Text>
       <Controller
         control={control}
         name="address"
