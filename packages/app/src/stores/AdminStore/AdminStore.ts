@@ -7,6 +7,10 @@ import {NodeAttribute} from 'core/models';
 export const AdminStore = types
   .model('AdminStore', {
     challengeRequest: types.optional(RequestModel, {}),
+    attrNodePublicKey: types.optional(NodeAttribute, {
+      attributeName: 'node_public_key'
+    }),
+
     attrBlockadelabs: types.optional(NodeAttribute, {
       attributeName: 'blockadelabs'
     }),
@@ -16,6 +20,7 @@ export const AdminStore = types
     attrOpenai: types.optional(NodeAttribute, {
       attributeName: 'open_ai'
     }),
+
     hostingAllowListRequest: types.optional(RequestModel, {}),
     hostingAllowListItems: types.optional(types.frozen<HostingAllowListItemInterface[]>(), [])
   })

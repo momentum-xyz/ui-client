@@ -316,29 +316,61 @@ export const useBlockchain = ({
     return balance.toString();
   }, [library, account, isCorrectAccount]);
 
-  const addNode = useCallback(
+  const addNodeWithMom = useCallback(
     async (
       node_id: string,
       hostname: string,
       name: string,
+      pubkey: string,
       feeAmount: BN,
       tokenKind = TokenEnum.MOM_TOKEN
     ) => {
       const hexNodeId = uuidToHex(node_id);
-      console.log('useBlockchain addNode', {node_id, hexNodeId, hostname, name, tokenKind});
+      console.log('useBlockchain addNodeWithMom', {
+        node_id,
+        hexNodeId,
+        hostname,
+        name,
+        pubkey,
+        tokenKind
+      });
 
       const tokenContract = tokenKind === TokenEnum.MOM_TOKEN ? momContract : dadContract;
 
       const res = await tokenContract?.methods
         .approve(appVariables.CONTRACT_MAPPING_ADDRESS, feeAmount)
         .send({from: account});
-      console.log('useBlockchain addNode approve result', res);
+      console.log('useBlockchain addNodeWithMom approve result', res);
 
-      await mappingContract?.methods.addNode(hexNodeId, hostname, name).send({
+      await mappingContract?.methods.addNodeWithMom(hexNodeId, hostname, name, pubkey).send({
         from: account
       });
     },
     [account, dadContract, mappingContract, momContract]
+  );
+
+  const addNodeWithEth = useCallback(
+    async (node_id: string, hostname: string, name: string, pubkey: string, feeAmount: BN) => {
+      const hexNodeId = uuidToHex(node_id);
+      console.log('useBlockchain addNodeWithEth', {
+        node_id,
+        hexNodeId,
+        hostname,
+        name,
+        pubkey,
+        feeAmount
+      });
+
+      // const res = await tokenContract?.methods
+      //   .approve(appVariables.CONTRACT_MAPPING_ADDRESS, feeAmount)
+      //   .send({from: account});
+      // console.log('useBlockchain addNodeWithEth approve result', res);
+
+      await mappingContract?.methods.addNodeWithEth(hexNodeId, hostname, name, pubkey).send({
+        from: account
+      });
+    },
+    [account, mappingContract]
   );
 
   const updateNode = useCallback(
@@ -487,6 +519,34 @@ export const useBlockchain = ({
 
   const contractsCreated = !!stakingContract && !!momContract && !!dadContract && !!faucetContract;
 
+  console.log('useBlockchain', {
+    isBlockchainReady:
+      !!library && contractsCreated && isWalletActive && isCorrectAccount && !isWrongNetwork,
+    account,
+    walletSelectContent,
+    signChallenge,
+    canRequestAirdrop,
+    dateOfNextAllowedAirdrop,
+    sendEthers,
+    getBalanceEthers,
+    stake,
+    unstake,
+    getTokens,
+    getRewards,
+    claimRewards,
+    getUnstakes,
+    claimUnstakedTokens,
+    addNodeWithMom,
+    addNodeWithEth,
+    updateNode,
+    removeNode,
+    getNodeInfo,
+    setOdysseyMapping,
+    setNodeMapping,
+    removeMapping,
+    getNodeForTheOdyssey
+  });
+
   return {
     isBlockchainReady:
       !!library && contractsCreated && isWalletActive && isCorrectAccount && !isWrongNetwork,
@@ -504,7 +564,8 @@ export const useBlockchain = ({
     claimRewards,
     getUnstakes,
     claimUnstakedTokens,
-    addNode,
+    addNodeWithMom,
+    addNodeWithEth,
     updateNode,
     removeNode,
     getNodeInfo,

@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Button, Frame, Input, Panel, TabInterface, Tabs} from '@momentum-xyz/ui-kit';
 import BN from 'bn.js';
@@ -154,7 +154,7 @@ const NodeOdysseyMapping: FC = () => {
 };
 
 const NodeReg: FC = () => {
-  const {nftStore} = useStore();
+  const {nftStore, adminStore} = useStore();
   const {selectedWalletId} = nftStore;
 
   const [error, setError] = useState<string | null>(null);
@@ -164,11 +164,18 @@ const NodeReg: FC = () => {
   const [hostname, setHostname] = useState<string>();
   const [name, setName] = useState<string>();
 
+  useEffect(() => {
+    adminStore.attrNodePublicKey.load();
+  }, [adminStore]);
+
+  const pubkey = adminStore.attrNodePublicKey?.value?.node_public_key as string | undefined;
+
   const {
     isBlockchainReady,
     walletSelectContent,
     account,
-    addNode,
+    addNodeWithMom,
+    addNodeWithEth,
     updateNode,
     removeNode,
     getNodeInfo
@@ -176,19 +183,35 @@ const NodeReg: FC = () => {
     requiredAccountAddress: selectedWalletId
   });
 
-  const handleAddNode = async () => {
+  const handleAddNodeWithMom = async () => {
     try {
-      console.log('handleAddNode');
+      console.log('handleAddNodeWithMom');
       setError(null);
 
-      if (!nodeId || !hostname || !name) {
+      if (!nodeId || !hostname || !name || !pubkey) {
         throw new Error('Missing required fields');
       }
 
-      await addNode(nodeId, hostname, name, NODE_ADDING_FEE);
-      console.log('handleAddNode done');
+      await addNodeWithMom(nodeId, hostname, name, pubkey, NODE_ADDING_FEE);
+      console.log('handleAddNodeWithMom done');
     } catch (err: any) {
-      console.log('handleAddNode error', err);
+      console.log('handleAddNodeWithMom error', err);
+      setError(err.message);
+    }
+  };
+  const handleAddNodeWithEth = async () => {
+    try {
+      console.log('handleAddNodeWithEth');
+      setError(null);
+
+      if (!nodeId || !hostname || !name || !pubkey) {
+        throw new Error('Missing required fields');
+      }
+
+      await addNodeWithEth(nodeId, hostname, name, pubkey, NODE_ADDING_FEE);
+      console.log('handleAddNodeWithEth done');
+    } catch (err: any) {
+      console.log('handleAddNodeWithEth error', err);
       setError(err.message);
     }
   };
@@ -264,7 +287,17 @@ const NodeReg: FC = () => {
         <Input value={name} onChange={setName} />
       </styled.Form>
 
-      <Button onClick={handleAddNode} disabled={!isBlockchainReady} label="Add Node" />
+      <Button
+        onClick={handleAddNodeWithMom}
+        disabled={!isBlockchainReady}
+        label="Add Node With MOM"
+      />
+      <br />
+      <Button
+        onClick={handleAddNodeWithEth}
+        disabled={!isBlockchainReady}
+        label="Add Node With ETH"
+      />
       <br />
       <Button onClick={handleUpdateNode} disabled={!isBlockchainReady} label="Update Node" />
       <br />

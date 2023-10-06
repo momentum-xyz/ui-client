@@ -16,7 +16,8 @@ import * as styled from './BlockchainRegistration.styled';
 const NODE_ADDING_FEE = '4200000000000000000';
 
 const BlockchainRegistration: FC = () => {
-  const {selectedWalletId} = useStore().nftStore;
+  const {nftStore, adminStore} = useStore();
+  const {selectedWalletId} = nftStore;
 
   const nodeId = appVariables.NODE_ID;
 
@@ -24,13 +25,18 @@ const BlockchainRegistration: FC = () => {
     isBlockchainReady,
     walletSelectContent,
     account,
-    addNode,
+    addNodeWithMom,
     updateNode,
     removeNode,
     getNodeInfo
   } = useBlockchain({
     requiredAccountAddress: selectedWalletId
   });
+
+  useEffect(() => {
+    adminStore.attrNodePublicKey.load();
+  }, [adminStore]);
+  const pubkey = adminStore.attrNodePublicKey?.value?.node_public_key as string | undefined;
 
   const [nodeConfig, setNodeConfig] = useState<NodeConfigInterface | null | undefined>();
   const nodeConfigLoading = nodeConfig === undefined;
@@ -58,13 +64,18 @@ const BlockchainRegistration: FC = () => {
   const isModified = Object.keys(dirtyFields).length > 0;
 
   const handleSave = async (data: NodeConfigInputType) => {
+    if (!pubkey) {
+      toast.error(<ToastContent icon="alert" text="Missing public key" />);
+      return;
+    }
+
     console.log('BlockchainRegistration', data);
     try {
       if (nodeConfig) {
         await updateNode(nodeId, data.hostname, data.name);
         toast.info(<ToastContent icon="checked" text="Registered successfully" />);
       } else {
-        await addNode(nodeId, data.hostname, data.name, new BN(NODE_ADDING_FEE));
+        await addNodeWithMom(nodeId, data.hostname, data.name, pubkey, new BN(NODE_ADDING_FEE));
         toast.info(<ToastContent icon="checked" text="Updated successfully" />);
       }
     } catch (err: any) {

@@ -52,7 +52,26 @@
         "type": "uint256"
       }
     ],
-    "name": "FeeUpdated",
+    "name": "FeeUpdatedEth",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "old_fee",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "new_fee",
+        "type": "uint256"
+      }
+    ],
+    "name": "FeeUpdatedMom",
     "type": "event"
   },
   {
@@ -90,7 +109,7 @@
         "type": "uint256"
       }
     ],
-    "name": "NodeMngmtEvent",
+    "name": "NodeMgmtEvent",
     "type": "event"
   },
   {
@@ -203,9 +222,42 @@
         "internalType": "string",
         "name": "name",
         "type": "string"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pubkey",
+        "type": "bytes32"
       }
     ],
-    "name": "addNode",
+    "name": "addNodeWithEth",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "node_id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "hostname",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "pubkey",
+        "type": "bytes32"
+      }
+    ],
+    "name": "addNodeWithMom",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -229,6 +281,11 @@
           },
           {
             "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
             "name": "hostname",
             "type": "string"
           },
@@ -238,9 +295,14 @@
             "type": "address"
           },
           {
-            "internalType": "string",
-            "name": "name",
-            "type": "string"
+            "internalType": "bytes32",
+            "name": "pubkey",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "node_account",
+            "type": "address"
           }
         ],
         "internalType": "struct NodeManagement.Node",
@@ -270,6 +332,11 @@
           },
           {
             "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
             "name": "hostname",
             "type": "string"
           },
@@ -279,9 +346,14 @@
             "type": "address"
           },
           {
-            "internalType": "string",
-            "name": "name",
-            "type": "string"
+            "internalType": "bytes32",
+            "name": "pubkey",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "node_account",
+            "type": "address"
           }
         ],
         "internalType": "struct NodeManagement.Node",
@@ -306,7 +378,12 @@
       },
       {
         "internalType": "uint256",
-        "name": "_fee",
+        "name": "_feeEth",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_feeMom",
         "type": "uint256"
       },
       {
@@ -402,7 +479,7 @@
         "type": "bytes"
       }
     ],
-    "name": "setNodeMaping",
+    "name": "setNodeMapping",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -517,11 +594,42 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "new_fee",
+        "name": "node_id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "new_pubkey",
+        "type": "bytes32"
+      }
+    ],
+    "name": "updateNodePubkey",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "new_feeEth",
         "type": "uint256"
       }
     ],
-    "name": "update_fee",
+    "name": "update_feeEth",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "new_feeMom",
+        "type": "uint256"
+      }
+    ],
+    "name": "update_feeMom",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
