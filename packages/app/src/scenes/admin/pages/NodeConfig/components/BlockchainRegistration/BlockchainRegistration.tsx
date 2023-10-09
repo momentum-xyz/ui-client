@@ -1,11 +1,12 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useCallback, useEffect, useState} from 'react';
 import {observer} from 'mobx-react-lite';
 import {Controller, useForm} from 'react-hook-form';
-import {Button, Input} from '@momentum-xyz/ui-kit';
+import {Button, Input, Radio} from '@momentum-xyz/ui-kit';
 import {toast} from 'react-toastify';
 import {BN} from 'bn.js';
 
 import {NodeConfigInputType, NodeConfigInterface} from 'core/models';
+import {formatBigInt} from 'core/utils';
 import {useBlockchain, useStore} from 'shared/hooks';
 import {appVariables} from 'api/constants';
 import {ToastContent} from 'ui-kit';
@@ -13,7 +14,10 @@ import {ToastContent} from 'ui-kit';
 import {NodeWhitelist} from './components';
 import * as styled from './BlockchainRegistration.styled';
 
-const NODE_ADDING_FEE = '4200000000000000000';
+const paymentMethodOptions = [
+  {value: 'ETH', label: 'ETH'},
+  {value: 'MOM', label: 'MOM'}
+];
 
 const BlockchainRegistration: FC = () => {
   const {nftStore, adminStore} = useStore();
@@ -26,9 +30,11 @@ const BlockchainRegistration: FC = () => {
     walletSelectContent,
     account,
     addNodeWithMom,
+    addNodeWithEth,
     updateNode,
     removeNode,
-    getNodeInfo
+    getNodeInfo,
+    getNodeAddingFees
   } = useBlockchain({
     requiredAccountAddress: selectedWalletId
   });
@@ -41,6 +47,17 @@ const BlockchainRegistration: FC = () => {
   const [nodeConfig, setNodeConfig] = useState<NodeConfigInterface | null | undefined>();
   const nodeConfigLoading = nodeConfig === undefined;
 
+  const [paymentMethod, setPaymentMethod] = useState<'MOM' | 'ETH'>('ETH');
+
+  const [nodeAddingFees, setNodeAddingFees] = useState<{feeMom: string; feeETH: string}>();
+  useEffect(() => {
+    getNodeAddingFees().then((fees) => {
+      console.log('getNodeAddingFees', fees);
+      setNodeAddingFees(fees);
+    });
+  }, [getNodeAddingFees]);
+
+  const nodeAddingFee = paymentMethod === 'MOM' ? nodeAddingFees?.feeMom : nodeAddingFees?.feeETH;
   const {
     control,
     handleSubmit,
@@ -78,12 +95,21 @@ const BlockchainRegistration: FC = () => {
       if (nodeConfig) {
         await updateNode(nodeId, data.hostname, data.name);
         toast.info(<ToastContent icon="checked" text="Registered successfully" />);
-      } else {
-        await addNodeWithMom(nodeId, data.hostname, data.name, pubkey, new BN(NODE_ADDING_FEE));
-        toast.info(<ToastContent icon="checked" text="Updated successfully" />);
-
-        refreshNodeInfo();
+        return;
       }
+
+      if (typeof nodeAddingFee !== 'string') {
+        toast.error(<ToastContent icon="alert" text="Unable to load registration fee" />);
+        return;
+      }
+      if (paymentMethod === 'MOM') {
+        await addNodeWithMom(nodeId, data.hostname, data.name, pubkey, new BN(nodeAddingFee));
+      } else {
+        await addNodeWithEth(nodeId, data.hostname, data.name, pubkey, new BN(nodeAddingFee));
+      }
+      toast.info(<ToastContent icon="checked" text="Updated successfully" />);
+
+      refreshNodeInfo();
     } catch (err: any) {
       console.log('handleSave error', err);
       toast.error(<ToastContent icon="alert" text="Something went wrong" />);
@@ -96,6 +122,8 @@ const BlockchainRegistration: FC = () => {
       await removeNode(nodeId);
       toast.info(<ToastContent icon="checked" text="Unregistered successfully" />);
       setNodeConfig(null);
+      setValue('hostname', '', {shouldDirty: false});
+      setValue('name', '', {shouldDirty: false});
     } catch (err: any) {
       console.log('handleRemove error', err);
       toast.error(<ToastContent icon="alert" text="Something went wrong" />);
@@ -160,8 +188,28 @@ const BlockchainRegistration: FC = () => {
         <styled.Title>Owner</styled.Title>
         <Input onChange={() => {}} wide value={account} disabled />
 
+        {!nodeConfig && nodeAddingFee !== undefined && (
+          <>
+            <styled.Title>Node Registration Fee</styled.Title>
+            <Input onChange={() => {}} wide value={formatBigInt(nodeAddingFee)} disabled />
+          </>
+        )}
+
         {walletSelectContent}
         <styled.ActionsBar>
+          {!nodeConfig && (
+            <>
+              <styled.Title>Payment method:</styled.Title>
+              <Radio
+                name="type"
+                value={paymentMethod}
+                options={paymentMethodOptions}
+                onChange={(val) => setPaymentMethod(val as 'MOM' | 'ETH')}
+                variant="horizontal"
+              />
+            </>
+          )}
+          <div style={{flex: 1}} />
           <Button
             label="Unregister"
             onClick={handleRemove}
@@ -174,6 +222,8 @@ const BlockchainRegistration: FC = () => {
           />
         </styled.ActionsBar>
       </styled.Form>
+
+      <br />
 
       <NodeWhitelist />
     </>

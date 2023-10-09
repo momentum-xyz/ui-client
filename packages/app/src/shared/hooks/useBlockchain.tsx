@@ -422,6 +422,15 @@ export const useBlockchain = ({
     [mappingContract]
   );
 
+  const getNodeAddingFees = useCallback(async () => {
+    const feeMom = await mappingContract?.methods.feeMom().call();
+    const feeETH = await mappingContract?.methods.feeETH().call();
+    return {
+      feeMom,
+      feeETH
+    };
+  }, [mappingContract]);
+
   const setOdysseyMapping = useCallback(
     async (node_id: string, odyssey_id: string, signed_challenge: string) => {
       const hexNodeId = uuidToHex(node_id);
@@ -551,6 +560,7 @@ export const useBlockchain = ({
     updateNode,
     removeNode,
     getNodeInfo,
+    getNodeAddingFees,
     setOdysseyMapping,
     setNodeMapping,
     removeMapping,
@@ -579,6 +589,7 @@ export const useBlockchain = ({
     updateNode,
     removeNode,
     getNodeInfo,
+    getNodeAddingFees,
     setOdysseyMapping,
     setNodeMapping,
     removeMapping,
