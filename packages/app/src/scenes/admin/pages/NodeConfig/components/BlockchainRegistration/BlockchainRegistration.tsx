@@ -48,7 +48,7 @@ const BlockchainRegistration: FC = () => {
     formState: {errors, dirtyFields}
   } = useForm<NodeConfigInputType>();
 
-  useEffect(() => {
+  const refreshNodeInfo = useCallback(() => {
     getNodeInfo(nodeId).then((nodeConfig) => {
       console.log('getNodeInfo', nodeConfig);
 
@@ -60,6 +60,10 @@ const BlockchainRegistration: FC = () => {
       }
     });
   }, [getNodeInfo, nodeId, setValue]);
+
+  useEffect(() => {
+    refreshNodeInfo();
+  }, [refreshNodeInfo]);
 
   const isModified = Object.keys(dirtyFields).length > 0;
 
@@ -77,6 +81,8 @@ const BlockchainRegistration: FC = () => {
       } else {
         await addNodeWithMom(nodeId, data.hostname, data.name, pubkey, new BN(NODE_ADDING_FEE));
         toast.info(<ToastContent icon="checked" text="Updated successfully" />);
+
+        refreshNodeInfo();
       }
     } catch (err: any) {
       console.log('handleSave error', err);
