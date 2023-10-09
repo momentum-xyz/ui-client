@@ -224,9 +224,9 @@
         "type": "string"
       },
       {
-        "internalType": "bytes32",
+        "internalType": "bytes",
         "name": "pubkey",
-        "type": "bytes32"
+        "type": "bytes"
       }
     ],
     "name": "addNodeWithEth",
@@ -252,9 +252,9 @@
         "type": "string"
       },
       {
-        "internalType": "bytes32",
+        "internalType": "bytes",
         "name": "pubkey",
-        "type": "bytes32"
+        "type": "bytes"
       }
     ],
     "name": "addNodeWithMom",
@@ -295,9 +295,9 @@
             "type": "address"
           },
           {
-            "internalType": "bytes32",
+            "internalType": "bytes",
             "name": "pubkey",
-            "type": "bytes32"
+            "type": "bytes"
           },
           {
             "internalType": "address",
@@ -346,9 +346,9 @@
             "type": "address"
           },
           {
-            "internalType": "bytes32",
+            "internalType": "bytes",
             "name": "pubkey",
-            "type": "bytes32"
+            "type": "bytes"
           },
           {
             "internalType": "address",
@@ -598,9 +598,9 @@
         "type": "uint256"
       },
       {
-        "internalType": "bytes32",
+        "internalType": "bytes",
         "name": "new_pubkey",
-        "type": "bytes32"
+        "type": "bytes"
       }
     ],
     "name": "updateNodePubkey",

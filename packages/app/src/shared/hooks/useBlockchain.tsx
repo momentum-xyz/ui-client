@@ -326,6 +326,11 @@ export const useBlockchain = ({
       tokenKind = TokenEnum.MOM_TOKEN
     ) => {
       const hexNodeId = uuidToHex(node_id);
+
+      if (!pubkey.startsWith('0x')) {
+        pubkey = '0x' + pubkey;
+      }
+
       console.log('useBlockchain addNodeWithMom', {
         node_id,
         hexNodeId,
@@ -352,6 +357,11 @@ export const useBlockchain = ({
   const addNodeWithEth = useCallback(
     async (node_id: string, hostname: string, name: string, pubkey: string, feeAmount: BN) => {
       const hexNodeId = uuidToHex(node_id);
+
+      if (!pubkey.startsWith('0x')) {
+        pubkey = '0x' + pubkey;
+      }
+
       console.log('useBlockchain addNodeWithEth', {
         node_id,
         hexNodeId,
