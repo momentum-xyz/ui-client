@@ -4,7 +4,7 @@ import {Panel, ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit';
 
 import {useAttributesEmulator} from '../../hooks';
 import {useTheme} from '../../../contexts/ThemeContext';
-import {AttributeValueInterface, PluginPropsInterface, PluginInterface} from '../../../interfaces';
+import {PluginPropsInterface, PluginInterface} from '../../../interfaces';
 import {ObjectGlobalPropsContextProvider} from '../../../contexts';
 
 import * as styled from './ObjectViewEmulator.styled';
@@ -22,14 +22,8 @@ export const ObjectViewEmulator: FC<PropsInterface> = ({plugin, isAdmin, onClose
   const theme = useTheme();
   const {
     spaceAttributes,
-    useAttributeChange,
-    useAttributeRemove,
     useAttributeItemChange,
     useAttributeItemRemove,
-    changedAttribute,
-    removedAttribute,
-    changedAttributeItem,
-    removedAttributeItem,
     subscribeToTopic,
     unsubscribeFromTopic
   } = useAttributesEmulator();
@@ -47,104 +41,6 @@ export const ObjectViewEmulator: FC<PropsInterface> = ({plugin, isAdmin, onClose
       theme: theme as ThemeInterface,
       isAdmin,
       objectId,
-      api: {
-        getSpaceAttributeValue: <T extends AttributeValueInterface>(
-          spaceId: string,
-          attributeName: string
-        ) => {
-          const attributeValue = spaceAttributes.current.find(
-            (attribute) => attribute.attributeName === attributeName
-          )?.attributeValue;
-
-          if (!attributeValue) {
-            return Promise.reject();
-          }
-
-          return Promise.resolve(attributeValue as T);
-        },
-        setSpaceAttributeValue: <T extends AttributeValueInterface>(
-          spaceId: string,
-          attributeName: string,
-          value: AttributeValueInterface
-        ) => {
-          const attribute = spaceAttributes.current.find(
-            (attribute) => attribute.attributeName === attributeName
-          );
-
-          if (!attribute) {
-            return Promise.reject();
-          }
-
-          attribute.attributeValue = value;
-          changedAttribute({attributeName, value});
-          return Promise.resolve(attribute.attributeValue as T);
-        },
-        deleteSpaceAttribute: (spaceId: string, attributeName) => {
-          const attributes = spaceAttributes.current.filter(
-            (attribute) => attribute.attributeName !== attributeName
-          );
-
-          spaceAttributes.current = attributes;
-          removedAttribute({attributeName});
-          return Promise.resolve(null);
-        },
-
-        getSpaceAttributeItem: <T,>(
-          spaceId: string,
-          attributeName: string,
-          attributeItemName: string
-        ) => {
-          const attributeValue = spaceAttributes.current.find(
-            (attribute) => attribute.attributeName === attributeName
-          )?.attributeValue;
-
-          if (!attributeValue) {
-            return Promise.reject();
-          }
-
-          return Promise.resolve(attributeValue[attributeItemName] as T);
-        },
-        setSpaceAttributeItem: <T,>(
-          spaceId: string,
-          attributeName: string,
-          attributeItemName: string,
-          value: T
-        ) => {
-          const attributeValue = spaceAttributes.current.find(
-            (attribute) => attribute.attributeName === attributeName
-          )?.attributeValue;
-
-          if (!attributeValue) {
-            return Promise.reject();
-          }
-
-          attributeValue[attributeItemName] = value;
-          changedAttributeItem({attributeName, attributeItemName, value});
-          return Promise.resolve(attributeValue[attributeItemName] as T);
-        },
-        deleteSpaceAttributeItem: (spaceId: string, attributeName, attributeItemName) => {
-          const attributeValue = spaceAttributes.current.find(
-            (attribute) => attribute.attributeName === attributeName
-          )?.attributeValue;
-
-          if (!attributeValue) {
-            return Promise.reject();
-          }
-
-          delete attributeValue[attributeItemName];
-          removedAttributeItem({attributeName, attributeItemName});
-          return Promise.resolve(null);
-        },
-
-        subscribeToTopic,
-        unsubscribeFromTopic,
-
-        useAttributeChange,
-        useAttributeRemove,
-
-        useAttributeItemChange,
-        useAttributeItemRemove
-      },
       pluginApi: {
         getStateItem: <T,>(key: string) => {
           const state = spaceAttributes.current.find(
@@ -195,15 +91,9 @@ export const ObjectViewEmulator: FC<PropsInterface> = ({plugin, isAdmin, onClose
       objectId,
       subscribeToTopic,
       unsubscribeFromTopic,
-      useAttributeChange,
-      useAttributeRemove,
       useAttributeItemChange,
       useAttributeItemRemove,
       spaceAttributes,
-      changedAttribute,
-      removedAttribute,
-      changedAttributeItem,
-      removedAttributeItem,
       config,
       onClose,
       isAdmin

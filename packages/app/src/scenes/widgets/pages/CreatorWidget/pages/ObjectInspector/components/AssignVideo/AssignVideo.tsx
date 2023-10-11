@@ -46,7 +46,6 @@ export const useAssignVideo: UseAssignVideoHookType = ({objectId, plugin, plugin
         onToggleExpand: pluginLoader.toggleIsExpanded,
         objectId,
         pluginApi: pluginLoader.attributesManager.pluginApi,
-        api: pluginLoader.attributesManager.api,
         onClose: () => {}
       }
     : null;

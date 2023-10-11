@@ -1,15 +1,9 @@
 import {RequestModel} from '@momentum-xyz/core';
-import {
-  PluginApiInterface,
-  AttributeValueInterface,
-  ApiInterface,
-  AttributeNameEnum
-} from '@momentum-xyz/sdk';
+import {PluginApiInterface, AttributeValueInterface, AttributeNameEnum} from '@momentum-xyz/sdk';
 import {flow, Instance, types} from 'mobx-state-tree';
 
 import {api, GetObjectAttributeResponse} from 'api';
 import {appVariables} from 'api/constants';
-import {PosBusService} from 'shared/services';
 import {usePosBusEvent} from 'shared/hooks';
 
 const PluginAttributesManager = types
@@ -252,112 +246,6 @@ const PluginAttributesManager = types
                 posBusTopic === self.pluginId &&
                 posBusAttributeName === AttributeNameEnum.STATE &&
                 value === null
-              ) {
-                callback();
-              }
-            }
-          );
-        }
-      };
-    },
-    get api(): ApiInterface {
-      return {
-        getSpaceAttributeValue: async <T extends AttributeValueInterface>(
-          spaceId: string,
-          attributeName: string
-        ) => self.getSpaceAttributeValue<T>(spaceId, attributeName) as Promise<T>,
-        setSpaceAttributeValue: async <T extends AttributeValueInterface>(
-          spaceId: string,
-          attributeName: string,
-          value: T
-        ) => self.setSpaceAttributeValue<T>(spaceId, attributeName, value) as Promise<T>,
-        deleteSpaceAttribute: self.deleteSpaceAttribute,
-
-        getSpaceAttributeItem: async <T>(
-          spaceId: string,
-          attributeName: string,
-          attributeItemName: string
-        ) => self.getSpaceAttributeItem<T>(spaceId, attributeName, attributeItemName) as Promise<T>,
-        setSpaceAttributeItem: async <T>(
-          spaceId: string,
-          attributeName: string,
-          attributeItemName: string,
-          value: T
-        ) =>
-          self.setSpaceAttributeItem<T>(
-            spaceId,
-            attributeName,
-            attributeItemName,
-            value
-          ) as Promise<T>,
-        // TODO: Change bellow to this after PosBus supports attribute items
-        // deleteSpaceAttributeItem: async (
-        //   spaceId: string,
-        //   attributeName: string,
-        //   attributeItemName: string
-        // ) => self.deleteObjectAttributeItem(spaceId, attributeName, attributeItemName),
-
-        // TODO: Change above to this after PosBus supports attribute items
-        deleteSpaceAttributeItem: async (
-          spaceId: string,
-          attributeName: string,
-          attributeItemName: string
-        ) => self.deleteSpaceAttribute(spaceId, attributeName),
-        subscribeToTopic: (topic) => {
-          PosBusService.subscribe(topic);
-        },
-        unsubscribeFromTopic: (topic) => {
-          PosBusService.unsubscribe(topic);
-        },
-
-        useAttributeChange: <T extends AttributeValueInterface>(
-          topic: string,
-          attributeName: string,
-          callback: (value: T) => void
-        ) => {
-          return usePosBusEvent(
-            'space-attribute-changed',
-            (posBusTopic, posBusAttributeName, value) => {
-              if (posBusTopic === topic && posBusAttributeName === attributeName) {
-                callback(value as unknown as T);
-              }
-            }
-          );
-        },
-        useAttributeRemove(topic, attributeName, callback) {
-          return usePosBusEvent('space-attribute-removed', (posBusTopic, posBusAttributeName) => {
-            if (posBusTopic === topic && posBusAttributeName === attributeName) {
-              callback();
-            }
-          });
-        },
-        useAttributeItemChange: <T>(
-          topic: string,
-          attributeName: string,
-          attributeItemName: string,
-          callback: (value: T) => void
-        ) => {
-          return usePosBusEvent(
-            'space-attribute-item-changed',
-            (posBusTopic, posBusAttributeName, posBusAttributItemName, value) => {
-              if (
-                posBusTopic === topic &&
-                posBusAttributeName === attributeName &&
-                posBusAttributItemName === attributeItemName
-              ) {
-                callback(value as T);
-              }
-            }
-          );
-        },
-        useAttributeItemRemove(topic, attributeName, attributeItemName, callback) {
-          return usePosBusEvent(
-            'space-attribute-item-removed',
-            (posBusTopic, posBusAttributeName, posBusAttributItemName) => {
-              if (
-                posBusTopic === topic &&
-                posBusAttributeName === attributeName &&
-                posBusAttributItemName === attributeItemName
               ) {
                 callback();
               }

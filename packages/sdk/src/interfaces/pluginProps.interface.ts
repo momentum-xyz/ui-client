@@ -1,7 +1,6 @@
 import {ThemeInterface} from '@momentum-xyz/ui-kit';
 
 import {PluginApiInterface} from './pluginApi.interface';
-import {ApiInterface} from './api.interface';
 
 export interface PluginPropsInterface<C = unknown> {
   theme: ThemeInterface;
@@ -12,7 +11,6 @@ export interface PluginPropsInterface<C = unknown> {
   onToggleExpand?: () => void;
 
   pluginApi: PluginApiInterface<C>;
-  api: ApiInterface;
 
   onClose: () => void;
 }

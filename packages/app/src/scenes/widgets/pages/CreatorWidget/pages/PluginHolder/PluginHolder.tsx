@@ -38,7 +38,6 @@ const PluginHolder: FC<PropsInterface> = ({pluginLoader, onCreatorTabChanged}) =
       isExpanded: pluginLoader.isExpanded,
       onToggleExpand: pluginLoader.toggleIsExpanded,
       pluginApi: pluginLoader.attributesManager.pluginApi,
-      api: pluginLoader.attributesManager.api,
       onClose: () => {}
     }),
     [pluginLoader, theme]
