@@ -30,6 +30,7 @@ export const createObject: RequestInterface<CreateObjectRequest, CreateObjectRes
     object_type_id,
     asset_2d_id,
     asset_3d_id,
+    transform,
     minimap,
     ...restOptions
   } = options;
@@ -42,6 +43,7 @@ export const createObject: RequestInterface<CreateObjectRequest, CreateObjectRes
       parent_id,
       asset_2d_id,
       asset_3d_id,
+      transform,
       minimap
     },
     restOptions

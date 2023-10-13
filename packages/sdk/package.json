@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@craco/craco": "^6.1.1",
+    "@momentum-xyz/core": "^0.1.2",
     "@momentum-xyz/ui-kit": "^0.1.4",
     "react-router-dom": "^6.6.2"
   },

@@ -1,15 +1,25 @@
-import {RequestModel} from '@momentum-xyz/core';
-import {PluginApiInterface, AttributeValueInterface, AttributeNameEnum} from '@momentum-xyz/sdk';
+import {ObjectTypeIdEnum, RequestModel} from '@momentum-xyz/core';
+import {
+  PluginApiInterface,
+  AttributeValueInterface,
+  AttributeNameEnum,
+  SetWorld,
+  Transform,
+  PluginApiEventHandlersType
+} from '@momentum-xyz/sdk';
 import {flow, Instance, types} from 'mobx-state-tree';
 
 import {api, GetObjectAttributeResponse} from 'api';
 import {appVariables} from 'api/constants';
 import {usePosBusEvent} from 'shared/hooks';
+import {PosBusService} from 'shared/services';
+import {PosBusEventEmitter} from 'core/constants';
+import {Asset3dCategoryEnum} from 'api/enums';
 
 const PluginAttributesManager = types
   .model('PluginAttributesManager', {
     pluginId: types.string,
-    spaceId: types.string,
+    worldId: types.maybeNull(types.string),
 
     getAttributeRequest: types.optional(RequestModel, {}),
     setAttributeRequest: types.optional(RequestModel, {}),
@@ -21,7 +31,9 @@ const PluginAttributesManager = types
 
     setStateRequest: types.optional(RequestModel, {}),
     deleteStateRequest: types.optional(RequestModel, {}),
-    getConfigRequest: types.optional(RequestModel, {})
+    getConfigRequest: types.optional(RequestModel, {}),
+
+    objectOperationRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
     getSpaceAttributeValue: flow(function* <T extends AttributeValueInterface>(
@@ -160,16 +172,31 @@ const PluginAttributesManager = types
     })
   }))
   .actions((self) => ({
-    getItem: flow(function* <T extends AttributeValueInterface>(spaceId: string, key: string) {
-      return yield self.getSpaceAttributeItem<T>(spaceId, AttributeNameEnum.STATE, key);
+    setWorldId(worldInfo: SetWorld | null) {
+      self.worldId = worldInfo?.id || null;
+    }
+  }))
+  .actions((self) => ({
+    afterCreate() {
+      console.log('PluginAttributesManager afterCreate');
+      PosBusEventEmitter.on('set-world', self.setWorldId);
+    },
+    beforeDestroy() {
+      console.log('PluginAttributesManager beforeDestroy');
+      PosBusEventEmitter.off('set-world', self.setWorldId);
+    }
+  }))
+  .actions((self) => ({
+    getItem: flow(function* <T extends AttributeValueInterface>(objectId: string, key: string) {
+      return yield self.getSpaceAttributeItem<T>(objectId, AttributeNameEnum.STATE, key);
     }),
-    set: flow(function* <T>(spaceId: string, key: string, value: T) {
-      return yield self.setSpaceAttributeItem(spaceId, AttributeNameEnum.STATE, key, value);
+    set: flow(function* <T>(objectId: string, key: string, value: T) {
+      return yield self.setSpaceAttributeItem(objectId, AttributeNameEnum.STATE, key, value);
     }),
-    deleteItem: flow(function* (spaceId: string, key: string) {
+    deleteItem: flow(function* (objectId: string, key: string) {
       // TODO: Replace after attribute item is implemented on PosBus
       // return yield self.deleteObjectAttributeItem(spaceId, AttributeNameEnum.STATE, key);
-      return yield self.deleteSpaceAttribute(spaceId, AttributeNameEnum.STATE);
+      return yield self.deleteSpaceAttribute(objectId, AttributeNameEnum.STATE);
     }),
     getConfig: flow(function* <C extends GetObjectAttributeResponse>() {
       return yield self.getSpaceAttributeValue<C>(appVariables.NODE_ID, AttributeNameEnum.CONFIG);
@@ -179,13 +206,24 @@ const PluginAttributesManager = types
     get pluginApi(): PluginApiInterface {
       return {
         getStateItem: async <T>(key: string) => {
-          const result = await self.getItem(self.spaceId, key);
+          if (self.worldId === null) {
+            throw new Error('worldId is not set');
+          }
+          const result = await self.getItem(self.worldId, key);
           return result as T;
         },
         setStateItem: async <T>(key: string, value: T) => {
-          return await self.set(self.spaceId, key, value);
+          if (self.worldId === null) {
+            throw new Error('worldId is not set');
+          }
+          return await self.set(self.worldId, key, value);
         },
-        deleteStateItem: (key: string) => self.deleteItem(self.spaceId, key),
+        deleteStateItem: (key: string) => {
+          if (self.worldId === null) {
+            throw new Error('worldId is not set');
+          }
+          return self.deleteItem(self.worldId, key);
+        },
         getConfig: self.getConfig,
 
         // TODO: Temporary, change to below after PosBus supports attribute items
@@ -251,7 +289,161 @@ const PluginAttributesManager = types
               }
             }
           );
-        }
+        },
+
+        on(handlers: Partial<PluginApiEventHandlersType>) {
+          const unsubscribeCallbacks = Object.entries(handlers).map(([eventName, handler]) => {
+            if (handler) {
+              PosBusEventEmitter.on(eventName as keyof PluginApiEventHandlersType, handler);
+              return () =>
+                PosBusEventEmitter.off(eventName as keyof PluginApiEventHandlersType, handler);
+            }
+            return () => {};
+          });
+
+          setTimeout(() => {
+            if (!PosBusService.worldInfo) {
+              return;
+            }
+            handlers['set-world']?.(PosBusService.worldInfo);
+
+            if (PosBusService.myTransform) {
+              handlers['my-transform']?.(PosBusService.myTransform);
+            }
+
+            for (const [, objectDefinition] of PosBusService.objectDefinitions) {
+              handlers['add-object']?.(objectDefinition);
+            }
+
+            for (const [, objectData] of PosBusService.objectDatas) {
+              handlers['object-data']?.(objectData.id, objectData);
+            }
+
+            for (const [id, objectTransform] of PosBusService.objectTransforms) {
+              handlers['object-transform']?.(id, objectTransform);
+            }
+
+            if (PosBusService.users.size > 0) {
+              handlers['users-added']?.(Array.from(PosBusService.users.values()));
+            }
+
+            if (PosBusService.usersTransforms.size > 0) {
+              handlers['users-transform-list']?.(
+                Array.from(PosBusService.usersTransforms.values())
+              );
+            }
+          }, 0);
+
+          return () => {
+            unsubscribeCallbacks.forEach((unsubscribeCallback) => unsubscribeCallback());
+          };
+        },
+
+        requestObjectLock: (objectId: string) => {
+          console.log('requestObjectLock', objectId);
+          return PosBusService.requestObjectLock(objectId);
+        },
+        requestObjectUnlock: (objectId: string) => {
+          console.log('requestObjectUnlock', objectId);
+          return PosBusService.requestObjectUnlock(objectId);
+        },
+        spawnObject: async ({
+          name,
+          asset_2d_id = null,
+          asset_3d_id = null,
+          transform,
+          object_type_id = ObjectTypeIdEnum.NORMAL
+        }: {
+          name: string;
+          asset_2d_id?: string | null;
+          asset_3d_id: string | null;
+          object_type_id?: string;
+          transform?: Transform;
+        }) => {
+          if (!self.worldId) {
+            throw new Error('worldId is not set');
+          }
+          const response = await self.objectOperationRequest.send(
+            api.objectRepository.createObject,
+            {
+              parent_id: self.worldId,
+              object_name: name,
+              asset_2d_id: asset_2d_id || undefined,
+              asset_3d_id: asset_3d_id || undefined,
+              object_type_id,
+              transform
+            }
+          );
+
+          if (self.objectOperationRequest.isError || !response) {
+            throw Error('Unknown error');
+          }
+
+          return response;
+        },
+        transformObject: (objectId: string, objectTransform: Transform) => {
+          PosBusService.sendObjectTransform(objectId, objectTransform);
+        },
+        removeObject: async (objectId: string) => {
+          await self.objectOperationRequest.send(api.objectRepository.deleteObject, {
+            objectId
+          });
+
+          if (self.objectOperationRequest.isError) {
+            throw Error('Unknown error');
+          }
+        },
+        getSupportedAssets3d: async (category: 'basic' | 'custom') => {
+          // const response = await self.objectOperationRequest.send(
+          //   api.assets3dRepository.fetchAssets3d,
+          //   {
+          //     category: category as Asset3dCategoryEnum
+          //   }
+          // );
+
+          // if (self.objectOperationRequest.isError || !response) {
+          //   throw Error('Unknown error');
+          // }
+
+          // return response as any; // TODO
+          const response = await api.assets3dRepository.fetchAssets3d(
+            {
+              category: category as Asset3dCategoryEnum
+            },
+            undefined as any
+          );
+          console.log('getSupportedAssets3d', response);
+          if (response.status !== 200) {
+            throw Error(response.statusText);
+          }
+          return response.data;
+        },
+
+        setObjectAttribute: (props: {
+          name: string;
+          value: any;
+          objectId: string;
+          // pluginId?: string
+        }) => Promise.reject(),
+
+        removeObjectAttribute: ({
+          name,
+          objectId,
+          pluginId
+        }: {
+          name: string;
+          objectId: string;
+          pluginId?: string;
+        }) => Promise.reject(),
+        getObjectAttribute: ({
+          name,
+          objectId,
+          pluginId
+        }: {
+          name: string;
+          objectId: string;
+          pluginId?: string;
+        }) => Promise.reject()
       };
     }
   }));

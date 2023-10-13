@@ -3,6 +3,7 @@ import {RequestModel} from '@momentum-xyz/core';
 
 import {api} from 'api';
 import {DynamicScriptList, PluginAttributesManager, PluginLoader} from 'core/models';
+import {getRootStore} from 'core/utils';
 
 interface PluginInfoInterface {
   plugin_id: string;
@@ -82,6 +83,8 @@ export const PluginStore = types
               await self.dynamicScriptList.addScript(meta.scopeName, meta.scriptUrl);
             }
 
+            const worldId = getRootStore(self).universeStore.worldId;
+
             const pluginLoader = PluginLoader.create({
               id: plugin_id,
               pluginId: plugin_id,
@@ -89,7 +92,7 @@ export const PluginStore = types
               ...meta,
               attributesManager: PluginAttributesManager.create({
                 pluginId: plugin_id,
-                spaceId: '123' // TODO remove
+                worldId
               })
             });
 

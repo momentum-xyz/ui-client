@@ -89,7 +89,7 @@ const ObjectStore = types
         ...meta,
         attributesManager: PluginAttributesManager.create({
           pluginId: meta.pluginId,
-          spaceId: objectId
+          worldId: objectId
         })
       });
 
