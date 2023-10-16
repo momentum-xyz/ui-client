@@ -168,6 +168,11 @@ class PosBusService {
         Event3dEmitter.emit('UsersTransformChanged', users);
         for (const user of users) {
           PosBusService.usersTransforms.set(user.id, user);
+
+          if (user.id === PosBusService.userId) {
+            PosBusService.myTransform = user.transform;
+            PosBusEventEmitter.emit('my-transform', user.transform);
+          }
         }
         PosBusEventEmitter.emit('users-transform-list', users);
         break;
