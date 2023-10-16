@@ -50,7 +50,7 @@ export interface PluginApiInterface<C = unknown> {
     asset_3d_id: string | null;
     object_type_id?: string;
     transform?: Transform;
-  }): Promise<any>;
+  }): Promise<{id: string}>;
   transformObject: (objectId: string, transform: Transform) => void;
   getObjectInfo(objectId: string): Promise<ObjectInfo>;
   removeObject(objectId: string): Promise<any>;

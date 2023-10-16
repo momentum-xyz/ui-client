@@ -275,7 +275,7 @@ export interface UseWorldReturnInterface {
     asset_3d_id: string | null;
     object_type_id?: string;
     transform?: Transform;
-  }): Promise<ObjectDefinition>;
+  }): Promise<{id: string}>;
 
   /**
    * Removes an object from the virtual world.

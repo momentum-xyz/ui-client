@@ -378,7 +378,8 @@ const PluginAttributesManager = types
           if (response.status >= 300) {
             throw Error(response.statusText);
           }
-          return response.data;
+          const {object_id} = response.data;
+          return {id: object_id};
         },
 
         transformObject: (objectId: string, objectTransform: Transform) => {
