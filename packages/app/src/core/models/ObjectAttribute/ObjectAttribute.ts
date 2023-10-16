@@ -40,6 +40,13 @@ export const ObjectAttribute = types
         response
       );
 
+      if (self.request.isError) {
+        throw new Error(
+          'Error loading attribute: ' +
+            ((response?.error as any)?.message || self.request.errorCode)
+        );
+      }
+
       if (response) {
         self._value = response;
       }
@@ -49,7 +56,7 @@ export const ObjectAttribute = types
     set: flow(function* (value: AttributeValueInterface) {
       console.log('ObjectAttribute set:', value);
 
-      yield self.request.send(api.objectAttributeRepository.setObjectAttribute, {
+      const response = yield self.request.send(api.objectAttributeRepository.setObjectAttribute, {
         objectId: self.objectId,
         plugin_id: self.pluginId,
         attribute_name: self.attributeName,
@@ -57,22 +64,29 @@ export const ObjectAttribute = types
       });
 
       if (self.request.isError) {
-        throw new Error('Error setting attribute: ' + self.request.errorCode);
+        throw new Error(
+          'Error setting attribute: ' + (response?.error?.message || self.request.errorCode)
+        );
       }
 
       self._value = value;
     }),
     setItem: flow(function* (itemName: string, value: unknown) {
-      yield self.request.send(api.objectAttributeRepository.setObjectAttributeItem, {
-        objectId: self.objectId,
-        plugin_id: self.pluginId,
-        attribute_name: self.attributeName,
-        sub_attribute_key: itemName,
-        value
-      });
+      const response = yield self.request.send(
+        api.objectAttributeRepository.setObjectAttributeItem,
+        {
+          objectId: self.objectId,
+          plugin_id: self.pluginId,
+          attribute_name: self.attributeName,
+          sub_attribute_key: itemName,
+          value
+        }
+      );
 
       if (self.request.isError) {
-        throw new Error('Error setting attribute item: ' + self.request.errorCode);
+        throw new Error(
+          'Error setting attribute item: ' + (response?.error?.message || self.request.errorCode)
+        );
       }
 
       if (self._value) {
@@ -82,14 +96,19 @@ export const ObjectAttribute = types
       }
     }),
     delete: flow(function* () {
-      yield self.request.send(api.objectAttributeRepository.deleteObjectAttribute, {
-        objectId: self.objectId,
-        plugin_id: self.pluginId,
-        attribute_name: self.attributeName
-      });
+      const response = yield self.request.send(
+        api.objectAttributeRepository.deleteObjectAttribute,
+        {
+          objectId: self.objectId,
+          plugin_id: self.pluginId,
+          attribute_name: self.attributeName
+        }
+      );
 
       if (self.request.isError) {
-        throw new Error('Error deleting attribute: ' + self.request.errorCode);
+        throw new Error(
+          'Error deleting attribute: ' + (response?.error?.message || self.request.errorCode)
+        );
       }
     })
   }))

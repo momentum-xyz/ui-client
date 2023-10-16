@@ -36,6 +36,12 @@ export const ObjectUserAttribute = types
       );
 
       console.log('[ObjectUserAttribute] load', params, 'resp:', response);
+      if (self.request.isError) {
+        throw new Error(
+          'Error loading attribute: ' +
+            ((response?.error as any)?.message || self.request.errorCode)
+        );
+      }
 
       if (response) {
         self._value = response;
@@ -54,10 +60,16 @@ export const ObjectUserAttribute = types
         value
       };
 
-      yield self.request.send(api.objectUserAttributeRepository.setObjectUserAttribute, data);
+      const response = yield self.request.send(
+        api.objectUserAttributeRepository.setObjectUserAttribute,
+        data
+      );
 
       if (self.request.isError) {
-        throw new Error('Error setting attribute: ' + self.request.errorCode);
+        throw new Error(
+          'Error setting attribute: ' +
+            ((response?.error as any)?.message || self.request.errorCode)
+        );
       }
 
       self._value = value;
@@ -72,10 +84,15 @@ export const ObjectUserAttribute = types
         sub_attribute_key: itemName,
         sub_attribute_value: value
       };
-      yield self.request.send(api.objectUserAttributeRepository.setObjectUserSubAttribute, data);
+      const response = yield self.request.send(
+        api.objectUserAttributeRepository.setObjectUserSubAttribute,
+        data
+      );
 
       if (self.request.isError) {
-        throw new Error('Error setting attribute item: ' + self.request.errorCode);
+        throw new Error(
+          'Error setting attribute item: ' + (response?.error?.message || self.request.errorCode)
+        );
       }
 
       if (self._value) {
@@ -92,10 +109,15 @@ export const ObjectUserAttribute = types
         attributeName: self.attributeName
       };
       console.log('[ObjectUserAttribute] delete', params);
-      yield self.request.send(api.objectUserAttributeRepository.deleteObjectUserAttribute, params);
+      const response = yield self.request.send(
+        api.objectUserAttributeRepository.deleteObjectUserAttribute,
+        params
+      );
 
       if (self.request.isError) {
-        throw new Error('Error deleting attribute: ' + self.request.errorCode);
+        throw new Error(
+          'Error deleting attribute: ' + (response?.error?.message || self.request.errorCode)
+        );
       }
 
       self._value = null;
@@ -109,13 +131,15 @@ export const ObjectUserAttribute = types
         sub_attribute_key: itemName
       };
       console.log('[ObjectUserAttribute] deleteItem', params);
-      yield self.request.send(
+      const response = yield self.request.send(
         api.objectUserAttributeRepository.deleteObjectUserSubAttribute,
         params
       );
 
       if (self.request.isError) {
-        throw new Error('Error deleting attribute item: ' + self.request.errorCode);
+        throw new Error(
+          'Error deleting attribute item: ' + (response?.error?.message || self.request.errorCode)
+        );
       }
     }),
     countAllUsers: flow(function* () {
@@ -125,12 +149,18 @@ export const ObjectUserAttribute = types
         attributeName: self.attributeName
       };
       console.log('[ObjectUserAttribute] countAllUsers', params);
-      const response: {count: number} = yield self.request.send(
+      const response: {count: number; error?: any} = yield self.request.send(
         api.objectUserAttributeRepository.getObjectUserAttributeCount,
         params
       );
 
       console.log('[ObjectUserAttribute] countAllUsers', params, 'resp:', response);
+
+      if (self.request.isError) {
+        throw new Error(
+          'Error counting users: ' + (response?.error?.message || self.request.errorCode)
+        );
+      }
 
       self.count = response?.count || 0;
 
@@ -171,6 +201,12 @@ export const ObjectUserAttribute = types
           q
         }
       );
+
+      if (self.request.isError) {
+        throw new Error(
+          'Error getting users: ' + ((response as any)?.error?.message || self.request.errorCode)
+        );
+      }
 
       if (response) {
         const {items, count} = response;
