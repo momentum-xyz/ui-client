@@ -89,27 +89,27 @@ export const useWorld = (props: UseWorldPropsInterface): UseWorldReturnInterface
       },
       setObjectAttribute(data: any) {
         console.log('[useWorld]: call setObjectAttribute', {data});
-        throw new Error('setObjectAttribute not implemented');
+        return pluginApi.setObjectAttribute(data);
       },
       removeObjectAttribute(data: any) {
         console.log('[useWorld]: call removeObjectAttribute', {data});
-        throw new Error('removeObjectAttribute not implemented');
+        return pluginApi.removeObjectAttribute(data);
       },
       getObjectAttribute(data: any) {
         console.log('[useWorld]: call getObjectAttribute', {data});
-        throw new Error('getObjectAttribute not implemented');
+        return pluginApi.getObjectAttribute(data);
       },
       setObjectColor(objectId: string, color: string | null) {
         console.log('[useWorld]: call setObjectColor', {objectId, color});
-        throw new Error('setObjectColor not implemented');
+        return pluginApi.setObjectColor(objectId, color);
       },
       setObjectName(objectId: string, name: string) {
         console.log('[useWorld]: call setObjectName', {objectId, name});
-        throw new Error('setObjectName not implemented');
+        return pluginApi.setObjectName(objectId, name);
       },
       getObjectInfo(objectId: string) {
         console.log('[useWorld]: call getObjectInfo', {objectId});
-        throw new Error('getObjectInfo not implemented');
+        return pluginApi.getObjectInfo(objectId);
       },
       spawnObject(data: {
         name: string;

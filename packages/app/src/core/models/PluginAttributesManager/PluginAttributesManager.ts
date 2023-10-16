@@ -16,6 +16,8 @@ import {PosBusService} from 'shared/services';
 import {PosBusEventEmitter} from 'core/constants';
 import {Asset3dCategoryEnum} from 'api/enums';
 
+import {ObjectAttribute} from '../ObjectAttribute';
+
 const PluginAttributesManager = types
   .model('PluginAttributesManager', {
     pluginId: types.string,
@@ -31,9 +33,7 @@ const PluginAttributesManager = types
 
     setStateRequest: types.optional(RequestModel, {}),
     deleteStateRequest: types.optional(RequestModel, {}),
-    getConfigRequest: types.optional(RequestModel, {}),
-
-    objectOperationRequest: types.optional(RequestModel, {})
+    getConfigRequest: types.optional(RequestModel, {})
   })
   .actions((self) => ({
     getSpaceAttributeValue: flow(function* <T extends AttributeValueInterface>(
@@ -343,10 +343,12 @@ const PluginAttributesManager = types
           console.log('requestObjectLock', objectId);
           return PosBusService.requestObjectLock(objectId);
         },
+
         requestObjectUnlock: (objectId: string) => {
           console.log('requestObjectUnlock', objectId);
           return PosBusService.requestObjectUnlock(objectId);
         },
+
         spawnObject: async ({
           name,
           asset_2d_id = null,
@@ -363,49 +365,49 @@ const PluginAttributesManager = types
           if (!self.worldId) {
             throw new Error('worldId is not set');
           }
-          const response = await self.objectOperationRequest.send(
-            api.objectRepository.createObject,
-            {
-              parent_id: self.worldId,
-              object_name: name,
-              asset_2d_id: asset_2d_id || undefined,
-              asset_3d_id: asset_3d_id || undefined,
-              object_type_id,
-              transform
-            }
-          );
+          const response = await api.objectRepository.createObject({
+            parent_id: self.worldId,
+            object_name: name,
+            asset_2d_id: asset_2d_id || undefined,
+            asset_3d_id: asset_3d_id || undefined,
+            object_type_id,
+            transform
+          });
 
-          if (self.objectOperationRequest.isError || !response) {
-            throw Error('Unknown error');
+          console.log('spawnObject', response);
+          if (response.status >= 300) {
+            throw Error(response.statusText);
           }
-
-          return response;
+          return response.data;
         },
+
         transformObject: (objectId: string, objectTransform: Transform) => {
           PosBusService.sendObjectTransform(objectId, objectTransform);
         },
+
+        getObjectInfo: async (objectId: string) => {
+          const response = await api.objectInfoRepository.getObjectInfo({objectId});
+          console.log('getObjectInfo', response);
+          if (response.status >= 300) {
+            throw Error(response.statusText);
+          }
+          return response.data;
+        },
+
         removeObject: async (objectId: string) => {
-          await self.objectOperationRequest.send(api.objectRepository.deleteObject, {
+          const response = await api.objectRepository.deleteObject({
             objectId
           });
 
-          if (self.objectOperationRequest.isError) {
-            throw Error('Unknown error');
+          console.log('removeObject', response);
+          if (response.status >= 300) {
+            throw Error(response.statusText);
           }
+
+          return response.data;
         },
+
         getSupportedAssets3d: async (category: 'basic' | 'custom') => {
-          // const response = await self.objectOperationRequest.send(
-          //   api.assets3dRepository.fetchAssets3d,
-          //   {
-          //     category: category as Asset3dCategoryEnum
-          //   }
-          // );
-
-          // if (self.objectOperationRequest.isError || !response) {
-          //   throw Error('Unknown error');
-          // }
-
-          // return response as any; // TODO
           const response = await api.assets3dRepository.fetchAssets3d(
             {
               category: category as Asset3dCategoryEnum
@@ -413,37 +415,76 @@ const PluginAttributesManager = types
             undefined as any
           );
           console.log('getSupportedAssets3d', response);
-          if (response.status !== 200) {
+          if (response.status >= 300) {
             throw Error(response.statusText);
           }
           return response.data;
         },
 
-        setObjectAttribute: (props: {
+        setObjectAttribute: ({
+          name,
+          value,
+          objectId
+        }: {
           name: string;
           value: any;
           objectId: string;
           // pluginId?: string
-        }) => Promise.reject(),
+        }) => {
+          const model = ObjectAttribute.create({
+            objectId,
+            attributeName: name
+          });
+          return model.set(value);
+        },
 
         removeObjectAttribute: ({
           name,
-          objectId,
-          pluginId
-        }: {
+          objectId
+        }: // pluginId
+        {
           name: string;
           objectId: string;
           pluginId?: string;
-        }) => Promise.reject(),
+        }) => {
+          const model = ObjectAttribute.create({
+            objectId,
+            attributeName: name
+          });
+          return model.delete();
+        },
+
         getObjectAttribute: ({
           name,
-          objectId,
-          pluginId
-        }: {
+          objectId
+        }: // pluginId
+        {
           name: string;
           objectId: string;
           pluginId?: string;
-        }) => Promise.reject()
+        }) => {
+          const model = ObjectAttribute.create({
+            objectId,
+            attributeName: name
+          });
+          return model.load();
+        },
+
+        setObjectColor: (objectId: string, color: string | null) => {
+          const model = ObjectAttribute.create({
+            objectId,
+            attributeName: 'object_color'
+          });
+          return model.set({value: color});
+        },
+
+        setObjectName: (objectId: string, name: string) => {
+          const model = ObjectAttribute.create({
+            objectId,
+            attributeName: 'name'
+          });
+          return model.set({value: name});
+        }
       };
     }
   }));

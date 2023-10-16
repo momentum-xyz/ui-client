@@ -42,6 +42,7 @@ export const ObjectGlobalPropsContext = createContext<PluginPropsInterface>({
     transformObject(objectId, transform) {
       throw new Error('Method not implemented.');
     },
+    getObjectInfo: (objectId: string) => Promise.reject(),
     removeObject: (objectId: string) => Promise.reject(),
     getSupportedAssets3d: (category: 'basic' | 'custom') => Promise.reject(),
 
@@ -69,7 +70,13 @@ export const ObjectGlobalPropsContext = createContext<PluginPropsInterface>({
       name: string;
       objectId: string;
       pluginId?: string;
-    }) => Promise.reject()
+    }) => Promise.reject(),
+    setObjectColor(objectId, color) {
+      throw new Error('Method not implemented.');
+    },
+    setObjectName(objectId, name) {
+      throw new Error('Method not implemented.');
+    }
   },
   onClose: () => {}
 });

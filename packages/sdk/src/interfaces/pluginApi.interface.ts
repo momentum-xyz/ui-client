@@ -2,6 +2,7 @@ import {
   Asset3d,
   ObjectData,
   ObjectDefinition,
+  ObjectInfo,
   SetWorld,
   Transform,
   TransformNoScale,
@@ -51,6 +52,7 @@ export interface PluginApiInterface<C = unknown> {
     transform?: Transform;
   }): Promise<any>;
   transformObject: (objectId: string, transform: Transform) => void;
+  getObjectInfo(objectId: string): Promise<ObjectInfo>;
   removeObject(objectId: string): Promise<any>;
   getSupportedAssets3d(category: 'basic' | 'custom'): Promise<Asset3d[]>;
 
@@ -70,4 +72,6 @@ export interface PluginApiInterface<C = unknown> {
     objectId: string;
     // pluginId?: string
   }): Promise<any>;
+  setObjectColor(objectId: string, color: string | null): Promise<any>;
+  setObjectName(objectId: string, name: string): Promise<any>;
 }
