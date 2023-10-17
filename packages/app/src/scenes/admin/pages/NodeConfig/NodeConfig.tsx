@@ -332,8 +332,12 @@ type TabsType = 'blockchain' | 'api_keys' | 'mapping' | 'reg';
 const TABS_LIST: TabInterface<TabsType>[] = [
   {id: 'blockchain', icon: 'connect', label: 'Blockchain registration'},
   {id: 'api_keys', icon: 'key', label: 'API Keys'},
-  {id: 'mapping', icon: 'info', label: 'mapping'},
-  {id: 'reg', icon: 'info', label: 'test register'}
+  ...((process.env.NODE_ENV === 'development'
+    ? [
+        {id: 'mapping', icon: 'info', label: 'mapping'},
+        {id: 'reg', icon: 'info', label: 'test register'}
+      ]
+    : []) as TabInterface<TabsType>[])
 ];
 
 const NodeConfig = () => {

@@ -341,6 +341,11 @@ export const useBlockchain = ({
       });
 
       const tokenContract = tokenKind === TokenEnum.MOM_TOKEN ? momContract : dadContract;
+      console.log('useBlockchain addNodeWithMom tokenContract', {
+        tokenKind,
+        momContract,
+        dadContract
+      });
 
       const res = await tokenContract?.methods
         .approve(appVariables.CONTRACT_MAPPING_ADDRESS, feeAmount)
@@ -370,11 +375,6 @@ export const useBlockchain = ({
         pubkey,
         feeAmount
       });
-
-      // const res = await tokenContract?.methods
-      //   .approve(appVariables.CONTRACT_MAPPING_ADDRESS, feeAmount)
-      //   .send({from: account});
-      // console.log('useBlockchain addNodeWithEth approve result', res);
 
       await mappingContract?.methods.addNodeWithEth(hexNodeId, hostname, name, pubkey).send({
         from: account
@@ -456,9 +456,6 @@ export const useBlockchain = ({
       const hexOdysseyId = uuidToHex(odyssey_id);
       console.log('useBlockchain setNodeMapping', {node_id, odyssey_id, hexNodeId, hexOdysseyId});
 
-      // const nodeIdUint256 = new BN(uuidToHex(node_id, false), 16).toArray('be', 32);
-      // const odysseyIdUint256 = new BN(uuidToHex(odyssey_id, false), 16).toArray('be', 32);
-      // const challenge = Uint8Array.from([...nodeIdUint256, ...odysseyIdUint256]);
       const nodeIdUint256 = ethers.BigNumber.from(uuidToHex(node_id));
       const odysseyIdUint256 = ethers.BigNumber.from(uuidToHex(odyssey_id));
       const message = ethers.utils.solidityKeccak256(
@@ -477,8 +474,7 @@ export const useBlockchain = ({
       console.log('useBlockchain setNodeMapping signature:', signature);
 
       await mappingContract?.methods
-        // .setNodeMapping(hexNodeId, hexOdysseyId, signature) // TODO uncomment this after fixed in the contract
-        .setNodeMaping(hexNodeId, hexOdysseyId, signature)
+        .setNodeMapping(hexNodeId, hexOdysseyId, signature)
         .send({from: account});
     },
     [account, mappingContract, signChallenge]
