@@ -1,5 +1,6 @@
 import {useCallback, useMemo, useState} from 'react';
 import Web3 from 'web3';
+import {ethers} from 'ethers';
 import BN from 'bn.js';
 import {TokenEnum} from '@momentum-xyz/core';
 import dayjs from 'dayjs';
@@ -13,11 +14,13 @@ import {
   getDateOfNextAllowedAirdrop,
   saveLastAirdropInfo as originalSaveLastAirdropInfo
 } from 'core/utils';
+import {NodeConfigInterface} from 'core/models';
 
 import stackingABI from './contract_staking.ABI.json';
 import momABI from './contract_MOM.ABI.json';
 import dadABI from './contract_DAD.ABI.json';
 import faucetABI from './contract_faucet.ABI.json';
+import mappingABI from './contract_mapping.ABI.json';
 
 const DELAY_REFRESH_DATA_MS = 2000;
 
@@ -49,6 +52,10 @@ export interface UnbondingInfoInterface {
   unstakes: ResolvedUnstakeInterface[];
 }
 
+const uuidToHex = (uuid: string, add0x = true) => {
+  return (add0x ? '0x' : '') + uuid.replace(/-/g, '');
+};
+
 export const useBlockchain = ({
   requiredAccountAddress,
   requiredChainId,
@@ -59,32 +66,39 @@ export const useBlockchain = ({
 
   const [account, setAccount] = useState<string>();
   const [library, setLibrary] = useState<any>();
+  const [signChallenge, setSignChallenge] = useState<(challenge: string) => Promise<string>>();
   const [isWrongNetwork, setIsWrongNetwork] = useState(false);
   const [isWalletActive, setIsWalletActive] = useState<boolean | undefined>();
 
   const isCorrectAccount = account === requiredAccountAddress;
 
-  const [stakingContract, momContract, dadContract, faucetContract] = useMemo(() => {
-    if (!library) {
-      return [];
-    }
-    const web3 = new Web3(library.provider);
+  const [stakingContract, momContract, dadContract, faucetContract, mappingContract] =
+    useMemo(() => {
+      if (!library) {
+        return [];
+      }
+      const web3 = new Web3(library.provider);
 
-    const stakingContract = new web3.eth.Contract(
-      stackingABI as any,
-      appVariables.CONTRACT_STAKING_ADDRESS
-    );
+      const stakingContract = new web3.eth.Contract(
+        stackingABI as any,
+        appVariables.CONTRACT_STAKING_ADDRESS
+      );
 
-    const momContract = new web3.eth.Contract(momABI as any, appVariables.CONTRACT_MOM_ADDRESS);
-    const dadContract = new web3.eth.Contract(dadABI as any, appVariables.CONTRACT_DAD_ADDRESS);
+      const momContract = new web3.eth.Contract(momABI as any, appVariables.CONTRACT_MOM_ADDRESS);
+      const dadContract = new web3.eth.Contract(dadABI as any, appVariables.CONTRACT_DAD_ADDRESS);
 
-    const faucetContract = new web3.eth.Contract(
-      faucetABI as any,
-      appVariables.CONTRACT_FAUCET_ADDRESS
-    );
+      const faucetContract = new web3.eth.Contract(
+        faucetABI as any,
+        appVariables.CONTRACT_FAUCET_ADDRESS
+      );
 
-    return [stakingContract, momContract, dadContract, faucetContract];
-  }, [library]);
+      const mappingContract = new web3.eth.Contract(
+        mappingABI as any,
+        appVariables.CONTRACT_MAPPING_ADDRESS
+      );
+
+      return [stakingContract, momContract, dadContract, faucetContract, mappingContract];
+    }, [library]);
 
   const stake = useCallback(
     async (worldId: string, amount: BN, tokenKind = TokenEnum.MOM_TOKEN) => {
@@ -101,7 +115,7 @@ export const useBlockchain = ({
         .send({from: account});
       console.log('useBlockchain stake approve result', res);
 
-      const nftId = '0x' + worldId.replace(/-/g, '');
+      const nftId = uuidToHex(worldId);
 
       console.log('useBlockchain stake into nftId', nftId, amount, tokenKind);
       const result = await stakingContract?.methods
@@ -124,7 +138,7 @@ export const useBlockchain = ({
         return;
       }
 
-      const nftId = '0x' + worldId.replace(/-/g, '');
+      const nftId = uuidToHex(worldId);
 
       console.log('useBlockchain unstake from nftId', nftId, tokenKind);
       const result = await stakingContract?.methods.unstake(nftId, tokenKind).send({from: account});
@@ -302,6 +316,195 @@ export const useBlockchain = ({
     return balance.toString();
   }, [library, account, isCorrectAccount]);
 
+  const addNodeWithMom = useCallback(
+    async (
+      node_id: string,
+      hostname: string,
+      name: string,
+      pubkey: string,
+      feeAmount: BN,
+      tokenKind = TokenEnum.MOM_TOKEN
+    ) => {
+      const hexNodeId = uuidToHex(node_id);
+
+      if (!pubkey.startsWith('0x')) {
+        pubkey = '0x' + pubkey;
+      }
+
+      console.log('useBlockchain addNodeWithMom', {
+        node_id,
+        hexNodeId,
+        hostname,
+        name,
+        pubkey,
+        tokenKind
+      });
+
+      const tokenContract = tokenKind === TokenEnum.MOM_TOKEN ? momContract : dadContract;
+      console.log('useBlockchain addNodeWithMom tokenContract', {
+        tokenKind,
+        momContract,
+        dadContract
+      });
+
+      const res = await tokenContract?.methods
+        .approve(appVariables.CONTRACT_MAPPING_ADDRESS, feeAmount)
+        .send({from: account});
+      console.log('useBlockchain addNodeWithMom approve result', res);
+
+      await mappingContract?.methods.addNodeWithMom(hexNodeId, hostname, name, pubkey).send({
+        from: account
+      });
+    },
+    [account, dadContract, mappingContract, momContract]
+  );
+
+  const addNodeWithEth = useCallback(
+    async (node_id: string, hostname: string, name: string, pubkey: string, feeAmount: BN) => {
+      const hexNodeId = uuidToHex(node_id);
+
+      if (!pubkey.startsWith('0x')) {
+        pubkey = '0x' + pubkey;
+      }
+
+      console.log('useBlockchain addNodeWithEth', {
+        node_id,
+        hexNodeId,
+        hostname,
+        name,
+        pubkey,
+        feeAmount
+      });
+
+      await mappingContract?.methods.addNodeWithEth(hexNodeId, hostname, name, pubkey).send({
+        from: account
+      });
+    },
+    [account, mappingContract]
+  );
+
+  const updateNode = useCallback(
+    async (node_id: string, hostname: string, name: string) => {
+      const hexNodeId = uuidToHex(node_id);
+      console.log('useBlockchain updateNode', {node_id, hexNodeId, hostname, name});
+
+      await mappingContract?.methods.updateNode(hexNodeId, hostname, name).send({from: account});
+    },
+    [account, mappingContract]
+  );
+
+  const removeNode = useCallback(
+    async (node_id: string) => {
+      const hexNodeId = uuidToHex(node_id);
+      console.log('useBlockchain removeNode', {node_id, hexNodeId});
+
+      await mappingContract?.methods.removeNode(hexNodeId).send({from: account});
+    },
+    [account, mappingContract]
+  );
+
+  const getNodeInfo = useCallback(
+    async (node_id: string): Promise<NodeConfigInterface | null> => {
+      const hexNodeId = uuidToHex(node_id);
+      console.log('useBlockchain getNodeInfo', {node_id, hexNodeId});
+
+      try {
+        const nodeInfo = await mappingContract?.methods.getNode(hexNodeId).call();
+
+        console.log('useBlockchain getNodeInfo result', nodeInfo);
+
+        return nodeInfo;
+      } catch (e) {
+        console.log('useBlockchain getNodeInfo error', e);
+        return null;
+      }
+    },
+    [mappingContract]
+  );
+
+  const getNodeAddingFees = useCallback(async () => {
+    const feeMom = await mappingContract?.methods.feeMom().call();
+    const feeETH = await mappingContract?.methods.feeETH().call();
+    return {
+      feeMom,
+      feeETH
+    };
+  }, [mappingContract]);
+
+  const setOdysseyMapping = useCallback(
+    async (node_id: string, odyssey_id: string, signed_challenge: string) => {
+      const hexNodeId = uuidToHex(node_id);
+      const hexOdysseyId = uuidToHex(odyssey_id);
+      console.log('useBlockchain setOdysseyMapping', {
+        node_id,
+        odyssey_id,
+        hexNodeId,
+        hexOdysseyId,
+        signed_challenge
+      });
+
+      await mappingContract?.methods
+        .setOdysseyMapping(hexNodeId, hexOdysseyId, signed_challenge)
+        .send({from: account});
+    },
+    [account, mappingContract]
+  );
+
+  const setNodeMapping = useCallback(
+    async (node_id: string, odyssey_id: string) => {
+      const hexNodeId = uuidToHex(node_id);
+      const hexOdysseyId = uuidToHex(odyssey_id);
+      console.log('useBlockchain setNodeMapping', {node_id, odyssey_id, hexNodeId, hexOdysseyId});
+
+      const nodeIdUint256 = ethers.BigNumber.from(uuidToHex(node_id));
+      const odysseyIdUint256 = ethers.BigNumber.from(uuidToHex(odyssey_id));
+      const message = ethers.utils.solidityKeccak256(
+        ['uint256', 'uint256'],
+        [nodeIdUint256, odysseyIdUint256]
+      );
+      const challenge = ethers.utils.arrayify(message);
+
+      console.log('useBlockchain setNodeMapping challenge', challenge);
+
+      if (!signChallenge) {
+        throw new Error('Missing signMessage');
+      }
+      console.log('useBlockchain setNodeMapping signChallenge', challenge);
+      const signature = await signChallenge(challenge as any);
+      console.log('useBlockchain setNodeMapping signature:', signature);
+
+      await mappingContract?.methods
+        .setNodeMapping(hexNodeId, hexOdysseyId, signature)
+        .send({from: account});
+    },
+    [account, mappingContract, signChallenge]
+  );
+
+  const removeMapping = useCallback(
+    async (node_id: string, odyssey_id: string) => {
+      const hexNodeId = uuidToHex(node_id);
+      const hexOdysseyId = uuidToHex(odyssey_id);
+      console.log('useBlockchain removeMapping', {node_id, odyssey_id, hexNodeId, hexOdysseyId});
+
+      await mappingContract?.methods.removeMapping(hexNodeId, hexOdysseyId).send({from: account});
+    },
+    [account, mappingContract]
+  );
+
+  const getNodeForTheOdyssey = useCallback(
+    async (odyssey_id: string) => {
+      const hexOdysseyId = uuidToHex(odyssey_id);
+      console.log('useBlockchain getNodeForOdyssey', {odyssey_id, hexOdysseyId});
+
+      const nodeInfo = await mappingContract?.methods.getNodeForTheOdyssey(hexOdysseyId).call();
+
+      console.log('useBlockchain getNodeForOdyssey result', nodeInfo);
+
+      return nodeInfo;
+    },
+    [mappingContract]
+  );
+
   const walletSelectContent =
     selectedWalletConf === dummyWalletConf ? (
       <WalletSelector
@@ -320,6 +523,7 @@ export const useBlockchain = ({
         wrongChainErrorMessage={wrongChainErrorMessage}
         onActivationDone={setIsWalletActive}
         onSelectedAccountChanged={setAccount}
+        onSignChallengeLoaded={(signChallenge) => setSignChallenge(() => signChallenge)}
         onLibraryLoaded={setLibrary}
         onNetworkStatusChanged={setIsWrongNetwork}
       />
@@ -330,11 +534,12 @@ export const useBlockchain = ({
 
   const contractsCreated = !!stakingContract && !!momContract && !!dadContract && !!faucetContract;
 
-  return {
+  console.log('useBlockchain', {
     isBlockchainReady:
       !!library && contractsCreated && isWalletActive && isCorrectAccount && !isWrongNetwork,
     account,
     walletSelectContent,
+    signChallenge,
     canRequestAirdrop,
     dateOfNextAllowedAirdrop,
     sendEthers,
@@ -345,6 +550,45 @@ export const useBlockchain = ({
     getRewards,
     claimRewards,
     getUnstakes,
-    claimUnstakedTokens
+    claimUnstakedTokens,
+    addNodeWithMom,
+    addNodeWithEth,
+    updateNode,
+    removeNode,
+    getNodeInfo,
+    getNodeAddingFees,
+    setOdysseyMapping,
+    setNodeMapping,
+    removeMapping,
+    getNodeForTheOdyssey
+  });
+
+  return {
+    isBlockchainReady:
+      !!library && contractsCreated && isWalletActive && isCorrectAccount && !isWrongNetwork,
+    account,
+    walletSelectContent,
+    signChallenge,
+    canRequestAirdrop,
+    dateOfNextAllowedAirdrop,
+    sendEthers,
+    getBalanceEthers,
+    stake,
+    unstake,
+    getTokens,
+    getRewards,
+    claimRewards,
+    getUnstakes,
+    claimUnstakedTokens,
+    addNodeWithMom,
+    addNodeWithEth,
+    updateNode,
+    removeNode,
+    getNodeInfo,
+    getNodeAddingFees,
+    setOdysseyMapping,
+    setNodeMapping,
+    removeMapping,
+    getNodeForTheOdyssey
   };
 };

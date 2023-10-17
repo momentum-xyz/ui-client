@@ -8,6 +8,7 @@ const World2dPage = lazy(() => import('./world/pages/World2dPage/World2dPage'));
 const DisconnectedPage = lazy(() => import('./system/pages/DisconnectedPage/DisconnectedPage'));
 const WrongBrowserPage = lazy(() => import('./system/pages/WrongBrowserPage/WrongBrowserPage'));
 const MaintenancePage = lazy(() => import('./system/pages/MaintenancePage/MaintenancePage'));
+const NodeConfigPage = lazy(() => import('./admin/pages/NodeConfig/NodeConfig'));
 
 export const SYSTEM_ROUTES: RouteConfigInterface[] = [
   {
@@ -40,6 +41,14 @@ export const WORLD_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.odyssey.base,
     main: () => <World2dPage />,
+    exact: true
+  }
+];
+
+export const ADMIN_ROUTES: RouteConfigInterface[] = [
+  {
+    path: ROUTES.admin.base,
+    main: () => <NodeConfigPage />,
     exact: true
   }
 ];

@@ -15,6 +15,7 @@ interface WalletSelectHelperPropsInterface {
   onActivationDone: (isSuccess: boolean) => void;
   onSelectedAccountChanged: (account: string) => void;
   onLibraryLoaded: (library: any) => void;
+  onSignChallengeLoaded: (signChallenge: (challenge: string) => Promise<string>) => void;
   onNetworkStatusChanged: (isWrongNetwork: boolean) => void;
 }
 
@@ -26,13 +27,14 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
   onActivationDone,
   onSelectedAccountChanged,
   onLibraryLoaded,
+  onSignChallengeLoaded,
   onNetworkStatusChanged
 }) => {
   const {useWallet} = walletConf;
   const walletProps = {appVariables: appVariables as any, onActivationDone};
 
   const {t} = useI18n();
-  const {web3Library, chainId, account, activate, isActive} = useWallet(walletProps);
+  const {web3Library, chainId, account, signChallenge, activate, isActive} = useWallet(walletProps);
 
   console.log('WalletSelectHelper', {
     web3Library,
@@ -54,6 +56,12 @@ const WalletSelectHelper: FC<WalletSelectHelperPropsInterface> = ({
       onLibraryLoaded(web3Library);
     }
   }, [web3Library, onLibraryLoaded]);
+
+  useEffect(() => {
+    if (signChallenge) {
+      onSignChallengeLoaded(signChallenge);
+    }
+  }, [signChallenge, onSignChallengeLoaded]);
 
   const isWrongNetwork = !!chainId && chainId !== requiredChainId;
 

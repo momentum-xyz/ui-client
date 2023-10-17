@@ -1,6 +1,7 @@
 import * as versionRepository from './repositories/versionRepository';
 import * as configRepository from './repositories/configRepository';
 import * as authRepository from './repositories/authRepository';
+import * as nodeRepository from './repositories/nodeRepository';
 import * as web3Repository from './repositories/web3Repository';
 import * as userRepository from './repositories/userRepository';
 import * as worldRepository from './repositories/worldRepository';
@@ -8,6 +9,7 @@ import * as userProfileRepository from './repositories/userProfileRepository';
 import * as pluginsRepository from './repositories/pluginsRepository';
 import * as objectAttributeRepository from './repositories/objectAttributeRepository';
 import * as userAttributeRepository from './repositories/userAttributeRepository';
+import * as nodeAttributeRepository from './repositories/nodeAttributeRepository';
 import * as mediaRepository from './repositories/mediaRepository';
 import * as newsfeedRepository from './repositories/newsfeedRepository';
 import * as timelineRepository from './repositories/timelineRepository';
@@ -38,6 +40,7 @@ export const api = {
   versionRepository,
   configRepository,
   authRepository,
+  nodeRepository,
   web3Repository,
   worldRepository,
   userRepository,
@@ -48,6 +51,7 @@ export const api = {
   objectAttributeRepository,
   userAttributeRepository,
   objectUserAttributeRepository,
+  nodeAttributeRepository,
   mediaRepository,
   newsfeedRepository,
   timelineRepository,
@@ -71,6 +75,7 @@ export const api = {
 export * from './repositories/versionRepository/versionRepository.api.types';
 export * from './repositories/configRepository/configRepository.api.types';
 export * from './repositories/authRepository/authRepository.api.types';
+export * from './repositories/nodeRepository/nodeRepository.api.types';
 export * from './repositories/web3Repository/web3Repository.api.types';
 export * from './repositories/userRepository/userRepository.api.types';
 export * from './repositories/userProfileRepository/userProfileRepository.api.types';
@@ -78,6 +83,7 @@ export * from './repositories/worldRepository/worldRepository.api.types';
 export * from './repositories/pluginsRepository/pluginsRepository.api.types';
 export * from './repositories/objectAttributeRepository/objectAttribute.api.types';
 export * from './repositories/userAttributeRepository/userAttributeRepository.api.types';
+export * from './repositories/nodeAttributeRepository/nodeAttributeRepository.api.types';
 export * from './repositories/mediaRepository/mediaRepository.api.types';
 export * from './repositories/newsfeedRepository/newsfeedRepository.api.types';
 export * from './repositories/timelineRepository/timelineRepository.api.types';
