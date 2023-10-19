@@ -34,6 +34,18 @@ const MediaUploader = types.compose(
         );
 
         return fileResponse?.hash || null;
+      }),
+      uploadPlugin: flow(function* (file?: File) {
+        if (!file) {
+          return null;
+        }
+
+        const fileResponse: UploadFileResponse = yield self.fileRequest.send(
+          api.mediaRepository.uploadPlugin,
+          {file: file}
+        );
+
+        return fileResponse?.hash || null;
       })
     }))
     .actions((self) => ({

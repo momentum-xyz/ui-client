@@ -2,7 +2,7 @@ import {types, flow, cast} from 'mobx-state-tree';
 import {RequestModel} from '@momentum-xyz/core';
 
 import {api} from 'api';
-import {DynamicScriptList, PluginAttributesManager, PluginLoader} from 'core/models';
+import {DynamicScriptList, MediaUploader, PluginAttributesManager, PluginLoader} from 'core/models';
 import {getRootStore} from 'core/utils';
 
 interface PluginInfoInterface {
@@ -42,7 +42,10 @@ export const PluginStore = types
     //   {}
     // ),
 
-    pluginsRequest: types.optional(RequestModel, {})
+    _plugins: types.optional(types.frozen<PluginInfoInterface[]>(), []),
+
+    pluginsRequest: types.optional(RequestModel, {}),
+    mediaUploader: types.optional(MediaUploader, {})
   })
   .actions((self) => ({
     init: flow(function* () {
@@ -52,6 +55,7 @@ export const PluginStore = types
         {}
       );
       console.log('pluginsResponse', pluginsResponse);
+      self._plugins = pluginsResponse || [];
 
       // if (pluginsResponse) {
       // self.pluginInfosByScopes = pluginsResponse.plugins;
@@ -123,5 +127,8 @@ export const PluginStore = types
   .views((self) => ({
     pluginsByScope(scope: string) {
       return self.pluginLoadersByScopes.get(scope) || [];
+    },
+    get plugins() {
+      return self._plugins.filter((plugin) => !!plugin.meta.scopeName);
     }
   }));

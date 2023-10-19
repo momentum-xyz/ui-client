@@ -54,3 +54,20 @@ export const uploadAudio: RequestInterface<UploadFileRequest, UploadFileResponse
 
   return request.post(mediaRepositoryEndpoints().uploadAudio, formData, requestOptions);
 };
+
+export const uploadPlugin: RequestInterface<UploadFileRequest, UploadFileResponse> = (options) => {
+  const {file, headers, ...restOptions} = options;
+
+  const formData: FormData = new FormData();
+  formData.append('file', file);
+
+  const requestOptions = {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      ...headers
+    },
+    ...restOptions
+  };
+
+  return request.post(mediaRepositoryEndpoints().uploadPlugin, formData, requestOptions);
+};

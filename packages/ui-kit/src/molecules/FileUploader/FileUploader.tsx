@@ -15,7 +15,7 @@ export interface FileUploaderPropsInterface {
   withFrame?: boolean;
   onFilesUpload: (file: File | undefined) => void;
   onError?: (error: Error) => void;
-  fileType?: 'image' | 'video' | 'audio' | 'asset';
+  fileType?: keyof typeof ALLOWED_EXTENSIONS;
   maxSize?: number;
   enableDragAndDrop?: boolean;
   disabled?: boolean;
@@ -26,6 +26,7 @@ const ALLOWED_EXTENSIONS = {
   image: {'image/*': ['.jpeg', '.png', '.jpg', '.svg', '.gif']},
   video: {'video/*': ['.mp4', '.mov', '.wmv', '.mpeg', '.webm', '.mkv']},
   audio: {'audio/*': ['.mp3', '.ogg', '.aac', '.webm', '.flac']},
+  archive: {'application/gzip': ['.tar.gz']},
   asset: {'model/gltf-binary': ['.glb']}
 };
 
