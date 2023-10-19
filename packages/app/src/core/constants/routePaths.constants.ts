@@ -10,5 +10,8 @@ export const ROUTES = {
     disconnected: '/system/disconnected',
     maintenance: '/system/maintenance',
     wrongBrowser: '/system/wrongBrowser'
+  },
+  admin: {
+    base: '/admin'
   }
 };

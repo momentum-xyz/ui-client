@@ -1,6 +1,7 @@
 export * from './versionRepository';
 export * from './configRepository';
 export * from './authRepository';
+export * from './nodeRepository';
 export * from './web3Repository';
 export * from './userRepository';
 export * from './userProfileRepository';
@@ -18,3 +19,4 @@ export * from './assets2dRepository';
 export * from './agoraRepository';
 export * from './streamChatRepository';
 export * from './objectUserAttributeRepository';
+export * from './nodeAttributeRepository';

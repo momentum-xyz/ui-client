@@ -11,12 +11,14 @@ import {AgoraStore} from './AgoraStore';
 import {SentryStore} from './SentryStore';
 import {WidgetManagerStore} from './WidgetManagerStore';
 import {MusicStore} from './MusicStore';
+import {AdminStore} from './AdminStore';
 import {PluginStore} from './PluginStore';
 
 const RootStore = types
   .model('RootStore', {
     /* Connect core stores */
     configStore: types.optional(ConfigStore, {}),
+    adminStore: types.optional(AdminStore, {}),
     nftStore: types.optional(NftStore, {}),
     themeStore: types.optional(ThemeStore, {}),
     sessionStore: types.optional(SessionStore, {}),

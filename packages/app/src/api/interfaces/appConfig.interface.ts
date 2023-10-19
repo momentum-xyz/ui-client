@@ -23,6 +23,7 @@ export interface AppConfigInterface {
   CONTRACT_DAD_ADDRESS: string;
   CONTRACT_NFT_ADDRESS: string;
   CONTRACT_FAUCET_ADDRESS: string;
+  CONTRACT_MAPPING_ADDRESS: string;
   MINT_NFT_AMOUNT: string;
   MINT_NFT_DEPOSIT_ADDRESS: string;
   NODE_ID: string;

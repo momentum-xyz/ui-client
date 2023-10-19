@@ -29,3 +29,5 @@ export * from './SoundPlayerTrack';
 export * from './SoundPlayerTime';
 export * from './TextLinkify';
 export * from './Round';
+export * from './Separator';
+export * from './Heading';
