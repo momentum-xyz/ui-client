@@ -25,6 +25,17 @@ export const Container = styled.div`
       box-shadow: none;
     }
   }
+
+  &.withFrame {
+    position: relative;
+    padding-top: 0px;
+    margin-top: 0px;
+
+    padding: 45px;
+    border: 1px dashed ${(props) => props.theme.text};
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
 `;
 
 export const DropZone = styled.div`

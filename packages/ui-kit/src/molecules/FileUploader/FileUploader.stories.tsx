@@ -27,3 +27,16 @@ General.args = {
     console.log(file);
   }
 };
+
+export const WithFrame = Template.bind({});
+WithFrame.args = {
+  fileType: 'image',
+  label: 'Choose image',
+  dragActiveLabel: 'Some content should be there.',
+  withFrame: true,
+  enableDragAndDrop: true,
+  maxSize: 50_100_000,
+  onFilesUpload: (file) => {
+    console.log(file);
+  }
+};

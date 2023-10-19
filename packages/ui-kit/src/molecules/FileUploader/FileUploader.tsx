@@ -12,6 +12,7 @@ export interface FileUploaderPropsInterface {
   buttonSize?: 'small' | 'normal' | 'medium';
   iconButton?: boolean;
   dragActiveLabel: string;
+  withFrame?: boolean;
   onFilesUpload: (file: File | undefined) => void;
   onError?: (error: Error) => void;
   fileType?: 'image' | 'video' | 'audio' | 'asset';
@@ -39,6 +40,7 @@ const FileUploader: FC<FileUploaderPropsInterface> = ({
   dragActiveLabel,
   buttonSize = 'normal',
   iconButton,
+  withFrame,
   onFilesUpload,
   onError,
   fileType,
@@ -73,7 +75,10 @@ const FileUploader: FC<FileUploaderPropsInterface> = ({
   const {onClick, ...restRootProps} = getRootProps();
 
   return (
-    <styled.Container data-testid="FileUploader-test" className={cn(iconButton && 'iconButton')}>
+    <styled.Container
+      data-testid="FileUploader-test"
+      className={cn(iconButton && 'iconButton', withFrame && 'withFrame')}
+    >
       {enableDragAndDrop && <styled.DropZone {...restRootProps} />}
       <input {...getInputProps()} disabled={disabled} data-testid="FileUploader-input-test" />
       {isDragActive ? (
