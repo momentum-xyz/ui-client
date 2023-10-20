@@ -49,7 +49,7 @@ switch (script) {
 
 switch (script) {
   case 'build':
-    generateAndStoreMetadata();
+    generateAndStoreManifest();
     break;
   default:
     break;
@@ -78,7 +78,7 @@ function spawnProcess(command, args, env) {
   // process.exit(child.status);
 }
 
-function generateAndStoreMetadata() {
+function generateAndStoreManifest() {
   const {
     name,
     version,
@@ -90,7 +90,7 @@ function generateAndStoreMetadata() {
     attribute_types = [],
     scopes = []
   } = packageJSON;
-  const metadata = {
+  const manifest = {
     name,
     version,
     description,
@@ -101,7 +101,15 @@ function generateAndStoreMetadata() {
     attribute_types,
     scopes
   };
-  const filename = path.resolve(BUILD_DIR, 'metadata.json');
-  fs.writeFileSync(filename, JSON.stringify(metadata, null, 2));
-  console.log('[momentum-plugin] Metadata generated and stored in', filename);
+  const filename = path.resolve(BUILD_DIR, 'manifest.json');
+  fs.writeFileSync(filename, JSON.stringify(manifest, null, 2));
+  console.log('[momentum-plugin] Manifest generated and stored in', filename);
+
+  const versionedDir = `./${name}-${version}`;
+
+  fs.renameSync(BUILD_DIR, versionedDir);
+  console.log('[momentum-plugin] Plugin build stored in', BUILD_DIR);
+
+  spawnProcess('tar', ['-czf', `${versionedDir}.tar.gz`, versionedDir], {});
+  console.log('[momentum-plugin] Plugin tarball generated: ', `${versionedDir}.tar.gz`);
 }
