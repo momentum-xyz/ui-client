@@ -10,7 +10,7 @@ import * as styled from './PluginsManagement.styled';
 const MAX_FILE_SIZE = 20_000_000;
 
 const PluginsManagement: FC = () => {
-  const {pluginStore} = useStore();
+  const {pluginStore, adminStore} = useStore();
 
   const [fileToUpload, setFileToUpload] = useState<File>();
   const [error, setError] = useState<string>();
@@ -28,6 +28,9 @@ const PluginsManagement: FC = () => {
       setError('Error uploading plugin');
       return;
     }
+
+    console.log('Activate plugin with hash', hash);
+    await adminStore.activatePlugin(hash);
 
     setFileToUpload(undefined);
 

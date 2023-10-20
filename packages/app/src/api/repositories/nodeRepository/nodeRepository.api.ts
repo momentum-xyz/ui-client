@@ -4,6 +4,7 @@ import {request} from 'api/request';
 import {RequestInterface} from 'api/interfaces';
 
 import {
+  ActivatePluginRequest,
   AddToHostingAllowListRequest,
   GetHostingAllowListRequest,
   GetHostingAllowListResponse,
@@ -45,4 +46,8 @@ export const removeFromHostingAllowList: RequestInterface<
     generatePath(configRepositoryEndpoints().hostingAllowListRemove, {userId: user_id}),
     restOptions
   );
+};
+
+export const activatePlugin: RequestInterface<ActivatePluginRequest, null> = (options) => {
+  return request.post(configRepositoryEndpoints().activatePlugin, options);
 };

@@ -4,6 +4,7 @@ export const configRepositoryEndpoints = () => {
   return {
     getChallenge: `${BASE_URL}/get-challenge`,
     hostingAllowList: `${BASE_URL}/hosting-allow-list`,
-    hostingAllowListRemove: `${BASE_URL}/hosting-allow-list/:userId`
+    hostingAllowListRemove: `${BASE_URL}/hosting-allow-list/:userId`,
+    activatePlugin: `${BASE_URL}/activate-plugin`
   };
 };
