@@ -22,9 +22,9 @@ const PluginsManagement: FC = () => {
 
     setError(undefined);
 
-    await pluginStore.mediaUploader.uploadPlugin(fileToUpload);
+    const hash = await pluginStore.mediaUploader.uploadPlugin(fileToUpload);
 
-    if (pluginStore.mediaUploader.isError) {
+    if (!hash) {
       setError('Error uploading plugin');
       return;
     }
@@ -73,7 +73,14 @@ const PluginsManagement: FC = () => {
               setError(err.message);
             }}
             fileType="archive"
-          />
+          >
+            {fileToUpload && (
+              <styled.FilePreview>
+                <div>{fileToUpload.name}</div>
+                <div>size: {(fileToUpload.size / (1024 * 1024)).toFixed(1)}MB</div>
+              </styled.FilePreview>
+            )}
+          </FileUploader>
         </div>
         {error && <styled.Error>{error}</styled.Error>}
         {!!fileToUpload && <Button label="Upload" onClick={handleUpload} />}

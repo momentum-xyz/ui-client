@@ -39,6 +39,13 @@ export const BottomPanel = styled.div`
 `;
 
 export const Error = styled.div`
-  color: ${(props) => props.theme.danger};
   font-size: var(--font-size-xs);
+`;
+
+export const FilePreview = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
 `;
