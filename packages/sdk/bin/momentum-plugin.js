@@ -81,6 +81,7 @@ function spawnProcess(command, args, env) {
 function generateAndStoreManifest() {
   const {
     name,
+    displayName,
     version,
     description,
     author,
@@ -92,6 +93,7 @@ function generateAndStoreManifest() {
   } = packageJSON;
   const manifest = {
     name,
+    displayName,
     version,
     description,
     author,
