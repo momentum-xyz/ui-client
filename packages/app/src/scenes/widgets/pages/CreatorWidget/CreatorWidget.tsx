@@ -113,6 +113,7 @@ const CreatorWidget: FC = () => {
     return (
       <PluginHolder
         key={pluginLoader.id}
+        failSilently
         pluginLoader={pluginLoader}
         onCreatorTabChanged={(data) => {
           console.log('onCreatorTabChanged:', data);

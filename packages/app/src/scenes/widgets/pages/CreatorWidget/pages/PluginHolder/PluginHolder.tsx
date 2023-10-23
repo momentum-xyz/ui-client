@@ -14,9 +14,10 @@ import {PluginLoaderModelType} from 'core/models';
 interface PropsInterface {
   pluginLoader: PluginLoaderModelType;
   onCreatorTabChanged: (data: UsePluginHookReturnInterface['creatorTab']) => void;
+  failSilently?: boolean;
 }
 
-const PluginHolder: FC<PropsInterface> = ({pluginLoader, onCreatorTabChanged}) => {
+const PluginHolder: FC<PropsInterface> = ({pluginLoader, onCreatorTabChanged, failSilently}) => {
   useEffect(() => {
     console.log('PluginHolder');
     return () => {
@@ -44,7 +45,7 @@ const PluginHolder: FC<PropsInterface> = ({pluginLoader, onCreatorTabChanged}) =
   );
 
   return (
-    <ErrorBoundary errorMessage={t('errors.errorWhileLoadingPlugin')}>
+    <ErrorBoundary errorMessage={failSilently ? '' : t('errors.errorWhileLoadingPlugin')}>
       <ObjectGlobalPropsContextProvider props={pluginProps}>
         {pluginLoader.plugin ? (
           <PluginInnerWrapper
@@ -54,7 +55,7 @@ const PluginHolder: FC<PropsInterface> = ({pluginLoader, onCreatorTabChanged}) =
           />
         ) : null}
 
-        {pluginLoader.isError && <div>{t('errors.errorWhileLoadingPlugin')}</div>}
+        {pluginLoader.isError && !failSilently && <div>{t('errors.errorWhileLoadingPlugin')}</div>}
       </ObjectGlobalPropsContextProvider>
     </ErrorBoundary>
   );
