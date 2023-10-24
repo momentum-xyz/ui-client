@@ -3,7 +3,7 @@ import {RequestModel} from '@momentum-xyz/core';
 
 import {api} from 'api';
 import {DynamicScriptList, MediaUploader, PluginAttributesManager, PluginLoader} from 'core/models';
-import {getRootStore} from 'core/utils';
+import {getPluginAbsoluteUrl, getRootStore} from 'core/utils';
 
 interface PluginInfoInterface {
   plugin_id: string;
@@ -13,18 +13,18 @@ interface PluginInfoInterface {
   updated_at?: string;
 }
 
-const localPluginInfosByScopes = {
-  creatorTab: [
-    {
-      plugin_id: '99c9a0ba-0c19-4ef5-a995-9bc3af39a0a5',
-      meta: {
-        name: 'plugin_odyssey_creator_openai',
-        scopeName: 'plugin_odyssey_creator_openai',
-        scriptUrl: 'http://localhost:3001/remoteEntry.js'
-      }
-    }
-  ]
-};
+// const localPluginInfosByScopes = {
+//   creatorTab: [
+//     {
+//       plugin_id: '99c9a0ba-0c19-4ef5-a995-9bc3af39a0a5',
+//       meta: {
+//         name: 'plugin_odyssey_creator_openai',
+//         scopeName: 'plugin_odyssey_creator_openai',
+//         scriptUrl: 'http://localhost:3001/remoteEntry.js'
+//       }
+//     }
+//   ]
+// };
 
 export const PluginStore = types
   .model('PluginStore', {
@@ -57,10 +57,21 @@ export const PluginStore = types
       console.log('pluginsResponse', pluginsResponse);
       self._plugins = pluginsResponse || [];
 
-      // if (pluginsResponse) {
-      // self.pluginInfosByScopes = pluginsResponse.plugins;
-      self.pluginInfosByScopes = localPluginInfosByScopes;
-      // }
+      // self.pluginInfosByScopes = localPluginInfosByScopes;
+      if (pluginsResponse) {
+        const pluginInfosByScopes: Record<string, PluginInfoInterface[]> = {};
+        for (const p of pluginsResponse) {
+          if (Array.isArray(p.meta?.scopes?.ui)) {
+            for (const scope of p.meta.scopes.ui) {
+              if (!pluginInfosByScopes[scope]) {
+                pluginInfosByScopes[scope] = [];
+              }
+              pluginInfosByScopes[scope].push(p);
+            }
+          }
+        }
+        self.pluginInfosByScopes = pluginInfosByScopes;
+      }
     }),
     storePluginLoadersByScope: (scope: string, pluginLoaders: any[]) => {
       self.pluginLoadersByScopes.set(scope, cast(pluginLoaders));
@@ -84,7 +95,9 @@ export const PluginStore = types
             console.log('create plugin ', {plugin_id, meta, options});
 
             if (!self.dynamicScriptList.containsLoaderWithName(meta.scopeName)) {
-              await self.dynamicScriptList.addScript(meta.scopeName, meta.scriptUrl);
+              const scriptUrl = getPluginAbsoluteUrl(meta.scriptUrl)!;
+              console.log('Load plugin', plugin_id, 'from scriptUrl', scriptUrl);
+              await self.dynamicScriptList.addScript(meta.scopeName, scriptUrl);
             }
 
             const worldId = getRootStore(self).universeStore.worldId;

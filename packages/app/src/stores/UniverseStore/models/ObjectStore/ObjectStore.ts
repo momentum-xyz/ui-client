@@ -12,7 +12,7 @@ import {
   ObjectUserAttribute,
   User
 } from 'core/models';
-import {getRootStore} from 'core/utils';
+import {getPluginAbsoluteUrl, getRootStore} from 'core/utils';
 
 import {ObjectContentStore} from './models';
 
@@ -80,7 +80,9 @@ const ObjectStore = types
       const {options, meta} = assetData;
 
       if (!self.dynamicScriptList.containsLoaderWithName(meta.scopeName)) {
-        yield self.dynamicScriptList.addScript(meta.scopeName, meta.scriptUrl);
+        const scriptUrl = getPluginAbsoluteUrl(meta.scriptUrl)!;
+        console.log('Load plugin', assetData, 'from scriptUrl', scriptUrl);
+        yield self.dynamicScriptList.addScript(meta.scopeName, scriptUrl);
       }
 
       self.pluginLoader = PluginLoader.create({
