@@ -9,10 +9,9 @@ export const usePlugin: UsePluginHookType<AppConfigInterface> = (props) => {
   const store = useMemo(
     () =>
       RootMiroStore.create({
-        attributesApi: props.api,
         api: props.pluginApi as PluginApiInterface<AppConfigInterface>
       }),
-    [props.api, props.pluginApi]
+    [props.pluginApi]
   );
 
   useEffect(() => {
