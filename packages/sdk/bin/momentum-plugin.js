@@ -9,7 +9,7 @@ const DEFAULT_PORT = 3001;
 
 const args = process.argv.slice(2);
 const scriptIndex = args.findIndex(
-  (x) => x === 'build' || x === 'start' || x === 'test' || x === 'start:plugin'
+  (x) => x === 'build' || x === 'pack' || x === 'start' || x === 'test' || x === 'start:plugin'
 );
 const script = scriptIndex === -1 ? args[0] : args[scriptIndex];
 
@@ -41,6 +41,8 @@ switch (script) {
     spawnProcess('craco', processArgs, env);
     break;
   }
+  case 'pack':
+    break;
   default:
     console.log(`Unknown script "${script}".`);
     console.log('Perhaps you need to update @momentum-xyz/sdk?');
@@ -49,6 +51,7 @@ switch (script) {
 
 switch (script) {
   case 'build':
+  case 'pack':
     generateAndStoreManifest();
     break;
   default:
@@ -109,9 +112,17 @@ function generateAndStoreManifest() {
 
   const versionedDir = `./${name}-${version}`;
 
-  fs.renameSync(BUILD_DIR, versionedDir);
-  console.log('[momentum-plugin] Plugin build stored in', BUILD_DIR);
+  console.log('[momentum-plugin] Temp copy plugin build to', versionedDir);
+  fs.cpSync(BUILD_DIR, versionedDir, {
+    force: true,
+    preserveTimestamps: true,
+    recursive: true
+  });
 
+  console.log('[momentum-plugin] Compress plugin build to', `${versionedDir}.tar.gz`);
   spawnProcess('tar', ['-czf', `${versionedDir}.tar.gz`, versionedDir], {});
   console.log('[momentum-plugin] Plugin tarball generated: ', `${versionedDir}.tar.gz`);
+
+  console.log('[momentum-plugin] Removing temp dir', versionedDir);
+  fs.rmSync(versionedDir, {recursive: true});
 }
