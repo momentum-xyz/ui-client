@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {FC, useMemo} from 'react';
 import {useParams} from 'react-router-dom';
 import {Panel, ErrorBoundary, ThemeInterface} from '@momentum-xyz/ui-kit';
 
 import {useAttributesEmulator} from '../../hooks';
 import {useTheme} from '../../../contexts/ThemeContext';
-import {AttributeValueInterface, PluginPropsInterface, PluginInterface} from '../../../interfaces';
+import {PluginPropsInterface, PluginInterface, Transform} from '../../../interfaces';
 import {ObjectGlobalPropsContextProvider} from '../../../contexts';
 
 import * as styled from './ObjectViewEmulator.styled';
@@ -19,206 +20,113 @@ export const ObjectViewEmulator: FC<PropsInterface> = ({plugin, isAdmin, onClose
   const {objectId} = useParams<{objectId: string}>();
   console.log('RENDER ObjectViewEmulator', {plugin, objectId});
 
-  const theme = useTheme();
-  const {
-    spaceAttributes,
-    useAttributeChange,
-    useAttributeRemove,
-    useAttributeItemChange,
-    useAttributeItemRemove,
-    changedAttribute,
-    removedAttribute,
-    changedAttributeItem,
-    removedAttributeItem,
-    subscribeToTopic,
-    unsubscribeFromTopic
-  } = useAttributesEmulator();
+  return <div>Under construction! Use Odyssey UI for testing</div>;
 
-  const config = useMemo(
-    () =>
-      ({
-        APP_ID: ''
-      } as any),
-    []
-  );
+  // const theme = useTheme();
+  // const {
+  //   spaceAttributes,
+  //   useAttributeItemChange,
+  //   useAttributeItemRemove,
+  //   subscribeToTopic,
+  //   unsubscribeFromTopic
+  // } = useAttributesEmulator();
 
-  const coreProps: PluginPropsInterface = useMemo(
-    () => ({
-      theme: theme as ThemeInterface,
-      isAdmin,
-      objectId,
-      api: {
-        getSpaceAttributeValue: <T extends AttributeValueInterface>(
-          spaceId: string,
-          attributeName: string
-        ) => {
-          const attributeValue = spaceAttributes.current.find(
-            (attribute) => attribute.attributeName === attributeName
-          )?.attributeValue;
+  // const config = useMemo(
+  //   () =>
+  //     ({
+  //       APP_ID: ''
+  //     } as any),
+  //   []
+  // );
 
-          if (!attributeValue) {
-            return Promise.reject();
-          }
+  // const coreProps: PluginPropsInterface = useMemo(
+  //   () => ({
+  //     theme: theme as ThemeInterface,
+  //     isAdmin,
+  //     objectId,
+  //     pluginApi: {
+  //       getStateItem: <T,>(key: string) => {
+  //         const state = spaceAttributes.current.find(
+  //           ({attributeName}) => attributeName === 'state'
+  //         )?.attributeValue;
 
-          return Promise.resolve(attributeValue as T);
-        },
-        setSpaceAttributeValue: <T extends AttributeValueInterface>(
-          spaceId: string,
-          attributeName: string,
-          value: AttributeValueInterface
-        ) => {
-          const attribute = spaceAttributes.current.find(
-            (attribute) => attribute.attributeName === attributeName
-          );
+  //         if (!state) {
+  //           return Promise.reject();
+  //         }
 
-          if (!attribute) {
-            return Promise.reject();
-          }
+  //         return Promise.resolve(state[key] as T);
+  //       },
+  //       setStateItem: <T,>(key: string, value: T) => {
+  //         const state = spaceAttributes.current.find(
+  //           ({attributeName}) => attributeName === 'state'
+  //         )?.attributeValue;
 
-          attribute.attributeValue = value;
-          changedAttribute({attributeName, value});
-          return Promise.resolve(attribute.attributeValue as T);
-        },
-        deleteSpaceAttribute: (spaceId: string, attributeName) => {
-          const attributes = spaceAttributes.current.filter(
-            (attribute) => attribute.attributeName !== attributeName
-          );
+  //         if (!state) {
+  //           return Promise.reject();
+  //         }
+  //         state[key] = value;
+  //         return Promise.resolve(state[key] as T);
+  //       },
+  //       getConfig: () => Promise.resolve(config),
+  //       deleteStateItem: (key) => {
+  //         const state = spaceAttributes.current.find(
+  //           ({attributeName}) => attributeName === 'state'
+  //         )?.attributeValue;
 
-          spaceAttributes.current = attributes;
-          removedAttribute({attributeName});
-          return Promise.resolve(null);
-        },
+  //         if (!state) {
+  //           return Promise.reject();
+  //         }
 
-        getSpaceAttributeItem: <T,>(
-          spaceId: string,
-          attributeName: string,
-          attributeItemName: string
-        ) => {
-          const attributeValue = spaceAttributes.current.find(
-            (attribute) => attribute.attributeName === attributeName
-          )?.attributeValue;
+  //         delete state[key];
+  //         return Promise.resolve(null);
+  //       },
 
-          if (!attributeValue) {
-            return Promise.reject();
-          }
+  //       subscribeToStateUsingTopic: subscribeToTopic,
+  //       unsubscribeFromStateUsingTopic: unsubscribeFromTopic,
 
-          return Promise.resolve(attributeValue[attributeItemName] as T);
-        },
-        setSpaceAttributeItem: <T,>(
-          spaceId: string,
-          attributeName: string,
-          attributeItemName: string,
-          value: T
-        ) => {
-          const attributeValue = spaceAttributes.current.find(
-            (attribute) => attribute.attributeName === attributeName
-          )?.attributeValue;
+  //       useStateItemChange: (key, callback) => useAttributeItemChange('', 'state', key, callback),
+  //       useStateItemRemove: (key, callback) => useAttributeItemRemove('', 'state', key, callback),
 
-          if (!attributeValue) {
-            return Promise.reject();
-          }
+  //       on: (handlers) => {
+  //         console.log('on', {handlers});
+  //         return () => {};
+  //       },
 
-          attributeValue[attributeItemName] = value;
-          changedAttributeItem({attributeName, attributeItemName, value});
-          return Promise.resolve(attributeValue[attributeItemName] as T);
-        },
-        deleteSpaceAttributeItem: (spaceId: string, attributeName, attributeItemName) => {
-          const attributeValue = spaceAttributes.current.find(
-            (attribute) => attribute.attributeName === attributeName
-          )?.attributeValue;
+  //       requestObjectLock: (objectId: string) => {
+  //         return Promise.resolve();
+  //       },
+  //       requestObjectUnlock: (objectId: string) => {},
 
-          if (!attributeValue) {
-            return Promise.reject();
-          }
+  //       transformObject: (objectId: string, transform: Transform) => {
+  //         console.log('transformObject', {objectId, transform});
+  //         return Promise.resolve();
+  //       }
+  //     },
+  //     onClose
+  //   }),
+  //   [
+  //     theme,
+  //     objectId,
+  //     subscribeToTopic,
+  //     unsubscribeFromTopic,
+  //     useAttributeItemChange,
+  //     useAttributeItemRemove,
+  //     spaceAttributes,
+  //     config,
+  //     onClose,
+  //     isAdmin
+  //   ]
+  // );
 
-          delete attributeValue[attributeItemName];
-          removedAttributeItem({attributeName, attributeItemName});
-          return Promise.resolve(null);
-        },
-
-        subscribeToTopic,
-        unsubscribeFromTopic,
-
-        useAttributeChange,
-        useAttributeRemove,
-
-        useAttributeItemChange,
-        useAttributeItemRemove
-      },
-      pluginApi: {
-        getStateItem: <T,>(key: string) => {
-          const state = spaceAttributes.current.find(
-            ({attributeName}) => attributeName === 'state'
-          )?.attributeValue;
-
-          if (!state) {
-            return Promise.reject();
-          }
-
-          return Promise.resolve(state[key] as T);
-        },
-        setStateItem: <T,>(key: string, value: T) => {
-          const state = spaceAttributes.current.find(
-            ({attributeName}) => attributeName === 'state'
-          )?.attributeValue;
-
-          if (!state) {
-            return Promise.reject();
-          }
-          state[key] = value;
-          return Promise.resolve(state[key] as T);
-        },
-        getConfig: () => Promise.resolve(config),
-        deleteStateItem: (key) => {
-          const state = spaceAttributes.current.find(
-            ({attributeName}) => attributeName === 'state'
-          )?.attributeValue;
-
-          if (!state) {
-            return Promise.reject();
-          }
-
-          delete state[key];
-          return Promise.resolve(null);
-        },
-
-        subscribeToStateUsingTopic: subscribeToTopic,
-        unsubscribeFromStateUsingTopic: unsubscribeFromTopic,
-
-        useStateItemChange: (key, callback) => useAttributeItemChange('', 'state', key, callback),
-        useStateItemRemove: (key, callback) => useAttributeItemRemove('', 'state', key, callback)
-      },
-      onClose
-    }),
-    [
-      theme,
-      objectId,
-      subscribeToTopic,
-      unsubscribeFromTopic,
-      useAttributeChange,
-      useAttributeRemove,
-      useAttributeItemChange,
-      useAttributeItemRemove,
-      spaceAttributes,
-      changedAttribute,
-      removedAttribute,
-      changedAttributeItem,
-      removedAttributeItem,
-      config,
-      onClose,
-      isAdmin
-    ]
-  );
-
-  return (
-    <ErrorBoundary errorMessage="Error while rendering plugin">
-      <ObjectGlobalPropsContextProvider props={coreProps}>
-        <styled.Container>
-          <PluginInnerWrapper pluginProps={coreProps} plugin={plugin} />
-        </styled.Container>
-      </ObjectGlobalPropsContextProvider>
-    </ErrorBoundary>
-  );
+  // return (
+  //   <ErrorBoundary errorMessage="Error while rendering plugin">
+  //     <ObjectGlobalPropsContextProvider props={coreProps}>
+  //       <styled.Container>
+  //         <PluginInnerWrapper pluginProps={coreProps} plugin={plugin} />
+  //       </styled.Container>
+  //     </ObjectGlobalPropsContextProvider>
+  //   </ErrorBoundary>
+  // );
 };
 
 const PluginInnerWrapper = ({

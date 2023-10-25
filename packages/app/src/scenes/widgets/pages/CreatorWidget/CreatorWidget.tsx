@@ -1,6 +1,7 @@
 import {observer} from 'mobx-react-lite';
-import {FC, useCallback, useEffect} from 'react';
+import {FC, useCallback, useEffect, useState} from 'react';
 import {Dialog, IconNameType, Panel, SideMenu, SideMenuItemInterface} from '@momentum-xyz/ui-kit';
+import {UsePluginHookReturnInterface} from '@momentum-xyz/sdk';
 import {i18n, useI18n} from '@momentum-xyz/core';
 import {toast} from 'react-toastify';
 
@@ -10,6 +11,7 @@ import {FeatureFlagEnum} from 'api/enums';
 import {CreatorTabsEnum} from 'core/enums';
 import {isFeatureEnabled} from 'api/constants';
 import {subMenuKeyWidgetEnumMap} from 'core/constants';
+import {PluginLoaderModelType} from 'core/models';
 
 import * as styled from './CreatorWidget.styled';
 import {
@@ -20,10 +22,11 @@ import {
   SkyboxSelector,
   SpawnAsset,
   WorldEditor,
-  WorldMembers
+  WorldMembers,
+  PluginHolder
 } from './pages';
 
-type MenuItemType = keyof typeof CreatorTabsEnum;
+type MenuItemType = keyof typeof CreatorTabsEnum; // | string;
 
 const SIZE_MENU_ITEMS: SideMenuItemInterface<MenuItemType>[] = [
   {
@@ -73,7 +76,7 @@ const ALL_MENU_ITEMS: SideMenuItemInterface<MenuItemType>[] = [
 ];
 
 const CreatorWidget: FC = () => {
-  const {universeStore, widgetStore, widgetManagerStore} = useStore();
+  const {universeStore, widgetStore, widgetManagerStore, pluginStore} = useStore();
   const {world2dStore, world3dStore, worldId} = universeStore;
   const {creatorStore} = widgetStore;
 
@@ -90,6 +93,41 @@ const CreatorWidget: FC = () => {
 
   console.log('CreatorWidget render', {selectedTab});
 
+  const [pluginsCreatorTabData, setPluginsCreatorTabData] = useState<
+    Record<
+      string,
+      {
+        pluginLoader: PluginLoaderModelType;
+        creatorTab: UsePluginHookReturnInterface['creatorTab'];
+      }
+    >
+  >({});
+
+  useEffect(() => {
+    pluginStore.preloadPluginsByScope('creatorTab');
+  }, [pluginStore]);
+
+  console.log('pluginsByScope', pluginStore.pluginsByScope('creatorTab'));
+  const pluginLoaders = pluginStore.pluginsByScope('creatorTab');
+  const pluginHolders = pluginLoaders.map((pluginLoader, idx) => {
+    return (
+      <PluginHolder
+        key={pluginLoader.id}
+        failSilently
+        pluginLoader={pluginLoader}
+        onCreatorTabChanged={(data) => {
+          console.log('onCreatorTabChanged:', data);
+          if (data) {
+            setPluginsCreatorTabData((prev) => {
+              const next = {...prev, [pluginLoader.id]: {pluginLoader, creatorTab: data}};
+              return next;
+            });
+          }
+        }}
+      />
+    );
+  });
+
   useEffect(() => {
     world3dStore?.enableCreatorMode();
     spawnAssetStore.init(worldId); // TEMP
@@ -104,9 +142,17 @@ const CreatorWidget: FC = () => {
   const panel = ALL_MENU_ITEMS.find((panel) => panel.id === selectedTab);
   const menuItem = SIZE_MENU_ITEMS.find((item) => item.id === selectedTab);
 
-  const filteredSideMenuItems = !isFeatureEnabled(FeatureFlagEnum.CANVAS)
+  const enabledSideMenuItems = !isFeatureEnabled(FeatureFlagEnum.CANVAS)
     ? SIZE_MENU_ITEMS.filter((item) => item.id !== 'canvas')
     : SIZE_MENU_ITEMS;
+
+  const sideMenuItems = enabledSideMenuItems.concat(
+    Object.values(pluginsCreatorTabData).map(({pluginLoader, creatorTab}) => ({
+      id: pluginLoader.id,
+      iconName: creatorTab?.icon || 'rabbit_fill',
+      label: creatorTab?.title || pluginLoader.name
+    })) as any
+  );
 
   const handleSubMenuActiveChange = useCallback(
     (tab: keyof typeof CreatorTabsEnum | null): void => {
@@ -160,6 +206,10 @@ const CreatorWidget: FC = () => {
       case 'editMembers':
         return <WorldMembers />;
       default:
+        if (selectedTab && pluginsCreatorTabData[selectedTab]) {
+          const {creatorTab} = pluginsCreatorTabData[selectedTab];
+          return creatorTab?.content || null;
+        }
     }
     return null;
   })();
@@ -170,7 +220,7 @@ const CreatorWidget: FC = () => {
         <SideMenu
           orientation="left"
           activeId={menuItem?.id}
-          sideMenuItems={filteredSideMenuItems}
+          sideMenuItems={sideMenuItems as any}
           onSelect={handleTabChange}
         />
       </div>
@@ -185,8 +235,11 @@ const CreatorWidget: FC = () => {
               : 'large'
           }
           variant="primary"
-          title={panel?.label || ''}
-          icon={panel?.iconName as IconNameType}
+          title={panel?.label || pluginsCreatorTabData[selectedTab]?.creatorTab?.title || ''}
+          icon={
+            (panel?.iconName ||
+              pluginsCreatorTabData[selectedTab]?.creatorTab?.icon) as IconNameType
+          }
           onClose={() => handleTabChange()}
         >
           {content}
@@ -225,6 +278,8 @@ const CreatorWidget: FC = () => {
           onClose={removeObjectDialog.close}
         />
       )}
+
+      {pluginHolders}
     </styled.Container>
   );
 };

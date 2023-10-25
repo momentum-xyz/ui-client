@@ -4,6 +4,7 @@ export const mediaRepositoryEndpoints = () => {
   return {
     uploadImage: `${BASE_URL}/image`,
     uploadVideo: `${BASE_URL}/video`,
-    uploadAudio: `${BASE_URL}/audio`
+    uploadAudio: `${BASE_URL}/audio`,
+    uploadPlugin: `${BASE_URL}/plugin`
   };
 };

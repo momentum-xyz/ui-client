@@ -1,4 +1,12 @@
-import {AttributeNameEnum} from '@momentum-xyz/sdk';
+import {
+  AttributeNameEnum,
+  ObjectData,
+  ObjectDefinition,
+  SetWorld,
+  Transform,
+  UserData,
+  UserTransform
+} from '@momentum-xyz/sdk';
 import {
   Client,
   loadClientWorker,
@@ -27,6 +35,15 @@ class PosBusService {
   private port: PosbusPort | null = null;
   private static userId: string;
   private static worldId?: string;
+
+  public static worldInfo?: SetWorld;
+  public static myTransform?: TransformNoScaleInterface;
+
+  public static objectDefinitions = new Map<string, ObjectDefinition>();
+  public static objectTransforms = new Map<string, Transform>();
+  public static objectDatas = new Map<string, ObjectData>();
+  public static users = new Map<string, UserData>();
+  public static usersTransforms = new Map<string, UserTransform>();
 
   public static attachNextReceivedObjectToCamera = false;
 
@@ -116,6 +133,7 @@ class PosBusService {
           PosBusEventEmitter.emit('posbus-duplicated-sessions');
           console.log('PosBus duplicated sessions. Leave world!');
           PosBusService.leaveWorld();
+          PosBusService.clearCachedData();
         }
         break;
       }
@@ -125,7 +143,9 @@ class PosBusService {
         const {users} = data;
         for (const user of users) {
           Event3dEmitter.emit('UserAdded', user);
+          PosBusService.users.set(user.id, user);
         }
+        PosBusEventEmitter.emit('users-added', users);
         break;
       }
 
@@ -134,7 +154,10 @@ class PosBusService {
         const {users} = data;
         for (const user of users) {
           Event3dEmitter.emit('UserRemoved', user);
+          PosBusService.users.delete(user);
+          PosBusService.usersTransforms.delete(user);
         }
+        PosBusEventEmitter.emit('users-removed', users);
         break;
       }
 
@@ -143,6 +166,15 @@ class PosBusService {
         const {value: users} = data;
 
         Event3dEmitter.emit('UsersTransformChanged', users);
+        for (const user of users) {
+          PosBusService.usersTransforms.set(user.id, user);
+
+          if (user.id === PosBusService.userId) {
+            PosBusService.myTransform = user.transform;
+            PosBusEventEmitter.emit('my-transform', user.transform);
+          }
+        }
+        PosBusEventEmitter.emit('users-transform-list', users);
         break;
       }
 
@@ -150,6 +182,8 @@ class PosBusService {
         console.log('PosBus object_transform', data);
         const {id, object_transform} = data;
         Event3dEmitter.emit('ObjectTransform', id, object_transform);
+        PosBusService.objectTransforms.set(id, object_transform);
+        PosBusEventEmitter.emit('object-transform', id, object_transform);
         break;
       }
 
@@ -187,12 +221,16 @@ class PosBusService {
           });
         }
 
+        PosBusService.objectDatas.set(id, data);
+        PosBusEventEmitter.emit('object-data', id, data);
+
         break;
       }
       case MsgType.SET_WORLD: {
         console.log('Handle posbus set_world', data);
         Event3dEmitter.emit('SetWorld', data, PosBusService.userId);
-
+        PosBusService.worldInfo = data;
+        PosBusEventEmitter.emit('set-world', data);
         break;
       }
 
@@ -200,6 +238,8 @@ class PosBusService {
         console.log('Handle posbus message my_transform', data);
 
         Event3dEmitter.emit('MyInitialTransform', data);
+        PosBusService.myTransform = data;
+        PosBusEventEmitter.emit('my-transform', data);
         break;
       }
 
@@ -233,7 +273,11 @@ class PosBusService {
           }
 
           PosBusService.attachNextReceivedObjectToCamera = false;
+
+          PosBusService.objectDefinitions.set(object.id, object);
+          PosBusEventEmitter.emit('add-object', object);
         }
+
         break;
       }
 
@@ -242,6 +286,8 @@ class PosBusService {
         const {objects} = data;
         for (const objectId of objects) {
           Event3dEmitter.emit('RemoveObject', objectId);
+          PosBusService.objectDefinitions.delete(objectId);
+          PosBusEventEmitter.emit('remove-object', objectId);
         }
         break;
       }
@@ -434,6 +480,16 @@ class PosBusService {
 
   static unsubscribe(topic: string) {
     this.main._subscribedAttributeTypeTopics.delete(topic);
+  }
+
+  static clearCachedData() {
+    this.objectDefinitions.clear();
+    this.objectTransforms.clear();
+    this.objectDatas.clear();
+    this.users.clear();
+    this.usersTransforms.clear();
+    this.myTransform = undefined;
+    this.worldInfo = undefined;
   }
 }
 

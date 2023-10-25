@@ -25,3 +25,7 @@ export interface HostingAllowListItemInterface {
 export interface GetHostingAllowListRequest {}
 
 export interface GetHostingAllowListResponse extends Array<HostingAllowListItemInterface> {}
+
+export interface ActivatePluginRequest {
+  plugin_hash: string;
+}

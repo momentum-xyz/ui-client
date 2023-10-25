@@ -1,21 +1,27 @@
-import {RequestModel} from '@momentum-xyz/core';
+import {ObjectTypeIdEnum, RequestModel} from '@momentum-xyz/core';
 import {
   PluginApiInterface,
   AttributeValueInterface,
-  ApiInterface,
-  AttributeNameEnum
+  AttributeNameEnum,
+  SetWorld,
+  Transform,
+  PluginApiEventHandlersType
 } from '@momentum-xyz/sdk';
 import {flow, Instance, types} from 'mobx-state-tree';
 
 import {api, GetObjectAttributeResponse} from 'api';
 import {appVariables} from 'api/constants';
-import {PosBusService} from 'shared/services';
 import {usePosBusEvent} from 'shared/hooks';
+import {PosBusService} from 'shared/services';
+import {PosBusEventEmitter} from 'core/constants';
+import {Asset3dCategoryEnum} from 'api/enums';
+
+import {ObjectAttribute} from '../ObjectAttribute';
 
 const PluginAttributesManager = types
   .model('PluginAttributesManager', {
     pluginId: types.string,
-    spaceId: types.string,
+    worldId: types.maybeNull(types.string),
 
     getAttributeRequest: types.optional(RequestModel, {}),
     setAttributeRequest: types.optional(RequestModel, {}),
@@ -166,16 +172,31 @@ const PluginAttributesManager = types
     })
   }))
   .actions((self) => ({
-    getItem: flow(function* <T extends AttributeValueInterface>(spaceId: string, key: string) {
-      return yield self.getSpaceAttributeItem<T>(spaceId, AttributeNameEnum.STATE, key);
+    setWorldId(worldInfo: SetWorld | null) {
+      self.worldId = worldInfo?.id || null;
+    }
+  }))
+  .actions((self) => ({
+    afterCreate() {
+      console.log('PluginAttributesManager afterCreate');
+      PosBusEventEmitter.on('set-world', self.setWorldId);
+    },
+    beforeDestroy() {
+      console.log('PluginAttributesManager beforeDestroy');
+      PosBusEventEmitter.off('set-world', self.setWorldId);
+    }
+  }))
+  .actions((self) => ({
+    getItem: flow(function* <T extends AttributeValueInterface>(objectId: string, key: string) {
+      return yield self.getSpaceAttributeItem<T>(objectId, AttributeNameEnum.STATE, key);
     }),
-    set: flow(function* <T>(spaceId: string, key: string, value: T) {
-      return yield self.setSpaceAttributeItem(spaceId, AttributeNameEnum.STATE, key, value);
+    set: flow(function* <T>(objectId: string, key: string, value: T) {
+      return yield self.setSpaceAttributeItem(objectId, AttributeNameEnum.STATE, key, value);
     }),
-    deleteItem: flow(function* (spaceId: string, key: string) {
+    deleteItem: flow(function* (objectId: string, key: string) {
       // TODO: Replace after attribute item is implemented on PosBus
       // return yield self.deleteObjectAttributeItem(spaceId, AttributeNameEnum.STATE, key);
-      return yield self.deleteSpaceAttribute(spaceId, AttributeNameEnum.STATE);
+      return yield self.deleteSpaceAttribute(objectId, AttributeNameEnum.STATE);
     }),
     getConfig: flow(function* <C extends GetObjectAttributeResponse>() {
       return yield self.getSpaceAttributeValue<C>(appVariables.NODE_ID, AttributeNameEnum.CONFIG);
@@ -185,13 +206,24 @@ const PluginAttributesManager = types
     get pluginApi(): PluginApiInterface {
       return {
         getStateItem: async <T>(key: string) => {
-          const result = await self.getItem(self.spaceId, key);
+          if (self.worldId === null) {
+            throw new Error('worldId is not set');
+          }
+          const result = await self.getItem(self.worldId, key);
           return result as T;
         },
         setStateItem: async <T>(key: string, value: T) => {
-          return await self.set(self.spaceId, key, value);
+          if (self.worldId === null) {
+            throw new Error('worldId is not set');
+          }
+          return await self.set(self.worldId, key, value);
         },
-        deleteStateItem: (key: string) => self.deleteItem(self.spaceId, key),
+        deleteStateItem: (key: string) => {
+          if (self.worldId === null) {
+            throw new Error('worldId is not set');
+          }
+          return self.deleteItem(self.worldId, key);
+        },
         getConfig: self.getConfig,
 
         // TODO: Temporary, change to below after PosBus supports attribute items
@@ -257,112 +289,202 @@ const PluginAttributesManager = types
               }
             }
           );
-        }
-      };
-    },
-    get api(): ApiInterface {
-      return {
-        getSpaceAttributeValue: async <T extends AttributeValueInterface>(
-          spaceId: string,
-          attributeName: string
-        ) => self.getSpaceAttributeValue<T>(spaceId, attributeName) as Promise<T>,
-        setSpaceAttributeValue: async <T extends AttributeValueInterface>(
-          spaceId: string,
-          attributeName: string,
-          value: T
-        ) => self.setSpaceAttributeValue<T>(spaceId, attributeName, value) as Promise<T>,
-        deleteSpaceAttribute: self.deleteSpaceAttribute,
-
-        getSpaceAttributeItem: async <T>(
-          spaceId: string,
-          attributeName: string,
-          attributeItemName: string
-        ) => self.getSpaceAttributeItem<T>(spaceId, attributeName, attributeItemName) as Promise<T>,
-        setSpaceAttributeItem: async <T>(
-          spaceId: string,
-          attributeName: string,
-          attributeItemName: string,
-          value: T
-        ) =>
-          self.setSpaceAttributeItem<T>(
-            spaceId,
-            attributeName,
-            attributeItemName,
-            value
-          ) as Promise<T>,
-        // TODO: Change bellow to this after PosBus supports attribute items
-        // deleteSpaceAttributeItem: async (
-        //   spaceId: string,
-        //   attributeName: string,
-        //   attributeItemName: string
-        // ) => self.deleteObjectAttributeItem(spaceId, attributeName, attributeItemName),
-
-        // TODO: Change above to this after PosBus supports attribute items
-        deleteSpaceAttributeItem: async (
-          spaceId: string,
-          attributeName: string,
-          attributeItemName: string
-        ) => self.deleteSpaceAttribute(spaceId, attributeName),
-        subscribeToTopic: (topic) => {
-          PosBusService.subscribe(topic);
-        },
-        unsubscribeFromTopic: (topic) => {
-          PosBusService.unsubscribe(topic);
         },
 
-        useAttributeChange: <T extends AttributeValueInterface>(
-          topic: string,
-          attributeName: string,
-          callback: (value: T) => void
-        ) => {
-          return usePosBusEvent(
-            'space-attribute-changed',
-            (posBusTopic, posBusAttributeName, value) => {
-              if (posBusTopic === topic && posBusAttributeName === attributeName) {
-                callback(value as unknown as T);
-              }
+        on(handlers: Partial<PluginApiEventHandlersType>) {
+          const unsubscribeCallbacks = Object.entries(handlers).map(([eventName, handler]) => {
+            if (handler) {
+              PosBusEventEmitter.on(eventName as keyof PluginApiEventHandlersType, handler);
+              return () =>
+                PosBusEventEmitter.off(eventName as keyof PluginApiEventHandlersType, handler);
             }
-          );
-        },
-        useAttributeRemove(topic, attributeName, callback) {
-          return usePosBusEvent('space-attribute-removed', (posBusTopic, posBusAttributeName) => {
-            if (posBusTopic === topic && posBusAttributeName === attributeName) {
-              callback();
-            }
+            return () => {};
           });
-        },
-        useAttributeItemChange: <T>(
-          topic: string,
-          attributeName: string,
-          attributeItemName: string,
-          callback: (value: T) => void
-        ) => {
-          return usePosBusEvent(
-            'space-attribute-item-changed',
-            (posBusTopic, posBusAttributeName, posBusAttributItemName, value) => {
-              if (
-                posBusTopic === topic &&
-                posBusAttributeName === attributeName &&
-                posBusAttributItemName === attributeItemName
-              ) {
-                callback(value as T);
-              }
+
+          setTimeout(() => {
+            if (!PosBusService.worldInfo) {
+              return;
             }
-          );
-        },
-        useAttributeItemRemove(topic, attributeName, attributeItemName, callback) {
-          return usePosBusEvent(
-            'space-attribute-item-removed',
-            (posBusTopic, posBusAttributeName, posBusAttributItemName) => {
-              if (
-                posBusTopic === topic &&
-                posBusAttributeName === attributeName &&
-                posBusAttributItemName === attributeItemName
-              ) {
-                callback();
-              }
+            handlers['set-world']?.(PosBusService.worldInfo);
+
+            if (PosBusService.myTransform) {
+              handlers['my-transform']?.(PosBusService.myTransform);
             }
+
+            for (const [, objectDefinition] of PosBusService.objectDefinitions) {
+              handlers['add-object']?.(objectDefinition);
+            }
+
+            for (const [, objectData] of PosBusService.objectDatas) {
+              handlers['object-data']?.(objectData.id, objectData);
+            }
+
+            for (const [id, objectTransform] of PosBusService.objectTransforms) {
+              handlers['object-transform']?.(id, objectTransform);
+            }
+
+            if (PosBusService.users.size > 0) {
+              handlers['users-added']?.(Array.from(PosBusService.users.values()));
+            }
+
+            if (PosBusService.usersTransforms.size > 0) {
+              handlers['users-transform-list']?.(
+                Array.from(PosBusService.usersTransforms.values())
+              );
+            }
+          }, 0);
+
+          return () => {
+            unsubscribeCallbacks.forEach((unsubscribeCallback) => unsubscribeCallback());
+          };
+        },
+
+        requestObjectLock: (objectId: string) => {
+          console.log('requestObjectLock', objectId);
+          return PosBusService.requestObjectLock(objectId);
+        },
+
+        requestObjectUnlock: (objectId: string) => {
+          console.log('requestObjectUnlock', objectId);
+          return PosBusService.requestObjectUnlock(objectId);
+        },
+
+        spawnObject: async ({
+          name,
+          asset_2d_id = null,
+          asset_3d_id = null,
+          transform,
+          object_type_id = ObjectTypeIdEnum.NORMAL
+        }: {
+          name: string;
+          asset_2d_id?: string | null;
+          asset_3d_id: string | null;
+          object_type_id?: string;
+          transform?: Transform;
+        }) => {
+          if (!self.worldId) {
+            throw new Error('worldId is not set');
+          }
+          const response = await api.objectRepository.createObject({
+            parent_id: self.worldId,
+            object_name: name,
+            asset_2d_id: asset_2d_id || undefined,
+            asset_3d_id: asset_3d_id || undefined,
+            object_type_id,
+            transform
+          });
+
+          console.log('spawnObject', response);
+          if (response.status >= 300) {
+            throw Error(response.statusText);
+          }
+          const {object_id} = response.data;
+          return {id: object_id};
+        },
+
+        transformObject: (objectId: string, objectTransform: Transform) => {
+          PosBusService.sendObjectTransform(objectId, objectTransform);
+        },
+
+        getObjectInfo: async (objectId: string) => {
+          const response = await api.objectInfoRepository.getObjectInfo({objectId});
+          console.log('getObjectInfo', response);
+          if (response.status >= 300) {
+            throw Error(response.statusText);
+          }
+          return response.data;
+        },
+
+        removeObject: async (objectId: string) => {
+          const response = await api.objectRepository.deleteObject({
+            objectId
+          });
+
+          console.log('removeObject', response);
+          if (response.status >= 300) {
+            throw Error(response.statusText);
+          }
+
+          return response.data;
+        },
+
+        getSupportedAssets3d: async (category: 'basic' | 'custom') => {
+          const response = await api.assets3dRepository.fetchAssets3d(
+            {
+              category: category as Asset3dCategoryEnum
+            },
+            undefined as any
           );
+          console.log('getSupportedAssets3d', response);
+          if (response.status >= 300) {
+            throw Error(response.statusText);
+          }
+          return response.data;
+        },
+
+        setObjectAttribute: ({
+          name,
+          value,
+          objectId
+        }: {
+          name: string;
+          value: any;
+          objectId: string;
+          // pluginId?: string
+        }) => {
+          const model = ObjectAttribute.create({
+            objectId,
+            attributeName: name
+          });
+          return model.set(value);
+        },
+
+        removeObjectAttribute: ({
+          name,
+          objectId
+        }: // pluginId
+        {
+          name: string;
+          objectId: string;
+          pluginId?: string;
+        }) => {
+          const model = ObjectAttribute.create({
+            objectId,
+            attributeName: name
+          });
+          return model.delete();
+        },
+
+        getObjectAttribute: ({
+          name,
+          objectId
+        }: // pluginId
+        {
+          name: string;
+          objectId: string;
+          pluginId?: string;
+        }) => {
+          const model = ObjectAttribute.create({
+            objectId,
+            attributeName: name
+          });
+          return model.load();
+        },
+
+        setObjectColor: (objectId: string, color: string | null) => {
+          const model = ObjectAttribute.create({
+            objectId,
+            attributeName: 'object_color'
+          });
+          return model.set({value: color});
+        },
+
+        setObjectName: (objectId: string, name: string) => {
+          const model = ObjectAttribute.create({
+            objectId,
+            attributeName: 'name'
+          });
+          return model.set({value: name});
         }
       };
     }

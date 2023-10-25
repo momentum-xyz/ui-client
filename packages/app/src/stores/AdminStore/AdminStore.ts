@@ -57,6 +57,17 @@ export const AdminStore = types
     }
   }))
   .actions((self) => ({
+    activatePlugin: flow(function* (plugin_hash: string) {
+      const resp = yield api.nodeRepository.activatePlugin({plugin_hash});
+
+      if (resp.error) {
+        throw new Error(resp.error);
+      }
+
+      return resp;
+    })
+  }))
+  .actions((self) => ({
     fetchApiKeys: flow(function* () {
       const resp = yield Promise.all([
         self.attrBlockadelabs.load(),

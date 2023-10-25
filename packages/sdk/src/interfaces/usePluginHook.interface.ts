@@ -4,7 +4,7 @@ export interface EditObjectViewInterface {
   onSave: () => void;
 }
 
-interface UsePluginHookReturnInterface {
+export interface UsePluginHookReturnInterface {
   content?: JSX.Element | null;
   objectView?: {
     title?: string;
@@ -19,6 +19,13 @@ interface UsePluginHookReturnInterface {
     saveChanges?: () => Promise<void>;
     discardChanges?: () => void;
     remove?: () => Promise<void>;
+  };
+  creatorTab?: {
+    title?: string;
+    icon?: string;
+    content: JSX.Element | null;
+    onOpen?: () => void;
+    onClose?: () => void;
   };
 }
 

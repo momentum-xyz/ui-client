@@ -189,7 +189,13 @@ const WorldBabylonScene: FC<Odyssey3dPropsInterface> = ({events, renderURL, ...c
   };
 
   return (
-    <div data-testid="Babylon-scene">
+    <div
+      data-testid="Babylon-scene"
+      style={{
+        // fixes strange offset appearing when creator plugin is opened
+        display: 'flex'
+      }}
+    >
       <SceneComponent
         id="babylon-canvas"
         antialias

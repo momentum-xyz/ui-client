@@ -1,5 +1,5 @@
 export const pluginsRepositoryEndpoints = () => {
-  const BASE_URL = '/plugins';
+  const BASE_URL = '/plugin';
 
   return {
     list: `${BASE_URL}`,

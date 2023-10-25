@@ -6,6 +6,11 @@
   "license": "GPL-3.0",
   "homepage": "https://odyssey.org",
   "author": "info@odyssey.org",
+  "provides": {
+    "ui": [
+      "objectView"
+    ]
+  },
   "attribute_types": [
     {
       "name": "state",

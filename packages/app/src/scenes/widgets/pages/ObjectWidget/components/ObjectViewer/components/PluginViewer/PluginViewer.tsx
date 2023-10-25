@@ -64,7 +64,6 @@ const PluginViewer: FC<PropsInterface> = ({
     isExpanded: pluginLoader.isExpanded,
     onToggleExpand: pluginLoader.toggleIsExpanded,
     pluginApi: pluginLoader.attributesManager.pluginApi,
-    api: pluginLoader.attributesManager.api,
     onClose: () => {}
   };
 

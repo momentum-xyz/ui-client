@@ -1,4 +1,4 @@
-import {AttributeValueInterface} from '@momentum-xyz/sdk';
+import {AttributeValueInterface, Transform} from '@momentum-xyz/sdk';
 
 import {MetadataInterface, OptionsInterface} from 'api/interfaces';
 
@@ -40,6 +40,8 @@ export interface CreateObjectRequest {
 
   asset_2d_id?: string;
   asset_3d_id?: string;
+
+  transform?: Transform;
 
   minimap?: boolean;
 }

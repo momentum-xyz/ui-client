@@ -12,9 +12,10 @@ export interface FileUploaderPropsInterface {
   buttonSize?: 'small' | 'normal' | 'medium';
   iconButton?: boolean;
   dragActiveLabel: string;
+  withFrame?: boolean;
   onFilesUpload: (file: File | undefined) => void;
   onError?: (error: Error) => void;
-  fileType?: 'image' | 'video' | 'audio' | 'asset';
+  fileType?: keyof typeof ALLOWED_EXTENSIONS;
   maxSize?: number;
   enableDragAndDrop?: boolean;
   disabled?: boolean;
@@ -25,6 +26,7 @@ const ALLOWED_EXTENSIONS = {
   image: {'image/*': ['.jpeg', '.png', '.jpg', '.svg', '.gif']},
   video: {'video/*': ['.mp4', '.mov', '.wmv', '.mpeg', '.webm', '.mkv']},
   audio: {'audio/*': ['.mp3', '.ogg', '.aac', '.webm', '.flac']},
+  archive: {'application/gzip': ['.tar.gz']},
   asset: {'model/gltf-binary': ['.glb']}
 };
 
@@ -39,6 +41,7 @@ const FileUploader: FC<FileUploaderPropsInterface> = ({
   dragActiveLabel,
   buttonSize = 'normal',
   iconButton,
+  withFrame,
   onFilesUpload,
   onError,
   fileType,
@@ -73,7 +76,10 @@ const FileUploader: FC<FileUploaderPropsInterface> = ({
   const {onClick, ...restRootProps} = getRootProps();
 
   return (
-    <styled.Container data-testid="FileUploader-test" className={cn(iconButton && 'iconButton')}>
+    <styled.Container
+      data-testid="FileUploader-test"
+      className={cn(iconButton && 'iconButton', withFrame && 'withFrame')}
+    >
       {enableDragAndDrop && <styled.DropZone {...restRootProps} />}
       <input {...getInputProps()} disabled={disabled} data-testid="FileUploader-input-test" />
       {isDragActive ? (

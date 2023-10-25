@@ -43,3 +43,17 @@ export const getTrackAbsoluteUrl = (trackUrlOrHash: string | undefined | null): 
 
   return null;
 };
+
+export const getPluginAbsoluteUrl = (pluginUrlOrHash: string | undefined | null): string | null => {
+  const pluginServerUrl = `${appVariables.RENDER_SERVICE_URL}/plugin`;
+  // const pluginServerUrl = `http://localhost:4000/api/v4/media/render/plugin`;
+  if (pluginUrlOrHash) {
+    if (pluginUrlOrHash.startsWith('http')) {
+      return pluginUrlOrHash;
+    } else {
+      return `${pluginServerUrl}/${pluginUrlOrHash}/remoteEntry.js`;
+    }
+  }
+
+  return null;
+};

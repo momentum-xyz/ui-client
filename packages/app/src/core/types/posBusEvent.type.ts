@@ -1,4 +1,4 @@
-import {AttributeValueInterface} from '@momentum-xyz/sdk';
+import {AttributeValueInterface, PluginApiEventHandlersType} from '@momentum-xyz/sdk';
 
 // import {
 //   PosBusEmojiMessageType,
@@ -78,4 +78,4 @@ export type PosBusEventType = {
     attributeName: string,
     attributeItemName: string
   ) => void;
-};
+} & PluginApiEventHandlersType;
