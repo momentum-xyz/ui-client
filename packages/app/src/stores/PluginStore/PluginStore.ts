@@ -33,14 +33,8 @@ export const PluginStore = types
       types.frozen<Record<string, PluginInfoInterface[]>>({}),
       {}
     ),
-    // pluginsLoadersByIds: types.optional(types.frozen<Record<string, typeof PluginLoader>>({})), {}),
     pluginsLoadersByIds: types.map(PluginLoader),
     pluginLoadersByScopes: types.map(types.array(types.reference(PluginLoader))),
-
-    // pluginLoadersByScopes: types.optional(
-    //   types.frozen<Record<string, typeof PluginLoader>>({}),
-    //   {}
-    // ),
 
     _plugins: types.optional(types.frozen<PluginInfoInterface[]>(), []),
 
@@ -49,7 +43,6 @@ export const PluginStore = types
   })
   .actions((self) => ({
     init: flow(function* () {
-      // init: function () {
       const pluginsResponse = yield self.pluginsRequest.send(
         api.pluginsRepository.getPluginsList,
         {}
@@ -118,9 +111,6 @@ export const PluginStore = types
             await pluginLoader.loadPlugin();
 
             console.log('loaded plugin ', {plugin_id, meta, options});
-
-            // self.pluginsLoadersByIds.set(plugin_id, pluginLoader);
-
             console.log('pluginLoader', pluginLoader);
 
             return pluginLoader;
@@ -131,7 +121,6 @@ export const PluginStore = types
         })
       );
       const loadedPlugins = plugins.filter((plugin: any) => !!plugin);
-      // self.pluginLoadersByScopes.set(scope, cast(loadedPlugins));
       self.storePluginLoadersByScope(scope, loadedPlugins);
 
       return loadedPlugins;
