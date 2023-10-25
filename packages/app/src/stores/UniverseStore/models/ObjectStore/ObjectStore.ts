@@ -191,14 +191,18 @@ const ObjectStore = types
       yield self.loadAsset2D(objectId);
       yield Promise.all([self.fetchObjectOwner(), self.fetchObjectName(objectId)]);
 
-      self.votesAttr = ObjectUserAttribute.create({
-        objectId,
-        attributeName: AttributeNameEnum.VOTE,
-        pluginId: PluginIdEnum.CORE,
-        userId: getRootStore(self).sessionStore.userId
-      });
-      yield self.votesAttr.load();
-      yield self.votesAttr.countAllUsers();
+      try {
+        self.votesAttr = ObjectUserAttribute.create({
+          objectId,
+          attributeName: AttributeNameEnum.VOTE,
+          pluginId: PluginIdEnum.CORE,
+          userId: getRootStore(self).sessionStore.userId
+        });
+        yield self.votesAttr.load();
+        yield self.votesAttr.countAllUsers();
+      } catch (e) {
+        console.log(e);
+      }
 
       self.commentsAttr = ObjectUserAttribute.create({
         objectId,
