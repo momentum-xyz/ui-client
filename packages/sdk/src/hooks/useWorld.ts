@@ -1,8 +1,6 @@
 import {useEffect, useMemo, useRef} from 'react';
-// import {Event3dEmitter} from '@momentum-xyz/core';
 
 import {useObjectGlobalProps} from '../contexts/ObjectGlobalPropsContext';
-// import {AttributeNameEnum} from '../enums';
 import {Transform, UseWorldPropsInterface, UseWorldReturnInterface} from '../interfaces';
 
 import {useObject} from './useObject';
