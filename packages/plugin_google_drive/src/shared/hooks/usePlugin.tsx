@@ -16,12 +16,11 @@ export const usePlugin: UsePluginHookType<AppConfigInterface> = (props) => {
     () =>
       RootGoogleDriveStore.create({
         api: props.pluginApi,
-        attributesApi: props.api,
         googleDriveStore: GoogleDriveStore.create({
           api: props.pluginApi
         })
       }),
-    [props.api, props.pluginApi]
+    [props.pluginApi]
   );
 
   useEffect(() => {

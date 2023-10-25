@@ -11,7 +11,6 @@ const RootMiroStore = types
     ResetModel,
     types.model('RootMiroStore', {
       api: types.frozen<PluginApiInterface<AppConfigInterface>>(),
-      attributesApi: types.frozen<ApiInterface>(),
       objectId: types.maybe(types.string),
       miroBoardStore: types.optional(MiroBoardStore, {})
     })
