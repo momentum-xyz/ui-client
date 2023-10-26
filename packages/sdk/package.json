@@ -12,7 +12,7 @@
   "scripts": {
     "copy-files": "copyfiles -u 1 bin/*.js dist/bin && copyfiles craco.config.js dist/ && copyfiles public/* dist/",
     "clean": "rimraf dist/",
-    "build": "yarn clean && yarn copy-files && tsc --listEmittedFiles",
+    "build": "yarn clean && yarn copy-files && yarn workspace @momentum-xyz/ui-kit build && tsc --listEmittedFiles",
     "start": "yarn copy-files && tsc -w"
   },
   "dependencies": {

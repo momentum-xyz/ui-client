@@ -10,7 +10,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "clean": "rimraf dist/",
-    "build": "yarn clean && tsc --listEmittedFiles && yarn copy-files",
+    "build": "yarn clean && yarn workspace @momentum-xyz/core build && tsc --listEmittedFiles && yarn copy-files",
     "start": "yarn copy-files && tsc -w",
     "copy-files": "yarn copy-files:static && yarn copy-files:fonts",
     "copy-files:static": "copyfiles -u 1 src/static/**/*.** dist && copyfiles -u 1 src/**/*.svg dist/",
