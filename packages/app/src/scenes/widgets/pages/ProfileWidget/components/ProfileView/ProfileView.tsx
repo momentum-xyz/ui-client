@@ -1,11 +1,13 @@
 import {FC} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {observer} from 'mobx-react-lite';
-import {Image, Frame, ProfileLine, WalletHash, TextCut} from '@momentum-xyz/ui-kit';
+import {Image, Frame, ProfileLine, WalletHash, TextCut, Button} from '@momentum-xyz/ui-kit';
 import {absoluteLink, withoutProtocol, useI18n, signUpDateString} from '@momentum-xyz/core';
 
 import {WalletInterface} from 'api';
 import {WorldsOwnedList, WorldsStakedList} from 'ui-kit';
 import {UserModelInterface, WorldInfoModelInterface} from 'core/models';
+import {ROUTES} from 'core/constants';
 
 import * as styled from './ProfileView.styled';
 
@@ -27,6 +29,7 @@ const ProfileView: FC<PropsInterface> = ({
   onVisitWorld
 }) => {
   const {t} = useI18n();
+  const navigate = useNavigate();
 
   return (
     <styled.Container>
@@ -61,6 +64,14 @@ const ProfileView: FC<PropsInterface> = ({
           onSelectWorld={onInfoWorld}
           onVisitWorld={onVisitWorld}
         />
+
+        <styled.BuyAnotherWorldPanel>
+          <Button
+            variant="secondary"
+            label="Buy another Odyssey"
+            onClick={() => navigate(ROUTES.buyNft)}
+          />
+        </styled.BuyAnotherWorldPanel>
 
         <WorldsStakedList
           worldsStakedIn={worldsStakedList}

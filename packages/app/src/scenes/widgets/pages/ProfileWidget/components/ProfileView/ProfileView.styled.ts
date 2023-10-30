@@ -33,3 +33,10 @@ export const LinkAccent = styled.a`
 export const Worlds = styled.div`
   padding: 0 10px 10px 10px;
 `;
+
+export const BuyAnotherWorldPanel = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+`;
