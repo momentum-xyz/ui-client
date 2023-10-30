@@ -4,7 +4,7 @@
 
 The UI-Client is currently a web application allowing to explore Odyssey 3D Worlds with 3D and 2D user interfaces.
 
-It is built with React and Typescript, using Web3 style sign-in, [Mobx State Tree](https://mobx-state-tree.js.org/) for the app state management and flow and websocket-based communication layer called [posbus-client](https://github.com/momentum-xyz/posbus-client). The App and the plugins are using [Module Federation](https://webpack.js.org/concepts/module-federation/) (MF) in order to create more optimised builds and on-demand plugging in runtime.
+It is built with React and Typescript, using Web3 style sign-in, [Mobx State Tree](https://mobx-state-tree.js.org/) for the app state management and flow and websocket-based communication layer called [posbus-client](https://github.com/momentum-xyz/posbus-client). The App and the plugins are using [Module Federation](https://webpack.js.org/concepts/module-federation/) (MF) in order to create more optimised builds and on-demand plugging in runtime
 
 ```mermaid
 flowchart LR
