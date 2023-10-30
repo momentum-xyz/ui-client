@@ -8,6 +8,8 @@ import {WalletInterface} from 'api';
 import {WorldsOwnedList, WorldsStakedList} from 'ui-kit';
 import {UserModelInterface, WorldInfoModelInterface} from 'core/models';
 import {ROUTES} from 'core/constants';
+import {isFeatureEnabled} from 'api/constants';
+import {FeatureFlagEnum} from 'api/enums';
 
 import * as styled from './ProfileView.styled';
 
@@ -65,13 +67,15 @@ const ProfileView: FC<PropsInterface> = ({
           onVisitWorld={onVisitWorld}
         />
 
-        <styled.BuyAnotherWorldPanel>
-          <Button
-            variant="secondary"
-            label="Buy another Odyssey"
-            onClick={() => navigate(ROUTES.buyNft)}
-          />
-        </styled.BuyAnotherWorldPanel>
+        {isFeatureEnabled(FeatureFlagEnum.BUY_NFT) && (
+          <styled.BuyAnotherWorldPanel>
+            <Button
+              variant="secondary"
+              label="Buy another Odyssey"
+              onClick={() => navigate(ROUTES.buyNft)}
+            />
+          </styled.BuyAnotherWorldPanel>
+        )}
 
         <WorldsStakedList
           worldsStakedIn={worldsStakedList}
