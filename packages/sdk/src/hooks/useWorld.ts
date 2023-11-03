@@ -126,6 +126,20 @@ export const useWorld = (props: UseWorldPropsInterface): UseWorldReturnInterface
       getSupportedAssets3d(category: 'basic' | 'custom') {
         console.log('[useWorld]: call getSupportedAssets3d', {category});
         return pluginApi.getSupportedAssets3d(category);
+      },
+      uploadImage(data: {file: File}): Promise<{hash: string}> {
+        console.log('[useWorld]: call uploadImage', {data});
+        return pluginApi.uploadImage(data);
+      },
+      uploadAsset3d(data: {
+        name: string;
+        asset: File;
+        isPrivate?: boolean;
+        previewHash?: string;
+        onUploadProgress?: (progressEvent: any) => void;
+      }): Promise<{id: string}> {
+        console.log('[useWorld]: call uploadAsset3d', {data});
+        return pluginApi.uploadAsset3d(data);
       }
     };
   }, [objectId, pluginApi]);

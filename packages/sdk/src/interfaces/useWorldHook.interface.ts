@@ -295,4 +295,33 @@ export interface UseWorldReturnInterface {
    * @returns {Promise<any>} - Returns a promise that resolves to an array of supported assets.
    */
   getSupportedAssets3d(category: 'basic' | 'custom'): Promise<Asset3d[]>;
+
+  /**
+   * Uploads an image to node storage
+   *
+   * @param {Object} data - An object that contains parameters for the new image.
+   * @param {File} data.file - The image file to upload.
+   *
+   * @returns {Promise<{hash: string}>} - Returns a promise that resolves to the hash of the uploaded image, also used as id
+   */
+  uploadImage(data: {file: File}): Promise<{hash: string}>;
+
+  /**
+   * Uploads a 3D asset, private or public.
+   *
+   * @param {Object} data - An object that contains parameters for the new asset.
+   * @param {string} data.name - The name of the new asset.
+   * @param {File} data.file - The 3D model file to upload.
+   * @param {boolean} data.isPrivate - Optional. Whether the asset should be private. Defaults to false.
+   * @param {string} data.previewHash - Optional. The hash of the preview image of the asset.
+   *
+   * @returns {Promise<{id: string}>} - Returns a promise that resolves to the ID of the uploaded asset.
+   */
+  uploadAsset3d(data: {
+    name: string;
+    asset: File;
+    isPrivate?: boolean;
+    previewHash?: string;
+    onUploadProgress?: (progressEvent: any) => void;
+  }): Promise<{id: string}>;
 }

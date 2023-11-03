@@ -74,4 +74,13 @@ export interface PluginApiInterface<C = unknown> {
   }): Promise<any>;
   setObjectColor(objectId: string, color: string | null): Promise<any>;
   setObjectName(objectId: string, name: string): Promise<any>;
+
+  uploadImage(data: {file: File}): Promise<{hash: string}>;
+  uploadAsset3d(data: {
+    name: string;
+    asset: File;
+    isPrivate?: boolean;
+    previewHash?: string;
+    onUploadProgress?: (progressEvent: any) => void;
+  }): Promise<{id: string}>;
 }

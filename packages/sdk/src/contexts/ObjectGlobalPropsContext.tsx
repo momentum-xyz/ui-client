@@ -76,6 +76,17 @@ export const ObjectGlobalPropsContext = createContext<PluginPropsInterface>({
     },
     setObjectName(objectId, name) {
       throw new Error('Method not implemented.');
+    },
+    uploadImage(data: {file: File}): Promise<{hash: string}> {
+      throw new Error('Method not implemented.');
+    },
+    uploadAsset3d(data: {
+      name: string;
+      asset: File;
+      isPrivate?: boolean;
+      previewHash?: string;
+    }): Promise<{id: string}> {
+      throw new Error('Method not implemented.');
     }
   },
   onClose: () => {}

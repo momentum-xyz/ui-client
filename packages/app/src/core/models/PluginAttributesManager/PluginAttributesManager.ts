@@ -485,6 +485,30 @@ const PluginAttributesManager = types
             attributeName: 'name'
           });
           return model.set({value: name});
+        },
+
+        async uploadImage(data: {file: File}): Promise<{hash: string}> {
+          const response = await api.mediaRepository.uploadImage(data);
+          console.log('uploadImage result', response);
+          if (response.status >= 300) {
+            throw Error(response.statusText);
+          }
+          return response.data;
+        },
+
+        async uploadAsset3d(data: {
+          name: string;
+          asset: File;
+          isPrivate?: boolean;
+          previewHash?: string;
+          onUploadProgress?: (progressEvent: any) => void;
+        }): Promise<{id: string}> {
+          const response = await api.assets3dRepository.upload3DAsset(data);
+          console.log('uploadAsset3d result', response);
+          if (response.status >= 300) {
+            throw Error(response.statusText);
+          }
+          return response.data;
         }
       };
     }
