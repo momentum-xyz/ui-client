@@ -13,18 +13,18 @@ interface PluginInfoInterface {
   updated_at?: string;
 }
 
-// const localPluginInfosByScopes = {
-//   creatorTab: [
-//     {
-//       plugin_id: '99c9a0ba-0c19-4ef5-a995-9bc3af39a0a5',
-//       meta: {
-//         name: 'plugin_odyssey_creator_openai',
-//         scopeName: 'plugin_odyssey_creator_openai',
-//         scriptUrl: 'http://localhost:3001/remoteEntry.js'
-//       }
-//     }
-//   ]
-// };
+const localPluginInfosByScopes: Record<string, PluginInfoInterface[]> = {
+  // creatorTab: [
+  //   {
+  //     plugin_id: '018b5c08-a574-7288-91cd-90a5e459f04d',
+  //     meta: {
+  //       name: 'plugin_odyssey_creator_openai',
+  //       scopeName: 'plugin_odyssey_creator_openai',
+  //       scriptUrl: 'http://localhost:3001/remoteEntry.js'
+  //     }
+  //   }
+  // ]
+};
 
 export const PluginStore = types
   .model('PluginStore', {
@@ -50,7 +50,6 @@ export const PluginStore = types
       console.log('pluginsResponse', pluginsResponse);
       self._plugins = pluginsResponse || [];
 
-      // self.pluginInfosByScopes = localPluginInfosByScopes;
       if (pluginsResponse) {
         const pluginInfosByScopes: Record<string, PluginInfoInterface[]> = {};
         for (const p of pluginsResponse) {
@@ -63,6 +62,24 @@ export const PluginStore = types
             }
           }
         }
+
+        // for local dev
+        for (const scope in localPluginInfosByScopes) {
+          if (!pluginInfosByScopes[scope]) {
+            pluginInfosByScopes[scope] = [];
+          }
+          for (const localPluginInfosByScope of localPluginInfosByScopes[scope]) {
+            const existingIndex = pluginInfosByScopes[scope].findIndex(
+              (p) => p.plugin_id === localPluginInfosByScope.plugin_id
+            );
+            if (existingIndex !== -1) {
+              pluginInfosByScopes[scope][existingIndex] = localPluginInfosByScope;
+            } else {
+              pluginInfosByScopes[scope].push(localPluginInfosByScope);
+            }
+          }
+        }
+
         self.pluginInfosByScopes = pluginInfosByScopes;
       }
     }),
