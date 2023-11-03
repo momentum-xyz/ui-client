@@ -65,6 +65,13 @@ Disabled.args = {
   opts: stringInputMask
 };
 
+export const AutoFocus = Template.bind({});
+AutoFocus.args = {
+  placeholder: 'Should be auto focused...',
+  autoFocus: true,
+  opts: stringInputMask
+};
+
 export const WithPrefix = Template.bind({});
 WithPrefix.args = {
   placeholder: 'Enter positive decimal...',

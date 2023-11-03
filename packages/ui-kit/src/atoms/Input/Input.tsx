@@ -1,4 +1,4 @@
-import {FC, memo, useRef} from 'react';
+import {FC, memo, useEffect, useRef} from 'react';
 import {IMaskInput} from 'react-imask';
 import cn from 'classnames';
 import IMask from 'imask';
@@ -14,6 +14,7 @@ export interface InputPropsInterface {
   placeholder?: string;
   size?: 'normal' | 'small';
   disabled?: boolean;
+  autoFocus?: boolean;
   isSearch?: boolean;
   danger?: boolean;
   wide?: boolean;
@@ -29,6 +30,7 @@ const Input: FC<InputPropsInterface> = ({
   value,
   placeholder,
   disabled,
+  autoFocus,
   danger,
   wide,
   isSearch,
@@ -39,6 +41,13 @@ const Input: FC<InputPropsInterface> = ({
 }) => {
   const ref = useRef(null);
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      // @ts-ignore: Typescript issues in library
+      inputRef.current.focus();
+    }
+  }, [autoFocus]);
 
   return (
     <styled.Container data-testid="Input-test" className={cn(wide && 'wide')}>
