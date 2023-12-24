@@ -13,6 +13,7 @@ import {
   Vector3
 } from '@babylonjs/core';
 import {ObjectTransformInterface} from '@momentum-xyz/core';
+import {SmoothTransformBehavior, getOrSetBehaviour} from './TransformHelper';
 
 import xPos_blue from '../static/Gizmo/drag_blue_merged.glb';
 import yPos_red from '../static/Gizmo/drag_red_merged.glb';
@@ -25,7 +26,7 @@ import yScale_red from '../static/Gizmo/scale_red.glb';
 import zScale_green from '../static/Gizmo/scale_green.glb';
 import scale_uniform from '../static/Gizmo/scale_origin.glb';
 
-import {vec3ToPos} from './TransformHelper';
+import {vec3ToPos, posToVec3} from './TransformHelper';
 import {ObjectHelper} from './ObjectHelper';
 
 export enum GizmoTypesEnum {
@@ -314,7 +315,18 @@ export class WorldCreatorHelper {
       return;
     }
 
-    ObjectHelper.objectsMap.get(id)?.setTransform(transform);
+    const transformNode = ObjectHelper.objectsMap.get(id)?.getNode()
+    if(transformNode) {
+      const behaviour = getOrSetBehaviour(transformNode);
+        behaviour.setTarget(
+          posToVec3(transform.position),
+          posToVec3(transform.rotation),
+          posToVec3(transform.scale),
+        )
+        //transformNode.position = posToVec3(transform.position);
+        //transformNode.rotation = posToVec3(transform.rotation);
+        //transformNode.scaling = posToVec3(transform.scale);
+    }
   }
 
   static toggleCreatorMode() {
